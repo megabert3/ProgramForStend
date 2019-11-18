@@ -2,9 +2,10 @@ package stend.model;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 
-public interface stendDLL extends Library {
-    stendDLL INSTANCE = (stendDLL) Native.loadLibrary(("resourseFiles.hscom.dll"), stendDLL.class);
+public interface StendDLL extends Library {
+    StendDLL INSTANCE = (StendDLL) Native.loadLibrary(("hscom.dll"), StendDLL.class);
 
 //--------------------------------------------------------------------------- Adjust_UI
 // Включить напряжение и ток
@@ -23,7 +24,7 @@ public interface stendDLL extends Library {
 // PhaseSrequence - чередование фаз
 //		0 - Прямое
 //		1 - Обратное
-// Revers - направлениетока
+// Revers - направление тока
 //		0 - Прямой
 //		1 - Обратный
 // Volt_Per - Процент по напряжению (0- 100)
@@ -44,9 +45,9 @@ public interface stendDLL extends Library {
                       int Revers,
                       double Volt_Per,
                       double Curr_Per,
-                      char *IABC,
-                      char *CosP,
-                      char *SModel,
+                      String IABC,
+                      String CosP,
+                      String SModel,
                       int Dev_Port);
 
 //--------------------------------------------------------------------------- Adjust_UI1
@@ -91,9 +92,9 @@ public interface stendDLL extends Library {
                        double Volt_PerB,
                        double Volt_PerC,
                        double Curr_Per,
-                       char *IABC,
-                       char *CosP,
-                       char *SModel,
+                       String IABC,
+                       String CosP,
+                       String SModel,
                        int Dev_Port);
 
 //--------------------------------------------------------------------------- StdMeter_Read
@@ -124,8 +125,8 @@ HY5101C-23?SY3803 : U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq
 TC-3000C? Ua , Ub , Uc , Ia , Ib , Ic , UI_Angle_a , UI_Angle_b , UI_Angle_c , Pa , Pb , Pc , Qa ,
 Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 */
-    boolean StdMeter_Read(void *SData,
-                          char *SModel,
+    boolean StdMeter_Read(Pointer SData,
+                          String SModel,
                           int Dev_Port);
 
 //--------------------------------------------------------------------------- Error_Read
@@ -134,7 +135,7 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 // Должен быть указатель на указатель. Размер не менее 1024 байт
 // Meter_No - номер места
 // Dev_Port - номер com-порта
-    boolean Error_Read(void *MError,
+    boolean Error_Read(Pointer MError,
                        int Meter_No,
                        int Dev_Port);
 
@@ -229,7 +230,7 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 // Meter_No - номер места
 // Meter_Port - номер com-порта счетчика
 // Функция для внутреннего использования. Не предназначена для пользовательского ПО
-    boolean Read_SerialNumber(char *Meter_SerialNumber,
+    boolean Read_SerialNumber(String Meter_SerialNumber,
                               int Meter_No,
                               int Meter_Port);
 
@@ -297,7 +298,7 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 // 2 - Относительная погрешность
 // Meter_No - номер счетчика (нумерация с 1)
 // Dev_Port - номер com-порта
-    boolean Clock_Error_Read(void *MError,
+    boolean Clock_Error_Read(Pointer MError,
                              double Freq,
                              int ErrType,
                              int Meter_No,
@@ -305,5 +306,5 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 
 //--------------------------------------------------------------------------- Dll_Port_Close
 // Закрыть порт
-    boolean Dll_Port_Close(void );
+    boolean Dll_Port_Close(Pointer close);
 }
