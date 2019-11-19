@@ -125,7 +125,7 @@ HY5101C-23?SY3803 : U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq
 TC-3000C? Ua , Ub , Uc , Ia , Ib , Ic , UI_Angle_a , UI_Angle_b , UI_Angle_c , Pa , Pb , Pc , Qa ,
 Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 */
-    boolean StdMeter_Read(Pointer SData,
+    boolean StdMeter_Read(String SData,
                           String SModel,
                           int Dev_Port);
 
@@ -135,7 +135,7 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 // Должен быть указатель на указатель. Размер не менее 1024 байт
 // Meter_No - номер места
 // Dev_Port - номер com-порта
-    boolean Error_Read(Pointer MError,
+    boolean Error_Read(String MError,
                        int Meter_No,
                        int Dev_Port);
 
@@ -298,7 +298,7 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 // 2 - Относительная погрешность
 // Meter_No - номер счетчика (нумерация с 1)
 // Dev_Port - номер com-порта
-    boolean Clock_Error_Read(Pointer MError,
+    boolean Clock_Error_Read(String MError,
                              double Freq,
                              int ErrType,
                              int Meter_No,
@@ -306,5 +306,5 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 
 //--------------------------------------------------------------------------- Dll_Port_Close
 // Закрыть порт
-    boolean Dll_Port_Close(Pointer close);
+    boolean Dll_Port_Close(String close);
 }
