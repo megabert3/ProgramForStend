@@ -2,7 +2,6 @@ package stend.controller;
 
 import stend.helper.ConsoleHelper;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 
@@ -21,9 +20,9 @@ public class MainStend {
             stend.errorStart(2, 8000.0, 7);
             Thread.sleep(10000);
 
-            ConsoleHelper.getMessage(String.valueOf(stend.meterErrorRead(2)));
+            ConsoleHelper.getMessage(stend.meterErrorRead(2));
+            ConsoleHelper.getMessage(stend.stMeterRead());
 
-            //ConsoleHelper.getMessage(String.valueOf(stend.stMeterRead()));
         }catch (Exception e){
             e.printStackTrace();
 

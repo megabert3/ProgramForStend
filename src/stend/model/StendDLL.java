@@ -131,7 +131,7 @@ HY5101C-23?SY3803 : U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq
 TC-3000C? Ua , Ub , Uc , Ia , Ib , Ic , UI_Angle_a , UI_Angle_b , UI_Angle_c , Pa , Pb , Pc , Qa ,
 Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 */
-    boolean StdMeter_Read(Pointer SData,
+    boolean StdMeter_Read(PointerByReference SData,
                           String SModel,
                           int Dev_Port);
 

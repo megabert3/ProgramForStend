@@ -99,9 +99,9 @@ public class StendCommands {
 
     //Получить данные с эталонного счётчика счетчика
     public String stMeterRead() {
-        ByteByReference pointer = new ByteByReference((byte) 256);
-        stend.StdMeter_Read(pointer.getPointer(), typeReferenceMeter, port);
-        return String.valueOf(pointer.getValue());
+        PointerByReference pointer = new PointerByReference(new Memory(1024));
+        stend.StdMeter_Read(pointer, typeReferenceMeter, port);
+        return pointer.getValue().getString(0, "ASCII");
     }
 
     // Получить ошибку навешенного счетчика
