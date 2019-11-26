@@ -1,8 +1,14 @@
 package stend.model;
 
 import com.sun.jna.Library;
+import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
+import com.sun.jna.ptr.ByteByReference;
+import com.sun.jna.ptr.PointerByReference;
+
+import java.nio.ByteBuffer;
+
 
 public interface StendDLL extends Library {
     StendDLL INSTANCE = (StendDLL) Native.loadLibrary(("hscom.dll"), StendDLL.class);
@@ -125,7 +131,7 @@ HY5101C-23?SY3803 : U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq
 TC-3000C? Ua , Ub , Uc , Ia , Ib , Ic , UI_Angle_a , UI_Angle_b , UI_Angle_c , Pa , Pb , Pc , Qa ,
 Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 */
-    boolean StdMeter_Read(String SData,
+    boolean StdMeter_Read(Pointer SData,
                           String SModel,
                           int Dev_Port);
 
@@ -135,7 +141,7 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 // Должен быть указатель на указатель. Размер не менее 1024 байт
 // Meter_No - номер места
 // Dev_Port - номер com-порта
-    boolean Error_Read(String MError,
+    boolean Error_Read(PointerByReference MError,
                        int Meter_No,
                        int Dev_Port);
 
