@@ -1,8 +1,6 @@
 package stend.controller;
 
-
 import com.sun.jna.Memory;
-import com.sun.jna.ptr.ByteByReference;
 
 import com.sun.jna.ptr.PointerByReference;
 import stend.model.StendDLL;
@@ -22,7 +20,7 @@ public class StendCommands {
 
 
     //Включить напряжение и ток
-    public boolean getUI() throws IOException {
+    public boolean getUI(double curr) throws IOException {
 //        int Phase;
 //        double Rated_Volt;
 //        double Rated_Curr;
@@ -84,7 +82,7 @@ public class StendCommands {
 //                "\t\tTC-3000D (3 фазы)");
 //        SModel = ConsoleHelper.entString();
 
-        return stend.Adjust_UI(1, 230.0, 5.0, 50.0, 0, 0, 100.0, 100.0, "H", "1.0", typeReferenceMeter, port);
+        return stend.Adjust_UI(1, 230.0, curr, 50.0, 0, 0, 100.0, 100.0, "H", "1.0", typeReferenceMeter, port);
     }
 
     // Сброс всех ошибок
@@ -135,19 +133,16 @@ public class StendCommands {
     /**
      * Спросить и протестить
      * */
-    // Поиск метки
-    public boolean searchMark(int meterNo) {
-        return stend.Search_mark(meterNo, port);
-    }
-
-    /**
-     * Спросить и протестить
-     * */
     // Старт CRPSTA
     public boolean crpstaStart(int meterNo) {
         return stend.CRPSTA_start(meterNo, port);
     }
 
+    // результат CRPSTA
+
+    public boolean crpstaResult(int meterNo) {
+        return stend.CRPSTA_Result(meterNo, port);
+    }
     /**
      * Спросить и протестить
      * */
@@ -159,14 +154,17 @@ public class StendCommands {
     /**
      * Спросить и протестить
      * */
+    // Поиск метки
+    public boolean searchMark(int meterNo) {
+        return stend.Search_mark(meterNo, port);
+    }
+
+    /**
+     * Спросить и протестить
+     * */
     // результат поиска метки
     public boolean searchMarkResult(int meterNo) {
         return stend.Search_mark_Result(meterNo, port);
-    }
-
-    // результат CRPSTA
-    public boolean crpstaResult(int meterNo) {
-        return stend.CRPSTA_Result(meterNo, port);
     }
 
     // Выключение нагрузки (тока)
@@ -208,16 +206,20 @@ public class StendCommands {
     // Прочитать результаты теста ТХЧ. Должна вызываться по прошествии времени, отведенного на тест
     // + запас в пару секунд
     public String clockErrorRead (double freq, int errType, int meterNo) {
-        String meError = new String();
-        stend.Clock_Error_Read(/*pointer*/meError, freq, errType, meterNo, port);
-        return meError;
+        PointerByReference pointer = new PointerByReference(new Memory(1024));
+        stend.Clock_Error_Read(pointer, freq, errType, meterNo, port);
+        return pointer.getValue().getString(0, "ASCII");
     }
 
     // Закрыть порт
     public String dllPortClose() {
-        String close = new String();
-        stend.Dll_Port_Close(close);
-        return close;
+        PointerByReference pointer = new PointerByReference(new Memory(1024));
+        stend.Dll_Port_Close(pointer);
+        return pointer.getValue().getString(0, "ASCII");
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(this);
+    }
 }

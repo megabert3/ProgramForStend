@@ -22,7 +22,7 @@ public interface StendDLL extends Library {
 // 		3 - Трех-фазный трех-проводной реактив 90 градусов
 // 		4 - Трех-фазный трех-проводной реактив 60 градусов
 //		5 - Трех-фазный четырех-проводной (реактив)
-//		6 - Трех-фазный трех-проводной 9реактив)
+//		6 - Трех-фазный трех-проводной (реактив)
 //		7 - Однофазный реактив
 // Rated_Volt - напряжение
 // Rated_Curr - ток
@@ -36,7 +36,7 @@ public interface StendDLL extends Library {
 // Volt_Per - Процент по напряжению (0- 100)
 // Curr_Per - Процент по току (0-100)
 // IABC - строка, определяющая фазы, по которым пустить ток: A, B, C, H - все
-// CosP - строка  с кросинусом угла. Например: "1.0", "0.5L", "0.8C"
+// CosP - строка  с косинусом угла. Например: "1.0", "0.5L", "0.8C"
 // SModel - Строка с моделью счетчика:
 // 		HY5303C-22, HS5320, SY3102, SY3302 (3 фазы)
 //		HY5101C-22, HY5101C-23, SY3803 (1 фаза)
@@ -65,7 +65,7 @@ public interface StendDLL extends Library {
 // 		3 - Трех-фазный трех-проводной реактив 90 градусов
 // 		4 - Трех-фазный трех-проводной реактив 60 градусов
 //		5 - Трех-фазный четырех-проводной (реактив)
-//		6 - Трех-фазный трех-проводной 9реактив)
+//		6 - Трех-фазный трех-проводной (реактив)
 //		7 - Однофазный реактив
 // Rated_Volt - напряжение
 // Rated_Curr - ток
@@ -304,7 +304,7 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 // 2 - Относительная погрешность
 // Meter_No - номер счетчика (нумерация с 1)
 // Dev_Port - номер com-порта
-    boolean Clock_Error_Read(String MError,
+    boolean Clock_Error_Read(PointerByReference MError,
                              double Freq,
                              int ErrType,
                              int Meter_No,
@@ -312,5 +312,5 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 
 //--------------------------------------------------------------------------- Dll_Port_Close
 // Закрыть порт
-    boolean Dll_Port_Close(String close);
+    boolean Dll_Port_Close(PointerByReference close);
 }
