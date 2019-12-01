@@ -8,9 +8,35 @@ import stend.model.StendDLL;
 
 public class StendDLLCommands {
     private StendDLL stend = StendDLL.INSTANCE;
+
+    //Порт для связи с установкой
     private int port;
+
+    //Тип эталонного счётчика
     private String typeReferenceMeter;
     private boolean threePhaseStend;
+
+    //Кол-во постадочных мест для счётчиков
+    private int amountPlaces;
+
+    //Активно ли посадочное место
+    private boolean activePlace;
+
+    //Константа счётчика
+    private int constant;
+
+    //Колличество повторов измерений
+    private int countResult;
+
+    //Пауза для стабилизации и установки заданных пар-ров установки
+    private int pauseForStabization;
+
+    //Колличество выбранных мест для испытания
+    private boolean[] amountActivePlaces = initializationAmountActivePlaces();
+
+
+    //Константы счётчиков
+    private double[] constantsForMetersOnPlaces = initializationconstantsForMetersOnPlaces();
 
     private String [] threePhaseStendNames = new String[]{"HY5303C-22", "HS5320", "SY3102", "SY3302", "TC-3000D"};
     private String [] onePhaseStendNames = new String[]{"HY5101C-22", "HY5101C-23", "SY3803", "TC-3000C"};
@@ -18,6 +44,59 @@ public class StendDLLCommands {
     public StendDLLCommands(int port, String refMeter) {
         this.port = port;
         this.typeReferenceMeter = refMeter;
+    }
+
+    //Инициализирует посадочные места и устанавливает значения флага
+    private boolean[] initializationAmountActivePlaces() {
+        boolean[] init = new boolean[amountPlaces];
+        for (int i = 1; i <= amountPlaces; i++) {
+            init[i] = false;
+        }
+        return init;
+    }
+
+    //Активирует или деактивирует посадочное место
+    public void setActivePlace(int number, boolean active) {
+        amountActivePlaces[number] = active;
+    }
+
+    public boolean[] getAmountActivePlaces() {
+        return amountActivePlaces;
+    }
+
+    //Инициализирует значения констант у посадочных мест
+    private double[] initializationconstantsForMetersOnPlaces() {
+        double[] init = new double[amountPlaces];
+        for (int i = 1; i <= amountPlaces; i++) {
+            init[i] = 0.0;
+        }
+        return init;
+    }
+
+    public double[] getConstantsForMetersOnPlaces() {
+        return constantsForMetersOnPlaces;
+    }
+
+    //Инициализирует значение константы у каждого счётчика
+    public void setConstant(int number, double constant) {
+        constantsForMetersOnPlaces[number] = constant;
+    }
+
+    public int getAmountPlaces() {
+        return amountPlaces;
+    }
+
+    //Пауза для стабилизации счётчика
+    public int getPauseForStabization() {
+        return pauseForStabization;
+    }
+
+    public int getConstant() {
+        return constant;
+    }
+
+    public void setConstant(int constant) {
+        this.constant = constant;
     }
 
     //Проверяет сколько фаз у стенда
@@ -36,36 +115,36 @@ public class StendDLLCommands {
         return stend.Adjust_UI(1, 230.0, curr, 50.0, 0, 0, 100.0, 100.0, "H", "1.0", typeReferenceMeter, port);
     }
     //Включить напряжение и ток без регулеровки пофазного напряжения
-    public boolean getUI(int Phase,
-                         double Rated_Volt,
-                         double Rated_Curr,
-                         double Rated_Freq,
-                         int PhaseSrequence,
-                         int Revers,
-                         double Volt_Per,
-                         double Curr_Per,
-                         String IABC,
-                         String CosP) {
+    public boolean getUI(int phase,
+                         double ratedVolt,
+                         double ratedCurr,
+                         double ratedFreq,
+                         int phaseSrequence,
+                         int revers,
+                         double voltPer,
+                         double currPer,
+                         String iABC,
+                         String cosP) {
 
-        return stend.Adjust_UI(Phase, Rated_Volt, Rated_Curr, Rated_Freq, PhaseSrequence, Revers, Volt_Per,
-                Curr_Per, IABC, CosP, typeReferenceMeter, port);
+        return stend.Adjust_UI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPer, currPer, iABC, cosP, typeReferenceMeter, port);
     }
 
     //Включить напряжение и ток с регулировкой пофазного напряжения
-    public boolean getUIWithPhase (int Phase,
-                                   double Rated_Volt,
-                                   double Rated_Curr,
-                                   double Rated_Freq,
-                                   int PhaseSrequence,
-                                   int Revers,
-                                   double Volt_PerA,
-                                   double Volt_PerB,
-                                   double Volt_PerC,
-                                   double Curr_Per,
-                                   String IABC,
-                                   String CosP) {
-        return stend.Adjust_UI1(Phase, Rated_Volt, Rated_Curr, Rated_Freq, PhaseSrequence, Revers, Volt_PerA,
-                Volt_PerB, Volt_PerC, Curr_Per, IABC, CosP, typeReferenceMeter, port);
+    public boolean getUIWithPhase (int phase,
+                                   double ratedVolt,
+                                   double ratedCurr,
+                                   double ratedFreq,
+                                   int phaseSrequence,
+                                   int revers,
+                                   double voltPerA,
+                                   double voltPerB,
+                                   double voltPerC,
+                                   double currPer,
+                                   String iABC,
+                                   String cosP) {
+        return stend.Adjust_UI1(phase,ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP, typeReferenceMeter, port);
     }
 
     // Сброс всех ошибок
