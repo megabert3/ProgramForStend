@@ -17,7 +17,7 @@ public class StendDLLCommands {
     private boolean threePhaseStend;
 
     //Кол-во постадочных мест для счётчиков
-    private int amountPlaces;
+    private int amountPlaces = 3;
 
     //Активно ли посадочное место
     private boolean activePlace;
@@ -36,7 +36,7 @@ public class StendDLLCommands {
 
 
     //Константы счётчиков
-    private double[] constantsForMetersOnPlaces = initializationconstantsForMetersOnPlaces();
+    private double[] constantsForMetersOnPlaces = initializationConstantsForMetersOnPlaces();
 
     private String [] threePhaseStendNames = new String[]{"HY5303C-22", "HS5320", "SY3102", "SY3302", "TC-3000D"};
     private String [] onePhaseStendNames = new String[]{"HY5101C-22", "HY5101C-23", "SY3803", "TC-3000C"};
@@ -48,9 +48,9 @@ public class StendDLLCommands {
 
     //Инициализирует посадочные места и устанавливает значения флага
     private boolean[] initializationAmountActivePlaces() {
-        boolean[] init = new boolean[amountPlaces];
+        boolean[] init = new boolean[amountPlaces + 1];
         for (int i = 1; i <= amountPlaces; i++) {
-            init[i] = false;
+            init[i] = true;
         }
         return init;
     }
@@ -65,8 +65,8 @@ public class StendDLLCommands {
     }
 
     //Инициализирует значения констант у посадочных мест
-    private double[] initializationconstantsForMetersOnPlaces() {
-        double[] init = new double[amountPlaces];
+    private double[] initializationConstantsForMetersOnPlaces() {
+        double[] init = new double[amountPlaces + 1];
         for (int i = 1; i <= amountPlaces; i++) {
             init[i] = 0.0;
         }
@@ -169,6 +169,25 @@ public class StendDLLCommands {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.Error_Read(pointer, meterNo, port);
         return pointer.getValue().getString(0, "ASCII");
+    }
+    //Получить массив ошибок навешенного счётчика
+    public double[] meterErrorReadMass (int meterNo, int countResult) {
+        int measurinNo = 0;
+        double error;
+        double[] errMass = new double[10];
+        while (measurinNo <= countResult) {
+            String errorRead = meterErrorRead(meterNo);
+            String[] split = errorRead.split(",");
+            measurinNo = Integer.parseInt(split[0]);
+            error = Double.parseDouble(split[1]);
+            errMass[measurinNo] = error;
+            return errMass;
+        }
+        return null;
+    }
+
+    public int getCountResult() {
+        return countResult;
     }
 
     /**
@@ -278,10 +297,5 @@ public class StendDLLCommands {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.Dll_Port_Close(pointer);
         return pointer.getValue().getString(0, "ASCII");
-    }
-
-    @Override
-    public String toString() {
-        return String.valueOf(this);
     }
 }

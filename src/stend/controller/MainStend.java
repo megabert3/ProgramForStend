@@ -1,56 +1,53 @@
 package stend.controller;
 
-import java.io.IOException;
 
+import stend.helper.ConsoleHelper;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class MainStend {
-    public static void main(String[] args) throws IOException, InterruptedException {
-//        //ConsoleHelper.getMessage("HY5303C-22, HS5320, SY3102, SY3302 (3 фазы)\n" +
-//                "\t\tHY5101C-22, HY5101C-23, SY3803 (1 фаза)\n"+
-//                "\t\tTC-3000C (1 фаза интегрированный)\n" +
-//                "\t\tTC-3000D (3 фазы интегрированный)");
-        //String refMetName = ConsoleHelper.entString();
-        StendDLLCommands stend = new StendDLLCommands(9, "HY5303C-22");
+    public static void main(String[] args) {
+        // Включить напряжение и ток
+// Phase - Режим:
+// 		0 - Однофазный
+//		1 - Трех-фазный четырех-проводной
+//		2 - Трех-фазный трех-проводной
+// 		3 - Трех-фазный трех-проводной реактив 90 градусов
+// 		4 - Трех-фазный трех-проводной реактив 60 градусов
+//		5 - Трех-фазный четырех-проводной (реактив)
+//		6 - Трех-фазный трех-проводной (реактив)
+//		7 - Однофазный реактив
+// Rated_Volt - напряжение
+// Rated_Curr - ток
+// Rated_Freq - частота
+// PhaseSrequence - чередование фаз
+//		0 - Прямое
+//		1 - Обратное
+// Revers - направление тока
+//		0 - Прямой
+//		1 - Обратный
+// Volt_Per - Процент по напряжению (0- 100)
+// Curr_Per - Процент по току (0-100)
+// IABC - строка, определяющая фазы, по которым пустить ток: A, B, C, H - все
+// CosP - строка  с косинусом угла. Например: "1.0", "0.5L", "0.8C"
+// SModel - Строка с моделью счетчика:
+// 		HY5303C-22, HS5320, SY3102, SY3302 (3 фазы)
+//		HY5101C-22, HY5101C-23, SY3803 (1 фаза)
+//		TC-3000C (1 фаза)
+//		TC-3000D (3 фазы)
+// Dev_Port - номер com-порта
+        StendDLLCommands stendDLLCommands = new StendDLLCommands(9, "HY5303C-22");
+        ErrorCommand errorCommand = new ErrorCommand(stendDLLCommands, 1, 230.0, 5.0, 50.0, 0,
+                0, 100.0, 100.0, "H", "1.0", 0, 10);
         try {
-            stend.getUI(5.0);
-            stend.setPulseChannel(1, 0);
-            Thread.sleep(4000);
-            stend.errorStart(1, 8000, 5);
-            Thread.sleep(20000);
-            stend.meterErrorRead(1);
-//            stend.getUI(0.0);
-//            String exit = "";
-//            while (!(exit.equalsIgnoreCase("exit"))){
-//                stend.errorClear();
-//                ConsoleHelper.getMessage("Коилчество импульсов");
-//                int impl = Integer.parseInt(ConsoleHelper.entString());
-//                ConsoleHelper.getMessage("Пауза");
-//                int pause =1000 * Integer.parseInt(ConsoleHelper.entString());
-//                ConsoleHelper.getMessage("Тип ошибки");
-//                int type = Integer.parseInt(ConsoleHelper.entString());
-//                stend.clockErrorStart(2, 1.0, impl);
-//                Thread.sleep(pause);
-//                ConsoleHelper.getMessage(stend.clockErrorRead(1.0, type, 2));
-//                ConsoleHelper.getMessage("Выйти?");
-//                exit = ConsoleHelper.entString();
-            //}
-            //ConsoleHelper.getMessage(String.valueOf(stend.crpstaResult(2)));
-            //stend.crpstaClear(2);
-            //ConsoleHelper.getMessage(String.valueOf(stend.searchMarkResult(2)));
-            //stend.errorStart(2, 8000.0, 7);
-            //Thread.sleep(10000);
-            //ConsoleHelper.getMessage(stend.meterErrorRead(2));
-            //stend.getUI(10.0);
-            //stend.errorStart(2, 8000.0, 7);
-            //Thread.sleep(3500);
-            //ConsoleHelper.getMessage(stend.meterErrorRead(2));
-            //ConsoleHelper.getMessage(stend.stMeterRead());
-
-        }catch (Exception e){
+            errorCommand.execute();
+            for (double[] errMass : errorCommand.getErrorList()) {
+                ConsoleHelper.getMessage(Arrays.toString(errMass));
+            }
+        }catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            stend.errorClear();
-            stend.powerOf();
         }
     }
 }

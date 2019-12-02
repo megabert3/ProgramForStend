@@ -1,13 +1,12 @@
 package stend.controller;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import stend.helper.ConsoleHelper;
 
 import java.util.ArrayList;
-import java.util.Map;
+
 
 public class ErrorCommand implements Commands{
-    private StendDLLCommands stendDLLCommands;
+    private static StendDLLCommands stendDLLCommands;
 
     private int phase;
     private double ratedVolt;
@@ -28,15 +27,38 @@ public class ErrorCommand implements Commands{
     private int channelFlag;
     private int pulse;
 
+
+    //Нужен сеттер т.к. инициализация будет с другого класса
+    private int constant;
+
     //Необходимо для быстрого обхода в цикле
     private int[] amountActivePlacesForTest = getAmountActivePlacesForTest();
 
-    private double[][] errorsMeters = new double[stendDLLCommands.getAmountPlaces()][9];
+    private ArrayList<double[]> errorList = new ArrayList<>(amountActivePlacesForTest.length);
 
+    public ArrayList<double[]> getErrorList() {
+        return errorList;
+    }
 
-
-    public ErrorCommand(StendDLLCommands stendDLLCommands) {
+    public ErrorCommand(StendDLLCommands stendDLLCommands, int phase, double ratedVolt, double ratedCurr, double ratedFreq, int phaseSrequence,
+                        int revers, double voltPer, double currPer, String iABC, String cosP, int channelFlag, int pulse) {
         this.stendDLLCommands = stendDLLCommands;
+        this.phase = phase;
+        this.ratedVolt = ratedVolt;
+        this.ratedCurr = ratedCurr;
+        this.ratedFreq = ratedFreq;
+        this.phaseSrequence = phaseSrequence;
+        this.revers = revers;
+        this.voltPerA = voltPer;
+        this.voltPerB = voltPer;
+        this.voltPerC = voltPer;
+        this.voltPer = voltPer;
+        this.currPer = currPer;
+        this.iABC = iABC;
+        this.cosP = cosP;
+        this.channelFlag = channelFlag;
+        this.pulse = pulse;
+
     }
 
     @Override
@@ -51,21 +73,26 @@ public class ErrorCommand implements Commands{
 
         ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
 
-        for (int i = 0; i < amountActivePlacesForTest.length; i++) {
+        for (int value : amountActivePlacesForTest) {
             //Подумать над константой, скорее всего необходимо будет сделать одной для всех
-            stendDLLCommands.errorStart(amountActivePlacesForTest[i], stendDLLCommands.getConstantsForMetersOnPlaces()[i], pulse);
-
+            stendDLLCommands.errorStart(value, constant, pulse);
         }
 
         //Тут надо что-то придумать
-        while (true) {
-            for (int i = 1; i < stendDLLCommands.getAmountPlaces(); i++) {
-                if (stendDLLCommands.getAmountActivePlaces()[i]) {
-
-                }
+        while (errorList.contains(null)) {
+            for (int i = 0; i < amountActivePlacesForTest.length; i++) {
+                errorList.add(i, stendDLLCommands.meterErrorReadMass(getAmountActivePlacesForTest()[i], stendDLLCommands.getCountResult()));
             }
-
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+        stendDLLCommands.powerOf();
+        stendDLLCommands.errorClear();
+
+        return true;
     }
 
     //Тут тоже необходимо подумать
@@ -83,5 +110,9 @@ public class ErrorCommand implements Commands{
         }
 
         return init;
+    }
+
+    public void setConstant(int constant) {
+        this.constant = constant;
     }
 }
