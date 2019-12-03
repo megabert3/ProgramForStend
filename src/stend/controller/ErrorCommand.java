@@ -86,8 +86,8 @@ public class ErrorCommand implements Commands{
             String[] strMass;
             double error;
 
-            for (int i = 1; i <= StendDLLCommands.amountActivePlacesForTest.length; i++) {
-                strError = stendDLLCommands.meterErrorRead(StendDLLCommands.amountActivePlacesForTest[1]);
+            for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
+                strError = stendDLLCommands.meterErrorRead(StendDLLCommands.amountActivePlacesForTest[i]);
                 strMass = strError.split(",");
                 resultNo = Integer.parseInt(strMass[0]);
                 error = Double.parseDouble(strMass[1]);
