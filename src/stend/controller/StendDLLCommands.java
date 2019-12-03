@@ -17,26 +17,26 @@ public class StendDLLCommands {
     private boolean threePhaseStend;
 
     //Кол-во постадочных мест для счётчиков
-    private int amountPlaces = 3;
+    private static int amountPlaces = 3;
 
     //Активно ли посадочное место
     private boolean activePlace;
 
     //Константа счётчика
-    private int constant;
+    private static double constant = 8000.0;
 
     //Колличество повторов измерений
-    private int countResult;
+    private int countResult = 2;
 
     //Пауза для стабилизации и установки заданных пар-ров установки
-    private int pauseForStabization;
+    private int pauseForStabization = 3;
 
     //Колличество выбранных мест для испытания
-    private boolean[] amountActivePlaces = initializationAmountActivePlaces();
+    public static boolean[] amountActivePlaces = initializationAmountActivePlaces();
 
 
     //Константы счётчиков
-    private double[] constantsForMetersOnPlaces = initializationConstantsForMetersOnPlaces();
+    public static double[] constantsForMetersOnPlaces = initializationConstantsForMetersOnPlaces();
 
     private String [] threePhaseStendNames = new String[]{"HY5303C-22", "HS5320", "SY3102", "SY3302", "TC-3000D"};
     private String [] onePhaseStendNames = new String[]{"HY5101C-22", "HY5101C-23", "SY3803", "TC-3000C"};
@@ -47,7 +47,7 @@ public class StendDLLCommands {
     }
 
     //Инициализирует посадочные места и устанавливает значения флага
-    private boolean[] initializationAmountActivePlaces() {
+    private static boolean[] initializationAmountActivePlaces() {
         boolean[] init = new boolean[amountPlaces + 1];
         for (int i = 1; i <= amountPlaces; i++) {
             init[i] = true;
@@ -65,10 +65,10 @@ public class StendDLLCommands {
     }
 
     //Инициализирует значения констант у посадочных мест
-    private double[] initializationConstantsForMetersOnPlaces() {
+    private static double[] initializationConstantsForMetersOnPlaces() {
         double[] init = new double[amountPlaces + 1];
         for (int i = 1; i <= amountPlaces; i++) {
-            init[i] = 0.0;
+            init[i] = constant;
         }
         return init;
     }
@@ -91,7 +91,7 @@ public class StendDLLCommands {
         return pauseForStabization;
     }
 
-    public int getConstant() {
+    public double getConstant() {
         return constant;
     }
 

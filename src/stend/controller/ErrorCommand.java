@@ -3,10 +3,14 @@ package stend.controller;
 import stend.helper.ConsoleHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ErrorCommand implements Commands{
-    private static StendDLLCommands stendDLLCommands;
+
+    private StendDLLCommands stendDLLCommands;
+
 
     private int phase;
     private double ratedVolt;
@@ -27,16 +31,22 @@ public class ErrorCommand implements Commands{
     private int channelFlag;
     private int pulse;
 
+    private String[] strMass;
 
     //Нужен сеттер т.к. инициализация будет с другого класса
-    private int constant;
+    private double[] constant = StendDLLCommands.constantsForMetersOnPlaces;
 
     //Необходимо для быстрого обхода в цикле
-    private int[] amountActivePlacesForTest = getAmountActivePlacesForTest();
+    private static int[] amountActivePlacesForTest = getAmountActivePlacesForTest();
 
-    private ArrayList<double[]> errorList = new ArrayList<>(amountActivePlacesForTest.length);
+    //Массив погрешностей одного счётчика
+    private HashMap<Integer, double[]> errorList = initErrorList();
 
-    public ArrayList<double[]> getErrorList() {
+    //Флаг для прекращения сбора погрешности
+    private HashMap<Integer, Boolean> flagInStop = initBoolList();
+
+
+    public HashMap<Integer, double[]> getErrorList() {
         return errorList;
     }
 
@@ -73,18 +83,26 @@ public class ErrorCommand implements Commands{
 
         ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
 
-        for (int value : amountActivePlacesForTest) {
+        for (int i = 1; i <= amountActivePlacesForTest.length; i++) {
             //Подумать над константой, скорее всего необходимо будет сделать одной для всех
-            stendDLLCommands.errorStart(value, constant, pulse);
+            stendDLLCommands.errorStart(i, constant[i], pulse);
         }
 
         //Тут надо что-то придумать
-        while (errorList.contains(null)) {
-            for (int i = 0; i < amountActivePlacesForTest.length; i++) {
-                errorList.add(i, stendDLLCommands.meterErrorReadMass(getAmountActivePlacesForTest()[i], stendDLLCommands.getCountResult()));
+        while (flagInStop.containsValue(false)) {
+            for (int i = 1; i <= amountActivePlacesForTest.length; i++) {
+                String strError = stendDLLCommands.meterErrorRead(i);
+                strMass = strError.split(",");
+                int resultNo = Integer.parseInt(strMass[0]);
+                ConsoleHelper.getMessage(String.valueOf(resultNo));
+                double error = Double.parseDouble(strMass[1]);
+                errorList.get(i)[resultNo] = error;
+                if (resultNo >= stendDLLCommands.getCountResult()) {
+                    flagInStop.put(i, true);
+                }
             }
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -96,10 +114,10 @@ public class ErrorCommand implements Commands{
     }
 
     //Тут тоже необходимо подумать
-    private int[] getAmountActivePlacesForTest() {
+    private static int[] getAmountActivePlacesForTest() {
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 1; i <= stendDLLCommands.getAmountActivePlaces().length; i++) {
-            if (stendDLLCommands.getAmountActivePlaces()[i]) {
+        for (int i = 1; i < StendDLLCommands.amountActivePlaces.length; i++) {
+            if (StendDLLCommands.amountActivePlaces[i]) {
                 list.add(i);
             }
         }
@@ -112,7 +130,23 @@ public class ErrorCommand implements Commands{
         return init;
     }
 
-    public void setConstant(int constant) {
-        this.constant = constant;
+    private HashMap<Integer, Boolean> initBoolList() {
+        HashMap<Integer, Boolean> init = new HashMap<>(amountActivePlacesForTest.length);
+        for (int i = 1; i <= amountActivePlacesForTest.length; i++) {
+            init.put(i, false);
+        }
+        return init;
+    }
+
+    private HashMap<Integer, double[]> initErrorList() {
+        HashMap<Integer, double[]> init = new HashMap<>(amountActivePlacesForTest.length);
+        for (int i = 1; i <= amountActivePlacesForTest.length; i++) {
+            init.put(i, new double[10]);
+        }
+        return init;
+    }
+
+    public void setConstant(int number, double constant) {
+        this.constant[number] = constant;
     }
 }
