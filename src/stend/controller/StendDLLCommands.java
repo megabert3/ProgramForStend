@@ -5,6 +5,8 @@ import com.sun.jna.Memory;
 import com.sun.jna.ptr.PointerByReference;
 import stend.model.StendDLL;
 
+import java.util.ArrayList;
+
 
 public class StendDLLCommands {
     private StendDLL stend = StendDLL.INSTANCE;
@@ -14,32 +16,24 @@ public class StendDLLCommands {
 
     //Тип эталонного счётчика
     private String typeReferenceMeter;
-    private boolean threePhaseStend;
 
     //Кол-во постадочных мест для счётчиков
     private static int amountPlaces = 3;
 
-    //Активно ли посадочное место
-    private boolean activePlace;
-
     //Константа счётчика
-    private static double constant = 8000.0;
-
-    //Колличество повторов измерений
-    private int countResult = 2;
+    private double constant = 8000.0;
 
     //Пауза для стабилизации и установки заданных пар-ров установки
     private int pauseForStabization = 3;
 
-    //Колличество выбранных мест для испытания
+    //Количество выбранных (активных мест)
     public static boolean[] amountActivePlaces = initializationAmountActivePlaces();
 
-
     //Константы счётчиков
-    public static double[] constantsForMetersOnPlaces = initializationConstantsForMetersOnPlaces();
+    //public static double[] constantsForMetersOnPlaces = initializationConstantsForMetersOnPlaces();
 
-    private String [] threePhaseStendNames = new String[]{"HY5303C-22", "HS5320", "SY3102", "SY3302", "TC-3000D"};
-    private String [] onePhaseStendNames = new String[]{"HY5101C-22", "HY5101C-23", "SY3803", "TC-3000C"};
+    //Необходимо для быстрого обхода в цикле
+    public static int[] amountActivePlacesForTest = initAmountActivePlacesForTest();
 
     public StendDLLCommands(int port, String refMeter) {
         this.port = port;
@@ -55,32 +49,42 @@ public class StendDLLCommands {
         return init;
     }
 
+    //Тут тоже необходимо подумать
+    private static int[] initAmountActivePlacesForTest() {
+        ArrayList<Integer> init = new ArrayList<>();
+        for (int i = 1; i < amountActivePlaces.length; i++) {
+            if (amountActivePlaces[i]) {
+                init.add(i);
+            }
+        }
+
+        int [] ints = new int[init.size()];
+
+        for (int i = 0; i < ints.length; i++) {
+            ints[i] = init.get(i);
+        }
+        return ints;
+    }
+
     //Активирует или деактивирует посадочное место
     public void setActivePlace(int number, boolean active) {
         amountActivePlaces[number] = active;
-    }
-
-    public boolean[] getAmountActivePlaces() {
-        return amountActivePlaces;
+        amountActivePlacesForTest = initAmountActivePlacesForTest();
     }
 
     //Инициализирует значения констант у посадочных мест
-    private static double[] initializationConstantsForMetersOnPlaces() {
-        double[] init = new double[amountPlaces + 1];
-        for (int i = 1; i <= amountPlaces; i++) {
-            init[i] = constant;
-        }
-        return init;
-    }
+//    private static double[] initializationConstantsForMetersOnPlaces() {
+//        double[] init = new double[amountPlaces + 1];
+//        for (int i = 1; i <= amountPlaces; i++) {
+//            init[i] = constant;
+//        }
+//        return init;
+//    }
 
-    public double[] getConstantsForMetersOnPlaces() {
-        return constantsForMetersOnPlaces;
-    }
-
-    //Инициализирует значение константы у каждого счётчика
-    public void setConstant(int number, double constant) {
-        constantsForMetersOnPlaces[number] = constant;
-    }
+//    //Инициализирует значение константы каждого отдельного счётчика
+//    public void setConstant(int number, double constant) {
+//        constantsForMetersOnPlaces[number] = constant;
+//    }
 
     public int getAmountPlaces() {
         return amountPlaces;
@@ -95,25 +99,12 @@ public class StendDLLCommands {
         return constant;
     }
 
-    public void setConstant(int constant) {
-        this.constant = constant;
-    }
-
-    //Проверяет сколько фаз у стенда
-    public void howManyPhase() {
-
-    }
-
-
-    public boolean isThreePhaseStend() {
-        return threePhaseStend;
-    }
-
     //Включить напряжение и ток
     //Test
     public boolean getUI(double curr) {
         return stend.Adjust_UI(1, 230.0, curr, 50.0, 0, 0, 100.0, 100.0, "H", "1.0", typeReferenceMeter, port);
     }
+
     //Включить напряжение и ток без регулеровки пофазного напряжения
     public boolean getUI(int phase,
                          double ratedVolt,
@@ -170,37 +161,13 @@ public class StendDLLCommands {
         stend.Error_Read(pointer, meterNo, port);
         return pointer.getValue().getString(0, "ASCII");
     }
-    //Получить массив ошибок навешенного счётчика
-    public double[] meterErrorReadMass (int meterNo, int countResult) {
-        int measurinNo = 0;
-        double error;
-        double[] errMass = new double[10];
-        while (measurinNo <= countResult) {
-            String errorRead = meterErrorRead(meterNo);
-            String[] split = errorRead.split(",");
-            measurinNo = Integer.parseInt(split[0]);
-            error = Double.parseDouble(split[1]);
-            errMass[measurinNo] = error;
-            return errMass;
-        }
-        return null;
-    }
 
-    public int getCountResult() {
-        return countResult;
-    }
-
-    /**
-     * Спросить и протестить
-     * */
     // Запустить проверку навешенного счетчика (напряжение и ток должны быть включены)
     public boolean errorStart(int meterNo, double constant, int pulse) {
         return stend.Error_Start(meterNo, constant, pulse, port);
     }
 
-    /**
-     * Спросить и протестить
-     * */
+
     // Установка режима импульсов
     public boolean setPulseChannel(int meterNo, int channelFlag) {
         return stend.Set_Pulse_Channel(meterNo, channelFlag, port);
@@ -211,38 +178,26 @@ public class StendDLLCommands {
         return stend.Set_485_Channel(meterNo, openFlag, port);
     }
 
-    /**
-     * Спросить и протестить
-     * */
     // Старт CRPSTA
     public boolean crpstaStart(int meterNo) {
         return stend.CRPSTA_start(meterNo, port);
     }
 
     // результат CRPSTA
-
     public boolean crpstaResult(int meterNo) {
         return stend.CRPSTA_Result(meterNo, port);
     }
-    /**
-     * Спросить и протестить
-     * */
+
     // Очистка CRPSTA
     public boolean crpstaClear(int meterNo) {
         return stend.CRPSTA_clear(meterNo, port);
     }
 
-    /**
-     * Спросить и протестить
-     * */
     // Поиск метки
     public boolean searchMark(int meterNo) {
         return stend.Search_mark(meterNo, port);
     }
 
-    /**
-     * Спросить и протестить
-     * */
     // результат поиска метки
     public boolean searchMarkResult(int meterNo) {
         return stend.Search_mark_Result(meterNo, port);
