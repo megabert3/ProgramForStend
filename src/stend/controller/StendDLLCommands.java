@@ -6,6 +6,7 @@ import com.sun.jna.ptr.PointerByReference;
 import stend.model.StendDLL;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class StendDLLCommands {
@@ -34,6 +35,9 @@ public class StendDLLCommands {
 
     //Необходимо для быстрого обхода в цикле
     public static int[] amountActivePlacesForTest = initAmountActivePlacesForTest();
+
+    //Флаг для прекращения сбора погрешности
+    public static HashMap<Integer, Boolean> flagInStop = initBoolList();
 
     public StendDLLCommands(int port, String refMeter) {
         this.port = port;
@@ -72,6 +76,19 @@ public class StendDLLCommands {
         amountActivePlacesForTest = initAmountActivePlacesForTest();
     }
 
+    private static HashMap<Integer, Boolean> initBoolList() {
+        HashMap<Integer, Boolean> init = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.length);
+        for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
+            init.put(StendDLLCommands.amountActivePlacesForTest[i], false);
+        }
+        return init;
+    }
+
+    public void setEnergyPulse (int channelFlag) {
+        for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
+            setPulseChannel(StendDLLCommands.amountActivePlacesForTest[i], channelFlag);
+        }
+    }
     //Инициализирует значения констант у посадочных мест
 //    private static double[] initializationConstantsForMetersOnPlaces() {
 //        double[] init = new double[amountPlaces + 1];

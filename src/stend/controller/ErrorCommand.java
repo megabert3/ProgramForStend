@@ -34,9 +34,6 @@ public class ErrorCommand implements Commands{
     //Массив погрешностей одного счётчика
     private HashMap<Integer, double[]> errorList = initErrorList();
 
-    //Флаг для прекращения сбора погрешности
-    private HashMap<Integer, Boolean> flagInStop = initBoolList();
-
     public HashMap<Integer, double[]> getErrorList() {
         return errorList;
     }
@@ -63,14 +60,11 @@ public class ErrorCommand implements Commands{
     }
 
     @Override
-    public boolean execute() {
+    public void execute() {
         stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPer, currPer, iABC, cosP);
 
-        //Тут необходимо придумать флаг
-        for (int i = 1; i <= stendDLLCommands.getAmountPlaces(); i++) {
-            stendDLLCommands.setPulseChannel(i, channelFlag);
-        }
+        stendDLLCommands.setEnergyPulse(channelFlag);
 
         ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
 
@@ -79,8 +73,7 @@ public class ErrorCommand implements Commands{
             stendDLLCommands.errorStart(StendDLLCommands.amountActivePlacesForTest[i], stendDLLCommands.getConstant(), pulse);
         }
 
-        //Тут надо что-то придумать
-        while (flagInStop.containsValue(false)) {
+        while (StendDLLCommands.flagInStop.containsValue(false)) {
             int resultNo;
             String strError;
             String[] strMass;
@@ -94,7 +87,7 @@ public class ErrorCommand implements Commands{
                 errorList.get(StendDLLCommands.amountActivePlacesForTest[i])[resultNo] = error;
 
                 if (resultNo >= countResult) {
-                    flagInStop.put(StendDLLCommands.amountActivePlacesForTest[i], true);
+                    StendDLLCommands.flagInStop.put(StendDLLCommands.amountActivePlacesForTest[i], true);
                 }
             }
 
@@ -106,19 +99,8 @@ public class ErrorCommand implements Commands{
         }
         stendDLLCommands.powerOf();
         stendDLLCommands.errorClear();
-
-        return true;
     }
 
-
-
-    private HashMap<Integer, Boolean> initBoolList() {
-        HashMap<Integer, Boolean> init = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.length);
-        for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
-            init.put(StendDLLCommands.amountActivePlacesForTest[i], false);
-        }
-        return init;
-    }
 
     private HashMap<Integer, double[]> initErrorList() {
         HashMap<Integer, double[]> init = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.length);
