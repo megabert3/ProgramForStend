@@ -21,14 +21,28 @@ public class MainStend {
 //        }
 
         //Проверка CreepCommand
+//        try {
+//            StendDLLCommands stendDLLCommands = new StendDLLCommands(9, "HY5303C-22");
+//            CreepCommand creepCommand = new CreepCommand(stendDLLCommands, 1, 230.0, 0.0, 50.0, 0,
+//                    0, 100.0, 100.0, 0, 2);
+//            Thread.sleep(2000);
+//            creepCommand.execute();
+//
+//            for (Map.Entry<Integer, Boolean> map : creepCommand.getCreepCommandResult().entrySet()) {
+//                System.out.println(map.getKey() + " : " + map.getValue());
+//            }
+//        }catch (Exception e) {
+//            e.printStackTrace();
+
+        //Проверка StartCommand
         try {
             StendDLLCommands stendDLLCommands = new StendDLLCommands(9, "HY5303C-22");
-            CreepCommand creepCommand = new CreepCommand(stendDLLCommands, 1, 230.0, 0.0, 50.0, 0,
+            StartCommand startCommand = new StartCommand(stendDLLCommands, 1, 230.0, 0.0, 50.0, 0,
                     0, 100.0, 100.0, 0, 2);
             Thread.sleep(2000);
-            creepCommand.execute();
+            startCommand.execute();
 
-            for (Map.Entry<Integer, Boolean> map : creepCommand.getCreepCommandResult().entrySet()) {
+            for (Map.Entry<Integer, Boolean> map : startCommand.getCreepCommandResult().entrySet()) {
                 System.out.println(map.getKey() + " : " + map.getValue());
             }
         }catch (Exception e) {
