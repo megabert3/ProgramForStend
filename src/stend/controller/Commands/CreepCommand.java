@@ -1,8 +1,12 @@
-package stend.controller;
+package stend.controller.Commands;
+
+import stend.controller.Commands.Commands;
+import stend.controller.StendDLLCommands;
 
 import java.util.HashMap;
 
-public class StartCommand implements Commands{
+
+public class CreepCommand implements Commands {
 
     private StendDLLCommands stendDLLCommands;
     private int phase;
@@ -23,14 +27,14 @@ public class StartCommand implements Commands{
     private long timeEnd;
     private long currTime;
 
-    private HashMap<Integer, Boolean> startCommandResult = initCreepCommandResult();
+    private HashMap<Integer, Boolean> creepCommandResult = initCreepCommandResult();
     private HashMap<Integer, Meter> metersList = initMeterList();
 
     public HashMap<Integer, Boolean> getCreepCommandResult() {
-        return startCommandResult;
+        return creepCommandResult;
     }
 
-    public StartCommand(StendDLLCommands stendDLLCommands, int phase, double ratedVolt, double ratedCurr, double ratedFreq,
+    public CreepCommand(StendDLLCommands stendDLLCommands, int phase, double ratedVolt, double ratedCurr, double ratedFreq,
                         int phaseSrequence, int revers, double voltPer, double currPer, int channelFlag, int pulseValue) {
         this.stendDLLCommands = stendDLLCommands;
         this.phase = phase;
@@ -54,10 +58,10 @@ public class StartCommand implements Commands{
 
         currTime = System.currentTimeMillis();
         timeEnd = currTime + timeForTest;
-        while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+        while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
             for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
                 if (!(metersList.get(StendDLLCommands.amountActivePlacesForTest[i]).run())) {
-                    startCommandResult.put(StendDLLCommands.amountActivePlacesForTest[i], true);
+                    creepCommandResult.put(StendDLLCommands.amountActivePlacesForTest[i], false);
                 }
             }
         }
@@ -66,7 +70,7 @@ public class StartCommand implements Commands{
     private HashMap<Integer, Boolean> initCreepCommandResult() {
         HashMap<Integer, Boolean> init = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.length);
         for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
-            init.put(StendDLLCommands.amountActivePlacesForTest[i], false);
+            init.put(StendDLLCommands.amountActivePlacesForTest[i], true);
         }
         return init;
     }
@@ -103,4 +107,5 @@ public class StartCommand implements Commands{
             return true;
         }
     }
+
 }

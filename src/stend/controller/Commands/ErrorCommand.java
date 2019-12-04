@@ -1,11 +1,12 @@
-package stend.controller;
+package stend.controller.Commands;
 
+import stend.controller.StendDLLCommands;
 import stend.helper.ConsoleHelper;
 
 import java.util.HashMap;
 
 
-public class ErrorCommand implements Commands{
+public class ErrorCommand implements Commands {
 
     private StendDLLCommands stendDLLCommands;
 
@@ -56,7 +57,6 @@ public class ErrorCommand implements Commands{
         this.cosP = cosP;
         this.channelFlag = channelFlag;
         this.pulse = pulse;
-
     }
 
     @Override
