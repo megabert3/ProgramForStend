@@ -1,6 +1,5 @@
 package stend.controller.Commands;
 
-import stend.controller.Commands.Commands;
 import stend.controller.StendDLLCommands;
 
 import java.util.HashMap;

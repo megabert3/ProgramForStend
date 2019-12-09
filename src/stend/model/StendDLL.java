@@ -1,13 +1,8 @@
 package stend.model;
 
 import com.sun.jna.Library;
-import com.sun.jna.Memory;
 import com.sun.jna.Native;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.PointerByReference;
-
-import java.nio.ByteBuffer;
 
 
 public interface StendDLL extends Library {
@@ -33,8 +28,8 @@ public interface StendDLL extends Library {
 // Revers - направление тока
 //		0 - Прямой
 //		1 - Обратный
-// Volt_Per - Процент по напряжению (0- 100)
-// Curr_Per - Процент по току (0-100)
+// Volt_Per - Процент по напряжению (0 - 100)
+// Curr_Per - Процент по току (0 - 100)
 // IABC - строка, определяющая фазы, по которым пустить ток: A, B, C, H - все
 // CosP - строка  с косинусом угла. Например: "1.0", "0.5L", "0.8C"
 // SModel - Строка с моделью счетчика:
@@ -256,8 +251,8 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 // Constant - постоянная
 // Meter_No - номер места
 // Dev_Port - номер com-порта
-    boolean ConstPulse_Read(double MeterKWH,
-                            double StdKWH,
+    boolean ConstPulse_Read(String MeterKWH,
+                            String StdKWH,
                             double Constant,
                             int Meter_No,
                             int Dev_Port);

@@ -1,8 +1,6 @@
 package stend.controller;
 
-
-
-import stend.controller.Commands.StartCommand;
+import stend.helper.ConsoleHelper;
 
 import java.util.Map;
 
@@ -50,26 +48,54 @@ public class MainStend {
 //        }catch (Exception e) {
 //            e.printStackTrace();
         try {
-            StendDLLCommands stendDLLCommands = new StendDLLCommands(9, "HY5303C-22");
-            stendDLLCommands.getUI(0);
-            Thread.sleep(2000);
+//            StendDLLCommands stendDLLCommands = new StendDLLCommands(9, "HY5303C-22");
+//            RTCCommand rtcCommand = new RTCCommand(stendDLLCommands, 1, 230.0, 0.0, 50.0, 0,
+//                    0, 100.0, 100.0,0, 10);
+//
+//            rtcCommand.execute();
+//            StendDLLCommands stendDLLCommands = new StendDLLCommands(9, "HY5303C-22");
+//            stendDLLCommands.getUI(0);
+//            Thread.sleep(7000);
+//
+//            System.out.println(stendDLLCommands.setPulseChannel(1, 0));
+//            System.out.println(stendDLLCommands.setPulseChannel(2, 0));
+//            System.out.println(stendDLLCommands.setPulseChannel(3, 0));
+//
+//        for (int j = 1; j < 50; j++) {
+//
+//            stendDLLCommands.clockErrorStart(1, 1.0, 10);
+//            stendDLLCommands.clockErrorStart(2, 1.0, 10);
+//            stendDLLCommands.clockErrorStart(3, 1.0, 10);
+//
+//            Thread.sleep(10 * 1000);
+//
+//            for (int i = 0; i < 25; i++) {
+//                Thread.sleep(200);
+//                System.out.println(stendDLLCommands.clockErrorRead(1.0, 0, 1));
+//                System.out.println(stendDLLCommands.clockErrorRead(1.0, 0, 2));
+//                System.out.println(stendDLLCommands.clockErrorRead(1.0, 0, 3));
+//                System.out.println();
+//            }
+//        }
 
-            stendDLLCommands.setPulseChannel(1, 0);
+
+            StendDLLCommands stendDLLCommands = new StendDLLCommands(9, "HY5303C-22");
+            stendDLLCommands.getUI(5);
+            Thread.sleep(7000);
+
             stendDLLCommands.setPulseChannel(2, 0);
             stendDLLCommands.setPulseChannel(3, 0);
 
-            stendDLLCommands.clockErrorStart(1, 1.0, 10);
-            stendDLLCommands.clockErrorStart(2, 1.0, 10);
-            stendDLLCommands.clockErrorStart(3, 1.0, 10);
+            stendDLLCommands.constTestStart(2, 800);
+            stendDLLCommands.constTestStart(3, 800);
 
-            while (true) {
-                System.out.println(stendDLLCommands.clockErrorRead(1.0, 0, 1));
-                System.out.println(stendDLLCommands.clockErrorRead(1.0, 0, 2));
-                System.out.println(stendDLLCommands.clockErrorRead(1.0, 0, 3));
-                System.out.println();
-                Thread.sleep(5000);
-            }
+            ConsoleHelper.getMessage(String.valueOf(stendDLLCommands.constPulseRead("2.0", "3.0", 200, 2)));
+            ConsoleHelper.getMessage(String.valueOf(stendDLLCommands.constPulseRead("2.0", "3.0", 800, 3)));
 
+
+
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
         }catch (Exception e) {
             e.printStackTrace();
         }

@@ -3,6 +3,7 @@ package stend.controller;
 import com.sun.jna.Memory;
 
 import com.sun.jna.ptr.PointerByReference;
+import stend.helper.ConsoleHelper;
 import stend.model.StendDLL;
 
 import java.util.ArrayList;
@@ -237,8 +238,9 @@ public class StendDLLCommands {
     }
 
     // Чтение данных по энергии
-    public boolean constPulseRead (double meterKWH, double stdKWH, double constant, int meterNo) {
-        return stend.ConstPulse_Read(meterKWH, stdKWH, constant, meterNo, port);
+    public boolean constPulseRead (String meterKWH, String stdKWH, double constant, int meterNo) {
+        stend.ConstPulse_Read(meterKWH, stdKWH, constant, meterNo, port);
+        return true;
     }
 
     // Выбор цепи
@@ -261,7 +263,7 @@ public class StendDLLCommands {
     public String clockErrorRead (double freq, int errType, int meterNo) {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.Clock_Error_Read(pointer, freq, errType, meterNo, port);
-        return pointer.getValue().getString(0, "ASCII");
+        return pointer.getValue().getString(0, "UTF-8");
     }
 
     // Закрыть порт
