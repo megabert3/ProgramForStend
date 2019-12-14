@@ -1,9 +1,11 @@
 package stend.controller.Commands;
 
+import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 import stend.helper.ConsoleHelper;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class ErrorCommand implements Commands {
@@ -32,12 +34,8 @@ public class ErrorCommand implements Commands {
     //Количество повторов теста
     private int countResult = 2;
 
-    //Массив погрешностей одного счётчика
-    private HashMap<Integer, double[]> errorList = initErrorList();
-
-    public HashMap<Integer, double[]> getErrorList() {
-        return errorList;
-    }
+    //Флаг для прекращения сбора погрешности
+    private HashMap<Integer, Boolean> flagInStop = initBoolList();
 
     public ErrorCommand(StendDLLCommands stendDLLCommands, int phase, double ratedVolt, double ratedCurr, double ratedFreq, int phaseSrequence,
                         int revers, double voltPer, double currPer, String iABC, String cosP, int channelFlag, int pulse) {
@@ -68,26 +66,26 @@ public class ErrorCommand implements Commands {
 
         ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
 
-        for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
+        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
             //Подумать над константой, скорее всего необходимо будет сделать одной для всех
-            stendDLLCommands.errorStart(StendDLLCommands.amountActivePlacesForTest[i], stendDLLCommands.getConstant(), pulse);
+            stendDLLCommands.errorStart(meter.getKey(), stendDLLCommands.getConstant(), pulse);
         }
 
-        while (StendDLLCommands.flagInStop.containsValue(false)) {
+        while (flagInStop.containsValue(false)) {
             int resultNo;
             String strError;
             String[] strMass;
             double error;
 
-            for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
-                strError = stendDLLCommands.meterErrorRead(StendDLLCommands.amountActivePlacesForTest[i]);
+            for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+                strError = stendDLLCommands.meterErrorRead(meter.getKey());
                 strMass = strError.split(",");
                 resultNo = Integer.parseInt(strMass[0]);
                 error = Double.parseDouble(strMass[1]);
-                errorList.get(StendDLLCommands.amountActivePlacesForTest[i])[resultNo] = error;
+                StendDLLCommands.amountActivePlacesForTest.get(meter.getKey()).getErrors()[resultNo] = error;
 
                 if (resultNo >= countResult) {
-                    StendDLLCommands.flagInStop.put(StendDLLCommands.amountActivePlacesForTest[i], true);
+                    flagInStop.put(meter.getKey(), true);
                 }
             }
 
@@ -101,11 +99,10 @@ public class ErrorCommand implements Commands {
         stendDLLCommands.errorClear();
     }
 
-
-    private HashMap<Integer, double[]> initErrorList() {
-        HashMap<Integer, double[]> init = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.length);
-        for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
-            init.put(StendDLLCommands.amountActivePlacesForTest[i], new double[10]);
+    private HashMap<Integer, Boolean> initBoolList() {
+        HashMap<Integer, Boolean> init = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.size());
+        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+            init.put(meter.getKey(), false);
         }
         return init;
     }

@@ -1,5 +1,6 @@
 package stend.controller.Commands;
 
+import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 import stend.helper.ConsoleHelper;
 
@@ -36,7 +37,7 @@ public class RTCCommand implements Commands {
 
 
     //Массив погрешностей одного счётчика
-    private HashMap<Integer, String> errorRTCList = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.length);
+    private HashMap<Integer, String> errorRTCList = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.size());
 
     public HashMap<Integer, String> getErrorRTCList() {
         return errorRTCList;
@@ -67,21 +68,17 @@ public class RTCCommand implements Commands {
 
         ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
 
-        for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
-            stendDLLCommands.clockErrorStart(StendDLLCommands.amountActivePlacesForTest[i], freg, pulse);
+        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+            stendDLLCommands.clockErrorStart(meter.getKey(), freg, pulse);
         }
 
         try {
             while (count < countResult) {
                 Thread.sleep((pulse * 1000) + 2000);
-                for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
-                    errorRTCList.put(StendDLLCommands.amountActivePlacesForTest[i], stendDLLCommands.clockErrorRead(freg, errorType, StendDLLCommands.amountActivePlacesForTest[i]));
+                for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+                    meter.getValue().setRTCTestResult(stendDLLCommands.clockErrorRead(freg, errorType, meter.getKey()));
                 }
                 count++;
-
-                for (Map.Entry<Integer, String> map : errorRTCList.entrySet()) {
-                    System.out.println(map.getKey() + " : " + map.getValue());
-                }
             }
         }catch (InterruptedException e) {
             e.printStackTrace();

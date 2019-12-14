@@ -3,11 +3,10 @@ package stend.controller;
 import com.sun.jna.Memory;
 
 import com.sun.jna.ptr.PointerByReference;
-import stend.helper.ConsoleHelper;
 import stend.model.StendDLL;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class StendDLLCommands {
@@ -28,17 +27,15 @@ public class StendDLLCommands {
     //Пауза для стабилизации и установки заданных пар-ров установки
     private int pauseForStabization = 3;
 
-    //Количество выбранных (активных мест)
+    //Количество (активных мест)
     public static boolean[] amountActivePlaces = initializationAmountActivePlaces();
 
     //Константы счётчиков
     //public static double[] constantsForMetersOnPlaces = initializationConstantsForMetersOnPlaces();
 
     //Необходимо для быстрого обхода в цикле
-    public static int[] amountActivePlacesForTest = initAmountActivePlacesForTest();
+    public static HashMap<Integer, Meter> amountActivePlacesForTest = initAmountActivePlacesForTest();
 
-    //Флаг для прекращения сбора погрешности
-    public static HashMap<Integer, Boolean> flagInStop = initBoolList();
 
     public StendDLLCommands(int port, String refMeter) {
         this.port = port;
@@ -54,21 +51,15 @@ public class StendDLLCommands {
         return init;
     }
 
-    //Тут тоже необходимо подумать
-    private static int[] initAmountActivePlacesForTest() {
-        ArrayList<Integer> init = new ArrayList<>();
+    //Оставляет только места необходимые для теста
+    private static HashMap<Integer, Meter> initAmountActivePlacesForTest() {
+        HashMap<Integer, Meter> init = new HashMap<>();
         for (int i = 1; i < amountActivePlaces.length; i++) {
             if (amountActivePlaces[i]) {
-                init.add(i);
+                init.put(i, new Meter());
             }
         }
-
-        int [] ints = new int[init.size()];
-
-        for (int i = 0; i < ints.length; i++) {
-            ints[i] = init.get(i);
-        }
-        return ints;
+        return init;
     }
 
     //Активирует или деактивирует посадочное место
@@ -77,17 +68,9 @@ public class StendDLLCommands {
         amountActivePlacesForTest = initAmountActivePlacesForTest();
     }
 
-    private static HashMap<Integer, Boolean> initBoolList() {
-        HashMap<Integer, Boolean> init = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.length);
-        for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
-            init.put(StendDLLCommands.amountActivePlacesForTest[i], false);
-        }
-        return init;
-    }
-
     public void setEnergyPulse (int channelFlag) {
-        for (int i = 0; i < StendDLLCommands.amountActivePlacesForTest.length; i++) {
-            setPulseChannel(StendDLLCommands.amountActivePlacesForTest[i], channelFlag);
+        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+            setPulseChannel(meter.getKey(), channelFlag);
         }
     }
     //Инициализирует значения констант у посадочных мест
