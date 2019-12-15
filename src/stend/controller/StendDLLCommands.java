@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class StendDLLCommands {
+public abstract class StendDLLCommands {
     private StendDLL stend = StendDLL.INSTANCE;
 
     //Порт для связи с установкой
