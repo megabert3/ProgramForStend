@@ -1,32 +1,46 @@
 package stend.controller.viewController;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
 
 public class MainFrameController {
 
     @FXML
-    private ResourceBundle resources;
+    private Button mainFramePropertiesBtn;
 
     @FXML
-    private URL location;
+    private Button mainFrameMethodicsBtn;
 
     @FXML
-    private Button mainFrameProperties;
+    private Button mainFrameParamTestBtn;
 
     @FXML
-    private Button mainFrameMethodics;
+    private Button mainFrameResultsBtn;
 
     @FXML
-    private Button mainFrameParamTest;
+    void mainFrameHandleClicks(MouseEvent event) {
+        if (event.getSource() == mainFrameParamTestBtn) {
+            loadStage("stend/view/properties.fxml");
+        }
+    }
 
-    @FXML
-    private Button mainFrameResults;
-
-    @FXML
-    void initialize() {
-
+    private void loadStage(String resoure) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource(resoure));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
