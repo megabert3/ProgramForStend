@@ -3,6 +3,7 @@ package stend.controller;
 import com.sun.jna.Memory;
 
 import com.sun.jna.ptr.PointerByReference;
+import jssc.SerialPortList;
 import stend.model.StendDLL;
 
 import java.util.HashMap;
@@ -254,5 +255,9 @@ public abstract class StendDLLCommands {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.Dll_Port_Close(pointer);
         return pointer.getValue().getString(0, "ASCII");
+    }
+
+    public String[] massPort() {
+        return SerialPortList.getPortNames();
     }
 }

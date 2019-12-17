@@ -79,7 +79,7 @@ public class MainStend {
 //        }
 
 
-            StendDLLCommands stendDLLCommands = new StendDLLCommands(9, "HY5303C-22");
+            StendDLLCommands stendDLLCommands = new ThreePhaseStend(9, "HY5303C-22");
             stendDLLCommands.getUI(5);
             Thread.sleep(7000);
 

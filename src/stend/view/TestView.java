@@ -10,9 +10,9 @@ public class TestView extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("mainFrame.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("properties.fxml"));
         primaryStage.setTitle("НЕВА СТЕНД");
-        primaryStage.setScene(new Scene(root, 1280, 800));
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 }

@@ -2,6 +2,7 @@
   <library name="jna-5.5.0">
     <CLASSES>
       <root url="jar://C:/Program Files/Java/jna-5.5.0.jar!/" />
+      <root url="jar://C:/Program Files/Java/jSSC-2.8.0-Release/jssc.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
