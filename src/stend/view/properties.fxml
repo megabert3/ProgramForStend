@@ -15,7 +15,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="798.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stend.controller.viewController.PropertiesController">
    <children>
       <AnchorPane layoutY="-8.0" style="-fx-background-color: #303030;">
@@ -57,9 +56,9 @@
          <children>
             <StackPane prefHeight="418.0" prefWidth="536.0">
                <children>
-                  <AnchorPane fx:id="dmeoPane" style="-fx-background-color: #656565;">
+                  <AnchorPane fx:id="demoPane" style="-fx-background-color: #6A6A6A;">
                      <children>
-                        <GridPane alignment="CENTER" prefHeight="418.0" prefWidth="536.0" style="-fx-background-color: #656565;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <GridPane alignment="CENTER" prefHeight="418.0" prefWidth="536.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
@@ -76,9 +75,9 @@
                         </GridPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="passwordPane" style="-fx-background-color: #656565;">
+                  <AnchorPane fx:id="passwordPane" style="-fx-background-color: #6A6A6A;">
                      <children>
-                        <GridPane prefHeight="418.0" prefWidth="536.0" style="-fx-background-color: #656565;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <GridPane prefHeight="418.0" prefWidth="536.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
@@ -95,9 +94,9 @@
                         </GridPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="stendPane" prefHeight="418.0" prefWidth="536.0" style="-fx-background-color: #656565;">
+                  <AnchorPane fx:id="stendPane" prefHeight="418.0" prefWidth="536.0" style="-fx-background-color: #6A6A6A;">
                      <children>
-                        <Button layoutX="137.0" layoutY="298.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="42.0" prefWidth="263.0" stylesheets="@styleCSS/buttonStyle.css" text="Сохранить">
+                        <Button layoutX="326.0" layoutY="330.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="38.0" prefWidth="180.0" stylesheets="@styleCSS/buttonStyle.css" text="Сохранить">
                            <graphic>
                               <ImageView fitHeight="23.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -117,7 +116,7 @@
                           </rowConstraints>
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="COM порт для связи" />
-                              <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" />
+                              <ChoiceBox fx:id="standPaneCOMList" prefWidth="150.0" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                         <GridPane hgap="5.0" layoutX="20.0" layoutY="8.0" prefHeight="193.0" prefWidth="497.0">
@@ -143,11 +142,11 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <ChoiceBox fx:id="stendPaneStendTypeList" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Тип" wrappingWidth="60.185546875" GridPane.rowIndex="1" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Модель" GridPane.rowIndex="2" />
-                                    <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <TextField alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <ChoiceBox fx:id="stendPaneStendModel" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <TextField fx:id="standPaneAmoutPlase" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Серийный №" GridPane.rowIndex="4" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности" GridPane.rowIndex="5" />
                                     <TextField alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
@@ -170,7 +169,7 @@
                                  <children>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Образцовый счётчик" wrappingWidth="162.185546875" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Модель" wrappingWidth="81.30338287353516" GridPane.rowIndex="1" />
-                                    <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <ChoiceBox fx:id="stendPaneRefMetModel" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <TextField alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Класс точности" wrappingWidth="120.41796112060547" GridPane.rowIndex="3" />
                                     <TextField alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -179,6 +178,15 @@
                               </GridPane>
                            </children>
                         </GridPane>
+                        <Button layoutX="59.0" layoutY="330.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="38.0" prefWidth="180.0" stylesheets="@styleCSS/buttonStyle.css" text="Автопоиск">
+                           <graphic>
+                              <ImageView fitHeight="23.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@image/settingsFrame/search_32.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
                      </children>
                   </AnchorPane>
                </children>

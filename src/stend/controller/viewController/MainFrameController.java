@@ -27,16 +27,24 @@ public class MainFrameController {
     private Button mainFrameResultsBtn;
 
     @FXML
-    void mainFrameHandleClicks(MouseEvent event) {
-        if (event.getSource() == mainFrameParamTestBtn) {
-            loadStage("stend/view/properties.fxml");
+    void mainFrameHandleClicks(ActionEvent event) {
+        if (event.getSource() == mainFramePropertiesBtn) {
+            loadStage("/stend/view/properties.fxml", "Настройки");
         }
     }
 
-    private void loadStage(String resoure) {
+    @FXML
+    void mainFrameHandleClicks(MouseEvent event) {
+        if (event.getSource() == mainFramePropertiesBtn) {
+            loadStage("/stend/view/properties.fxml", "Настройки");
+        }
+    }
+
+    private void loadStage(String fxml, String stageName) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(resoure));
+            Parent root = FXMLLoader.load(getClass().getResource(fxml));
             Stage stage = new Stage();
+            stage.setTitle(stageName);
             stage.setScene(new Scene(root));
             stage.showAndWait();
         } catch (IOException e) {

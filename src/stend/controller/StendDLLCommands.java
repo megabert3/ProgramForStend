@@ -37,12 +37,6 @@ public abstract class StendDLLCommands {
     //Необходимо для быстрого обхода в цикле
     public static HashMap<Integer, Meter> amountActivePlacesForTest = initAmountActivePlacesForTest();
 
-
-    public StendDLLCommands(int port, String refMeter) {
-        this.port = port;
-        this.typeReferenceMeter = refMeter;
-    }
-
     //Инициализирует посадочные места и устанавливает значения флага
     private static boolean[] initializationAmountActivePlaces() {
         boolean[] init = new boolean[amountPlaces + 1];

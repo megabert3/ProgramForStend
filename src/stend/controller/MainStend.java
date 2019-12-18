@@ -79,23 +79,23 @@ public class MainStend {
 //        }
 
 
-            StendDLLCommands stendDLLCommands = new ThreePhaseStend(9, "HY5303C-22");
-            stendDLLCommands.getUI(5);
-            Thread.sleep(7000);
-
-            stendDLLCommands.setPulseChannel(2, 0);
-            stendDLLCommands.setPulseChannel(3, 0);
-
-            stendDLLCommands.constTestStart(2, 800);
-            stendDLLCommands.constTestStart(3, 800);
-
-            ConsoleHelper.getMessage(String.valueOf(stendDLLCommands.constPulseRead("2.0", "3.0", 200, 2)));
-            ConsoleHelper.getMessage(String.valueOf(stendDLLCommands.constPulseRead("2.0", "3.0", 800, 3)));
-
-
-
-            stendDLLCommands.errorClear();
-            stendDLLCommands.powerOf();
+//            StendDLLCommands stendDLLCommands = new ThreePhaseStend(9, "HY5303C-22");
+//            stendDLLCommands.getUI(5);
+//            Thread.sleep(7000);
+//
+//            stendDLLCommands.setPulseChannel(2, 0);
+//            stendDLLCommands.setPulseChannel(3, 0);
+//
+//            stendDLLCommands.constTestStart(2, 800);
+//            stendDLLCommands.constTestStart(3, 800);
+//
+//            ConsoleHelper.getMessage(String.valueOf(stendDLLCommands.constPulseRead("2.0", "3.0", 200, 2)));
+//            ConsoleHelper.getMessage(String.valueOf(stendDLLCommands.constPulseRead("2.0", "3.0", 800, 3)));
+//
+//
+//
+//            stendDLLCommands.errorClear();
+//            stendDLLCommands.powerOf();
         }catch (Exception e) {
             e.printStackTrace();
         }
