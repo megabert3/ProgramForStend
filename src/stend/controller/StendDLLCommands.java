@@ -20,7 +20,7 @@ public abstract class StendDLLCommands {
     private String typeReferenceMeter;
 
     //Кол-во постадочных мест для счётчиков
-    private static int amountPlaces = 3;
+    public static int amountPlaces;
 
     //Константа счётчика
     private double constant = 8000.0;
@@ -251,7 +251,8 @@ public abstract class StendDLLCommands {
         return pointer.getValue().getString(0, "ASCII");
     }
 
-    public String[] massPort() {
+    //Список портов
+    public static String[] massPort() {
         return SerialPortList.getPortNames();
     }
 }

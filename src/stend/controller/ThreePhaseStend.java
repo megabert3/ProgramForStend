@@ -8,8 +8,8 @@ public class ThreePhaseStend extends StendDLLCommands{
      * Трехфазный стенд
      */
     private static ThreePhaseStend threePhaseStend;
-    private List<String> stendModelList = Arrays.asList("HS3103", "HS6103");
-    private List<String> refMetModelList = Arrays.asList("HY5303C-22", "TC-3000B", "TC-3000D", "HC3100", "HS5300H");
+    public List<String> stendModelList = Arrays.asList("HS3103", "HS6103");
+    public List<String> refMetModelList = Arrays.asList("HY5303C-22", "TC-3000B", "TC-3000D", "HC3100", "HS5300H");
 
     private ThreePhaseStend() {}
 

@@ -2,7 +2,17 @@ package stend.controller;
 
 import stend.helper.ConsoleHelper;
 
-import java.util.Map;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class MainStend {
     public static void main(String[] args) {
@@ -47,7 +57,7 @@ public class MainStend {
 //            }
 //        }catch (Exception e) {
 //            e.printStackTrace();
-        try {
+
 //            StendDLLCommands stendDLLCommands = new StendDLLCommands(9, "HY5303C-22");
 //            RTCCommand rtcCommand = new RTCCommand(stendDLLCommands, 1, 230.0, 0.0, 50.0, 0,
 //                    0, 100.0, 100.0,0, 10);
@@ -96,8 +106,20 @@ public class MainStend {
 //
 //            stendDLLCommands.errorClear();
 //            stendDLLCommands.powerOf();
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("stendProperties");
+//        MainStend mainStend = new MainStend();
+//        Properties properties = mainStend.getProperties();
+//
+//        for (String key : properties.stringPropertyNames())
+//        {
+//            System.out.println(properties.get(key));
+//        }
+
+    }
+    private Properties getProperties() {
+        Properties properties = new Properties();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("stendProperties.properties");
+        System.out.println(resourceBundle.containsKey("stendType"));
+        return properties;
     }
 }
