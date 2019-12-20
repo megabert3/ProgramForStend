@@ -149,8 +149,8 @@
                                     <TextField fx:id="standPaneAmoutPlase" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Серийный №" GridPane.rowIndex="4" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности" GridPane.rowIndex="5" />
-                                    <TextField alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                    <TextField alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                    <TextField fx:id="stendPaneStendSerNo" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <TextField fx:id="StendPaneStandAcrCl" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Количество мест" GridPane.rowIndex="3" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Установка" textAlignment="CENTER" wrappingWidth="246.3802032470703" />
                                  </children>
@@ -170,9 +170,9 @@
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Образцовый счётчик" wrappingWidth="162.185546875" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Модель" wrappingWidth="81.30338287353516" GridPane.rowIndex="1" />
                                     <ChoiceBox fx:id="stendPaneRefMetModel" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <TextField alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <TextField fx:id="StendPaneRefSerNo" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Класс точности" wrappingWidth="120.41796112060547" GridPane.rowIndex="3" />
-                                    <TextField alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <TextField fx:id="stendPaneRefAcrCl" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Серийный №" wrappingWidth="121.36067199707031" GridPane.rowIndex="2" />
                                  </children>
                               </GridPane>
