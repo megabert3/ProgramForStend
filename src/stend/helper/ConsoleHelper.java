@@ -1,10 +1,22 @@
 package stend.helper;
 
-        import java.io.BufferedReader;
-        import java.io.IOException;
-        import java.io.InputStreamReader;
+        import java.io.*;
+        import java.util.Properties;
 
 public class ConsoleHelper {
+    public static Properties properties = getProperties();
+
+    private static Properties getProperties() {
+        Properties initProperties = new Properties();
+        try {
+            initProperties.load(new FileInputStream(new File("src/resourseFiles/stendProperties.properties")));
+        } catch (IOException e) {
+            System.out.println("Указанный файл properties не найден");
+            e.printStackTrace();
+        }
+        return initProperties;
+    }
+
     private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
     public static void getMessage(String mess) {

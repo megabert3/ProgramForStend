@@ -34,7 +34,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="mainFrameMethodicsBtn" contentDisplay="TOP" mnemonicParsing="false" prefHeight="150.0" prefWidth="312.0" stylesheets="@styleCSS/buttonStyle.css" text="Методики" GridPane.columnIndex="1">
+                  <Button fx:id="mainFrameMethodicsBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#mainFrameHandleClicks" prefHeight="150.0" prefWidth="312.0" stylesheets="@styleCSS/buttonStyle.css" text="Методики" GridPane.columnIndex="1">
                      <graphic>
                         <ImageView fitHeight="107.0" fitWidth="103.0" pickOnBounds="true" preserveRatio="true">
                            <image>

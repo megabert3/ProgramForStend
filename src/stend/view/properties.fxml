@@ -96,7 +96,7 @@
                   </AnchorPane>
                   <AnchorPane fx:id="stendPane" prefHeight="418.0" prefWidth="536.0" style="-fx-background-color: #6A6A6A;">
                      <children>
-                        <Button layoutX="326.0" layoutY="330.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="38.0" prefWidth="180.0" stylesheets="@styleCSS/buttonStyle.css" text="Сохранить">
+                        <Button fx:id="stendPaneSave" layoutX="326.0" layoutY="330.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="38.0" prefWidth="180.0" stylesheets="@styleCSS/buttonStyle.css" text="Сохранить">
                            <graphic>
                               <ImageView fitHeight="23.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -149,8 +149,8 @@
                                     <TextField fx:id="standPaneAmoutPlase" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Серийный №" GridPane.rowIndex="4" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности" GridPane.rowIndex="5" />
-                                    <TextField fx:id="stendPaneStendSerNo" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                    <TextField fx:id="StendPaneStandAcrCl" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                    <TextField fx:id="standPaneStandSerNo" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <TextField fx:id="stendPaneStandAcrCl" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Количество мест" GridPane.rowIndex="3" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Установка" textAlignment="CENTER" wrappingWidth="246.3802032470703" />
                                  </children>

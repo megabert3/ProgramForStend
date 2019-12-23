@@ -31,6 +31,10 @@ public class MainFrameController {
         if (event.getSource() == mainFramePropertiesBtn) {
             loadStage("/stend/view/properties.fxml", "Настройки");
         }
+
+        if(event.getSource() == mainFrameMethodicsBtn) {
+            loadStage("/stend/view/methodicsFrame.fxml", "Методики");
+        }
     }
 
     @FXML
