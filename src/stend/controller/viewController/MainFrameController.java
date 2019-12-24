@@ -33,7 +33,7 @@ public class MainFrameController {
         }
 
         if(event.getSource() == mainFrameMethodicsBtn) {
-            loadStage("/stend/view/methodicsFrame.fxml", "Методики");
+            loadStage("/stend/view/method/methodicsFrame.fxml", "Методики");
         }
     }
 
