@@ -14,14 +14,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="875.0" prefWidth="1226.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="875.0" prefWidth="1226.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stend.controller.viewController.methodicsFrameController.addEditFrameController">
    <children>
       <AnchorPane layoutX="803.0" layoutY="109.0" prefHeight="623.0" prefWidth="405.0">
          <children>
-            <ScrollPane prefHeight="463.0" prefWidth="409.0">
+            <ScrollPane layoutY="-14.0" prefHeight="623.0" prefWidth="409.0">
                <content>
-                  <TableView fx:id="viewPointTable" prefHeight="460.0" prefWidth="408.0">
+                  <TableView fx:id="viewPointTable" prefHeight="611.0" prefWidth="408.0">
                      <columns>
                         <TableColumn prefWidth="101.0" text="C1" />
                         <TableColumn prefWidth="99.0" text="C2" />
@@ -37,23 +36,23 @@
          <children>
             <StackPane layoutX="108.0" layoutY="34.0" prefHeight="525.0" prefWidth="643.0">
                <children>
-                  <GridPane fx:id="gridPaneAllPhase" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPaneAllPhaseAPPlus" style="-fx-background-color: #797979;">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseA" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseAAPPlus" style="-fx-background-color: #797979;">
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseB" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseBAPPlus" style="-fx-background-color: #797979;">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseC" prefHeight="519.0" prefWidth="636.0" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseCAPPlus" prefHeight="519.0" prefWidth="636.0" style="-fx-background-color: #797979;">
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
@@ -62,81 +61,84 @@
                         <ColumnConstraints />
                      </columnConstraints>
                   </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase1" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPaneAllPhaseAPMinus" style="-fx-background-color: #797979;">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
                   </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase2" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseAAPMinus" style="-fx-background-color: #797979;">
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+                  <GridPane fx:id="gridPanePhaseBAPMinus" style="-fx-background-color: #797979;">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                  </GridPane>
+                  <GridPane fx:id="gridPanePhaseCAPMinus" prefHeight="519.0" prefWidth="636.0" style="-fx-background-color: #797979;">
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                     </columnConstraints>
+                  </GridPane>
+                  <GridPane fx:id="gridPaneAllPhaseRPPlus" style="-fx-background-color: #797979;">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
                   </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase3" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseARPPlus" style="-fx-background-color: #797979;">
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+                  <GridPane fx:id="gridPanePhaseBRPPlus" style="-fx-background-color: #797979;">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                  </GridPane>
+                  <GridPane fx:id="gridPanePhaseCRPPlus" prefHeight="519.0" prefWidth="636.0" style="-fx-background-color: #797979;">
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                     </columnConstraints>
+                  </GridPane>
+                  <GridPane fx:id="gridPaneAllPhaseRPMinus" style="-fx-background-color: #797979;">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
                   </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase4" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseARPMinus" style="-fx-background-color: #797979;">
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+                  <GridPane fx:id="gridPanePhaseBRPMinus" style="-fx-background-color: #797979;">
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
                   </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase5" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseCRpMinus" prefHeight="519.0" prefWidth="636.0" style="-fx-background-color: #797979;">
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                  </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase6" style="-fx-background-color: #797979;">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                  </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase7" style="-fx-background-color: #797979;">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                  </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase8" style="-fx-background-color: #797979;">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                  </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase9" style="-fx-background-color: #797979;">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                  </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase10" style="-fx-background-color: #797979;">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                  </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase11" style="-fx-background-color: #797979;">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                  </GridPane>
-                  <GridPane fx:id="gridPaneAllPhase12" style="-fx-background-color: #797979;">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
                      </columnConstraints>
                   </GridPane>
                </children>
             </StackPane>
-            <VBox layoutY="34.0" prefHeight="525.0" prefWidth="108.0" style="-fx-background-color: #303030;">
+            <VBox fx:id="vBoxForPhaseTgBtn" layoutY="34.0" prefHeight="525.0" prefWidth="108.0" style="-fx-background-color: #303030;">
                <children>
                   <ToggleButton fx:id="allPhaseBtn" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="Все">
                      <graphic>
@@ -160,7 +162,7 @@
                   </ToggleButton>
                </children>
             </VBox>
-            <HBox alignment="TOP_RIGHT" prefHeight="35.0" prefWidth="751.0" style="-fx-background-color: #6A6A6A;">
+            <HBox fx:id="hBoxForDirectionTgBtn" alignment="TOP_RIGHT" prefHeight="35.0" prefWidth="751.0" style="-fx-background-color: #6A6A6A;">
                <children>
                   <ToggleButton fx:id="APPlus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="A.P. +">
                      <graphic>
@@ -224,7 +226,7 @@
             </VBox>
             <StackPane layoutX="130.0" layoutY="-6.0" prefHeight="208.0" prefWidth="621.0">
                <children>
-                  <GridPane style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPaneCreep" style="-fx-background-color: #797979;">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -235,7 +237,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                   </GridPane>
-                  <GridPane style="-fx-background-color: #797979;">
+                  <GridPane fx:id="GridPaneStart" style="-fx-background-color: #797979;">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -246,7 +248,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                   </GridPane>
-                  <GridPane style="-fx-background-color: #797979;">
+                  <GridPane fx:id="GridPaneRTC" style="-fx-background-color: #797979;">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -257,7 +259,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                   </GridPane>
-                  <GridPane style="-fx-background-color: #797979;">
+                  <GridPane fx:id="GridPaneConst" style="-fx-background-color: #797979;">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
