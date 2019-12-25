@@ -1,16 +1,30 @@
-package stend.controller.viewController.methodicsFrameController;
+package stend.view.TEST;
 
 import java.net.URL;
 import java.util.*;
 
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
-public class addEditFrameController {
+public class TESTVIEW extends Application {
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("/stend/view/TEST/TESTVIEW.fxml"));
+        primaryStage.setTitle("Тест");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+        initialize();
+    }
 
     private Map<String, CheckBox> checkBoxMap = new HashMap<>();
 
@@ -21,7 +35,7 @@ public class addEditFrameController {
     private List<String> current = Arrays.asList("Imax", "0.5Imax", "0.2Imax", "0.5Ib", "Ib","0.2Ib", "0.1Ib", "0.05Ib");
 
     //Список GridPane для выставления точек поверки
-    private List<GridPane> gridPanesEnergyAndPhase = initGridPanesEnergyAndPhase();
+    private List<GridPane> gridPanesEnergyAndPhaseList;
 
     @FXML
     private ResourceBundle resources;
@@ -32,56 +46,56 @@ public class addEditFrameController {
     @FXML
     private TableView<?> viewPointTable;
 
-//-------------------------------------------------------
+    //-------------------------------------------------------
     @FXML
-    private GridPane gridPaneAllPhaseAPPlus;
+    private GridPane gridPaneAllPhaseAPPlus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseAAPPlus;
+    private GridPane gridPanePhaseAAPPlus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseBAPPlus;
+    private GridPane gridPanePhaseBAPPlus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseCAPPlus;
+    private GridPane gridPanePhaseCAPPlus = new GridPane();
 
     @FXML
-    private GridPane gridPaneAllPhaseAPMinus;
+    private GridPane gridPaneAllPhaseAPMinus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseAAPMinus;
+    private GridPane gridPanePhaseAAPMinus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseBAPMinus;
+    private GridPane gridPanePhaseBAPMinus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseCAPMinus;
+    private GridPane gridPanePhaseCAPMinus = new GridPane();
 
     @FXML
-    private GridPane gridPaneAllPhaseRPPlus;
+    private GridPane gridPaneAllPhaseRPPlus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseARPPlus;
+    private GridPane gridPanePhaseARPPlus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseBRPPlus;
+    private GridPane gridPanePhaseBRPPlus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseCRPPlus;
+    private GridPane gridPanePhaseCRPPlus = new GridPane();
 
     @FXML
-    private GridPane gridPaneAllPhaseRPMinus;
+    private GridPane gridPaneAllPhaseRPMinus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseARPMinus;
+    private GridPane gridPanePhaseARPMinus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseBRPMinus;
+    private GridPane gridPanePhaseBRPMinus = new GridPane();
 
     @FXML
-    private GridPane gridPanePhaseCRPMinus;
+    private GridPane gridPanePhaseCRpMinus = new GridPane();
 
-//-------------------------------------------------------
+    //-------------------------------------------------------
     @FXML
     private VBox vBoxForPhaseTgBtn;
 
@@ -155,7 +169,6 @@ public class addEditFrameController {
     @FXML
     void setPointFrameAction(ActionEvent event) {
         setGropToggleButton(event);
-        gridPaneToFront(Objects.requireNonNull(getGridPane()));
     }
 
     @FXML
@@ -163,6 +176,7 @@ public class addEditFrameController {
         initGridPane();
     }
 
+    //Понять почему ArrayList не инициируется
     private void initGridPane() {
         setBoxAndLabelGridPane(gridPaneAllPhaseAPPlus);
         setBoxAndLabelGridPane(gridPanePhaseAAPPlus);
@@ -179,12 +193,11 @@ public class addEditFrameController {
         setBoxAndLabelGridPane(gridPaneAllPhaseRPMinus);
         setBoxAndLabelGridPane(gridPanePhaseARPMinus);
         setBoxAndLabelGridPane(gridPanePhaseBRPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseCRPMinus);
+        setBoxAndLabelGridPane(gridPanePhaseCRpMinus);
     }
 
-
-    private List<GridPane> initGridPanesEnergyAndPhase() {
-        return  null;
+    private static List<GridPane> initGridPanesEnergyAndPhaseList() {
+        return null;
     }
 
     //Заполняет поля нужными значениями GridPane
@@ -235,7 +248,7 @@ public class addEditFrameController {
             pane.getColumnConstraints().add(new ColumnConstraints(50));
         }
         for (int j = 0; j < powerFactor.size() + 1; j++) {
-            pane.getRowConstraints().add(new RowConstraints(23));
+            pane.getRowConstraints().add(new RowConstraints(20));
         }
     }
 
@@ -293,40 +306,11 @@ public class addEditFrameController {
         }
     }
 
-    private void gridPaneToFront(GridPane pane) {
-        pane.toFront();
-    }
-
     //Выдаёт нужный GridPane в зависимости от нажатой кнопки
-    private GridPane getGridPane() {
-        if (allPhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPaneAllPhaseAPPlus;
-            if (APMinus.isSelected()) return gridPaneAllPhaseAPMinus;
-            if (RPPlus.isSelected()) return gridPaneAllPhaseRPPlus;
-            if (RPMinus.isSelected()) return gridPaneAllPhaseRPMinus;
-        }
+    public GridPane getGridPane() {
+        if (allPhaseBtn.isSelected() && APPlus.isSelected()) {
 
-        if (APhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPanePhaseAAPPlus;
-            if (APMinus.isSelected()) return gridPanePhaseAAPMinus;
-            if (RPPlus.isSelected()) return gridPanePhaseARPPlus;
-            if (RPMinus.isSelected()) return gridPanePhaseARPMinus;
-        }
-
-        if (BPhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPanePhaseBAPPlus;
-            if (APMinus.isSelected()) return gridPanePhaseBAPMinus;
-            if (RPPlus.isSelected()) return gridPanePhaseBRPPlus;
-            if (RPMinus.isSelected()) return gridPanePhaseBRPMinus;
-        }
-
-        if (CPhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPanePhaseCAPPlus;
-            if (APMinus.isSelected()) return gridPanePhaseCAPMinus;
-            if (RPPlus.isSelected()) return gridPanePhaseCRPPlus;
-            if (RPMinus.isSelected()) return gridPanePhaseCRPMinus;
         }
         return null;
     }
 }
-

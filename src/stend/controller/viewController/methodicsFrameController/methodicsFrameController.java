@@ -51,39 +51,40 @@ public class methodicsFrameController {
 
     @FXML
     void initialize() {
-        //setPointGird.setGridLinesVisible(true);
+        setPointGird = new GridPane();
+        setPointGird.setGridLinesVisible(true);
 
-        //initGridPane();
-//        Label label;
-//        CheckBox checkBox = new CheckBox();
-//        for (int x = 0; x < current.size(); x++) {
-//            for (int y = 0; y < powerFactor.size(); y++) {
-//
-//                //Устанавливаю значения строки тока
-//                if (y == 0) {
-//                    label = new Label(current.get(x));
-//                    GridPane.setRowIndex(label, y);
-//                    GridPane.setColumnIndex(label, x + 1);
-//                    GridPane.setHalignment(label, HPos.CENTER);
-//                    GridPane.setValignment(label, VPos.CENTER);
-//                    setPointGird.getChildren().add(label);
-//
-//                //Устанавливаю значения строки PowerFactor
-//                }else if (x == 0) {
-//                    label = new Label(powerFactor.get(y));
-//                    GridPane.setRowIndex(label, y + 1);
-//                    GridPane.setColumnIndex(label, x);
-//                    GridPane.setHalignment(label, HPos.CENTER);
-//                    GridPane.setValignment(label, VPos.CENTER);
-//                    setPointGird.getChildren().add(label);
+        initGridPane();
+        Label label;
+        CheckBox checkBox = new CheckBox();
+        for (int x = 0; x < current.size(); x++) {
+            for (int y = 0; y < powerFactor.size(); y++) {
+
+                //Устанавливаю значения строки тока
+                if (y == 0) {
+                    label = new Label(current.get(x));
+                    GridPane.setRowIndex(label, y);
+                    GridPane.setColumnIndex(label, x + 1);
+                    GridPane.setHalignment(label, HPos.CENTER);
+                    GridPane.setValignment(label, VPos.CENTER);
+                    setPointGird.getChildren().add(label);
+
+                //Устанавливаю значения строки PowerFactor
+                }else if (x == 0) {
+                    label = new Label(powerFactor.get(y));
+                    GridPane.setRowIndex(label, y + 1);
+                    GridPane.setColumnIndex(label, x);
+                    GridPane.setHalignment(label, HPos.CENTER);
+                    GridPane.setValignment(label, VPos.CENTER);
+                    setPointGird.getChildren().add(label);
+                }
+
+//                if (x == current.size() - 1) {
+//                    setPointGird.getColumnConstraints().add(new ColumnConstraints(50));
+//                    setPointGird.getRowConstraints().add(new RowConstraints(20));
 //                }
-//
-////                if (x == current.size() - 1) {
-////                    setPointGird.getColumnConstraints().add(new ColumnConstraints(50));
-////                    setPointGird.getRowConstraints().add(new RowConstraints(20));
-////                }
-//            }
-//        }
+            }
+        }
     }
 
     @FXML
