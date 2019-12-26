@@ -4,11 +4,13 @@ import java.net.URL;
 import java.util.*;
 
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -23,7 +25,6 @@ public class TESTVIEW extends Application {
         primaryStage.setTitle("Тест");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-        initialize();
     }
 
     private Map<String, CheckBox> checkBoxMap = new HashMap<>();
@@ -35,7 +36,7 @@ public class TESTVIEW extends Application {
     private List<String> current = Arrays.asList("Imax", "0.5Imax", "0.2Imax", "0.5Ib", "Ib","0.2Ib", "0.1Ib", "0.05Ib");
 
     //Список GridPane для выставления точек поверки
-    private List<GridPane> gridPanesEnergyAndPhaseList;
+    private List<GridPane> gridPanesEnergyAndPhase;
 
     @FXML
     private ResourceBundle resources;
@@ -48,52 +49,52 @@ public class TESTVIEW extends Application {
 
     //-------------------------------------------------------
     @FXML
-    private GridPane gridPaneAllPhaseAPPlus = new GridPane();
+    private GridPane gridPaneAllPhaseAPPlus;
 
     @FXML
-    private GridPane gridPanePhaseAAPPlus = new GridPane();
+    private GridPane gridPanePhaseAAPPlus;
 
     @FXML
-    private GridPane gridPanePhaseBAPPlus = new GridPane();
+    private GridPane gridPanePhaseBAPPlus;
 
     @FXML
-    private GridPane gridPanePhaseCAPPlus = new GridPane();
+    private GridPane gridPanePhaseCAPPlus;
 
     @FXML
-    private GridPane gridPaneAllPhaseAPMinus = new GridPane();
+    private GridPane gridPaneAllPhaseAPMinus;
 
     @FXML
-    private GridPane gridPanePhaseAAPMinus = new GridPane();
+    private GridPane gridPanePhaseAAPMinus;
 
     @FXML
-    private GridPane gridPanePhaseBAPMinus = new GridPane();
+    private GridPane gridPanePhaseBAPMinus;
 
     @FXML
-    private GridPane gridPanePhaseCAPMinus = new GridPane();
+    private GridPane gridPanePhaseCAPMinus;
 
     @FXML
-    private GridPane gridPaneAllPhaseRPPlus = new GridPane();
+    private GridPane gridPaneAllPhaseRPPlus;
 
     @FXML
-    private GridPane gridPanePhaseARPPlus = new GridPane();
+    private GridPane gridPanePhaseARPPlus;
 
     @FXML
-    private GridPane gridPanePhaseBRPPlus = new GridPane();
+    private GridPane gridPanePhaseBRPPlus;
 
     @FXML
-    private GridPane gridPanePhaseCRPPlus = new GridPane();
+    private GridPane gridPanePhaseCRPPlus;
 
     @FXML
-    private GridPane gridPaneAllPhaseRPMinus = new GridPane();
+    private GridPane gridPaneAllPhaseRPMinus;
 
     @FXML
-    private GridPane gridPanePhaseARPMinus = new GridPane();
+    private GridPane gridPanePhaseARPMinus;
 
     @FXML
-    private GridPane gridPanePhaseBRPMinus = new GridPane();
+    private GridPane gridPanePhaseBRPMinus;
 
     @FXML
-    private GridPane gridPanePhaseCRpMinus = new GridPane();
+    private GridPane gridPanePhaseCRPMinus;
 
     //-------------------------------------------------------
     @FXML
@@ -169,35 +170,62 @@ public class TESTVIEW extends Application {
     @FXML
     void setPointFrameAction(ActionEvent event) {
         setGropToggleButton(event);
+        gridPaneToFront(Objects.requireNonNull(getGridPane()));
     }
 
     @FXML
     void initialize() {
         initGridPane();
+        APPlus.setSelected(true);
+        allPhaseBtn.setSelected(true);
+        gridPaneAllPhaseAPPlus.toFront();
+
     }
 
-    //Понять почему ArrayList не инициируется
     private void initGridPane() {
-        setBoxAndLabelGridPane(gridPaneAllPhaseAPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseAAPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseBAPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseCAPPlus);
-        setBoxAndLabelGridPane(gridPaneAllPhaseAPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseAAPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseBAPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseCAPMinus);
-        setBoxAndLabelGridPane(gridPaneAllPhaseRPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseARPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseBRPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseCRPPlus);
-        setBoxAndLabelGridPane(gridPaneAllPhaseRPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseARPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseBRPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseCRpMinus);
+        initGridPanesEnergyAndPhase();
+
+        gridPaneAllPhaseAPPlus.setId("gridPaneAllPhaseAPPlus");
+        gridPanePhaseAAPPlus.setId("gridPanePhaseAAPPlus");
+        gridPanePhaseBAPPlus.setId("gridPanePhaseBAPPlus");
+        gridPanePhaseCAPPlus.setId("gridPanePhaseCAPPlus");
+        gridPaneAllPhaseAPMinus.setId("gridPaneAllPhaseAPMinus");
+        gridPanePhaseAAPMinus.setId("gridPanePhaseAAPMinus");
+        gridPanePhaseBAPMinus.setId("gridPanePhaseBAPMinus");
+        gridPanePhaseCAPMinus.setId("gridPanePhaseCAPMinus");
+        gridPaneAllPhaseRPPlus.setId("gridPaneAllPhaseRPPlus");
+        gridPanePhaseARPPlus.setId("gridPanePhaseARPPlus");
+        gridPanePhaseBRPPlus.setId("gridPanePhaseBRPPlus");
+        gridPanePhaseCRPPlus.setId("gridPanePhaseCRPPlus");
+        gridPanePhaseCRPPlus.setId("gridPanePhaseCRPPlus");
+        gridPaneAllPhaseRPMinus.setId("gridPaneAllPhaseRPMinus");
+        gridPanePhaseARPMinus.setId("gridPanePhaseARPMinus");
+        gridPanePhaseBRPMinus.setId("gridPanePhaseBRPMinus");
+        gridPanePhaseCRPMinus.setId("gridPanePhaseCRPMinus");
+
+        for (GridPane pane : gridPanesEnergyAndPhase) {
+            setBoxAndLabelGridPane(pane);
+        }
     }
 
-    private static List<GridPane> initGridPanesEnergyAndPhaseList() {
-        return null;
+    //Добавляет все панели в лист
+    private void initGridPanesEnergyAndPhase() {
+        gridPanesEnergyAndPhase = Arrays.asList(gridPaneAllPhaseAPPlus,
+                gridPanePhaseAAPPlus,
+                gridPanePhaseBAPPlus,
+                gridPanePhaseCAPPlus,
+                gridPaneAllPhaseAPMinus,
+                gridPanePhaseAAPMinus,
+                gridPanePhaseBAPMinus,
+                gridPanePhaseCAPMinus,
+                gridPaneAllPhaseRPPlus,
+                gridPanePhaseARPPlus,
+                gridPanePhaseBRPPlus,
+                gridPanePhaseCRPPlus,
+                gridPaneAllPhaseRPMinus,
+                gridPanePhaseARPMinus,
+                gridPanePhaseBRPMinus,
+                gridPanePhaseCRPMinus);
     }
 
     //Заполняет поля нужными значениями GridPane
@@ -230,8 +258,18 @@ public class TESTVIEW extends Application {
                     pane.getChildren().add(label);
                 }
 
+
                 //Устанавливаю CheckBox
                 checkBox = new CheckBox();
+                checkBox.setId("Поле " + pane.getId() + " x: " + (x + 1) + " y: " + (y + 1));
+                CheckBox finalCheckBox = checkBox;
+                checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+                    if (newVal) {
+                        System.out.println("Кнопка зажата " + finalCheckBox.getId());
+                    } else {
+                        System.out.println("Кнопка разжата " + finalCheckBox.getId());
+                    }
+                });
                 GridPane.setColumnIndex(checkBox, x + 1);
                 GridPane.setRowIndex(checkBox, y + 1);
                 GridPane.setHalignment(checkBox, HPos.CENTER);
@@ -248,7 +286,7 @@ public class TESTVIEW extends Application {
             pane.getColumnConstraints().add(new ColumnConstraints(50));
         }
         for (int j = 0; j < powerFactor.size() + 1; j++) {
-            pane.getRowConstraints().add(new RowConstraints(20));
+            pane.getRowConstraints().add(new RowConstraints(23));
         }
     }
 
@@ -306,10 +344,46 @@ public class TESTVIEW extends Application {
         }
     }
 
-    //Выдаёт нужный GridPane в зависимости от нажатой кнопки
-    public GridPane getGridPane() {
-        if (allPhaseBtn.isSelected() && APPlus.isSelected()) {
+    private void gridPaneToFront(GridPane pane) {
+        pane.toFront();
+    }
 
+    //Выдаёт нужный GridPane в зависимости от нажатой кнопки
+    private GridPane getGridPane() {
+        if (allPhaseBtn.isSelected()) {
+            if (APPlus.isSelected()) return gridPaneAllPhaseAPPlus;
+            if (APMinus.isSelected()) return gridPaneAllPhaseAPMinus;
+            if (RPPlus.isSelected()) return gridPaneAllPhaseRPPlus;
+            if (RPMinus.isSelected()) return gridPaneAllPhaseRPMinus;
+        }
+
+        if (APhaseBtn.isSelected()) {
+            if (APPlus.isSelected()) return gridPanePhaseAAPPlus;
+            if (APMinus.isSelected()) return gridPanePhaseAAPMinus;
+            if (RPPlus.isSelected()) return gridPanePhaseARPPlus;
+            if (RPMinus.isSelected()) return gridPanePhaseARPMinus;
+        }
+
+        if (BPhaseBtn.isSelected()) {
+            if (APPlus.isSelected()) return gridPanePhaseBAPPlus;
+            if (APMinus.isSelected()) return gridPanePhaseBAPMinus;
+            if (RPPlus.isSelected()) return gridPanePhaseBRPPlus;
+            if (RPMinus.isSelected()) return gridPanePhaseBRPMinus;
+        }
+
+        if (CPhaseBtn.isSelected()) {
+            if (APPlus.isSelected()) return gridPanePhaseCAPPlus;
+            if (APMinus.isSelected()) return gridPanePhaseCAPMinus;
+            if (RPPlus.isSelected()) return gridPanePhaseCRPPlus;
+            if (RPMinus.isSelected()) return gridPanePhaseCRPMinus;
+        }
+        return null;
+    }
+    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+        for (Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+                return node;
+            }
         }
         return null;
     }

@@ -3,6 +3,7 @@ package stend.controller.viewController.methodicsFrameController;
 import java.net.URL;
 import java.util.*;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -21,7 +22,7 @@ public class addEditFrameController {
     private List<String> current = Arrays.asList("Imax", "0.5Imax", "0.2Imax", "0.5Ib", "Ib","0.2Ib", "0.1Ib", "0.05Ib");
 
     //Список GridPane для выставления точек поверки
-    private List<GridPane> gridPanesEnergyAndPhase = initGridPanesEnergyAndPhase();
+    private List<GridPane> gridPanesEnergyAndPhase;
 
     @FXML
     private ResourceBundle resources;
@@ -161,30 +162,55 @@ public class addEditFrameController {
     @FXML
     void initialize() {
         initGridPane();
+        APPlus.setSelected(true);
+        allPhaseBtn.setSelected(true);
+        gridPaneAllPhaseAPPlus.toFront();
     }
 
     private void initGridPane() {
-        setBoxAndLabelGridPane(gridPaneAllPhaseAPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseAAPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseBAPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseCAPPlus);
-        setBoxAndLabelGridPane(gridPaneAllPhaseAPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseAAPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseBAPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseCAPMinus);
-        setBoxAndLabelGridPane(gridPaneAllPhaseRPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseARPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseBRPPlus);
-        setBoxAndLabelGridPane(gridPanePhaseCRPPlus);
-        setBoxAndLabelGridPane(gridPaneAllPhaseRPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseARPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseBRPMinus);
-        setBoxAndLabelGridPane(gridPanePhaseCRPMinus);
+        initGridPanesEnergyAndPhase();
+
+        gridPaneAllPhaseAPPlus.setId("gridPaneAllPhaseAPPlus");
+        gridPanePhaseAAPPlus.setId("gridPanePhaseAAPPlus");
+        gridPanePhaseBAPPlus.setId("gridPanePhaseBAPPlus");
+        gridPanePhaseCAPPlus.setId("gridPanePhaseCAPPlus");
+        gridPaneAllPhaseAPMinus.setId("gridPaneAllPhaseAPMinus");
+        gridPanePhaseAAPMinus.setId("gridPanePhaseAAPMinus");
+        gridPanePhaseBAPMinus.setId("gridPanePhaseBAPMinus");
+        gridPanePhaseCAPMinus.setId("gridPanePhaseCAPMinus");
+        gridPaneAllPhaseRPPlus.setId("gridPaneAllPhaseRPPlus");
+        gridPanePhaseARPPlus.setId("gridPanePhaseARPPlus");
+        gridPanePhaseBRPPlus.setId("gridPanePhaseBRPPlus");
+        gridPanePhaseCRPPlus.setId("gridPanePhaseCRPPlus");
+        gridPanePhaseCRPPlus.setId("gridPanePhaseCRPPlus");
+        gridPaneAllPhaseRPMinus.setId("gridPaneAllPhaseRPMinus");
+        gridPanePhaseARPMinus.setId("gridPanePhaseARPMinus");
+        gridPanePhaseBRPMinus.setId("gridPanePhaseBRPMinus");
+        gridPanePhaseCRPMinus.setId("gridPanePhaseCRPMinus");
+
+        for (GridPane pane : gridPanesEnergyAndPhase) {
+            setBoxAndLabelGridPane(pane);
+        }
     }
 
 
-    private List<GridPane> initGridPanesEnergyAndPhase() {
-        return  null;
+    private void initGridPanesEnergyAndPhase() {
+        gridPanesEnergyAndPhase = Arrays.asList(gridPaneAllPhaseAPPlus,
+                gridPanePhaseAAPPlus,
+                gridPanePhaseBAPPlus,
+                gridPanePhaseCAPPlus,
+                gridPaneAllPhaseAPMinus,
+                gridPanePhaseAAPMinus,
+                gridPanePhaseBAPMinus,
+                gridPanePhaseCAPMinus,
+                gridPaneAllPhaseRPPlus,
+                gridPanePhaseARPPlus,
+                gridPanePhaseBRPPlus,
+                gridPanePhaseCRPPlus,
+                gridPaneAllPhaseRPMinus,
+                gridPanePhaseARPMinus,
+                gridPanePhaseBRPMinus,
+                gridPanePhaseCRPMinus);
     }
 
     //Заполняет поля нужными значениями GridPane
@@ -217,8 +243,18 @@ public class addEditFrameController {
                     pane.getChildren().add(label);
                 }
 
+
                 //Устанавливаю CheckBox
                 checkBox = new CheckBox();
+                checkBox.setId("Поле " + pane.getId() + " x: " + (x + 1) + " y: " + (y + 1));
+                CheckBox finalCheckBox = checkBox;
+                checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+                    if (newVal) {
+                        System.out.println("Кнопка зажата " + finalCheckBox.getId());
+                    } else {
+                        System.out.println("Кнопка разжата " + finalCheckBox.getId());
+                    }
+                });
                 GridPane.setColumnIndex(checkBox, x + 1);
                 GridPane.setRowIndex(checkBox, y + 1);
                 GridPane.setHalignment(checkBox, HPos.CENTER);
