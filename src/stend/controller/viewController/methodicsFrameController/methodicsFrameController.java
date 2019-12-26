@@ -51,55 +51,12 @@ public class methodicsFrameController {
 
     @FXML
     void initialize() {
-        setPointGird = new GridPane();
-        setPointGird.setGridLinesVisible(true);
-
-        initGridPane();
-        Label label;
-        CheckBox checkBox = new CheckBox();
-        for (int x = 0; x < current.size(); x++) {
-            for (int y = 0; y < powerFactor.size(); y++) {
-
-                //Устанавливаю значения строки тока
-                if (y == 0) {
-                    label = new Label(current.get(x));
-                    GridPane.setRowIndex(label, y);
-                    GridPane.setColumnIndex(label, x + 1);
-                    GridPane.setHalignment(label, HPos.CENTER);
-                    GridPane.setValignment(label, VPos.CENTER);
-                    setPointGird.getChildren().add(label);
-
-                //Устанавливаю значения строки PowerFactor
-                }else if (x == 0) {
-                    label = new Label(powerFactor.get(y));
-                    GridPane.setRowIndex(label, y + 1);
-                    GridPane.setColumnIndex(label, x);
-                    GridPane.setHalignment(label, HPos.CENTER);
-                    GridPane.setValignment(label, VPos.CENTER);
-                    setPointGird.getChildren().add(label);
-                }
-
-//                if (x == current.size() - 1) {
-//                    setPointGird.getColumnConstraints().add(new ColumnConstraints(50));
-//                    setPointGird.getRowConstraints().add(new RowConstraints(20));
-//                }
-            }
-        }
     }
 
     @FXML
     void actinonForMethodicsFrame(ActionEvent event) {
         if (event.getSource() == addMetBtn) {
-            loadStage("/stend/view/method/addEditMet.fxml", "Добавление методики");
-        }
-    }
-    //Создаёт поле нужной величины
-    private void initGridPane() {
-        for (int i = 0; i < current.size() + 1; i++) {
-            setPointGird.getColumnConstraints().add(new ColumnConstraints(50));
-        }
-        for (int j = 0; j < powerFactor.size() + 1; j++) {
-            setPointGird.getRowConstraints().add(new RowConstraints(20));
+            loadStage("/stend/view/method/metodicName.fxml", "Добавление методики");
         }
     }
 

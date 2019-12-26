@@ -6,10 +6,26 @@ import java.util.HashMap;
 
 public class MethodicsForTest {
 
-    public static HashMap<String, Methodic> methodicsMap = new HashMap<>();
+    private static MethodicsForTest methodicsForTestInstance;
 
-    public void addMethodicListToMap(String name, Methodic methodicList) throws InfoExeption {
+    private MethodicsForTest() {}
+
+    public static MethodicsForTest getMethodicsForTestInstance() {
+        if (methodicsForTestInstance == null) {
+            methodicsForTestInstance = new MethodicsForTest();
+        }
+        return methodicsForTestInstance;
+    }
+
+    private HashMap<String, Methodic> methodicsMap = new HashMap<>();
+
+    public boolean addMethodicListToMap(String name, Methodic methodicList) throws InfoExeption {
         if (methodicsMap.containsKey(name)) throw new InfoExeption();
         methodicsMap.put(name, methodicList);
+        return true;
+    }
+
+    public HashMap<String, Methodic> getMethodicsMap() {
+        return methodicsMap;
     }
 }

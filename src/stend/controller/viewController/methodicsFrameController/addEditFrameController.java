@@ -10,16 +10,19 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import stend.model.Methodic;
 
 public class addEditFrameController {
 
     private Map<String, CheckBox> checkBoxMap = new HashMap<>();
 
+    Methodic methodic = new Methodic("");
+
     //Значения коэффициента мощности
-    private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C");
+    private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C", "0.14C", "1313.K");
 
     //Значения выставленного тока
-    private List<String> current = Arrays.asList("Imax", "0.5Imax", "0.2Imax", "0.5Ib", "Ib","0.2Ib", "0.1Ib", "0.05Ib");
+    private List<String> current = Arrays.asList("Imax", "0.5Imax", "0.2Imax", "0.5Ib", "Ib","0.2Ib", "0.1Ib", "0.05Ib", "0.001Ib");
 
     //Список GridPane для выставления точек поверки
     private List<GridPane> gridPanesEnergyAndPhase;
@@ -170,23 +173,23 @@ public class addEditFrameController {
     private void initGridPane() {
         initGridPanesEnergyAndPhase();
 
-        gridPaneAllPhaseAPPlus.setId("gridPaneAllPhaseAPPlus");
-        gridPanePhaseAAPPlus.setId("gridPanePhaseAAPPlus");
-        gridPanePhaseBAPPlus.setId("gridPanePhaseBAPPlus");
-        gridPanePhaseCAPPlus.setId("gridPanePhaseCAPPlus");
-        gridPaneAllPhaseAPMinus.setId("gridPaneAllPhaseAPMinus");
-        gridPanePhaseAAPMinus.setId("gridPanePhaseAAPMinus");
-        gridPanePhaseBAPMinus.setId("gridPanePhaseBAPMinus");
-        gridPanePhaseCAPMinus.setId("gridPanePhaseCAPMinus");
-        gridPaneAllPhaseRPPlus.setId("gridPaneAllPhaseRPPlus");
-        gridPanePhaseARPPlus.setId("gridPanePhaseARPPlus");
-        gridPanePhaseBRPPlus.setId("gridPanePhaseBRPPlus");
-        gridPanePhaseCRPPlus.setId("gridPanePhaseCRPPlus");
-        gridPanePhaseCRPPlus.setId("gridPanePhaseCRPPlus");
-        gridPaneAllPhaseRPMinus.setId("gridPaneAllPhaseRPMinus");
-        gridPanePhaseARPMinus.setId("gridPanePhaseARPMinus");
-        gridPanePhaseBRPMinus.setId("gridPanePhaseBRPMinus");
-        gridPanePhaseCRPMinus.setId("gridPanePhaseCRPMinus");
+        gridPaneAllPhaseAPPlus.setId("AllAPPls");
+        gridPanePhaseAAPPlus.setId("AAPPls");
+        gridPanePhaseBAPPlus.setId("BAPPls");
+        gridPanePhaseCAPPlus.setId("CAPPls");
+        gridPaneAllPhaseAPMinus.setId("AllAPMns");
+        gridPanePhaseAAPMinus.setId("AAPMns");
+        gridPanePhaseBAPMinus.setId("BAPMns");
+        gridPanePhaseCAPMinus.setId("CAPMns");
+        gridPaneAllPhaseRPPlus.setId("AllRPPls");
+        gridPanePhaseARPPlus.setId("ARPPls");
+        gridPanePhaseBRPPlus.setId("BRPPls");
+        gridPanePhaseCRPPlus.setId("CRPPls");
+        gridPanePhaseCRPPlus.setId("CRPPls");
+        gridPaneAllPhaseRPMinus.setId("AllRPMns");
+        gridPanePhaseARPMinus.setId("ARPMns");
+        gridPanePhaseBRPMinus.setId("BRPMns");
+        gridPanePhaseCRPMinus.setId("CRPMns");
 
         for (GridPane pane : gridPanesEnergyAndPhase) {
             setBoxAndLabelGridPane(pane);
@@ -243,10 +246,9 @@ public class addEditFrameController {
                     pane.getChildren().add(label);
                 }
 
-
                 //Устанавливаю CheckBox
                 checkBox = new CheckBox();
-                checkBox.setId("Поле " + pane.getId() + " x: " + (x + 1) + " y: " + (y + 1));
+                checkBox.setId(pane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
                 CheckBox finalCheckBox = checkBox;
                 checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
                     if (newVal) {
@@ -304,29 +306,41 @@ public class addEditFrameController {
 
 
         if (event.getSource() == APPlus) {
+            setDefPosBtn();
             APPlus.setSelected(true);
             APMinus.setSelected(false);
             RPPlus.setSelected(false);
             RPMinus.setSelected(false);
         }
         if (event.getSource() == APMinus) {
+            setDefPosBtn();
             APMinus.setSelected(true);
             APPlus.setSelected(false);
             RPPlus.setSelected(false);
             RPMinus.setSelected(false);
         }
         if (event.getSource() == RPPlus) {
+            setDefPosBtn();
             RPPlus.setSelected(true);
             APPlus.setSelected(false);
             APMinus.setSelected(false);
             RPMinus.setSelected(false);
         }
         if (event.getSource() == RPMinus) {
+            setDefPosBtn();
             RPMinus.setSelected(true);
             RPPlus.setSelected(false);
             APPlus.setSelected(false);
             APMinus.setSelected(false);
         }
+    }
+
+    //При переключении вкладки Мощности и Направления устанавливает положение в "Все фазы"
+    private void setDefPosBtn() {
+        allPhaseBtn.setSelected(true);
+        APhaseBtn.setSelected(false);
+        BPhaseBtn.setSelected(false);
+        CPhaseBtn.setSelected(false);
     }
 
     private void gridPaneToFront(GridPane pane) {
@@ -364,5 +378,12 @@ public class addEditFrameController {
         }
         return null;
     }
+
+    //Добавляет тестовую точку в методику
+    public void addTestPointInMethodic(String testPoint) {
+
+    }
+
+
 }
 

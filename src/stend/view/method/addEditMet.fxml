@@ -30,45 +30,45 @@
             </ScrollPane>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="33.0" layoutY="58.0" prefHeight="566.0" prefWidth="747.0">
+      <AnchorPane layoutX="33.0" layoutY="58.0" prefHeight="300.0" prefWidth="640.0">
          <children>
-            <StackPane layoutX="108.0" layoutY="34.0" prefHeight="525.0" prefWidth="643.0">
+            <StackPane layoutX="108.0" layoutY="34.0" prefHeight="300.0" prefWidth="640.0">
                <children>
-                  <GridPane fx:id="gridPaneAllPhaseAPPlus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPaneAllPhaseAPPlus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseAAPPlus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseAAPPlus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseBAPPlus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseBAPPlus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseCAPPlus" prefHeight="519.0" prefWidth="636.0" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseCAPPlus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPaneAllPhaseAPMinus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPaneAllPhaseAPMinus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseAAPMinus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseAAPMinus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseBAPMinus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseBAPMinus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseCAPMinus" prefHeight="519.0" prefWidth="636.0" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseCAPMinus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPaneAllPhaseRPPlus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPaneAllPhaseRPPlus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseARPPlus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseARPPlus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseBRPPlus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseBRPPlus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseCRPPlus" prefHeight="519.0" prefWidth="636.0" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseCRPPlus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPaneAllPhaseRPMinus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPaneAllPhaseRPMinus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseARPMinus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseARPMinus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseBRPMinus" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseBRPMinus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
-                  <GridPane fx:id="gridPanePhaseCRPMinus" prefHeight="519.0" prefWidth="636.0" style="-fx-background-color: #797979;">
+                  <GridPane fx:id="gridPanePhaseCRPMinus" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #797979;">
                   </GridPane>
                </children>
             </StackPane>
-            <VBox fx:id="vBoxForPhaseTgBtn" layoutY="34.0" prefHeight="525.0" prefWidth="108.0" style="-fx-background-color: #303030;">
+            <VBox fx:id="vBoxForPhaseTgBtn" layoutY="34.0" prefHeight="300.0" prefWidth="108.0" style="-fx-background-color: #303030;">
                <children>
                   <ToggleButton fx:id="allPhaseBtn" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="Все">
                      <graphic>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="140.0" prefWidth="396.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stend.controller.viewController.exceptionFrameController">
+   <children>
+      <Label fx:id="exceptionLabel" layoutX="66.0" layoutY="33.0" prefHeight="75.0" prefWidth="264.0" text="Label">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
+         </graphic>
+      </Label>
+   </children>
+</AnchorPane>
