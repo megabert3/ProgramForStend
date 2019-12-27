@@ -37,12 +37,7 @@ public class methodicNameController {
     @FXML
     void actinonForNameFrame(ActionEvent event) {
         if (event.getSource() == acceptNameBtn) {
-            try {
-                if (MethodicsForTest.getMethodicsForTestInstance().addMethodicListToMap(nameField.getText(), new Methodic(nameField.getText())))
-                loadStage("/stend/view/method/metodicName.fxml", "Добавление методики");
-            } catch (InfoExeption infoExeption) {
-                loadStageExeptionStage("dfsdfs");
-            }
+            loadStage("/stend/view/method/addEditMet.fxml", "Добавление методики");
         }
     }
 

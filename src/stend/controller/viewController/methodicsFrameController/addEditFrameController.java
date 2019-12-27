@@ -16,7 +16,7 @@ public class addEditFrameController {
 
     private Map<String, CheckBox> checkBoxMap = new HashMap<>();
 
-    Methodic methodic = new Methodic("");
+    Methodic methodic = new Methodic();
 
     //Значения коэффициента мощности
     private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C", "0.14C", "1313.K");
@@ -27,8 +27,11 @@ public class addEditFrameController {
     //Список GridPane для выставления точек поверки
     private List<GridPane> gridPanesEnergyAndPhase;
 
+    //Это трёхфазный стенд?
+    private boolean isThrePhaseStend;
+
     @FXML
-    private ResourceBundle resources;
+    private ResourceBundle resources = ResourceBundle.getBundle("stendProperties");
 
     @FXML
     private URL location;
@@ -164,6 +167,10 @@ public class addEditFrameController {
 
     @FXML
     void initialize() {
+        if (resources.getString("stendType").equals("OnePhaseStend")) {
+            isThrePhaseStend = false;
+        }
+
         initGridPane();
         APPlus.setSelected(true);
         allPhaseBtn.setSelected(true);

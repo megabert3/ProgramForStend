@@ -3,6 +3,7 @@ package stend.controller.Commands;
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 import stend.helper.ConsoleHelper;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,23 +13,39 @@ public class ErrorCommand implements Commands {
 
     private StendDLLCommands stendDLLCommands;
 
+    //Базовый или максимальный ток из конструктора
+    private String current;
+
+    //Базовый ток
+    private double Ib;
+
+    //Максимальный ток
+    private double Imax;
+
+
+
     private int phase;
     private double ratedVolt;
-    private double ratedCurr;
-    private double ratedFreq;
-    private int phaseSrequence;
-    private int revers;
 
-    private double voltPerA;
-    private double voltPerB;
-    private double voltPerC;
+    //Будет расчётной
+    private double ratedCurr;
+
+    private double ratedFreq;
+
+    //Необходимо сделать в доп тестовом окне
+    private int phaseSrequence;
+
+    private int revers;
 
     private double voltPer;
     private double currPer;
     private String iABC;
     private String cosP;
 
+    //Импульсный выход
     private int channelFlag;
+
+    //Кол-во импульсов для расчёта ошибки
     private int pulse;
 
     //Количество повторов теста
@@ -37,24 +54,19 @@ public class ErrorCommand implements Commands {
     //Флаг для прекращения сбора погрешности
     private HashMap<Integer, Boolean> flagInStop = initBoolList();
 
-    public ErrorCommand(StendDLLCommands stendDLLCommands, int phase, double ratedVolt, double ratedCurr, double ratedFreq, int phaseSrequence,
-                        int revers, double voltPer, double currPer, String iABC, String cosP, int channelFlag, int pulse) {
+    /**
+        Не забудь создать второй конструктор для другого окна
+     */
+    public ErrorCommand(StendDLLCommands stendDLLCommands, int phase, String current,
+                        int revers, double currPer, String iABC, String cosP, int channelFlag) {
         this.stendDLLCommands = stendDLLCommands;
         this.phase = phase;
-        this.ratedVolt = ratedVolt;
-        this.ratedCurr = ratedCurr;
-        this.ratedFreq = ratedFreq;
-        this.phaseSrequence = phaseSrequence;
+        this.current = current;
         this.revers = revers;
-        this.voltPerA = voltPer;
-        this.voltPerB = voltPer;
-        this.voltPerC = voltPer;
-        this.voltPer = voltPer;
         this.currPer = currPer;
         this.iABC = iABC;
         this.cosP = cosP;
         this.channelFlag = channelFlag;
-        this.pulse = pulse;
     }
 
     @Override
@@ -105,5 +117,17 @@ public class ErrorCommand implements Commands {
             init.put(meter.getKey(), false);
         }
         return init;
+    }
+
+    public void setPulse(int pulse) {
+        this.pulse = pulse;
+    }
+
+    public void setRatedVolt(double ratedVolt) {
+        this.ratedVolt = ratedVolt;
+    }
+
+    public void setRatedFreq(double ratedFreq) {
+        this.ratedFreq = ratedFreq;
     }
 }

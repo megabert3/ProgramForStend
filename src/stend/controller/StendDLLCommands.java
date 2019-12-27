@@ -8,13 +8,16 @@ import stend.model.StendDLL;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 
 public abstract class StendDLLCommands {
     private StendDLL stend = StendDLL.INSTANCE;
 
+    private ResourceBundle res = ResourceBundle.getBundle("resourseFiles");
+
     //Порт для связи с установкой
-    private int port;
+    private int port = Integer.parseInt(res.getString("stendCOMPort"));
 
     //Тип эталонного счётчика
     private String typeReferenceMeter;
@@ -93,12 +96,6 @@ public abstract class StendDLLCommands {
 
     public double getConstant() {
         return constant;
-    }
-
-    //Включить напряжение и ток
-    //Test
-    public boolean getUI(double curr) {
-        return stend.Adjust_UI(1, 230.0, curr, 50.0, 0, 0, 100.0, 100.0, "H", "1.0", typeReferenceMeter, port);
     }
 
     //Включить напряжение и ток без регулеровки пофазного напряжения
@@ -255,4 +252,5 @@ public abstract class StendDLLCommands {
     public static String[] massPort() {
         return SerialPortList.getPortNames();
     }
+
 }

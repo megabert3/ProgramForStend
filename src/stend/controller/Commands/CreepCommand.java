@@ -1,5 +1,6 @@
 package stend.controller.Commands;
 
+import stend.controller.Commands.Commands;
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 
@@ -22,9 +23,12 @@ public class CreepCommand implements Commands {
     private String cosP = "1.0";
 
     private int channelFlag;
+
+    //Количество импоульсов для провала теста
     private int pulseValue;
 
-    private long timeForTest = 60000;
+
+    private long timeForTest;
     private long timeEnd;
     private long currTime;
 
@@ -36,7 +40,7 @@ public class CreepCommand implements Commands {
     }
 
     public CreepCommand(StendDLLCommands stendDLLCommands, int phase, double ratedVolt, double ratedCurr, double ratedFreq,
-                        int phaseSrequence, int revers, double voltPer, double currPer, int channelFlag, int pulseValue) {
+                        int phaseSrequence, int revers, double voltPer, double currPer, int channelFlag) {
         this.stendDLLCommands = stendDLLCommands;
         this.phase = phase;
         this.ratedVolt = ratedVolt;
@@ -48,8 +52,7 @@ public class CreepCommand implements Commands {
         this.currPer = currPer;
         this.channelFlag = channelFlag;
 
-        //Количество импоульсов для провала теста
-        this.pulseValue = pulseValue;
+
     }
 
     @Override

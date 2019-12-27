@@ -10,12 +10,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import stend.controller.OnePhaseStend;
+import stend.controller.StendDLLCommands;
+import stend.controller.ThreePhaseStend;
+import stend.model.Methodic;
 
 public class TESTVIEW extends Application {
 
@@ -29,17 +32,24 @@ public class TESTVIEW extends Application {
 
     private Map<String, CheckBox> checkBoxMap = new HashMap<>();
 
+    private Methodic methodic = new Methodic();
+
+    private StendDLLCommands stendDLLCommands;
+
     //Значения коэффициента мощности
-    private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C");
+    private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C", "0.14C", "1313.K");
 
     //Значения выставленного тока
-    private List<String> current = Arrays.asList("Imax", "0.5Imax", "0.2Imax", "0.5Ib", "Ib","0.2Ib", "0.1Ib", "0.05Ib");
+    private List<String> current = Arrays.asList("Imax", "0.5Imax", "0.2Imax", "0.5Ib", "Ib","0.2Ib", "0.1Ib", "0.05Ib", "0.001Ib");
 
     //Список GridPane для выставления точек поверки
     private List<GridPane> gridPanesEnergyAndPhase;
 
+    //Это трёхфазный стенд?
+    private boolean isThrePhaseStend;
+
     @FXML
-    private ResourceBundle resources;
+    private ResourceBundle resources = ResourceBundle.getBundle("stendProperties");
 
     @FXML
     private URL location;
@@ -175,40 +185,70 @@ public class TESTVIEW extends Application {
 
     @FXML
     void initialize() {
+        if (!resources.getString("stendType").equals("OnePhaseStend")) {
+            isThrePhaseStend = true;
+        }
+
         initGridPane();
         APPlus.setSelected(true);
         allPhaseBtn.setSelected(true);
         gridPaneAllPhaseAPPlus.toFront();
-
     }
 
     private void initGridPane() {
         initGridPanesEnergyAndPhase();
 
-        gridPaneAllPhaseAPPlus.setId("gridPaneAllPhaseAPPlus");
-        gridPanePhaseAAPPlus.setId("gridPanePhaseAAPPlus");
-        gridPanePhaseBAPPlus.setId("gridPanePhaseBAPPlus");
-        gridPanePhaseCAPPlus.setId("gridPanePhaseCAPPlus");
-        gridPaneAllPhaseAPMinus.setId("gridPaneAllPhaseAPMinus");
-        gridPanePhaseAAPMinus.setId("gridPanePhaseAAPMinus");
-        gridPanePhaseBAPMinus.setId("gridPanePhaseBAPMinus");
-        gridPanePhaseCAPMinus.setId("gridPanePhaseCAPMinus");
-        gridPaneAllPhaseRPPlus.setId("gridPaneAllPhaseRPPlus");
-        gridPanePhaseARPPlus.setId("gridPanePhaseARPPlus");
-        gridPanePhaseBRPPlus.setId("gridPanePhaseBRPPlus");
-        gridPanePhaseCRPPlus.setId("gridPanePhaseCRPPlus");
-        gridPanePhaseCRPPlus.setId("gridPanePhaseCRPPlus");
-        gridPaneAllPhaseRPMinus.setId("gridPaneAllPhaseRPMinus");
-        gridPanePhaseARPMinus.setId("gridPanePhaseARPMinus");
-        gridPanePhaseBRPMinus.setId("gridPanePhaseBRPMinus");
-        gridPanePhaseCRPMinus.setId("gridPanePhaseCRPMinus");
-
+        // Phase - Режим:
+// 		0 - Однофазный
+//		1 - Трех-фазный четырех-проводной
+//		2 - Трех-фазный трех-проводной
+// 		3 - Трех-фазный трех-проводной реактив 90 градусов
+// 		4 - Трех-фазный трех-проводной реактив 60 градусов
+//		5 - Трех-фазный четырех-проводной (реактив)
+//		6 - Трех-фазный трех-проводной (реактив)
+//		7 - Однофазный реактив
+//Режим;
+        if (isThrePhaseStend) {
+            gridPaneAllPhaseAPPlus.setId("1;H;AP;Pls");
+            gridPanePhaseAAPPlus.setId("1;A;AP;Pls");
+            gridPanePhaseBAPPlus.setId("1;B;AP;Pls");
+            gridPanePhaseCAPPlus.setId("1;C;AP;Pls");
+            gridPaneAllPhaseAPMinus.setId("1;H;AP;Mns");
+            gridPanePhaseAAPMinus.setId("1;A;AP;Mns");
+            gridPanePhaseBAPMinus.setId("1;B;AP;Mns");
+            gridPanePhaseCAPMinus.setId("1;C;AP;Mns");
+            gridPaneAllPhaseRPPlus.setId("5;H;RP;Pls");
+            gridPanePhaseARPPlus.setId("5;A;RP;Pls");
+            gridPanePhaseBRPPlus.setId("5;B;RPPls");
+            gridPanePhaseCRPPlus.setId("5;C;RPPls");
+            gridPaneAllPhaseRPMinus.setId("5;H;RP;Mns");
+            gridPanePhaseARPMinus.setId("5;A;RP;Mns");
+            gridPanePhaseBRPMinus.setId("5;B;RP;Mns");
+            gridPanePhaseCRPMinus.setId("5;C;RP;Mns");
+        } else {
+            gridPaneAllPhaseAPPlus.setId("H;AP;Pls");
+            gridPanePhaseAAPPlus.setId("A;AP;Pls");
+            gridPanePhaseBAPPlus.setId("B;AP;Pls");
+            gridPanePhaseCAPPlus.setId("C;AP;Pls");
+            gridPaneAllPhaseAPMinus.setId("H;AP;Mns");
+            gridPanePhaseAAPMinus.setId("A;AP;Mns");
+            gridPanePhaseBAPMinus.setId("B;AP;Mns");
+            gridPanePhaseCAPMinus.setId("C;AP;Mns");
+            gridPaneAllPhaseRPPlus.setId("H;RP;Pls");
+            gridPanePhaseARPPlus.setId("A;RP;Pls");
+            gridPanePhaseBRPPlus.setId("B;RPPls");
+            gridPanePhaseCRPPlus.setId("C;RPPls");
+            gridPaneAllPhaseRPMinus.setId("H;RP;Mns");
+            gridPanePhaseARPMinus.setId("A;RP;Mns");
+            gridPanePhaseBRPMinus.setId("B;RP;Mns");
+            gridPanePhaseCRPMinus.setId("C;RP;Mns");
+        }
         for (GridPane pane : gridPanesEnergyAndPhase) {
             setBoxAndLabelGridPane(pane);
         }
     }
 
-    //Добавляет все панели в лист
+
     private void initGridPanesEnergyAndPhase() {
         gridPanesEnergyAndPhase = Arrays.asList(gridPaneAllPhaseAPPlus,
                 gridPanePhaseAAPPlus,
@@ -258,10 +298,9 @@ public class TESTVIEW extends Application {
                     pane.getChildren().add(label);
                 }
 
-
                 //Устанавливаю CheckBox
                 checkBox = new CheckBox();
-                checkBox.setId("Поле " + pane.getId() + " x: " + (x + 1) + " y: " + (y + 1));
+                checkBox.setId(pane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
                 CheckBox finalCheckBox = checkBox;
                 checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
                     if (newVal) {
@@ -319,29 +358,41 @@ public class TESTVIEW extends Application {
 
 
         if (event.getSource() == APPlus) {
+            setDefPosBtn();
             APPlus.setSelected(true);
             APMinus.setSelected(false);
             RPPlus.setSelected(false);
             RPMinus.setSelected(false);
         }
         if (event.getSource() == APMinus) {
+            setDefPosBtn();
             APMinus.setSelected(true);
             APPlus.setSelected(false);
             RPPlus.setSelected(false);
             RPMinus.setSelected(false);
         }
         if (event.getSource() == RPPlus) {
+            setDefPosBtn();
             RPPlus.setSelected(true);
             APPlus.setSelected(false);
             APMinus.setSelected(false);
             RPMinus.setSelected(false);
         }
         if (event.getSource() == RPMinus) {
+            setDefPosBtn();
             RPMinus.setSelected(true);
             RPPlus.setSelected(false);
             APPlus.setSelected(false);
             APMinus.setSelected(false);
         }
+    }
+
+    //При переключении вкладки Мощности и Направления устанавливает положение в "Все фазы"
+    private void setDefPosBtn() {
+        allPhaseBtn.setSelected(true);
+        APhaseBtn.setSelected(false);
+        BPhaseBtn.setSelected(false);
+        CPhaseBtn.setSelected(false);
     }
 
     private void gridPaneToFront(GridPane pane) {
@@ -379,12 +430,71 @@ public class TESTVIEW extends Application {
         }
         return null;
     }
-    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
-        for (Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                return node;
-            }
+
+    //Добавляет тестовую точку в методику
+    public void addTestPointInMethodic(String testPoint) {
+        if (isThrePhaseStend) {
+            stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
+        } else {
+            stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
         }
-        return null;
+
+        String[] dirCurFactor = testPoint.split(";");
+        String digection = dirCurFactor[0];
+        String curr = dirCurFactor[1];
+        String factor = dirCurFactor[2];
+
+//        public ErrorCommand(StendDLLCommands stendDLLCommands, int phase, String current,
+//        int revers, double currPer, String iABC, String cosP, int channelFlag) {
+
+    //ChannelFlag - Режим импульсов:
+//		0 - Активная мощность (+)
+// 		1 - Активная мощность (-)
+// 		2 - Реактивная мощность (+)
+// 		3 - Реактивная мощность (-)
+// Включить напряжение и ток
+// Phase - Режим:
+// 		0 - Однофазный
+//		1 - Трех-фазный четырех-проводной
+//		2 - Трех-фазный трех-проводной
+// 		3 - Трех-фазный трех-проводной реактив 90 градусов
+// 		4 - Трех-фазный трех-проводной реактив 60 градусов
+//		5 - Трех-фазный четырех-проводной (реактив)
+//		6 - Трех-фазный трех-проводной (реактив)
+//		7 - Однофазный реактив
+// Rated_Volt - напряжение
+// Rated_Curr - ток
+// Rated_Freq - частота
+// PhaseSrequence - чередование фаз
+//		0 - Прямое
+//		1 - Обратное
+// Revers - направление тока
+//		0 - Прямой
+//		1 - Обратный
+// Volt_Per - Процент по напряжению (0 - 100)
+// Curr_Per - Процент по току (0 - 100)
+// IABC - строка, определяющая фазы, по которым пустить ток: A, B, C, H - все
+// CosP - строка  с косинусом угла. Например: "1.0", "0.5L", "0.8C"
+// SModel - Строка с моделью счетчика:
+// 		HY5303C-22, HS5320, SY3102, SY3302 (3 фазы)
+//		HY5101C-22, HY5101C-23, SY3803 (1 фаза)
+//		TC-3000C (1 фаза)
+//		TC-3000D (3 фазы)
+// Dev_Port - номер com-порта
+//        boolean Adjust_UI(int Phase,
+//        double Rated_Volt,
+//        double Rated_Curr,
+//        double Rated_Freq,
+//        int PhaseSrequence,
+//        int Revers,
+//        double Volt_Per,
+//        double Curr_Per,
+//        String IABC,
+//        String CosP,
+//        String SModel,
+//        int Dev_Port);
+
+
     }
+
 }

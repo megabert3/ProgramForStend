@@ -25,9 +25,6 @@ public class Methodic {
 
     private String methodicName;
 
-    public Methodic(String methodicName) {
-        this.methodicName = methodicName;
-    }
 
     public void addCommandToList(Integer numb, Commands command) {
         commandsMap.get(numb).add(command);
