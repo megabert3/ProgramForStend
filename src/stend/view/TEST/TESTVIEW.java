@@ -13,11 +13,14 @@ import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import stend.controller.Commands.ErrorCommand;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
+import stend.helper.ConsoleHelper;
 import stend.model.Methodic;
 
 public class TESTVIEW extends Application {
@@ -36,11 +39,14 @@ public class TESTVIEW extends Application {
 
     private StendDLLCommands stendDLLCommands;
 
+    //Имя методики поверки
+    private String metodicName = "default";
+
     //Значения коэффициента мощности
     private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C", "0.14C", "1313.K");
 
     //Значения выставленного тока
-    private List<String> current = Arrays.asList("Imax", "0.5Imax", "0.2Imax", "0.5Ib", "Ib","0.2Ib", "0.1Ib", "0.05Ib", "0.001Ib");
+    private List<String> current = Arrays.asList("Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.00 1Ib");
 
     //Список GridPane для выставления точек поверки
     private List<GridPane> gridPanesEnergyAndPhase;
@@ -54,9 +60,22 @@ public class TESTVIEW extends Application {
     @FXML
     private URL location;
 
+    //-------------------------------------------------------
+
     @FXML
     private TableView<?> viewPointTable;
 
+    @FXML
+    private TableColumn<?, ?> loadCurrTabCol;
+
+    @FXML
+    private TableColumn<?, ?> eMaxTabCol;
+
+    @FXML
+    private TableColumn<?, ?> eMinTabCol;
+
+    @FXML
+    private TableColumn<?, ?> amountImplTabCol;
     //-------------------------------------------------------
     @FXML
     private GridPane gridPaneAllPhaseAPPlus;
@@ -168,6 +187,9 @@ public class TESTVIEW extends Application {
     private GridPane GridPaneConst;
 
     @FXML
+    private TextField metodicNameTxtFld;
+
+    @FXML
     void SaveOrCancelAction(ActionEvent event) {
 
     }
@@ -177,6 +199,7 @@ public class TESTVIEW extends Application {
 
     }
 
+
     @FXML
     void setPointFrameAction(ActionEvent event) {
         setGropToggleButton(event);
@@ -185,7 +208,7 @@ public class TESTVIEW extends Application {
 
     @FXML
     void initialize() {
-        if (!resources.getString("stendType").equals("OnePhaseStend")) {
+        if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
             isThrePhaseStend = true;
         }
 
@@ -209,39 +232,39 @@ public class TESTVIEW extends Application {
 //		7 - Однофазный реактив
 //Режим;
         if (isThrePhaseStend) {
-            gridPaneAllPhaseAPPlus.setId("1;H;AP;Pls");
-            gridPanePhaseAAPPlus.setId("1;A;AP;Pls");
-            gridPanePhaseBAPPlus.setId("1;B;AP;Pls");
-            gridPanePhaseCAPPlus.setId("1;C;AP;Pls");
-            gridPaneAllPhaseAPMinus.setId("1;H;AP;Mns");
-            gridPanePhaseAAPMinus.setId("1;A;AP;Mns");
-            gridPanePhaseBAPMinus.setId("1;B;AP;Mns");
-            gridPanePhaseCAPMinus.setId("1;C;AP;Mns");
-            gridPaneAllPhaseRPPlus.setId("5;H;RP;Pls");
-            gridPanePhaseARPPlus.setId("5;A;RP;Pls");
-            gridPanePhaseBRPPlus.setId("5;B;RPPls");
-            gridPanePhaseCRPPlus.setId("5;C;RPPls");
-            gridPaneAllPhaseRPMinus.setId("5;H;RP;Mns");
-            gridPanePhaseARPMinus.setId("5;A;RP;Mns");
-            gridPanePhaseBRPMinus.setId("5;B;RP;Mns");
-            gridPanePhaseCRPMinus.setId("5;C;RP;Mns");
+            gridPaneAllPhaseAPPlus.setId("1;H;A;P");
+            gridPanePhaseAAPPlus.setId("1;A;A;P");
+            gridPanePhaseBAPPlus.setId("1;B;A;P");
+            gridPanePhaseCAPPlus.setId("1;C;A;P");
+            gridPaneAllPhaseAPMinus.setId("1;H;A;N");
+            gridPanePhaseAAPMinus.setId("1;A;A;N");
+            gridPanePhaseBAPMinus.setId("1;B;A;N");
+            gridPanePhaseCAPMinus.setId("1;C;A;N");
+            gridPaneAllPhaseRPPlus.setId("5;H;R;P");
+            gridPanePhaseARPPlus.setId("5;A;R;P");
+            gridPanePhaseBRPPlus.setId("5;B;R;P");
+            gridPanePhaseCRPPlus.setId("5;C;R;P");
+            gridPaneAllPhaseRPMinus.setId("5;H;R;N");
+            gridPanePhaseARPMinus.setId("5;A;R;N");
+            gridPanePhaseBRPMinus.setId("5;B;R;N");
+            gridPanePhaseCRPMinus.setId("5;C;R;N");
         } else {
-            gridPaneAllPhaseAPPlus.setId("H;AP;Pls");
-            gridPanePhaseAAPPlus.setId("A;AP;Pls");
-            gridPanePhaseBAPPlus.setId("B;AP;Pls");
-            gridPanePhaseCAPPlus.setId("C;AP;Pls");
-            gridPaneAllPhaseAPMinus.setId("H;AP;Mns");
-            gridPanePhaseAAPMinus.setId("A;AP;Mns");
-            gridPanePhaseBAPMinus.setId("B;AP;Mns");
-            gridPanePhaseCAPMinus.setId("C;AP;Mns");
-            gridPaneAllPhaseRPPlus.setId("H;RP;Pls");
-            gridPanePhaseARPPlus.setId("A;RP;Pls");
-            gridPanePhaseBRPPlus.setId("B;RPPls");
-            gridPanePhaseCRPPlus.setId("C;RPPls");
-            gridPaneAllPhaseRPMinus.setId("H;RP;Mns");
-            gridPanePhaseARPMinus.setId("A;RP;Mns");
-            gridPanePhaseBRPMinus.setId("B;RP;Mns");
-            gridPanePhaseCRPMinus.setId("C;RP;Mns");
+            gridPaneAllPhaseAPPlus.setId("0;H;A;P");
+            gridPanePhaseAAPPlus.setId("0;A;A;P");
+            gridPanePhaseBAPPlus.setId("0;B;A;P");
+            gridPanePhaseCAPPlus.setId("0;C;A;P");
+            gridPaneAllPhaseAPMinus.setId("0;H;A;N");
+            gridPanePhaseAAPMinus.setId("0;A;A;N");
+            gridPanePhaseBAPMinus.setId("0;B;A;N");
+            gridPanePhaseCAPMinus.setId("0;C;A;N");
+            gridPaneAllPhaseRPPlus.setId("7;H;R;P");
+            gridPanePhaseARPPlus.setId("7;A;R;P");
+            gridPanePhaseBRPPlus.setId("7;B;R;P");
+            gridPanePhaseCRPPlus.setId("7;C;R;P");
+            gridPaneAllPhaseRPMinus.setId("7;H;R;N");
+            gridPanePhaseARPMinus.setId("7;A;R;N");
+            gridPanePhaseBRPMinus.setId("7;B;R;N");
+            gridPanePhaseCRPMinus.setId("7;C;R;N");
         }
         for (GridPane pane : gridPanesEnergyAndPhase) {
             setBoxAndLabelGridPane(pane);
@@ -438,63 +461,65 @@ public class TESTVIEW extends Application {
         } else {
             stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
         }
-
+        /** 1;H;A;P;0.2 Ib;0.5C
+         *  режим;
+         *  Фазы по которым необходимо пустить ток (H);
+         *  Тип энергии актив/реактив;
+         *  Направление тока прямое/обратное
+         *  Ток 0.2 Ib
+         *  Коэф мощности 0.8L
+         *  */
         String[] dirCurFactor = testPoint.split(";");
-        String digection = dirCurFactor[0];
-        String curr = dirCurFactor[1];
-        String factor = dirCurFactor[2];
 
-//        public ErrorCommand(StendDLLCommands stendDLLCommands, int phase, String current,
-//        int revers, double currPer, String iABC, String cosP, int channelFlag) {
+        //Phase - Режим
+        int phase = Integer.parseInt(dirCurFactor[0]);
 
-    //ChannelFlag - Режим импульсов:
-//		0 - Активная мощность (+)
-// 		1 - Активная мощность (-)
-// 		2 - Реактивная мощность (+)
-// 		3 - Реактивная мощность (-)
-// Включить напряжение и ток
-// Phase - Режим:
-// 		0 - Однофазный
-//		1 - Трех-фазный четырех-проводной
-//		2 - Трех-фазный трех-проводной
-// 		3 - Трех-фазный трех-проводной реактив 90 градусов
-// 		4 - Трех-фазный трех-проводной реактив 60 градусов
-//		5 - Трех-фазный четырех-проводной (реактив)
-//		6 - Трех-фазный трех-проводной (реактив)
-//		7 - Однофазный реактив
-// Rated_Volt - напряжение
-// Rated_Curr - ток
-// Rated_Freq - частота
-// PhaseSrequence - чередование фаз
-//		0 - Прямое
-//		1 - Обратное
-// Revers - направление тока
-//		0 - Прямой
-//		1 - Обратный
-// Volt_Per - Процент по напряжению (0 - 100)
-// Curr_Per - Процент по току (0 - 100)
-// IABC - строка, определяющая фазы, по которым пустить ток: A, B, C, H - все
-// CosP - строка  с косинусом угла. Например: "1.0", "0.5L", "0.8C"
-// SModel - Строка с моделью счетчика:
-// 		HY5303C-22, HS5320, SY3102, SY3302 (3 фазы)
-//		HY5101C-22, HY5101C-23, SY3803 (1 фаза)
-//		TC-3000C (1 фаза)
-//		TC-3000D (3 фазы)
-// Dev_Port - номер com-порта
-//        boolean Adjust_UI(int Phase,
-//        double Rated_Volt,
-//        double Rated_Curr,
-//        double Rated_Freq,
-//        int PhaseSrequence,
-//        int Revers,
-//        double Volt_Per,
-//        double Curr_Per,
-//        String IABC,
-//        String CosP,
-//        String SModel,
-//        int Dev_Port);
+        //фазы, по которым пустить ток
+        String iABC = dirCurFactor[1];
+
+        //Тип энергии
+        String energyType = dirCurFactor[2];
+
+        //Направление тока
+        String currentDirection = dirCurFactor[3];
+
+        //Целое значеник процент + Максимальный или минимальный
+        String[] curAndPer = dirCurFactor[4].split(" ");
+        //Процент от тока
+        String percent;
+        //Максимальный или минимальный ток.
+        String current;
+
+        if (curAndPer.length == 1) {
+            percent = "1.0";
+            current = curAndPer[0];
+        } else {
+            percent = curAndPer[0];
+            current = curAndPer[1];
+        }
+
+        //Коэф мощности
+        String powerFactor = dirCurFactor[5];
 
 
+        if (energyType.equals("A") && currentDirection.equals("P")) {
+            methodic.addCommandToList(0, new ErrorCommand(stendDLLCommands, phase, current, 0, percent, iABC, powerFactor, 0));
+        }
+
+        if (energyType.equals("A") && currentDirection.equals("N")) {
+            methodic.addCommandToList(1, new ErrorCommand(stendDLLCommands, phase, current, 1, percent, iABC, powerFactor, 1));
+        }
+
+        if (energyType.equals("R") && currentDirection.equals("P")) {
+            methodic.addCommandToList(2, new ErrorCommand(stendDLLCommands, phase, current, 0, percent, iABC, powerFactor, 2));
+        }
+
+        if (energyType.equals("R") && currentDirection.equals("N")) {
+            methodic.addCommandToList(3, new ErrorCommand(stendDLLCommands, phase, current, 1, percent, iABC, powerFactor, 3));
+        }
     }
 
+    private void refreshCollum() {
+
+    }
 }

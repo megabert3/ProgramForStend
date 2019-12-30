@@ -10,6 +10,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import stend.helper.ConsoleHelper;
 import stend.model.Methodic;
 
 public class addEditFrameController {
@@ -167,8 +168,8 @@ public class addEditFrameController {
 
     @FXML
     void initialize() {
-        if (resources.getString("stendType").equals("OnePhaseStend")) {
-            isThrePhaseStend = false;
+        if (!ConsoleHelper.properties.getProperty("stendType").equals("OnePhaseStend")) {
+            isThrePhaseStend = true;
         }
 
         initGridPane();

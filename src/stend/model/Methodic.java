@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Methodic {
 
-    private static Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
+    public static Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
 
     private static List<Commands> activeEnergyDirect = new ArrayList<>();
     private static List<Commands> activeEnergyRevers = new ArrayList<>();

@@ -3,7 +3,6 @@ package stend.controller.Commands;
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 import stend.helper.ConsoleHelper;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +21,6 @@ public class ErrorCommand implements Commands {
     //Максимальный ток
     private double Imax;
 
-
-
     private int phase;
     private double ratedVolt;
 
@@ -38,7 +35,12 @@ public class ErrorCommand implements Commands {
     private int revers;
 
     private double voltPer;
+
+    //Расчётный процент из
     private double currPer;
+
+    //Стринговый процент получаемый из конструктора
+    private String currentPerсent;
     private String iABC;
     private String cosP;
 
@@ -58,12 +60,12 @@ public class ErrorCommand implements Commands {
         Не забудь создать второй конструктор для другого окна
      */
     public ErrorCommand(StendDLLCommands stendDLLCommands, int phase, String current,
-                        int revers, double currPer, String iABC, String cosP, int channelFlag) {
+                        int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
         this.stendDLLCommands = stendDLLCommands;
         this.phase = phase;
         this.current = current;
         this.revers = revers;
-        this.currPer = currPer;
+        this.currentPerсent = currentPercent;
         this.iABC = iABC;
         this.cosP = cosP;
         this.channelFlag = channelFlag;
@@ -129,5 +131,12 @@ public class ErrorCommand implements Commands {
 
     public void setRatedFreq(double ratedFreq) {
         this.ratedFreq = ratedFreq;
+    }
+
+    @Override
+    public String toString() {
+        if (iABC.equals("H")) {
+            return (cosP + "; " + currentPerсent + " "  + current);
+        } else return (iABC + ": " + cosP + "; " + currentPerсent + " "  + current);
     }
 }
