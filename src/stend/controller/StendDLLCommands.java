@@ -4,6 +4,7 @@ import com.sun.jna.Memory;
 
 import com.sun.jna.ptr.PointerByReference;
 import jssc.SerialPortList;
+import stend.helper.ConsoleHelper;
 import stend.model.StendDLL;
 
 import java.util.HashMap;
@@ -14,10 +15,9 @@ import java.util.ResourceBundle;
 public abstract class StendDLLCommands {
     private StendDLL stend = StendDLL.INSTANCE;
 
-    private ResourceBundle res = ResourceBundle.getBundle("resourseFiles");
 
     //Порт для связи с установкой
-    private int port = Integer.parseInt(res.getString("stendCOMPort"));
+    private int port = Integer.parseInt(ConsoleHelper.properties.getProperty("stendCOMPort"));
 
     //Тип эталонного счётчика
     private String typeReferenceMeter;

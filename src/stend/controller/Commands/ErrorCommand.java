@@ -12,6 +12,18 @@ public class ErrorCommand implements Commands {
 
     private StendDLLCommands stendDLLCommands;
 
+    //Максимальный порог ошибки
+    private String emin = "-1.0";
+
+    //Минимальный порог ошибки
+    private String emax = "1.0";
+
+    //Кол-во импульсов для расчёта ошибки
+    private String pulse = "20";
+
+    //Нагрузка для теста отображения таблицы
+    private String testCurrent;
+
     //Базовый или максимальный ток из конструктора
     private String current;
 
@@ -47,8 +59,7 @@ public class ErrorCommand implements Commands {
     //Импульсный выход
     private int channelFlag;
 
-    //Кол-во импульсов для расчёта ошибки
-    private int pulse;
+
 
     //Количество повторов теста
     private int countResult = 2;
@@ -69,6 +80,9 @@ public class ErrorCommand implements Commands {
         this.iABC = iABC;
         this.cosP = cosP;
         this.channelFlag = channelFlag;
+        if (iABC.equals("H")) {
+            testCurrent = (cosP + "; " + currentPerсent + " " + current.trim());
+        } else testCurrent = (iABC + ": " + cosP + "; " + currentPerсent + ":" + current);
     }
 
     @Override
@@ -82,7 +96,7 @@ public class ErrorCommand implements Commands {
 
         for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
             //Подумать над константой, скорее всего необходимо будет сделать одной для всех
-            stendDLLCommands.errorStart(meter.getKey(), stendDLLCommands.getConstant(), pulse);
+            stendDLLCommands.errorStart(meter.getKey(), stendDLLCommands.getConstant(), Integer.parseInt(pulse));
         }
 
         while (flagInStop.containsValue(false)) {
@@ -121,9 +135,6 @@ public class ErrorCommand implements Commands {
         return init;
     }
 
-    public void setPulse(int pulse) {
-        this.pulse = pulse;
-    }
 
     public void setRatedVolt(double ratedVolt) {
         this.ratedVolt = ratedVolt;
@@ -131,6 +142,34 @@ public class ErrorCommand implements Commands {
 
     public void setRatedFreq(double ratedFreq) {
         this.ratedFreq = ratedFreq;
+    }
+
+    public void setPulse(String pulse) {
+        this.pulse = pulse;
+    }
+
+    public void setEmin(String emin) {
+        this.emin = emin;
+    }
+
+    public void setEmax(String emax) {
+        this.emax = emax;
+    }
+
+    public String getTestCurrent() {
+        return testCurrent;
+    }
+
+    public String getEmin() {
+        return emin;
+    }
+
+    public String getEmax() {
+        return emax;
+    }
+
+    public String getPulse() {
+        return pulse;
     }
 
     @Override

@@ -5,6 +5,8 @@ import java.util.*;
 
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,8 +16,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import stend.controller.Commands.Commands;
 import stend.controller.Commands.ErrorCommand;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
@@ -46,7 +50,7 @@ public class TESTVIEW extends Application {
     private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C", "0.14C", "1313.K");
 
     //Значения выставленного тока
-    private List<String> current = Arrays.asList("Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.00 1Ib");
+    private List<String> current = Arrays.asList("1.0 Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "1.0 Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.00 1Ib");
 
     //Список GridPane для выставления точек поверки
     private List<GridPane> gridPanesEnergyAndPhase;
@@ -54,28 +58,31 @@ public class TESTVIEW extends Application {
     //Это трёхфазный стенд?
     private boolean isThrePhaseStend;
 
+    //Лист с точками
+    ObservableList<Commands> testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+
     @FXML
     private ResourceBundle resources = ResourceBundle.getBundle("stendProperties");
 
     @FXML
     private URL location;
 
+    //Отвечают за окно отображения выбранных точек тестирования
     //-------------------------------------------------------
+    @FXML
+    private TableView<Commands> viewPointTable = new TableView<>();
 
     @FXML
-    private TableView<?> viewPointTable;
+    private TableColumn<Commands, String> loadCurrTabCol;
 
     @FXML
-    private TableColumn<?, ?> loadCurrTabCol;
+    private TableColumn<Commands, String> eMaxTabCol;
 
     @FXML
-    private TableColumn<?, ?> eMaxTabCol;
+    private TableColumn<Commands, String> eMinTabCol;
 
     @FXML
-    private TableColumn<?, ?> eMinTabCol;
-
-    @FXML
-    private TableColumn<?, ?> amountImplTabCol;
+    private TableColumn<Commands, String> amountImplTabCol;
     //-------------------------------------------------------
     @FXML
     private GridPane gridPaneAllPhaseAPPlus;
@@ -162,40 +169,18 @@ public class TESTVIEW extends Application {
     @FXML
     private Button SaveBtn;
 
-    @FXML
-    private ToggleButton CRPBtn;
+    //Этот блок кода отвечает за установку параметров тестов Самахода, ТХЧ, Константы и Чуувствительности
+    //---------------------------------------------------------------------
 
-    @FXML
-    private ToggleButton STABtn;
 
-    @FXML
-    private ToggleButton RTCBtn;
+    //---------------------------------------------------------------------
 
-    @FXML
-    private ToggleButton ConstBtn;
-
-    @FXML
-    private GridPane gridPaneCreep;
-
-    @FXML
-    private GridPane GridPaneStart;
-
-    @FXML
-    private GridPane GridPaneRTC;
-
-    @FXML
-    private GridPane GridPaneConst;
 
     @FXML
     private TextField metodicNameTxtFld;
 
     @FXML
     void SaveOrCancelAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    void setCRPSTAFrameAction(ActionEvent event) {
 
     }
 
@@ -216,6 +201,7 @@ public class TESTVIEW extends Application {
         APPlus.setSelected(true);
         allPhaseBtn.setSelected(true);
         gridPaneAllPhaseAPPlus.toFront();
+        initTableView();
     }
 
     private void initGridPane() {
@@ -327,8 +313,13 @@ public class TESTVIEW extends Application {
                 CheckBox finalCheckBox = checkBox;
                 checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
                     if (newVal) {
-                        System.out.println("Кнопка зажата " + finalCheckBox.getId());
+                        addTestPointInMethodic(finalCheckBox.getId());
+                        System.out.println("Кнопка зажата " + finalCheckBox.getId() + "\n" + "Количество точек: " + Methodic.commandsMap.get(0).size());
+                        testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                        viewPointTable.setItems(testListForCollum);
                     } else {
+                        String[] idCheckBox = finalCheckBox.getId().split(";");
+                        deleteTestPointInMethodic(idCheckBox);
                         System.out.println("Кнопка разжата " + finalCheckBox.getId());
                     }
                 });
@@ -454,8 +445,69 @@ public class TESTVIEW extends Application {
         return null;
     }
 
+    //Инициализирует таблицу для отображения выбранных точек
+    private void initTableView() {
+
+        //Устанавливаем данные для колонок
+        loadCurrTabCol.setCellValueFactory(new PropertyValueFactory<>("testCurrent"));
+        eMaxTabCol.setCellValueFactory(new PropertyValueFactory<>("emax"));
+        eMinTabCol.setCellValueFactory(new PropertyValueFactory<>("emin"));
+        amountImplTabCol.setCellValueFactory(new PropertyValueFactory<>("pulse"));
+
+        //Выставляем отображение информации в колонке "по центру"
+        eMaxTabCol.setStyle( "-fx-alignment: CENTER;");
+        eMinTabCol.setStyle( "-fx-alignment: CENTER;");
+        amountImplTabCol.setStyle( "-fx-alignment: CENTER;");
+
+        viewPointTable.setEditable(true);
+
+        //Устанавливаем возможность редактирования информации в колонке
+        eMaxTabCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        eMinTabCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        amountImplTabCol.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        //Действие при изменении информации в колонке
+        eMaxTabCol.setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+            TablePosition<Commands, String> pos = event.getTablePosition();
+
+            String newImpulseValue = event.getNewValue();
+
+            int row = pos.getRow();
+            Commands command = event.getTableView().getItems().get(row);
+
+            ((ErrorCommand) command).setEmax(newImpulseValue);
+
+        });
+
+        eMinTabCol.setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+            TablePosition<Commands, String> pos = event.getTablePosition();
+
+            String newImpulseValue = event.getNewValue();
+
+            int row = pos.getRow();
+            Commands command = event.getTableView().getItems().get(row);
+
+            ((ErrorCommand) command).setEmin(newImpulseValue);
+
+        });
+
+        amountImplTabCol.setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+            TablePosition<Commands, String> pos = event.getTablePosition();
+
+            String newImpulseValue = event.getNewValue();
+
+            int row = pos.getRow();
+            Commands command = event.getTableView().getItems().get(row);
+
+            ((ErrorCommand) command).setPulse(newImpulseValue);
+
+        });
+
+        viewPointTable.setItems(testListForCollum);
+    }
+
     //Добавляет тестовую точку в методику
-    public void addTestPointInMethodic(String testPoint) {
+    private void addTestPointInMethodic(String testPoint) {
         if (isThrePhaseStend) {
             stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
         } else {
@@ -486,17 +538,9 @@ public class TESTVIEW extends Application {
         //Целое значеник процент + Максимальный или минимальный
         String[] curAndPer = dirCurFactor[4].split(" ");
         //Процент от тока
-        String percent;
+        String percent = curAndPer[0];
         //Максимальный или минимальный ток.
-        String current;
-
-        if (curAndPer.length == 1) {
-            percent = "1.0";
-            current = curAndPer[0];
-        } else {
-            percent = curAndPer[0];
-            current = curAndPer[1];
-        }
+        String current = curAndPer[1];
 
         //Коэф мощности
         String powerFactor = dirCurFactor[5];
@@ -519,7 +563,76 @@ public class TESTVIEW extends Application {
         }
     }
 
-    private void refreshCollum() {
+    private void deleteTestPointInMethodic(String [] point) {
+        ErrorCommand errorCommand;
+        String str;
 
+        if (point[2].equals("A") && point[3].equals("P")) {
+
+            if (point[1].equals("H")) {
+                str = point[5] + "; " + point[4];
+            }else str = point[1] + ": " + point[5] + "; " + point[4];
+
+            for (Commands current  : Methodic.commandsMap.get(0)) {
+                errorCommand = (ErrorCommand) current;
+                if (errorCommand.getTestCurrent().equals(str)) {
+                    Methodic.commandsMap.get(0).remove(current);
+                    break;
+                }
+            }
+            testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+            viewPointTable.setItems(testListForCollum);
+        }
+
+        if (point[2].equals("A") && point[3].equals("N")) {
+
+            if (point[1].equals("H")) {
+                str = point[5] + "; " + point[4];
+            }else str = point[1] + ": " + point[5] + "; " + point[4];
+
+            for (Commands current  : Methodic.commandsMap.get(1)) {
+                errorCommand = (ErrorCommand) current;
+                if (errorCommand.getTestCurrent().equals(str)) {
+                    Methodic.commandsMap.get(1).remove(current);
+                    break;
+                }
+            }
+            testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+            viewPointTable.setItems(testListForCollum);
+        }
+
+        if (point[2].equals("R") && point[3].equals("P")) {
+
+            if (point[1].equals("H")) {
+                str = point[5] + "; " + point[4];
+            }else str = point[1] + ": " + point[5] + "; " + point[4];
+
+            for (Commands current  : Methodic.commandsMap.get(2)) {
+                errorCommand = (ErrorCommand) current;
+                if (errorCommand.getTestCurrent().equals(str)) {
+                    Methodic.commandsMap.get(1).remove(current);
+                    break;
+                }
+            }
+            testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+            viewPointTable.setItems(testListForCollum);
+        }
+
+        if (point[2].equals("R") && point[3].equals("N")) {
+
+            if (point[1].equals("H")) {
+                str = point[5] + "; " + point[4];
+            }else str = point[1] + ": " + point[5] + "; " + point[4];
+
+            for (Commands current  : Methodic.commandsMap.get(3)) {
+                errorCommand = (ErrorCommand) current;
+                if (errorCommand.getTestCurrent().equals(str)) {
+                    Methodic.commandsMap.get(1).remove(current);
+                    break;
+                }
+            }
+            testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+            viewPointTable.setItems(testListForCollum);
+        }
     }
 }

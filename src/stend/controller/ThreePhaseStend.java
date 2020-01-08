@@ -1,5 +1,7 @@
 package stend.controller;
 
+import stend.helper.ConsoleHelper;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,11 +23,9 @@ public class ThreePhaseStend extends StendDLLCommands{
         return threePhaseStend;
     }
 
-    private ResourceBundle res = ResourceBundle.getBundle("resourseFiles");
+    private String stendModel = ConsoleHelper.properties.getProperty("stendModel");
 
-    private String stendModel = res.getString("stendModel");
-
-    private String refMetModel = res.getString("refMeterModel");
+    private String refMetModel = ConsoleHelper.properties.getProperty("refMeterModel");
 
     public List<String> getStendModelList() {
         return stendModelList;

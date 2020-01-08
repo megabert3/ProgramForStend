@@ -1,6 +1,8 @@
 package stend.model;
 
 import stend.controller.Commands.Commands;
+import stend.controller.Commands.ErrorCommand;
+import stend.controller.ThreePhaseStend;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ public class Methodic {
     private static List<Commands> reactiveEnergyReverse = new ArrayList<>();
 
     static {
+        //activeEnergyDirect.add(new ErrorCommand(ThreePhaseStend.getThreePhaseStendInstance(), 3, "Ib", 0, "df", "dsf", "fdf", 0));
         commandsMap.put(0, activeEnergyDirect);
         commandsMap.put(1, activeEnergyRevers);
         commandsMap.put(2, reactiveEnergyDirect);
