@@ -22,14 +22,50 @@
          <children>
             <StackPane prefHeight="623.0" prefWidth="405.0">
                <children>
-                          <ScrollPane prefHeight="499.0" prefWidth="318.0">
+                  <ScrollPane fx:id="scrlPaneAPMns" prefHeight="499.0" prefWidth="318.0">
+                     <content>
+                        <TableView fx:id="viewPointTableAPMns" prefHeight="624.0" prefWidth="402.0">
+                           <columns>
+                              <TableColumn fx:id="loadCurrTabColAPMns" prefWidth="101.0" text="Нагрузка" />
+                              <TableColumn fx:id="eMaxTabColAPMns" prefWidth="99.0" text="Emax" />
+                              <TableColumn fx:id="eMinTabColAPMns" prefWidth="97.0" text="Emin" />
+                              <TableColumn fx:id="amountImplTabColAPMns" prefWidth="98.0" text="Импульсы" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </ScrollPane>
+                  <ScrollPane fx:id="scrlPaneRPPls" prefHeight="499.0" prefWidth="318.0">
+                     <content>
+                        <TableView fx:id="viewPointTableRPPls" prefHeight="624.0" prefWidth="402.0">
+                           <columns>
+                              <TableColumn fx:id="loadCurrTabColRPPls" prefWidth="101.0" text="Нагрузка" />
+                              <TableColumn fx:id="eMaxTabColRPPls" prefWidth="99.0" text="Emax" />
+                              <TableColumn fx:id="eMinTabColRPPls" prefWidth="97.0" text="Emin" />
+                              <TableColumn fx:id="amountImplTabColRPPls" prefWidth="98.0" text="Импульсы" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </ScrollPane>
+                  <ScrollPane fx:id="scrlPaneRPMns" prefHeight="499.0" prefWidth="318.0">
+                     <content>
+                        <TableView fx:id="viewPointTableRPMns" prefHeight="624.0" prefWidth="402.0">
+                           <columns>
+                              <TableColumn fx:id="loadCurrTabColRPMns" prefWidth="101.0" text="Нагрузка" />
+                              <TableColumn fx:id="eMaxTabColRPMns" prefWidth="99.0" text="Emax" />
+                              <TableColumn fx:id="eMinTabColRPMns" prefWidth="97.0" text="Emin" />
+                              <TableColumn fx:id="amountImplTabColRPMns" prefWidth="98.0" text="Импульсы" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </ScrollPane>
+                          <ScrollPane fx:id="scrlPaneAPPls" prefHeight="499.0" prefWidth="318.0">
                               <content>
-                                  <TableView fx:id="viewPointTable" prefHeight="624.0" prefWidth="402.0">
+                                  <TableView fx:id="viewPointTableAPPls" prefHeight="624.0" prefWidth="402.0">
                                       <columns>
-                                          <TableColumn fx:id="loadCurrTabCol" prefWidth="101.0" text="Нагрузка" />
-                                          <TableColumn fx:id="eMaxTabCol" prefWidth="99.0" text="Emax" />
-                                          <TableColumn fx:id="eMinTabCol" prefWidth="97.0" text="Emin" />
-                                          <TableColumn fx:id="amountImplTabCol" prefWidth="98.0" text="Импульсы" />
+                                          <TableColumn fx:id="loadCurrTabColAPPls" prefWidth="101.0" text="Нагрузка" />
+                                          <TableColumn fx:id="eMaxTabColAPPls" prefWidth="99.0" text="Emax" />
+                                          <TableColumn fx:id="eMinTabColAPPls" prefWidth="97.0" text="Emin" />
+                                          <TableColumn fx:id="amountImplTabColAPPls" prefWidth="98.0" text="Импульсы" />
                                       </columns>
                                   </TableView>
                               </content>

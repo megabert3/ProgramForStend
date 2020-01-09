@@ -1,5 +1,6 @@
 package stend.view.TEST;
 
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.*;
 
@@ -47,10 +48,10 @@ public class TESTVIEW extends Application {
     private String metodicName = "default";
 
     //Значения коэффициента мощности
-    private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C", "0.14C", "1313.K");
+    private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C");
 
     //Значения выставленного тока
-    private List<String> current = Arrays.asList("1.0 Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "1.0 Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.00 1Ib");
+    private List<String> current = Arrays.asList("1.0 Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "1.0 Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.001 Ib");
 
     //Список GridPane для выставления точек поверки
     private List<GridPane> gridPanesEnergyAndPhase;
@@ -59,7 +60,10 @@ public class TESTVIEW extends Application {
     private boolean isThrePhaseStend;
 
     //Лист с точками
-    ObservableList<Commands> testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+    private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+    private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+    private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+    private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
 
     @FXML
     private ResourceBundle resources = ResourceBundle.getBundle("stendProperties");
@@ -69,20 +73,84 @@ public class TESTVIEW extends Application {
 
     //Отвечают за окно отображения выбранных точек тестирования
     //-------------------------------------------------------
+    //Активная энергия в прямом направлении тока
     @FXML
-    private TableView<Commands> viewPointTable = new TableView<>();
+    private ScrollPane scrlPaneAPPls;
 
     @FXML
-    private TableColumn<Commands, String> loadCurrTabCol;
+    private TableView<Commands> viewPointTableAPPls = new TableView<>();
 
     @FXML
-    private TableColumn<Commands, String> eMaxTabCol;
+    private TableColumn<Commands, String> loadCurrTabColAPPls;
 
     @FXML
-    private TableColumn<Commands, String> eMinTabCol;
+    private TableColumn<Commands, String> eMaxTabColAPPls;
 
     @FXML
-    private TableColumn<Commands, String> amountImplTabCol;
+    private TableColumn<Commands, String> eMinTabColAPPls;
+
+    @FXML
+    private TableColumn<Commands, String> amountImplTabColAPPls;
+
+    //-------------------------------------------------------
+    //Активная энергия в обратном направлении тока
+    @FXML
+    private ScrollPane scrlPaneAPMns;
+
+    @FXML
+    private TableView<Commands> viewPointTableAPMns;
+
+    @FXML
+    private TableColumn<Commands, String> loadCurrTabColAPMns;
+
+    @FXML
+    private TableColumn<Commands, String> eMaxTabColAPMns;
+
+    @FXML
+    private TableColumn<Commands, String> eMinTabColAPMns;
+
+    @FXML
+    private TableColumn<Commands, String> amountImplTabColAPMns;
+
+    //--------------------------------------------------------
+    //Реактивная энергия в прямом напралении тока
+    @FXML
+    private ScrollPane scrlPaneRPPls;
+
+    @FXML
+    private TableView<Commands> viewPointTableRPPls;
+
+    @FXML
+    private TableColumn<Commands, String> loadCurrTabColRPPls;
+
+    @FXML
+    private TableColumn<Commands, String> eMaxTabColRPPls;
+
+    @FXML
+    private TableColumn<Commands, String> eMinTabColRPPls;
+
+    @FXML
+    private TableColumn<Commands, String> amountImplTabColRPPls;
+
+    //--------------------------------------------------------
+    //Реактивная энергия в обратном напралении тока
+    @FXML
+    private ScrollPane scrlPaneRPMns;
+
+    @FXML
+    private TableView<Commands> viewPointTableRPMns;
+
+    @FXML
+    private TableColumn<Commands, String> loadCurrTabColRPMns;
+
+    @FXML
+    private TableColumn<Commands, String> eMaxTabColRPMns;
+
+    @FXML
+    private TableColumn<Commands, String> eMinTabColRPMns;
+
+    @FXML
+    private TableColumn<Commands, String> amountImplTabColRPMns;
     //-------------------------------------------------------
     @FXML
     private GridPane gridPaneAllPhaseAPPlus;
@@ -311,14 +379,35 @@ public class TESTVIEW extends Application {
                 checkBox = new CheckBox();
                 checkBox.setId(pane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
                 CheckBox finalCheckBox = checkBox;
+                String[] idCheckBox = finalCheckBox.getId().split(";");
+                String energy = idCheckBox[2];
+                String direction = idCheckBox[3];
+
                 checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
                     if (newVal) {
                         addTestPointInMethodic(finalCheckBox.getId());
+                        if (energy.equals("A") && direction.equals("P")) {
+                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                            viewPointTableAPPls.setItems(testListForCollumAPPls);
+                        }
+
+                        if (energy.equals("A") && direction.equals("N")) {
+                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+                            viewPointTableAPMns.setItems(testListForCollumAPPls);
+                        }
+
+                        if (energy.equals("R") && direction.equals("P")) {
+                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+                            viewPointTableRPPls.setItems(testListForCollumAPPls);
+                        }
+
+                        if (energy.equals("R") && direction.equals("N")) {
+                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+                            viewPointTableRPMns.setItems(testListForCollumAPPls);
+                        }
                         System.out.println("Кнопка зажата " + finalCheckBox.getId() + "\n" + "Количество точек: " + Methodic.commandsMap.get(0).size());
-                        testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                        viewPointTable.setItems(testListForCollum);
+
                     } else {
-                        String[] idCheckBox = finalCheckBox.getId().split(";");
                         deleteTestPointInMethodic(idCheckBox);
                         System.out.println("Кнопка разжата " + finalCheckBox.getId());
                     }
@@ -373,6 +462,7 @@ public class TESTVIEW extends Application {
 
         if (event.getSource() == APPlus) {
             setDefPosBtn();
+            scrlPaneAPPls.toFront();
             APPlus.setSelected(true);
             APMinus.setSelected(false);
             RPPlus.setSelected(false);
@@ -380,6 +470,7 @@ public class TESTVIEW extends Application {
         }
         if (event.getSource() == APMinus) {
             setDefPosBtn();
+            scrlPaneAPMns.toFront();
             APMinus.setSelected(true);
             APPlus.setSelected(false);
             RPPlus.setSelected(false);
@@ -387,6 +478,7 @@ public class TESTVIEW extends Application {
         }
         if (event.getSource() == RPPlus) {
             setDefPosBtn();
+            scrlPaneRPPls.toFront();
             RPPlus.setSelected(true);
             APPlus.setSelected(false);
             APMinus.setSelected(false);
@@ -394,6 +486,7 @@ public class TESTVIEW extends Application {
         }
         if (event.getSource() == RPMinus) {
             setDefPosBtn();
+            scrlPaneRPMns.toFront();
             RPMinus.setSelected(true);
             RPPlus.setSelected(false);
             APPlus.setSelected(false);
@@ -447,63 +540,105 @@ public class TESTVIEW extends Application {
 
     //Инициализирует таблицу для отображения выбранных точек
     private void initTableView() {
+        List<TableColumn<Commands, String>> collumnListAPPls = Arrays.asList(
+                loadCurrTabColAPPls,
+                eMaxTabColAPPls,
+                eMinTabColAPPls,
+                amountImplTabColAPPls
+        );
 
-        //Устанавливаем данные для колонок
-        loadCurrTabCol.setCellValueFactory(new PropertyValueFactory<>("testCurrent"));
-        eMaxTabCol.setCellValueFactory(new PropertyValueFactory<>("emax"));
-        eMinTabCol.setCellValueFactory(new PropertyValueFactory<>("emin"));
-        amountImplTabCol.setCellValueFactory(new PropertyValueFactory<>("pulse"));
+        List<TableColumn<Commands, String>> collumnListAPMns = Arrays.asList(
+                loadCurrTabColAPMns,
+                eMaxTabColAPMns,
+                eMinTabColAPMns,
+                amountImplTabColAPMns
+        );
 
-        //Выставляем отображение информации в колонке "по центру"
-        eMaxTabCol.setStyle( "-fx-alignment: CENTER;");
-        eMinTabCol.setStyle( "-fx-alignment: CENTER;");
-        amountImplTabCol.setStyle( "-fx-alignment: CENTER;");
+        List<TableColumn<Commands, String>> collumnListRPPls = Arrays.asList(
+                loadCurrTabColRPPls,
+                eMaxTabColRPPls,
+                eMinTabColRPPls,
+                amountImplTabColRPPls
+        );
 
-        viewPointTable.setEditable(true);
+        List<TableColumn<Commands, String>> collumnListRPMns = Arrays.asList(
+                loadCurrTabColRPMns,
+                eMaxTabColRPMns,
+                eMinTabColRPMns,
+                amountImplTabColRPMns
+        );
 
-        //Устанавливаем возможность редактирования информации в колонке
-        eMaxTabCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        eMinTabCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        amountImplTabCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        Map<Integer, List<TableColumn<Commands, String>>> mapTableColumn = new HashMap<>();
+        mapTableColumn.put(0, collumnListAPPls);
+        mapTableColumn.put(1, collumnListAPMns);
+        mapTableColumn.put(2, collumnListRPPls);
+        mapTableColumn.put(3, collumnListRPMns);
 
-        //Действие при изменении информации в колонке
-        eMaxTabCol.setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
-            TablePosition<Commands, String> pos = event.getTablePosition();
 
-            String newImpulseValue = event.getNewValue();
+        for (int i = 0; i < mapTableColumn.size(); i++) {
+            //Устанавливаем данные для колонок (AP+, AP-, RP+, RP-)
+            mapTableColumn.get(i).get(0).setCellValueFactory(new PropertyValueFactory<>("testCurrent"));
+            mapTableColumn.get(i).get(1).setCellValueFactory(new PropertyValueFactory<>("emax"));
+            mapTableColumn.get(i).get(2).setCellValueFactory(new PropertyValueFactory<>("emin"));
+            mapTableColumn.get(i).get(3).setCellValueFactory(new PropertyValueFactory<>("pulse"));
 
-            int row = pos.getRow();
-            Commands command = event.getTableView().getItems().get(row);
+            //Выставляем отображение информации в колонке "по центру"
+            mapTableColumn.get(i).get(1).setStyle( "-fx-alignment: CENTER;");
+            mapTableColumn.get(i).get(2).setStyle( "-fx-alignment: CENTER;");
+            mapTableColumn.get(i).get(3).setStyle( "-fx-alignment: CENTER;");
 
-            ((ErrorCommand) command).setEmax(newImpulseValue);
+            //Устанавливаем возможность редактирования информации в колонке
+            mapTableColumn.get(i).get(1).setCellFactory(TextFieldTableCell.forTableColumn());
+            mapTableColumn.get(i).get(2).setCellFactory(TextFieldTableCell.forTableColumn());
+            mapTableColumn.get(i).get(3).setCellFactory(TextFieldTableCell.forTableColumn());
 
-        });
+            //Действие при изменении информации в колонке
+            mapTableColumn.get(i).get(1).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+                TablePosition<Commands, String> pos = event.getTablePosition();
 
-        eMinTabCol.setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
-            TablePosition<Commands, String> pos = event.getTablePosition();
+                String newImpulseValue = event.getNewValue();
 
-            String newImpulseValue = event.getNewValue();
+                int row = pos.getRow();
+                Commands command = event.getTableView().getItems().get(row);
 
-            int row = pos.getRow();
-            Commands command = event.getTableView().getItems().get(row);
+                ((ErrorCommand) command).setEmax(newImpulseValue);
 
-            ((ErrorCommand) command).setEmin(newImpulseValue);
+            });
 
-        });
+            mapTableColumn.get(i).get(2).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+                TablePosition<Commands, String> pos = event.getTablePosition();
 
-        amountImplTabCol.setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
-            TablePosition<Commands, String> pos = event.getTablePosition();
+                String newImpulseValue = event.getNewValue();
 
-            String newImpulseValue = event.getNewValue();
+                int row = pos.getRow();
+                Commands command = event.getTableView().getItems().get(row);
 
-            int row = pos.getRow();
-            Commands command = event.getTableView().getItems().get(row);
+                ((ErrorCommand) command).setEmax(newImpulseValue);
 
-            ((ErrorCommand) command).setPulse(newImpulseValue);
+            });
 
-        });
+            mapTableColumn.get(i).get(3).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+                TablePosition<Commands, String> pos = event.getTablePosition();
 
-        viewPointTable.setItems(testListForCollum);
+                String newImpulseValue = event.getNewValue();
+
+                int row = pos.getRow();
+                Commands command = event.getTableView().getItems().get(row);
+
+                ((ErrorCommand) command).setEmax(newImpulseValue);
+
+            });
+        }
+
+        viewPointTableAPPls.setEditable(true);
+        viewPointTableAPMns.setEditable(true);
+        viewPointTableRPPls.setEditable(true);
+        viewPointTableRPMns.setEditable(true);
+
+        viewPointTableAPPls.setItems(testListForCollumAPPls);
+        viewPointTableAPMns.setItems(testListForCollumAPMns);
+        viewPointTableRPPls.setItems(testListForCollumRPPls);
+        viewPointTableRPMns.setItems(testListForCollumRPMns);
     }
 
     //Добавляет тестовую точку в методику
@@ -573,15 +708,15 @@ public class TESTVIEW extends Application {
                 str = point[5] + "; " + point[4];
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
-            for (Commands current  : Methodic.commandsMap.get(0)) {
+            for (Commands current : Methodic.commandsMap.get(0)) {
                 errorCommand = (ErrorCommand) current;
                 if (errorCommand.getTestCurrent().equals(str)) {
                     Methodic.commandsMap.get(0).remove(current);
                     break;
                 }
             }
-            testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-            viewPointTable.setItems(testListForCollum);
+            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+            viewPointTableAPPls.setItems(testListForCollumAPPls);
         }
 
         if (point[2].equals("A") && point[3].equals("N")) {
@@ -590,15 +725,15 @@ public class TESTVIEW extends Application {
                 str = point[5] + "; " + point[4];
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
-            for (Commands current  : Methodic.commandsMap.get(1)) {
+            for (Commands current : Methodic.commandsMap.get(1)) {
                 errorCommand = (ErrorCommand) current;
                 if (errorCommand.getTestCurrent().equals(str)) {
                     Methodic.commandsMap.get(1).remove(current);
                     break;
                 }
             }
-            testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-            viewPointTable.setItems(testListForCollum);
+            testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+            viewPointTableAPMns.setItems(testListForCollumAPMns);
         }
 
         if (point[2].equals("R") && point[3].equals("P")) {
@@ -607,15 +742,15 @@ public class TESTVIEW extends Application {
                 str = point[5] + "; " + point[4];
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
-            for (Commands current  : Methodic.commandsMap.get(2)) {
+            for (Commands current : Methodic.commandsMap.get(2)) {
                 errorCommand = (ErrorCommand) current;
                 if (errorCommand.getTestCurrent().equals(str)) {
-                    Methodic.commandsMap.get(1).remove(current);
+                    Methodic.commandsMap.get(2).remove(current);
                     break;
                 }
             }
-            testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-            viewPointTable.setItems(testListForCollum);
+            testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+            viewPointTableRPPls.setItems(testListForCollumRPPls);
         }
 
         if (point[2].equals("R") && point[3].equals("N")) {
@@ -624,15 +759,15 @@ public class TESTVIEW extends Application {
                 str = point[5] + "; " + point[4];
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
-            for (Commands current  : Methodic.commandsMap.get(3)) {
+            for (Commands current : Methodic.commandsMap.get(3)) {
                 errorCommand = (ErrorCommand) current;
                 if (errorCommand.getTestCurrent().equals(str)) {
-                    Methodic.commandsMap.get(1).remove(current);
+                    Methodic.commandsMap.get(3).remove(current);
                     break;
                 }
             }
-            testListForCollum = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-            viewPointTable.setItems(testListForCollum);
+            testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+            viewPointTableRPMns.setItems(testListForCollumRPMns);
         }
     }
 }
