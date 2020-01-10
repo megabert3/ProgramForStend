@@ -1,6 +1,5 @@
 package stend.view.TEST;
 
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.*;
 
@@ -75,9 +74,6 @@ public class TESTVIEW extends Application {
     //-------------------------------------------------------
     //Активная энергия в прямом направлении тока
     @FXML
-    private ScrollPane scrlPaneAPPls;
-
-    @FXML
     private TableView<Commands> viewPointTableAPPls = new TableView<>();
 
     @FXML
@@ -94,9 +90,6 @@ public class TESTVIEW extends Application {
 
     //-------------------------------------------------------
     //Активная энергия в обратном направлении тока
-    @FXML
-    private ScrollPane scrlPaneAPMns;
-
     @FXML
     private TableView<Commands> viewPointTableAPMns;
 
@@ -115,9 +108,6 @@ public class TESTVIEW extends Application {
     //--------------------------------------------------------
     //Реактивная энергия в прямом напралении тока
     @FXML
-    private ScrollPane scrlPaneRPPls;
-
-    @FXML
     private TableView<Commands> viewPointTableRPPls;
 
     @FXML
@@ -135,9 +125,6 @@ public class TESTVIEW extends Application {
     //--------------------------------------------------------
     //Реактивная энергия в обратном напралении тока
     @FXML
-    private ScrollPane scrlPaneRPMns;
-
-    @FXML
     private TableView<Commands> viewPointTableRPMns;
 
     @FXML
@@ -152,6 +139,8 @@ public class TESTVIEW extends Application {
     @FXML
     private TableColumn<Commands, String> amountImplTabColRPMns;
     //-------------------------------------------------------
+    //Данный блок отвечает за сетку выбора точки.
+    //Активная энергия в прямом направлении, Все фазы и отдельно А В С
     @FXML
     private GridPane gridPaneAllPhaseAPPlus;
 
@@ -164,6 +153,7 @@ public class TESTVIEW extends Application {
     @FXML
     private GridPane gridPanePhaseCAPPlus;
 
+    //Активная энергия в обратном направлении, Все фазы и отдельно А В С
     @FXML
     private GridPane gridPaneAllPhaseAPMinus;
 
@@ -176,6 +166,7 @@ public class TESTVIEW extends Application {
     @FXML
     private GridPane gridPanePhaseCAPMinus;
 
+    //Реактивная энергия в прямом направлении, Все фазы и отдельно А В С
     @FXML
     private GridPane gridPaneAllPhaseRPPlus;
 
@@ -188,6 +179,7 @@ public class TESTVIEW extends Application {
     @FXML
     private GridPane gridPanePhaseCRPPlus;
 
+    //Реактивная энергия в обратном направлении, Все фазы и отдельно А В С
     @FXML
     private GridPane gridPaneAllPhaseRPMinus;
 
@@ -201,8 +193,6 @@ public class TESTVIEW extends Application {
     private GridPane gridPanePhaseCRPMinus;
 
     //-------------------------------------------------------
-    @FXML
-    private VBox vBoxForPhaseTgBtn;
 
     @FXML
     private ToggleButton allPhaseBtn;
@@ -215,9 +205,6 @@ public class TESTVIEW extends Application {
 
     @FXML
     private ToggleButton CPhaseBtn;
-
-    @FXML
-    private HBox hBoxForDirectionTgBtn;
 
     @FXML
     private ToggleButton APPlus;
@@ -237,21 +224,331 @@ public class TESTVIEW extends Application {
     @FXML
     private Button SaveBtn;
 
-    //Этот блок кода отвечает за установку параметров тестов Самахода, ТХЧ, Константы и Чуувствительности
+    //Этот блок кода отвечает за установку параметров тестов Самахода, ТХЧ, Константы и Чувствительности
     //---------------------------------------------------------------------
+    //Активная энергия в прямом напралении
+    @FXML
+    private ToggleButton APPlusCRPSTA;
 
+    @FXML
+    private Pane APPlsPane;
 
+    @FXML
+    private ToggleButton CRPTogBtnAPPls;
+
+    @FXML
+    private ToggleButton STATogBtnAPPls;
+
+    @FXML
+    private ToggleButton RTCTogBtnAPPls;
+
+    @FXML
+    private ToggleButton ConstTogBtnAPPls;
+
+    @FXML
+    private Pane paneConstAPPls;
+
+    @FXML
+    private TextField txtFieldConsErAPPls;
+
+    @FXML
+    private TextField txtFieldEngConstAPPls;
+
+    @FXML
+    private TextField txtFieldConstAPPls;
+
+    @FXML
+    private ToggleButton addTglBtnConstAPPls;
+
+    @FXML
+    private Pane paneRTCAPPls;
+
+    @FXML
+    private TextField txtFieldRngEAPPls;
+
+    @FXML
+    private TextField txtFldRTCAmtMshAPPls;
+
+    @FXML
+    private ToggleButton addTglBtnRTCAPPls;
+
+    @FXML
+    private ChoiceBox<?> ChcBxRTCErrAPPls;
+
+    @FXML
+    private Pane paneCRPAPPls;
+
+    @FXML
+    private TextField txtFieldCRPUProcAPPls;
+
+    @FXML
+    private TextField txtFieldTimeCRPAPPls;
+
+    @FXML
+    private TextField txtFieldCRPAmtImpAPPls;
+
+    @FXML
+    private ToggleButton addTglBtnCRPAPPls;
+
+    @FXML
+    private Pane paneSTAAPPls;
+
+    @FXML
+    private TextField txtFieldSTAIProcAPPls;
+
+    @FXML
+    private TextField txtFieldTimeSRAAPPls;
+
+    @FXML
+    private TextField txtFieldSTAAmtImpAPPls;
+
+    @FXML
+    private ToggleButton addTglBtnSTAAPPls;
+
+    //Активная энергия в обратном напралении
+    //--------------------------------------------------------
+    @FXML
+    private ToggleButton APMinusCRPSTA;
+
+    @FXML
+    private Pane APMnsPane;
+
+    @FXML
+    private ToggleButton CRPTogBtnAPMns;
+
+    @FXML
+    private ToggleButton STATogBtnAPMns;
+
+    @FXML
+    private ToggleButton RTCTogBtnAPMns;
+
+    @FXML
+    private ToggleButton ConstTogBtnAPMns;
+
+    @FXML
+    private Pane paneCRPAPMns;
+
+    @FXML
+    private TextField txtFieldCRPUProcAPMns;
+
+    @FXML
+    private TextField txtFieldTimeCRPAPMns;
+
+    @FXML
+    private TextField txtFieldCRPAmtImpAPMns;
+
+    @FXML
+    private ToggleButton addTglBtnCRPAPMns;
+
+    @FXML
+    private Pane paneSTAAPMns;
+
+    @FXML
+    private TextField txtFieldSTAIProcAPMns;
+
+    @FXML
+    private TextField txtFieldTimeSRAAPMns;
+
+    @FXML
+    private TextField txtFieldSTAAmtImpAPMns;
+
+    @FXML
+    private ToggleButton addTglBtnSTAAPMns;
+
+    @FXML
+    private Pane paneRTCAPMns;
+
+    @FXML
+    private TextField txtFieldRngEAPMns;
+
+    @FXML
+    private TextField txtFldRTCAmtMshAPMns;
+
+    @FXML
+    private ToggleButton addTglBtnRTCAPMns;
+
+    @FXML
+    private ChoiceBox<?> ChcBxRTCErrRPMns;
+
+    @FXML
+    private Pane paneConstAPMns;
+
+    @FXML
+    private TextField txtFieldConsErAPMns;
+
+    @FXML
+    private TextField txtFieldEngConstAPMns;
+
+    @FXML
+    private TextField txtFieldConstAPMns;
+
+    @FXML
+    private ToggleButton addTglBtnConstAPMns;
+
+    //Реактивная энергия в прямом направлении
+    //--------------------------------------------------------
+    @FXML
+    private ToggleButton RPPlusCRPSTA;
+
+    @FXML
+    private Pane RPPlsPane;
+
+    @FXML
+    private ToggleButton CRPTogBtnRPPls;
+
+    @FXML
+    private ToggleButton STATogBtnRPPls;
+
+    @FXML
+    private ToggleButton RTCTogBtnRPPls;
+
+    @FXML
+    private ToggleButton ConstTogBtnRPPls;
+
+    @FXML
+    private Pane paneCRPRPPls;
+
+    @FXML
+    private TextField txtFieldCRPUProcRPPls;
+
+    @FXML
+    private TextField txtFieldTimeCRPPPls;
+
+    @FXML
+    private TextField txtFieldCRPAmtImpRPPls;
+
+    @FXML
+    private ToggleButton addTglBtnCRPRPPls;
+
+    @FXML
+    private Pane paneSTARPPls;
+
+    @FXML
+    private TextField txtFieldSTAIProcRPPls;
+
+    @FXML
+    private TextField txtFieldTimeSRARPPls;
+
+    @FXML
+    private TextField txtFieldSTAAmtImpRPPls;
+
+    @FXML
+    private ToggleButton addTglBtnSTARPPls;
+
+    @FXML
+    private Pane paneRTCRPPls;
+
+    @FXML
+    private TextField txtFieldRngERPPls;
+
+    @FXML
+    private TextField txtFldRTCAmtMshRPPls;
+
+    @FXML
+    private ToggleButton addTglBtnRTCRPPls;
+
+    @FXML
+    private ChoiceBox<?> ChcBxRTCErrRPPls;
+
+    @FXML
+    private Pane paneConstRPPls;
+
+    @FXML
+    private TextField txtFieldConsErRPPls;
+
+    @FXML
+    private TextField txtFieldEngConstRPPls;
+
+    @FXML
+    private TextField txtFieldConstRPPls;
+
+    @FXML
+    private ToggleButton addTglBtnConstRPPls;
+
+    //--------------------------------------------------------
+    //Реактивная энергия в обратном направлении
+    @FXML
+    private ToggleButton RPMinusCRPSTA;
+
+    @FXML
+    private Pane RPMnsPane;
+
+    @FXML
+    private ToggleButton CRPTogBtnRPMns;
+
+    @FXML
+    private ToggleButton STATogBtnRPMns;
+
+    @FXML
+    private ToggleButton RTCTogBtnRPMns;
+
+    @FXML
+    private ToggleButton ConstTogBtnRPMns;
+
+    @FXML
+    private Pane paneCRPRPMns;
+
+    @FXML
+    private TextField txtFieldCRPUProcRPMns;
+
+    @FXML
+    private TextField txtFieldTimeCRPPMns;
+
+    @FXML
+    private TextField txtFieldCRPAmtImpRPMns;
+
+    @FXML
+    private ToggleButton addTglBtnCRPRPMns;
+
+    @FXML
+    private Pane paneSTARPMns;
+
+    @FXML
+    private TextField txtFieldSTAIProcRPMns;
+
+    @FXML
+    private TextField txtFieldTimeSRARPMns;
+
+    @FXML
+    private TextField txtFieldSTAAmtImpRPMns;
+
+    @FXML
+    private ToggleButton addTglBtnSTARPMns;
+
+    @FXML
+    private Pane paneRTCRPMns;
+
+    @FXML
+    private TextField txtFieldRngERPMns;
+
+    @FXML
+    private TextField txtFldRTCAmtMshRPMns;
+
+    @FXML
+    private ToggleButton addTglBtnRTCRPMns;
+
+    @FXML
+    private Pane paneConstRPMns;
+
+    @FXML
+    private TextField txtFieldConsErRPMns;
+
+    @FXML
+    private TextField txtFieldEngConstRPMns;
+
+    @FXML
+    private TextField txtFieldConstRPMns;
+
+    @FXML
+    private ToggleButton addTglBtnConstRPMns;
     //---------------------------------------------------------------------
-
 
     @FXML
     private TextField metodicNameTxtFld;
 
     @FXML
     void SaveOrCancelAction(ActionEvent event) {
-
     }
-
 
     @FXML
     void setPointFrameAction(ActionEvent event) {
@@ -268,7 +565,12 @@ public class TESTVIEW extends Application {
         initGridPane();
         APPlus.setSelected(true);
         allPhaseBtn.setSelected(true);
+        APPlusCRPSTA.setSelected(true);
+        APPlsPane.toFront();
+        paneCRPAPPls.toFront();
         gridPaneAllPhaseAPPlus.toFront();
+        viewPointTableAPPls.toFront();
+
         initTableView();
     }
 
@@ -459,38 +761,157 @@ public class TESTVIEW extends Application {
             BPhaseBtn.setSelected(false);
         }
 
-
-        if (event.getSource() == APPlus) {
+        //Tg btns "энергия и направление" отвечающие за сетку точек и добавление тестов Сам., ТХЧ, Чувств., Конст.
+        if (event.getSource() == APPlus || event.getSource() == APPlusCRPSTA) {
             setDefPosBtn();
-            scrlPaneAPPls.toFront();
+            viewPointTableAPPls.toFront();
+            APPlsPane.toFront();
+            paneCRPAPPls.toFront();
+
+
             APPlus.setSelected(true);
             APMinus.setSelected(false);
             RPPlus.setSelected(false);
             RPMinus.setSelected(false);
+
+            APPlusCRPSTA.setSelected(true);
+            APMinusCRPSTA.setSelected(false);
+            RPPlusCRPSTA.setSelected(false);
+            RPMinusCRPSTA.setSelected(false);
         }
-        if (event.getSource() == APMinus) {
+
+        if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
             setDefPosBtn();
-            scrlPaneAPMns.toFront();
+            viewPointTableAPMns.toFront();
+            APMnsPane.toFront();
+            paneCRPAPMns.toFront();
+
             APMinus.setSelected(true);
             APPlus.setSelected(false);
             RPPlus.setSelected(false);
             RPMinus.setSelected(false);
+
+            APPlusCRPSTA.setSelected(false);
+            APMinusCRPSTA.setSelected(true);
+            RPPlusCRPSTA.setSelected(false);
+            RPMinusCRPSTA.setSelected(false);
         }
-        if (event.getSource() == RPPlus) {
+        if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
             setDefPosBtn();
-            scrlPaneRPPls.toFront();
+            viewPointTableRPPls.toFront();
+            RPPlsPane.toFront();
+            paneCRPRPPls.toFront();
+
             RPPlus.setSelected(true);
             APPlus.setSelected(false);
             APMinus.setSelected(false);
             RPMinus.setSelected(false);
+
+            APPlusCRPSTA.setSelected(false);
+            APMinusCRPSTA.setSelected(false);
+            RPPlusCRPSTA.setSelected(true);
+            RPMinusCRPSTA.setSelected(false);
         }
-        if (event.getSource() == RPMinus) {
+        if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
             setDefPosBtn();
-            scrlPaneRPMns.toFront();
+            viewPointTableRPMns.toFront();
+            RPMnsPane.toFront();
+            paneCRPRPMns.toFront();
+
             RPMinus.setSelected(true);
             RPPlus.setSelected(false);
             APPlus.setSelected(false);
             APMinus.setSelected(false);
+
+            APPlusCRPSTA.setSelected(false);
+            APMinusCRPSTA.setSelected(false);
+            RPPlusCRPSTA.setSelected(false);
+            RPMinusCRPSTA.setSelected(true);
+        }
+
+        //Переключение окон внутри фрейма "направление" между вкладками Сам. ТХЧ и т.д.
+        //AP+
+        if (event.getSource() == CRPTogBtnAPPls) {
+            CRPTogBtnAPPls.setSelected(addTglBtnCRPAPPls.isSelected());
+            paneCRPAPPls.toFront();
+        }
+
+        if (event.getSource() == STATogBtnAPPls) {
+            STATogBtnAPPls.setSelected(addTglBtnSTAAPPls.isSelected());
+            paneSTAAPPls.toFront();
+        }
+
+        if (event.getSource() == RTCTogBtnAPPls) {
+            RTCTogBtnAPPls.setSelected(addTglBtnRTCAPPls.isSelected());
+            paneRTCAPPls.toFront();
+        }
+
+        if (event.getSource() == ConstTogBtnAPPls) {
+            ConstTogBtnAPPls.setSelected(addTglBtnConstAPPls.isSelected());
+            paneConstAPPls.toFront();
+        }
+
+        //AP-
+        if (event.getSource() == CRPTogBtnAPMns) {
+            CRPTogBtnAPMns.setSelected(addTglBtnCRPAPMns.isSelected());
+            paneCRPAPMns.toFront();
+        }
+
+        if (event.getSource() == STATogBtnAPMns) {
+            STATogBtnAPMns.setSelected(addTglBtnSTAAPMns.isSelected());
+            paneSTAAPMns.toFront();
+        }
+
+        if (event.getSource() == RTCTogBtnAPMns) {
+            RTCTogBtnAPMns.setSelected(addTglBtnRTCAPMns.isSelected());
+            paneRTCAPMns.toFront();
+        }
+
+        if (event.getSource() == ConstTogBtnAPMns) {
+            ConstTogBtnAPMns.setSelected(addTglBtnConstAPMns.isSelected());
+            paneConstAPMns.toFront();
+        }
+
+        //RP+
+        if (event.getSource() == CRPTogBtnRPPls) {
+            CRPTogBtnRPPls.setSelected(addTglBtnCRPRPPls.isSelected());
+            paneCRPRPPls.toFront();
+        }
+
+        if (event.getSource() == STATogBtnRPPls) {
+            STATogBtnRPPls.setSelected(addTglBtnSTARPPls.isSelected());
+            paneSTARPPls.toFront();
+        }
+
+        if (event.getSource() == RTCTogBtnRPPls) {
+            RTCTogBtnRPPls.setSelected(addTglBtnRTCRPPls.isSelected());
+            paneRTCRPPls.toFront();
+        }
+
+        if (event.getSource() == ConstTogBtnRPPls) {
+            ConstTogBtnRPPls.setSelected(addTglBtnConstRPPls.isSelected());
+            paneConstRPPls.toFront();
+        }
+
+        //RP-
+        if (event.getSource() == CRPTogBtnRPMns) {
+            CRPTogBtnRPMns.setSelected(addTglBtnCRPRPMns.isSelected());
+            paneCRPRPMns.toFront();
+        }
+
+        if (event.getSource() == STATogBtnRPMns) {
+            STATogBtnRPMns.setSelected(addTglBtnSTARPMns.isSelected());
+            paneSTARPMns.toFront();
+        }
+
+        if (event.getSource() == RTCTogBtnRPMns) {
+            RTCTogBtnRPMns.setSelected(addTglBtnRTCRPMns.isSelected());
+            paneRTCRPMns.toFront();
+        }
+
+        if (event.getSource() == ConstTogBtnRPMns) {
+            ConstTogBtnRPMns.setSelected(addTglBtnConstRPMns.isSelected());
+            paneConstRPMns.toFront();
         }
     }
 
