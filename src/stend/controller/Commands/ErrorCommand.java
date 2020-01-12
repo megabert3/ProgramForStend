@@ -21,8 +21,8 @@ public class ErrorCommand implements Commands {
     //Кол-во импульсов для расчёта ошибки
     private String pulse = "20";
 
-    //Нагрузка для теста отображения таблицы
-    private String testCurrent;
+    //Имя точки для отображения в таблице
+    private String name;
 
     //Базовый или максимальный ток из конструктора
     private String current;
@@ -52,14 +52,12 @@ public class ErrorCommand implements Commands {
     private double currPer;
 
     //Стринговый процент получаемый из конструктора
-    private String currentPerсent;
+    private String currentPerсent = "100.0";
     private String iABC;
     private String cosP;
 
     //Импульсный выход
     private int channelFlag;
-
-
 
     //Количество повторов теста
     private int countResult = 2;
@@ -81,8 +79,8 @@ public class ErrorCommand implements Commands {
         this.cosP = cosP;
         this.channelFlag = channelFlag;
         if (iABC.equals("H")) {
-            testCurrent = (cosP + "; " + currentPerсent + " " + current.trim());
-        } else testCurrent = (iABC + ": " + cosP + "; " + currentPerсent + " " + current);
+            name = (cosP + "; " + currentPerсent + " " + current.trim());
+        } else name = (iABC + ": " + cosP + "; " + currentPerсent + " " + current.trim());
     }
 
     @Override
@@ -156,8 +154,8 @@ public class ErrorCommand implements Commands {
         this.emax = emax;
     }
 
-    public String getTestCurrent() {
-        return testCurrent;
+    public String getName() {
+        return name;
     }
 
     public String getEmin() {

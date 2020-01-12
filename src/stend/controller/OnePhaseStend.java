@@ -1,6 +1,7 @@
 package stend.controller;
 
 
+import stend.helper.ConsoleHelper;
 import stend.model.StendDLL;
 
 import java.util.Arrays;
@@ -26,13 +27,11 @@ public class OnePhaseStend extends StendDLLCommands{
 
     private StendDLL stendDLL = StendDLL.INSTANCE;
 
-    private ResourceBundle res = ResourceBundle.getBundle("resourseFiles");
+    private String stendModel = ConsoleHelper.properties.getProperty("stendModel");
 
-    private String stendModel = res.getString("stendModel");
+    private String refMetModel = ConsoleHelper.properties.getProperty("refMeterModel");
 
-    private String refMetModel = res.getString("refMeterModel");
-
-    private int port = Integer.parseInt(res.getString("stendCOMPort"));
+    private int port = Integer.parseInt(ConsoleHelper.properties.getProperty("stendCOMPort"));
 
     public List<String> getStendModelList() {
         return stendModelList;

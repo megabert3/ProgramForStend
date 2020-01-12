@@ -20,6 +20,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import stend.controller.Commands.Commands;
+import stend.controller.Commands.CreepCommand;
 import stend.controller.Commands.ErrorCommand;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
@@ -291,6 +292,9 @@ public class TESTVIEW extends Application {
     private ToggleButton addTglBtnCRPAPPls;
 
     @FXML
+    private ToggleButton addTglBtnCRPAPPlsGOST;
+
+    @FXML
     private Pane paneSTAAPPls;
 
     @FXML
@@ -304,6 +308,9 @@ public class TESTVIEW extends Application {
 
     @FXML
     private ToggleButton addTglBtnSTAAPPls;
+
+    @FXML
+    private ToggleButton addTglBtnSTAAPPlsGOST;
 
     //Активная энергия в обратном напралении
     //--------------------------------------------------------
@@ -341,6 +348,9 @@ public class TESTVIEW extends Application {
     private ToggleButton addTglBtnCRPAPMns;
 
     @FXML
+    private ToggleButton addTglBtnCRPAPMnsGOST;
+
+    @FXML
     private Pane paneSTAAPMns;
 
     @FXML
@@ -354,6 +364,9 @@ public class TESTVIEW extends Application {
 
     @FXML
     private ToggleButton addTglBtnSTAAPMns;
+
+    @FXML
+    private ToggleButton addTglBtnSTAAPMnsGOST;
 
     @FXML
     private Pane paneRTCAPMns;
@@ -421,6 +434,9 @@ public class TESTVIEW extends Application {
     private ToggleButton addTglBtnCRPRPPls;
 
     @FXML
+    private ToggleButton addTglBtnCRPRPPlsGOST;
+
+    @FXML
     private Pane paneSTARPPls;
 
     @FXML
@@ -434,6 +450,9 @@ public class TESTVIEW extends Application {
 
     @FXML
     private ToggleButton addTglBtnSTARPPls;
+
+    @FXML
+    private ToggleButton addTglBtnSTARPPlsGOST;
 
     @FXML
     private Pane paneRTCRPPls;
@@ -501,6 +520,9 @@ public class TESTVIEW extends Application {
     private ToggleButton addTglBtnCRPRPMns;
 
     @FXML
+    private ToggleButton addTglBtnCRPRPMnsGOST;
+
+    @FXML
     private Pane paneSTARPMns;
 
     @FXML
@@ -514,6 +536,9 @@ public class TESTVIEW extends Application {
 
     @FXML
     private ToggleButton addTglBtnSTARPMns;
+
+    @FXML
+    private ToggleButton addTglBtnSTARPMnsGOST;
 
     @FXML
     private Pane paneRTCRPMns;
@@ -547,13 +572,94 @@ public class TESTVIEW extends Application {
     private TextField metodicNameTxtFld;
 
     @FXML
-    void SaveOrCancelAction(ActionEvent event) {
+    void saveOrCancelAction(ActionEvent event) {
     }
 
+    //Устанавливает значения Tgl Btn grid и добавления тестов ТХЧ и т.д.
+    // в соответствующие значения
     @FXML
     void setPointFrameAction(ActionEvent event) {
         setGropToggleButton(event);
         gridPaneToFront(Objects.requireNonNull(getGridPane()));
+    }
+
+    @FXML
+    void addSTAcRPrTCcOnst(ActionEvent event) {
+        //Действие для добавления теста Самоход
+        //---------------------------------------------------------------------------------------
+        //Добаление самохода с параметрами пользователя AP+
+        CreepCommand creepStartConstRtc;
+        if (addTglBtnCRPAPPls.isSelected()) {
+            creepStartConstRtc = new CreepCommand(stendDLLCommands, false);
+
+            creepStartConstRtc.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
+            creepStartConstRtc.setUserTimeTest(txtFieldTimeCRPAPPls.getText());
+            creepStartConstRtc.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
+            creepStartConstRtc.setName("Самоход AP+");
+
+            txtFieldCRPAmtImpAPPls.setEditable(false);
+            txtFieldTimeCRPAPPls.setEditable(false);
+            txtFieldCRPUProcAPPls.setEditable(false);
+
+            addTglBtnCRPAPPlsGOST.setDisable(true);
+            CRPTogBtnAPPls.setSelected(true);
+            Methodic.commandsMap.get(0).add(creepStartConstRtc);
+
+            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+            viewPointTableAPPls.setItems(testListForCollumAPPls);
+        } else {
+            for (Commands command : Methodic.commandsMap.get(0)) {
+                if (((CreepCommand) command).getName().equals("Самоход AP+"))
+                    Methodic.commandsMap.get(0).remove(command);
+                break;
+            }
+            txtFieldCRPAmtImpAPPls.setEditable(true);
+            txtFieldTimeCRPAPPls.setEditable(true);
+            txtFieldCRPUProcAPPls.setEditable(true);
+
+            addTglBtnCRPAPPlsGOST.setDisable(false);
+            CRPTogBtnAPPls.setSelected(false);
+
+            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+            viewPointTableAPPls.setItems(testListForCollumAPPls);
+        }
+
+        //Добаление самохода с параметрами по ГОСТу AP+
+        if (addTglBtnCRPAPPlsGOST.isSelected()) {
+            creepStartConstRtc = new CreepCommand(stendDLLCommands, true);
+
+            creepStartConstRtc.setName("Самоход AP+ ГОСТ");
+
+            txtFieldCRPAmtImpAPPls.clear();
+            txtFieldTimeCRPAPPls.clear();
+            txtFieldCRPUProcAPPls.clear();
+
+            txtFieldCRPAmtImpAPPls.setEditable(false);
+            txtFieldTimeCRPAPPls.setEditable(false);
+            txtFieldCRPUProcAPPls.setEditable(false);
+
+            addTglBtnCRPAPPls.setDisable(true);
+            CRPTogBtnAPPls.setSelected(true);
+            Methodic.commandsMap.get(0).add(creepStartConstRtc);
+
+            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+            viewPointTableAPPls.setItems(testListForCollumAPPls);
+        } else {
+            for (Commands command : Methodic.commandsMap.get(0)) {
+                if (((CreepCommand) command).getName().equals("Самоход AP+ ГОСТ"))
+                    Methodic.commandsMap.get(0).remove(command);
+                break;
+            }
+            txtFieldCRPAmtImpAPPls.setEditable(true);
+            txtFieldTimeCRPAPPls.setEditable(true);
+            txtFieldCRPUProcAPPls.setEditable(true);
+
+            addTglBtnCRPAPPls.setDisable(false);
+            CRPTogBtnAPPls.setSelected(false);
+
+            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+            viewPointTableAPPls.setItems(testListForCollumAPPls);
+        }
     }
 
     @FXML
@@ -998,7 +1104,7 @@ public class TESTVIEW extends Application {
 
         for (int i = 0; i < mapTableColumn.size(); i++) {
             //Устанавливаем данные для колонок (AP+, AP-, RP+, RP-)
-            mapTableColumn.get(i).get(0).setCellValueFactory(new PropertyValueFactory<>("testCurrent"));
+            mapTableColumn.get(i).get(0).setCellValueFactory(new PropertyValueFactory<>("name"));
             mapTableColumn.get(i).get(1).setCellValueFactory(new PropertyValueFactory<>("emax"));
             mapTableColumn.get(i).get(2).setCellValueFactory(new PropertyValueFactory<>("emin"));
             mapTableColumn.get(i).get(3).setCellValueFactory(new PropertyValueFactory<>("pulse"));
@@ -1131,7 +1237,7 @@ public class TESTVIEW extends Application {
 
             for (Commands current : Methodic.commandsMap.get(0)) {
                 errorCommand = (ErrorCommand) current;
-                if (errorCommand.getTestCurrent().equals(str)) {
+                if (errorCommand.getName().equals(str)) {
                     Methodic.commandsMap.get(0).remove(current);
                     break;
                 }
@@ -1148,7 +1254,7 @@ public class TESTVIEW extends Application {
 
             for (Commands current : Methodic.commandsMap.get(1)) {
                 errorCommand = (ErrorCommand) current;
-                if (errorCommand.getTestCurrent().equals(str)) {
+                if (errorCommand.getName().equals(str)) {
                     Methodic.commandsMap.get(1).remove(current);
                     break;
                 }
@@ -1165,7 +1271,7 @@ public class TESTVIEW extends Application {
 
             for (Commands current : Methodic.commandsMap.get(2)) {
                 errorCommand = (ErrorCommand) current;
-                if (errorCommand.getTestCurrent().equals(str)) {
+                if (errorCommand.getName().equals(str)) {
                     Methodic.commandsMap.get(2).remove(current);
                     break;
                 }
@@ -1182,7 +1288,7 @@ public class TESTVIEW extends Application {
 
             for (Commands current : Methodic.commandsMap.get(3)) {
                 errorCommand = (ErrorCommand) current;
-                if (errorCommand.getTestCurrent().equals(str)) {
+                if (errorCommand.getName().equals(str)) {
                     Methodic.commandsMap.get(3).remove(current);
                     break;
                 }
