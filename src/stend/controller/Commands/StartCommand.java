@@ -13,14 +13,21 @@ public class StartCommand implements Commands {
 
     //Выставлять в зависимости от выбранного параметра перед тестом
     private int phase;
+
+    //Номинальное напряжение
     private double ratedVolt;
+
+    //Номинальный ток
     private double ratedCurr;
+
+    //Номинальная частота
     private double ratedFreq;
-    private int phaseSrequence;
+
     private int revers;
-    private double voltPer;
+
     private double currPer;
-    private String iABC = "H";
+
+    private String iABC;
 
     private int channelFlag;
 
@@ -34,29 +41,26 @@ public class StartCommand implements Commands {
     private String userTimeTest;
 
     //Количество импульсов для провала теста
-    private int pulseValue = 2;
+    private int pulseValue;
 
     //Класс точности счётчика
-    private double accuracyClass = 0.5;
-
-    //Номинальное напряжение
-    private double Un = 230;
+    private double accuracyClass;
 
     //Константа счётчика для расчёта по ГОСТ формуле
-    private int constMeterForTest = 8000;
+    private int constMeterForTest;
 
     //Базовый ток счётчика для формулы по ГОСТ
-    private double baseCurrMeter = 5;
+    private double baseCurrMeter;
 
     //Это трехфазный счётчик?
-    private boolean treePhaseMeter = true;
+    private boolean treePhaseMeter;
 
     //Датчик тока трансформаторный?
-    private boolean transfDetect = true;
+    private boolean transfDetect;
 
-    //Стартовый ток
-    private double startCurrent;
-
+    //Значение тока введённое пользователем
+    private double userCurr;
+    
     //Количество измерительных элементов (фрехфазный или однофазный)
     private int amountMeasElem;
 
@@ -71,17 +75,23 @@ public class StartCommand implements Commands {
         return startCommandResult;
     }
 
-    public StartCommand(StendDLLCommands stendDLLCommands, int revers, int channelFlag, int pulseValue) {
+    public StartCommand(StendDLLCommands stendDLLCommands, int revers, int channelFlag, boolean gostTest) {
         this.stendDLLCommands = stendDLLCommands;
         this.revers = revers;
         this.channelFlag = channelFlag;
-        this.pulseValue = pulseValue;
+        this.gostTest = gostTest;
     }
 
     @Override
     public void execute() {
         stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq,0, revers,
-                voltPer, currPer, iABC, "1.0");
+                100.0, 100.0, iABC, "1.0");
+
+        if (gostTest) {
+            timeForTest = initTimeForGOSTTest();
+        } else {
+            timeForTest = initTimeForTest();
+        }
 
         stendDLLCommands.setEnergyPulse(channelFlag);
 
@@ -141,17 +151,16 @@ public class StartCommand implements Commands {
 
         if (transfDetect) {
             if (accuracyClass == 1.0) {
-                startCurrent = baseCurrMeter * 0.002;
+                ratedCurr = baseCurrMeter * 0.002;
             } else {
-                startCurrent = baseCurrMeter * 0.001;
+                ratedCurr = baseCurrMeter * 0.001;
             }
         } else {
-            startCurrent = baseCurrMeter * 0.004;
+            ratedCurr = baseCurrMeter * 0.004;
         }
 
-        double formulaResult = 2.3 * (60000 / (constMeterForTest * amountMeasElem * Un * startCurrent));
-        System.out.println(formulaResult);
-
+        double formulaResult = 2.3 * (60000 / (constMeterForTest * amountMeasElem * ratedVolt * ratedCurr));
+        
         //Округляю результат до 3х знаков
         BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
 
@@ -185,6 +194,10 @@ public class StartCommand implements Commands {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setPulseValue(int pulseValue) {
         this.pulseValue = pulseValue;
     }
@@ -201,12 +214,28 @@ public class StartCommand implements Commands {
         this.treePhaseMeter = treePhaseMeter;
     }
 
-    public void setUn(double un) {
-        Un = un;
-    }
-
     public void setAccuracyClass(double accuracyClass) {
         this.accuracyClass = accuracyClass;
+    }
+
+    public void setUserTimeTest(String userTimeTest) {
+        this.userTimeTest = userTimeTest;
+    }
+
+    public void setRatedCurr(double ratedCurr) {
+        this.ratedCurr = ratedCurr;
+    }
+
+    public void setRatedVolt(double ratedVolt) {
+        this.ratedVolt = ratedVolt;
+    }
+
+    public void setRatedFreq(double ratedFreq) {
+        this.ratedFreq = ratedFreq;
+    }
+
+    public void setPhase(int phase) {
+        this.phase = phase;
     }
 
     private class LocalMeter {

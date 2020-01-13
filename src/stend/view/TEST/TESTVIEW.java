@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import stend.controller.Commands.Commands;
 import stend.controller.Commands.CreepCommand;
 import stend.controller.Commands.ErrorCommand;
+import stend.controller.Commands.StartCommand;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
@@ -586,24 +587,24 @@ public class TESTVIEW extends Application {
     @FXML
     void addSTAcRPrTCcOnst(ActionEvent event) {
         //Действие для добавления теста Самоход
-        CreepCommand creepStartConstRtc;
+        CreepCommand creepCommand;
         //---------------------------------------------------------------------------------------
         //Добаление самохода с параметрами пользователя AP+
         if (event.getSource() == addTglBtnCRPAPPls) {
             if (addTglBtnCRPAPPls.isSelected()) {
-                creepStartConstRtc = new CreepCommand(stendDLLCommands, false, 0);
+                creepCommand = new CreepCommand(stendDLLCommands, false, 0);
 
-                creepStartConstRtc.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
-                creepStartConstRtc.setUserTimeTest(txtFieldTimeCRPAPPls.getText());
-                creepStartConstRtc.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
-                creepStartConstRtc.setName("Самоход AP+");
+                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
+                creepCommand.setUserTimeTest(txtFieldTimeCRPAPPls.getText());
+                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
+                creepCommand.setName("Самоход AP+");
 
                 txtFieldCRPAmtImpAPPls.setEditable(false);
                 txtFieldTimeCRPAPPls.setEditable(false);
                 txtFieldCRPUProcAPPls.setEditable(false);
 
                 CRPTogBtnAPPls.setSelected(true);
-                Methodic.commandsMap.get(0).add(creepStartConstRtc);
+                Methodic.commandsMap.get(0).add(creepCommand);
 
                 testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
                 viewPointTableAPPls.setItems(testListForCollumAPPls);
@@ -632,15 +633,15 @@ public class TESTVIEW extends Application {
         //Добаление самохода с параметрами по ГОСТу AP+
         if (event.getSource() == addTglBtnCRPAPPlsGOST) {
             if (addTglBtnCRPAPPlsGOST.isSelected()) {
-                creepStartConstRtc = new CreepCommand(stendDLLCommands, true, 0);
+                creepCommand = new CreepCommand(stendDLLCommands, true, 0);
 
-                creepStartConstRtc.setPulseValue(2);
-                creepStartConstRtc.setVoltPer(115.0);
-                creepStartConstRtc.setName("Самоход AP+ ГОСТ");
+                creepCommand.setPulseValue(2);
+                creepCommand.setVoltPer(115.0);
+                creepCommand.setName("Самоход AP+ ГОСТ");
 
                 CRPTogBtnAPPls.setSelected(true);
 
-                Methodic.commandsMap.get(0).add(creepStartConstRtc);
+                Methodic.commandsMap.get(0).add(creepCommand);
 
                 testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
                 viewPointTableAPPls.setItems(testListForCollumAPPls);
@@ -666,19 +667,19 @@ public class TESTVIEW extends Application {
         //Добаление самохода с параметрами пользователя AP-
         if (event.getSource() == addTglBtnCRPAPMns) {
             if (addTglBtnCRPAPMns.isSelected()) {
-                creepStartConstRtc = new CreepCommand(stendDLLCommands, false, 1);
+                creepCommand = new CreepCommand(stendDLLCommands, false, 1);
 
-                creepStartConstRtc.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
-                creepStartConstRtc.setUserTimeTest(txtFieldTimeCRPAPMns.getText());
-                creepStartConstRtc.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPMns.getText()));
-                creepStartConstRtc.setName("Самоход AP-");
+                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
+                creepCommand.setUserTimeTest(txtFieldTimeCRPAPMns.getText());
+                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPMns.getText()));
+                creepCommand.setName("Самоход AP-");
 
                 txtFieldCRPAmtImpAPMns.setEditable(false);
                 txtFieldTimeCRPAPMns.setEditable(false);
                 txtFieldCRPUProcAPMns.setEditable(false);
 
                 CRPTogBtnAPMns.setSelected(true);
-                Methodic.commandsMap.get(1).add(creepStartConstRtc);
+                Methodic.commandsMap.get(1).add(creepCommand);
 
                 testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
                 viewPointTableAPMns.setItems(testListForCollumAPMns);
@@ -707,15 +708,15 @@ public class TESTVIEW extends Application {
         //Добаление самохода с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnCRPAPMnsGOST) {
             if (addTglBtnCRPAPMnsGOST.isSelected()) {
-                creepStartConstRtc = new CreepCommand(stendDLLCommands, true, 1);
+                creepCommand = new CreepCommand(stendDLLCommands, true, 1);
 
-                creepStartConstRtc.setPulseValue(2);
-                creepStartConstRtc.setVoltPer(115.0);
-                creepStartConstRtc.setName("Самоход AP- ГОСТ");
+                creepCommand.setPulseValue(2);
+                creepCommand.setVoltPer(115.0);
+                creepCommand.setName("Самоход AP- ГОСТ");
 
                 CRPTogBtnAPMns.setSelected(true);
 
-                Methodic.commandsMap.get(1).add(creepStartConstRtc);
+                Methodic.commandsMap.get(1).add(creepCommand);
 
                 testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
                 viewPointTableAPMns.setItems(testListForCollumAPMns);
@@ -741,19 +742,19 @@ public class TESTVIEW extends Application {
         //Добаление самохода с параметрами пользователя RP+
         if (event.getSource() == addTglBtnCRPRPPls) {
             if (addTglBtnCRPRPPls.isSelected()) {
-                creepStartConstRtc = new CreepCommand(stendDLLCommands, false, 2);
+                creepCommand = new CreepCommand(stendDLLCommands, false, 2);
 
-                creepStartConstRtc.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
-                creepStartConstRtc.setUserTimeTest(txtFieldTimeCRPRPPls.getText());
-                creepStartConstRtc.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPPls.getText()));
-                creepStartConstRtc.setName("Самоход RP+");
+                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
+                creepCommand.setUserTimeTest(txtFieldTimeCRPRPPls.getText());
+                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPPls.getText()));
+                creepCommand.setName("Самоход RP+");
 
                 txtFieldCRPAmtImpRPPls.setEditable(false);
                 txtFieldTimeCRPRPPls.setEditable(false);
                 txtFieldCRPUProcRPPls.setEditable(false);
 
                 CRPTogBtnRPPls.setSelected(true);
-                Methodic.commandsMap.get(2).add(creepStartConstRtc);
+                Methodic.commandsMap.get(2).add(creepCommand);
 
                 testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
                 viewPointTableRPPls.setItems(testListForCollumRPPls);
@@ -782,15 +783,15 @@ public class TESTVIEW extends Application {
         //Добаление самохода с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnCRPRPPlsGOST) {
             if (addTglBtnCRPRPPlsGOST.isSelected()) {
-                creepStartConstRtc = new CreepCommand(stendDLLCommands, true, 2);
+                creepCommand = new CreepCommand(stendDLLCommands, true, 2);
 
-                creepStartConstRtc.setPulseValue(2);
-                creepStartConstRtc.setVoltPer(115.0);
-                creepStartConstRtc.setName("Самоход RP+ ГОСТ");
+                creepCommand.setPulseValue(2);
+                creepCommand.setVoltPer(115.0);
+                creepCommand.setName("Самоход RP+ ГОСТ");
 
                 CRPTogBtnRPPls.setSelected(true);
 
-                Methodic.commandsMap.get(2).add(creepStartConstRtc);
+                Methodic.commandsMap.get(2).add(creepCommand);
 
                 testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
                 viewPointTableRPPls.setItems(testListForCollumRPPls);
@@ -816,19 +817,19 @@ public class TESTVIEW extends Application {
         //Добаление самохода с параметрами пользователя RP-
         if (event.getSource() == addTglBtnCRPRPMns) {
             if (addTglBtnCRPRPMns.isSelected()) {
-                creepStartConstRtc = new CreepCommand(stendDLLCommands, false, 3);
+                creepCommand = new CreepCommand(stendDLLCommands, false, 3);
 
-                creepStartConstRtc.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
-                creepStartConstRtc.setUserTimeTest(txtFieldTimeCRPRPMns.getText());
-                creepStartConstRtc.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPMns.getText()));
-                creepStartConstRtc.setName("Самоход RP-");
+                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
+                creepCommand.setUserTimeTest(txtFieldTimeCRPRPMns.getText());
+                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPMns.getText()));
+                creepCommand.setName("Самоход RP-");
 
                 txtFieldCRPAmtImpRPMns.setEditable(false);
                 txtFieldTimeCRPRPMns.setEditable(false);
                 txtFieldCRPUProcRPMns.setEditable(false);
 
                 CRPTogBtnRPMns.setSelected(true);
-                Methodic.commandsMap.get(3).add(creepStartConstRtc);
+                Methodic.commandsMap.get(3).add(creepCommand);
 
                 testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
                 viewPointTableRPMns.setItems(testListForCollumRPMns);
@@ -857,15 +858,15 @@ public class TESTVIEW extends Application {
         //Добаление самохода с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnCRPRPMnsGOST) {
             if (addTglBtnCRPRPMnsGOST.isSelected()) {
-                creepStartConstRtc = new CreepCommand(stendDLLCommands, true, 3);
+                creepCommand = new CreepCommand(stendDLLCommands, true, 3);
 
-                creepStartConstRtc.setPulseValue(2);
-                creepStartConstRtc.setVoltPer(115.0);
-                creepStartConstRtc.setName("Самоход RP- ГОСТ");
+                creepCommand.setPulseValue(2);
+                creepCommand.setVoltPer(115.0);
+                creepCommand.setName("Самоход RP- ГОСТ");
 
                 CRPTogBtnRPMns.setSelected(true);
 
-                Methodic.commandsMap.get(3).add(creepStartConstRtc);
+                Methodic.commandsMap.get(3).add(creepCommand);
 
                 testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
                 viewPointTableRPMns.setItems(testListForCollumRPMns);
@@ -882,6 +883,295 @@ public class TESTVIEW extends Application {
                 if (addTglBtnCRPRPMns.isSelected()) {
                     CRPTogBtnRPMns.setSelected(true);
                 } else CRPTogBtnRPMns.setSelected(false);
+
+                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+                viewPointTableRPMns.setItems(testListForCollumRPMns);
+            }
+        }
+        //------------------------------------------------------------------------------
+        //Добаление теста на чувствительность с параметрами пользователя AP+
+        StartCommand startCommand;
+        if (event.getSource() == addTglBtnSTAAPPls) {
+            if (addTglBtnSTAAPPls.isSelected()) {
+                startCommand = new StartCommand(stendDLLCommands, 0, 0, false);
+
+                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPPls.getText()));
+                startCommand.setUserTimeTest(txtFieldTimeSRAAPPls.getText());
+                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPPls.getText()));
+                startCommand.setName("Чувствительность AP+");
+
+                txtFieldSTAAmtImpAPPls.setEditable(false);
+                txtFieldTimeSRAAPPls.setEditable(false);
+                txtFieldSTAIProcAPPls.setEditable(false);
+
+                STATogBtnAPPls.setSelected(true);
+                Methodic.commandsMap.get(0).add(startCommand);
+
+                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                viewPointTableAPPls.setItems(testListForCollumAPPls);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(0)) {
+                    if (command instanceof StartCommand) {
+                        if (((StartCommand) command).getName().equals("Чувствительность AP+")) {
+                            Methodic.commandsMap.get(0).remove(command);
+                            break;
+                        }
+                    }
+                }
+                txtFieldSTAAmtImpAPPls.setEditable(true);
+                txtFieldTimeSRAAPPls.setEditable(true);
+                txtFieldSTAIProcAPPls.setEditable(true);
+
+                if (addTglBtnSTAAPPlsGOST.isSelected()) {
+                    STATogBtnAPPls.setSelected(true);
+                } else STATogBtnAPPls.setSelected(false);
+
+                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                viewPointTableAPPls.setItems(testListForCollumAPPls);
+            }
+        }
+
+        //Добаление теста на чувствительность с параметрами по ГОСТу AP+
+        if (event.getSource() == addTglBtnSTAAPPlsGOST) {
+            if (addTglBtnSTAAPPlsGOST.isSelected()) {
+                startCommand = new StartCommand(stendDLLCommands, 0, 0, true);
+
+                startCommand.setName("Чувствительность ГОСТ AP+");
+
+                STATogBtnAPPls.setSelected(true);
+                Methodic.commandsMap.get(0).add(startCommand);
+
+                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                viewPointTableAPPls.setItems(testListForCollumAPPls);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(0)) {
+                    if (command instanceof StartCommand) {
+                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ AP+")) {
+                            Methodic.commandsMap.get(0).remove(command);
+                            break;
+                        }
+                    }
+                }
+
+                if (addTglBtnSTAAPPls.isSelected()) {
+                    STATogBtnAPPls.setSelected(true);
+                } else STATogBtnAPPls.setSelected(false);
+
+                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                viewPointTableAPPls.setItems(testListForCollumAPPls);
+            }
+        }
+
+        //Добаление теста на чувствительность с параметрами пользователя AP-
+        if (event.getSource() == addTglBtnSTAAPMns) {
+            if (addTglBtnSTAAPMns.isSelected()) {
+                startCommand = new StartCommand(stendDLLCommands, 1, 1, false);
+
+                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPMns.getText()));
+                startCommand.setUserTimeTest(txtFieldTimeSRAAPMns.getText());
+                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPMns.getText()));
+                startCommand.setName("Чувствительность AP-");
+
+                txtFieldSTAAmtImpAPMns.setEditable(false);
+                txtFieldTimeSRAAPMns.setEditable(false);
+                txtFieldSTAIProcAPMns.setEditable(false);
+
+                STATogBtnAPMns.setSelected(true);
+                Methodic.commandsMap.get(1).add(startCommand);
+
+                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+                viewPointTableAPMns.setItems(testListForCollumAPMns);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(1)) {
+                    if (command instanceof StartCommand) {
+                        if (((StartCommand) command).getName().equals("Чувствительность AP-")) {
+                            Methodic.commandsMap.get(1).remove(command);
+                            break;
+                        }
+                    }
+                }
+                txtFieldSTAAmtImpAPMns.setEditable(true);
+                txtFieldTimeSRAAPMns.setEditable(true);
+                txtFieldSTAIProcAPMns.setEditable(true);
+
+                if (addTglBtnSTAAPMnsGOST.isSelected()) {
+                    STATogBtnAPMns.setSelected(true);
+                } else STATogBtnAPMns.setSelected(false);
+
+                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+                viewPointTableAPMns.setItems(testListForCollumAPMns);
+            }
+        }
+
+        //Добаление теста на чувствительность с параметрами по ГОСТу AP-
+        if (event.getSource() == addTglBtnSTAAPMnsGOST) {
+            if (addTglBtnSTAAPMnsGOST.isSelected()) {
+                startCommand = new StartCommand(stendDLLCommands, 1, 1, true);
+
+                startCommand.setName("Чувствительность ГОСТ AP-");
+
+                STATogBtnAPPls.setSelected(true);
+                Methodic.commandsMap.get(1).add(startCommand);
+
+                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+                viewPointTableAPMns.setItems(testListForCollumAPMns);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(1)) {
+                    if (command instanceof StartCommand) {
+                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ AP-")) {
+                            Methodic.commandsMap.get(1).remove(command);
+                            break;
+                        }
+                    }
+                }
+
+                if (addTglBtnSTAAPMns.isSelected()) {
+                    STATogBtnAPMns.setSelected(true);
+                } else STATogBtnAPMns.setSelected(false);
+
+                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+                viewPointTableAPMns.setItems(testListForCollumAPMns);
+            }
+        }
+
+        //Добаление теста на чувствительность с параметрами пользователя RP+
+        if (event.getSource() == addTglBtnSTARPPls) {
+            if (addTglBtnSTARPPls.isSelected()) {
+                startCommand = new StartCommand(stendDLLCommands, 0, 2, false);
+
+                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPPls.getText()));
+                startCommand.setUserTimeTest(txtFieldTimeSRARPPls.getText());
+                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPPls.getText()));
+                startCommand.setName("Чувствительность RP+");
+
+                txtFieldSTAAmtImpRPPls.setEditable(false);
+                txtFieldTimeSRARPPls.setEditable(false);
+                txtFieldSTAIProcRPPls.setEditable(false);
+
+                STATogBtnRPPls.setSelected(true);
+                Methodic.commandsMap.get(2).add(startCommand);
+
+                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+                viewPointTableRPPls.setItems(testListForCollumRPPls);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(2)) {
+                    if (command instanceof StartCommand) {
+                        if (((StartCommand) command).getName().equals("Чувствительность RP+")) {
+                            Methodic.commandsMap.get(2).remove(command);
+                            break;
+                        }
+                    }
+                }
+                txtFieldSTAAmtImpRPPls.setEditable(true);
+                txtFieldTimeSRARPPls.setEditable(true);
+                txtFieldSTAIProcRPPls.setEditable(true);
+
+                if (addTglBtnSTARPPlsGOST.isSelected()) {
+                    STATogBtnRPPls.setSelected(true);
+                } else STATogBtnRPPls.setSelected(false);
+
+                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+                viewPointTableRPPls.setItems(testListForCollumRPPls);
+            }
+        }
+
+        //Добаление теста на чувствительность с параметрами по ГОСТу RP+
+        if (event.getSource() == addTglBtnSTARPPlsGOST) {
+            if (addTglBtnSTARPPlsGOST.isSelected()) {
+                startCommand = new StartCommand(stendDLLCommands, 0, 1, true);
+
+                startCommand.setName("Чувствительность ГОСТ RP+");
+
+                STATogBtnRPPls.setSelected(true);
+                Methodic.commandsMap.get(2).add(startCommand);
+
+                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+                viewPointTableRPPls.setItems(testListForCollumRPPls);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(2)) {
+                    if (command instanceof StartCommand) {
+                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ RP+")) {
+                            Methodic.commandsMap.get(2).remove(command);
+                            break;
+                        }
+                    }
+                }
+
+                if (addTglBtnSTARPPls.isSelected()) {
+                    STATogBtnRPPls.setSelected(true);
+                } else STATogBtnRPPls.setSelected(false);
+
+                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+                viewPointTableRPPls.setItems(testListForCollumRPPls);
+            }
+        }
+
+        //Добаление теста на чувствительность с параметрами пользователя RP-
+        if (event.getSource() == addTglBtnSTARPMns) {
+            if (addTglBtnSTARPMns.isSelected()) {
+                startCommand = new StartCommand(stendDLLCommands, 1, 3, false);
+
+                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPMns.getText()));
+                startCommand.setUserTimeTest(txtFieldTimeSRARPMns.getText());
+                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPMns.getText()));
+                startCommand.setName("Чувствительность RP-");
+
+                txtFieldSTAAmtImpRPMns.setEditable(false);
+                txtFieldTimeSRARPMns.setEditable(false);
+                txtFieldSTAIProcRPMns.setEditable(false);
+
+                STATogBtnRPMns.setSelected(true);
+                Methodic.commandsMap.get(3).add(startCommand);
+
+                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+                viewPointTableRPMns.setItems(testListForCollumRPMns);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(3)) {
+                    if (command instanceof StartCommand) {
+                        if (((StartCommand) command).getName().equals("Чувствительность RP-")) {
+                            Methodic.commandsMap.get(3).remove(command);
+                            break;
+                        }
+                    }
+                }
+                txtFieldSTAAmtImpRPMns.setEditable(true);
+                txtFieldTimeSRARPMns.setEditable(true);
+                txtFieldSTAIProcRPMns.setEditable(true);
+
+                if (addTglBtnSTARPMnsGOST.isSelected()) {
+                    STATogBtnRPMns.setSelected(true);
+                } else STATogBtnRPMns.setSelected(false);
+
+                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+                viewPointTableRPMns.setItems(testListForCollumRPMns);
+            }
+        }
+
+        //Добаление теста на чувствительность с параметрами по ГОСТу RP-
+        if (event.getSource() == addTglBtnSTARPMnsGOST) {
+            if (addTglBtnSTARPMnsGOST.isSelected()) {
+                startCommand = new StartCommand(stendDLLCommands, 0, 3, true);
+
+                startCommand.setName("Чувствительность ГОСТ RP-");
+
+                STATogBtnRPMns.setSelected(true);
+                Methodic.commandsMap.get(3).add(startCommand);
+
+                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+                viewPointTableRPMns.setItems(testListForCollumRPMns);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(3)) {
+                    if (command instanceof StartCommand) {
+                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ RP-")) {
+                            Methodic.commandsMap.get(3).remove(command);
+                            break;
+                        }
+                    }
+                }
+
+                if (addTglBtnSTARPMns.isSelected()) {
+                    STATogBtnRPMns.setSelected(true);
+                } else STATogBtnRPMns.setSelected(false);
 
                 testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
                 viewPointTableRPMns.setItems(testListForCollumRPMns);

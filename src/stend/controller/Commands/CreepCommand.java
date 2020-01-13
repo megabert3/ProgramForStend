@@ -11,7 +11,9 @@ import java.util.Map;
 public class CreepCommand implements Commands {
 
     private StendDLLCommands stendDLLCommands;
+
     private int phase;
+
     private double ratedVolt;
 
     private double ratedFreq;
@@ -37,9 +39,6 @@ public class CreepCommand implements Commands {
 
     //Максимальный ток счётчика для формулы по ГОСТ
     private double maxCurrMeter;
-
-    //Номинальное напряжение используемое в испытании
-    private double Un;
 
     //Это трехфазный счётчик?
     private boolean treePhaseMeter;
@@ -116,7 +115,7 @@ public class CreepCommand implements Commands {
             amountMeasElem = 3;
         } else amountMeasElem = 1;
 
-        double formulaResult = 600000000 / (constMeterForTest * amountMeasElem * Un * maxCurrMeter);
+        double formulaResult = 600000000 / (constMeterForTest * amountMeasElem * ratedVolt * maxCurrMeter);
 
         //Округляю результат до 3х знаков
         BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
@@ -147,10 +146,6 @@ public class CreepCommand implements Commands {
         this.maxCurrMeter = maxCurrMeter;
     }
 
-    public void setUn(int un) {
-        Un = un;
-    }
-
     public String getName() {
         return name;
     }
@@ -173,6 +168,18 @@ public class CreepCommand implements Commands {
 
     public void setVoltPer(double voltPer) {
         this.voltPer = voltPer;
+    }
+
+    public void setRatedFreq(double ratedFreq) {
+        this.ratedFreq = ratedFreq;
+    }
+
+    public void setPhase(int phase) {
+        this.phase = phase;
+    }
+
+    public void setRatedVolt(double ratedVolt) {
+        this.ratedVolt = ratedVolt;
     }
 
     @Override
