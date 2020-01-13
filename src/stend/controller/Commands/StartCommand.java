@@ -3,12 +3,15 @@ package stend.controller.Commands;
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 public class StartCommand implements Commands {
 
     private StendDLLCommands stendDLLCommands;
+
+    //Выставлять в зависимости от выбранного параметра перед тестом
     private int phase;
     private double ratedVolt;
     private double ratedCurr;
@@ -18,12 +21,46 @@ public class StartCommand implements Commands {
     private double voltPer;
     private double currPer;
     private String iABC = "H";
-    private String cosP = "1.0";
 
     private int channelFlag;
-    private int pulseValue;
 
-    private long timeForTest = 60000;
+    //Имя точки для отображения в таблице
+    private String name;
+
+    //Время расчитывается по госту?
+    private boolean gostTest;
+
+    //Время теста введённое пользователем
+    private String userTimeTest;
+
+    //Количество импульсов для провала теста
+    private int pulseValue = 2;
+
+    //Класс точности счётчика
+    private double accuracyClass = 0.5;
+
+    //Номинальное напряжение
+    private double Un = 230;
+
+    //Константа счётчика для расчёта по ГОСТ формуле
+    private int constMeterForTest = 8000;
+
+    //Базовый ток счётчика для формулы по ГОСТ
+    private double baseCurrMeter = 5;
+
+    //Это трехфазный счётчик?
+    private boolean treePhaseMeter = true;
+
+    //Датчик тока трансформаторный?
+    private boolean transfDetect = true;
+
+    //Стартовый ток
+    private double startCurrent;
+
+    //Количество измерительных элементов (фрехфазный или однофазный)
+    private int amountMeasElem;
+
+    private long timeForTest;
     private long timeEnd;
     private long currTime;
 
@@ -34,25 +71,17 @@ public class StartCommand implements Commands {
         return startCommandResult;
     }
 
-    public StartCommand(StendDLLCommands stendDLLCommands, int phase, double ratedVolt, double ratedCurr, double ratedFreq,
-                        int phaseSrequence, int revers, double voltPer, double currPer, int channelFlag, int pulseValue) {
+    public StartCommand(StendDLLCommands stendDLLCommands, int revers, int channelFlag, int pulseValue) {
         this.stendDLLCommands = stendDLLCommands;
-        this.phase = phase;
-        this.ratedVolt = ratedVolt;
-        this.ratedCurr = ratedCurr;
-        this.ratedFreq = ratedFreq;
-        this.phaseSrequence = phaseSrequence;
         this.revers = revers;
-        this.voltPer = voltPer;
-        this.currPer = currPer;
         this.channelFlag = channelFlag;
         this.pulseValue = pulseValue;
     }
 
     @Override
     public void execute() {
-        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPer, currPer, iABC, cosP);
+        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq,0, revers,
+                voltPer, currPer, iABC, "1.0");
 
         stendDLLCommands.setEnergyPulse(channelFlag);
 
@@ -104,6 +133,81 @@ public class StartCommand implements Commands {
         }
     }
 
+    //Расчётная формула времени теста по ГОСТ
+    public long initTimeForGOSTTest() {
+        if (treePhaseMeter) {
+            amountMeasElem = 3;
+        } else amountMeasElem = 1;
+
+        if (transfDetect) {
+            if (accuracyClass == 1.0) {
+                startCurrent = baseCurrMeter * 0.002;
+            } else {
+                startCurrent = baseCurrMeter * 0.001;
+            }
+        } else {
+            startCurrent = baseCurrMeter * 0.004;
+        }
+
+        double formulaResult = 2.3 * (60000 / (constMeterForTest * amountMeasElem * Un * startCurrent));
+        System.out.println(formulaResult);
+
+        //Округляю результат до 3х знаков
+        BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
+
+        String[] timeArr = String.valueOf(bigDecimalResult).split("\\.");
+
+        //Округляю значение после запятой до целых секунд
+        BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
+
+        return ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
+    }
+
+    //Расчёт времени теста исходя из параметров введённых пользователем
+    private long initTimeForTest() {
+        String[] timearr = userTimeTest.split(":");
+        String hours = timearr[0];
+        String mins = timearr[1];
+        String seks = timearr[2];
+
+        return ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+    }
+
+    public void setTransfDetect(boolean transfDetect) {
+        this.transfDetect = transfDetect;
+    }
+
+    public void setGostTest(boolean gostTest) {
+        this.gostTest = gostTest;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPulseValue(int pulseValue) {
+        this.pulseValue = pulseValue;
+    }
+
+    public void setConstMeterForTest(int constMeterForTest) {
+        this.constMeterForTest = constMeterForTest;
+    }
+
+    public void setBaseCurrMeter(double baseCurrMeter) {
+        this.baseCurrMeter = baseCurrMeter;
+    }
+
+    public void setTreePhaseMeter(boolean treePhaseMeter) {
+        this.treePhaseMeter = treePhaseMeter;
+    }
+
+    public void setUn(double un) {
+        Un = un;
+    }
+
+    public void setAccuracyClass(double accuracyClass) {
+        this.accuracyClass = accuracyClass;
+    }
 
     private class LocalMeter {
         int number;

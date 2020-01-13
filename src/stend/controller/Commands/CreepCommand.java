@@ -14,6 +14,8 @@ public class CreepCommand implements Commands {
     private int phase;
     private double ratedVolt;
 
+    private double ratedFreq;
+
     private double voltPer;
 
     private int channelFlag;
@@ -56,9 +58,10 @@ public class CreepCommand implements Commands {
         return creepCommandResult;
     }
 
-    public CreepCommand(StendDLLCommands stendDLLCommands, boolean gostTest) {
+    public CreepCommand(StendDLLCommands stendDLLCommands, boolean gostTest, int channelFlag) {
         this.stendDLLCommands = stendDLLCommands;
         this.gostTest = gostTest;
+        this.channelFlag = channelFlag;
     }
 
     @Override
@@ -69,7 +72,7 @@ public class CreepCommand implements Commands {
             timeForTest = initTimeForTest();
         }
 
-        stendDLLCommands.getUI(phase, ratedVolt, 0.0, 50.0, 0, 0,
+        stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
                 voltPer, 0.0, "H", "1.0");
 
         stendDLLCommands.setEnergyPulse(channelFlag);
@@ -113,7 +116,7 @@ public class CreepCommand implements Commands {
             amountMeasElem = 3;
         } else amountMeasElem = 1;
 
-        double formulaResult = 480000000 / (constMeterForTest * amountMeasElem * Un * maxCurrMeter);
+        double formulaResult = 600000000 / (constMeterForTest * amountMeasElem * Un * maxCurrMeter);
 
         //Округляю результат до 3х знаков
         BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
@@ -170,6 +173,11 @@ public class CreepCommand implements Commands {
 
     public void setVoltPer(double voltPer) {
         this.voltPer = voltPer;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     private class LocalMeter {

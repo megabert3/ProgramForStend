@@ -383,7 +383,7 @@
                                     <Label layoutX="24.0" layoutY="145.0" text="Время теста" />
                                     <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
                                     <TextField fx:id="txtFieldCRPUProcRPPls" layoutX="150.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldTimeCRPPPls" layoutX="114.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
+                                    <TextField fx:id="txtFieldTimeCRPRPPls" layoutX="114.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
                                     <TextField fx:id="txtFieldCRPAmtImpRPPls" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
                                     <Label layoutX="384.0" layoutY="184.0" text="Добавить" />
                                     <ToggleButton fx:id="addTglBtnCRPRPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
@@ -459,7 +459,7 @@
                                     <Label layoutX="24.0" layoutY="145.0" text="Время теста" />
                                     <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
                                     <TextField fx:id="txtFieldCRPUProcRPMns" layoutX="150.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldTimeCRPPMns" layoutX="114.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
+                                    <TextField fx:id="txtFieldTimeCRPRPMns" layoutX="114.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
                                     <TextField fx:id="txtFieldCRPAmtImpRPMns" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
                                     <Label layoutX="384.0" layoutY="184.0" text="Добавить" />
                                     <ToggleButton fx:id="addTglBtnCRPRPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />

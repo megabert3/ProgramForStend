@@ -425,7 +425,7 @@ public class TESTVIEW extends Application {
     private TextField txtFieldCRPUProcRPPls;
 
     @FXML
-    private TextField txtFieldTimeCRPPPls;
+    private TextField txtFieldTimeCRPRPPls;
 
     @FXML
     private TextField txtFieldCRPAmtImpRPPls;
@@ -511,7 +511,7 @@ public class TESTVIEW extends Application {
     private TextField txtFieldCRPUProcRPMns;
 
     @FXML
-    private TextField txtFieldTimeCRPPMns;
+    private TextField txtFieldTimeCRPRPMns;
 
     @FXML
     private TextField txtFieldCRPAmtImpRPMns;
@@ -586,79 +586,306 @@ public class TESTVIEW extends Application {
     @FXML
     void addSTAcRPrTCcOnst(ActionEvent event) {
         //Действие для добавления теста Самоход
+        CreepCommand creepStartConstRtc;
         //---------------------------------------------------------------------------------------
         //Добаление самохода с параметрами пользователя AP+
-        CreepCommand creepStartConstRtc;
-        if (addTglBtnCRPAPPls.isSelected()) {
-            creepStartConstRtc = new CreepCommand(stendDLLCommands, false);
+        if (event.getSource() == addTglBtnCRPAPPls) {
+            if (addTglBtnCRPAPPls.isSelected()) {
+                creepStartConstRtc = new CreepCommand(stendDLLCommands, false, 0);
 
-            creepStartConstRtc.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
-            creepStartConstRtc.setUserTimeTest(txtFieldTimeCRPAPPls.getText());
-            creepStartConstRtc.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
-            creepStartConstRtc.setName("Самоход AP+");
+                creepStartConstRtc.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
+                creepStartConstRtc.setUserTimeTest(txtFieldTimeCRPAPPls.getText());
+                creepStartConstRtc.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
+                creepStartConstRtc.setName("Самоход AP+");
 
-            txtFieldCRPAmtImpAPPls.setEditable(false);
-            txtFieldTimeCRPAPPls.setEditable(false);
-            txtFieldCRPUProcAPPls.setEditable(false);
+                txtFieldCRPAmtImpAPPls.setEditable(false);
+                txtFieldTimeCRPAPPls.setEditable(false);
+                txtFieldCRPUProcAPPls.setEditable(false);
 
-            addTglBtnCRPAPPlsGOST.setDisable(true);
-            CRPTogBtnAPPls.setSelected(true);
-            Methodic.commandsMap.get(0).add(creepStartConstRtc);
+                CRPTogBtnAPPls.setSelected(true);
+                Methodic.commandsMap.get(0).add(creepStartConstRtc);
 
-            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-            viewPointTableAPPls.setItems(testListForCollumAPPls);
-        } else {
-            for (Commands command : Methodic.commandsMap.get(0)) {
-                if (((CreepCommand) command).getName().equals("Самоход AP+"))
-                    Methodic.commandsMap.get(0).remove(command);
-                break;
+                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                viewPointTableAPPls.setItems(testListForCollumAPPls);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(0)) {
+                    if (command instanceof CreepCommand) {
+                        if (((CreepCommand) command).getName().equals("Самоход AP+")) {
+                            Methodic.commandsMap.get(0).remove(command);
+                            break;
+                        }
+                    }
+                }
+                txtFieldCRPAmtImpAPPls.setEditable(true);
+                txtFieldTimeCRPAPPls.setEditable(true);
+                txtFieldCRPUProcAPPls.setEditable(true);
+
+                if (addTglBtnCRPAPPlsGOST.isSelected()) {
+                    CRPTogBtnAPPls.setSelected(true);
+                } else CRPTogBtnAPPls.setSelected(false);
+
+                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                viewPointTableAPPls.setItems(testListForCollumAPPls);
             }
-            txtFieldCRPAmtImpAPPls.setEditable(true);
-            txtFieldTimeCRPAPPls.setEditable(true);
-            txtFieldCRPUProcAPPls.setEditable(true);
-
-            addTglBtnCRPAPPlsGOST.setDisable(false);
-            CRPTogBtnAPPls.setSelected(false);
-
-            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-            viewPointTableAPPls.setItems(testListForCollumAPPls);
         }
 
         //Добаление самохода с параметрами по ГОСТу AP+
-        if (addTglBtnCRPAPPlsGOST.isSelected()) {
-            creepStartConstRtc = new CreepCommand(stendDLLCommands, true);
+        if (event.getSource() == addTglBtnCRPAPPlsGOST) {
+            if (addTglBtnCRPAPPlsGOST.isSelected()) {
+                creepStartConstRtc = new CreepCommand(stendDLLCommands, true, 0);
 
-            creepStartConstRtc.setName("Самоход AP+ ГОСТ");
+                creepStartConstRtc.setPulseValue(2);
+                creepStartConstRtc.setVoltPer(115.0);
+                creepStartConstRtc.setName("Самоход AP+ ГОСТ");
 
-            txtFieldCRPAmtImpAPPls.clear();
-            txtFieldTimeCRPAPPls.clear();
-            txtFieldCRPUProcAPPls.clear();
+                CRPTogBtnAPPls.setSelected(true);
 
-            txtFieldCRPAmtImpAPPls.setEditable(false);
-            txtFieldTimeCRPAPPls.setEditable(false);
-            txtFieldCRPUProcAPPls.setEditable(false);
+                Methodic.commandsMap.get(0).add(creepStartConstRtc);
 
-            addTglBtnCRPAPPls.setDisable(true);
-            CRPTogBtnAPPls.setSelected(true);
-            Methodic.commandsMap.get(0).add(creepStartConstRtc);
+                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                viewPointTableAPPls.setItems(testListForCollumAPPls);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(0)) {
+                    if (command instanceof CreepCommand) {
+                        if (((CreepCommand) command).getName().equals("Самоход AP+ ГОСТ")) {
+                            Methodic.commandsMap.get(0).remove(command);
+                            break;
+                        }
+                    }
+                }
 
-            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-            viewPointTableAPPls.setItems(testListForCollumAPPls);
-        } else {
-            for (Commands command : Methodic.commandsMap.get(0)) {
-                if (((CreepCommand) command).getName().equals("Самоход AP+ ГОСТ"))
-                    Methodic.commandsMap.get(0).remove(command);
-                break;
+                if (addTglBtnCRPAPPls.isSelected()) {
+                    CRPTogBtnAPPls.setSelected(true);
+                } else CRPTogBtnAPPls.setSelected(false);
+
+                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                viewPointTableAPPls.setItems(testListForCollumAPPls);
             }
-            txtFieldCRPAmtImpAPPls.setEditable(true);
-            txtFieldTimeCRPAPPls.setEditable(true);
-            txtFieldCRPUProcAPPls.setEditable(true);
+        }
 
-            addTglBtnCRPAPPls.setDisable(false);
-            CRPTogBtnAPPls.setSelected(false);
+        //Добаление самохода с параметрами пользователя AP-
+        if (event.getSource() == addTglBtnCRPAPMns) {
+            if (addTglBtnCRPAPMns.isSelected()) {
+                creepStartConstRtc = new CreepCommand(stendDLLCommands, false, 1);
 
-            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-            viewPointTableAPPls.setItems(testListForCollumAPPls);
+                creepStartConstRtc.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
+                creepStartConstRtc.setUserTimeTest(txtFieldTimeCRPAPMns.getText());
+                creepStartConstRtc.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPMns.getText()));
+                creepStartConstRtc.setName("Самоход AP-");
+
+                txtFieldCRPAmtImpAPMns.setEditable(false);
+                txtFieldTimeCRPAPMns.setEditable(false);
+                txtFieldCRPUProcAPMns.setEditable(false);
+
+                CRPTogBtnAPMns.setSelected(true);
+                Methodic.commandsMap.get(1).add(creepStartConstRtc);
+
+                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+                viewPointTableAPMns.setItems(testListForCollumAPMns);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(1)) {
+                    if (command instanceof CreepCommand) {
+                        if (((CreepCommand) command).getName().equals("Самоход AP-")) {
+                            Methodic.commandsMap.get(1).remove(command);
+                            break;
+                        }
+                    }
+                }
+                txtFieldCRPAmtImpAPMns.setEditable(true);
+                txtFieldTimeCRPAPMns.setEditable(true);
+                txtFieldCRPUProcAPMns.setEditable(true);
+
+                if (addTglBtnCRPAPMnsGOST.isSelected()) {
+                    CRPTogBtnAPMns.setSelected(true);
+                } else CRPTogBtnAPMns.setSelected(false);
+
+                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+                viewPointTableAPMns.setItems(testListForCollumAPMns);
+            }
+        }
+
+        //Добаление самохода с параметрами по ГОСТу AP-
+        if (event.getSource() == addTglBtnCRPAPMnsGOST) {
+            if (addTglBtnCRPAPMnsGOST.isSelected()) {
+                creepStartConstRtc = new CreepCommand(stendDLLCommands, true, 1);
+
+                creepStartConstRtc.setPulseValue(2);
+                creepStartConstRtc.setVoltPer(115.0);
+                creepStartConstRtc.setName("Самоход AP- ГОСТ");
+
+                CRPTogBtnAPMns.setSelected(true);
+
+                Methodic.commandsMap.get(1).add(creepStartConstRtc);
+
+                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+                viewPointTableAPMns.setItems(testListForCollumAPMns);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(1)) {
+                    if (command instanceof CreepCommand) {
+                        if (((CreepCommand) command).getName().equals("Самоход AP- ГОСТ")) {
+                            Methodic.commandsMap.get(1).remove(command);
+                            break;
+                        }
+                    }
+                }
+
+                if (addTglBtnCRPAPMns.isSelected()) {
+                    CRPTogBtnAPMns.setSelected(true);
+                } else CRPTogBtnAPMns.setSelected(false);
+
+                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+                viewPointTableAPMns.setItems(testListForCollumAPMns);
+            }
+        }
+
+        //Добаление самохода с параметрами пользователя RP+
+        if (event.getSource() == addTglBtnCRPRPPls) {
+            if (addTglBtnCRPRPPls.isSelected()) {
+                creepStartConstRtc = new CreepCommand(stendDLLCommands, false, 2);
+
+                creepStartConstRtc.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
+                creepStartConstRtc.setUserTimeTest(txtFieldTimeCRPRPPls.getText());
+                creepStartConstRtc.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPPls.getText()));
+                creepStartConstRtc.setName("Самоход RP+");
+
+                txtFieldCRPAmtImpRPPls.setEditable(false);
+                txtFieldTimeCRPRPPls.setEditable(false);
+                txtFieldCRPUProcRPPls.setEditable(false);
+
+                CRPTogBtnRPPls.setSelected(true);
+                Methodic.commandsMap.get(2).add(creepStartConstRtc);
+
+                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+                viewPointTableRPPls.setItems(testListForCollumRPPls);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(2)) {
+                    if (command instanceof CreepCommand) {
+                        if (((CreepCommand) command).getName().equals("Самоход RP+")) {
+                            Methodic.commandsMap.get(2).remove(command);
+                            break;
+                        }
+                    }
+                }
+                txtFieldCRPAmtImpRPPls.setEditable(true);
+                txtFieldTimeCRPRPPls.setEditable(true);
+                txtFieldCRPUProcRPPls.setEditable(true);
+
+                if (addTglBtnCRPRPPlsGOST.isSelected()) {
+                    CRPTogBtnRPPls.setSelected(true);
+                } else CRPTogBtnRPPls.setSelected(false);
+
+                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+                viewPointTableRPPls.setItems(testListForCollumRPPls);
+            }
+        }
+
+        //Добаление самохода с параметрами по ГОСТу RP+
+        if (event.getSource() == addTglBtnCRPRPPlsGOST) {
+            if (addTglBtnCRPRPPlsGOST.isSelected()) {
+                creepStartConstRtc = new CreepCommand(stendDLLCommands, true, 2);
+
+                creepStartConstRtc.setPulseValue(2);
+                creepStartConstRtc.setVoltPer(115.0);
+                creepStartConstRtc.setName("Самоход RP+ ГОСТ");
+
+                CRPTogBtnRPPls.setSelected(true);
+
+                Methodic.commandsMap.get(2).add(creepStartConstRtc);
+
+                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+                viewPointTableRPPls.setItems(testListForCollumRPPls);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(2)) {
+                    if (command instanceof CreepCommand) {
+                        if (((CreepCommand) command).getName().equals("Самоход RP+ ГОСТ")) {
+                            Methodic.commandsMap.get(2).remove(command);
+                            break;
+                        }
+                    }
+                }
+
+                if (addTglBtnCRPRPPls.isSelected()) {
+                    CRPTogBtnRPPls.setSelected(true);
+                } else CRPTogBtnRPPls.setSelected(false);
+
+                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+                viewPointTableRPPls.setItems(testListForCollumRPPls);
+            }
+        }
+
+        //Добаление самохода с параметрами пользователя RP-
+        if (event.getSource() == addTglBtnCRPRPMns) {
+            if (addTglBtnCRPRPMns.isSelected()) {
+                creepStartConstRtc = new CreepCommand(stendDLLCommands, false, 3);
+
+                creepStartConstRtc.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
+                creepStartConstRtc.setUserTimeTest(txtFieldTimeCRPRPMns.getText());
+                creepStartConstRtc.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPMns.getText()));
+                creepStartConstRtc.setName("Самоход RP-");
+
+                txtFieldCRPAmtImpRPMns.setEditable(false);
+                txtFieldTimeCRPRPMns.setEditable(false);
+                txtFieldCRPUProcRPMns.setEditable(false);
+
+                CRPTogBtnRPMns.setSelected(true);
+                Methodic.commandsMap.get(3).add(creepStartConstRtc);
+
+                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+                viewPointTableRPMns.setItems(testListForCollumRPMns);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(3)) {
+                    if (command instanceof CreepCommand) {
+                        if (((CreepCommand) command).getName().equals("Самоход RP-")) {
+                            Methodic.commandsMap.get(3).remove(command);
+                            break;
+                        }
+                    }
+                }
+                txtFieldCRPAmtImpRPMns.setEditable(true);
+                txtFieldTimeCRPRPMns.setEditable(true);
+                txtFieldCRPUProcRPMns.setEditable(true);
+
+                if (addTglBtnCRPRPMnsGOST.isSelected()) {
+                    CRPTogBtnRPMns.setSelected(true);
+                } else CRPTogBtnRPMns.setSelected(false);
+
+                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+                viewPointTableRPMns.setItems(testListForCollumRPMns);
+            }
+        }
+
+        //Добаление самохода с параметрами по ГОСТу RP-
+        if (event.getSource() == addTglBtnCRPRPMnsGOST) {
+            if (addTglBtnCRPRPMnsGOST.isSelected()) {
+                creepStartConstRtc = new CreepCommand(stendDLLCommands, true, 3);
+
+                creepStartConstRtc.setPulseValue(2);
+                creepStartConstRtc.setVoltPer(115.0);
+                creepStartConstRtc.setName("Самоход RP- ГОСТ");
+
+                CRPTogBtnRPMns.setSelected(true);
+
+                Methodic.commandsMap.get(3).add(creepStartConstRtc);
+
+                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+                viewPointTableRPMns.setItems(testListForCollumRPMns);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(3)) {
+                    if (command instanceof CreepCommand) {
+                        if (((CreepCommand) command).getName().equals("Самоход RP- ГОСТ")) {
+                            Methodic.commandsMap.get(3).remove(command);
+                            break;
+                        }
+                    }
+                }
+
+                if (addTglBtnCRPRPMns.isSelected()) {
+                    CRPTogBtnRPMns.setSelected(true);
+                } else CRPTogBtnRPMns.setSelected(false);
+
+                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+                viewPointTableRPMns.setItems(testListForCollumRPMns);
+            }
         }
     }
 
@@ -1236,10 +1463,12 @@ public class TESTVIEW extends Application {
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
             for (Commands current : Methodic.commandsMap.get(0)) {
-                errorCommand = (ErrorCommand) current;
-                if (errorCommand.getName().equals(str)) {
-                    Methodic.commandsMap.get(0).remove(current);
-                    break;
+                if (current instanceof ErrorCommand) {
+                    errorCommand = (ErrorCommand) current;
+                    if (errorCommand.getName().equals(str)) {
+                        Methodic.commandsMap.get(0).remove(current);
+                        break;
+                    }
                 }
             }
             testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
@@ -1253,10 +1482,12 @@ public class TESTVIEW extends Application {
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
             for (Commands current : Methodic.commandsMap.get(1)) {
-                errorCommand = (ErrorCommand) current;
-                if (errorCommand.getName().equals(str)) {
-                    Methodic.commandsMap.get(1).remove(current);
-                    break;
+                if (current instanceof ErrorCommand) {
+                    errorCommand = (ErrorCommand) current;
+                    if (errorCommand.getName().equals(str)) {
+                        Methodic.commandsMap.get(1).remove(current);
+                        break;
+                    }
                 }
             }
             testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
@@ -1270,10 +1501,12 @@ public class TESTVIEW extends Application {
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
             for (Commands current : Methodic.commandsMap.get(2)) {
-                errorCommand = (ErrorCommand) current;
-                if (errorCommand.getName().equals(str)) {
-                    Methodic.commandsMap.get(2).remove(current);
-                    break;
+                if (current instanceof ErrorCommand) {
+                    errorCommand = (ErrorCommand) current;
+                    if (errorCommand.getName().equals(str)) {
+                        Methodic.commandsMap.get(2).remove(current);
+                        break;
+                    }
                 }
             }
             testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
@@ -1287,10 +1520,12 @@ public class TESTVIEW extends Application {
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
             for (Commands current : Methodic.commandsMap.get(3)) {
-                errorCommand = (ErrorCommand) current;
-                if (errorCommand.getName().equals(str)) {
-                    Methodic.commandsMap.get(3).remove(current);
-                    break;
+                if (current instanceof ErrorCommand) {
+                    errorCommand = (ErrorCommand) current;
+                    if (errorCommand.getName().equals(str)) {
+                        Methodic.commandsMap.get(3).remove(current);
+                        break;
+                    }
                 }
             }
             testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));

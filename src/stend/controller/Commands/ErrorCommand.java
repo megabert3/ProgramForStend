@@ -80,7 +80,7 @@ public class ErrorCommand implements Commands {
         this.channelFlag = channelFlag;
         if (iABC.equals("H")) {
             name = (cosP + "; " + currentPerсent + " " + current.trim());
-        } else name = (iABC + ": " + cosP + "; " + currentPerсent + " " + current.trim());
+        } else name = (iABC + ": " + cosP + "; " + currentPerсent + " " + current);
     }
 
     @Override
