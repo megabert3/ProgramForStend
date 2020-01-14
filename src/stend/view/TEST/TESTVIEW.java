@@ -19,10 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import stend.controller.Commands.Commands;
-import stend.controller.Commands.CreepCommand;
-import stend.controller.Commands.ErrorCommand;
-import stend.controller.Commands.StartCommand;
+import stend.controller.Commands.*;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
@@ -275,7 +272,10 @@ public class TESTVIEW extends Application {
     private ToggleButton addTglBtnRTCAPPls;
 
     @FXML
-    private ChoiceBox<?> ChcBxRTCErrAPPls;
+    private ChoiceBox<String> ChcBxRTCErrAPPls;
+
+    @FXML
+    private TextField txtFldRTCTimeMshAPPls;
 
     @FXML
     private Pane paneCRPAPPls;
@@ -382,7 +382,10 @@ public class TESTVIEW extends Application {
     private ToggleButton addTglBtnRTCAPMns;
 
     @FXML
-    private ChoiceBox<?> ChcBxRTCErrRPMns;
+    private ChoiceBox<String> ChcBxRTCErrAPMns;
+
+    @FXML
+    private TextField txtFldRTCTimeMshAPMns;
 
     @FXML
     private Pane paneConstAPMns;
@@ -468,7 +471,10 @@ public class TESTVIEW extends Application {
     private ToggleButton addTglBtnRTCRPPls;
 
     @FXML
-    private ChoiceBox<?> ChcBxRTCErrRPPls;
+    private ChoiceBox<String> ChcBxRTCErrRPPls;
+
+    @FXML
+    private TextField txtFldRTCTimeMshRPPls;
 
     @FXML
     private Pane paneConstRPPls;
@@ -551,6 +557,9 @@ public class TESTVIEW extends Application {
     private TextField txtFldRTCAmtMshRPMns;
 
     @FXML
+    private TextField txtFldRTCTimeMshRPMns;
+
+    @FXML
     private ToggleButton addTglBtnRTCRPMns;
 
     @FXML
@@ -564,6 +573,9 @@ public class TESTVIEW extends Application {
 
     @FXML
     private TextField txtFieldConstRPMns;
+
+    @FXML
+    private ChoiceBox<String> ChcBxRTCErrRPMns;
 
     @FXML
     private ToggleButton addTglBtnConstRPMns;
@@ -1010,7 +1022,7 @@ public class TESTVIEW extends Application {
 
                 startCommand.setName("Чувствительность ГОСТ AP-");
 
-                STATogBtnAPPls.setSelected(true);
+                STATogBtnAPMns.setSelected(true);
                 Methodic.commandsMap.get(1).add(startCommand);
 
                 testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
@@ -1177,6 +1189,161 @@ public class TESTVIEW extends Application {
                 viewPointTableRPMns.setItems(testListForCollumRPMns);
             }
         }
+
+        RTCCommand rtcCommand;
+        //Добаление теста "точность хода часов" AP+
+        if(event.getSource() == addTglBtnRTCAPPls) {
+            if (addTglBtnRTCAPPls.isSelected()) {
+                if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
+                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
+                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 0, Double.parseDouble(txtFieldRngEAPPls.getText()));
+                } else {
+                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
+                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 1, Double.parseDouble(txtFieldRngEAPPls.getText()));
+                }
+
+                rtcCommand.setName("ТХЧ AP+");
+
+                RTCTogBtnAPPls.setSelected(true);
+
+                Methodic.commandsMap.get(0).add(rtcCommand);
+
+                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                viewPointTableAPPls.setItems(testListForCollumAPPls);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(0)) {
+                    if (command instanceof RTCCommand) {
+                        if (((RTCCommand) command).getName().equals("ТХЧ AP+")) {
+                            Methodic.commandsMap.get(0).remove(command);
+                            break;
+                        }
+                    }
+                }
+
+                RTCTogBtnAPPls.setSelected(false);
+                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
+                viewPointTableAPPls.setItems(testListForCollumAPPls);
+            }
+        }
+
+        //Добаление теста "точность хода часов" AP-
+        if(event.getSource() == addTglBtnRTCAPMns) {
+            if (addTglBtnRTCAPMns.isSelected()) {
+                if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
+                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
+                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 0, Double.parseDouble(txtFieldRngEAPMns.getText()));
+                } else {
+                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
+                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 1, Double.parseDouble(txtFieldRngEAPMns.getText()));
+                }
+
+                rtcCommand.setName("ТХЧ AP-");
+
+                RTCTogBtnAPMns.setSelected(true);
+
+                Methodic.commandsMap.get(1).add(rtcCommand);
+
+                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+                viewPointTableAPMns.setItems(testListForCollumAPMns);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(1)) {
+                    if (command instanceof RTCCommand) {
+                        if (((RTCCommand) command).getName().equals("ТХЧ AP-")) {
+                            Methodic.commandsMap.get(1).remove(command);
+                            break;
+                        }
+                    }
+                }
+
+                RTCTogBtnAPMns.setSelected(false);
+                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
+                viewPointTableAPMns.setItems(testListForCollumAPMns);
+            }
+        }
+
+        //Добаление теста "точность хода часов" RP+
+        if(event.getSource() == addTglBtnRTCRPPls) {
+            if (addTglBtnRTCRPPls.isSelected()) {
+                if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
+                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
+                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 0, Double.parseDouble(txtFieldRngERPPls.getText()));
+                } else {
+                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
+                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 1, Double.parseDouble(txtFieldRngERPPls.getText()));
+                }
+
+                rtcCommand.setName("ТХЧ RP+");
+
+                RTCTogBtnRPPls.setSelected(true);
+
+                Methodic.commandsMap.get(2).add(rtcCommand);
+
+                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+                viewPointTableRPPls.setItems(testListForCollumRPPls);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(2)) {
+                    if (command instanceof RTCCommand) {
+                        if (((RTCCommand) command).getName().equals("ТХЧ RP+")) {
+                            Methodic.commandsMap.get(2).remove(command);
+                            break;
+                        }
+                    }
+                }
+
+                RTCTogBtnRPPls.setSelected(false);
+                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
+                viewPointTableRPPls.setItems(testListForCollumRPPls);
+            }
+        }
+
+        //Добаление теста "точность хода часов" RP-
+        if(event.getSource() == addTglBtnRTCRPMns) {
+            if (addTglBtnRTCRPMns.isSelected()) {
+                if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
+                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
+                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 0, Double.parseDouble(txtFieldRngERPMns.getText()));
+                } else {
+                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
+                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 1, Double.parseDouble(txtFieldRngERPMns.getText()));
+                }
+
+                rtcCommand.setName("ТХЧ RP-");
+
+                RTCTogBtnRPMns.setSelected(true);
+
+                Methodic.commandsMap.get(3).add(rtcCommand);
+
+                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+                viewPointTableRPMns.setItems(testListForCollumRPMns);
+            } else {
+                for (Commands command : Methodic.commandsMap.get(3)) {
+                    if (command instanceof RTCCommand) {
+                        if (((RTCCommand) command).getName().equals("ТХЧ RP-")) {
+                            Methodic.commandsMap.get(3).remove(command);
+                            break;
+                        }
+                    }
+                }
+
+                RTCTogBtnRPMns.setSelected(false);
+                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+                viewPointTableRPMns.setItems(testListForCollumRPMns);
+            }
+        }
+    }
+
+    public void initCoiseBoxParamForRTC() {
+        ChcBxRTCErrAPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+        ChcBxRTCErrAPPls.getSelectionModel().select(0);
+
+        ChcBxRTCErrAPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+        ChcBxRTCErrAPMns.getSelectionModel().select(0);
+
+        ChcBxRTCErrRPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+        ChcBxRTCErrRPPls.getSelectionModel().select(0);
+
+        ChcBxRTCErrRPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+        ChcBxRTCErrRPMns.getSelectionModel().select(0);
     }
 
     @FXML
@@ -1191,6 +1358,8 @@ public class TESTVIEW extends Application {
         APPlusCRPSTA.setSelected(true);
         APPlsPane.toFront();
         paneCRPAPPls.toFront();
+
+        initCoiseBoxParamForRTC();
         gridPaneAllPhaseAPPlus.toFront();
         viewPointTableAPPls.toFront();
 
@@ -1455,34 +1624,42 @@ public class TESTVIEW extends Application {
         //Переключение окон внутри фрейма "направление" между вкладками Сам. ТХЧ и т.д.
         //AP+
         if (event.getSource() == CRPTogBtnAPPls) {
-            CRPTogBtnAPPls.setSelected(addTglBtnCRPAPPls.isSelected());
             paneCRPAPPls.toFront();
+            if (addTglBtnCRPAPPls.isSelected() || addTglBtnCRPAPPlsGOST.isSelected()) {
+                CRPTogBtnAPPls.setSelected(true);
+            }else CRPTogBtnAPPls.setSelected(false);
         }
 
         if (event.getSource() == STATogBtnAPPls) {
-            STATogBtnAPPls.setSelected(addTglBtnSTAAPPls.isSelected());
             paneSTAAPPls.toFront();
+            if (addTglBtnSTAAPPls.isSelected() || addTglBtnSTAAPPlsGOST.isSelected()) {
+                STATogBtnAPPls.setSelected(true);
+            }else STATogBtnAPPls.setSelected(false);
         }
 
         if (event.getSource() == RTCTogBtnAPPls) {
-            RTCTogBtnAPPls.setSelected(addTglBtnRTCAPPls.isSelected());
             paneRTCAPPls.toFront();
+            RTCTogBtnAPPls.setSelected(addTglBtnRTCAPPls.isSelected());
         }
 
         if (event.getSource() == ConstTogBtnAPPls) {
-            ConstTogBtnAPPls.setSelected(addTglBtnConstAPPls.isSelected());
             paneConstAPPls.toFront();
+            ConstTogBtnAPPls.setSelected(addTglBtnConstAPPls.isSelected());
         }
 
         //AP-
         if (event.getSource() == CRPTogBtnAPMns) {
-            CRPTogBtnAPMns.setSelected(addTglBtnCRPAPMns.isSelected());
             paneCRPAPMns.toFront();
+            if (addTglBtnCRPAPMns.isSelected() || addTglBtnCRPAPMnsGOST.isSelected()) {
+                CRPTogBtnAPMns.setSelected(true);
+            } else CRPTogBtnAPMns.setSelected(false);
         }
 
         if (event.getSource() == STATogBtnAPMns) {
-            STATogBtnAPMns.setSelected(addTglBtnSTAAPMns.isSelected());
             paneSTAAPMns.toFront();
+            if (addTglBtnSTAAPMns.isSelected() || addTglBtnSTAAPMnsGOST.isSelected()) {
+                STATogBtnAPMns.setSelected(true);
+            } else STATogBtnAPMns.setSelected(false);
         }
 
         if (event.getSource() == RTCTogBtnAPMns) {
@@ -1497,12 +1674,12 @@ public class TESTVIEW extends Application {
 
         //RP+
         if (event.getSource() == CRPTogBtnRPPls) {
-            CRPTogBtnRPPls.setSelected(addTglBtnCRPRPPls.isSelected());
+            CRPTogBtnRPPls.setSelected(addTglBtnCRPRPPls.isSelected() || addTglBtnCRPRPPlsGOST.isSelected());
             paneCRPRPPls.toFront();
         }
 
         if (event.getSource() == STATogBtnRPPls) {
-            STATogBtnRPPls.setSelected(addTglBtnSTARPPls.isSelected());
+            STATogBtnRPPls.setSelected(addTglBtnSTARPPls.isSelected() || addTglBtnSTARPPlsGOST.isSelected());
             paneSTARPPls.toFront();
         }
 
@@ -1518,12 +1695,12 @@ public class TESTVIEW extends Application {
 
         //RP-
         if (event.getSource() == CRPTogBtnRPMns) {
-            CRPTogBtnRPMns.setSelected(addTglBtnCRPRPMns.isSelected());
+            CRPTogBtnRPMns.setSelected(addTglBtnCRPRPMns.isSelected() || addTglBtnCRPRPMnsGOST.isSelected());
             paneCRPRPMns.toFront();
         }
 
         if (event.getSource() == STATogBtnRPMns) {
-            STATogBtnRPMns.setSelected(addTglBtnSTARPMns.isSelected());
+            STATogBtnRPMns.setSelected(addTglBtnSTARPMns.isSelected() || addTglBtnSTARPMnsGOST.isSelected());
             paneSTARPMns.toFront();
         }
 

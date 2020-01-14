@@ -12,29 +12,27 @@ public class RTCCommand implements Commands {
     private StendDLLCommands stendDLLCommands;
 
     private int phase;
-    private double ratedVolt;
-    private double ratedCurr;
-    private double ratedFreq;
-    private int phaseSrequence;
-    private int revers;
-    private double voltPer;
-    private double currPer;
-    private String iABC = "H";
-    private String cosP = "1.0";
 
-    private int channelFlag;
+    private double ratedVolt;
+
+    private int channelFlag = 4;
+
+    private double errorForFalseTest;
 
     //Количество повторов теста
-    private int countResult = 3;
+    private int countResult;
+
     //Частота
-    private double freg = 1.000000;
+    private double freg;
+
+    //Имя команды
+    private String name;
 
     //Количество импульсов для считывания
-    private int pulse = 10;
+    private int pulse;
 
     //Тип измерения
-    private int errorType = 0;
-
+    private int errorType;
 
     //Массив погрешностей одного счётчика
     private HashMap<Integer, String> errorRTCList = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.size());
@@ -43,26 +41,20 @@ public class RTCCommand implements Commands {
         return errorRTCList;
     }
 
-    public RTCCommand(StendDLLCommands stendDLLCommands, int phase, double ratedVolt, double ratedCurr, double ratedFreq, int phaseSrequence,
-                        int revers, double voltPer, double currPer, int channelFlag, int pulse) {
+    public RTCCommand(StendDLLCommands stendDLLCommands, int pulse, double freg, int countResult, int errorType, double errorForFalseTest) {
         this.stendDLLCommands = stendDLLCommands;
-        this.phase = phase;
-        this.ratedVolt = ratedVolt;
-        this.ratedCurr = ratedCurr;
-        this.ratedFreq = ratedFreq;
-        this.phaseSrequence = phaseSrequence;
-        this.revers = revers;
-        this.voltPer = voltPer;
-        this.currPer = currPer;
-        this.channelFlag = channelFlag;
         this.pulse = pulse;
+        this.freg = freg;
+        this.countResult = countResult;
+        this.errorType = errorType;
+        this.errorForFalseTest = errorForFalseTest;
     }
 
     @Override
     public void execute() {
         int count = 0;
-        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPer, currPer, iABC, cosP);
+        stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
+                0.0, 0.0, "H", "1.0");
 
         stendDLLCommands.setEnergyPulse(channelFlag);
 
@@ -74,7 +66,7 @@ public class RTCCommand implements Commands {
 
         try {
             while (count < countResult) {
-                Thread.sleep((pulse * 1000) + 2000);
+                Thread.sleep((pulse * 1000) + (pulse * 200));
                 for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
                     meter.getValue().setRTCTestResult(stendDLLCommands.clockErrorRead(freg, errorType, meter.getKey()));
                 }
@@ -85,5 +77,21 @@ public class RTCCommand implements Commands {
         }
         stendDLLCommands.errorClear();
         stendDLLCommands.powerOf();
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setPhase(int phase) {
+        this.phase = phase;
+    }
+
+    public void setRatedVolt(double ratedVolt) {
+        this.ratedVolt = ratedVolt;
     }
 }
