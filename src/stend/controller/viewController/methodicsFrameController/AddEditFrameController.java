@@ -13,7 +13,7 @@ import javafx.scene.layout.*;
 import stend.helper.ConsoleHelper;
 import stend.model.Methodic;
 
-public class addEditFrameController {
+public class AddEditFrameController {
 
     private Map<String, CheckBox> checkBoxMap = new HashMap<>();
 

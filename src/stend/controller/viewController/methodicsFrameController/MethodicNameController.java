@@ -1,29 +1,21 @@
 package stend.controller.viewController.methodicsFrameController;
-
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import stend.helper.exeptions.InfoExeption;
+import stend.model.Methodic;
+import stend.model.MethodicsForTest;
 
-
-public class methodicsFrameController {
-
-    private Map<String, CheckBox> checkBoxMap = new HashMap<>();
-
-    private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C");
-    private List<String> current = Arrays.asList("Imax", "0.5Imax", "0.2Imax", "0.5Ib", "Ib","0.2Ib", "0.1Ib", "0.05Ib");
+public class MethodicNameController {
 
     @FXML
     private ResourceBundle resources;
@@ -32,32 +24,25 @@ public class methodicsFrameController {
     private URL location;
 
     @FXML
-    private Button addMetBtn;
+    private TextField nameField;
 
     @FXML
-    private TableView<?> viewPointTable;
-
-    @FXML
-    private GridPane setPointGird;
-
-    @FXML
-    private Button saveMetBtn;
-
-    @FXML
-    private Button addMetBtn2;
-
-    @FXML
-    private Button deleteMetBtn;
+    private Button acceptNameBtn;
 
     @FXML
     void initialize() {
+
     }
 
     @FXML
-    void actinonForMethodicsFrame(ActionEvent event) {
-        if (event.getSource() == addMetBtn) {
+    void actinonForNameFrame(ActionEvent event) {
+        if (event.getSource() == acceptNameBtn) {
             loadStage("/stend/view/method/addEditMet.fxml", "Добавление методики");
         }
+    }
+
+    private void loadStageExeptionStage(String error) {
+        loadStage("/stend/view/exceptionName.fxml", "Ошибка");
     }
 
     private void loadStage(String fxml, String stageName) {
@@ -71,5 +56,4 @@ public class methodicsFrameController {
             e.printStackTrace();
         }
     }
-
 }

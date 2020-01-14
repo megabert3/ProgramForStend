@@ -3,14 +3,14 @@ package stend.controller.viewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class exceptionFrameController {
+public class ExceptionFrameController {
 
     private String exceptionMessage;
 
     @FXML
     private Label exceptionLabel;
 
-    public exceptionFrameController(String exceptoinMessage) {
+    public ExceptionFrameController(String exceptoinMessage) {
         this.exceptionMessage = exceptoinMessage;
     }
 

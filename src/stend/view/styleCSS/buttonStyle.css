@@ -1,12 +1,11 @@
-.button
-{
--fx-background-color : #FFC107;
+.button {
+    -fx-background-color : #FFC107;
 }
-.button : hover
-{
--fx-background-color : #E3AC06;
+
+.button : hover {
+    -fx-background-color : #E3AC06;
 }
-.button : pressed
-{
--fx-background-color : #E3AC06;
+
+.button : pressed {
+    -fx-background-color : #E3AC06;
 }

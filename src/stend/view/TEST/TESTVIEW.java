@@ -49,7 +49,7 @@ public class TESTVIEW extends Application {
     private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C");
 
     //Значения выставленного тока
-    private List<String> current = Arrays.asList("1.0 Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "1.0 Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.001 Ib");
+    private List<String> current = Arrays.asList("1.0 Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "1.0 Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.02 Ib", "0.02 Ib", "0.01 Ib");
 
     //Список GridPane для выставления точек поверки
     private List<GridPane> gridPanesEnergyAndPhase;
@@ -1192,21 +1192,30 @@ public class TESTVIEW extends Application {
 
         RTCCommand rtcCommand;
         //Добаление теста "точность хода часов" AP+
+        String cbValue;
         if(event.getSource() == addTglBtnRTCAPPls) {
             if (addTglBtnRTCAPPls.isSelected()) {
                 if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
                     rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 0, Double.parseDouble(txtFieldRngEAPPls.getText()));
+                    cbValue = "В ед. частоты";
                 } else {
                     rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 1, Double.parseDouble(txtFieldRngEAPPls.getText()));
+                    cbValue = "Сутч. погрешность";
                 }
 
                 rtcCommand.setName("ТХЧ AP+");
 
-                RTCTogBtnAPPls.setSelected(true);
-
                 Methodic.commandsMap.get(0).add(rtcCommand);
+
+                RTCTogBtnAPPls.setSelected(true);
+                ChcBxRTCErrAPPls.getItems().clear();
+                ChcBxRTCErrAPPls.getItems().addAll(cbValue);
+                ChcBxRTCErrAPPls.getSelectionModel().select(0);
+                txtFldRTCTimeMshAPPls.setEditable(false);
+                txtFldRTCAmtMshAPPls.setEditable(false);
+                txtFieldRngEAPPls.setEditable(false);
 
                 testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
                 viewPointTableAPPls.setItems(testListForCollumAPPls);
@@ -1221,6 +1230,13 @@ public class TESTVIEW extends Application {
                 }
 
                 RTCTogBtnAPPls.setSelected(false);
+                ChcBxRTCErrAPPls.getItems().clear();
+                ChcBxRTCErrAPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+                ChcBxRTCErrAPPls.getSelectionModel().select(0);
+                txtFldRTCTimeMshAPPls.setEditable(true);
+                txtFldRTCAmtMshAPPls.setEditable(true);
+                txtFieldRngEAPPls.setEditable(true);
+
                 testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
                 viewPointTableAPPls.setItems(testListForCollumAPPls);
             }
@@ -1232,14 +1248,22 @@ public class TESTVIEW extends Application {
                 if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
                     rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 0, Double.parseDouble(txtFieldRngEAPMns.getText()));
+                    cbValue = "В ед. частоты";
                 } else {
                     rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 1, Double.parseDouble(txtFieldRngEAPMns.getText()));
+                    cbValue = "Сутч. погрешность";
                 }
 
                 rtcCommand.setName("ТХЧ AP-");
 
                 RTCTogBtnAPMns.setSelected(true);
+                ChcBxRTCErrAPMns.getItems().clear();
+                ChcBxRTCErrAPMns.getItems().addAll(cbValue);
+                ChcBxRTCErrAPMns.getSelectionModel().select(0);
+                txtFldRTCTimeMshAPMns.setEditable(false);
+                txtFldRTCAmtMshAPMns.setEditable(false);
+                txtFieldRngEAPMns.setEditable(false);
 
                 Methodic.commandsMap.get(1).add(rtcCommand);
 
@@ -1256,6 +1280,13 @@ public class TESTVIEW extends Application {
                 }
 
                 RTCTogBtnAPMns.setSelected(false);
+                ChcBxRTCErrAPMns.getItems().clear();
+                ChcBxRTCErrAPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+                ChcBxRTCErrAPMns.getSelectionModel().select(0);
+                txtFldRTCTimeMshAPMns.setEditable(true);
+                txtFldRTCAmtMshAPMns.setEditable(true);
+                txtFieldRngEAPMns.setEditable(true);
+
                 testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
                 viewPointTableAPMns.setItems(testListForCollumAPMns);
             }
@@ -1267,14 +1298,22 @@ public class TESTVIEW extends Application {
                 if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
                     rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 0, Double.parseDouble(txtFieldRngERPPls.getText()));
+                    cbValue = "В ед. частоты";
                 } else {
                     rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 1, Double.parseDouble(txtFieldRngERPPls.getText()));
+                    cbValue = "Сутч. погрешность";
                 }
 
                 rtcCommand.setName("ТХЧ RP+");
 
                 RTCTogBtnRPPls.setSelected(true);
+                ChcBxRTCErrRPPls.getItems().clear();
+                ChcBxRTCErrRPPls.getItems().addAll(cbValue);
+                ChcBxRTCErrRPPls.getSelectionModel().select(0);
+                txtFldRTCTimeMshRPPls.setEditable(false);
+                txtFldRTCAmtMshRPPls.setEditable(false);
+                txtFieldRngERPPls.setEditable(false);
 
                 Methodic.commandsMap.get(2).add(rtcCommand);
 
@@ -1291,6 +1330,13 @@ public class TESTVIEW extends Application {
                 }
 
                 RTCTogBtnRPPls.setSelected(false);
+                ChcBxRTCErrRPPls.getItems().clear();
+                ChcBxRTCErrRPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+                ChcBxRTCErrRPPls.getSelectionModel().select(0);
+                txtFldRTCTimeMshRPPls.setEditable(true);
+                txtFldRTCAmtMshRPPls.setEditable(true);
+                txtFieldRngERPPls.setEditable(true);
+
                 testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
                 viewPointTableRPPls.setItems(testListForCollumRPPls);
             }
@@ -1302,14 +1348,22 @@ public class TESTVIEW extends Application {
                 if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
                     rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 0, Double.parseDouble(txtFieldRngERPMns.getText()));
+                    cbValue = "В ед. частоты";
                 } else {
                     rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 1, Double.parseDouble(txtFieldRngERPMns.getText()));
+                    cbValue = "Сутч. погрешность";
                 }
 
                 rtcCommand.setName("ТХЧ RP-");
 
                 RTCTogBtnRPMns.setSelected(true);
+                ChcBxRTCErrRPMns.getItems().clear();
+                ChcBxRTCErrRPMns.getItems().addAll(cbValue);
+                ChcBxRTCErrRPMns.getSelectionModel().select(0);
+                txtFldRTCTimeMshRPMns.setEditable(false);
+                txtFldRTCAmtMshRPMns.setEditable(false);
+                txtFieldRngERPMns.setEditable(false);
 
                 Methodic.commandsMap.get(3).add(rtcCommand);
 
@@ -1326,6 +1380,13 @@ public class TESTVIEW extends Application {
                 }
 
                 RTCTogBtnRPMns.setSelected(false);
+                ChcBxRTCErrRPMns.getItems().clear();
+                ChcBxRTCErrRPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+                ChcBxRTCErrRPMns.getSelectionModel().select(0);
+                txtFldRTCTimeMshRPMns.setEditable(true);
+                txtFldRTCAmtMshRPMns.setEditable(true);
+                txtFieldRngERPMns.setEditable(true);
+
                 testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
                 viewPointTableRPMns.setItems(testListForCollumRPMns);
             }

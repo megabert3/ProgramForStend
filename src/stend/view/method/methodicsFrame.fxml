@@ -9,7 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="789.0" prefWidth="866.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stend.controller.viewController.methodicsFrameController.methodicsFrameController">
+<AnchorPane prefHeight="789.0" prefWidth="866.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stend.controller.viewController.methodicsFrameController.MethodicsFrameController">
    <children>
       <AnchorPane prefHeight="789.0" prefWidth="889.0" style="-fx-background-color: #6A6A6A;">
          <children>
