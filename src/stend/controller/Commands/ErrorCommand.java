@@ -1,5 +1,6 @@
 package stend.controller.Commands;
 
+import com.sun.jmx.remote.internal.ClientListenerInfo;
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 import stend.helper.ConsoleHelper;
@@ -27,6 +28,9 @@ public class ErrorCommand implements Commands {
     //Базовый или максимальный ток из конструктора
     private String current;
 
+    //id кнопки
+    private String id;
+
     //Базовый ток
     private double Ib;
 
@@ -52,7 +56,7 @@ public class ErrorCommand implements Commands {
     private double currPer;
 
     //Стринговый процент получаемый из конструктора
-    private String currentPerсent = "100.0";
+    private String currentPerсent;
     private String iABC;
     private String cosP;
 
@@ -68,9 +72,10 @@ public class ErrorCommand implements Commands {
     /**
         Не забудь создать второй конструктор для другого окна
      */
-    public ErrorCommand(StendDLLCommands stendDLLCommands, int phase, String current,
+    public ErrorCommand(StendDLLCommands stendDLLCommands, String id, int phase, String current,
                         int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
         this.stendDLLCommands = stendDLLCommands;
+        this.id = id;
         this.phase = phase;
         this.current = current;
         this.revers = revers;
@@ -78,13 +83,23 @@ public class ErrorCommand implements Commands {
         this.iABC = iABC;
         this.cosP = cosP;
         this.channelFlag = channelFlag;
+
         if (iABC.equals("H")) {
             name = (cosP + "; " + currentPerсent + " " + current.trim());
         } else name = (iABC + ": " + cosP + "; " + currentPerсent + " " + current);
+
+        currPer = Double.parseDouble(currentPerсent) * 100;
+        phaseSrequence = 0;
+        voltPer = 100.0;
     }
 
     @Override
     public void execute() {
+        if (current.equals("Ib")) {
+            ratedCurr = Ib;
+        } else {
+            ratedCurr = Imax;
+        }
         stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPer, currPer, iABC, cosP);
 
@@ -168,6 +183,14 @@ public class ErrorCommand implements Commands {
 
     public String getPulse() {
         return pulse;
+    }
+
+    public void setImax(double imax) {
+        Imax = imax;
+    }
+
+    public void setIb(double ib) {
+        Ib = ib;
     }
 
     @Override
