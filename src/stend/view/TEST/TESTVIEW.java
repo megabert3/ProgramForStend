@@ -143,27 +143,36 @@ public class TESTVIEW extends Application {
     private TableColumn<Commands, String> amountImplTabColRPMns;
     //-------------------------------------------------------
     //Данный блок отвечает за сетку выбора точки.
-    //Активная энергия в прямом направлении, Все фазы и отдельно А В С
-    @FXML
-    private GridPane gridPaneAllPhaseAPPlus;
+    //Влияние напряжения
 
-    //Активная энергия в обратном направлении, Все фазы и отдельно А В С
     @FXML
-    private GridPane gridPaneAllPhaseAPMinus;
+    private GridPane gridPaneUAPPlus;
 
-    //Реактивная энергия в прямом направлении, Все фазы и отдельно А В С
     @FXML
-    private GridPane gridPaneAllPhaseRPPlus;
+    private GridPane gridPaneUAPMns;
 
-    //Реактивная энергия в обратном направлении, Все фазы и отдельно А В С
     @FXML
-    private GridPane gridPaneAllPhaseRPMinus;
+    private GridPane gridPaneURPPls;
+
+    @FXML
+    private GridPane gridPaneURPMns;
+
+    //Влияние частоты
+    @FXML
+    private GridPane gridPaneFAPPlus;
+
+    @FXML
+    private GridPane gridPaneFAPMns;
+
+    @FXML
+    private GridPane gridPaneFRPPls;
+
+    @FXML
+    private GridPane gridPaneFRPMns;
 
     //-------------------------------------------------------
-
     @FXML
     private ToggleButton allPhaseBtn;
-
 
     @FXML
     private ToggleButton APPlus;
@@ -177,6 +186,7 @@ public class TESTVIEW extends Application {
     @FXML
     private ToggleButton RPMinus;
 
+    //-------------------------------------------------------
     @FXML
     private Button CancelBtn;
 
@@ -315,8 +325,13 @@ public class TESTVIEW extends Application {
 
     @FXML
     private TextField txtFieldInfUnblRPMns;
-
     //---------------------------------------------------------------------
+
+    @FXML
+    private ToggleButton RPPlusCRPSTA;
+
+    @FXML
+    private Pane RPPlsPane;
 
     @FXML
     void initialize() {
@@ -325,33 +340,124 @@ public class TESTVIEW extends Application {
         }
 
         initGridPane();
-        APPlus.setSelected(true);
-        allPhaseBtn.setSelected(true);
-        APPlusCRPSTA.setSelected(true);
         APPlsPane.toFront();
 
-        gridPaneAllPhaseAPPlus.toFront();
+
         viewPointTableAPPls.toFront();
 
         initTableView();
     }
 
+    //Отвечает за отображение нужного окна настроек влияния
     @FXML
     void addInfluenceTests(ActionEvent event) {
+        if (event.getSource() == InfluenceTglBtnUAPPls) {
+            InfluenceTglBtnUAPPls.setSelected(addTglBtnInfUAPPls.isSelected());
+            gridPaneUAPPlus.toFront();
+            InflUpaneAPPls.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnFAPPls) {
+            InfluenceTglBtnFAPPls.setSelected(addTglBtnInfFAPPls.isSelected());
+            gridPaneFAPPlus.toFront();
+            InflFpaneAPPls.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnUnbAPPls) {
+            InfluenceTglBtnUnbAPPls.setSelected(addTglBtnInfUnblAPPls.isSelected());
+            addTglBtnInfUnblAPPls.toFront();
+        }
 
     }
-
 
     @FXML
     void saveOrCancelAction(ActionEvent event) {
     }
 
-    //Устанавливает значения Tgl Btn grid и добавления тестов ТХЧ и т.д.
-    // в соответствующие значения
+    //Устанавливает значение TgBtn в соответствующие значения
     @FXML
     void setPointFrameAction(ActionEvent event) {
-        setGropToggleButton(event);
-        gridPaneToFront(Objects.requireNonNull(getGridPane()));
+        //Кнопки выбора необходимой сетки
+        if (event.getSource() == APPlus || event.getSource() == APPlusCRPSTA) {
+            setAPPlsTglBtn();
+        }
+
+        if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
+            setAPMnsTglBtn();
+        }
+
+        if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
+            setRPPlsTglBtn();
+        }
+
+        if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
+            setRPMnsTglBtn();
+        }
+
+    }
+
+    //Устанавливает значение TglBtn если выбрана вкладка AP+
+    private void setAPPlsTglBtn() {
+        gridPaneUAPPlus.toFront();
+        viewPointTableAPPls.toFront();
+        APPlsPane.toFront();
+        APPlus.setSelected(true);
+        APMinus.setSelected(false);
+        RPPlus.setSelected(false);
+        RPMinus.setSelected(false);
+
+        APPlusCRPSTA.setSelected(true);
+        APMinusCRPSTA.setSelected(false);
+        RPPlusCRPSTA.setSelected(false);
+        RPMinusCRPSTA.setSelected(false);
+    }
+
+    //Устанавливает значение TglBtn если выбрана вкладка AP-
+    private void setAPMnsTglBtn() {
+        gridPaneUAPMns.toFront();
+        viewPointTableAPMns.toFront();
+        APMnsPane.toFront();
+        APPlus.setSelected(false);
+        APMinus.setSelected(true);
+        RPPlus.setSelected(false);
+        RPMinus.setSelected(false);
+
+        APPlusCRPSTA.setSelected(false);
+        APMinusCRPSTA.setSelected(true);
+        RPPlusCRPSTA.setSelected(false);
+        RPMinusCRPSTA.setSelected(false);
+    }
+
+    //Устанавливает значение TglBtn если выбрана вкладка RP+
+    private void setRPPlsTglBtn() {
+        gridPaneURPPls.toFront();
+        viewPointTableRPPls.toFront();
+        RPPlsPane.toFront();
+        APPlus.setSelected(false);
+        APMinus.setSelected(false);
+        RPPlus.setSelected(true);
+        RPMinus.setSelected(false);
+
+        APPlusCRPSTA.setSelected(false);
+        APMinusCRPSTA.setSelected(false);
+        RPPlusCRPSTA.setSelected(true);
+        RPMinusCRPSTA.setSelected(false);
+    }
+
+    //Устанавливает значение TglBtn если выбрана вкладка RP-
+    private void setRPMnsTglBtn() {
+        gridPaneURPMns.toFront();
+        viewPointTableRPMns.toFront();
+        RPMnsPane.toFront();
+        APPlus.setSelected(false);
+        APMinus.setSelected(false);
+        RPPlus.setSelected(false);
+        RPMinus.setSelected(true);
+
+        APPlusCRPSTA.setSelected(false);
+        APMinusCRPSTA.setSelected(false);
+        RPPlusCRPSTA.setSelected(false);
+        RPMinusCRPSTA.setSelected(true);
     }
 
     private void initGridPane() {
@@ -368,40 +474,27 @@ public class TESTVIEW extends Application {
 //		7 - Однофазный реактив
 //Режим;
         if (isThrePhaseStend) {
-            gridPaneAllPhaseAPPlus.setId("1;H;A;P");
-            gridPanePhaseAAPPlus.setId("1;A;A;P");
-            gridPanePhaseBAPPlus.setId("1;B;A;P");
-            gridPanePhaseCAPPlus.setId("1;C;A;P");
-            gridPaneAllPhaseAPMinus.setId("1;H;A;N");
-            gridPanePhaseAAPMinus.setId("1;A;A;N");
-            gridPanePhaseBAPMinus.setId("1;B;A;N");
-            gridPanePhaseCAPMinus.setId("1;C;A;N");
-            gridPaneAllPhaseRPPlus.setId("5;H;R;P");
-            gridPanePhaseARPPlus.setId("5;A;R;P");
-            gridPanePhaseBRPPlus.setId("5;B;R;P");
-            gridPanePhaseCRPPlus.setId("5;C;R;P");
-            gridPaneAllPhaseRPMinus.setId("5;H;R;N");
-            gridPanePhaseARPMinus.setId("5;A;R;N");
-            gridPanePhaseBRPMinus.setId("5;B;R;N");
-            gridPanePhaseCRPMinus.setId("5;C;R;N");
+            gridPaneUAPPlus.setId("U;1;H;A;P");
+            gridPaneUAPMns.setId("U;1;H;A;N");
+            gridPaneURPPls.setId("U;5;H;R;P");
+            gridPaneURPMns.setId("U;5;H;R;N");
+            //Влияние частоты
+            gridPaneFAPPlus.setId("F;1;H;A;P");
+            gridPaneFAPMns.setId("F;1;H;A;N");
+            gridPaneFRPPls.setId("F;5;H;R;P");
+            gridPaneFRPMns.setId("F;5;H;R;N");
         } else {
-            gridPaneAllPhaseAPPlus.setId("0;H;A;P");
-            gridPanePhaseAAPPlus.setId("0;A;A;P");
-            gridPanePhaseBAPPlus.setId("0;B;A;P");
-            gridPanePhaseCAPPlus.setId("0;C;A;P");
-            gridPaneAllPhaseAPMinus.setId("0;H;A;N");
-            gridPanePhaseAAPMinus.setId("0;A;A;N");
-            gridPanePhaseBAPMinus.setId("0;B;A;N");
-            gridPanePhaseCAPMinus.setId("0;C;A;N");
-            gridPaneAllPhaseRPPlus.setId("7;H;R;P");
-            gridPanePhaseARPPlus.setId("7;A;R;P");
-            gridPanePhaseBRPPlus.setId("7;B;R;P");
-            gridPanePhaseCRPPlus.setId("7;C;R;P");
-            gridPaneAllPhaseRPMinus.setId("7;H;R;N");
-            gridPanePhaseARPMinus.setId("7;A;R;N");
-            gridPanePhaseBRPMinus.setId("7;B;R;N");
-            gridPanePhaseCRPMinus.setId("7;C;R;N");
+            gridPaneUAPPlus.setId("U;0;H;A;P");
+            gridPaneUAPMns.setId("U;0;H;A;N");
+            gridPaneURPPls.setId("U;7;H;R;P");
+            gridPaneURPMns.setId("U;7;H;R;N");
+            //Влияние частоты
+            gridPaneFAPPlus.setId("F;0;H;A;P");
+            gridPaneFAPMns.setId("F;0;H;A;N");
+            gridPaneFRPPls.setId("F;7;H;R;P");
+            gridPaneFRPMns.setId("F;7;H;R;N");
         }
+
         for (GridPane pane : gridPanesEnergyAndPhase) {
             setBoxAndLabelGridPane(pane);
         }
@@ -409,22 +502,15 @@ public class TESTVIEW extends Application {
 
 
     private void initGridPanesEnergyAndPhase() {
-        gridPanesEnergyAndPhase = Arrays.asList(gridPaneAllPhaseAPPlus,
-                gridPanePhaseAAPPlus,
-                gridPanePhaseBAPPlus,
-                gridPanePhaseCAPPlus,
-                gridPaneAllPhaseAPMinus,
-                gridPanePhaseAAPMinus,
-                gridPanePhaseBAPMinus,
-                gridPanePhaseCAPMinus,
-                gridPaneAllPhaseRPPlus,
-                gridPanePhaseARPPlus,
-                gridPanePhaseBRPPlus,
-                gridPanePhaseCRPPlus,
-                gridPaneAllPhaseRPMinus,
-                gridPanePhaseARPMinus,
-                gridPanePhaseBRPMinus,
-                gridPanePhaseCRPMinus);
+        gridPanesEnergyAndPhase = Arrays.asList(
+                gridPaneUAPPlus,
+                gridPaneUAPMns,
+                gridPaneURPPls,
+                gridPaneURPMns,
+                gridPaneFAPPlus,
+                gridPaneFAPMns,
+                gridPaneFRPPls,
+                gridPaneFRPMns);
     }
 
     //Заполняет поля нужными значениями GridPane
@@ -487,13 +573,11 @@ public class TESTVIEW extends Application {
                             testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
                             viewPointTableRPMns.setItems(testListForCollumAPPls);
                         }
-                        System.out.println("Кнопка зажата " + finalCheckBox.getId() + "\n" + "Количество точек: " + Methodic.commandsMap.get(0).size());
-
                     } else {
                         deleteTestPointInMethodic(idCheckBox);
-                        System.out.println("Кнопка разжата " + finalCheckBox.getId());
                     }
                 });
+
                 GridPane.setColumnIndex(checkBox, x + 1);
                 GridPane.setRowIndex(checkBox, y + 1);
                 GridPane.setHalignment(checkBox, HPos.CENTER);
@@ -516,235 +600,12 @@ public class TESTVIEW extends Application {
 
     //Имитация ToggleGroup
     private void setGropToggleButton(ActionEvent event) {
-        if (event.getSource() == allPhaseBtn) {
-            allPhaseBtn.setSelected(true);
-            APhaseBtn.setSelected(false);
-            BPhaseBtn.setSelected(false);
-            CPhaseBtn.setSelected(false);
-        }
-        if (event.getSource() == APhaseBtn) {
-            APhaseBtn.setSelected(true);
-            allPhaseBtn.setSelected(false);
-            BPhaseBtn.setSelected(false);
-            CPhaseBtn.setSelected(false);
-        }
-        if (event.getSource() == BPhaseBtn) {
-            BPhaseBtn.setSelected(true);
-            allPhaseBtn.setSelected(false);
-            APhaseBtn.setSelected(false);
-            CPhaseBtn.setSelected(false);
-        }
-        if (event.getSource() == CPhaseBtn) {
-            CPhaseBtn.setSelected(true);
-            allPhaseBtn.setSelected(false);
-            APhaseBtn.setSelected(false);
-            BPhaseBtn.setSelected(false);
-        }
 
-        //Tg btns "энергия и направление" отвечающие за сетку точек и добавление тестов Влияния.
-        if (event.getSource() == APPlus || event.getSource() == APPlusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableAPPls.toFront();
-            APPlsPane.toFront();
-            paneCRPAPPls.toFront();
-
-
-            APPlus.setSelected(true);
-            APMinus.setSelected(false);
-            RPPlus.setSelected(false);
-            RPMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(true);
-            APMinusCRPSTA.setSelected(false);
-            RPPlusCRPSTA.setSelected(false);
-            RPMinusCRPSTA.setSelected(false);
-        }
-
-        if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableAPMns.toFront();
-            APMnsPane.toFront();
-            paneCRPAPMns.toFront();
-
-            APMinus.setSelected(true);
-            APPlus.setSelected(false);
-            RPPlus.setSelected(false);
-            RPMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(false);
-            APMinusCRPSTA.setSelected(true);
-            RPPlusCRPSTA.setSelected(false);
-            RPMinusCRPSTA.setSelected(false);
-        }
-        if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableRPPls.toFront();
-            RPPlsPane.toFront();
-            paneCRPRPPls.toFront();
-
-            RPPlus.setSelected(true);
-            APPlus.setSelected(false);
-            APMinus.setSelected(false);
-            RPMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(false);
-            APMinusCRPSTA.setSelected(false);
-            RPPlusCRPSTA.setSelected(true);
-            RPMinusCRPSTA.setSelected(false);
-        }
-        if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableRPMns.toFront();
-            RPMnsPane.toFront();
-            paneCRPRPMns.toFront();
-
-            RPMinus.setSelected(true);
-            RPPlus.setSelected(false);
-            APPlus.setSelected(false);
-            APMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(false);
-            APMinusCRPSTA.setSelected(false);
-            RPPlusCRPSTA.setSelected(false);
-            RPMinusCRPSTA.setSelected(true);
-        }
-
-        //Переключение окон внутри фрейма "направление" между вкладками Сам. ТХЧ и т.д.
-        //AP+
-        if (event.getSource() == CRPTogBtnAPPls) {
-            paneCRPAPPls.toFront();
-            if (addTglBtnCRPAPPls.isSelected() || addTglBtnCRPAPPlsGOST.isSelected()) {
-                CRPTogBtnAPPls.setSelected(true);
-            }else CRPTogBtnAPPls.setSelected(false);
-        }
-
-        if (event.getSource() == STATogBtnAPPls) {
-            paneSTAAPPls.toFront();
-            if (addTglBtnSTAAPPls.isSelected() || addTglBtnSTAAPPlsGOST.isSelected()) {
-                STATogBtnAPPls.setSelected(true);
-            }else STATogBtnAPPls.setSelected(false);
-        }
-
-        if (event.getSource() == RTCTogBtnAPPls) {
-            paneRTCAPPls.toFront();
-            RTCTogBtnAPPls.setSelected(addTglBtnRTCAPPls.isSelected());
-        }
-
-        if (event.getSource() == ConstTogBtnAPPls) {
-            paneConstAPPls.toFront();
-            ConstTogBtnAPPls.setSelected(addTglBtnConstAPPls.isSelected());
-        }
-
-        //AP-
-        if (event.getSource() == CRPTogBtnAPMns) {
-            paneCRPAPMns.toFront();
-            if (addTglBtnCRPAPMns.isSelected() || addTglBtnCRPAPMnsGOST.isSelected()) {
-                CRPTogBtnAPMns.setSelected(true);
-            } else CRPTogBtnAPMns.setSelected(false);
-        }
-
-        if (event.getSource() == STATogBtnAPMns) {
-            paneSTAAPMns.toFront();
-            if (addTglBtnSTAAPMns.isSelected() || addTglBtnSTAAPMnsGOST.isSelected()) {
-                STATogBtnAPMns.setSelected(true);
-            } else STATogBtnAPMns.setSelected(false);
-        }
-
-        if (event.getSource() == RTCTogBtnAPMns) {
-            RTCTogBtnAPMns.setSelected(addTglBtnRTCAPMns.isSelected());
-            paneRTCAPMns.toFront();
-        }
-
-        if (event.getSource() == ConstTogBtnAPMns) {
-            ConstTogBtnAPMns.setSelected(addTglBtnConstAPMns.isSelected());
-            paneConstAPMns.toFront();
-        }
-
-        //RP+
-        if (event.getSource() == CRPTogBtnRPPls) {
-            CRPTogBtnRPPls.setSelected(addTglBtnCRPRPPls.isSelected() || addTglBtnCRPRPPlsGOST.isSelected());
-            paneCRPRPPls.toFront();
-        }
-
-        if (event.getSource() == STATogBtnRPPls) {
-            STATogBtnRPPls.setSelected(addTglBtnSTARPPls.isSelected() || addTglBtnSTARPPlsGOST.isSelected());
-            paneSTARPPls.toFront();
-        }
-
-        if (event.getSource() == RTCTogBtnRPPls) {
-            RTCTogBtnRPPls.setSelected(addTglBtnRTCRPPls.isSelected());
-            paneRTCRPPls.toFront();
-        }
-
-        if (event.getSource() == ConstTogBtnRPPls) {
-            ConstTogBtnRPPls.setSelected(addTglBtnConstRPPls.isSelected());
-            paneConstRPPls.toFront();
-        }
-
-        //RP-
-        if (event.getSource() == CRPTogBtnRPMns) {
-            CRPTogBtnRPMns.setSelected(addTglBtnCRPRPMns.isSelected() || addTglBtnCRPRPMnsGOST.isSelected());
-            paneCRPRPMns.toFront();
-        }
-
-        if (event.getSource() == STATogBtnRPMns) {
-            STATogBtnRPMns.setSelected(addTglBtnSTARPMns.isSelected() || addTglBtnSTARPMnsGOST.isSelected());
-            paneSTARPMns.toFront();
-        }
-
-        if (event.getSource() == RTCTogBtnRPMns) {
-            RTCTogBtnRPMns.setSelected(addTglBtnRTCRPMns.isSelected());
-            paneRTCRPMns.toFront();
-        }
-
-        if (event.getSource() == ConstTogBtnRPMns) {
-            ConstTogBtnRPMns.setSelected(addTglBtnConstRPMns.isSelected());
-            paneConstRPMns.toFront();
-        }
     }
 
-    //При переключении вкладки Мощности и Направления устанавливает положение в "Все фазы"
-    private void setDefPosBtn() {
-        allPhaseBtn.setSelected(true);
-        APhaseBtn.setSelected(false);
-        BPhaseBtn.setSelected(false);
-        CPhaseBtn.setSelected(false);
-    }
 
     private void gridPaneToFront(GridPane pane) {
         pane.toFront();
-    }
-
-    //Выдаёт нужный GridPane в зависимости от нажатой кнопки
-    private GridPane getGridPane() {
-        if (allPhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPaneAllPhaseAPPlus;
-            if (APMinus.isSelected()) return gridPaneAllPhaseAPMinus;
-            if (RPPlus.isSelected()) return gridPaneAllPhaseRPPlus;
-            if (RPMinus.isSelected()) return gridPaneAllPhaseRPMinus;
-        }
-
-        if (APhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPanePhaseAAPPlus;
-            if (APMinus.isSelected()) return gridPanePhaseAAPMinus;
-            if (RPPlus.isSelected()) return gridPanePhaseARPPlus;
-            if (RPMinus.isSelected()) return gridPanePhaseARPMinus;
-        }
-
-        if (BPhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPanePhaseBAPPlus;
-            if (APMinus.isSelected()) return gridPanePhaseBAPMinus;
-            if (RPPlus.isSelected()) return gridPanePhaseBRPPlus;
-            if (RPMinus.isSelected()) return gridPanePhaseBRPMinus;
-        }
-
-        if (CPhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPanePhaseCAPPlus;
-            if (APMinus.isSelected()) return gridPanePhaseCAPMinus;
-            if (RPPlus.isSelected()) return gridPanePhaseCRPPlus;
-            if (RPMinus.isSelected()) return gridPanePhaseCRPMinus;
-        }
-        return null;
     }
 
     //Инициализирует таблицу для отображения выбранных точек
