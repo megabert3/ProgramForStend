@@ -55,6 +55,23 @@ public class AddEditFrameController {
     private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
     private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
 
+
+    public ObservableList<Commands> getTestListForCollumAPPls() {
+        return testListForCollumAPPls;
+    }
+
+    public ObservableList<Commands> getTestListForCollumAPMns() {
+        return testListForCollumAPMns;
+    }
+
+    public ObservableList<Commands> getTestListForCollumRPPls() {
+        return testListForCollumRPPls;
+    }
+
+    public ObservableList<Commands> getTestListForCollumRPMns() {
+        return testListForCollumRPMns;
+    }
+
     @FXML
     private ResourceBundle resources = ResourceBundle.getBundle("stendProperties");
 

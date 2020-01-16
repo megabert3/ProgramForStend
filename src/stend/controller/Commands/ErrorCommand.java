@@ -93,6 +93,26 @@ public class ErrorCommand implements Commands {
         voltPer = 100.0;
     }
 
+    public ErrorCommand(String param, StendDLLCommands stendDLLCommands, String id, int phase, String current,
+                        double voltPer, int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
+        this.stendDLLCommands = stendDLLCommands;
+        this.id = id;
+        this.phase = phase;
+        this.current = current;
+        this.revers = revers;
+        this.currentPerсent = currentPercent;
+        this.iABC = iABC;
+        this.cosP = cosP;
+        this.channelFlag = channelFlag;
+        this.voltPer = voltPer;
+
+        //47.0%Un: 0.5L; 0.01 Ib
+        name = (voltPer + "%" + param + "n: " + cosP + "; " + currentPerсent + " " + current.trim());
+
+        currPer = Double.parseDouble(currentPerсent) * 100;
+        phaseSrequence = 0;
+    }
+
     @Override
     public void execute() {
         if (current.equals("Ib")) {
