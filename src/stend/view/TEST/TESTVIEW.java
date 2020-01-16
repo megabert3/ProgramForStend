@@ -63,7 +63,7 @@ public class TESTVIEW extends Application {
     //Это трёхфазный стенд?
     private boolean isThrePhaseStend;
 
-    //Лист с точками
+    //Лист с точками тестирования
     private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
@@ -756,6 +756,7 @@ public class TESTVIEW extends Application {
     private void setAPPlsTglBtn() {
         gridPaneUAPPlus.toFront();
         viewPointTableAPPls.toFront();
+        InflUpaneAPPls.toFront();
         APPlsPane.toFront();
         APPlus.setSelected(true);
         APMinus.setSelected(false);
@@ -773,6 +774,7 @@ public class TESTVIEW extends Application {
         gridPaneUAPMns.toFront();
         viewPointTableAPMns.toFront();
         APMnsPane.toFront();
+        InflUpaneAPMns.toFront();
         APPlus.setSelected(false);
         APMinus.setSelected(true);
         RPPlus.setSelected(false);
@@ -789,6 +791,7 @@ public class TESTVIEW extends Application {
         gridPaneURPPls.toFront();
         viewPointTableRPPls.toFront();
         RPPlsPane.toFront();
+        InflUpaneRPPls.toFront();
         APPlus.setSelected(false);
         APMinus.setSelected(false);
         RPPlus.setSelected(true);
@@ -805,6 +808,7 @@ public class TESTVIEW extends Application {
         gridPaneURPMns.toFront();
         viewPointTableRPMns.toFront();
         RPMnsPane.toFront();
+        InflUpaneRPMns.toFront();
         APPlus.setSelected(false);
         APMinus.setSelected(false);
         RPPlus.setSelected(false);
@@ -1170,23 +1174,29 @@ public class TESTVIEW extends Application {
 
             if (point[0].equals("U")) {
 
-                for (double proc : influenceUprocAPPls) {
-                    str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
+                for (double influenceUprocAPPl : influenceUprocAPPls) {
+                    str = influenceUprocAPPl + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-                    for (Commands command : testListForCollumAPPls) {
-                        errorCommand = (ErrorCommand) command;
-                        if (errorCommand.getName().equals(str)) testListForCollumAPPls.remove(command);
+                    for (int j = 0; j < testListForCollumAPPls.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumAPPls.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumAPPls.remove(testListForCollumAPPls.get(j));
+                            j--;
+                        }
                     }
                 }
             }
 
             if (point[0].equals("F")) {
-                for (double proc : influenceFprocAPPls) {
-                    str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
+                for (double influenceFprocAPPl : influenceFprocAPPls) {
+                    str = influenceFprocAPPl + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-                    for (Commands command : testListForCollumAPPls) {
-                        errorCommand = (ErrorCommand) command;
-                        if (errorCommand.getName().equals(str)) testListForCollumAPPls.remove(command);
+                    for (int j = 0; j < testListForCollumAPPls.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumAPPls.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumAPPls.remove(testListForCollumAPPls.get(j));
+                            j--;
+                        }
                     }
                 }
             }
@@ -1198,9 +1208,12 @@ public class TESTVIEW extends Application {
                 for (double proc : influenceUprocAPMns) {
                     str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-                    for (Commands command : testListForCollumAPMns) {
-                        errorCommand = (ErrorCommand) command;
-                        if (errorCommand.getName().equals(str)) testListForCollumAPMns.remove(command);
+                    for (int j = 0; j < testListForCollumAPMns.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumAPMns.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumAPMns.remove(testListForCollumAPMns.get(j));
+                            j--;
+                        }
                     }
                 }
             }
@@ -1209,9 +1222,12 @@ public class TESTVIEW extends Application {
                 for (double proc : influenceFprocAPMns) {
                     str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-                    for (Commands command : testListForCollumAPMns) {
-                        errorCommand = (ErrorCommand) command;
-                        if (errorCommand.getName().equals(str)) testListForCollumAPMns.remove(command);
+                    for (int j = 0; j < testListForCollumAPMns.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumAPMns.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumAPMns.remove(testListForCollumAPMns.get(j));
+                            j--;
+                        }
                     }
                 }
             }
@@ -1224,9 +1240,12 @@ public class TESTVIEW extends Application {
                 for (double proc : influenceUprocRPPls) {
                     str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-                    for (Commands command : testListForCollumRPPls) {
-                        errorCommand = (ErrorCommand) command;
-                        if (errorCommand.getName().equals(str)) testListForCollumRPPls.remove(command);
+                    for (int j = 0; j < testListForCollumRPPls.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumRPPls.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumRPPls.remove(testListForCollumRPPls.get(j));
+                            j--;
+                        }
                     }
                 }
             }
@@ -1235,9 +1254,12 @@ public class TESTVIEW extends Application {
                 for (double proc : influenceFprocRPPls) {
                     str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-                    for (Commands command : testListForCollumRPPls) {
-                        errorCommand = (ErrorCommand) command;
-                        if (errorCommand.getName().equals(str)) testListForCollumRPPls.remove(command);
+                    for (int j = 0; j < testListForCollumRPPls.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumRPPls.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumRPPls.remove(testListForCollumRPPls.get(j));
+                            j--;
+                        }
                     }
                 }
             }
@@ -1250,9 +1272,12 @@ public class TESTVIEW extends Application {
                 for (double proc : influenceUprocRPMns) {
                     str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-                    for (Commands command : testListForCollumRPMns) {
-                        errorCommand = (ErrorCommand) command;
-                        if (errorCommand.getName().equals(str)) testListForCollumRPMns.remove(command);
+                    for (int j = 0; j < testListForCollumRPMns.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumRPMns.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumRPMns.remove(testListForCollumRPMns.get(j));
+                            j--;
+                        }
                     }
                 }
             }
@@ -1261,9 +1286,12 @@ public class TESTVIEW extends Application {
                 for (double proc : influenceFprocRPMns) {
                     str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-                    for (Commands command : testListForCollumRPMns) {
-                        errorCommand = (ErrorCommand) command;
-                        if (errorCommand.getName().equals(str)) testListForCollumRPMns.remove(command);
+                    for (int j = 0; j < testListForCollumRPMns.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumRPMns.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumRPMns.remove(testListForCollumRPMns.get(j));
+                            j--;
+                        }
                     }
                 }
             }

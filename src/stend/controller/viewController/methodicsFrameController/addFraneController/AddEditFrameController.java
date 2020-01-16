@@ -50,10 +50,10 @@ public class AddEditFrameController {
     private boolean isThrePhaseStend;
 
     //Лист с точками
-    private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-    private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-    private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-    private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+    private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
+    private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
+    private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
+    private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
 
 
     public ObservableList<Commands> getTestListForCollumAPPls() {
@@ -655,15 +655,12 @@ public class AddEditFrameController {
                 txtFieldCRPUProcAPPls.setEditable(false);
 
                 CRPTogBtnAPPls.setSelected(true);
-                Methodic.commandsMap.get(0).add(creepCommand);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
+                testListForCollumAPPls.add(creepCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(0)) {
+                for (Commands command : testListForCollumAPPls) {
                     if (command instanceof CreepCommand) {
                         if (((CreepCommand) command).getName().equals("Самоход AP+")) {
-                            Methodic.commandsMap.get(0).remove(command);
+                            testListForCollumAPPls.remove(command);
                             break;
                         }
                     }
@@ -675,9 +672,6 @@ public class AddEditFrameController {
                 if (addTglBtnCRPAPPlsGOST.isSelected()) {
                     CRPTogBtnAPPls.setSelected(true);
                 } else CRPTogBtnAPPls.setSelected(false);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
             }
         }
 
@@ -692,15 +686,12 @@ public class AddEditFrameController {
 
                 CRPTogBtnAPPls.setSelected(true);
 
-                Methodic.commandsMap.get(0).add(creepCommand);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
+                testListForCollumAPPls.add(creepCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(0)) {
+                for (Commands command : testListForCollumAPPls) {
                     if (command instanceof CreepCommand) {
                         if (((CreepCommand) command).getName().equals("Самоход AP+ ГОСТ")) {
-                            Methodic.commandsMap.get(0).remove(command);
+                            testListForCollumAPPls.remove(command);
                             break;
                         }
                     }
@@ -709,9 +700,6 @@ public class AddEditFrameController {
                 if (addTglBtnCRPAPPls.isSelected()) {
                     CRPTogBtnAPPls.setSelected(true);
                 } else CRPTogBtnAPPls.setSelected(false);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
             }
         }
 
@@ -730,15 +718,12 @@ public class AddEditFrameController {
                 txtFieldCRPUProcAPMns.setEditable(false);
 
                 CRPTogBtnAPMns.setSelected(true);
-                Methodic.commandsMap.get(1).add(creepCommand);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
+                testListForCollumAPMns.add(creepCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(1)) {
+                for (Commands command : testListForCollumAPMns) {
                     if (command instanceof CreepCommand) {
                         if (((CreepCommand) command).getName().equals("Самоход AP-")) {
-                            Methodic.commandsMap.get(1).remove(command);
+                            testListForCollumAPMns.remove(command);
                             break;
                         }
                     }
@@ -750,9 +735,6 @@ public class AddEditFrameController {
                 if (addTglBtnCRPAPMnsGOST.isSelected()) {
                     CRPTogBtnAPMns.setSelected(true);
                 } else CRPTogBtnAPMns.setSelected(false);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
             }
         }
 
@@ -767,15 +749,12 @@ public class AddEditFrameController {
 
                 CRPTogBtnAPMns.setSelected(true);
 
-                Methodic.commandsMap.get(1).add(creepCommand);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
+                testListForCollumAPMns.add(creepCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(1)) {
+                for (Commands command : testListForCollumAPMns) {
                     if (command instanceof CreepCommand) {
                         if (((CreepCommand) command).getName().equals("Самоход AP- ГОСТ")) {
-                            Methodic.commandsMap.get(1).remove(command);
+                            testListForCollumAPMns.remove(command);
                             break;
                         }
                     }
@@ -784,9 +763,6 @@ public class AddEditFrameController {
                 if (addTglBtnCRPAPMns.isSelected()) {
                     CRPTogBtnAPMns.setSelected(true);
                 } else CRPTogBtnAPMns.setSelected(false);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
             }
         }
 
@@ -805,15 +781,12 @@ public class AddEditFrameController {
                 txtFieldCRPUProcRPPls.setEditable(false);
 
                 CRPTogBtnRPPls.setSelected(true);
-                Methodic.commandsMap.get(2).add(creepCommand);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
+                testListForCollumRPPls.add(creepCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(2)) {
+                for (Commands command : testListForCollumRPPls) {
                     if (command instanceof CreepCommand) {
                         if (((CreepCommand) command).getName().equals("Самоход RP+")) {
-                            Methodic.commandsMap.get(2).remove(command);
+                            testListForCollumRPPls.remove(command);
                             break;
                         }
                     }
@@ -825,9 +798,6 @@ public class AddEditFrameController {
                 if (addTglBtnCRPRPPlsGOST.isSelected()) {
                     CRPTogBtnRPPls.setSelected(true);
                 } else CRPTogBtnRPPls.setSelected(false);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
             }
         }
 
@@ -842,15 +812,12 @@ public class AddEditFrameController {
 
                 CRPTogBtnRPPls.setSelected(true);
 
-                Methodic.commandsMap.get(2).add(creepCommand);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
+                testListForCollumRPPls.add(creepCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(2)) {
+                for (Commands command : testListForCollumRPPls) {
                     if (command instanceof CreepCommand) {
                         if (((CreepCommand) command).getName().equals("Самоход RP+ ГОСТ")) {
-                            Methodic.commandsMap.get(2).remove(command);
+                            testListForCollumRPPls.remove(command);
                             break;
                         }
                     }
@@ -859,9 +826,6 @@ public class AddEditFrameController {
                 if (addTglBtnCRPRPPls.isSelected()) {
                     CRPTogBtnRPPls.setSelected(true);
                 } else CRPTogBtnRPPls.setSelected(false);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
             }
         }
 
@@ -880,15 +844,12 @@ public class AddEditFrameController {
                 txtFieldCRPUProcRPMns.setEditable(false);
 
                 CRPTogBtnRPMns.setSelected(true);
-                Methodic.commandsMap.get(3).add(creepCommand);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
+                testListForCollumRPMns.add(creepCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(3)) {
+                for (Commands command : testListForCollumRPMns) {
                     if (command instanceof CreepCommand) {
                         if (((CreepCommand) command).getName().equals("Самоход RP-")) {
-                            Methodic.commandsMap.get(3).remove(command);
+                            testListForCollumRPMns.remove(command);
                             break;
                         }
                     }
@@ -900,9 +861,6 @@ public class AddEditFrameController {
                 if (addTglBtnCRPRPMnsGOST.isSelected()) {
                     CRPTogBtnRPMns.setSelected(true);
                 } else CRPTogBtnRPMns.setSelected(false);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
             }
         }
 
@@ -917,15 +875,12 @@ public class AddEditFrameController {
 
                 CRPTogBtnRPMns.setSelected(true);
 
-                Methodic.commandsMap.get(3).add(creepCommand);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
+                testListForCollumRPMns.add(creepCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(3)) {
+                for (Commands command : testListForCollumRPMns) {
                     if (command instanceof CreepCommand) {
                         if (((CreepCommand) command).getName().equals("Самоход RP- ГОСТ")) {
-                            Methodic.commandsMap.get(3).remove(command);
+                            testListForCollumRPMns.remove(command);
                             break;
                         }
                     }
@@ -934,9 +889,6 @@ public class AddEditFrameController {
                 if (addTglBtnCRPRPMns.isSelected()) {
                     CRPTogBtnRPMns.setSelected(true);
                 } else CRPTogBtnRPMns.setSelected(false);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
             }
         }
         //------------------------------------------------------------------------------
@@ -956,15 +908,12 @@ public class AddEditFrameController {
                 txtFieldSTAIProcAPPls.setEditable(false);
 
                 STATogBtnAPPls.setSelected(true);
-                Methodic.commandsMap.get(0).add(startCommand);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
+                testListForCollumAPPls.add(startCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(0)) {
+                for (Commands command : testListForCollumAPPls) {
                     if (command instanceof StartCommand) {
                         if (((StartCommand) command).getName().equals("Чувствительность AP+")) {
-                            Methodic.commandsMap.get(0).remove(command);
+                            testListForCollumAPPls.remove(command);
                             break;
                         }
                     }
@@ -976,9 +925,6 @@ public class AddEditFrameController {
                 if (addTglBtnSTAAPPlsGOST.isSelected()) {
                     STATogBtnAPPls.setSelected(true);
                 } else STATogBtnAPPls.setSelected(false);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
             }
         }
 
@@ -990,15 +936,12 @@ public class AddEditFrameController {
                 startCommand.setName("Чувствительность ГОСТ AP+");
 
                 STATogBtnAPPls.setSelected(true);
-                Methodic.commandsMap.get(0).add(startCommand);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
+                testListForCollumAPPls.add(startCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(0)) {
+                for (Commands command : testListForCollumAPPls) {
                     if (command instanceof StartCommand) {
                         if (((StartCommand) command).getName().equals("Чувствительность ГОСТ AP+")) {
-                            Methodic.commandsMap.get(0).remove(command);
+                            testListForCollumAPPls.remove(command);
                             break;
                         }
                     }
@@ -1007,9 +950,6 @@ public class AddEditFrameController {
                 if (addTglBtnSTAAPPls.isSelected()) {
                     STATogBtnAPPls.setSelected(true);
                 } else STATogBtnAPPls.setSelected(false);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
             }
         }
 
@@ -1028,15 +968,12 @@ public class AddEditFrameController {
                 txtFieldSTAIProcAPMns.setEditable(false);
 
                 STATogBtnAPMns.setSelected(true);
-                Methodic.commandsMap.get(1).add(startCommand);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
+                testListForCollumAPMns.add(startCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(1)) {
+                for (Commands command : testListForCollumAPMns) {
                     if (command instanceof StartCommand) {
                         if (((StartCommand) command).getName().equals("Чувствительность AP-")) {
-                            Methodic.commandsMap.get(1).remove(command);
+                            testListForCollumAPMns.remove(command);
                             break;
                         }
                     }
@@ -1048,9 +985,6 @@ public class AddEditFrameController {
                 if (addTglBtnSTAAPMnsGOST.isSelected()) {
                     STATogBtnAPMns.setSelected(true);
                 } else STATogBtnAPMns.setSelected(false);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
             }
         }
 
@@ -1062,15 +996,12 @@ public class AddEditFrameController {
                 startCommand.setName("Чувствительность ГОСТ AP-");
 
                 STATogBtnAPMns.setSelected(true);
-                Methodic.commandsMap.get(1).add(startCommand);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
+                testListForCollumAPMns.add(startCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(1)) {
+                for (Commands command : testListForCollumAPMns) {
                     if (command instanceof StartCommand) {
                         if (((StartCommand) command).getName().equals("Чувствительность ГОСТ AP-")) {
-                            Methodic.commandsMap.get(1).remove(command);
+                            testListForCollumAPMns.remove(command);
                             break;
                         }
                     }
@@ -1079,9 +1010,6 @@ public class AddEditFrameController {
                 if (addTglBtnSTAAPMns.isSelected()) {
                     STATogBtnAPMns.setSelected(true);
                 } else STATogBtnAPMns.setSelected(false);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
             }
         }
 
@@ -1100,15 +1028,13 @@ public class AddEditFrameController {
                 txtFieldSTAIProcRPPls.setEditable(false);
 
                 STATogBtnRPPls.setSelected(true);
-                Methodic.commandsMap.get(2).add(startCommand);
+                testListForCollumRPPls.add(startCommand);
 
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
             } else {
-                for (Commands command : Methodic.commandsMap.get(2)) {
+                for (Commands command : testListForCollumRPPls) {
                     if (command instanceof StartCommand) {
                         if (((StartCommand) command).getName().equals("Чувствительность RP+")) {
-                            Methodic.commandsMap.get(2).remove(command);
+                            testListForCollumRPPls.remove(command);
                             break;
                         }
                     }
@@ -1120,9 +1046,6 @@ public class AddEditFrameController {
                 if (addTglBtnSTARPPlsGOST.isSelected()) {
                     STATogBtnRPPls.setSelected(true);
                 } else STATogBtnRPPls.setSelected(false);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
             }
         }
 
@@ -1134,15 +1057,12 @@ public class AddEditFrameController {
                 startCommand.setName("Чувствительность ГОСТ RP+");
 
                 STATogBtnRPPls.setSelected(true);
-                Methodic.commandsMap.get(2).add(startCommand);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
+                testListForCollumRPPls.add(startCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(2)) {
+                for (Commands command : testListForCollumRPPls) {
                     if (command instanceof StartCommand) {
                         if (((StartCommand) command).getName().equals("Чувствительность ГОСТ RP+")) {
-                            Methodic.commandsMap.get(2).remove(command);
+                            testListForCollumRPPls.remove(command);
                             break;
                         }
                     }
@@ -1151,9 +1071,6 @@ public class AddEditFrameController {
                 if (addTglBtnSTARPPls.isSelected()) {
                     STATogBtnRPPls.setSelected(true);
                 } else STATogBtnRPPls.setSelected(false);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
             }
         }
 
@@ -1172,15 +1089,12 @@ public class AddEditFrameController {
                 txtFieldSTAIProcRPMns.setEditable(false);
 
                 STATogBtnRPMns.setSelected(true);
-                Methodic.commandsMap.get(3).add(startCommand);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
+                testListForCollumRPMns.add(startCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(3)) {
+                for (Commands command : testListForCollumRPMns) {
                     if (command instanceof StartCommand) {
                         if (((StartCommand) command).getName().equals("Чувствительность RP-")) {
-                            Methodic.commandsMap.get(3).remove(command);
+                            testListForCollumRPMns.remove(command);
                             break;
                         }
                     }
@@ -1192,9 +1106,6 @@ public class AddEditFrameController {
                 if (addTglBtnSTARPMnsGOST.isSelected()) {
                     STATogBtnRPMns.setSelected(true);
                 } else STATogBtnRPMns.setSelected(false);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
             }
         }
 
@@ -1206,15 +1117,12 @@ public class AddEditFrameController {
                 startCommand.setName("Чувствительность ГОСТ RP-");
 
                 STATogBtnRPMns.setSelected(true);
-                Methodic.commandsMap.get(3).add(startCommand);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
+                testListForCollumRPMns.add(startCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(3)) {
+                for (Commands command : testListForCollumRPMns) {
                     if (command instanceof StartCommand) {
                         if (((StartCommand) command).getName().equals("Чувствительность ГОСТ RP-")) {
-                            Methodic.commandsMap.get(3).remove(command);
+                            testListForCollumRPMns.remove(command);
                             break;
                         }
                     }
@@ -1223,9 +1131,6 @@ public class AddEditFrameController {
                 if (addTglBtnSTARPMns.isSelected()) {
                     STATogBtnRPMns.setSelected(true);
                 } else STATogBtnRPMns.setSelected(false);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
             }
         }
 
@@ -1246,7 +1151,7 @@ public class AddEditFrameController {
 
                 rtcCommand.setName("ТХЧ AP+");
 
-                Methodic.commandsMap.get(0).add(rtcCommand);
+                testListForCollumAPPls.add(rtcCommand);
 
                 RTCTogBtnAPPls.setSelected(true);
                 ChcBxRTCErrAPPls.getItems().clear();
@@ -1255,14 +1160,11 @@ public class AddEditFrameController {
                 txtFldRTCTimeMshAPPls.setEditable(false);
                 txtFldRTCAmtMshAPPls.setEditable(false);
                 txtFieldRngEAPPls.setEditable(false);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
             } else {
-                for (Commands command : Methodic.commandsMap.get(0)) {
+                for (Commands command : testListForCollumAPPls) {
                     if (command instanceof RTCCommand) {
                         if (((RTCCommand) command).getName().equals("ТХЧ AP+")) {
-                            Methodic.commandsMap.get(0).remove(command);
+                            testListForCollumAPPls.remove(command);
                             break;
                         }
                     }
@@ -1275,9 +1177,6 @@ public class AddEditFrameController {
                 txtFldRTCTimeMshAPPls.setEditable(true);
                 txtFldRTCAmtMshAPPls.setEditable(true);
                 txtFieldRngEAPPls.setEditable(true);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
             }
         }
 
@@ -1304,15 +1203,12 @@ public class AddEditFrameController {
                 txtFldRTCAmtMshAPMns.setEditable(false);
                 txtFieldRngEAPMns.setEditable(false);
 
-                Methodic.commandsMap.get(1).add(rtcCommand);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
+                testListForCollumAPMns.add(rtcCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(1)) {
+                for (Commands command : testListForCollumAPMns) {
                     if (command instanceof RTCCommand) {
                         if (((RTCCommand) command).getName().equals("ТХЧ AP-")) {
-                            Methodic.commandsMap.get(1).remove(command);
+                            testListForCollumAPMns.remove(command);
                             break;
                         }
                     }
@@ -1325,9 +1221,6 @@ public class AddEditFrameController {
                 txtFldRTCTimeMshAPMns.setEditable(true);
                 txtFldRTCAmtMshAPMns.setEditable(true);
                 txtFieldRngEAPMns.setEditable(true);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
             }
         }
 
@@ -1354,15 +1247,13 @@ public class AddEditFrameController {
                 txtFldRTCAmtMshRPPls.setEditable(false);
                 txtFieldRngERPPls.setEditable(false);
 
-                Methodic.commandsMap.get(2).add(rtcCommand);
+                testListForCollumRPPls.add(rtcCommand);
 
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
             } else {
-                for (Commands command : Methodic.commandsMap.get(2)) {
+                for (Commands command : testListForCollumRPPls) {
                     if (command instanceof RTCCommand) {
                         if (((RTCCommand) command).getName().equals("ТХЧ RP+")) {
-                            Methodic.commandsMap.get(2).remove(command);
+                            testListForCollumRPPls.remove(command);
                             break;
                         }
                     }
@@ -1375,9 +1266,6 @@ public class AddEditFrameController {
                 txtFldRTCTimeMshRPPls.setEditable(true);
                 txtFldRTCAmtMshRPPls.setEditable(true);
                 txtFieldRngERPPls.setEditable(true);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
             }
         }
 
@@ -1404,15 +1292,12 @@ public class AddEditFrameController {
                 txtFldRTCAmtMshRPMns.setEditable(false);
                 txtFieldRngERPMns.setEditable(false);
 
-                Methodic.commandsMap.get(3).add(rtcCommand);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
+                testListForCollumRPMns.add(rtcCommand);
             } else {
-                for (Commands command : Methodic.commandsMap.get(3)) {
+                for (Commands command : testListForCollumRPMns) {
                     if (command instanceof RTCCommand) {
                         if (((RTCCommand) command).getName().equals("ТХЧ RP-")) {
-                            Methodic.commandsMap.get(3).remove(command);
+                            testListForCollumRPMns.remove(command);
                             break;
                         }
                     }
@@ -1425,9 +1310,6 @@ public class AddEditFrameController {
                 txtFldRTCTimeMshRPMns.setEditable(true);
                 txtFldRTCAmtMshRPMns.setEditable(true);
                 txtFieldRngERPMns.setEditable(true);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
             }
         }
     }
@@ -1554,36 +1436,12 @@ public class AddEditFrameController {
                 checkBox.setId(pane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
                 CheckBox finalCheckBox = checkBox;
                 String[] idCheckBox = finalCheckBox.getId().split(";");
-                String energy = idCheckBox[2];
-                String direction = idCheckBox[3];
 
                 checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
                     if (newVal) {
                         addTestPointInMethodic(finalCheckBox.getId());
-                        if (energy.equals("A") && direction.equals("P")) {
-                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                            viewPointTableAPPls.setItems(testListForCollumAPPls);
-                        }
-
-                        if (energy.equals("A") && direction.equals("N")) {
-                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                            viewPointTableAPMns.setItems(testListForCollumAPPls);
-                        }
-
-                        if (energy.equals("R") && direction.equals("P")) {
-                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                            viewPointTableRPPls.setItems(testListForCollumAPPls);
-                        }
-
-                        if (energy.equals("R") && direction.equals("N")) {
-                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                            viewPointTableRPMns.setItems(testListForCollumAPPls);
-                        }
-                        System.out.println("Кнопка зажата " + finalCheckBox.getId() + "\n" + "Количество точек: " + Methodic.commandsMap.get(0).size());
-
                     } else {
                         deleteTestPointInMethodic(idCheckBox);
-                        System.out.println("Кнопка разжата " + finalCheckBox.getId());
                     }
                 });
                 GridPane.setColumnIndex(checkBox, x + 1);
@@ -1639,7 +1497,6 @@ public class AddEditFrameController {
             viewPointTableAPPls.toFront();
             APPlsPane.toFront();
             paneCRPAPPls.toFront();
-
 
             APPlus.setSelected(true);
             APMinus.setSelected(false);
@@ -1983,19 +1840,19 @@ public class AddEditFrameController {
 
 
         if (energyType.equals("A") && currentDirection.equals("P")) {
-            methodic.addCommandToList(0, new ErrorCommand(stendDLLCommands, testPoint, phase, current, 0, percent, iABC, powerFactor, 0));
+            testListForCollumAPPls.add(new ErrorCommand(stendDLLCommands, testPoint, phase, current, 0, percent, iABC, powerFactor, 0));
         }
 
         if (energyType.equals("A") && currentDirection.equals("N")) {
-            methodic.addCommandToList(1, new ErrorCommand(stendDLLCommands, testPoint, phase, current, 1, percent, iABC, powerFactor, 1));
+            testListForCollumAPMns.add(new ErrorCommand(stendDLLCommands, testPoint, phase, current, 1, percent, iABC, powerFactor, 1));
         }
 
         if (energyType.equals("R") && currentDirection.equals("P")) {
-            methodic.addCommandToList(2, new ErrorCommand(stendDLLCommands, testPoint, phase, current, 0, percent, iABC, powerFactor, 2));
+            testListForCollumRPPls.add(new ErrorCommand(stendDLLCommands, testPoint, phase, current, 0, percent, iABC, powerFactor, 2));
         }
 
         if (energyType.equals("R") && currentDirection.equals("N")) {
-            methodic.addCommandToList(3, new ErrorCommand(stendDLLCommands, testPoint, phase, current, 1, percent, iABC, powerFactor, 3));
+            testListForCollumRPMns.add(new ErrorCommand(stendDLLCommands, testPoint, phase, current, 1, percent, iABC, powerFactor, 3));
         }
     }
 
@@ -2009,17 +1866,15 @@ public class AddEditFrameController {
                 str = point[5] + "; " + point[4];
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
-            for (Commands current : Methodic.commandsMap.get(0)) {
+            for (Commands current : testListForCollumAPPls) {
                 if (current instanceof ErrorCommand) {
                     errorCommand = (ErrorCommand) current;
                     if (errorCommand.getName().equals(str)) {
-                        Methodic.commandsMap.get(0).remove(current);
+                        testListForCollumAPPls.remove(current);
                         break;
                     }
                 }
             }
-            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-            viewPointTableAPPls.setItems(testListForCollumAPPls);
         }
 
         if (point[2].equals("A") && point[3].equals("N")) {
@@ -2028,17 +1883,15 @@ public class AddEditFrameController {
                 str = point[5] + "; " + point[4];
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
-            for (Commands current : Methodic.commandsMap.get(1)) {
+            for (Commands current : testListForCollumAPMns) {
                 if (current instanceof ErrorCommand) {
                     errorCommand = (ErrorCommand) current;
                     if (errorCommand.getName().equals(str)) {
-                        Methodic.commandsMap.get(1).remove(current);
+                        testListForCollumAPMns.remove(current);
                         break;
                     }
                 }
             }
-            testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-            viewPointTableAPMns.setItems(testListForCollumAPMns);
         }
 
         if (point[2].equals("R") && point[3].equals("P")) {
@@ -2047,17 +1900,15 @@ public class AddEditFrameController {
                 str = point[5] + "; " + point[4];
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
-            for (Commands current : Methodic.commandsMap.get(2)) {
+            for (Commands current : testListForCollumRPPls) {
                 if (current instanceof ErrorCommand) {
                     errorCommand = (ErrorCommand) current;
                     if (errorCommand.getName().equals(str)) {
-                        Methodic.commandsMap.get(2).remove(current);
+                        testListForCollumRPPls.remove(current);
                         break;
                     }
                 }
             }
-            testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-            viewPointTableRPPls.setItems(testListForCollumRPPls);
         }
 
         if (point[2].equals("R") && point[3].equals("N")) {
@@ -2066,17 +1917,15 @@ public class AddEditFrameController {
                 str = point[5] + "; " + point[4];
             }else str = point[1] + ": " + point[5] + "; " + point[4];
 
-            for (Commands current : Methodic.commandsMap.get(3)) {
+            for (Commands current : testListForCollumRPMns) {
                 if (current instanceof ErrorCommand) {
                     errorCommand = (ErrorCommand) current;
                     if (errorCommand.getName().equals(str)) {
-                        Methodic.commandsMap.get(3).remove(current);
+                        testListForCollumRPMns.remove(current);
                         break;
                     }
                 }
             }
-            testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-            viewPointTableRPMns.setItems(testListForCollumRPMns);
         }
     }
 
