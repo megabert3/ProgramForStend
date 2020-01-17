@@ -23,12 +23,9 @@ import stend.controller.Commands.*;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
-import stend.controller.viewController.methodicsFrameController.addFraneController.AddEditFrameController;
 import stend.helper.ConsoleHelper;
-import stend.model.Methodic;
+import stend.model.MethodicsForTest;
 
-import javax.annotation.processing.SupportedSourceVersion;
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -42,9 +39,7 @@ public class TESTVIEW extends Application {
         primaryStage.show();
     }
 
-    private Map<String, CheckBox> checkBoxMap = new HashMap<>();
-
-    private Methodic methodic = new Methodic();
+    private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
     private StendDLLCommands stendDLLCommands;
 
@@ -52,10 +47,10 @@ public class TESTVIEW extends Application {
     private String metodicName = "default";
 
     //Значения коэффициента мощности
-    private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C");
+    private List<String> powerFactor = methodicsForTest.getPowerFactor();
 
     //Значения выставленного тока
-    private List<String> current = Arrays.asList("1.0 Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "1.0 Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.02 Ib", "0.02 Ib", "0.01 Ib");
+    private List<String> current = methodicsForTest.getCurrent();
 
     //Список GridPane для выставления точек поверки
     private List<GridPane> gridPanesEnergyAndPhase;
@@ -68,6 +63,17 @@ public class TESTVIEW extends Application {
     private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
+
+    //Листы с checkBox'ами.
+    private ArrayList<CheckBox> checkBoxesListUAPPls = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListUAPMns = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListURPPls = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListURPMns = new ArrayList<>();
+
+    private ArrayList<CheckBox> checkBoxesListFAPPls = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListFAPMns = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListFRPPls = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListFRPMns = new ArrayList<>();
 
     @FXML
     private ResourceBundle resources = ResourceBundle.getBundle("stendProperties");
@@ -265,9 +271,6 @@ public class TESTVIEW extends Application {
 
     @FXML
     private TextField txtFieldInfUAPMns;
-
-    @FXML
-    private Pane InflUnblnsPaneAPMns;
 
     @FXML
     private ToggleButton addTglBtnInfFAPMns;
@@ -520,6 +523,10 @@ public class TESTVIEW extends Application {
                 txtFieldInfUAPPls.setDisable(false);
                 gridPaneUAPPlus.setDisable(true);
                 InfluenceTglBtnUAPPls.setSelected(false);
+
+                for (CheckBox checkBox :checkBoxesListUAPPls) {
+                    checkBox.setSelected(false);
+                }
             }
         }
 
@@ -541,6 +548,10 @@ public class TESTVIEW extends Application {
                 txtFieldInfFAPPls.setDisable(false);
                 gridPaneFAPPlus.setDisable(true);
                 InfluenceTglBtnFAPPls.setSelected(false);
+
+                for (CheckBox checkBox :checkBoxesListFAPPls) {
+                    checkBox.setSelected(false);
+                }
             }
         }
 
@@ -576,6 +587,10 @@ public class TESTVIEW extends Application {
                 txtFieldInfUAPMns.setDisable(false);
                 gridPaneUAPMns.setDisable(true);
                 InfluenceTglBtnUAPMns.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListUAPMns) {
+                    checkBox.setSelected(false);
+                }
             }
         }
 
@@ -597,6 +612,10 @@ public class TESTVIEW extends Application {
                 txtFieldInfFAPMns.setDisable(false);
                 gridPaneFAPMns.setDisable(true);
                 InfluenceTglBtnFAPMns.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListFAPMns) {
+                    checkBox.setSelected(false);
+                }
             }
         }
 
@@ -632,6 +651,10 @@ public class TESTVIEW extends Application {
                 txtFieldInfURPPls.setDisable(false);
                 gridPaneURPPls.setDisable(true);
                 InfluenceTglBtnURPPls.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListURPPls) {
+                    checkBox.setSelected(false);
+                }
             }
         }
 
@@ -653,6 +676,10 @@ public class TESTVIEW extends Application {
                 txtFieldInfFRPPls.setDisable(false);
                 gridPaneFRPPls.setDisable(true);
                 InfluenceTglBtnFRPPls.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListFRPPls) {
+                    checkBox.setSelected(false);
+                }
             }
         }
 
@@ -688,6 +715,10 @@ public class TESTVIEW extends Application {
                 txtFieldInfURPMns.setDisable(false);
                 gridPaneURPMns.setDisable(true);
                 InfluenceTglBtnURPMns.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListURPMns) {
+                    checkBox.setSelected(false);
+                }
             }
         }
 
@@ -709,6 +740,10 @@ public class TESTVIEW extends Application {
                 txtFieldInfFRPMns.setDisable(false);
                 gridPaneFRPMns.setDisable(true);
                 InfluenceTglBtnFRPMns.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListFRPMns) {
+                    checkBox.setSelected(false);
+                }
             }
         }
 
@@ -908,6 +943,46 @@ public class TESTVIEW extends Application {
                 checkBox.setId(pane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
                 CheckBox finalCheckBox = checkBox;
                 String[] idCheckBox = finalCheckBox.getId().split(";");
+
+                if (idCheckBox[0].equals("U") && idCheckBox[3].equals("A")) {
+                    if (idCheckBox[4].equals("P")) {
+                        checkBoxesListUAPPls.add(checkBox);
+                    }
+
+                    if (idCheckBox[4].equals("N")) {
+                        checkBoxesListUAPMns.add(checkBox);
+                    }
+                }
+
+                if (idCheckBox[0].equals("U") && idCheckBox[3].equals("R")) {
+                    if (idCheckBox[4].equals("P")) {
+                        checkBoxesListURPPls.add(checkBox);
+                    }
+
+                    if (idCheckBox[4].equals("N")) {
+                        checkBoxesListURPMns.add(checkBox);
+                    }
+                }
+
+                if (idCheckBox[0].equals("F") && idCheckBox[3].equals("A")) {
+                    if (idCheckBox[4].equals("P")) {
+                        checkBoxesListFAPPls.add(checkBox);
+                    }
+
+                    if (idCheckBox[4].equals("N")) {
+                        checkBoxesListFAPMns.add(checkBox);
+                    }
+                }
+
+                if (idCheckBox[0].equals("F") && idCheckBox[3].equals("R")) {
+                    if (idCheckBox[4].equals("P")) {
+                        checkBoxesListFRPPls.add(checkBox);
+                    }
+
+                    if (idCheckBox[4].equals("N")) {
+                        checkBoxesListFRPMns.add(checkBox);
+                    }
+                }
 
                 //Действие при нажатии на чек бокс
                 checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
@@ -1295,18 +1370,6 @@ public class TESTVIEW extends Application {
                     }
                 }
             }
-        }
-    }
-
-    private void loadStage(String fxml, String stageName) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
-            Stage stage = new Stage();
-            stage.setTitle(stageName);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

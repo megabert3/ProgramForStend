@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Methodic {
 
-    public static Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
+    private static Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
 
     private static List<Commands> activeEnergyDirect = new ArrayList<>();
     private static List<Commands> activeEnergyRevers = new ArrayList<>();
@@ -17,7 +17,6 @@ public class Methodic {
     private static List<Commands> reactiveEnergyReverse = new ArrayList<>();
 
     static {
-        //activeEnergyDirect.add(new ErrorCommand(ThreePhaseStend.getThreePhaseStendInstance(), 3, "Ib", 0, "df", "dsf", "fdf", 0));
         commandsMap.put(0, activeEnergyDirect);
         commandsMap.put(1, activeEnergyRevers);
         commandsMap.put(2, reactiveEnergyDirect);
@@ -26,9 +25,12 @@ public class Methodic {
 
     private String methodicName;
 
+    public void addCommandToList(Integer numb, ArrayList<Commands> list) {
+        commandsMap.get(numb).addAll(list);
+    }
 
-    public void addCommandToList(Integer numb, Commands command) {
-        commandsMap.get(numb).add(command);
+    public static Map<Integer, List<Commands>> getCommandsMap() {
+        return commandsMap;
     }
 
     public String getMethodicName() {

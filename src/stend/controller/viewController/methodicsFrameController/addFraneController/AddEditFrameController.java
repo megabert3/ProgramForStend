@@ -18,30 +18,34 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import stend.controller.Commands.*;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
 import stend.helper.ConsoleHelper;
+import stend.helper.exeptions.InfoExeption;
 import stend.model.Methodic;
+import stend.model.MethodicsForTest;
 
 public class AddEditFrameController {
 
-    private Map<String, CheckBox> checkBoxMap = new HashMap<>();
+    private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
+
+    public Methodic getMethodic() {
+        return methodic;
+    }
 
     private Methodic methodic = new Methodic();
 
     private StendDLLCommands stendDLLCommands;
 
-    //Имя методики поверки
-    private String metodicName = "default";
-
     //Значения коэффициента мощности
-    private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C");
+    private List<String> powerFactor = methodicsForTest.getPowerFactor();
 
     //Значения выставленного тока
-    private List<String> current = Arrays.asList("1.0 Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "1.0 Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.02 Ib", "0.02 Ib", "0.01 Ib");
+    private List<String> current = methodicsForTest.getCurrent();
 
     //Список GridPane для выставления точек поверки
     private List<GridPane> gridPanesEnergyAndPhase;
@@ -54,23 +58,6 @@ public class AddEditFrameController {
     private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
-
-
-    public ObservableList<Commands> getTestListForCollumAPPls() {
-        return testListForCollumAPPls;
-    }
-
-    public ObservableList<Commands> getTestListForCollumAPMns() {
-        return testListForCollumAPMns;
-    }
-
-    public ObservableList<Commands> getTestListForCollumRPPls() {
-        return testListForCollumRPPls;
-    }
-
-    public ObservableList<Commands> getTestListForCollumRPMns() {
-        return testListForCollumRPMns;
-    }
 
     @FXML
     private ResourceBundle resources = ResourceBundle.getBundle("stendProperties");
@@ -625,6 +612,37 @@ public class AddEditFrameController {
 
     @FXML
     void saveOrCancelAction(ActionEvent event) {
+        if (event.getSource() == SaveBtn) {
+            String metName;
+
+            if (!metodicNameTxtFld.getText().isEmpty()) {
+                metName = metodicNameTxtFld.getText();
+
+                ArrayList<Commands> APPls = new ArrayList<>(testListForCollumAPPls);
+                ArrayList<Commands> APMns = new ArrayList<>(testListForCollumAPMns);
+                ArrayList<Commands> RPPls = new ArrayList<>(testListForCollumRPPls);
+                ArrayList<Commands> RPMns = new ArrayList<>(testListForCollumRPMns);
+
+                methodic.addCommandToList(0, APPls);
+                methodic.addCommandToList(1, APMns);
+                methodic.addCommandToList(2, RPPls);
+                methodic.addCommandToList(3, RPMns);
+
+                try {
+                    methodicsForTest.addMethodicListToMap(metName, methodic);
+                    System.out.println("Методика успешно добавлена");
+                    System.out.println(methodicsForTest.getMethodicsMap().size());
+
+                } catch (InfoExeption infoExeption) {
+                    infoExeption.printStackTrace();
+                }
+            } else System.out.println("Ведите название методики");
+        }
+
+        if (event.getSource() == CancelBtn) {
+            Stage thisScene = (Stage) CancelBtn.getScene().getWindow();
+            thisScene.close();
+        }
     }
 
     //Устанавливает значения Tgl Btn grid и добавления тестов ТХЧ и т.д.
@@ -1933,8 +1951,10 @@ public class AddEditFrameController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxml));
             Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle(stageName);
             stage.setScene(new Scene(root));
+
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();

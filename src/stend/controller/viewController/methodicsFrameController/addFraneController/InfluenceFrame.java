@@ -1,9 +1,5 @@
 package stend.controller.viewController.methodicsFrameController.addFraneController;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
-
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,24 +8,26 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
-import stend.controller.Commands.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.RowConstraints;
+import stend.controller.Commands.Commands;
+import stend.controller.Commands.ErrorCommand;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
 import stend.helper.ConsoleHelper;
-import stend.model.Methodic;
+import stend.model.MethodicsForTest;
+
+import java.net.URL;
+import java.util.*;
 
 public class InfluenceFrame {
-    private Map<String, CheckBox> checkBoxMap = new HashMap<>();
-
-    private Methodic methodic = new Methodic();
+    private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
     private StendDLLCommands stendDLLCommands;
 
@@ -37,10 +35,10 @@ public class InfluenceFrame {
     private String metodicName = "default";
 
     //Значения коэффициента мощности
-    private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C");
+    private List<String> powerFactor = methodicsForTest.getPowerFactor();
 
     //Значения выставленного тока
-    private List<String> current = Arrays.asList("1.0 Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "1.0 Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.02 Ib", "0.02 Ib", "0.01 Ib");
+    private List<String> current = methodicsForTest.getCurrent();
 
     //Список GridPane для выставления точек поверки
     private List<GridPane> gridPanesEnergyAndPhase;
@@ -48,11 +46,22 @@ public class InfluenceFrame {
     //Это трёхфазный стенд?
     private boolean isThrePhaseStend;
 
-    //Лист с точками
-    private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-    private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-    private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-    private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
+    //Лист с точками тестирования
+    private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
+    private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
+    private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
+    private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
+
+    //Листы с checkBox'ами.
+    private ArrayList<CheckBox> checkBoxesListUAPPls = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListUAPMns = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListURPPls = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListURPMns = new ArrayList<>();
+
+    private ArrayList<CheckBox> checkBoxesListFAPPls = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListFAPMns = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListFRPPls = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesListFRPMns = new ArrayList<>();
 
     @FXML
     private ResourceBundle resources = ResourceBundle.getBundle("stendProperties");
@@ -130,71 +139,36 @@ public class InfluenceFrame {
     private TableColumn<Commands, String> amountImplTabColRPMns;
     //-------------------------------------------------------
     //Данный блок отвечает за сетку выбора точки.
-    //Активная энергия в прямом направлении, Все фазы и отдельно А В С
-    @FXML
-    private GridPane gridPaneAllPhaseAPPlus;
+    //Влияние напряжения
 
     @FXML
-    private GridPane gridPanePhaseAAPPlus;
+    private GridPane gridPaneUAPPlus;
 
     @FXML
-    private GridPane gridPanePhaseBAPPlus;
+    private GridPane gridPaneUAPMns;
 
     @FXML
-    private GridPane gridPanePhaseCAPPlus;
-
-    //Активная энергия в обратном направлении, Все фазы и отдельно А В С
-    @FXML
-    private GridPane gridPaneAllPhaseAPMinus;
+    private GridPane gridPaneURPPls;
 
     @FXML
-    private GridPane gridPanePhaseAAPMinus;
+    private GridPane gridPaneURPMns;
+
+    //Влияние частоты
+    @FXML
+    private GridPane gridPaneFAPPlus;
 
     @FXML
-    private GridPane gridPanePhaseBAPMinus;
+    private GridPane gridPaneFAPMns;
 
     @FXML
-    private GridPane gridPanePhaseCAPMinus;
-
-    //Реактивная энергия в прямом направлении, Все фазы и отдельно А В С
-    @FXML
-    private GridPane gridPaneAllPhaseRPPlus;
+    private GridPane gridPaneFRPPls;
 
     @FXML
-    private GridPane gridPanePhaseARPPlus;
-
-    @FXML
-    private GridPane gridPanePhaseBRPPlus;
-
-    @FXML
-    private GridPane gridPanePhaseCRPPlus;
-
-    //Реактивная энергия в обратном направлении, Все фазы и отдельно А В С
-    @FXML
-    private GridPane gridPaneAllPhaseRPMinus;
-
-    @FXML
-    private GridPane gridPanePhaseARPMinus;
-
-    @FXML
-    private GridPane gridPanePhaseBRPMinus;
-
-    @FXML
-    private GridPane gridPanePhaseCRPMinus;
+    private GridPane gridPaneFRPMns;
 
     //-------------------------------------------------------
-
     @FXML
     private ToggleButton allPhaseBtn;
-
-    @FXML
-    private ToggleButton APhaseBtn;
-
-    @FXML
-    private ToggleButton BPhaseBtn;
-
-    @FXML
-    private ToggleButton CPhaseBtn;
 
     @FXML
     private ToggleButton APPlus;
@@ -208,13 +182,14 @@ public class InfluenceFrame {
     @FXML
     private ToggleButton RPMinus;
 
+    //-------------------------------------------------------
     @FXML
     private Button CancelBtn;
 
     @FXML
     private Button SaveBtn;
 
-    //Этот блок кода отвечает за установку параметров тестов Самахода, ТХЧ, Константы и Чувствительности
+    //Этот блок кода отвечает за установку параметров тестов Влияния
     //---------------------------------------------------------------------
     //Активная энергия в прямом напралении
     @FXML
@@ -224,85 +199,40 @@ public class InfluenceFrame {
     private Pane APPlsPane;
 
     @FXML
-    private ToggleButton CRPTogBtnAPPls;
+    private ToggleButton InfluenceTglBtnUAPPls;
 
     @FXML
-    private ToggleButton STATogBtnAPPls;
+    private ToggleButton InfluenceTglBtnFAPPls;
 
     @FXML
-    private ToggleButton RTCTogBtnAPPls;
+    private ToggleButton InfluenceTglBtnUnbAPPls;
 
     @FXML
-    private ToggleButton ConstTogBtnAPPls;
+    private Pane InflUpaneAPPls;
 
     @FXML
-    private Pane paneConstAPPls;
+    private ToggleButton addTglBtnInfUAPPls;
 
     @FXML
-    private TextField txtFieldConsErAPPls;
+    private TextField txtFieldInfUAPPls;
 
     @FXML
-    private TextField txtFieldEngConstAPPls;
+    private Pane InflUnblnsPaneAPPls;
 
     @FXML
-    private TextField txtFieldConstAPPls;
+    private ToggleButton addTglBtnInfFAPPls;
 
     @FXML
-    private ToggleButton addTglBtnConstAPPls;
+    private TextField txtFieldInfFAPPls;
 
     @FXML
-    private Pane paneRTCAPPls;
+    private Pane InflFpaneAPPls;
 
     @FXML
-    private TextField txtFieldRngEAPPls;
+    private ToggleButton addTglBtnInfUnblAPPls;
 
     @FXML
-    private TextField txtFldRTCAmtMshAPPls;
-
-    @FXML
-    private ToggleButton addTglBtnRTCAPPls;
-
-    @FXML
-    private ChoiceBox<String> ChcBxRTCErrAPPls;
-
-    @FXML
-    private TextField txtFldRTCTimeMshAPPls;
-
-    @FXML
-    private Pane paneCRPAPPls;
-
-    @FXML
-    private TextField txtFieldCRPUProcAPPls;
-
-    @FXML
-    private TextField txtFieldTimeCRPAPPls;
-
-    @FXML
-    private TextField txtFieldCRPAmtImpAPPls;
-
-    @FXML
-    private ToggleButton addTglBtnCRPAPPls;
-
-    @FXML
-    private ToggleButton addTglBtnCRPAPPlsGOST;
-
-    @FXML
-    private Pane paneSTAAPPls;
-
-    @FXML
-    private TextField txtFieldSTAIProcAPPls;
-
-    @FXML
-    private TextField txtFieldTimeSRAAPPls;
-
-    @FXML
-    private TextField txtFieldSTAAmtImpAPPls;
-
-    @FXML
-    private ToggleButton addTglBtnSTAAPPls;
-
-    @FXML
-    private ToggleButton addTglBtnSTAAPPlsGOST;
+    private TextField txtFieldInfUnblAPPls;
 
     //Активная энергия в обратном напралении
     //--------------------------------------------------------
@@ -313,174 +243,37 @@ public class InfluenceFrame {
     private Pane APMnsPane;
 
     @FXML
-    private ToggleButton CRPTogBtnAPMns;
+    private ToggleButton InfluenceTglBtnUAPMns;
 
     @FXML
-    private ToggleButton STATogBtnAPMns;
+    private ToggleButton InfluenceTglBtnFAPMns;
 
     @FXML
-    private ToggleButton RTCTogBtnAPMns;
+    private ToggleButton InfluenceTglBtnUnbAPMns;
 
     @FXML
-    private ToggleButton ConstTogBtnAPMns;
+    private Pane InflUpaneAPMns;
 
     @FXML
-    private Pane paneCRPAPMns;
+    private ToggleButton addTglBtnInfUAPMns;
 
     @FXML
-    private TextField txtFieldCRPUProcAPMns;
+    private TextField txtFieldInfUAPMns;
 
     @FXML
-    private TextField txtFieldTimeCRPAPMns;
+    private ToggleButton addTglBtnInfFAPMns;
 
     @FXML
-    private TextField txtFieldCRPAmtImpAPMns;
+    private TextField txtFieldInfFAPMns;
 
     @FXML
-    private ToggleButton addTglBtnCRPAPMns;
+    private Pane InflFpaneAPMns;
 
     @FXML
-    private ToggleButton addTglBtnCRPAPMnsGOST;
+    private ToggleButton addTglBtnInfUnblAPMns;
 
     @FXML
-    private Pane paneSTAAPMns;
-
-    @FXML
-    private TextField txtFieldSTAIProcAPMns;
-
-    @FXML
-    private TextField txtFieldTimeSRAAPMns;
-
-    @FXML
-    private TextField txtFieldSTAAmtImpAPMns;
-
-    @FXML
-    private ToggleButton addTglBtnSTAAPMns;
-
-    @FXML
-    private ToggleButton addTglBtnSTAAPMnsGOST;
-
-    @FXML
-    private Pane paneRTCAPMns;
-
-    @FXML
-    private TextField txtFieldRngEAPMns;
-
-    @FXML
-    private TextField txtFldRTCAmtMshAPMns;
-
-    @FXML
-    private ToggleButton addTglBtnRTCAPMns;
-
-    @FXML
-    private ChoiceBox<String> ChcBxRTCErrAPMns;
-
-    @FXML
-    private TextField txtFldRTCTimeMshAPMns;
-
-    @FXML
-    private Pane paneConstAPMns;
-
-    @FXML
-    private TextField txtFieldConsErAPMns;
-
-    @FXML
-    private TextField txtFieldEngConstAPMns;
-
-    @FXML
-    private TextField txtFieldConstAPMns;
-
-    @FXML
-    private ToggleButton addTglBtnConstAPMns;
-
-    //Реактивная энергия в прямом направлении
-    //--------------------------------------------------------
-    @FXML
-    private ToggleButton RPPlusCRPSTA;
-
-    @FXML
-    private Pane RPPlsPane;
-
-    @FXML
-    private ToggleButton CRPTogBtnRPPls;
-
-    @FXML
-    private ToggleButton STATogBtnRPPls;
-
-    @FXML
-    private ToggleButton RTCTogBtnRPPls;
-
-    @FXML
-    private ToggleButton ConstTogBtnRPPls;
-
-    @FXML
-    private Pane paneCRPRPPls;
-
-    @FXML
-    private TextField txtFieldCRPUProcRPPls;
-
-    @FXML
-    private TextField txtFieldTimeCRPRPPls;
-
-    @FXML
-    private TextField txtFieldCRPAmtImpRPPls;
-
-    @FXML
-    private ToggleButton addTglBtnCRPRPPls;
-
-    @FXML
-    private ToggleButton addTglBtnCRPRPPlsGOST;
-
-    @FXML
-    private Pane paneSTARPPls;
-
-    @FXML
-    private TextField txtFieldSTAIProcRPPls;
-
-    @FXML
-    private TextField txtFieldTimeSRARPPls;
-
-    @FXML
-    private TextField txtFieldSTAAmtImpRPPls;
-
-    @FXML
-    private ToggleButton addTglBtnSTARPPls;
-
-    @FXML
-    private ToggleButton addTglBtnSTARPPlsGOST;
-
-    @FXML
-    private Pane paneRTCRPPls;
-
-    @FXML
-    private TextField txtFieldRngERPPls;
-
-    @FXML
-    private TextField txtFldRTCAmtMshRPPls;
-
-    @FXML
-    private ToggleButton addTglBtnRTCRPPls;
-
-    @FXML
-    private ChoiceBox<String> ChcBxRTCErrRPPls;
-
-    @FXML
-    private TextField txtFldRTCTimeMshRPPls;
-
-    @FXML
-    private Pane paneConstRPPls;
-
-    @FXML
-    private TextField txtFieldConsErRPPls;
-
-    @FXML
-    private TextField txtFieldEngConstRPPls;
-
-    @FXML
-    private TextField txtFieldConstRPPls;
-
-    @FXML
-    private ToggleButton addTglBtnConstRPPls;
+    private TextField txtFieldInfUnblAPMns;
 
     //--------------------------------------------------------
     //Реактивная энергия в обратном направлении
@@ -491,938 +284,566 @@ public class InfluenceFrame {
     private Pane RPMnsPane;
 
     @FXML
-    private ToggleButton CRPTogBtnRPMns;
+    private ToggleButton InfluenceTglBtnURPMns;
 
     @FXML
-    private ToggleButton STATogBtnRPMns;
+    private ToggleButton InfluenceTglBtnFRPMns;
 
     @FXML
-    private ToggleButton RTCTogBtnRPMns;
+    private ToggleButton InfluenceTglBtnUnbRPMns;
 
     @FXML
-    private ToggleButton ConstTogBtnRPMns;
+    private Pane InflUpaneRPMns;
 
     @FXML
-    private Pane paneCRPRPMns;
+    private ToggleButton addTglBtnInfURPMns;
 
     @FXML
-    private TextField txtFieldCRPUProcRPMns;
+    private TextField txtFieldInfURPMns;
 
     @FXML
-    private TextField txtFieldTimeCRPRPMns;
+    private Pane InflUnblnsPaneRPMns;
 
     @FXML
-    private TextField txtFieldCRPAmtImpRPMns;
+    private ToggleButton addTglBtnInfFRPMns;
 
     @FXML
-    private ToggleButton addTglBtnCRPRPMns;
+    private TextField txtFieldInfFRPMns;
 
     @FXML
-    private ToggleButton addTglBtnCRPRPMnsGOST;
+    private Pane InflFpaneRPMns;
 
     @FXML
-    private Pane paneSTARPMns;
+    private ToggleButton addTglBtnInfUnblRPMns;
 
     @FXML
-    private TextField txtFieldSTAIProcRPMns;
-
-    @FXML
-    private TextField txtFieldTimeSRARPMns;
-
-    @FXML
-    private TextField txtFieldSTAAmtImpRPMns;
-
-    @FXML
-    private ToggleButton addTglBtnSTARPMns;
-
-    @FXML
-    private ToggleButton addTglBtnSTARPMnsGOST;
-
-    @FXML
-    private Pane paneRTCRPMns;
-
-    @FXML
-    private TextField txtFieldRngERPMns;
-
-    @FXML
-    private TextField txtFldRTCAmtMshRPMns;
-
-    @FXML
-    private TextField txtFldRTCTimeMshRPMns;
-
-    @FXML
-    private ToggleButton addTglBtnRTCRPMns;
-
-    @FXML
-    private Pane paneConstRPMns;
-
-    @FXML
-    private TextField txtFieldConsErRPMns;
-
-    @FXML
-    private TextField txtFieldEngConstRPMns;
-
-    @FXML
-    private TextField txtFieldConstRPMns;
-
-    @FXML
-    private ChoiceBox<String> ChcBxRTCErrRPMns;
-
-    @FXML
-    private ToggleButton addTglBtnConstRPMns;
+    private TextField txtFieldInfUnblRPMns;
     //---------------------------------------------------------------------
 
     @FXML
-    private TextField metodicNameTxtFld;
+    private ToggleButton RPPlusCRPSTA;
 
     @FXML
-    private Button influenceBtn;
+    private Pane RPPlsPane;
+
+    @FXML
+    private Pane InflUInbPaneAPPls;
+
+    @FXML
+    private Pane InflUInbPaneAPMns;
+
+    @FXML
+    private Pane InflUInbPaneRPPls;
+
+    @FXML
+    private ToggleButton InfluenceTglBtnURPPls;
+
+    @FXML
+    private ToggleButton InfluenceTglBtnFRPPls;
+
+    @FXML
+    private ToggleButton addTglBtnInfURPPls;
+
+    @FXML
+    private ToggleButton addTglBtnInfFRPPls;
+
+    @FXML
+    private Pane InflFpaneRPPls;
+
+    @FXML
+    private ToggleButton InfluenceTglBtnUnbRPPls;
+
+    @FXML
+    private ToggleButton addTglBtnInfUnblRPPls;
+
+    @FXML
+    private Pane InflUpaneRPPls;
+
+    @FXML
+    private TextField txtFieldInfURPPls;
+
+    @FXML
+    private TextField txtFieldInfFRPPls;
+
+    @FXML
+    private TextField txtFieldInfUnblRPPls;
+
+
+    //Поля необходимые для добавления точки испытания на влияние
+    //AP+
+    private double[] influenceUprocAPPls;
+    private double[] influenceFprocAPPls;
+    private String[] influenceInbUAPPls;
+
+    //AP-
+    private double[] influenceUprocAPMns;
+    private double[] influenceFprocAPMns;
+    private String[] influenceInbUAPMns;
+
+    //RP+
+    private double[] influenceUprocRPPls;
+    private double[] influenceFprocRPPls;
+    private String[] influenceInbURPPls;
+
+    //RP-
+    private double[] influenceUprocRPMns;
+    private double[] influenceFprocRPMns;
+    private String[] influenceInbURPMns;
+
+
 
     @FXML
     void initialize() {
         if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
             isThrePhaseStend = true;
         }
-
         initGridPane();
-        APPlus.setSelected(true);
-        allPhaseBtn.setSelected(true);
-        APPlusCRPSTA.setSelected(true);
-        APPlsPane.toFront();
-        paneCRPAPPls.toFront();
 
-        initCoiseBoxParamForRTC();
-        gridPaneAllPhaseAPPlus.toFront();
+        APPlsPane.toFront();
         viewPointTableAPPls.toFront();
+        gridPaneUAPPlus.toFront();
+        InflUpaneAPPls.toFront();
+
+        APPlusCRPSTA.setSelected(true);
+        APPlus.setSelected(true);
+        allPhaseBtn.setDisable(true);
+
+        for (GridPane pane : gridPanesEnergyAndPhase) {
+            pane.setDisable(true);
+        }
 
         initTableView();
     }
 
+    //Отвечает за отображение нужного окна настроек влияния
     @FXML
-    void influenceAction(ActionEvent event) {
+    void addInfluenceTests(ActionEvent event) {
+        //AP+
+        if (event.getSource() == InfluenceTglBtnUAPPls) {
+            InfluenceTglBtnUAPPls.setSelected(addTglBtnInfUAPPls.isSelected());
+            gridPaneUAPPlus.toFront();
+            InflUpaneAPPls.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnFAPPls) {
+            InfluenceTglBtnFAPPls.setSelected(addTglBtnInfFAPPls.isSelected());
+            gridPaneFAPPlus.toFront();
+            InflFpaneAPPls.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnUnbAPPls) {
+            InfluenceTglBtnUnbAPPls.setSelected(addTglBtnInfUnblAPPls.isSelected());
+            InflUInbPaneAPPls.toFront();
+        }
+
+        //AP-
+        if (event.getSource() == InfluenceTglBtnUAPMns) {
+            InfluenceTglBtnUAPMns.setSelected(addTglBtnInfUAPMns.isSelected());
+            gridPaneUAPMns.toFront();
+            InflUpaneAPMns.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnFAPMns) {
+            InfluenceTglBtnFAPMns.setSelected(addTglBtnInfFAPMns.isSelected());
+            gridPaneFAPMns.toFront();
+            InflFpaneAPMns.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnUnbAPMns) {
+            InfluenceTglBtnUnbAPMns.setSelected(addTglBtnInfUnblAPMns.isSelected());
+            InflUInbPaneAPMns.toFront();
+        }
+
+        //RP+
+        if (event.getSource() == InfluenceTglBtnURPPls) {
+            InfluenceTglBtnURPPls.setSelected(addTglBtnInfURPPls.isSelected());
+            gridPaneURPPls.toFront();
+            InflUpaneRPPls.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnFRPPls) {
+            InfluenceTglBtnFRPPls.setSelected(addTglBtnInfFRPPls.isSelected());
+            gridPaneFRPPls.toFront();
+            InflFpaneRPPls.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnUnbRPPls) {
+            InfluenceTglBtnUnbRPPls.setSelected(addTglBtnInfUnblRPPls.isSelected());
+            InflUInbPaneRPPls.toFront();
+        }
+
+        //RP-
+        if (event.getSource() == InfluenceTglBtnURPMns) {
+            InfluenceTglBtnURPMns.setSelected(addTglBtnInfURPMns.isSelected());
+            gridPaneURPMns.toFront();
+            InflUpaneRPMns.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnFRPMns) {
+            InfluenceTglBtnFRPMns.setSelected(addTglBtnInfFRPMns.isSelected());
+            gridPaneFRPMns.toFront();
+            InflFpaneRPMns.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnUnbRPMns) {
+            InfluenceTglBtnUnbRPMns.setSelected(addTglBtnInfUnblRPMns.isSelected());
+            InflUnblnsPaneRPMns.toFront();
+        }
+
+        //Добавление параметров для добавления точек испытания
+        String[] procentArr;
+
+        //AP+ Uproc
+        if (event.getSource() == addTglBtnInfUAPPls) {
+            if (addTglBtnInfUAPPls.isSelected()) {
+                procentArr = txtFieldInfUAPPls.getText().split(",");
+                influenceUprocAPPls = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceUprocAPPls[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnUAPPls.setSelected(true);
+                txtFieldInfUAPPls.setDisable(true);
+
+                gridPaneUAPPlus.setDisable(false);
+            } else {
+                txtFieldInfUAPPls.setDisable(false);
+                gridPaneUAPPlus.setDisable(true);
+                InfluenceTglBtnUAPPls.setSelected(false);
+
+                for (CheckBox checkBox :checkBoxesListUAPPls) {
+                    checkBox.setSelected(false);
+                }
+            }
+        }
+
+        //AP+ Fproc
+        if (event.getSource() == addTglBtnInfFAPPls) {
+            if (addTglBtnInfFAPPls.isSelected()) {
+                procentArr = txtFieldInfFAPPls.getText().split(",");
+                influenceFprocAPPls = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceFprocAPPls[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnFAPPls.setSelected(true);
+                txtFieldInfFAPPls.setDisable(true);
+
+                gridPaneFAPPlus.setDisable(false);
+            } else {
+                txtFieldInfFAPPls.setDisable(false);
+                gridPaneFAPPlus.setDisable(true);
+                InfluenceTglBtnFAPPls.setSelected(false);
+
+                for (CheckBox checkBox :checkBoxesListFAPPls) {
+                    checkBox.setSelected(false);
+                }
+            }
+        }
+
+        //AP+ Uinbl
+        if (event.getSource() == addTglBtnInfUnblAPPls) {
+            if (addTglBtnInfUnblAPPls.isSelected()) {
+                influenceInbUAPPls = txtFieldInfUnblAPPls.getText().split(",");
+
+                InfluenceTglBtnUnbAPPls.setSelected(true);
+                txtFieldInfUnblAPPls.setDisable(true);
+            } else {
+                InfluenceTglBtnUnbAPPls.setSelected(false);
+                txtFieldInfUnblAPPls.setDisable(false);
+            }
+        }
+
+
+        //AP- Uproc
+        if (event.getSource() == addTglBtnInfUAPMns) {
+            if (addTglBtnInfUAPMns.isSelected()) {
+                procentArr = txtFieldInfUAPMns.getText().split(",");
+                influenceUprocAPMns = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceUprocAPMns[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnUAPMns.setSelected(true);
+                txtFieldInfUAPMns.setDisable(true);
+
+                gridPaneUAPMns.setDisable(false);
+            } else {
+                txtFieldInfUAPMns.setDisable(false);
+                gridPaneUAPMns.setDisable(true);
+                InfluenceTglBtnUAPMns.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListUAPMns) {
+                    checkBox.setSelected(false);
+                }
+            }
+        }
+
+        //AP- Fproc
+        if (event.getSource() == addTglBtnInfFAPMns) {
+            if (addTglBtnInfFAPMns.isSelected()) {
+                procentArr = txtFieldInfFAPMns.getText().split(",");
+                influenceFprocAPMns = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceFprocAPMns[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnFAPMns.setSelected(true);
+                txtFieldInfFAPMns.setDisable(true);
+
+                gridPaneFAPMns.setDisable(false);
+            } else {
+                txtFieldInfFAPMns.setDisable(false);
+                gridPaneFAPMns.setDisable(true);
+                InfluenceTglBtnFAPMns.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListFAPMns) {
+                    checkBox.setSelected(false);
+                }
+            }
+        }
+
+        //AP- Uinbl
+        if (event.getSource() == addTglBtnInfUnblAPMns) {
+            if (addTglBtnInfUnblAPMns.isSelected()) {
+                influenceInbUAPMns = txtFieldInfUnblAPMns.getText().split(",");
+
+                InfluenceTglBtnUnbAPMns.setSelected(true);
+                txtFieldInfUnblAPMns.setDisable(true);
+            } else {
+                InfluenceTglBtnUnbAPMns.setSelected(false);
+                txtFieldInfUnblAPMns.setDisable(false);
+            }
+        }
+
+
+        //RP+ Uproc
+        if (event.getSource() == addTglBtnInfURPPls) {
+            if (addTglBtnInfURPPls.isSelected()) {
+                procentArr = txtFieldInfURPPls.getText().split(",");
+                influenceUprocRPPls = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceUprocRPPls[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnURPPls.setSelected(true);
+                txtFieldInfURPPls.setDisable(true);
+
+                gridPaneURPPls.setDisable(false);
+            } else {
+                txtFieldInfURPPls.setDisable(false);
+                gridPaneURPPls.setDisable(true);
+                InfluenceTglBtnURPPls.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListURPPls) {
+                    checkBox.setSelected(false);
+                }
+            }
+        }
+
+        //RP+ Fproc
+        if (event.getSource() == addTglBtnInfFRPPls) {
+            if (addTglBtnInfFRPPls.isSelected()) {
+                procentArr = txtFieldInfFRPPls.getText().split(",");
+                influenceFprocRPPls = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceFprocRPPls[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnFRPPls.setSelected(true);
+                txtFieldInfFRPPls.setDisable(true);
+
+                gridPaneFRPPls.setDisable(false);
+            } else {
+                txtFieldInfFRPPls.setDisable(false);
+                gridPaneFRPPls.setDisable(true);
+                InfluenceTglBtnFRPPls.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListFRPPls) {
+                    checkBox.setSelected(false);
+                }
+            }
+        }
+
+        //RP+ Uinbl
+        if (event.getSource() == addTglBtnInfUnblRPPls) {
+            if (addTglBtnInfUnblRPPls.isSelected()) {
+                influenceInbURPPls= txtFieldInfUnblRPPls.getText().split(",");
+
+                InfluenceTglBtnUnbRPPls.setSelected(true);
+                txtFieldInfUnblRPPls.setDisable(true);
+            } else {
+                InfluenceTglBtnUnbRPPls.setSelected(false);
+                txtFieldInfUnblRPPls.setDisable(false);
+            }
+        }
+
+
+        //RP- Uproc
+        if (event.getSource() == addTglBtnInfURPMns) {
+            if (addTglBtnInfURPMns.isSelected()) {
+                procentArr = txtFieldInfURPMns.getText().split(",");
+                influenceUprocRPMns = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceUprocRPMns[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnURPMns.setSelected(true);
+                txtFieldInfURPMns.setDisable(true);
+
+                gridPaneURPMns.setDisable(false);
+            } else {
+                txtFieldInfURPMns.setDisable(false);
+                gridPaneURPMns.setDisable(true);
+                InfluenceTglBtnURPMns.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListURPMns) {
+                    checkBox.setSelected(false);
+                }
+            }
+        }
+
+        //RP- Fproc
+        if (event.getSource() == addTglBtnInfFRPMns) {
+            if (addTglBtnInfFRPMns.isSelected()) {
+                procentArr = txtFieldInfFRPMns.getText().split(",");
+                influenceFprocRPMns = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceFprocRPMns[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnFRPMns.setSelected(true);
+                txtFieldInfFRPMns.setDisable(true);
+
+                gridPaneFRPMns.setDisable(false);
+            } else {
+                txtFieldInfFRPMns.setDisable(false);
+                gridPaneFRPMns.setDisable(true);
+                InfluenceTglBtnFRPMns.setSelected(false);
+
+                for (CheckBox checkBox : checkBoxesListFRPMns) {
+                    checkBox.setSelected(false);
+                }
+            }
+        }
+
+        //RP- Uinbl
+        if (event.getSource() == addTglBtnInfUnblRPMns) {
+            if (addTglBtnInfUnblRPMns.isSelected()) {
+                influenceInbURPMns = txtFieldInfUnblRPMns.getText().split(",");
+
+                InfluenceTglBtnUnbRPMns.setSelected(true);
+                txtFieldInfUnblRPMns.setDisable(true);
+            } else {
+                InfluenceTglBtnUnbRPMns.setSelected(false);
+                txtFieldInfUnblRPMns.setDisable(false);
+            }
+        }
     }
 
     @FXML
     void saveOrCancelAction(ActionEvent event) {
+        if (event.getSource() == SaveBtn) {
+
+        }
     }
 
-    //Устанавливает значения Tgl Btn grid и добавления тестов ТХЧ и т.д.
-    // в соответствующие значения
+    //Устанавливает значение TgBtn в соответствующие значения
     @FXML
     void setPointFrameAction(ActionEvent event) {
-        setGropToggleButton(event);
-        gridPaneToFront(Objects.requireNonNull(getGridPane()));
+        //Кнопки выбора необходимой сетки
+        if (event.getSource() == APPlus || event.getSource() == APPlusCRPSTA) {
+            setAPPlsTglBtn();
+        }
+
+        if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
+            setAPMnsTglBtn();
+        }
+
+        if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
+            setRPPlsTglBtn();
+        }
+
+        if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
+            setRPMnsTglBtn();
+        }
+
     }
 
-    @FXML
-    void addSTAcRPrTCcOnst(ActionEvent event) {
-        //Действие для добавления теста Самоход
-        CreepCommand creepCommand;
-        //---------------------------------------------------------------------------------------
-        //Добаление самохода с параметрами пользователя AP+
-        if (event.getSource() == addTglBtnCRPAPPls) {
-            if (addTglBtnCRPAPPls.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, false, 0);
-
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
-                creepCommand.setUserTimeTest(txtFieldTimeCRPAPPls.getText());
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
-                creepCommand.setName("Самоход AP+");
-
-                txtFieldCRPAmtImpAPPls.setEditable(false);
-                txtFieldTimeCRPAPPls.setEditable(false);
-                txtFieldCRPUProcAPPls.setEditable(false);
-
-                CRPTogBtnAPPls.setSelected(true);
-                Methodic.commandsMap.get(0).add(creepCommand);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(0)) {
-                    if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход AP+")) {
-                            Methodic.commandsMap.get(0).remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldCRPAmtImpAPPls.setEditable(true);
-                txtFieldTimeCRPAPPls.setEditable(true);
-                txtFieldCRPUProcAPPls.setEditable(true);
-
-                if (addTglBtnCRPAPPlsGOST.isSelected()) {
-                    CRPTogBtnAPPls.setSelected(true);
-                } else CRPTogBtnAPPls.setSelected(false);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
-            }
-        }
-
-        //Добаление самохода с параметрами по ГОСТу AP+
-        if (event.getSource() == addTglBtnCRPAPPlsGOST) {
-            if (addTglBtnCRPAPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, true, 0);
-
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход AP+ ГОСТ");
-
-                CRPTogBtnAPPls.setSelected(true);
-
-                Methodic.commandsMap.get(0).add(creepCommand);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(0)) {
-                    if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход AP+ ГОСТ")) {
-                            Methodic.commandsMap.get(0).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnCRPAPPls.isSelected()) {
-                    CRPTogBtnAPPls.setSelected(true);
-                } else CRPTogBtnAPPls.setSelected(false);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
-            }
-        }
-
-        //Добаление самохода с параметрами пользователя AP-
-        if (event.getSource() == addTglBtnCRPAPMns) {
-            if (addTglBtnCRPAPMns.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, false, 1);
-
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
-                creepCommand.setUserTimeTest(txtFieldTimeCRPAPMns.getText());
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPMns.getText()));
-                creepCommand.setName("Самоход AP-");
-
-                txtFieldCRPAmtImpAPMns.setEditable(false);
-                txtFieldTimeCRPAPMns.setEditable(false);
-                txtFieldCRPUProcAPMns.setEditable(false);
-
-                CRPTogBtnAPMns.setSelected(true);
-                Methodic.commandsMap.get(1).add(creepCommand);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(1)) {
-                    if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход AP-")) {
-                            Methodic.commandsMap.get(1).remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldCRPAmtImpAPMns.setEditable(true);
-                txtFieldTimeCRPAPMns.setEditable(true);
-                txtFieldCRPUProcAPMns.setEditable(true);
-
-                if (addTglBtnCRPAPMnsGOST.isSelected()) {
-                    CRPTogBtnAPMns.setSelected(true);
-                } else CRPTogBtnAPMns.setSelected(false);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
-            }
-        }
-
-        //Добаление самохода с параметрами по ГОСТу AP-
-        if (event.getSource() == addTglBtnCRPAPMnsGOST) {
-            if (addTglBtnCRPAPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, true, 1);
-
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход AP- ГОСТ");
-
-                CRPTogBtnAPMns.setSelected(true);
-
-                Methodic.commandsMap.get(1).add(creepCommand);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(1)) {
-                    if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход AP- ГОСТ")) {
-                            Methodic.commandsMap.get(1).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnCRPAPMns.isSelected()) {
-                    CRPTogBtnAPMns.setSelected(true);
-                } else CRPTogBtnAPMns.setSelected(false);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
-            }
-        }
-
-        //Добаление самохода с параметрами пользователя RP+
-        if (event.getSource() == addTglBtnCRPRPPls) {
-            if (addTglBtnCRPRPPls.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, false, 2);
-
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
-                creepCommand.setUserTimeTest(txtFieldTimeCRPRPPls.getText());
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPPls.getText()));
-                creepCommand.setName("Самоход RP+");
-
-                txtFieldCRPAmtImpRPPls.setEditable(false);
-                txtFieldTimeCRPRPPls.setEditable(false);
-                txtFieldCRPUProcRPPls.setEditable(false);
-
-                CRPTogBtnRPPls.setSelected(true);
-                Methodic.commandsMap.get(2).add(creepCommand);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(2)) {
-                    if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход RP+")) {
-                            Methodic.commandsMap.get(2).remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldCRPAmtImpRPPls.setEditable(true);
-                txtFieldTimeCRPRPPls.setEditable(true);
-                txtFieldCRPUProcRPPls.setEditable(true);
-
-                if (addTglBtnCRPRPPlsGOST.isSelected()) {
-                    CRPTogBtnRPPls.setSelected(true);
-                } else CRPTogBtnRPPls.setSelected(false);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
-            }
-        }
-
-        //Добаление самохода с параметрами по ГОСТу RP+
-        if (event.getSource() == addTglBtnCRPRPPlsGOST) {
-            if (addTglBtnCRPRPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, true, 2);
-
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход RP+ ГОСТ");
-
-                CRPTogBtnRPPls.setSelected(true);
-
-                Methodic.commandsMap.get(2).add(creepCommand);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(2)) {
-                    if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход RP+ ГОСТ")) {
-                            Methodic.commandsMap.get(2).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnCRPRPPls.isSelected()) {
-                    CRPTogBtnRPPls.setSelected(true);
-                } else CRPTogBtnRPPls.setSelected(false);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
-            }
-        }
-
-        //Добаление самохода с параметрами пользователя RP-
-        if (event.getSource() == addTglBtnCRPRPMns) {
-            if (addTglBtnCRPRPMns.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, false, 3);
-
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
-                creepCommand.setUserTimeTest(txtFieldTimeCRPRPMns.getText());
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPMns.getText()));
-                creepCommand.setName("Самоход RP-");
-
-                txtFieldCRPAmtImpRPMns.setEditable(false);
-                txtFieldTimeCRPRPMns.setEditable(false);
-                txtFieldCRPUProcRPMns.setEditable(false);
-
-                CRPTogBtnRPMns.setSelected(true);
-                Methodic.commandsMap.get(3).add(creepCommand);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(3)) {
-                    if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход RP-")) {
-                            Methodic.commandsMap.get(3).remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldCRPAmtImpRPMns.setEditable(true);
-                txtFieldTimeCRPRPMns.setEditable(true);
-                txtFieldCRPUProcRPMns.setEditable(true);
-
-                if (addTglBtnCRPRPMnsGOST.isSelected()) {
-                    CRPTogBtnRPMns.setSelected(true);
-                } else CRPTogBtnRPMns.setSelected(false);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
-            }
-        }
-
-        //Добаление самохода с параметрами по ГОСТу RP-
-        if (event.getSource() == addTglBtnCRPRPMnsGOST) {
-            if (addTglBtnCRPRPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, true, 3);
-
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход RP- ГОСТ");
-
-                CRPTogBtnRPMns.setSelected(true);
-
-                Methodic.commandsMap.get(3).add(creepCommand);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(3)) {
-                    if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход RP- ГОСТ")) {
-                            Methodic.commandsMap.get(3).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnCRPRPMns.isSelected()) {
-                    CRPTogBtnRPMns.setSelected(true);
-                } else CRPTogBtnRPMns.setSelected(false);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
-            }
-        }
-        //------------------------------------------------------------------------------
-        //Добаление теста на чувствительность с параметрами пользователя AP+
-        StartCommand startCommand;
-        if (event.getSource() == addTglBtnSTAAPPls) {
-            if (addTglBtnSTAAPPls.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 0, 0, false);
-
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPPls.getText()));
-                startCommand.setUserTimeTest(txtFieldTimeSRAAPPls.getText());
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPPls.getText()));
-                startCommand.setName("Чувствительность AP+");
-
-                txtFieldSTAAmtImpAPPls.setEditable(false);
-                txtFieldTimeSRAAPPls.setEditable(false);
-                txtFieldSTAIProcAPPls.setEditable(false);
-
-                STATogBtnAPPls.setSelected(true);
-                Methodic.commandsMap.get(0).add(startCommand);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(0)) {
-                    if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность AP+")) {
-                            Methodic.commandsMap.get(0).remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldSTAAmtImpAPPls.setEditable(true);
-                txtFieldTimeSRAAPPls.setEditable(true);
-                txtFieldSTAIProcAPPls.setEditable(true);
-
-                if (addTglBtnSTAAPPlsGOST.isSelected()) {
-                    STATogBtnAPPls.setSelected(true);
-                } else STATogBtnAPPls.setSelected(false);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами по ГОСТу AP+
-        if (event.getSource() == addTglBtnSTAAPPlsGOST) {
-            if (addTglBtnSTAAPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 0, 0, true);
-
-                startCommand.setName("Чувствительность ГОСТ AP+");
-
-                STATogBtnAPPls.setSelected(true);
-                Methodic.commandsMap.get(0).add(startCommand);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(0)) {
-                    if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ AP+")) {
-                            Methodic.commandsMap.get(0).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnSTAAPPls.isSelected()) {
-                    STATogBtnAPPls.setSelected(true);
-                } else STATogBtnAPPls.setSelected(false);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами пользователя AP-
-        if (event.getSource() == addTglBtnSTAAPMns) {
-            if (addTglBtnSTAAPMns.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 1, 1, false);
-
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPMns.getText()));
-                startCommand.setUserTimeTest(txtFieldTimeSRAAPMns.getText());
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPMns.getText()));
-                startCommand.setName("Чувствительность AP-");
-
-                txtFieldSTAAmtImpAPMns.setEditable(false);
-                txtFieldTimeSRAAPMns.setEditable(false);
-                txtFieldSTAIProcAPMns.setEditable(false);
-
-                STATogBtnAPMns.setSelected(true);
-                Methodic.commandsMap.get(1).add(startCommand);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(1)) {
-                    if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность AP-")) {
-                            Methodic.commandsMap.get(1).remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldSTAAmtImpAPMns.setEditable(true);
-                txtFieldTimeSRAAPMns.setEditable(true);
-                txtFieldSTAIProcAPMns.setEditable(true);
-
-                if (addTglBtnSTAAPMnsGOST.isSelected()) {
-                    STATogBtnAPMns.setSelected(true);
-                } else STATogBtnAPMns.setSelected(false);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами по ГОСТу AP-
-        if (event.getSource() == addTglBtnSTAAPMnsGOST) {
-            if (addTglBtnSTAAPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 1, 1, true);
-
-                startCommand.setName("Чувствительность ГОСТ AP-");
-
-                STATogBtnAPMns.setSelected(true);
-                Methodic.commandsMap.get(1).add(startCommand);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(1)) {
-                    if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ AP-")) {
-                            Methodic.commandsMap.get(1).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnSTAAPMns.isSelected()) {
-                    STATogBtnAPMns.setSelected(true);
-                } else STATogBtnAPMns.setSelected(false);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами пользователя RP+
-        if (event.getSource() == addTglBtnSTARPPls) {
-            if (addTglBtnSTARPPls.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 0, 2, false);
-
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPPls.getText()));
-                startCommand.setUserTimeTest(txtFieldTimeSRARPPls.getText());
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPPls.getText()));
-                startCommand.setName("Чувствительность RP+");
-
-                txtFieldSTAAmtImpRPPls.setEditable(false);
-                txtFieldTimeSRARPPls.setEditable(false);
-                txtFieldSTAIProcRPPls.setEditable(false);
-
-                STATogBtnRPPls.setSelected(true);
-                Methodic.commandsMap.get(2).add(startCommand);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(2)) {
-                    if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность RP+")) {
-                            Methodic.commandsMap.get(2).remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldSTAAmtImpRPPls.setEditable(true);
-                txtFieldTimeSRARPPls.setEditable(true);
-                txtFieldSTAIProcRPPls.setEditable(true);
-
-                if (addTglBtnSTARPPlsGOST.isSelected()) {
-                    STATogBtnRPPls.setSelected(true);
-                } else STATogBtnRPPls.setSelected(false);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами по ГОСТу RP+
-        if (event.getSource() == addTglBtnSTARPPlsGOST) {
-            if (addTglBtnSTARPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 0, 1, true);
-
-                startCommand.setName("Чувствительность ГОСТ RP+");
-
-                STATogBtnRPPls.setSelected(true);
-                Methodic.commandsMap.get(2).add(startCommand);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(2)) {
-                    if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ RP+")) {
-                            Methodic.commandsMap.get(2).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnSTARPPls.isSelected()) {
-                    STATogBtnRPPls.setSelected(true);
-                } else STATogBtnRPPls.setSelected(false);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами пользователя RP-
-        if (event.getSource() == addTglBtnSTARPMns) {
-            if (addTglBtnSTARPMns.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 1, 3, false);
-
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPMns.getText()));
-                startCommand.setUserTimeTest(txtFieldTimeSRARPMns.getText());
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPMns.getText()));
-                startCommand.setName("Чувствительность RP-");
-
-                txtFieldSTAAmtImpRPMns.setEditable(false);
-                txtFieldTimeSRARPMns.setEditable(false);
-                txtFieldSTAIProcRPMns.setEditable(false);
-
-                STATogBtnRPMns.setSelected(true);
-                Methodic.commandsMap.get(3).add(startCommand);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(3)) {
-                    if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность RP-")) {
-                            Methodic.commandsMap.get(3).remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldSTAAmtImpRPMns.setEditable(true);
-                txtFieldTimeSRARPMns.setEditable(true);
-                txtFieldSTAIProcRPMns.setEditable(true);
-
-                if (addTglBtnSTARPMnsGOST.isSelected()) {
-                    STATogBtnRPMns.setSelected(true);
-                } else STATogBtnRPMns.setSelected(false);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами по ГОСТу RP-
-        if (event.getSource() == addTglBtnSTARPMnsGOST) {
-            if (addTglBtnSTARPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 0, 3, true);
-
-                startCommand.setName("Чувствительность ГОСТ RP-");
-
-                STATogBtnRPMns.setSelected(true);
-                Methodic.commandsMap.get(3).add(startCommand);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(3)) {
-                    if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ RP-")) {
-                            Methodic.commandsMap.get(3).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnSTARPMns.isSelected()) {
-                    STATogBtnRPMns.setSelected(true);
-                } else STATogBtnRPMns.setSelected(false);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
-            }
-        }
-
-        RTCCommand rtcCommand;
-        //Добаление теста "точность хода часов" AP+
-        String cbValue;
-        if(event.getSource() == addTglBtnRTCAPPls) {
-            if (addTglBtnRTCAPPls.isSelected()) {
-                if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 0, Double.parseDouble(txtFieldRngEAPPls.getText()));
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 1, Double.parseDouble(txtFieldRngEAPPls.getText()));
-                    cbValue = "Сутч. погрешность";
-                }
-
-                rtcCommand.setName("ТХЧ AP+");
-
-                Methodic.commandsMap.get(0).add(rtcCommand);
-
-                RTCTogBtnAPPls.setSelected(true);
-                ChcBxRTCErrAPPls.getItems().clear();
-                ChcBxRTCErrAPPls.getItems().addAll(cbValue);
-                ChcBxRTCErrAPPls.getSelectionModel().select(0);
-                txtFldRTCTimeMshAPPls.setEditable(false);
-                txtFldRTCAmtMshAPPls.setEditable(false);
-                txtFieldRngEAPPls.setEditable(false);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(0)) {
-                    if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ AP+")) {
-                            Methodic.commandsMap.get(0).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                RTCTogBtnAPPls.setSelected(false);
-                ChcBxRTCErrAPPls.getItems().clear();
-                ChcBxRTCErrAPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrAPPls.getSelectionModel().select(0);
-                txtFldRTCTimeMshAPPls.setEditable(true);
-                txtFldRTCAmtMshAPPls.setEditable(true);
-                txtFieldRngEAPPls.setEditable(true);
-
-                testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                viewPointTableAPPls.setItems(testListForCollumAPPls);
-            }
-        }
-
-        //Добаление теста "точность хода часов" AP-
-        if(event.getSource() == addTglBtnRTCAPMns) {
-            if (addTglBtnRTCAPMns.isSelected()) {
-                if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 0, Double.parseDouble(txtFieldRngEAPMns.getText()));
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 1, Double.parseDouble(txtFieldRngEAPMns.getText()));
-                    cbValue = "Сутч. погрешность";
-                }
-
-                rtcCommand.setName("ТХЧ AP-");
-
-                RTCTogBtnAPMns.setSelected(true);
-                ChcBxRTCErrAPMns.getItems().clear();
-                ChcBxRTCErrAPMns.getItems().addAll(cbValue);
-                ChcBxRTCErrAPMns.getSelectionModel().select(0);
-                txtFldRTCTimeMshAPMns.setEditable(false);
-                txtFldRTCAmtMshAPMns.setEditable(false);
-                txtFieldRngEAPMns.setEditable(false);
-
-                Methodic.commandsMap.get(1).add(rtcCommand);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(1)) {
-                    if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ AP-")) {
-                            Methodic.commandsMap.get(1).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                RTCTogBtnAPMns.setSelected(false);
-                ChcBxRTCErrAPMns.getItems().clear();
-                ChcBxRTCErrAPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrAPMns.getSelectionModel().select(0);
-                txtFldRTCTimeMshAPMns.setEditable(true);
-                txtFldRTCAmtMshAPMns.setEditable(true);
-                txtFieldRngEAPMns.setEditable(true);
-
-                testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                viewPointTableAPMns.setItems(testListForCollumAPMns);
-            }
-        }
-
-        //Добаление теста "точность хода часов" RP+
-        if(event.getSource() == addTglBtnRTCRPPls) {
-            if (addTglBtnRTCRPPls.isSelected()) {
-                if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 0, Double.parseDouble(txtFieldRngERPPls.getText()));
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 1, Double.parseDouble(txtFieldRngERPPls.getText()));
-                    cbValue = "Сутч. погрешность";
-                }
-
-                rtcCommand.setName("ТХЧ RP+");
-
-                RTCTogBtnRPPls.setSelected(true);
-                ChcBxRTCErrRPPls.getItems().clear();
-                ChcBxRTCErrRPPls.getItems().addAll(cbValue);
-                ChcBxRTCErrRPPls.getSelectionModel().select(0);
-                txtFldRTCTimeMshRPPls.setEditable(false);
-                txtFldRTCAmtMshRPPls.setEditable(false);
-                txtFieldRngERPPls.setEditable(false);
-
-                Methodic.commandsMap.get(2).add(rtcCommand);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(2)) {
-                    if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ RP+")) {
-                            Methodic.commandsMap.get(2).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                RTCTogBtnRPPls.setSelected(false);
-                ChcBxRTCErrRPPls.getItems().clear();
-                ChcBxRTCErrRPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrRPPls.getSelectionModel().select(0);
-                txtFldRTCTimeMshRPPls.setEditable(true);
-                txtFldRTCAmtMshRPPls.setEditable(true);
-                txtFieldRngERPPls.setEditable(true);
-
-                testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                viewPointTableRPPls.setItems(testListForCollumRPPls);
-            }
-        }
-
-        //Добаление теста "точность хода часов" RP-
-        if(event.getSource() == addTglBtnRTCRPMns) {
-            if (addTglBtnRTCRPMns.isSelected()) {
-                if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 0, Double.parseDouble(txtFieldRngERPMns.getText()));
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 1, Double.parseDouble(txtFieldRngERPMns.getText()));
-                    cbValue = "Сутч. погрешность";
-                }
-
-                rtcCommand.setName("ТХЧ RP-");
-
-                RTCTogBtnRPMns.setSelected(true);
-                ChcBxRTCErrRPMns.getItems().clear();
-                ChcBxRTCErrRPMns.getItems().addAll(cbValue);
-                ChcBxRTCErrRPMns.getSelectionModel().select(0);
-                txtFldRTCTimeMshRPMns.setEditable(false);
-                txtFldRTCAmtMshRPMns.setEditable(false);
-                txtFieldRngERPMns.setEditable(false);
-
-                Methodic.commandsMap.get(3).add(rtcCommand);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
-            } else {
-                for (Commands command : Methodic.commandsMap.get(3)) {
-                    if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ RP-")) {
-                            Methodic.commandsMap.get(3).remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                RTCTogBtnRPMns.setSelected(false);
-                ChcBxRTCErrRPMns.getItems().clear();
-                ChcBxRTCErrRPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrRPMns.getSelectionModel().select(0);
-                txtFldRTCTimeMshRPMns.setEditable(true);
-                txtFldRTCAmtMshRPMns.setEditable(true);
-                txtFieldRngERPMns.setEditable(true);
-
-                testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                viewPointTableRPMns.setItems(testListForCollumRPMns);
-            }
-        }
+    //Устанавливает значение TglBtn если выбрана вкладка AP+
+    private void setAPPlsTglBtn() {
+        gridPaneUAPPlus.toFront();
+        viewPointTableAPPls.toFront();
+        InflUpaneAPPls.toFront();
+        APPlsPane.toFront();
+        APPlus.setSelected(true);
+        APMinus.setSelected(false);
+        RPPlus.setSelected(false);
+        RPMinus.setSelected(false);
+
+        APPlusCRPSTA.setSelected(true);
+        APMinusCRPSTA.setSelected(false);
+        RPPlusCRPSTA.setSelected(false);
+        RPMinusCRPSTA.setSelected(false);
     }
 
-    public void initCoiseBoxParamForRTC() {
-        ChcBxRTCErrAPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-        ChcBxRTCErrAPPls.getSelectionModel().select(0);
+    //Устанавливает значение TglBtn если выбрана вкладка AP-
+    private void setAPMnsTglBtn() {
+        gridPaneUAPMns.toFront();
+        viewPointTableAPMns.toFront();
+        APMnsPane.toFront();
+        InflUpaneAPMns.toFront();
+        APPlus.setSelected(false);
+        APMinus.setSelected(true);
+        RPPlus.setSelected(false);
+        RPMinus.setSelected(false);
 
-        ChcBxRTCErrAPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-        ChcBxRTCErrAPMns.getSelectionModel().select(0);
+        APPlusCRPSTA.setSelected(false);
+        APMinusCRPSTA.setSelected(true);
+        RPPlusCRPSTA.setSelected(false);
+        RPMinusCRPSTA.setSelected(false);
+    }
 
-        ChcBxRTCErrRPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-        ChcBxRTCErrRPPls.getSelectionModel().select(0);
+    //Устанавливает значение TglBtn если выбрана вкладка RP+
+    private void setRPPlsTglBtn() {
+        gridPaneURPPls.toFront();
+        viewPointTableRPPls.toFront();
+        RPPlsPane.toFront();
+        InflUpaneRPPls.toFront();
+        APPlus.setSelected(false);
+        APMinus.setSelected(false);
+        RPPlus.setSelected(true);
+        RPMinus.setSelected(false);
 
-        ChcBxRTCErrRPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-        ChcBxRTCErrRPMns.getSelectionModel().select(0);
+        APPlusCRPSTA.setSelected(false);
+        APMinusCRPSTA.setSelected(false);
+        RPPlusCRPSTA.setSelected(true);
+        RPMinusCRPSTA.setSelected(false);
+    }
+
+    //Устанавливает значение TglBtn если выбрана вкладка RP-
+    private void setRPMnsTglBtn() {
+        gridPaneURPMns.toFront();
+        viewPointTableRPMns.toFront();
+        RPMnsPane.toFront();
+        InflUpaneRPMns.toFront();
+        APPlus.setSelected(false);
+        APMinus.setSelected(false);
+        RPPlus.setSelected(false);
+        RPMinus.setSelected(true);
+
+        APPlusCRPSTA.setSelected(false);
+        APMinusCRPSTA.setSelected(false);
+        RPPlusCRPSTA.setSelected(false);
+        RPMinusCRPSTA.setSelected(true);
     }
 
     private void initGridPane() {
@@ -1439,40 +860,27 @@ public class InfluenceFrame {
 //		7 - Однофазный реактив
 //Режим;
         if (isThrePhaseStend) {
-            gridPaneAllPhaseAPPlus.setId("1;H;A;P");
-            gridPanePhaseAAPPlus.setId("1;A;A;P");
-            gridPanePhaseBAPPlus.setId("1;B;A;P");
-            gridPanePhaseCAPPlus.setId("1;C;A;P");
-            gridPaneAllPhaseAPMinus.setId("1;H;A;N");
-            gridPanePhaseAAPMinus.setId("1;A;A;N");
-            gridPanePhaseBAPMinus.setId("1;B;A;N");
-            gridPanePhaseCAPMinus.setId("1;C;A;N");
-            gridPaneAllPhaseRPPlus.setId("5;H;R;P");
-            gridPanePhaseARPPlus.setId("5;A;R;P");
-            gridPanePhaseBRPPlus.setId("5;B;R;P");
-            gridPanePhaseCRPPlus.setId("5;C;R;P");
-            gridPaneAllPhaseRPMinus.setId("5;H;R;N");
-            gridPanePhaseARPMinus.setId("5;A;R;N");
-            gridPanePhaseBRPMinus.setId("5;B;R;N");
-            gridPanePhaseCRPMinus.setId("5;C;R;N");
+            gridPaneUAPPlus.setId("U;1;H;A;P");
+            gridPaneUAPMns.setId("U;1;H;A;N");
+            gridPaneURPPls.setId("U;5;H;R;P");
+            gridPaneURPMns.setId("U;5;H;R;N");
+            //Влияние частоты
+            gridPaneFAPPlus.setId("F;1;H;A;P");
+            gridPaneFAPMns.setId("F;1;H;A;N");
+            gridPaneFRPPls.setId("F;5;H;R;P");
+            gridPaneFRPMns.setId("F;5;H;R;N");
         } else {
-            gridPaneAllPhaseAPPlus.setId("0;H;A;P");
-            gridPanePhaseAAPPlus.setId("0;A;A;P");
-            gridPanePhaseBAPPlus.setId("0;B;A;P");
-            gridPanePhaseCAPPlus.setId("0;C;A;P");
-            gridPaneAllPhaseAPMinus.setId("0;H;A;N");
-            gridPanePhaseAAPMinus.setId("0;A;A;N");
-            gridPanePhaseBAPMinus.setId("0;B;A;N");
-            gridPanePhaseCAPMinus.setId("0;C;A;N");
-            gridPaneAllPhaseRPPlus.setId("7;H;R;P");
-            gridPanePhaseARPPlus.setId("7;A;R;P");
-            gridPanePhaseBRPPlus.setId("7;B;R;P");
-            gridPanePhaseCRPPlus.setId("7;C;R;P");
-            gridPaneAllPhaseRPMinus.setId("7;H;R;N");
-            gridPanePhaseARPMinus.setId("7;A;R;N");
-            gridPanePhaseBRPMinus.setId("7;B;R;N");
-            gridPanePhaseCRPMinus.setId("7;C;R;N");
+            gridPaneUAPPlus.setId("U;0;H;A;P");
+            gridPaneUAPMns.setId("U;0;H;A;N");
+            gridPaneURPPls.setId("U;7;H;R;P");
+            gridPaneURPMns.setId("U;7;H;R;N");
+            //Влияние частоты
+            gridPaneFAPPlus.setId("F;0;H;A;P");
+            gridPaneFAPMns.setId("F;0;H;A;N");
+            gridPaneFRPPls.setId("F;7;H;R;P");
+            gridPaneFRPMns.setId("F;7;H;R;N");
         }
+
         for (GridPane pane : gridPanesEnergyAndPhase) {
             setBoxAndLabelGridPane(pane);
         }
@@ -1480,22 +888,15 @@ public class InfluenceFrame {
 
 
     private void initGridPanesEnergyAndPhase() {
-        gridPanesEnergyAndPhase = Arrays.asList(gridPaneAllPhaseAPPlus,
-                gridPanePhaseAAPPlus,
-                gridPanePhaseBAPPlus,
-                gridPanePhaseCAPPlus,
-                gridPaneAllPhaseAPMinus,
-                gridPanePhaseAAPMinus,
-                gridPanePhaseBAPMinus,
-                gridPanePhaseCAPMinus,
-                gridPaneAllPhaseRPPlus,
-                gridPanePhaseARPPlus,
-                gridPanePhaseBRPPlus,
-                gridPanePhaseCRPPlus,
-                gridPaneAllPhaseRPMinus,
-                gridPanePhaseARPMinus,
-                gridPanePhaseBRPMinus,
-                gridPanePhaseCRPMinus);
+        gridPanesEnergyAndPhase = Arrays.asList(
+                gridPaneUAPPlus,
+                gridPaneUAPMns,
+                gridPaneURPPls,
+                gridPaneURPMns,
+                gridPaneFAPPlus,
+                gridPaneFAPMns,
+                gridPaneFRPPls,
+                gridPaneFRPMns);
     }
 
     //Заполняет поля нужными значениями GridPane
@@ -1533,38 +934,57 @@ public class InfluenceFrame {
                 checkBox.setId(pane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
                 CheckBox finalCheckBox = checkBox;
                 String[] idCheckBox = finalCheckBox.getId().split(";");
-                String energy = idCheckBox[2];
-                String direction = idCheckBox[3];
 
+                if (idCheckBox[0].equals("U") && idCheckBox[3].equals("A")) {
+                    if (idCheckBox[4].equals("P")) {
+                        checkBoxesListUAPPls.add(checkBox);
+                    }
+
+                    if (idCheckBox[4].equals("N")) {
+                        checkBoxesListUAPMns.add(checkBox);
+                    }
+                }
+
+                if (idCheckBox[0].equals("U") && idCheckBox[3].equals("R")) {
+                    if (idCheckBox[4].equals("P")) {
+                        checkBoxesListURPPls.add(checkBox);
+                    }
+
+                    if (idCheckBox[4].equals("N")) {
+                        checkBoxesListURPMns.add(checkBox);
+                    }
+                }
+
+                if (idCheckBox[0].equals("F") && idCheckBox[3].equals("A")) {
+                    if (idCheckBox[4].equals("P")) {
+                        checkBoxesListFAPPls.add(checkBox);
+                    }
+
+                    if (idCheckBox[4].equals("N")) {
+                        checkBoxesListFAPMns.add(checkBox);
+                    }
+                }
+
+                if (idCheckBox[0].equals("F") && idCheckBox[3].equals("R")) {
+                    if (idCheckBox[4].equals("P")) {
+                        checkBoxesListFRPPls.add(checkBox);
+                    }
+
+                    if (idCheckBox[4].equals("N")) {
+                        checkBoxesListFRPMns.add(checkBox);
+                    }
+                }
+
+                //Действие при нажатии на чек бокс
                 checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
                     if (newVal) {
                         addTestPointInMethodic(finalCheckBox.getId());
-                        if (energy.equals("A") && direction.equals("P")) {
-                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-                            viewPointTableAPPls.setItems(testListForCollumAPPls);
-                        }
-
-                        if (energy.equals("A") && direction.equals("N")) {
-                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-                            viewPointTableAPMns.setItems(testListForCollumAPPls);
-                        }
-
-                        if (energy.equals("R") && direction.equals("P")) {
-                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-                            viewPointTableRPPls.setItems(testListForCollumAPPls);
-                        }
-
-                        if (energy.equals("R") && direction.equals("N")) {
-                            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-                            viewPointTableRPMns.setItems(testListForCollumAPPls);
-                        }
-                        System.out.println("Кнопка зажата " + finalCheckBox.getId() + "\n" + "Количество точек: " + Methodic.commandsMap.get(0).size());
 
                     } else {
                         deleteTestPointInMethodic(idCheckBox);
-                        System.out.println("Кнопка разжата " + finalCheckBox.getId());
                     }
                 });
+
                 GridPane.setColumnIndex(checkBox, x + 1);
                 GridPane.setRowIndex(checkBox, y + 1);
                 GridPane.setHalignment(checkBox, HPos.CENTER);
@@ -1583,239 +1003,6 @@ public class InfluenceFrame {
         for (int j = 0; j < powerFactor.size() + 1; j++) {
             pane.getRowConstraints().add(new RowConstraints(23));
         }
-    }
-
-    //Имитация ToggleGroup
-    private void setGropToggleButton(ActionEvent event) {
-        if (event.getSource() == allPhaseBtn) {
-            allPhaseBtn.setSelected(true);
-            APhaseBtn.setSelected(false);
-            BPhaseBtn.setSelected(false);
-            CPhaseBtn.setSelected(false);
-        }
-        if (event.getSource() == APhaseBtn) {
-            APhaseBtn.setSelected(true);
-            allPhaseBtn.setSelected(false);
-            BPhaseBtn.setSelected(false);
-            CPhaseBtn.setSelected(false);
-        }
-        if (event.getSource() == BPhaseBtn) {
-            BPhaseBtn.setSelected(true);
-            allPhaseBtn.setSelected(false);
-            APhaseBtn.setSelected(false);
-            CPhaseBtn.setSelected(false);
-        }
-        if (event.getSource() == CPhaseBtn) {
-            CPhaseBtn.setSelected(true);
-            allPhaseBtn.setSelected(false);
-            APhaseBtn.setSelected(false);
-            BPhaseBtn.setSelected(false);
-        }
-
-        //Tg btns "энергия и направление" отвечающие за сетку точек и добавление тестов Сам., ТХЧ, Чувств., Конст.
-        if (event.getSource() == APPlus || event.getSource() == APPlusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableAPPls.toFront();
-            APPlsPane.toFront();
-            paneCRPAPPls.toFront();
-
-
-            APPlus.setSelected(true);
-            APMinus.setSelected(false);
-            RPPlus.setSelected(false);
-            RPMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(true);
-            APMinusCRPSTA.setSelected(false);
-            RPPlusCRPSTA.setSelected(false);
-            RPMinusCRPSTA.setSelected(false);
-        }
-
-        if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableAPMns.toFront();
-            APMnsPane.toFront();
-            paneCRPAPMns.toFront();
-
-            APMinus.setSelected(true);
-            APPlus.setSelected(false);
-            RPPlus.setSelected(false);
-            RPMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(false);
-            APMinusCRPSTA.setSelected(true);
-            RPPlusCRPSTA.setSelected(false);
-            RPMinusCRPSTA.setSelected(false);
-        }
-        if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableRPPls.toFront();
-            RPPlsPane.toFront();
-            paneCRPRPPls.toFront();
-
-            RPPlus.setSelected(true);
-            APPlus.setSelected(false);
-            APMinus.setSelected(false);
-            RPMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(false);
-            APMinusCRPSTA.setSelected(false);
-            RPPlusCRPSTA.setSelected(true);
-            RPMinusCRPSTA.setSelected(false);
-        }
-        if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableRPMns.toFront();
-            RPMnsPane.toFront();
-            paneCRPRPMns.toFront();
-
-            RPMinus.setSelected(true);
-            RPPlus.setSelected(false);
-            APPlus.setSelected(false);
-            APMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(false);
-            APMinusCRPSTA.setSelected(false);
-            RPPlusCRPSTA.setSelected(false);
-            RPMinusCRPSTA.setSelected(true);
-        }
-
-        //Переключение окон внутри фрейма "направление" между вкладками Сам. ТХЧ и т.д.
-        //AP+
-        if (event.getSource() == CRPTogBtnAPPls) {
-            paneCRPAPPls.toFront();
-            if (addTglBtnCRPAPPls.isSelected() || addTglBtnCRPAPPlsGOST.isSelected()) {
-                CRPTogBtnAPPls.setSelected(true);
-            }else CRPTogBtnAPPls.setSelected(false);
-        }
-
-        if (event.getSource() == STATogBtnAPPls) {
-            paneSTAAPPls.toFront();
-            if (addTglBtnSTAAPPls.isSelected() || addTglBtnSTAAPPlsGOST.isSelected()) {
-                STATogBtnAPPls.setSelected(true);
-            }else STATogBtnAPPls.setSelected(false);
-        }
-
-        if (event.getSource() == RTCTogBtnAPPls) {
-            paneRTCAPPls.toFront();
-            RTCTogBtnAPPls.setSelected(addTglBtnRTCAPPls.isSelected());
-        }
-
-        if (event.getSource() == ConstTogBtnAPPls) {
-            paneConstAPPls.toFront();
-            ConstTogBtnAPPls.setSelected(addTglBtnConstAPPls.isSelected());
-        }
-
-        //AP-
-        if (event.getSource() == CRPTogBtnAPMns) {
-            paneCRPAPMns.toFront();
-            if (addTglBtnCRPAPMns.isSelected() || addTglBtnCRPAPMnsGOST.isSelected()) {
-                CRPTogBtnAPMns.setSelected(true);
-            } else CRPTogBtnAPMns.setSelected(false);
-        }
-
-        if (event.getSource() == STATogBtnAPMns) {
-            paneSTAAPMns.toFront();
-            if (addTglBtnSTAAPMns.isSelected() || addTglBtnSTAAPMnsGOST.isSelected()) {
-                STATogBtnAPMns.setSelected(true);
-            } else STATogBtnAPMns.setSelected(false);
-        }
-
-        if (event.getSource() == RTCTogBtnAPMns) {
-            RTCTogBtnAPMns.setSelected(addTglBtnRTCAPMns.isSelected());
-            paneRTCAPMns.toFront();
-        }
-
-        if (event.getSource() == ConstTogBtnAPMns) {
-            ConstTogBtnAPMns.setSelected(addTglBtnConstAPMns.isSelected());
-            paneConstAPMns.toFront();
-        }
-
-        //RP+
-        if (event.getSource() == CRPTogBtnRPPls) {
-            CRPTogBtnRPPls.setSelected(addTglBtnCRPRPPls.isSelected() || addTglBtnCRPRPPlsGOST.isSelected());
-            paneCRPRPPls.toFront();
-        }
-
-        if (event.getSource() == STATogBtnRPPls) {
-            STATogBtnRPPls.setSelected(addTglBtnSTARPPls.isSelected() || addTglBtnSTARPPlsGOST.isSelected());
-            paneSTARPPls.toFront();
-        }
-
-        if (event.getSource() == RTCTogBtnRPPls) {
-            RTCTogBtnRPPls.setSelected(addTglBtnRTCRPPls.isSelected());
-            paneRTCRPPls.toFront();
-        }
-
-        if (event.getSource() == ConstTogBtnRPPls) {
-            ConstTogBtnRPPls.setSelected(addTglBtnConstRPPls.isSelected());
-            paneConstRPPls.toFront();
-        }
-
-        //RP-
-        if (event.getSource() == CRPTogBtnRPMns) {
-            CRPTogBtnRPMns.setSelected(addTglBtnCRPRPMns.isSelected() || addTglBtnCRPRPMnsGOST.isSelected());
-            paneCRPRPMns.toFront();
-        }
-
-        if (event.getSource() == STATogBtnRPMns) {
-            STATogBtnRPMns.setSelected(addTglBtnSTARPMns.isSelected() || addTglBtnSTARPMnsGOST.isSelected());
-            paneSTARPMns.toFront();
-        }
-
-        if (event.getSource() == RTCTogBtnRPMns) {
-            RTCTogBtnRPMns.setSelected(addTglBtnRTCRPMns.isSelected());
-            paneRTCRPMns.toFront();
-        }
-
-        if (event.getSource() == ConstTogBtnRPMns) {
-            ConstTogBtnRPMns.setSelected(addTglBtnConstRPMns.isSelected());
-            paneConstRPMns.toFront();
-        }
-    }
-
-    //При переключении вкладки Мощности и Направления устанавливает положение в "Все фазы"
-    private void setDefPosBtn() {
-        allPhaseBtn.setSelected(true);
-        APhaseBtn.setSelected(false);
-        BPhaseBtn.setSelected(false);
-        CPhaseBtn.setSelected(false);
-    }
-
-    private void gridPaneToFront(GridPane pane) {
-        pane.toFront();
-    }
-
-    //Выдаёт нужный GridPane в зависимости от нажатой кнопки
-    private GridPane getGridPane() {
-        if (allPhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPaneAllPhaseAPPlus;
-            if (APMinus.isSelected()) return gridPaneAllPhaseAPMinus;
-            if (RPPlus.isSelected()) return gridPaneAllPhaseRPPlus;
-            if (RPMinus.isSelected()) return gridPaneAllPhaseRPMinus;
-        }
-
-        if (APhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPanePhaseAAPPlus;
-            if (APMinus.isSelected()) return gridPanePhaseAAPMinus;
-            if (RPPlus.isSelected()) return gridPanePhaseARPPlus;
-            if (RPMinus.isSelected()) return gridPanePhaseARPMinus;
-        }
-
-        if (BPhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPanePhaseBAPPlus;
-            if (APMinus.isSelected()) return gridPanePhaseBAPMinus;
-            if (RPPlus.isSelected()) return gridPanePhaseBRPPlus;
-            if (RPMinus.isSelected()) return gridPanePhaseBRPMinus;
-        }
-
-        if (CPhaseBtn.isSelected()) {
-            if (APPlus.isSelected()) return gridPanePhaseCAPPlus;
-            if (APMinus.isSelected()) return gridPanePhaseCAPMinus;
-            if (RPPlus.isSelected()) return gridPanePhaseCRPPlus;
-            if (RPMinus.isSelected()) return gridPanePhaseCRPMinus;
-        }
-        return null;
     }
 
     //Инициализирует таблицу для отображения выбранных точек
@@ -1928,7 +1115,8 @@ public class InfluenceFrame {
         } else {
             stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
         }
-        /** 1;H;A;P;0.2 Ib;0.5C
+        /** U;1;H;A;P;0.2 Ib;0.5C
+         *  По напряжению или частоте
          *  режим;
          *  Фазы по которым необходимо пустить ток (H);
          *  Тип энергии актив/реактив;
@@ -1938,136 +1126,241 @@ public class InfluenceFrame {
          *  */
         String[] dirCurFactor = testPoint.split(";");
 
+        //Влияние напряжения или частоты
+        String influenceUorF = dirCurFactor[0];
+
         //Phase - Режим
-        int phase = Integer.parseInt(dirCurFactor[0]);
+        int phase = Integer.parseInt(dirCurFactor[1]);
 
         //фазы, по которым пустить ток
-        String iABC = dirCurFactor[1];
+        String iABC = dirCurFactor[2];
 
         //Тип энергии
-        String energyType = dirCurFactor[2];
+        String energyType = dirCurFactor[3];
 
         //Направление тока
-        String currentDirection = dirCurFactor[3];
+        String currentDirection = dirCurFactor[4];
 
         //Целое значеник процент + Максимальный или минимальный
-        String[] curAndPer = dirCurFactor[4].split(" ");
+        String[] curAndPer = dirCurFactor[5].split(" ");
         //Процент от тока
         String percent = curAndPer[0];
         //Максимальный или минимальный ток.
         String current = curAndPer[1];
 
         //Коэф мощности
-        String powerFactor = dirCurFactor[5];
+        String powerFactor = dirCurFactor[6];
 
-
+        //Добавление точек по влиянию AP+
         if (energyType.equals("A") && currentDirection.equals("P")) {
-            methodic.addCommandToList(0, new ErrorCommand(stendDLLCommands, testPoint, phase, current, 0, percent, iABC, powerFactor, 0));
+
+            if (influenceUorF.equals("U")) {
+                for (double influenceUprocAPPl : influenceUprocAPPls) {
+                    testListForCollumAPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceUprocAPPl,
+                            0, percent, iABC, powerFactor, 0));
+                }
+            }
+
+            if (influenceUorF.equals("F")) {
+
+                for (double influenceFprocAPPl : influenceFprocAPPls) {
+                    testListForCollumAPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceFprocAPPl,
+                            0, percent, iABC, powerFactor, 0));
+                }
+            }
         }
 
+        //Добавление точек по влиянию AP-
         if (energyType.equals("A") && currentDirection.equals("N")) {
-            methodic.addCommandToList(1, new ErrorCommand(stendDLLCommands, testPoint, phase, current, 1, percent, iABC, powerFactor, 1));
+
+            if (influenceUorF.equals("U")) {
+
+                for (double influenceUprocAPMns : influenceUprocAPMns) {
+                    testListForCollumAPMns.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceUprocAPMns,
+                            1, percent, iABC, powerFactor, 1));
+                }
+            }
+
+            if (influenceUorF.equals("F")) {
+
+                for (double influenceFprocAPMns : influenceFprocAPMns) {
+                    testListForCollumAPMns.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceFprocAPMns,
+                            1, percent, iABC, powerFactor, 1));
+                }
+            }
         }
 
+
+        //Добавление точек по влиянию RP+
         if (energyType.equals("R") && currentDirection.equals("P")) {
-            methodic.addCommandToList(2, new ErrorCommand(stendDLLCommands, testPoint, phase, current, 0, percent, iABC, powerFactor, 2));
+            if (influenceUorF.equals("U")) {
+
+                for (double influenceUprocRPPls : influenceUprocRPPls) {
+                    testListForCollumRPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceUprocRPPls,
+                            0, percent, iABC, powerFactor, 2));
+                }
+            }
+
+            if (influenceUorF.equals("F")) {
+
+                for (double influenceFprocRPPls : influenceFprocRPPls) {
+                    testListForCollumRPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceFprocRPPls,
+                            0, percent, iABC, powerFactor, 2));
+                }
+            }
         }
 
+
+        //Добавление точек по влиянию RP-
         if (energyType.equals("R") && currentDirection.equals("N")) {
-            methodic.addCommandToList(3, new ErrorCommand(stendDLLCommands, testPoint, phase, current, 1, percent, iABC, powerFactor, 3));
+
+            if (influenceUorF.equals("U")) {
+                for (double influenceUprocRPMns : influenceUprocRPMns) {
+                    testListForCollumRPMns.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceUprocRPMns,
+                            1, percent, iABC, powerFactor, 3));
+                }
+
+            }
+
+            if (influenceUorF.equals("F")) {
+                for (double influenceFprocRPPls : influenceFprocRPMns) {
+                    testListForCollumRPMns.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceFprocRPPls,
+                            1, percent, iABC, powerFactor, 3));
+                }
+            }
         }
     }
 
+    //Удаляет точку по айди чекбокса
     private void deleteTestPointInMethodic(String [] point) {
         ErrorCommand errorCommand;
         String str;
 
-        if (point[2].equals("A") && point[3].equals("P")) {
+        if (point[3].equals("A") && point[4].equals("P")) {
 
-            if (point[1].equals("H")) {
-                str = point[5] + "; " + point[4];
-            }else str = point[1] + ": " + point[5] + "; " + point[4];
+            if (point[0].equals("U")) {
 
-            for (Commands current : Methodic.commandsMap.get(0)) {
-                if (current instanceof ErrorCommand) {
-                    errorCommand = (ErrorCommand) current;
-                    if (errorCommand.getName().equals(str)) {
-                        Methodic.commandsMap.get(0).remove(current);
-                        break;
+                for (double influenceUprocAPPl : influenceUprocAPPls) {
+                    str = influenceUprocAPPl + "%" + point[0] + "n: " + point[6] + "; " + point[5];
+
+                    for (int j = 0; j < testListForCollumAPPls.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumAPPls.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumAPPls.remove(testListForCollumAPPls.get(j));
+                            j--;
+                        }
                     }
                 }
             }
-            testListForCollumAPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(0));
-            viewPointTableAPPls.setItems(testListForCollumAPPls);
-        }
 
-        if (point[2].equals("A") && point[3].equals("N")) {
+            if (point[0].equals("F")) {
+                for (double influenceFprocAPPl : influenceFprocAPPls) {
+                    str = influenceFprocAPPl + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-            if (point[1].equals("H")) {
-                str = point[5] + "; " + point[4];
-            }else str = point[1] + ": " + point[5] + "; " + point[4];
-
-            for (Commands current : Methodic.commandsMap.get(1)) {
-                if (current instanceof ErrorCommand) {
-                    errorCommand = (ErrorCommand) current;
-                    if (errorCommand.getName().equals(str)) {
-                        Methodic.commandsMap.get(1).remove(current);
-                        break;
+                    for (int j = 0; j < testListForCollumAPPls.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumAPPls.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumAPPls.remove(testListForCollumAPPls.get(j));
+                            j--;
+                        }
                     }
                 }
             }
-            testListForCollumAPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(1));
-            viewPointTableAPMns.setItems(testListForCollumAPMns);
         }
 
-        if (point[2].equals("R") && point[3].equals("P")) {
+        if (point[3].equals("A") && point[4].equals("N")) {
+            if (point[0].equals("U")) {
 
-            if (point[1].equals("H")) {
-                str = point[5] + "; " + point[4];
-            }else str = point[1] + ": " + point[5] + "; " + point[4];
+                for (double proc : influenceUprocAPMns) {
+                    str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-            for (Commands current : Methodic.commandsMap.get(2)) {
-                if (current instanceof ErrorCommand) {
-                    errorCommand = (ErrorCommand) current;
-                    if (errorCommand.getName().equals(str)) {
-                        Methodic.commandsMap.get(2).remove(current);
-                        break;
+                    for (int j = 0; j < testListForCollumAPMns.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumAPMns.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumAPMns.remove(testListForCollumAPMns.get(j));
+                            j--;
+                        }
                     }
                 }
             }
-            testListForCollumRPPls = FXCollections.observableArrayList(Methodic.commandsMap.get(2));
-            viewPointTableRPPls.setItems(testListForCollumRPPls);
-        }
 
-        if (point[2].equals("R") && point[3].equals("N")) {
+            if (point[0].equals("F")) {
+                for (double proc : influenceFprocAPMns) {
+                    str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-            if (point[1].equals("H")) {
-                str = point[5] + "; " + point[4];
-            }else str = point[1] + ": " + point[5] + "; " + point[4];
-
-            for (Commands current : Methodic.commandsMap.get(3)) {
-                if (current instanceof ErrorCommand) {
-                    errorCommand = (ErrorCommand) current;
-                    if (errorCommand.getName().equals(str)) {
-                        Methodic.commandsMap.get(3).remove(current);
-                        break;
+                    for (int j = 0; j < testListForCollumAPMns.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumAPMns.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumAPMns.remove(testListForCollumAPMns.get(j));
+                            j--;
+                        }
                     }
                 }
             }
-            testListForCollumRPMns = FXCollections.observableArrayList(Methodic.commandsMap.get(3));
-            viewPointTableRPMns.setItems(testListForCollumRPMns);
         }
-    }
 
-    private void loadStage(String fxml, String stageName) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
-            Stage stage = new Stage();
-            stage.setTitle(stageName);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (point[3].equals("R") && point[4].equals("P")) {
+
+            if (point[0].equals("U")) {
+
+                for (double proc : influenceUprocRPPls) {
+                    str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
+
+                    for (int j = 0; j < testListForCollumRPPls.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumRPPls.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumRPPls.remove(testListForCollumRPPls.get(j));
+                            j--;
+                        }
+                    }
+                }
+            }
+
+            if (point[0].equals("F")) {
+                for (double proc : influenceFprocRPPls) {
+                    str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
+
+                    for (int j = 0; j < testListForCollumRPPls.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumRPPls.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumRPPls.remove(testListForCollumRPPls.get(j));
+                            j--;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (point[3].equals("R") && point[4].equals("N")) {
+
+            if (point[0].equals("U")) {
+
+                for (double proc : influenceUprocRPMns) {
+                    str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
+
+                    for (int j = 0; j < testListForCollumRPMns.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumRPMns.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumRPMns.remove(testListForCollumRPMns.get(j));
+                            j--;
+                        }
+                    }
+                }
+            }
+
+            if (point[0].equals("F")) {
+                for (double proc : influenceFprocRPMns) {
+                    str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
+
+                    for (int j = 0; j < testListForCollumRPMns.size(); j++) {
+                        errorCommand = (ErrorCommand) testListForCollumRPMns.get(j);
+                        if (errorCommand.getName().equals(str)) {
+                            testListForCollumRPMns.remove(testListForCollumRPMns.get(j));
+                            j--;
+                        }
+                    }
+                }
+            }
         }
     }
 }
