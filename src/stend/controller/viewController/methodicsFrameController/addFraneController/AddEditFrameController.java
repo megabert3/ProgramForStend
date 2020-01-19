@@ -33,9 +33,7 @@ public class AddEditFrameController {
 
     private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
-    public Methodic getMethodic() {
-        return methodic;
-    }
+    private InfluenceFrame influenceFrame;
 
     private Methodic methodic = new Methodic();
 
@@ -53,11 +51,40 @@ public class AddEditFrameController {
     //Это трёхфазный стенд?
     private boolean isThrePhaseStend;
 
-    //Лист с точками
+    //Лист с точками общая методика
     private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
+
+    //------------------------------------------------------------------------------------------------------------
+    //Данные полученные с окна "влияния".
+    //Значения в % от номинального напрряжения U, частоты F и т.д.
+    private double[] saveInfluenceUprocAPPls = new double[0];
+    private double[] saveInfluenceFprocAPPls = new double[0];
+    private String[] saveInfluenceInbUAPPls = new String[0];
+
+    //AP-
+    private double[] saveInfluenceUprocAPMns = new double[0];
+    private double[] saveInfluenceFprocAPMns = new double[0];
+    private String[] saveInfluenceInbUAPMns = new String[0];
+
+    //RP+
+    private double[] saveInfluenceUprocRPPls = new double[0];
+    private double[] saveInfluenceFprocRPPls = new double[0];
+    private String[] saveInfluenceInbURPPls = new String[0];
+
+    //RP-
+    private double[] saveInfluenceUprocRPMns = new double[0];
+    private double[] saveInfluenceFprocRPMns = new double[0];
+    private String[] saveInfluenceInbURPMns = new String[0];
+
+    //Лист с точками влияния
+    private List<Commands> saveInflListForCollumAPPls = new ArrayList<>();
+    private List<Commands> saveInflListForCollumAPMns = new ArrayList<>();
+    private List<Commands> saveInflListForCollumRPPls = new ArrayList<>();
+    private List<Commands> saveInflListForCollumRPMns = new ArrayList<>();
+
 
     @FXML
     private ResourceBundle resources = ResourceBundle.getBundle("stendProperties");
@@ -582,6 +609,75 @@ public class AddEditFrameController {
 
     @FXML
     private Button influenceBtn;
+
+    public Methodic getMethodic() {
+        return methodic;
+    }
+
+    public void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
+        this.saveInfluenceUprocAPPls = saveInfluenceUprocAPPls;
+    }
+
+    public void setSaveInfluenceFprocAPPls(double[] saveInfluenceFprocAPPls) {
+        this.saveInfluenceFprocAPPls = saveInfluenceFprocAPPls;
+    }
+
+    public void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
+        this.saveInfluenceInbUAPPls = saveInfluenceInbUAPPls;
+    }
+
+    public void setSaveInfluenceUprocAPMns(double[] saveInfluenceUprocAPMns) {
+        this.saveInfluenceUprocAPMns = saveInfluenceUprocAPMns;
+    }
+
+    public void setSaveInfluenceFprocAPMns(double[] saveInfluenceFprocAPMns) {
+        this.saveInfluenceFprocAPMns = saveInfluenceFprocAPMns;
+    }
+
+    public void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
+        this.saveInfluenceInbUAPMns = saveInfluenceInbUAPMns;
+    }
+
+    public void setSaveInfluenceUprocRPPls(double[] saveInfluenceUprocRPPls) {
+        this.saveInfluenceUprocRPPls = saveInfluenceUprocRPPls;
+    }
+
+    public void setSaveInfluenceFprocRPPls(double[] saveInfluenceFprocRPPls) {
+        this.saveInfluenceFprocRPPls = saveInfluenceFprocRPPls;
+    }
+
+    public void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
+        this.saveInfluenceInbURPPls = saveInfluenceInbURPPls;
+    }
+
+    public void setSaveInfluenceUprocRPMns(double[] saveInfluenceUprocRPMns) {
+        this.saveInfluenceUprocRPMns = saveInfluenceUprocRPMns;
+    }
+
+    public void setSaveInfluenceFprocRPMns(double[] saveInfluenceFprocRPMns) {
+        this.saveInfluenceFprocRPMns = saveInfluenceFprocRPMns;
+    }
+
+    public void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
+        this.saveInfluenceInbURPMns = saveInfluenceInbURPMns;
+    }
+
+    public void setSaveInflListForCollumAPPls(ArrayList<Commands> saveInflListForCollumAPPls) {
+        this.saveInflListForCollumAPPls = saveInflListForCollumAPPls;
+    }
+
+    public void setSaveInflListForCollumAPMns(ArrayList<Commands> saveInflListForCollumAPMns) {
+        this.saveInflListForCollumAPMns = saveInflListForCollumAPMns;
+    }
+
+    public void setSaveInflListForCollumRPPls(ArrayList<Commands> saveInflListForCollumRPPls) {
+        this.saveInflListForCollumRPPls = saveInflListForCollumRPPls;
+    }
+
+    public void setSaveInflListForCollumRPMns(ArrayList<Commands> saveInflListForCollumRPMns) {
+        this.saveInflListForCollumRPMns = saveInflListForCollumRPMns;
+    }
+
 
     @FXML
     void initialize() {
@@ -1947,15 +2043,46 @@ public class AddEditFrameController {
         }
     }
 
+    private void initInfluenceFrame() {
+        influenceFrame.setSaveInflListForCollumAPPls(saveInflListForCollumAPPls);
+        influenceFrame.setSaveInflListForCollumAPMns(saveInflListForCollumAPMns);
+        influenceFrame.setSaveInflListForCollumRPPls(saveInflListForCollumRPPls);
+        influenceFrame.setSaveInflListForCollumRPMns(saveInflListForCollumRPMns);
+
+        influenceFrame.setInfluenceUprocAPPls(saveInfluenceUprocAPPls);
+        influenceFrame.setInfluenceFprocAPPls(saveInfluenceFprocAPPls);
+        influenceFrame.setInfluenceInbUAPPls(saveInfluenceInbUAPPls);
+
+        influenceFrame.setInfluenceUprocAPMns(saveInfluenceUprocAPMns);
+        influenceFrame.setInfluenceFprocAPMns(saveInfluenceFprocAPMns);
+        influenceFrame.setInfluenceInbUAPMns(saveInfluenceInbUAPMns);
+
+        influenceFrame.setInfluenceUprocRPPls(saveInfluenceUprocRPPls);
+        influenceFrame.setInfluenceFprocRPPls(saveInfluenceFprocRPPls);
+        influenceFrame.setInfluenceInbURPPls(saveInfluenceInbURPPls);
+
+        influenceFrame.setInfluenceUprocRPMns(saveInfluenceUprocRPMns);
+        influenceFrame.setInfluenceFprocRPMns(saveInfluenceFprocRPMns);
+        influenceFrame.setInfluenceInbURPMns(saveInfluenceInbURPMns);
+    }
+
     private void loadStage(String fxml, String stageName) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource(fxml));
+            fxmlLoader.load();
+            Parent root = fxmlLoader.getRoot();
             Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle(stageName);
             stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            influenceFrame = fxmlLoader.getController();
+            influenceFrame.setAddEditFrameController(this);
+            initInfluenceFrame();
 
             stage.showAndWait();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -213,6 +213,10 @@ public class ErrorCommand implements Commands {
         Ib = ib;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         if (iABC.equals("H")) {

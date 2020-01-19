@@ -1,9 +1,24 @@
 package stend.controller;
 
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
 public class MainStend {
-    public static void main(String[] args) {
-        //StartCommand startCommand = new StartCommand(ThreePhaseStend.getThreePhaseStendInstance(), 0, 0, 0);
-        //System.out.println(startCommand.initTimeForGOSTTest());
+
+    String name = "Хуета";
+
+    public static void main(String[] args) throws IOException {
+        MainStend mainStend = new MainStend();
+        mainStend.idiNaXyi();
+
     }
+
+    private void idiNaXyi() throws IOException {
+    }
+
 }

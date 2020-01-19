@@ -17,12 +17,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1226.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stend.controller.viewController.methodicsFrameController.addFraneController.InfluenceFrame">
     <children>
-        <Button fx:id="CancelBtn" layoutX="1053.0" layoutY="652.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="41.0" prefWidth="150.0" text="Отменить">
-            <graphic>
-                <ImageView fitHeight="30.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
-            </graphic>
-        </Button>
-        <Button fx:id="SaveBtn" layoutX="851.0" layoutY="652.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="41.0" prefWidth="150.0" text="Сохранить">
+        <Button fx:id="SaveBtn" layoutX="1054.0" layoutY="661.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="41.0" prefWidth="150.0" text="Сохранить">
             <graphic>
                 <ImageView fitHeight="30.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
             </graphic>
@@ -133,45 +128,6 @@
                                 </StackPane>
                             </children>
                         </Pane>
-                        <Pane fx:id="APPlsPane" prefHeight="140.0" prefWidth="200.0">
-                            <children>
-                                <VBox prefHeight="140.0" prefWidth="150.0" style="-fx-background-color: #303030;">
-                                    <children>
-                                        <ToggleButton fx:id="InfluenceTglBtnUAPPls" mnemonicParsing="false" onAction="#addInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Напряжение" />
-                                        <ToggleButton fx:id="InfluenceTglBtnFAPPls" mnemonicParsing="false" onAction="#addInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Частота" />
-                                        <ToggleButton fx:id="InfluenceTglBtnUnbAPPls" mnemonicParsing="false" onAction="#addInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Инбаланс U" />
-                                    </children>
-                                </VBox>
-                                <StackPane layoutX="150.0" layoutY="-1.0" prefHeight="140.0" prefWidth="600.0">
-                                    <children>
-                                        <Pane fx:id="InflFpaneAPPls" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                            <children>
-                                                <Label layoutX="76.0" layoutY="49.0" text="Влияние частоты, %" />
-                                                <Label layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
-                                                <ToggleButton fx:id="addTglBtnInfFAPPls" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
-                                                <TextField fx:id="txtFieldInfFAPPls" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
-                                            </children>
-                                        </Pane>
-                                        <Pane fx:id="InflUpaneAPPls" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                            <children>
-                                                <Label layoutX="76.0" layoutY="49.0" text="Влияние напряжения, %" />
-                                                <Label layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
-                                                <ToggleButton fx:id="addTglBtnInfUAPPls" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
-                                                <TextField fx:id="txtFieldInfUAPPls" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
-                                            </children>
-                                        </Pane>
-                                        <Pane fx:id="InflUInbPaneAPPls" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                            <children>
-                                                <Label layoutX="76.0" layoutY="49.0" text="Инбаланс фазных напряжений" />
-                                                <Label layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
-                                                <ToggleButton fx:id="addTglBtnInfUnblAPPls" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
-                                                <TextField fx:id="txtFieldInfUnblAPPls" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
-                                            </children>
-                                        </Pane>
-                                    </children>
-                                </StackPane>
-                            </children>
-                        </Pane>
                         <Pane fx:id="RPPlsPane" prefHeight="140.0" prefWidth="200.0">
                             <children>
                                 <VBox prefHeight="140.0" prefWidth="150.0" style="-fx-background-color: #303030;">
@@ -205,6 +161,45 @@
                                                 <Label layoutX="171.0" layoutY="14.0" text="Реактивная энергия в прямом направлении тока" />
                                                 <ToggleButton fx:id="addTglBtnInfUnblRPPls" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
                                                 <TextField fx:id="txtFieldInfUnblRPPls" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+                                            </children>
+                                        </Pane>
+                                    </children>
+                                </StackPane>
+                            </children>
+                        </Pane>
+                        <Pane fx:id="APPlsPane" prefHeight="140.0" prefWidth="200.0">
+                            <children>
+                                <VBox prefHeight="140.0" prefWidth="150.0" style="-fx-background-color: #303030;">
+                                    <children>
+                                        <ToggleButton fx:id="InfluenceTglBtnUAPPls" mnemonicParsing="false" onAction="#addInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Напряжение" />
+                                        <ToggleButton fx:id="InfluenceTglBtnFAPPls" mnemonicParsing="false" onAction="#addInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Частота" />
+                                        <ToggleButton fx:id="InfluenceTglBtnUnbAPPls" mnemonicParsing="false" onAction="#addInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Инбаланс U" />
+                                    </children>
+                                </VBox>
+                                <StackPane layoutX="150.0" layoutY="-1.0" prefHeight="140.0" prefWidth="600.0">
+                                    <children>
+                                        <Pane fx:id="InflUInbPaneAPPls" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                            <children>
+                                                <Label layoutX="76.0" layoutY="49.0" text="Инбаланс фазных напряжений" />
+                                                <Label layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
+                                                <ToggleButton fx:id="addTglBtnInfUnblAPPls" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+                                                <TextField fx:id="txtFieldInfUnblAPPls" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+                                            </children>
+                                        </Pane>
+                                        <Pane fx:id="InflUpaneAPPls" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                            <children>
+                                                <Label layoutX="76.0" layoutY="49.0" text="Влияние напряжения, %" />
+                                                <Label layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
+                                                <ToggleButton fx:id="addTglBtnInfUAPPls" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+                                                <TextField fx:id="txtFieldInfUAPPls" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+                                            </children>
+                                        </Pane>
+                                        <Pane fx:id="InflFpaneAPPls" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                            <children>
+                                                <Label layoutX="76.0" layoutY="49.0" text="Влияние частоты, %" />
+                                                <Label layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
+                                                <ToggleButton fx:id="addTglBtnInfFAPPls" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+                                                <TextField fx:id="txtFieldInfFAPPls" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
                                             </children>
                                         </Pane>
                                     </children>
