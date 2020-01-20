@@ -150,12 +150,12 @@
             </ScrollPane>
          </children>
       </AnchorPane>
-      <Button fx:id="CancelBtn" layoutX="1047.0" layoutY="794.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="41.0" prefWidth="150.0" text="Отменить">
+      <Button fx:id="CancelBtn" layoutX="1047.0" layoutY="794.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="40.0" prefWidth="150.0" text="Отменить">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
       </Button>
-      <Button fx:id="SaveBtn" layoutX="851.0" layoutY="794.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="41.0" prefWidth="150.0" text="Сохранить">
+      <Button fx:id="SaveBtn" layoutX="851.0" layoutY="794.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="40.0" prefWidth="150.0" text="Сохранить">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>

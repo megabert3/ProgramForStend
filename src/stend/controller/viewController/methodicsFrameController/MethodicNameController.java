@@ -23,6 +23,7 @@ public class MethodicNameController {
     @FXML
     private URL location;
 
+
     @FXML
     private TextField nameField;
 

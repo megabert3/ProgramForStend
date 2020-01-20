@@ -678,6 +678,21 @@ public class AddEditFrameController {
         this.saveInflListForCollumRPMns = saveInflListForCollumRPMns;
     }
 
+    public ObservableList<Commands> getTestListForCollumAPPls() {
+        return testListForCollumAPPls;
+    }
+
+    public ObservableList<Commands> getTestListForCollumAPMns() {
+        return testListForCollumAPMns;
+    }
+
+    public ObservableList<Commands> getTestListForCollumRPPls() {
+        return testListForCollumRPPls;
+    }
+
+    public ObservableList<Commands> getTestListForCollumRPMns() {
+        return testListForCollumRPMns;
+    }
 
     @FXML
     void initialize() {
@@ -2049,21 +2064,23 @@ public class AddEditFrameController {
         influenceFrame.setSaveInflListForCollumRPPls(saveInflListForCollumRPPls);
         influenceFrame.setSaveInflListForCollumRPMns(saveInflListForCollumRPMns);
 
-        influenceFrame.setInfluenceUprocAPPls(saveInfluenceUprocAPPls);
-        influenceFrame.setInfluenceFprocAPPls(saveInfluenceFprocAPPls);
-        influenceFrame.setInfluenceInbUAPPls(saveInfluenceInbUAPPls);
+        influenceFrame.setSaveInfluenceUprocAPPls(saveInfluenceUprocAPPls);
+        influenceFrame.setSaveInfluenceFprocAPPls(saveInfluenceFprocAPPls);
+        influenceFrame.setSaveInfluenceInbUAPPls(saveInfluenceInbUAPPls);
 
-        influenceFrame.setInfluenceUprocAPMns(saveInfluenceUprocAPMns);
-        influenceFrame.setInfluenceFprocAPMns(saveInfluenceFprocAPMns);
-        influenceFrame.setInfluenceInbUAPMns(saveInfluenceInbUAPMns);
+        influenceFrame.setSaveInfluenceUprocAPMns(saveInfluenceUprocAPMns);
+        influenceFrame.setSaveInfluenceFprocAPMns(saveInfluenceFprocAPMns);
+        influenceFrame.setSaveInfluenceInbUAPMns(saveInfluenceInbUAPMns);
 
-        influenceFrame.setInfluenceUprocRPPls(saveInfluenceUprocRPPls);
-        influenceFrame.setInfluenceFprocRPPls(saveInfluenceFprocRPPls);
-        influenceFrame.setInfluenceInbURPPls(saveInfluenceInbURPPls);
+        influenceFrame.setSaveInfluenceUprocRPPls(saveInfluenceUprocRPPls);
+        influenceFrame.setSaveInfluenceFprocRPPls(saveInfluenceFprocRPPls);
+        influenceFrame.setSaveInfluenceInbURPPls(saveInfluenceInbURPPls);
 
-        influenceFrame.setInfluenceUprocRPMns(saveInfluenceUprocRPMns);
-        influenceFrame.setInfluenceFprocRPMns(saveInfluenceFprocRPMns);
-        influenceFrame.setInfluenceInbURPMns(saveInfluenceInbURPMns);
+        influenceFrame.setSaveInfluenceUprocRPMns(saveInfluenceUprocRPMns);
+        influenceFrame.setSaveInfluenceFprocRPMns(saveInfluenceFprocRPMns);
+        influenceFrame.setSaveInfluenceInbURPMns(saveInfluenceInbURPMns);
+
+        influenceFrame.initOfAdeedTestPoints();
     }
 
     private void loadStage(String fxml, String stageName) {

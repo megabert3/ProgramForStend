@@ -32,22 +32,53 @@ public class MethodicsFrameController {
     private URL location;
 
     @FXML
+    private Button copyMetBtn;
+
+    @FXML
+    private Button deleteMetBtn;
+
+    @FXML
     private Button addMetBtn;
+
+    @FXML
+    private ToggleButton tglBtnAPPls;
+
+    @FXML
+    private ToggleButton tglBtnAPMns;
+
+    @FXML
+    private ToggleButton tglBtnRPPls;
+
+    @FXML
+    private ToggleButton tglBtnRPMns;
+
+    @FXML
+    private Button BtnGoToStartTest;
 
     @FXML
     private TableView<?> viewPointTable;
 
     @FXML
-    private GridPane setPointGird;
+    private TableColumn<?, ?> tabClMethodics;
 
     @FXML
-    private Button saveMetBtn;
+    private ListView<?> ListViewAPMns;
 
     @FXML
-    private Button addMetBtn2;
+    private ListView<?> ListViewAPPls;
 
     @FXML
-    private Button deleteMetBtn;
+    private ListView<?> ListViewRPPls;
+
+    @FXML
+    private ListView<?> ListViewAPRPMns;
+
+    @FXML
+    private Button editMetBtn;
+
+    @FXML
+    void tglBtnsEnegyViewAction(ActionEvent event) {
+    }
 
     @FXML
     void initialize() {

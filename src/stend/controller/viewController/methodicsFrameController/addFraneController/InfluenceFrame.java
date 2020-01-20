@@ -52,7 +52,7 @@ public class InfluenceFrame {
     //Листы с точками тестирования до сохранения
     private ObservableList<Commands> inflListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> inflListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
-    private ObservableList<Commands> infListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
+    private ObservableList<Commands> inflListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> inflListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
 
     //листы с точками после сохранения
@@ -75,24 +75,24 @@ public class InfluenceFrame {
     //Поля необходимые для добавления точек испытания на влияние
     //До сохранения
     //AP+
-    private double[] influenceUprocAPPls;
-    private double[] influenceFprocAPPls;
-    private String[] influenceInbUAPPls;
+    private double[] influenceUprocAPPls = new double[0];
+    private double[] influenceFprocAPPls = new double[0];
+    private String[] influenceInbUAPPls = new String[0];
 
     //AP-
-    private double[] influenceUprocAPMns;
-    private double[] influenceFprocAPMns;
-    private String[] influenceInbUAPMns;
+    private double[] influenceUprocAPMns = new double[0];
+    private double[] influenceFprocAPMns = new double[0];
+    private String[] influenceInbUAPMns = new String[0];
 
     //RP+
-    private double[] influenceUprocRPPls;
-    private double[] influenceFprocRPPls;
-    private String[] influenceInbURPPls;
+    private double[] influenceUprocRPPls = new double[0];
+    private double[] influenceFprocRPPls = new double[0];
+    private String[] influenceInbURPPls = new String[0];
 
     //RP-
-    private double[] influenceUprocRPMns;
-    private double[] influenceFprocRPMns;
-    private String[] influenceInbURPMns;
+    private double[] influenceUprocRPMns = new double[0];
+    private double[] influenceFprocRPMns = new double[0];
+    private String[] influenceInbURPMns = new String[0];
 
     //Поля необходимые для добавления точек испытания на влияние
     //После сохранения
@@ -446,44 +446,52 @@ public class InfluenceFrame {
         this.influenceFprocAPPls = influenceFprocAPPls;
     }
 
-    public void setInfluenceInbUAPPls(String[] influenceInbUAPPls) {
-        this.influenceInbUAPPls = influenceInbUAPPls;
+    public void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
+        this.saveInfluenceUprocAPPls = saveInfluenceUprocAPPls;
     }
 
-    public void setInfluenceUprocAPMns(double[] influenceUprocAPMns) {
-        this.influenceUprocAPMns = influenceUprocAPMns;
+    public void setSaveInfluenceFprocAPPls(double[] saveInfluenceFprocAPPls) {
+        this.saveInfluenceFprocAPPls = saveInfluenceFprocAPPls;
     }
 
-    public void setInfluenceFprocAPMns(double[] influenceFprocAPMns) {
-        this.influenceFprocAPMns = influenceFprocAPMns;
+    public void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
+        this.saveInfluenceInbUAPPls = saveInfluenceInbUAPPls;
     }
 
-    public void setInfluenceInbUAPMns(String[] influenceInbUAPMns) {
-        this.influenceInbUAPMns = influenceInbUAPMns;
+    public void setSaveInfluenceUprocAPMns(double[] saveInfluenceUprocAPMns) {
+        this.saveInfluenceUprocAPMns = saveInfluenceUprocAPMns;
     }
 
-    public void setInfluenceUprocRPPls(double[] influenceUprocRPPls) {
-        this.influenceUprocRPPls = influenceUprocRPPls;
+    public void setSaveInfluenceFprocAPMns(double[] saveInfluenceFprocAPMns) {
+        this.saveInfluenceFprocAPMns = saveInfluenceFprocAPMns;
     }
 
-    public void setInfluenceFprocRPPls(double[] influenceFprocRPPls) {
-        this.influenceFprocRPPls = influenceFprocRPPls;
+    public void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
+        this.saveInfluenceInbUAPMns = saveInfluenceInbUAPMns;
     }
 
-    public void setInfluenceInbURPPls(String[] influenceInbURPPls) {
-        this.influenceInbURPPls = influenceInbURPPls;
+    public void setSaveInfluenceUprocRPPls(double[] saveInfluenceUprocRPPls) {
+        this.saveInfluenceUprocRPPls = saveInfluenceUprocRPPls;
     }
 
-    public void setInfluenceUprocRPMns(double[] influenceUprocRPMns) {
-        this.influenceUprocRPMns = influenceUprocRPMns;
+    public void setSaveInfluenceFprocRPPls(double[] saveInfluenceFprocRPPls) {
+        this.saveInfluenceFprocRPPls = saveInfluenceFprocRPPls;
     }
 
-    public void setInfluenceFprocRPMns(double[] influenceFprocRPMns) {
-        this.influenceFprocRPMns = influenceFprocRPMns;
+    public void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
+        this.saveInfluenceInbURPPls = saveInfluenceInbURPPls;
     }
 
-    public void setInfluenceInbURPMns(String[] influenceInbURPMns) {
-        this.influenceInbURPMns = influenceInbURPMns;
+    public void setSaveInfluenceUprocRPMns(double[] saveInfluenceUprocRPMns) {
+        this.saveInfluenceUprocRPMns = saveInfluenceUprocRPMns;
+    }
+
+    public void setSaveInfluenceFprocRPMns(double[] saveInfluenceFprocRPMns) {
+        this.saveInfluenceFprocRPMns = saveInfluenceFprocRPMns;
+    }
+
+    public void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
+        this.saveInfluenceInbURPMns = saveInfluenceInbURPMns;
     }
 
     @FXML
@@ -607,7 +615,7 @@ public class InfluenceFrame {
                 gridPaneUAPPlus.setDisable(true);
                 InfluenceTglBtnUAPPls.setSelected(false);
 
-                for (CheckBox checkBox :checkBoxesListUAPPls) {
+                for (CheckBox checkBox : checkBoxesListUAPPls) {
                     checkBox.setSelected(false);
                 }
             }
@@ -848,6 +856,11 @@ public class InfluenceFrame {
     void saveOrCancelAction(ActionEvent event) {
         if (event.getSource() == SaveBtn) {
 
+            addEditFrameController.getTestListForCollumAPPls().removeAll(saveInflListForCollumAPPls);
+            addEditFrameController.getTestListForCollumAPMns().removeAll(saveInflListForCollumAPMns);
+            addEditFrameController.getTestListForCollumRPPls().removeAll(saveInflListForCollumRPPls);
+            addEditFrameController.getTestListForCollumRPMns().removeAll(saveInflListForCollumRPMns);
+
             saveInflListForCollumAPPls.clear();
             saveInflListForCollumAPMns.clear();
             saveInflListForCollumRPPls.clear();
@@ -855,23 +868,28 @@ public class InfluenceFrame {
 
             saveInflListForCollumAPPls.addAll(inflListForCollumAPPls);
             saveInflListForCollumAPMns.addAll(inflListForCollumAPMns);
-            saveInflListForCollumRPPls.addAll(inflListForCollumRPMns);
+            saveInflListForCollumRPPls.addAll(inflListForCollumRPPls);
             saveInflListForCollumRPMns.addAll(inflListForCollumRPMns);
 
+            addEditFrameController.getTestListForCollumAPPls().addAll(saveInflListForCollumAPPls);
+            addEditFrameController.getTestListForCollumAPMns().addAll(saveInflListForCollumAPMns);
+            addEditFrameController.getTestListForCollumRPPls().addAll(saveInflListForCollumRPPls);
+            addEditFrameController.getTestListForCollumRPMns().addAll(saveInflListForCollumRPMns);
+
             addEditFrameController.setSaveInfluenceUprocAPPls(influenceUprocAPPls);
-            addEditFrameController.setSaveInfluenceFprocAPPls(influenceUprocAPPls);
+            addEditFrameController.setSaveInfluenceFprocAPPls(influenceFprocAPPls);
             addEditFrameController.setSaveInfluenceInbUAPPls(influenceInbUAPPls);
 
             addEditFrameController.setSaveInfluenceUprocAPMns(influenceUprocAPMns);
-            addEditFrameController.setSaveInfluenceFprocAPMns(influenceUprocAPMns);
+            addEditFrameController.setSaveInfluenceFprocAPMns(influenceFprocAPMns);
             addEditFrameController.setSaveInfluenceInbUAPMns(influenceInbUAPMns);
 
             addEditFrameController.setSaveInfluenceUprocRPPls(influenceUprocRPPls);
-            addEditFrameController.setSaveInfluenceFprocRPPls(influenceUprocRPPls);
+            addEditFrameController.setSaveInfluenceFprocRPPls(influenceFprocRPPls);
             addEditFrameController.setSaveInfluenceInbURPPls(influenceInbURPPls);
 
             addEditFrameController.setSaveInfluenceUprocRPMns(influenceUprocRPMns);
-            addEditFrameController.setSaveInfluenceFprocRPMns(influenceUprocRPMns);
+            addEditFrameController.setSaveInfluenceFprocRPMns(influenceFprocRPMns);
             addEditFrameController.setSaveInfluenceInbURPMns(influenceInbURPMns);
 
             addEditFrameController.setSaveInflListForCollumAPPls((ArrayList<Commands>) saveInflListForCollumAPPls);
@@ -1229,7 +1247,7 @@ public class InfluenceFrame {
 
         viewPointTableAPPls.setItems(inflListForCollumAPPls);
         viewPointTableAPMns.setItems(inflListForCollumAPMns);
-        viewPointTableRPPls.setItems(infListForCollumRPPls);
+        viewPointTableRPPls.setItems(inflListForCollumRPPls);
         viewPointTableRPMns.setItems(inflListForCollumRPMns);
     }
 
@@ -1321,7 +1339,7 @@ public class InfluenceFrame {
             if (influenceUorF.equals("U")) {
 
                 for (double influenceUprocRPPls : influenceUprocRPPls) {
-                    infListForCollumRPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceUprocRPPls,
+                    inflListForCollumRPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceUprocRPPls,
                             0, percent, iABC, powerFactor, 2));
                 }
             }
@@ -1329,7 +1347,7 @@ public class InfluenceFrame {
             if (influenceUorF.equals("F")) {
 
                 for (double influenceFprocRPPls : influenceFprocRPPls) {
-                    infListForCollumRPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceFprocRPPls,
+                    inflListForCollumRPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceFprocRPPls,
                             0, percent, iABC, powerFactor, 2));
                 }
             }
@@ -1431,10 +1449,10 @@ public class InfluenceFrame {
                 for (double proc : influenceUprocRPPls) {
                     str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-                    for (int j = 0; j < infListForCollumRPPls.size(); j++) {
-                        errorCommand = (ErrorCommand) infListForCollumRPPls.get(j);
+                    for (int j = 0; j < inflListForCollumRPPls.size(); j++) {
+                        errorCommand = (ErrorCommand) inflListForCollumRPPls.get(j);
                         if (errorCommand.getName().equals(str)) {
-                            infListForCollumRPPls.remove(infListForCollumRPPls.get(j));
+                            inflListForCollumRPPls.remove(inflListForCollumRPPls.get(j));
                             j--;
                         }
                     }
@@ -1445,10 +1463,10 @@ public class InfluenceFrame {
                 for (double proc : influenceFprocRPPls) {
                     str = proc + "%" + point[0] + "n: " + point[6] + "; " + point[5];
 
-                    for (int j = 0; j < infListForCollumRPPls.size(); j++) {
-                        errorCommand = (ErrorCommand) infListForCollumRPPls.get(j);
+                    for (int j = 0; j < inflListForCollumRPPls.size(); j++) {
+                        errorCommand = (ErrorCommand) inflListForCollumRPPls.get(j);
                         if (errorCommand.getName().equals(str)) {
-                            infListForCollumRPPls.remove(infListForCollumRPPls.get(j));
+                            inflListForCollumRPPls.remove(inflListForCollumRPPls.get(j));
                             j--;
                         }
                     }
@@ -1490,57 +1508,98 @@ public class InfluenceFrame {
     }
 
     public void initOfAdeedTestPoints() {
-
         char[] charIdTestPoint;
+        String strArr;
+
         if (saveInfluenceUprocAPPls.length != 0) {
             influenceUprocAPPls = saveInfluenceUprocAPPls;
-            txtFieldInfUAPPls.setText(Arrays.toString(influenceUprocAPPls));
+            strArr = Arrays.toString(influenceUprocAPPls).substring(1, (Arrays.toString(influenceUprocAPPls)).length() - 1);
+
+            txtFieldInfUAPPls.setText(strArr);
+            txtFieldInfUAPPls.setDisable(true);
             addTglBtnInfUAPPls.setSelected(true);
+            InfluenceTglBtnUAPPls.setSelected(true);
+            gridPaneUAPPlus.setDisable(false);
         }
 
         if (saveInfluenceFprocAPPls.length != 0) {
             influenceFprocAPPls = saveInfluenceFprocAPPls;
-            txtFieldInfFAPPls.setText(Arrays.toString(influenceFprocAPPls));
+            strArr = Arrays.toString(influenceFprocAPPls).substring(1, (Arrays.toString(influenceFprocAPPls)).length() - 1);
+
+            txtFieldInfFAPPls.setText(strArr);
+            txtFieldInfFAPPls.setDisable(true);
             addTglBtnInfFAPPls.setSelected(true);
+            InfluenceTglBtnFAPPls.setSelected(true);
+            gridPaneFAPPlus.setDisable(false);
         }
 
         if (saveInfluenceUprocAPMns.length != 0) {
             influenceUprocAPMns = saveInfluenceUprocAPMns;
-            txtFieldInfUAPMns.setText(Arrays.toString(influenceUprocAPMns));
+            strArr = Arrays.toString(influenceUprocAPMns).substring(1, (Arrays.toString(influenceUprocAPMns)).length() - 1);
+
+            txtFieldInfUAPMns.setText(strArr);
+            txtFieldInfUAPMns.setDisable(true);
             addTglBtnInfUAPMns.setSelected(true);
+            InfluenceTglBtnUAPMns.setSelected(true);
+            gridPaneUAPMns.setDisable(false);
         }
 
         if (saveInfluenceFprocAPMns.length != 0) {
             influenceFprocAPMns = saveInfluenceFprocAPMns;
-            txtFieldInfFAPMns.setText(Arrays.toString(influenceFprocAPMns));
+            strArr = Arrays.toString(influenceFprocAPMns).substring(1, (Arrays.toString(influenceFprocAPMns)).length() - 1);
+
+            txtFieldInfFAPMns.setText(strArr);
+            txtFieldInfFAPMns.setDisable(true);
             addTglBtnInfFAPMns.setSelected(true);
+            InfluenceTglBtnFAPMns.setSelected(true);
+            gridPaneFAPMns.setDisable(false);
         }
 
         if (saveInfluenceUprocRPPls.length != 0) {
             influenceUprocRPPls = saveInfluenceUprocRPPls;
-            txtFieldInfURPPls.setText(Arrays.toString(influenceUprocRPPls));
+            strArr = Arrays.toString(influenceUprocRPPls).substring(1, (Arrays.toString(influenceUprocRPPls)).length() - 1);
+
+            txtFieldInfURPPls.setText(strArr);
+            txtFieldInfURPPls.setDisable(true);
             addTglBtnInfURPPls.setSelected(true);
+            InfluenceTglBtnURPPls.setSelected(true);
+            gridPaneURPPls.setDisable(false);
         }
 
         if (saveInfluenceFprocRPPls.length != 0) {
             influenceFprocRPPls = saveInfluenceFprocRPPls;
-            txtFieldInfFRPPls.setText(Arrays.toString(influenceFprocRPPls));
+            strArr = Arrays.toString(influenceFprocRPPls).substring(1, (Arrays.toString(influenceFprocRPPls)).length() - 1);
+
+            txtFieldInfFRPPls.setText(strArr);
+            txtFieldInfFRPPls.setDisable(true);
             addTglBtnInfFRPPls.setSelected(true);
+            InfluenceTglBtnFRPPls.setSelected(true);
+            gridPaneFRPPls.setDisable(false);
         }
 
         if (saveInfluenceUprocRPMns.length != 0) {
             influenceUprocRPMns = saveInfluenceUprocRPMns;
-            txtFieldInfURPMns.setText(Arrays.toString(influenceUprocRPMns));
+            strArr = Arrays.toString(influenceUprocRPMns).substring(1, (Arrays.toString(influenceUprocRPMns)).length() - 1);
+
+            txtFieldInfURPMns.setText(strArr);
+            txtFieldInfURPMns.setDisable(true);
             addTglBtnInfURPMns.setSelected(true);
+            InfluenceTglBtnURPMns.setSelected(true);
+            gridPaneURPMns.setDisable(false);
         }
 
         if (saveInfluenceFprocRPMns.length != 0) {
             influenceFprocRPMns = saveInfluenceFprocRPMns;
-            txtFieldInfFRPMns.setText(Arrays.toString(influenceFprocRPMns));
+            strArr = Arrays.toString(influenceFprocRPMns).substring(1, (Arrays.toString(influenceFprocRPMns)).length() - 1);
+
+            txtFieldInfFRPMns.setText(strArr);
+            txtFieldInfFRPMns.setDisable(true);
             addTglBtnInfFRPMns.setSelected(true);
+            InfluenceTglBtnFRPMns.setSelected(true);
+            gridPaneFRPMns.setDisable(false);
         }
 
-        System.out.println(saveInflListForCollumAPPls.isEmpty());
+
         if (!saveInflListForCollumAPPls.isEmpty()) {
 
             for (Commands comand : saveInflListForCollumAPPls) {
@@ -1648,7 +1707,7 @@ public class InfluenceFrame {
         }
 
         //RP-
-        if (charIdTestPoint[6] == 'R' && charIdTestPoint[8] == 'P') {
+        if (charIdTestPoint[6] == 'R' && charIdTestPoint[8] == 'N') {
 
             if (charIdTestPoint[0] == 'U') {
 
