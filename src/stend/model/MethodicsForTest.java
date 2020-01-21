@@ -10,6 +10,7 @@ public class MethodicsForTest {
 
     private static MethodicsForTest methodicsForTestInstance;
 
+
     //Значения коэффициента мощности
     private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C");
 
