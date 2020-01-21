@@ -16,6 +16,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import stend.controller.Commands.Commands;
+import stend.controller.Commands.ErrorCommand;
+import stend.helper.exeptions.InfoExeption;
 import stend.model.Methodic;
 import stend.model.MethodicsForTest;
 
@@ -24,7 +27,7 @@ public class MethodicsAddEditDeleteFrameController {
 
     private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
-    private ObservableList<String> metodicsNameList = FXCollections.observableArrayList(new ArrayList<>());
+    private ObservableList<Methodic> metodicsNameList = FXCollections.observableArrayList(new ArrayList<>());
 
     @FXML
     private Button copyMetBtn;
@@ -54,7 +57,7 @@ public class MethodicsAddEditDeleteFrameController {
     private TableView<Methodic> viewPointTable = new TableView<>();
 
     @FXML
-    private TableColumn<Methodic, String> tabClMethodics = new TableColumn<>("Список доступных методик");
+    private TableColumn<Methodic, String> tabClMethodics;
 
     @FXML
     private ListView<String> ListViewAPMns;
@@ -107,9 +110,49 @@ public class MethodicsAddEditDeleteFrameController {
     }
 
     @FXML
-    void initialize() {
-        tabClMethodics.setCellValueFactory(new PropertyValueFactory<>("methodicName"));
+    void initialize() throws InfoExeption {
+        methodicsForTest.addMethodicListToMap("Test1", new Methodic());
+        methodicsForTest.addMethodicListToMap("Test2", new Methodic());
+        methodicsForTest.addMethodicListToMap("Test3", new Methodic());
+
+        methodicsForTest.getMethodicsMap().get("Test1").setMethodicName("Test1");
+        methodicsForTest.getMethodicsMap().get("Test2").setMethodicName("Test2");
+        methodicsForTest.getMethodicsMap().get("Test3").setMethodicName("Test3");
         initMethodicListName();
+
+        tabClMethodics.setCellValueFactory(new PropertyValueFactory<>("methodicName"));
+
+        viewPointTable.setItems(metodicsNameList);
+
+        Methodic selectedBook = viewPointTable.getSelectionModel().getSelectedItem();
+
+        tabClMethodics.setOnEditCommit((TableColumn.CellEditEvent<Methodic, String> event) -> {
+            TablePosition<Methodic, String> pos = event.getTablePosition();
+
+            Methodic selectedBook1 = viewPointTable.getSelectionModel().getSelectedItem();
+
+            System.out.println(selectedBook1);
+
+            System.out.println(pos);
+
+            //String newImpulseValue = event.getNewValue();
+
+            int row = pos.getRow();
+
+            System.out.println(row);
+
+            Methodic methodic = event.getTableView().getItems().get(row);
+
+            System.out.println(methodic.getMethodicName());
+
+            //((ErrorCommand) command).setEmax(newImpulseValue);
+
+        });
+
+        for (Methodic met : metodicsNameList) {
+            System.out.println(met.getMethodicName());
+        }
+
     }
 
     @FXML
@@ -123,7 +166,7 @@ public class MethodicsAddEditDeleteFrameController {
         metodicsNameList.clear();
 
         for (Map.Entry<String, Methodic> keyNames : methodicsForTest.getMethodicsMap().entrySet()) {
-            metodicsNameList.add(keyNames.getKey());
+            metodicsNameList.add(keyNames.getValue());
         }
     }
 

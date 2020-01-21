@@ -22,9 +22,6 @@ public class MethodicsFrameController {
 
     private Map<String, CheckBox> checkBoxMap = new HashMap<>();
 
-    private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C");
-    private List<String> current = Arrays.asList("Imax", "0.5Imax", "0.2Imax", "0.5Ib", "Ib","0.2Ib", "0.1Ib", "0.05Ib");
-
     @FXML
     private ResourceBundle resources;
 
@@ -51,6 +48,7 @@ public class MethodicsFrameController {
 
     @FXML
     void initialize() {
+
     }
 
     @FXML

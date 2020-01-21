@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import stend.model.Methodic;
+import stend.model.MethodicsForTest;
 
 public class MainView extends Application {
 
@@ -14,5 +16,8 @@ public class MainView extends Application {
         primaryStage.setTitle("НЕВА СТЕНД");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
+        MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
+
     }
 }
