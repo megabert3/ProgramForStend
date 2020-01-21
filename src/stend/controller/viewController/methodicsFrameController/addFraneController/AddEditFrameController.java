@@ -24,6 +24,7 @@ import stend.controller.Commands.*;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
+import stend.controller.viewController.methodicsFrameController.MethodicNameController;
 import stend.helper.ConsoleHelper;
 import stend.helper.exeptions.InfoExeption;
 import stend.model.Methodic;
@@ -35,7 +36,9 @@ public class AddEditFrameController {
 
     private InfluenceFrame influenceFrame;
 
-    private Methodic methodic = new Methodic();
+    private MethodicNameController methodicNameController;
+
+    private Methodic methodic;
 
     private StendDLLCommands stendDLLCommands;
 
@@ -614,84 +617,94 @@ public class AddEditFrameController {
         return methodic;
     }
 
-    public void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
+    public void setMethodicNameController(MethodicNameController methodicNameController) {
+        this.methodicNameController = methodicNameController;
+    }
+
+    void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
         this.saveInfluenceUprocAPPls = saveInfluenceUprocAPPls;
     }
 
-    public void setSaveInfluenceFprocAPPls(double[] saveInfluenceFprocAPPls) {
+    void setSaveInfluenceFprocAPPls(double[] saveInfluenceFprocAPPls) {
         this.saveInfluenceFprocAPPls = saveInfluenceFprocAPPls;
     }
 
-    public void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
+    void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
         this.saveInfluenceInbUAPPls = saveInfluenceInbUAPPls;
     }
 
-    public void setSaveInfluenceUprocAPMns(double[] saveInfluenceUprocAPMns) {
+    void setSaveInfluenceUprocAPMns(double[] saveInfluenceUprocAPMns) {
         this.saveInfluenceUprocAPMns = saveInfluenceUprocAPMns;
     }
 
-    public void setSaveInfluenceFprocAPMns(double[] saveInfluenceFprocAPMns) {
+    void setSaveInfluenceFprocAPMns(double[] saveInfluenceFprocAPMns) {
         this.saveInfluenceFprocAPMns = saveInfluenceFprocAPMns;
     }
 
-    public void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
+    void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
         this.saveInfluenceInbUAPMns = saveInfluenceInbUAPMns;
     }
 
-    public void setSaveInfluenceUprocRPPls(double[] saveInfluenceUprocRPPls) {
+    void setSaveInfluenceUprocRPPls(double[] saveInfluenceUprocRPPls) {
         this.saveInfluenceUprocRPPls = saveInfluenceUprocRPPls;
     }
 
-    public void setSaveInfluenceFprocRPPls(double[] saveInfluenceFprocRPPls) {
+    void setSaveInfluenceFprocRPPls(double[] saveInfluenceFprocRPPls) {
         this.saveInfluenceFprocRPPls = saveInfluenceFprocRPPls;
     }
 
-    public void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
+    void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
         this.saveInfluenceInbURPPls = saveInfluenceInbURPPls;
     }
 
-    public void setSaveInfluenceUprocRPMns(double[] saveInfluenceUprocRPMns) {
+    void setSaveInfluenceUprocRPMns(double[] saveInfluenceUprocRPMns) {
         this.saveInfluenceUprocRPMns = saveInfluenceUprocRPMns;
     }
 
-    public void setSaveInfluenceFprocRPMns(double[] saveInfluenceFprocRPMns) {
+    void setSaveInfluenceFprocRPMns(double[] saveInfluenceFprocRPMns) {
         this.saveInfluenceFprocRPMns = saveInfluenceFprocRPMns;
     }
 
-    public void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
+    void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
         this.saveInfluenceInbURPMns = saveInfluenceInbURPMns;
     }
 
-    public void setSaveInflListForCollumAPPls(ArrayList<Commands> saveInflListForCollumAPPls) {
+    void setSaveInflListForCollumAPPls(ArrayList<Commands> saveInflListForCollumAPPls) {
         this.saveInflListForCollumAPPls = saveInflListForCollumAPPls;
     }
 
-    public void setSaveInflListForCollumAPMns(ArrayList<Commands> saveInflListForCollumAPMns) {
+    void setSaveInflListForCollumAPMns(ArrayList<Commands> saveInflListForCollumAPMns) {
         this.saveInflListForCollumAPMns = saveInflListForCollumAPMns;
     }
 
-    public void setSaveInflListForCollumRPPls(ArrayList<Commands> saveInflListForCollumRPPls) {
+    void setSaveInflListForCollumRPPls(ArrayList<Commands> saveInflListForCollumRPPls) {
         this.saveInflListForCollumRPPls = saveInflListForCollumRPPls;
     }
 
-    public void setSaveInflListForCollumRPMns(ArrayList<Commands> saveInflListForCollumRPMns) {
+    void setSaveInflListForCollumRPMns(ArrayList<Commands> saveInflListForCollumRPMns) {
         this.saveInflListForCollumRPMns = saveInflListForCollumRPMns;
     }
 
-    public ObservableList<Commands> getTestListForCollumAPPls() {
+    ObservableList<Commands> getTestListForCollumAPPls() {
         return testListForCollumAPPls;
     }
 
-    public ObservableList<Commands> getTestListForCollumAPMns() {
+    ObservableList<Commands> getTestListForCollumAPMns() {
         return testListForCollumAPMns;
     }
 
-    public ObservableList<Commands> getTestListForCollumRPPls() {
+    ObservableList<Commands> getTestListForCollumRPPls() {
         return testListForCollumRPPls;
     }
 
-    public ObservableList<Commands> getTestListForCollumRPMns() {
+    ObservableList<Commands> getTestListForCollumRPMns() {
         return testListForCollumRPMns;
+    }
+
+    //Устанавливает имя методики полученное с другого окна
+    public void setTextFielMethodicName() {
+        metodicNameTxtFld.setText(methodicNameController.getName());
+        metodicNameTxtFld.setEditable(false);
     }
 
     @FXML
@@ -724,30 +737,23 @@ public class AddEditFrameController {
     @FXML
     void saveOrCancelAction(ActionEvent event) {
         if (event.getSource() == SaveBtn) {
-            String metName;
+            ArrayList<Commands> APPls = new ArrayList<>(testListForCollumAPPls);
+            ArrayList<Commands> APMns = new ArrayList<>(testListForCollumAPMns);
+            ArrayList<Commands> RPPls = new ArrayList<>(testListForCollumRPPls);
+            ArrayList<Commands> RPMns = new ArrayList<>(testListForCollumRPMns);
 
-            if (!metodicNameTxtFld.getText().isEmpty()) {
-                metName = metodicNameTxtFld.getText();
+            methodic = new Methodic();
 
-                ArrayList<Commands> APPls = new ArrayList<>(testListForCollumAPPls);
-                ArrayList<Commands> APMns = new ArrayList<>(testListForCollumAPMns);
-                ArrayList<Commands> RPPls = new ArrayList<>(testListForCollumRPPls);
-                ArrayList<Commands> RPMns = new ArrayList<>(testListForCollumRPMns);
+            methodic.addCommandToList(0, APPls);
+            methodic.addCommandToList(1, APMns);
+            methodic.addCommandToList(2, RPPls);
+            methodic.addCommandToList(3, RPMns);
+            try {
 
-                methodic.addCommandToList(0, APPls);
-                methodic.addCommandToList(1, APMns);
-                methodic.addCommandToList(2, RPPls);
-                methodic.addCommandToList(3, RPMns);
+                methodicsForTest.addMethodicListToMap(metodicNameTxtFld.getText(), methodic);
 
-                try {
-                    methodicsForTest.addMethodicListToMap(metName, methodic);
-                    System.out.println("Методика успешно добавлена");
-                    System.out.println(methodicsForTest.getMethodicsMap().size());
-
-                } catch (InfoExeption infoExeption) {
-                    infoExeption.printStackTrace();
-                }
-            } else System.out.println("Ведите название методики");
+            } catch (InfoExeption ignor) {
+            }
         }
 
         if (event.getSource() == CancelBtn) {

@@ -9,13 +9,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import stend.controller.viewController.methodicsFrameController.addFraneController.AddEditFrameController;
 import stend.helper.exeptions.InfoExeption;
-import stend.model.Methodic;
 import stend.model.MethodicsForTest;
 
 public class MethodicNameController {
+
+    private AddEditFrameController addEditFrameController;
+
+    private String name;
 
     @FXML
     private ResourceBundle resources;
@@ -23,35 +28,57 @@ public class MethodicNameController {
     @FXML
     private URL location;
 
-
     @FXML
     private TextField nameField;
+
 
     @FXML
     private Button acceptNameBtn;
 
     @FXML
-    void initialize() {
+    private Label labelInfo;
 
+    @FXML
+    void initialize() {
     }
+
+    public String getName() {
+        return name;
+    }
+
 
     @FXML
     void actinonForNameFrame(ActionEvent event) {
         if (event.getSource() == acceptNameBtn) {
-            loadStage("/stend/view/method/addEditMet.fxml", "Добавление методики");
-        }
-    }
+            MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
+            try {
+                name = nameField.getText();
+                if (methodicsForTest.getMethodicsMap().containsKey(name)) throw new InfoExeption();
 
-    private void loadStageExeptionStage(String error) {
-        loadStage("/stend/view/exceptionName.fxml", "Ошибка");
+                loadStage("/stend/view/method/addEditMet.fxml", "Добавление методики");
+                Stage stage = (Stage) nameField.getScene().getWindow();
+                stage.hide();
+                stage.close();
+            }catch (InfoExeption e) {
+                labelInfo.setText("Методика с таким именем уже существует");
+            }
+        }
     }
 
     private void loadStage(String fxml, String stageName) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource(fxml));
+            fxmlLoader.load();
+            Parent root = fxmlLoader.getRoot();
             Stage stage = new Stage();
             stage.setTitle(stageName);
             stage.setScene(new Scene(root));
+
+            addEditFrameController = fxmlLoader.getController();
+            addEditFrameController.setMethodicNameController(this);
+
+            addEditFrameController.setTextFielMethodicName();
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
