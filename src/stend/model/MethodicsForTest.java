@@ -2,6 +2,8 @@ package stend.model;
 
 import stend.helper.exeptions.InfoExeption;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -25,16 +27,21 @@ public class MethodicsForTest {
         return methodicsForTestInstance;
     }
 
-    private HashMap<String, Methodic> methodicsMap = new HashMap<>();
+    //Лист со всеми методиками
+    private ArrayList<Methodic> methodics = new ArrayList<>();
 
-    public boolean addMethodicListToMap(String name, Methodic methodicList) throws InfoExeption {
-        if (methodicsMap.containsKey(name)) throw new InfoExeption();
-        methodicsMap.put(name, methodicList);
+    //Добавление методики в список
+    public boolean addMethodicToList(String name, Methodic methodicList) throws InfoExeption {
+        for (Methodic methodic : methodics) {
+            if (methodic.getMethodicName().equals(name)) throw new InfoExeption();
+        }
+        methodicList.setMethodicName(name);
+        methodics.add(methodicList);
         return true;
     }
 
-    public HashMap<String, Methodic> getMethodicsMap() {
-        return methodicsMap;
+    public ArrayList<Methodic> getMethodics() {
+        return methodics;
     }
 
     public List<String> getPowerFactor() {

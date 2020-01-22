@@ -25,6 +25,7 @@ import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
 import stend.controller.viewController.methodicsFrameController.MethodicNameController;
+import stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
 import stend.helper.ConsoleHelper;
 import stend.helper.exeptions.InfoExeption;
 import stend.model.Methodic;
@@ -37,6 +38,8 @@ public class AddEditFrameController {
     private InfluenceFrame influenceFrame;
 
     private MethodicNameController methodicNameController;
+
+    private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
 
     private Methodic methodic;
 
@@ -613,10 +616,6 @@ public class AddEditFrameController {
     @FXML
     private Button influenceBtn;
 
-    public Methodic getMethodic() {
-        return methodic;
-    }
-
     public void setMethodicNameController(MethodicNameController methodicNameController) {
         this.methodicNameController = methodicNameController;
     }
@@ -685,6 +684,10 @@ public class AddEditFrameController {
         this.saveInflListForCollumRPMns = saveInflListForCollumRPMns;
     }
 
+    public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {
+        this.methodicsAddEditDeleteFrameController = methodicsAddEditDeleteFrameController;
+    }
+
     ObservableList<Commands> getTestListForCollumAPPls() {
         return testListForCollumAPPls;
     }
@@ -749,8 +752,10 @@ public class AddEditFrameController {
             methodic.addCommandToList(2, RPPls);
             methodic.addCommandToList(3, RPMns);
             try {
-
-                methodicsForTest.addMethodicListToMap(metodicNameTxtFld.getText(), methodic);
+                System.out.println(methodicsForTest.getMethodics().size());
+                methodicsForTest.addMethodicToList(metodicNameTxtFld.getText(), methodic);
+                System.out.println(methodicsForTest.getMethodics().size());
+                methodicsAddEditDeleteFrameController.getViewPointTable().setItems(FXCollections.observableArrayList(methodicsForTest.getMethodics()));
 
             } catch (InfoExeption ignor) {
             }

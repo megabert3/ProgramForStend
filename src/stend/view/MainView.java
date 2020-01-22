@@ -16,8 +16,6 @@ public class MainView extends Application {
         primaryStage.setTitle("НЕВА СТЕНД");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-
-        MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
-
+        
     }
 }

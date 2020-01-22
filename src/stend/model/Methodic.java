@@ -9,27 +9,26 @@ import java.util.Map;
 
 public class Methodic {
 
-    private static Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
+    private Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
 
-    private static List<Commands> activeEnergyDirect = new ArrayList<>();
-    private static List<Commands> activeEnergyRevers = new ArrayList<>();
-    private static List<Commands> reactiveEnergyDirect = new ArrayList<>();
-    private static List<Commands> reactiveEnergyReverse = new ArrayList<>();
-
-    static {
-        commandsMap.put(0, activeEnergyDirect);
-        commandsMap.put(1, activeEnergyRevers);
-        commandsMap.put(2, reactiveEnergyDirect);
-        commandsMap.put(3, reactiveEnergyReverse);
+    public Methodic() {
+        commandsMap.put(0, new ArrayList<Commands>());
+        commandsMap.put(1, new ArrayList<Commands>());
+        commandsMap.put(2, new ArrayList<Commands>());
+        commandsMap.put(3, new ArrayList<Commands>());
     }
 
     private String methodicName;
 
-    public void addCommandToList(Integer numb, ArrayList<Commands> list) {
-        commandsMap.get(numb).addAll(list);
+    public boolean addCommandToList(Integer numb, ArrayList<Commands> list) {
+        if (numb > 4 || numb < 0) return false;
+        else {
+            commandsMap.get(numb).addAll(list);
+        }
+        return true;
     }
 
-    public static Map<Integer, List<Commands>> getCommandsMap() {
+    public Map<Integer, List<Commands>> getCommandsMap() {
         return commandsMap;
     }
 

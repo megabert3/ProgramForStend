@@ -7,4 +7,9 @@ public class ConstantCommand implements Commands {
     public void execute() {
 
     }
+
+    @Override
+    public String getName() {
+        return null;
+    }
 }

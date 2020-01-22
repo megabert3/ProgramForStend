@@ -1,11 +1,13 @@
 package stend.controller.viewController.methodicsFrameController;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +19,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import stend.controller.Commands.Commands;
-import stend.controller.Commands.ErrorCommand;
 import stend.helper.exeptions.InfoExeption;
 import stend.model.Methodic;
 import stend.model.MethodicsForTest;
@@ -27,7 +28,18 @@ public class MethodicsAddEditDeleteFrameController {
 
     private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
-    private ObservableList<Methodic> metodicsNameList = FXCollections.observableArrayList(new ArrayList<>());
+    private ObservableList<Methodic> metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
+
+    //Выделенная методикка
+    private Methodic focusedMetodic;
+
+    //Листы для точек из методики
+    private ArrayList<String> comandListAPPls = new ArrayList<>();
+    private ArrayList<String> comandListAPMns = new ArrayList<>();
+    private ArrayList<String> comandListRPPls = new ArrayList<>();
+    private ArrayList<String> comandListRPMns = new ArrayList<>();
+
+    private MethodicNameController methodicNameController;
 
     @FXML
     private Button copyMetBtn;
@@ -60,10 +72,10 @@ public class MethodicsAddEditDeleteFrameController {
     private TableColumn<Methodic, String> tabClMethodics;
 
     @FXML
-    private ListView<String> ListViewAPMns;
+    private ListView<String> ListViewAPPls;
 
     @FXML
-    private ListView<String> ListViewAPPls;
+    private ListView<String> ListViewAPMns;
 
     @FXML
     private ListView<String> ListViewRPPls;
@@ -109,76 +121,106 @@ public class MethodicsAddEditDeleteFrameController {
         }
     }
 
+    public TableView<Methodic> getViewPointTable() {
+        return viewPointTable;
+    }
+
     @FXML
     void initialize() throws InfoExeption {
-        methodicsForTest.addMethodicListToMap("Test1", new Methodic());
-        methodicsForTest.addMethodicListToMap("Test2", new Methodic());
-        methodicsForTest.addMethodicListToMap("Test3", new Methodic());
+        methodicsForTest.addMethodicToList("Test1", new Methodic());
+        methodicsForTest.addMethodicToList("Test2", new Methodic());
+        methodicsForTest.addMethodicToList("Test3", new Methodic());
+        metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
 
-        methodicsForTest.getMethodicsMap().get("Test1").setMethodicName("Test1");
-        methodicsForTest.getMethodicsMap().get("Test2").setMethodicName("Test2");
-        methodicsForTest.getMethodicsMap().get("Test3").setMethodicName("Test3");
+        System.out.println(methodicsForTest.getMethodics().get(0).getCommandsMap().get(0).size());
+        System.out.println(methodicsForTest.getMethodics().get(0).getCommandsMap().get(1).size());
+        System.out.println(methodicsForTest.getMethodics().get(0).getCommandsMap().get(2).size());
+        System.out.println(methodicsForTest.getMethodics().get(0).getCommandsMap().get(3).size());
+
+        tglBtnAPPls.setSelected(true);
+
         initMethodicListName();
-
-        tabClMethodics.setCellValueFactory(new PropertyValueFactory<>("methodicName"));
-
-        viewPointTable.setItems(metodicsNameList);
-
-        Methodic selectedBook = viewPointTable.getSelectionModel().getSelectedItem();
-
-        tabClMethodics.setOnEditCommit((TableColumn.CellEditEvent<Methodic, String> event) -> {
-            TablePosition<Methodic, String> pos = event.getTablePosition();
-
-            Methodic selectedBook1 = viewPointTable.getSelectionModel().getSelectedItem();
-
-            System.out.println(selectedBook1);
-
-            System.out.println(pos);
-
-            //String newImpulseValue = event.getNewValue();
-
-            int row = pos.getRow();
-
-            System.out.println(row);
-
-            Methodic methodic = event.getTableView().getItems().get(row);
-
-            System.out.println(methodic.getMethodicName());
-
-            //((ErrorCommand) command).setEmax(newImpulseValue);
-
-        });
-
-        for (Methodic met : metodicsNameList) {
-            System.out.println(met.getMethodicName());
-        }
 
     }
 
     @FXML
-    void actinonForMethodicsFrame(ActionEvent event) {
+    void actinonForMethodicsFrame(ActionEvent event) throws InfoExeption {
         if (event.getSource() == addMetBtn) {
             loadStage("/stend/view/method/metodicName.fxml", "Имя методики методики");
+        }
+
+        if (event.getSource() == copyMetBtn) {
         }
     }
 
     private void initMethodicListName() {
-        metodicsNameList.clear();
+        tabClMethodics.setCellValueFactory(new PropertyValueFactory<>("methodicName"));
 
-        for (Map.Entry<String, Methodic> keyNames : methodicsForTest.getMethodicsMap().entrySet()) {
-            metodicsNameList.add(keyNames.getValue());
+        viewPointTable.setItems(metodicsNameList);
+
+        viewPointTable.setPlaceholder(new Label("У вас не создано ни одоной методики"));
+
+        metodicsNameList = viewPointTable.getSelectionModel().getSelectedItems();
+
+
+        metodicsNameList.addListener(new ListChangeListener<Methodic>() {
+            @Override
+            public void onChanged(Change<? extends Methodic> c) {
+                tglBtnAPPls.setSelected(true);
+                focusedMetodic = c.getList().get(0);
+
+                setListsView();
+            }
+        });
+    }
+
+    private void setListsView() {
+        if (focusedMetodic == null) return;
+
+        comandListAPPls.clear();
+        comandListAPMns.clear();
+        comandListRPPls.clear();
+        comandListRPMns.clear();
+
+        for (Commands commandsAPPls : focusedMetodic.getCommandsMap().get(0)) {
+            comandListAPPls.add(commandsAPPls.getName());
         }
+
+        for (Commands commandsAPMns : focusedMetodic.getCommandsMap().get(1)) {
+            comandListAPMns.add(commandsAPMns.getName());
+        }
+
+        for (Commands commandsRPPls : focusedMetodic.getCommandsMap().get(2)) {
+            comandListRPPls.add(commandsRPPls.getName());
+        }
+
+        for (Commands commandsRPMns : focusedMetodic.getCommandsMap().get(3)) {
+            comandListRPMns.add(commandsRPMns.getName());
+        }
+
+        ListViewAPPls.setItems(FXCollections.observableArrayList(comandListAPPls));
+        ListViewAPMns.setItems(FXCollections.observableArrayList(comandListAPMns));
+        ListViewRPPls.setItems(FXCollections.observableArrayList(comandListRPMns));
+        ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
     }
 
 
     private void loadStage(String fxml, String stageName) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource(fxml));
+            fxmlLoader.load();
+            Parent root = fxmlLoader.getRoot();
             Stage stage = new Stage();
             stage.setTitle(stageName);
             stage.setScene(new Scene(root));
+
+            methodicNameController = fxmlLoader.getController();
+            methodicNameController.setMethodicsAddEditDeleteFrameController(this);
+
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

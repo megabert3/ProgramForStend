@@ -14,11 +14,14 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import stend.controller.viewController.methodicsFrameController.addFraneController.AddEditFrameController;
 import stend.helper.exeptions.InfoExeption;
+import stend.model.Methodic;
 import stend.model.MethodicsForTest;
 
 public class MethodicNameController {
 
     private AddEditFrameController addEditFrameController;
+
+    private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
 
     private String name;
 
@@ -31,12 +34,15 @@ public class MethodicNameController {
     @FXML
     private TextField nameField;
 
-
     @FXML
     private Button acceptNameBtn;
 
     @FXML
     private Label labelInfo;
+
+    public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {
+        this.methodicsAddEditDeleteFrameController = methodicsAddEditDeleteFrameController;
+    }
 
     @FXML
     void initialize() {
@@ -50,10 +56,12 @@ public class MethodicNameController {
     @FXML
     void actinonForNameFrame(ActionEvent event) {
         if (event.getSource() == acceptNameBtn) {
-            MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
             try {
                 name = nameField.getText();
-                if (methodicsForTest.getMethodicsMap().containsKey(name)) throw new InfoExeption();
+
+                for (Methodic methodic : MethodicsForTest.getMethodicsForTestInstance().getMethodics()) {
+                    if (methodic.getMethodicName().equals(name)) throw new InfoExeption();
+                }
 
                 loadStage("/stend/view/method/addEditMet.fxml", "Добавление методики");
                 Stage stage = (Stage) nameField.getScene().getWindow();
@@ -77,8 +85,9 @@ public class MethodicNameController {
 
             addEditFrameController = fxmlLoader.getController();
             addEditFrameController.setMethodicNameController(this);
-
+            addEditFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
             addEditFrameController.setTextFielMethodicName();
+
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
