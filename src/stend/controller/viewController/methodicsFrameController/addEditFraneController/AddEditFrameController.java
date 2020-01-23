@@ -1,6 +1,7 @@
-package stend.controller.viewController.methodicsFrameController.addFraneController;
+package stend.controller.viewController.methodicsFrameController.addEditFraneController;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.*;
 
@@ -57,11 +58,43 @@ public class AddEditFrameController {
     //Это трёхфазный стенд?
     private boolean isThrePhaseStend;
 
+    //Листы с checkBox'ами.
+    //AP+
+    private ArrayList<CheckBox> checkBoxesAllPhaseAPPlus = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseAAPPlus = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseBAPPlus = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseCAPPlus = new ArrayList<>();
+
+    //AP-
+    private ArrayList<CheckBox> checkBoxesAllPhaseAPMns = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseAAPMns = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseBAPMns = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseCAPMns = new ArrayList<>();
+
+    //RP+
+    private ArrayList<CheckBox> checkBoxesAllPhaseRPPlus = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseARPPlus = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseBRPPlus = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseCRPPlus = new ArrayList<>();
+
+    //RP+
+    private ArrayList<CheckBox> checkBoxesAllPhaseRPMns = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseARPMns = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseBRPMns = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxesPhaseCRPMns = new ArrayList<>();
+
+
+    //Сохранённые листы с точками
+    private ArrayList<Commands> saveListForCollumAPPls = new ArrayList<>();
+    private ArrayList<Commands> saveListForCollumAPMns = new ArrayList<>();
+    private ArrayList<Commands> saveListForCollumRPPls = new ArrayList<>();
+    private ArrayList<Commands> saveListForCollumRPMns = new ArrayList<>();
+
     //Лист с точками общая методика
-    private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
-    private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
-    private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
-    private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
+    private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(saveListForCollumAPPls);
+    private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(saveListForCollumAPMns);
+    private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(saveListForCollumRPPls);
+    private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(saveListForCollumRPMns);
 
     //------------------------------------------------------------------------------------------------------------
     //Данные полученные с окна "влияния".
@@ -710,6 +743,10 @@ public class AddEditFrameController {
         metodicNameTxtFld.setEditable(false);
     }
 
+    public void setMethodic(Methodic methodic) {
+        this.methodic = methodic;
+    }
+
     @FXML
     void initialize() {
         if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
@@ -745,19 +782,40 @@ public class AddEditFrameController {
             ArrayList<Commands> RPPls = new ArrayList<>(testListForCollumRPPls);
             ArrayList<Commands> RPMns = new ArrayList<>(testListForCollumRPMns);
 
-            methodic = new Methodic();
+            if (methodic == null) {
+                methodic = new Methodic();
+            }
 
             methodic.addCommandToList(0, APPls);
             methodic.addCommandToList(1, APMns);
             methodic.addCommandToList(2, RPPls);
             methodic.addCommandToList(3, RPMns);
+
+            methodic.setSaveInflListForCollumAPPls(saveInflListForCollumAPPls);
+            methodic.setSaveInflListForCollumAPMns(saveInflListForCollumAPMns);
+            methodic.setSaveInflListForCollumRPPls(saveInflListForCollumRPPls);
+            methodic.setSaveInflListForCollumRPMns(saveInflListForCollumRPMns);
+
+            methodic.setSaveInfluenceUprocAPPls(saveInfluenceUprocAPPls);
+            methodic.setSaveInfluenceUprocAPMns(saveInfluenceUprocAPMns);
+            methodic.setSaveInfluenceUprocRPPls(saveInfluenceUprocRPPls);
+            methodic.setSaveInfluenceUprocRPMns(saveInfluenceUprocRPMns);
+
+            methodic.setSaveInfluenceFprocAPPls(saveInfluenceFprocAPPls);
+            methodic.setSaveInfluenceFprocAPMns(saveInfluenceFprocAPMns);
+            methodic.setSaveInfluenceFprocRPPls(saveInfluenceFprocRPPls);
+            methodic.setSaveInfluenceFprocRPMns(saveInfluenceFprocRPMns);
+
+            methodic.setSaveInfluenceInbUAPPls(saveInfluenceInbUAPPls);
+            methodic.setSaveInfluenceInbUAPMns(saveInfluenceInbUAPMns);
+            methodic.setSaveInfluenceInbURPPls(saveInfluenceInbURPPls);
+            methodic.setSaveInfluenceInbURPMns(saveInfluenceInbURPMns);
+
             try {
-                System.out.println(methodicsForTest.getMethodics().size());
                 methodicsForTest.addMethodicToList(metodicNameTxtFld.getText(), methodic);
-                System.out.println(methodicsForTest.getMethodics().size());
                 methodicsAddEditDeleteFrameController.getViewPointTable().setItems(FXCollections.observableArrayList(methodicsForTest.getMethodics()));
 
-            } catch (InfoExeption ignor) {
+            } catch (InfoExeption ignored) {
             }
         }
 
@@ -1454,7 +1512,7 @@ public class AddEditFrameController {
         }
     }
 
-    public void initCoiseBoxParamForRTC() {
+    private void initCoiseBoxParamForRTC() {
         ChcBxRTCErrAPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
         ChcBxRTCErrAPPls.getSelectionModel().select(0);
 
@@ -1577,13 +1635,16 @@ public class AddEditFrameController {
                 CheckBox finalCheckBox = checkBox;
                 String[] idCheckBox = finalCheckBox.getId().split(";");
 
+                addCheckBoxInList(idCheckBox, checkBox);
+
                 checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
                     if (newVal) {
-                        addTestPointInMethodic(finalCheckBox.getId());
+                        addTestPointInMethodic(idCheckBox, finalCheckBox.getId());
                     } else {
                         deleteTestPointInMethodic(idCheckBox);
                     }
                 });
+
                 GridPane.setColumnIndex(checkBox, x + 1);
                 GridPane.setRowIndex(checkBox, y + 1);
                 GridPane.setHalignment(checkBox, HPos.CENTER);
@@ -1592,6 +1653,301 @@ public class AddEditFrameController {
                 pane.getChildren().add(checkBox);
             }
         }
+    }
+
+    //Добавляет CheckBox в нужний лист CB
+    private void addCheckBoxInList(String[] idCheck, CheckBox checkBox) {
+
+        //AP+
+        if (idCheck[2].equals("A") && idCheck[3].equals("P")) {
+            if (idCheck[1].equals("H")) {
+                checkBoxesAllPhaseAPPlus.add(checkBox);
+            }
+
+            if (idCheck[1].equals("A")) {
+                checkBoxesPhaseAAPPlus.add(checkBox);
+            }
+
+            if (idCheck[1].equals("B")) {
+                checkBoxesPhaseBAPPlus.add(checkBox);
+            }
+
+            if (idCheck[1].equals("C")) {
+                checkBoxesPhaseCAPPlus.add(checkBox);
+            }
+        }
+
+        //AP-
+        if (idCheck[2].equals("A") && idCheck[3].equals("N")) {
+
+            if (idCheck[1].equals("H")) {
+                checkBoxesAllPhaseAPMns.add(checkBox);
+            }
+
+            if (idCheck[1].equals("A")) {
+                checkBoxesPhaseAAPMns.add(checkBox);
+            }
+
+            if (idCheck[1].equals("B")) {
+                checkBoxesPhaseBAPMns.add(checkBox);
+            }
+
+            if (idCheck[1].equals("C")) {
+                checkBoxesPhaseCAPMns.add(checkBox);
+            }
+        }
+
+        //RP+
+        if (idCheck[2].equals("R") && idCheck[3].equals("P")) {
+
+            if (idCheck[1].equals("H")) {
+                checkBoxesAllPhaseRPPlus.add(checkBox);
+            }
+
+            if (idCheck[1].equals("A")) {
+                checkBoxesPhaseARPPlus.add(checkBox);
+            }
+
+            if (idCheck[1].equals("B")) {
+                checkBoxesPhaseBRPPlus.add(checkBox);
+            }
+
+            if (idCheck[1].equals("C")) {
+                checkBoxesPhaseCRPPlus.add(checkBox);
+            }
+        }
+
+        //RP-
+        if (idCheck[2].equals("R") && idCheck[3].equals("N")) {
+
+            if (idCheck[1].equals("H")) {
+                checkBoxesAllPhaseAPMns.add(checkBox);
+            }
+
+            if (idCheck[1].equals("A")) {
+                checkBoxesPhaseAAPMns.add(checkBox);
+            }
+
+            if (idCheck[1].equals("B")) {
+                checkBoxesPhaseBAPMns.add(checkBox);
+            }
+
+            if (idCheck[1].equals("C")) {
+                checkBoxesPhaseCAPMns.add(checkBox);
+            }
+        }
+    }
+
+    //Задаёт параметр true или false нужной точке
+    public void addTestPointsOnGreedPane() {
+        char[] testPointIdArr;
+
+        if (!saveListForCollumAPPls.isEmpty()) {
+
+            for (Commands command : saveInflListForCollumAPPls) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+                }
+            }
+        }
+
+        if (!saveListForCollumAPMns.isEmpty()) {
+
+            for (Commands command : saveInflListForCollumAPMns) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+                }
+            }
+        }
+
+        if (!saveListForCollumRPPls.isEmpty()) {
+
+            for (Commands command : saveInflListForCollumRPPls) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+                }
+            }
+        }
+
+        if (!saveListForCollumRPMns.isEmpty()) {
+
+            for (Commands command : saveInflListForCollumRPMns) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+                }
+            }
+        }
+    }
+
+    //Находит нужный CheckBox и задаёт значение
+    private void setTrueOrFalseOnCheckBox(char[] testPointIdArr, Commands commands) {
+        System.out.println(Arrays.toString(testPointIdArr));
+        System.out.println(((ErrorCommand) commands).getId());
+        //AP+
+        if (testPointIdArr[4] == 'A' && testPointIdArr[6] == 'P') {
+
+            if (testPointIdArr[2] == 'H') {
+
+                for (CheckBox checkBox : checkBoxesAllPhaseAPPlus) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'A') {
+
+                for (CheckBox checkBox : checkBoxesPhaseAAPPlus) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'B') {
+
+                for (CheckBox checkBox : checkBoxesPhaseBAPPlus) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'C') {
+
+                for (CheckBox checkBox : checkBoxesPhaseCAPPlus) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+        }
+
+        //AP-
+        if (testPointIdArr[4] == 'A' && testPointIdArr[6] == 'N') {
+
+            if (testPointIdArr[2] == 'H') {
+
+                for (CheckBox checkBox : checkBoxesAllPhaseAPMns) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'A') {
+
+                for (CheckBox checkBox : checkBoxesPhaseAAPMns) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'B') {
+
+                for (CheckBox checkBox : checkBoxesPhaseBAPMns) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'C') {
+
+                for (CheckBox checkBox : checkBoxesPhaseCAPMns) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+        }
+
+        //RP+
+        if (testPointIdArr[4] == 'R' && testPointIdArr[6] == 'P') {
+
+            if (testPointIdArr[2] == 'H') {
+
+                for (CheckBox checkBox : checkBoxesAllPhaseRPPlus) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'A') {
+
+                for (CheckBox checkBox : checkBoxesPhaseARPPlus) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'B') {
+
+                for (CheckBox checkBox : checkBoxesPhaseBRPPlus) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'C') {
+
+                for (CheckBox checkBox : checkBoxesPhaseCRPPlus) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+        }
+
+
+        //RP-
+        if (testPointIdArr[4] == 'A' && testPointIdArr[6] == 'P') {
+
+            if (testPointIdArr[2] == 'H') {
+
+                for (CheckBox checkBox : checkBoxesAllPhaseRPMns) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'A') {
+
+                for (CheckBox checkBox : checkBoxesPhaseARPMns) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'B') {
+
+                for (CheckBox checkBox : checkBoxesPhaseBRPMns) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'C') {
+
+                for (CheckBox checkBox : checkBoxesPhaseCAPPlus) {
+                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                        checkBox.setSelected(true);
+                    }
+                }
+            }
+        }
+
     }
 
     //Создаёт поле нужной величины
@@ -1940,12 +2296,13 @@ public class AddEditFrameController {
     }
 
     //Добавляет тестовую точку в методику
-    private void addTestPointInMethodic(String testPoint) {
+    private void addTestPointInMethodic(String[] dirCurFactor, String testPoint) {
         if (isThrePhaseStend) {
             stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
         } else {
             stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
         }
+
         /** 1;H;A;P;0.2 Ib;0.5C
          *  режим;
          *  Фазы по которым необходимо пустить ток (H);
@@ -1954,7 +2311,6 @@ public class AddEditFrameController {
          *  Ток 0.2 Ib
          *  Коэф мощности 0.8L
          *  */
-        String[] dirCurFactor = testPoint.split(";");
 
         //Phase - Режим
         int phase = Integer.parseInt(dirCurFactor[0]);
@@ -2092,6 +2448,37 @@ public class AddEditFrameController {
         influenceFrame.setSaveInfluenceInbURPMns(saveInfluenceInbURPMns);
 
         influenceFrame.initOfAdeedTestPoints();
+    }
+
+
+    //Проверияет нет ли данных с полученной методики и если у неё есть данные, то выгружает её в это окно
+    public void initEditsMetodic() {
+        saveListForCollumAPPls.addAll(methodic.getCommandsMap().get(0));
+        saveListForCollumAPMns.addAll(methodic.getCommandsMap().get(1));
+        saveListForCollumRPPls.addAll(methodic.getCommandsMap().get(2));
+        saveListForCollumRPMns.addAll(methodic.getCommandsMap().get(3));
+
+        System.out.println(saveListForCollumAPPls.size());
+
+        saveInflListForCollumAPPls.addAll(methodic.getSaveInflListForCollumAPPls());
+        saveInflListForCollumAPMns.addAll(methodic.getSaveInflListForCollumAPMns());
+        saveInflListForCollumRPPls.addAll(methodic.getSaveInflListForCollumRPPls());
+        saveInflListForCollumRPMns.addAll(methodic.getSaveInflListForCollumRPPls());
+
+        saveInfluenceUprocAPPls = methodic.getSaveInfluenceUprocAPPls();
+        saveInfluenceUprocAPMns = methodic.getSaveInfluenceUprocAPMns();
+        saveInfluenceUprocRPPls = methodic.getSaveInfluenceUprocRPPls();
+        saveInfluenceUprocRPMns = methodic.getSaveInfluenceUprocRPMns();
+
+        saveInfluenceFprocAPPls = methodic.getSaveInfluenceFprocAPPls();
+        saveInfluenceFprocAPMns = methodic.getSaveInfluenceFprocAPMns();
+        saveInfluenceFprocRPPls = methodic.getSaveInfluenceFprocRPPls();
+        saveInfluenceFprocRPMns = methodic.getSaveInfluenceFprocRPMns();
+
+        saveInfluenceInbUAPPls = methodic.getSaveInfluenceInbUAPPls();
+        saveInfluenceInbUAPMns = methodic.getSaveInfluenceInbUAPMns();
+        saveInfluenceInbURPPls = methodic.getSaveInfluenceInbURPPls();
+        saveInfluenceInbURPMns = methodic.getSaveInfluenceInbURPMns();
     }
 
     private void loadStage(String fxml, String stageName) {

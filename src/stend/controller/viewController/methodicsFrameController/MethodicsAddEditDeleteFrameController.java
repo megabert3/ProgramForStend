@@ -2,8 +2,6 @@ package stend.controller.viewController.methodicsFrameController;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -19,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import stend.controller.Commands.Commands;
+import stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditFrameController;
 import stend.helper.exeptions.InfoExeption;
 import stend.model.Methodic;
 import stend.model.MethodicsForTest;
@@ -40,9 +39,13 @@ public class MethodicsAddEditDeleteFrameController {
     private ArrayList<String> comandListRPMns = new ArrayList<>();
 
     private MethodicNameController methodicNameController;
+    private AddEditFrameController addEditFrameController;
 
     @FXML
     private Button copyMetBtn;
+
+    @FXML
+    private Button editMetBtn;
 
     @FXML
     private Button deleteMetBtn;
@@ -83,9 +86,8 @@ public class MethodicsAddEditDeleteFrameController {
     @FXML
     private ListView<String> ListViewRPMns;
 
-    @FXML
-    private Button editMetBtn;
 
+    //Имитацию TglGroup
     @FXML
     void tglBtnsEnegyViewAction(ActionEvent event) {
         if (event.getSource() == tglBtnAPPls) {
@@ -93,7 +95,6 @@ public class MethodicsAddEditDeleteFrameController {
             tglBtnAPMns.setSelected(false);
             tglBtnRPPls.setSelected(false);
             tglBtnRPMns.setSelected(false);
-            ListViewAPPls.toFront();
         }
 
         if (event.getSource() == tglBtnAPMns) {
@@ -101,7 +102,6 @@ public class MethodicsAddEditDeleteFrameController {
             tglBtnAPMns.setSelected(true);
             tglBtnRPPls.setSelected(false);
             tglBtnRPMns.setSelected(false);
-            ListViewAPMns.toFront();
         }
 
         if (event.getSource() == tglBtnRPPls) {
@@ -109,7 +109,6 @@ public class MethodicsAddEditDeleteFrameController {
             tglBtnAPMns.setSelected(false);
             tglBtnRPPls.setSelected(true);
             tglBtnRPMns.setSelected(false);
-            ListViewRPPls.toFront();
         }
 
         if (event.getSource() == tglBtnRPMns) {
@@ -117,8 +116,9 @@ public class MethodicsAddEditDeleteFrameController {
             tglBtnAPMns.setSelected(false);
             tglBtnRPPls.setSelected(false);
             tglBtnRPMns.setSelected(true);
-            ListViewRPMns.toFront();
         }
+
+        toFront();
     }
 
     public TableView<Methodic> getViewPointTable() {
@@ -132,11 +132,6 @@ public class MethodicsAddEditDeleteFrameController {
         methodicsForTest.addMethodicToList("Test3", new Methodic());
         metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
 
-        System.out.println(methodicsForTest.getMethodics().get(0).getCommandsMap().get(0).size());
-        System.out.println(methodicsForTest.getMethodics().get(0).getCommandsMap().get(1).size());
-        System.out.println(methodicsForTest.getMethodics().get(0).getCommandsMap().get(2).size());
-        System.out.println(methodicsForTest.getMethodics().get(0).getCommandsMap().get(3).size());
-
         tglBtnAPPls.setSelected(true);
 
         initMethodicListName();
@@ -144,12 +139,35 @@ public class MethodicsAddEditDeleteFrameController {
     }
 
     @FXML
-    void actinonForMethodicsFrame(ActionEvent event) throws InfoExeption {
+    void actinonForMethodicsFrame(ActionEvent event) {
         if (event.getSource() == addMetBtn) {
-            loadStage("/stend/view/method/metodicName.fxml", "Имя методики методики");
+            loadStageWithController("/stend/view/method/metodicName.fxml", "Имя методики методики");
         }
 
-        if (event.getSource() == copyMetBtn) {
+        if (event.getSource() == editMetBtn) {
+            if (focusedMetodic == null) {
+                System.out.println("Выберите методику");
+            }
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/stend/view/method/addEditMet.fxml"));
+            try {
+                fxmlLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Parent root = fxmlLoader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Редактирование методики");
+            stage.setScene(new Scene(root));
+
+            addEditFrameController = fxmlLoader.getController();
+            addEditFrameController.setMethodic(focusedMetodic);
+            addEditFrameController.initEditsMetodic();
+            addEditFrameController.addTestPointsOnGreedPane();
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
         }
     }
 
@@ -170,6 +188,8 @@ public class MethodicsAddEditDeleteFrameController {
                 focusedMetodic = c.getList().get(0);
 
                 setListsView();
+
+                ListViewAPPls.toFront();
             }
         });
     }
@@ -202,10 +222,19 @@ public class MethodicsAddEditDeleteFrameController {
         ListViewAPMns.setItems(FXCollections.observableArrayList(comandListAPMns));
         ListViewRPPls.setItems(FXCollections.observableArrayList(comandListRPMns));
         ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
+
+
+    }
+
+    private void toFront() {
+        if (tglBtnAPPls.isSelected()) ListViewAPPls.toFront();
+        if (tglBtnAPMns.isSelected()) ListViewAPMns.toFront();
+        if (tglBtnRPPls.isSelected()) ListViewRPPls.toFront();
+        if (tglBtnRPMns.isSelected()) ListViewRPMns.toFront();
     }
 
 
-    private void loadStage(String fxml, String stageName) {
+    private void loadStageWithController(String fxml, String stageName) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource(fxml));
@@ -226,4 +255,20 @@ public class MethodicsAddEditDeleteFrameController {
         }
     }
 
+    private void loadStage(String fxml, String stageName) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource(fxml));
+            fxmlLoader.load();
+            Parent root = fxmlLoader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle(stageName);
+            stage.setScene(new Scene(root));
+
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

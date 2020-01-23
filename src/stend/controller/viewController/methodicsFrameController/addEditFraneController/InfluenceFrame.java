@@ -1,4 +1,4 @@
-package stend.controller.viewController.methodicsFrameController.addFraneController;
+package stend.controller.viewController.methodicsFrameController.addEditFraneController;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -436,14 +436,6 @@ public class InfluenceFrame {
 
     public void setSaveInflListForCollumRPMns(List<Commands> saveInflListForCollumRPMns) {
         this.saveInflListForCollumRPMns = saveInflListForCollumRPMns;
-    }
-
-    public void setInfluenceUprocAPPls(double[] influenceUprocAPPls) {
-        this.influenceUprocAPPls = influenceUprocAPPls;
-    }
-
-    public void setInfluenceFprocAPPls(double[] influenceFprocAPPls) {
-        this.influenceFprocAPPls = influenceFprocAPPls;
     }
 
     public void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
@@ -1507,7 +1499,7 @@ public class InfluenceFrame {
         }
     }
 
-    public void initOfAdeedTestPoints() {
+    void initOfAdeedTestPoints() {
         char[] charIdTestPoint;
         String strArr;
 
