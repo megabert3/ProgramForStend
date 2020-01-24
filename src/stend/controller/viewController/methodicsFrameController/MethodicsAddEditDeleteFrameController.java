@@ -165,6 +165,7 @@ public class MethodicsAddEditDeleteFrameController {
             addEditFrameController.setMethodic(focusedMetodic);
             addEditFrameController.initEditsMetodic();
             addEditFrameController.addTestPointsOnGreedPane();
+            addEditFrameController.setTextFielMethodicName();
 
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
@@ -222,8 +223,6 @@ public class MethodicsAddEditDeleteFrameController {
         ListViewAPMns.setItems(FXCollections.observableArrayList(comandListAPMns));
         ListViewRPPls.setItems(FXCollections.observableArrayList(comandListRPMns));
         ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
-
-
     }
 
     private void toFront() {

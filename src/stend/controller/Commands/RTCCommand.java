@@ -17,6 +17,7 @@ public class RTCCommand implements Commands {
 
     private int channelFlag = 4;
 
+    //Дианазон ошибки
     private double errorForFalseTest;
 
     //Количество повторов теста
@@ -93,5 +94,21 @@ public class RTCCommand implements Commands {
 
     public void setRatedVolt(double ratedVolt) {
         this.ratedVolt = ratedVolt;
+    }
+
+    public double getErrorForFalseTest() {
+        return errorForFalseTest;
+    }
+
+    public int getPulse() {
+        return pulse;
+    }
+
+    public int getErrorType() {
+        return errorType;
+    }
+
+    public int getCountResult() {
+        return countResult;
     }
 }

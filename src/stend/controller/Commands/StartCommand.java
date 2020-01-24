@@ -238,6 +238,22 @@ public class StartCommand implements Commands {
         this.phase = phase;
     }
 
+    public boolean isGostTest() {
+        return gostTest;
+    }
+
+    public String getUserTimeTest() {
+        return userTimeTest;
+    }
+
+    public int getPulseValue() {
+        return pulseValue;
+    }
+
+    public double getRatedCurr() {
+        return ratedCurr;
+    }
+
     private class LocalMeter {
         int number;
         int counter = 0;

@@ -182,6 +182,22 @@ public class CreepCommand implements Commands {
         this.ratedVolt = ratedVolt;
     }
 
+    public boolean isGostTest() {
+        return gostTest;
+    }
+
+    public int getPulseValue() {
+        return pulseValue;
+    }
+
+    public double getVoltPer() {
+        return voltPer;
+    }
+
+    public String getUserTimeTest() {
+        return userTimeTest;
+    }
+
     @Override
     public String toString() {
         return name;
