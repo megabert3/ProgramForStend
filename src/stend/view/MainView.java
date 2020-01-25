@@ -16,16 +16,6 @@ public class MainView extends Application {
         primaryStage.setTitle("НЕВА СТЕНД");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-        ewfwefwe
-                fwe
-                fwef
-                        wef
-                        w
-                                efw
-                                efwwe
-                                        fw
-                                        efwwef
-                                                w
-                                                ef
+        Тестовое говно которое надо закомитить
     }
 }
