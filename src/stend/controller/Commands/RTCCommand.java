@@ -30,7 +30,7 @@ public class RTCCommand implements Commands {
     private String name;
 
     //Количество импульсов для считывания
-    private int pulse;
+    private int pulseForRTC;
 
     //Тип измерения
     private int errorType;
@@ -42,9 +42,9 @@ public class RTCCommand implements Commands {
         return errorRTCList;
     }
 
-    public RTCCommand(StendDLLCommands stendDLLCommands, int pulse, double freg, int countResult, int errorType, double errorForFalseTest) {
+    public RTCCommand(StendDLLCommands stendDLLCommands, int pulseForRTC, double freg, int countResult, int errorType, double errorForFalseTest) {
         this.stendDLLCommands = stendDLLCommands;
-        this.pulse = pulse;
+        this.pulseForRTC = pulseForRTC;
         this.freg = freg;
         this.countResult = countResult;
         this.errorType = errorType;
@@ -62,12 +62,12 @@ public class RTCCommand implements Commands {
         ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
 
         for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
-            stendDLLCommands.clockErrorStart(meter.getKey(), freg, pulse);
+            stendDLLCommands.clockErrorStart(meter.getKey(), freg, pulseForRTC);
         }
 
         try {
             while (count < countResult) {
-                Thread.sleep((pulse * 1000) + (pulse * 200));
+                Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
                 for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
                     meter.getValue().setRTCTestResult(stendDLLCommands.clockErrorRead(freg, errorType, meter.getKey()));
                 }
@@ -100,8 +100,8 @@ public class RTCCommand implements Commands {
         return errorForFalseTest;
     }
 
-    public int getPulse() {
-        return pulse;
+    public int getPulseForRTC() {
+        return pulseForRTC;
     }
 
     public int getErrorType() {

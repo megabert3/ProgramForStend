@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Methodic {
+public class Methodic implements Cloneable{
 
     private String methodicName;
     private Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
@@ -25,11 +25,11 @@ public class Methodic {
     }
 
     public void setSaveInflListForCollumRPPls(List<Commands> saveInflListForCollumRPPls) {
-        influenceMetodic.influenceCommandsMap.put(3, saveInflListForCollumRPPls);
+        influenceMetodic.influenceCommandsMap.put(2, saveInflListForCollumRPPls);
     }
 
     public void setSaveInflListForCollumRPMns(List<Commands> saveInflListForCollumRPMns) {
-        influenceMetodic.influenceCommandsMap.put(4, saveInflListForCollumRPMns);
+        influenceMetodic.influenceCommandsMap.put(3, saveInflListForCollumRPMns);
     }
 
     public void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
@@ -93,7 +93,7 @@ public class Methodic {
     }
 
     public List<Commands> getSaveInflListForCollumRPMns() {
-        return influenceMetodic.influenceCommandsMap.get(0);
+        return influenceMetodic.influenceCommandsMap.get(3);
     }
 
     public double[] getSaveInfluenceUprocAPPls() {
@@ -172,24 +172,29 @@ public class Methodic {
         this.methodicName = methodicName;
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
     //Внутренний класс отвечающий за точки влияния
-    class InfluenceMetodic {
+    class InfluenceMetodic implements Cloneable{
 
         InfluenceMetodic() {
-            influenceCommandsMap.put(0, saveInflListForCollumAPPls);
-            influenceCommandsMap.put(1, saveInflListForCollumAPMns);
-            influenceCommandsMap.put(2, saveInflListForCollumRPPls);
-            influenceCommandsMap.put(3, saveInflListForCollumRPMns);
+            influenceCommandsMap.put(0, new ArrayList<>());
+            influenceCommandsMap.put(1, new ArrayList<>());
+            influenceCommandsMap.put(2, new ArrayList<>());
+            influenceCommandsMap.put(3, new ArrayList<>());
         }
 
         private Map<Integer, List<Commands>> influenceCommandsMap = new HashMap<>(4);
 
 
-        //листы с точками после сохранения
-        private List<Commands> saveInflListForCollumAPPls = new ArrayList<>();
-        private List<Commands> saveInflListForCollumAPMns = new ArrayList<>();
-        private List<Commands> saveInflListForCollumRPPls = new ArrayList<>();
-        private List<Commands> saveInflListForCollumRPMns = new ArrayList<>();
+//        //листы с точками после сохранения
+//        private List<Commands> saveInflListForCollumAPPls = new ArrayList<>();
+//        private List<Commands> saveInflListForCollumAPMns = new ArrayList<>();
+//        private List<Commands> saveInflListForCollumRPPls = new ArrayList<>();
+//        private List<Commands> saveInflListForCollumRPMns = new ArrayList<>();
 
         //Для теста влияния значения в в процентах
         //AP-
@@ -211,5 +216,10 @@ public class Methodic {
         private double[] saveInfluenceUprocRPMns = new double[0];
         private double[] saveInfluenceFprocRPMns = new double[0];
         private String[] saveInfluenceInbURPMns = new String[0];
+
+        @Override
+        public Object clone() throws CloneNotSupportedException {
+            return super.clone();
+        }
     }
 }

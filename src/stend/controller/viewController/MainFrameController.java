@@ -37,13 +37,6 @@ public class MainFrameController {
         }
     }
 
-    @FXML
-    void mainFrameHandleClicks(MouseEvent event) {
-        if (event.getSource() == mainFramePropertiesBtn) {
-            loadStage("/stend/view/properties.fxml", "Настройки");
-        }
-    }
-
     private void loadStage(String fxml, String stageName) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxml));

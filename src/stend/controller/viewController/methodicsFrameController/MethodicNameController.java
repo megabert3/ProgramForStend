@@ -23,7 +23,16 @@ public class MethodicNameController {
 
     private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
 
+    private Methodic methodic;
+
     private String name;
+
+    //Это окно вызнано из кнопки копирования?
+    private boolean clone;
+
+    public void setMethodic(Methodic methodic) {
+        this.methodic = methodic;
+    }
 
     @FXML
     private ResourceBundle resources;
@@ -44,6 +53,14 @@ public class MethodicNameController {
         this.methodicsAddEditDeleteFrameController = methodicsAddEditDeleteFrameController;
     }
 
+    public void setClone(boolean clone) {
+        this.clone = clone;
+    }
+
+    public MethodicNameController getMethodicNameController() {
+        return this;
+    }
+
     @FXML
     void initialize() {
     }
@@ -56,19 +73,32 @@ public class MethodicNameController {
     @FXML
     void actinonForNameFrame(ActionEvent event) {
         if (event.getSource() == acceptNameBtn) {
-            try {
+            if (clone) {
                 name = nameField.getText();
+                MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
-                for (Methodic methodic : MethodicsForTest.getMethodicsForTestInstance().getMethodics()) {
-                    if (methodic.getMethodicName().equals(name)) throw new InfoExeption();
+                try {
+                    methodicsForTest.addMethodicToList(name, (Methodic) methodic.clone());
+                }catch (InfoExeption e) {
+                    labelInfo.setText("Методика с таким именем уже существует");
+                } catch (CloneNotSupportedException ignored) {
+
                 }
 
-                loadStage("/stend/view/method/addEditMet.fxml", "Добавление методики");
-                Stage stage = (Stage) nameField.getScene().getWindow();
-                stage.hide();
-                stage.close();
-            }catch (InfoExeption e) {
-                labelInfo.setText("Методика с таким именем уже существует");
+            } else {
+                try {
+                    name = nameField.getText();
+
+                    for (Methodic methodic : MethodicsForTest.getMethodicsForTestInstance().getMethodics()) {
+                        if (methodic.getMethodicName().equals(name)) throw new InfoExeption();
+                    }
+
+                    loadStage("/stend/view/method/addEditMet.fxml", "Добавление методики");
+                    Stage stage = (Stage) nameField.getScene().getWindow();
+                    stage.close();
+                } catch (InfoExeption e) {
+                    labelInfo.setText("Методика с таким именем уже существует");
+                }
             }
         }
     }
@@ -88,7 +118,7 @@ public class MethodicNameController {
             addEditFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
             addEditFrameController.setTextFielMethodicName();
 
-            stage.showAndWait();
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }

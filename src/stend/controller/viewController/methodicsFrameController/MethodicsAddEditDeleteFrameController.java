@@ -39,6 +39,7 @@ public class MethodicsAddEditDeleteFrameController {
     private ArrayList<String> comandListRPMns = new ArrayList<>();
 
     private MethodicNameController methodicNameController;
+
     private AddEditFrameController addEditFrameController;
 
     @FXML
@@ -166,6 +167,34 @@ public class MethodicsAddEditDeleteFrameController {
             addEditFrameController.initEditsMetodic();
             addEditFrameController.addTestPointsOnGreedPane();
             addEditFrameController.setTextFielMethodicName();
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        }
+
+        if (event.getSource() == copyMetBtn) {
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/stend/view/method/metodicName.fxml"));
+            try {
+                fxmlLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Parent root = fxmlLoader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Копирование методики");
+            stage.setScene(new Scene(root));
+
+            MethodicNameController methodicNameController = fxmlLoader.getController();
+            methodicNameController.setClone(true);
+            methodicNameController.setMethodic(focusedMetodic);
+
+//            addEditFrameController = fxmlLoader.getController();
+//            addEditFrameController.setMethodic(focusedMetodic);
+//            addEditFrameController.initEditsMetodic();
+//            addEditFrameController.addTestPointsOnGreedPane();
+//            addEditFrameController.setTextFielMethodicName();
 
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();

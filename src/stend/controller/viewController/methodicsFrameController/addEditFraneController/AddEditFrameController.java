@@ -1104,9 +1104,9 @@ public class AddEditFrameController {
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPPls.getText()));
                 startCommand.setName("Чувствительность AP+");
 
-                txtFieldSTAAmtImpAPPls.setDisable(false);
-                txtFieldTimeSRAAPPls.setDisable(false);
-                txtFieldSTAIProcAPPls.setDisable(false);
+                txtFieldSTAAmtImpAPPls.setDisable(true);
+                txtFieldTimeSRAAPPls.setDisable(true);
+                txtFieldSTAIProcAPPls.setDisable(true);
 
                 STATogBtnAPPls.setSelected(true);
                 testListForCollumAPPls.add(startCommand);
@@ -1119,9 +1119,9 @@ public class AddEditFrameController {
                         }
                     }
                 }
-                txtFieldSTAAmtImpAPPls.setDisable(true);
-                txtFieldTimeSRAAPPls.setDisable(true);
-                txtFieldSTAIProcAPPls.setDisable(true);
+                txtFieldSTAAmtImpAPPls.setDisable(false);
+                txtFieldTimeSRAAPPls.setDisable(false);
+                txtFieldSTAIProcAPPls.setDisable(false);
 
                 if (addTglBtnSTAAPPlsGOST.isSelected()) {
                     STATogBtnAPPls.setSelected(true);
@@ -1164,9 +1164,9 @@ public class AddEditFrameController {
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPMns.getText()));
                 startCommand.setName("Чувствительность AP-");
 
-                txtFieldSTAAmtImpAPMns.setDisable(false);
-                txtFieldTimeSRAAPMns.setDisable(false);
-                txtFieldSTAIProcAPMns.setDisable(false);
+                txtFieldSTAAmtImpAPMns.setDisable(true);
+                txtFieldTimeSRAAPMns.setDisable(true);
+                txtFieldSTAIProcAPMns.setDisable(true);
 
                 STATogBtnAPMns.setSelected(true);
                 testListForCollumAPMns.add(startCommand);
@@ -1179,7 +1179,7 @@ public class AddEditFrameController {
                         }
                     }
                 }
-                txtFieldSTAAmtImpAPMns.setDisable(true);
+                txtFieldSTAAmtImpAPMns.setDisable(false);
                 txtFieldTimeSRAAPMns.setDisable(false);
                 txtFieldSTAIProcAPMns.setDisable(false);
 
@@ -1224,9 +1224,9 @@ public class AddEditFrameController {
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPPls.getText()));
                 startCommand.setName("Чувствительность RP+");
 
-                txtFieldSTAAmtImpRPPls.setDisable(true);
-                txtFieldTimeSRARPPls.setDisable(true);
-                txtFieldSTAIProcRPPls.setDisable(true);
+                txtFieldSTAAmtImpRPPls.setDisable(false);
+                txtFieldTimeSRARPPls.setDisable(false);
+                txtFieldSTAIProcRPPls.setDisable(false);
 
                 STATogBtnRPPls.setSelected(true);
                 testListForCollumRPPls.add(startCommand);
@@ -1240,9 +1240,9 @@ public class AddEditFrameController {
                         }
                     }
                 }
-                txtFieldSTAAmtImpRPPls.setDisable(false);
-                txtFieldTimeSRARPPls.setDisable(false);
-                txtFieldSTAIProcRPPls.setDisable(false);
+                txtFieldSTAAmtImpRPPls.setDisable(true);
+                txtFieldTimeSRARPPls.setDisable(true);
+                txtFieldSTAIProcRPPls.setDisable(true);
 
                 if (addTglBtnSTARPPlsGOST.isSelected()) {
                     STATogBtnRPPls.setSelected(true);
@@ -1285,9 +1285,9 @@ public class AddEditFrameController {
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPMns.getText()));
                 startCommand.setName("Чувствительность RP-");
 
-                txtFieldSTAAmtImpRPMns.setDisable(true);
-                txtFieldTimeSRARPMns.setDisable(true);
-                txtFieldSTAIProcRPMns.setDisable(true);
+                txtFieldSTAAmtImpRPMns.setDisable(false);
+                txtFieldTimeSRARPMns.setDisable(false);
+                txtFieldSTAIProcRPMns.setDisable(false);
 
                 STATogBtnRPMns.setSelected(true);
                 testListForCollumRPMns.add(startCommand);
@@ -1300,9 +1300,9 @@ public class AddEditFrameController {
                         }
                     }
                 }
-                txtFieldSTAAmtImpRPMns.setDisable(false);
-                txtFieldTimeSRARPMns.setDisable(false);
-                txtFieldSTAIProcRPMns.setDisable(false);
+                txtFieldSTAAmtImpRPMns.setDisable(true);
+                txtFieldTimeSRARPMns.setDisable(true);
+                txtFieldSTAIProcRPMns.setDisable(true);
 
                 if (addTglBtnSTARPMnsGOST.isSelected()) {
                     STATogBtnRPMns.setSelected(true);
@@ -1341,6 +1341,7 @@ public class AddEditFrameController {
         if(event.getSource() == addTglBtnRTCAPPls) {
             if (addTglBtnRTCAPPls.isSelected()) {
                 if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
+
                     rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 0, Double.parseDouble(txtFieldRngEAPPls.getText()));
                     cbValue = "В ед. частоты";
@@ -1803,7 +1804,7 @@ public class AddEditFrameController {
 
                     txtFieldRngEAPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
                     txtFldRTCAmtMshAPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshAPPls.setText(String.valueOf(((RTCCommand)command).getPulse()));
+                    txtFldRTCTimeMshAPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
 
                     ChcBxRTCErrAPPls.setDisable(true);
 
@@ -1865,7 +1866,7 @@ public class AddEditFrameController {
 
                     txtFieldRngEAPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
                     txtFldRTCAmtMshAPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshAPMns.setText(String.valueOf(((RTCCommand)command).getPulse()));
+                    txtFldRTCTimeMshAPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
 
                     ChcBxRTCErrAPMns.setDisable(true);
 
@@ -1927,7 +1928,7 @@ public class AddEditFrameController {
 
                     txtFieldRngERPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
                     txtFldRTCAmtMshRPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshRPPls.setText(String.valueOf(((RTCCommand)command).getPulse()));
+                    txtFldRTCTimeMshRPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
 
                     ChcBxRTCErrRPPls.setDisable(true);
 
@@ -1989,7 +1990,7 @@ public class AddEditFrameController {
 
                     txtFieldRngERPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
                     txtFldRTCAmtMshRPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshRPMns.setText(String.valueOf(((RTCCommand)command).getPulse()));
+                    txtFldRTCTimeMshRPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
 
                     ChcBxRTCErrRPMns.setDisable(true);
 
