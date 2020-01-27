@@ -1,6 +1,7 @@
 package stend.controller.viewController.methodicsFrameController;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -73,19 +74,27 @@ public class MethodicNameController {
     @FXML
     void actinonForNameFrame(ActionEvent event) {
         if (event.getSource() == acceptNameBtn) {
+            //Если нажата кнопка "Копировать"
             if (clone) {
                 name = nameField.getText();
                 MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
                 try {
                     methodicsForTest.addMethodicToList(name, (Methodic) methodic.clone());
-                }catch (InfoExeption e) {
-                    labelInfo.setText("Методика с таким именем уже существует");
-                } catch (CloneNotSupportedException ignored) {
 
+                    methodicsAddEditDeleteFrameController.refreshMethodicList();
+
+                    Stage stage = (Stage) nameField.getScene().getWindow();
+                    stage.close();
+
+                    clone = false;
+
+                }catch (InfoExeption | CloneNotSupportedException e) {
+                    labelInfo.setText("Методика с таким именем уже существует");
                 }
 
             } else {
+                //Если нажата кнопка "Добавить"
                 try {
                     name = nameField.getText();
 

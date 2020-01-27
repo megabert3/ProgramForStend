@@ -87,7 +87,6 @@ public class MethodicsAddEditDeleteFrameController {
     @FXML
     private ListView<String> ListViewRPMns;
 
-
     //Имитацию TglGroup
     @FXML
     void tglBtnsEnegyViewAction(ActionEvent event) {
@@ -189,6 +188,7 @@ public class MethodicsAddEditDeleteFrameController {
             MethodicNameController methodicNameController = fxmlLoader.getController();
             methodicNameController.setClone(true);
             methodicNameController.setMethodic(focusedMetodic);
+            methodicNameController.setMethodicsAddEditDeleteFrameController(this);
 
 //            addEditFrameController = fxmlLoader.getController();
 //            addEditFrameController.setMethodic(focusedMetodic);
@@ -201,6 +201,7 @@ public class MethodicsAddEditDeleteFrameController {
         }
     }
 
+    //Инициирует список методик
     private void initMethodicListName() {
         tabClMethodics.setCellValueFactory(new PropertyValueFactory<>("methodicName"));
 
@@ -259,6 +260,12 @@ public class MethodicsAddEditDeleteFrameController {
         if (tglBtnAPMns.isSelected()) ListViewAPMns.toFront();
         if (tglBtnRPPls.isSelected()) ListViewRPPls.toFront();
         if (tglBtnRPMns.isSelected()) ListViewRPMns.toFront();
+    }
+
+    //Обновляет список методик
+    public void refreshMethodicList() {
+        metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
+        initMethodicListName();
     }
 
 

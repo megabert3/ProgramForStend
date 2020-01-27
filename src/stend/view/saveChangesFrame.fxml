@@ -5,12 +5,10 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 
-
-<AnchorPane prefHeight="206.0" prefWidth="431.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stend.controller.viewController.SaveChangesFrameController">
+<AnchorPane prefHeight="157.0" prefWidth="390.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stend.controller.viewController.yesOrNoFrameController">
    <children>
-      <Button layoutX="48.0" layoutY="121.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="114.0" stylesheets="@styleCSS/buttonStyle.css" text="Да">
+      <Button fx:id="noBtn" layoutX="31.0" layoutY="96.0" mnemonicParsing="false" onAction="#yesOrNoAction" prefHeight="38.0" prefWidth="114.0" stylesheets="@styleCSS/buttonStyle.css" text="Да">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -19,8 +17,8 @@
             </ImageView>
          </graphic>
       </Button>
-      <Label layoutX="162.0" layoutY="79.0" text="Сохранить параметры?" />
-      <Button layoutX="291.0" layoutY="121.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="114.0" stylesheets="@styleCSS/buttonStyle.css" text="Нет">
+      <Label fx:id="questionTxt" layoutX="184.0" layoutY="46.0" text="Сохранить параметры?" />
+      <Button fx:id="yesBtn" layoutX="248.0" layoutY="96.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="114.0" stylesheets="@styleCSS/buttonStyle.css" text="Нет">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -29,6 +27,6 @@
             </ImageView>
          </graphic>
       </Button>
-      <Pane prefHeight="38.0" prefWidth="452.0" style="-fx-background-color: #FFC107;" />
+      <ImageView fitHeight="84.0" fitWidth="92.0" layoutX="53.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>
