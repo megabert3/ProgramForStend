@@ -783,9 +783,13 @@ public class AddEditFrameController {
             ArrayList<Commands> RPPls = new ArrayList<>(testListForCollumRPPls);
             ArrayList<Commands> RPMns = new ArrayList<>(testListForCollumRPMns);
 
+            System.out.println(methodic);
+
             if (methodic == null) {
                 methodic = new Methodic();
             }
+
+            System.out.println(methodic);
 
             methodic.addCommandToList(0, APPls);
             methodic.addCommandToList(1, APMns);
@@ -814,9 +818,10 @@ public class AddEditFrameController {
 
             try {
                 methodicsForTest.addMethodicToList(metodicNameTxtFld.getText(), methodic);
-                methodicsAddEditDeleteFrameController.getViewPointTable().setItems(FXCollections.observableArrayList(methodicsForTest.getMethodics()));
-
+                //methodicsAddEditDeleteFrameController.getViewPointTable().setItems(FXCollections.observableArrayList(methodicsForTest.getMethodics()));
+                //methodicsAddEditDeleteFrameController.refreshMethodicList();
             } catch (InfoExeption ignored) {
+                methodicsAddEditDeleteFrameController.setListsView(methodic);
             }
         }
 

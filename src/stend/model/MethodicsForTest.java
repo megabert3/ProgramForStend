@@ -40,6 +40,18 @@ public class MethodicsForTest {
         return true;
     }
 
+    //Удаление методики
+    public boolean deleteMethodic(String name) {
+        for (Methodic methodic : methodics) {
+
+            if (methodic.getMethodicName().equals(name)) {
+                methodics.remove(methodic);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ArrayList<Methodic> getMethodics() {
         return methodics;
     }

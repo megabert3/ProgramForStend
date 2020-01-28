@@ -17,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import stend.controller.Commands.Commands;
+import stend.controller.viewController.YesOrNoFrameController;
 import stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditFrameController;
 import stend.helper.exeptions.InfoExeption;
 import stend.model.Methodic;
@@ -121,9 +122,6 @@ public class MethodicsAddEditDeleteFrameController {
         toFront();
     }
 
-    public TableView<Methodic> getViewPointTable() {
-        return viewPointTable;
-    }
 
     @FXML
     void initialize() throws InfoExeption {
@@ -135,7 +133,6 @@ public class MethodicsAddEditDeleteFrameController {
         tglBtnAPPls.setSelected(true);
 
         initMethodicListName();
-
     }
 
     @FXML
@@ -190,14 +187,33 @@ public class MethodicsAddEditDeleteFrameController {
             methodicNameController.setMethodic(focusedMetodic);
             methodicNameController.setMethodicsAddEditDeleteFrameController(this);
 
-//            addEditFrameController = fxmlLoader.getController();
-//            addEditFrameController.setMethodic(focusedMetodic);
-//            addEditFrameController.initEditsMetodic();
-//            addEditFrameController.addTestPointsOnGreedPane();
-//            addEditFrameController.setTextFielMethodicName();
-
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+        }
+
+        //Если нажата кнопка "Удалить"
+        if (event.getSource() == deleteMetBtn) {
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/stend/view/yesOrNoFrame.fxml"));
+            try {
+                fxmlLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Parent root = fxmlLoader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Удаление методики");
+            stage.setScene(new Scene(root));
+
+            YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
+            yesOrNoFrameController.setDeliteMethodic(true);
+            yesOrNoFrameController.setMethodic(focusedMetodic);
+            yesOrNoFrameController.getQuestionTxt().setText("Вы действительно жедаете удалить методику:\n" +
+                    focusedMetodic.getMethodicName() + "?");
+            yesOrNoFrameController.setMethodicsAddEditDeleteFrameController(this);
+
+            stage.show();
         }
     }
 
@@ -251,7 +267,37 @@ public class MethodicsAddEditDeleteFrameController {
 
         ListViewAPPls.setItems(FXCollections.observableArrayList(comandListAPPls));
         ListViewAPMns.setItems(FXCollections.observableArrayList(comandListAPMns));
-        ListViewRPPls.setItems(FXCollections.observableArrayList(comandListRPMns));
+        ListViewRPPls.setItems(FXCollections.observableArrayList(comandListRPPls));
+        ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
+    }
+
+    public void setListsView(Methodic methodic) {
+        focusedMetodic = methodic;
+
+        comandListAPPls.clear();
+        comandListAPMns.clear();
+        comandListRPPls.clear();
+        comandListRPMns.clear();
+
+        for (Commands commandsAPPls : focusedMetodic.getCommandsMap().get(0)) {
+            comandListAPPls.add(commandsAPPls.getName());
+        }
+
+        for (Commands commandsAPMns : focusedMetodic.getCommandsMap().get(1)) {
+            comandListAPMns.add(commandsAPMns.getName());
+        }
+
+        for (Commands commandsRPPls : focusedMetodic.getCommandsMap().get(2)) {
+            comandListRPPls.add(commandsRPPls.getName());
+        }
+
+        for (Commands commandsRPMns : focusedMetodic.getCommandsMap().get(3)) {
+            comandListRPMns.add(commandsRPMns.getName());
+        }
+
+        ListViewAPPls.setItems(FXCollections.observableArrayList(comandListAPPls));
+        ListViewAPMns.setItems(FXCollections.observableArrayList(comandListAPMns));
+        ListViewRPPls.setItems(FXCollections.observableArrayList(comandListRPPls));
         ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
     }
 
@@ -262,10 +308,42 @@ public class MethodicsAddEditDeleteFrameController {
         if (tglBtnRPMns.isSelected()) ListViewRPMns.toFront();
     }
 
-    //Обновляет список методик
+    //Обновление списка методик после добавления методики
     public void refreshMethodicList() {
         metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
+
         initMethodicListName();
+    }
+
+    //Обновление списка после редактирования методики
+    public void refreshAfterEdite(Methodic methodic) {
+        metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
+
+        initMethodicListName();
+
+        setListsView(methodic);
+
+        ListViewAPPls.setItems(FXCollections.observableArrayList(comandListAPPls));
+        ListViewAPMns.setItems(FXCollections.observableArrayList(comandListAPMns));
+        ListViewRPPls.setItems(FXCollections.observableArrayList(comandListRPPls));
+        ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
+    }
+
+    //Обновление списка после удаления методики
+    public void refreshAfterDelete() {
+        metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
+
+        initMethodicListName();
+
+        comandListAPPls.clear();
+        comandListAPMns.clear();
+        comandListRPPls.clear();
+        comandListRPMns.clear();
+
+        ListViewAPPls.setItems(FXCollections.observableArrayList(comandListAPPls));
+        ListViewAPMns.setItems(FXCollections.observableArrayList(comandListAPMns));
+        ListViewRPPls.setItems(FXCollections.observableArrayList(comandListRPPls));
+        ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
     }
 
 
