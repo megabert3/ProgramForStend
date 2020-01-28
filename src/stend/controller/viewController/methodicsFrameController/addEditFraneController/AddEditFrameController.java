@@ -45,6 +45,9 @@ public class AddEditFrameController {
 
     private StendDLLCommands stendDLLCommands;
 
+    //Это окно вызвано кнопкой редактировать?
+    private boolean edit;
+
     //Значения коэффициента мощности
     private List<String> powerFactor = methodicsForTest.getPowerFactor();
 
@@ -736,6 +739,10 @@ public class AddEditFrameController {
         return testListForCollumRPMns;
     }
 
+    public void setEdit(boolean edit) {
+        this.edit = edit;
+    }
+
     //Устанавливает имя методики полученное с другого окна
     public void setTextFielMethodicName() {
         if (methodic == null) {
@@ -783,14 +790,6 @@ public class AddEditFrameController {
             ArrayList<Commands> RPPls = new ArrayList<>(testListForCollumRPPls);
             ArrayList<Commands> RPMns = new ArrayList<>(testListForCollumRPMns);
 
-            System.out.println(methodic);
-
-            if (methodic == null) {
-                methodic = new Methodic();
-            }
-
-            System.out.println(methodic);
-
             methodic.addCommandToList(0, APPls);
             methodic.addCommandToList(1, APMns);
             methodic.addCommandToList(2, RPPls);
@@ -816,12 +815,10 @@ public class AddEditFrameController {
             methodic.setSaveInfluenceInbURPPls(saveInfluenceInbURPPls);
             methodic.setSaveInfluenceInbURPMns(saveInfluenceInbURPMns);
 
-            try {
-                methodicsForTest.addMethodicToList(metodicNameTxtFld.getText(), methodic);
-                //methodicsAddEditDeleteFrameController.getViewPointTable().setItems(FXCollections.observableArrayList(methodicsForTest.getMethodics()));
-                //methodicsAddEditDeleteFrameController.refreshMethodicList();
-            } catch (InfoExeption ignored) {
+            if (edit) {
                 methodicsAddEditDeleteFrameController.setListsView(methodic);
+            }else {
+                methodicsAddEditDeleteFrameController.refreshMethodicList();
             }
         }
 
@@ -1782,6 +1779,7 @@ public class AddEditFrameController {
                     } else {
                         addTglBtnCRPAPPlsGOST.setSelected(true);
                     }
+                    CRPTogBtnAPPls.setSelected(true);
                 }
 
                 if (command instanceof StartCommand) {
@@ -1798,6 +1796,7 @@ public class AddEditFrameController {
                     }else {
                         addTglBtnSTAAPPlsGOST.setSelected(true);
                     }
+                    STATogBtnAPPls.setSelected(true);
                 }
 
                 if (command instanceof RTCCommand) {
@@ -1817,6 +1816,8 @@ public class AddEditFrameController {
                     txtFldRTCAmtMshAPPls.setDisable(true);
                     txtFldRTCTimeMshAPPls.setDisable(true);
                     addTglBtnRTCAPPls.setSelected(true);
+
+                    RTCTogBtnAPPls.setSelected(true);
                 }
             }
         }
@@ -1844,6 +1845,7 @@ public class AddEditFrameController {
                     } else {
                         addTglBtnCRPAPMnsGOST.setSelected(true);
                     }
+                    CRPTogBtnAPMns.setSelected(true);
                 }
 
                 if (command instanceof StartCommand) {
@@ -1860,6 +1862,7 @@ public class AddEditFrameController {
                     }else {
                         addTglBtnSTAAPMnsGOST.setSelected(true);
                     }
+                    STATogBtnAPMns.setSelected(true);
                 }
 
                 if (command instanceof RTCCommand) {
@@ -1879,6 +1882,8 @@ public class AddEditFrameController {
                     txtFldRTCAmtMshAPMns.setDisable(true);
                     txtFldRTCTimeMshAPMns.setDisable(true);
                     addTglBtnRTCAPMns.setSelected(true);
+
+                    RTCTogBtnAPMns.setSelected(true);
                 }
             }
         }
@@ -1906,6 +1911,7 @@ public class AddEditFrameController {
                     } else {
                         addTglBtnCRPRPPlsGOST.setSelected(true);
                     }
+                    CRPTogBtnRPPls.setSelected(true);
                 }
 
                 if (command instanceof StartCommand) {
@@ -1922,6 +1928,7 @@ public class AddEditFrameController {
                     }else {
                         addTglBtnSTARPPlsGOST.setSelected(true);
                     }
+                    STATogBtnRPPls.setSelected(true);
                 }
 
                 if (command instanceof RTCCommand) {
@@ -1941,6 +1948,8 @@ public class AddEditFrameController {
                     txtFldRTCAmtMshRPPls.setDisable(true);
                     txtFldRTCTimeMshRPPls.setDisable(true);
                     addTglBtnRTCRPPls.setSelected(true);
+
+                    RTCTogBtnRPPls.setSelected(true);
                 }
             }
         }
@@ -1968,6 +1977,7 @@ public class AddEditFrameController {
                     } else {
                         addTglBtnCRPRPMnsGOST.setSelected(true);
                     }
+                    CRPTogBtnRPMns.setSelected(true);
                 }
 
                 if (command instanceof StartCommand) {
@@ -1984,6 +1994,7 @@ public class AddEditFrameController {
                     }else {
                         addTglBtnSTARPMnsGOST.setSelected(true);
                     }
+                    STATogBtnRPMns.setSelected(true);
                 }
 
                 if (command instanceof RTCCommand) {
@@ -2003,6 +2014,8 @@ public class AddEditFrameController {
                     txtFldRTCAmtMshRPMns.setDisable(true);
                     txtFldRTCTimeMshRPMns.setDisable(true);
                     addTglBtnRTCRPMns.setSelected(true);
+
+                    RTCTogBtnRPMns.setSelected(true);
                 }
             }
         }
@@ -2173,14 +2186,13 @@ public class AddEditFrameController {
 
             if (testPointIdArr[2] == 'C') {
 
-                for (CheckBox checkBox : checkBoxesPhaseCAPPlus) {
+                for (CheckBox checkBox : checkBoxesPhaseCRPMns) {
                     if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                         checkBox.setSelected(true);
                     }
                 }
             }
         }
-
     }
 
     //Создаёт поле нужной величины
@@ -2685,6 +2697,7 @@ public class AddEditFrameController {
 
 
     //Проверияет нет ли данных с полученной методики и если у неё есть данные, то выгружает её в это окно
+    //Необходимо для команды Редактирования методики
     public void initEditsMetodic() {
         saveListForCollumAPPls.addAll(methodic.getCommandsMap().get(0));
         saveListForCollumAPMns.addAll(methodic.getCommandsMap().get(1));
@@ -2710,7 +2723,6 @@ public class AddEditFrameController {
         saveInfluenceInbUAPMns = methodic.getSaveInfluenceInbUAPMns();
         saveInfluenceInbURPPls = methodic.getSaveInfluenceInbURPPls();
         saveInfluenceInbURPMns = methodic.getSaveInfluenceInbURPMns();
-
     }
 
     private void loadStage(String fxml, String stageName) {

@@ -63,4 +63,13 @@ public class MethodicsForTest {
     public List<String> getCurrent() {
         return current;
     }
+
+    public Methodic getMethodic(String name) {
+        for (Methodic methodic : methodics) {
+            if (methodic.getMethodicName().equals(name)) {
+                return methodic;
+            }
+        }
+        return null;
+    }
 }

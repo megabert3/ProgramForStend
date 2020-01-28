@@ -35,6 +35,7 @@ public class YesOrNoFrameController {
 
     @FXML
     void yesOrNoAction(ActionEvent event) {
+        Stage stage = (Stage) questionTxt.getScene().getWindow();
         //если вызвано с окна удаления методики "Удалить методику"
         if (event.getSource() == yesBtn) {
             if (deliteMethodic) {
@@ -44,7 +45,6 @@ public class YesOrNoFrameController {
 
                 methodicsAddEditDeleteFrameController.refreshAfterDelete();
 
-                Stage stage = (Stage) questionTxt.getScene().getWindow();
                 stage.close();
 
                 deliteMethodic = false;
@@ -52,7 +52,6 @@ public class YesOrNoFrameController {
         }
 
         if (event.getSource() == noBtn) {
-            Stage stage = (Stage) questionTxt.getScene().getWindow();
             stage.close();
         }
     }

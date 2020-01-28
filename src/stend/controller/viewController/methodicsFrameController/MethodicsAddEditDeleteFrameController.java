@@ -88,7 +88,7 @@ public class MethodicsAddEditDeleteFrameController {
     @FXML
     private ListView<String> ListViewRPMns;
 
-    //Имитацию TglGroup
+    //Дейстаие при нажатии выбора направления энергии
     @FXML
     void tglBtnsEnegyViewAction(ActionEvent event) {
         if (event.getSource() == tglBtnAPPls) {
@@ -119,7 +119,35 @@ public class MethodicsAddEditDeleteFrameController {
             tglBtnRPMns.setSelected(true);
         }
 
+        imitationTglGroup();
         toFront();
+    }
+
+    //Имитирует Tgl group
+    private void imitationTglGroup() {
+        if (tglBtnAPPls.isSelected()) {
+            tglBtnAPMns.setSelected(false);
+            tglBtnRPPls.setSelected(false);
+            tglBtnRPMns.setSelected(false);
+        }
+
+        if (tglBtnAPMns.isSelected()) {
+            tglBtnAPPls.setSelected(false);
+            tglBtnRPPls.setSelected(false);
+            tglBtnRPMns.setSelected(false);
+        }
+
+        if (tglBtnRPPls.isSelected()) {
+            tglBtnAPMns.setSelected(false);
+            tglBtnAPPls.setSelected(false);
+            tglBtnRPMns.setSelected(false);
+        }
+
+        if (tglBtnRPMns.isSelected()) {
+            tglBtnAPMns.setSelected(false);
+            tglBtnRPPls.setSelected(false);
+            tglBtnAPPls.setSelected(false);
+        }
     }
 
 
@@ -137,10 +165,30 @@ public class MethodicsAddEditDeleteFrameController {
 
     @FXML
     void actinonForMethodicsFrame(ActionEvent event) {
+        //Добавление методики
         if (event.getSource() == addMetBtn) {
-            loadStageWithController("/stend/view/method/metodicName.fxml", "Имя методики методики");
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/stend/view/method/metodicName.fxml"));
+                fxmlLoader.load();
+                Parent root = fxmlLoader.getRoot();
+                Stage stage = new Stage();
+                stage.setTitle("Имя методики методики");
+                stage.setScene(new Scene(root));
+
+                methodicNameController = fxmlLoader.getController();
+                methodicNameController.setMethodicsAddEditDeleteFrameController(this);
+                methodicNameController.setAdd(true);
+
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.showAndWait();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
+        //Редактирование методики
         if (event.getSource() == editMetBtn) {
             if (focusedMetodic == null) {
                 System.out.println("Выберите методику");
@@ -160,14 +208,17 @@ public class MethodicsAddEditDeleteFrameController {
 
             addEditFrameController = fxmlLoader.getController();
             addEditFrameController.setMethodic(focusedMetodic);
+            addEditFrameController.setEdit(true);
             addEditFrameController.initEditsMetodic();
             addEditFrameController.addTestPointsOnGreedPane();
+            addEditFrameController.setMethodicsAddEditDeleteFrameController(this);
             addEditFrameController.setTextFielMethodicName();
 
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
         }
 
+        //Если нажата кнопка копирования методики
         if (event.getSource() == copyMetBtn) {
 
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -241,6 +292,7 @@ public class MethodicsAddEditDeleteFrameController {
         });
     }
 
+    //Инициализирует список команд в окне отображения команд
     private void setListsView() {
         if (focusedMetodic == null) return;
 
@@ -321,7 +373,7 @@ public class MethodicsAddEditDeleteFrameController {
 
         initMethodicListName();
 
-        setListsView(methodic);
+        setListsView();
 
         ListViewAPPls.setItems(FXCollections.observableArrayList(comandListAPPls));
         ListViewAPMns.setItems(FXCollections.observableArrayList(comandListAPMns));
@@ -348,24 +400,7 @@ public class MethodicsAddEditDeleteFrameController {
 
 
     private void loadStageWithController(String fxml, String stageName) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource(fxml));
-            fxmlLoader.load();
-            Parent root = fxmlLoader.getRoot();
-            Stage stage = new Stage();
-            stage.setTitle(stageName);
-            stage.setScene(new Scene(root));
 
-            methodicNameController = fxmlLoader.getController();
-            methodicNameController.setMethodicsAddEditDeleteFrameController(this);
-
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void loadStage(String fxml, String stageName) {

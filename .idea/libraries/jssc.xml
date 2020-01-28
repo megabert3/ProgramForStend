@@ -1,8 +1,7 @@
 <component name="libraryTable">
-  <library name="jna-5.5.0">
+  <library name="jssc">
     <CLASSES>
       <root url="jar://C:/Program Files/Java/jSSC-2.8.0-Release/jssc.jar!/" />
-      <root url="jar://C:/Program Files/Java/jna-5.5.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

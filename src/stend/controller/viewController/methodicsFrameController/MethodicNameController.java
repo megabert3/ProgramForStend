@@ -24,6 +24,8 @@ public class MethodicNameController {
 
     private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
 
+    private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
+
     private Methodic methodic;
 
     private String name;
@@ -31,15 +33,12 @@ public class MethodicNameController {
     //Это окно вызнано из кнопки копирования?
     private boolean clone;
 
+    //Это окно вызвано из окна "Добавить"
+    private boolean add;
+
     public void setMethodic(Methodic methodic) {
         this.methodic = methodic;
     }
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private TextField nameField;
@@ -58,6 +57,10 @@ public class MethodicNameController {
         this.clone = clone;
     }
 
+    public void setAdd(boolean add) {
+        this.add = add;
+    }
+
     public MethodicNameController getMethodicNameController() {
         return this;
     }
@@ -69,7 +72,6 @@ public class MethodicNameController {
     public String getName() {
         return name;
     }
-
 
     @FXML
     void actinonForNameFrame(ActionEvent event) {
@@ -93,43 +95,37 @@ public class MethodicNameController {
                     labelInfo.setText("Методика с таким именем уже существует");
                 }
 
-            } else {
-                //Если нажата кнопка "Добавить"
+            //Если нажата кнопка "Добавить"
+            } else if (add){
                 try {
                     name = nameField.getText();
 
-                    for (Methodic methodic : MethodicsForTest.getMethodicsForTestInstance().getMethodics()) {
-                        if (methodic.getMethodicName().equals(name)) throw new InfoExeption();
-                    }
+                    methodicsForTest.addMethodicToList(name, new Methodic());
 
-                    loadStage("/stend/view/method/addEditMet.fxml", "Добавление методики");
-                    Stage stage = (Stage) nameField.getScene().getWindow();
-                    stage.close();
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/stend/view/method/addEditMet.fxml"));
+                    fxmlLoader.load();
+                    Parent root = fxmlLoader.getRoot();
+                    Stage stage = new Stage();
+                    stage.setTitle("Добавление методики");
+                    stage.setScene(new Scene(root));
+
+                    addEditFrameController = fxmlLoader.getController();
+                    addEditFrameController.setMethodicNameController(this);
+                    addEditFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
+                    addEditFrameController.setMethodic(methodicsForTest.getMethodic(name));
+                    addEditFrameController.setTextFielMethodicName();
+
+                    stage.show();
+
+                    Stage stageMetodicName = (Stage) nameField.getScene().getWindow();
+                    stageMetodicName.close();
                 } catch (InfoExeption e) {
                     labelInfo.setText("Методика с таким именем уже существует");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-        }
-    }
-
-    private void loadStage(String fxml, String stageName) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource(fxml));
-            fxmlLoader.load();
-            Parent root = fxmlLoader.getRoot();
-            Stage stage = new Stage();
-            stage.setTitle(stageName);
-            stage.setScene(new Scene(root));
-
-            addEditFrameController = fxmlLoader.getController();
-            addEditFrameController.setMethodicNameController(this);
-            addEditFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
-            addEditFrameController.setTextFielMethodicName();
-
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
