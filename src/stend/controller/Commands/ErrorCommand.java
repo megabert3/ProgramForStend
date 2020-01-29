@@ -127,7 +127,7 @@ public class ErrorCommand implements Commands {
 
         ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
 
-        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
             //Подумать над константой, скорее всего необходимо будет сделать одной для всех
             stendDLLCommands.errorStart(meter.getKey(), stendDLLCommands.getConstant(), Integer.parseInt(pulse));
         }
@@ -138,12 +138,12 @@ public class ErrorCommand implements Commands {
             String[] strMass;
             double error;
 
-            for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+            for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
                 strError = stendDLLCommands.meterErrorRead(meter.getKey());
                 strMass = strError.split(",");
                 resultNo = Integer.parseInt(strMass[0]);
                 error = Double.parseDouble(strMass[1]);
-                StendDLLCommands.amountActivePlacesForTest.get(meter.getKey()).getErrors()[resultNo] = error;
+                stendDLLCommands.getAmountActivePlacesForTest().get(meter.getKey()).getErrors()[resultNo] = error;
 
                 if (resultNo >= countResult) {
                     flagInStop.put(meter.getKey(), true);
@@ -161,8 +161,8 @@ public class ErrorCommand implements Commands {
     }
 
     private HashMap<Integer, Boolean> initBoolList() {
-        HashMap<Integer, Boolean> init = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.size());
-        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+        HashMap<Integer, Boolean> init = new HashMap<>(stendDLLCommands.getAmountActivePlacesForTest().size());
+        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
             init.put(meter.getKey(), false);
         }
         return init;

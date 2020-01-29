@@ -98,7 +98,7 @@ public class StartCommand implements Commands {
         currTime = System.currentTimeMillis();
         timeEnd = currTime + timeForTest;
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-            for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+            for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
                 if (!(metersList.get(meter.getKey()).run())) {
                     startCommandResult.put(meter.getKey(), true);
                 }
@@ -108,8 +108,8 @@ public class StartCommand implements Commands {
     }
 
     private HashMap<Integer, Boolean> initCreepCommandResult() {
-        HashMap<Integer, Boolean> init = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.size());
-        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+        HashMap<Integer, Boolean> init = new HashMap<>(stendDLLCommands.getAmountActivePlacesForTest().size());
+        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
             init.put(meter.getKey(), false);
         }
         return init;
@@ -117,7 +117,7 @@ public class StartCommand implements Commands {
 
     private HashMap<Integer, LocalMeter> initMeterList() {
         HashMap<Integer, LocalMeter> init = new HashMap<>();
-        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
             init.put(meter.getKey(), new LocalMeter(meter.getKey()));
         }
         return  init;
@@ -125,7 +125,7 @@ public class StartCommand implements Commands {
 
     //Довавляет результат в счётчик в зависимости от направления тока
     private void addResultOnMeter() {
-        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
             switch (channelFlag) {
                 case 0: {
                     meter.getValue().setStartTestActiveEnergyDirect(startCommandResult.get(meter.getKey()));

@@ -14,7 +14,6 @@ import java.util.Map;
 public abstract class StendDLLCommands {
     private StendDLL stend = StendDLL.INSTANCE;
 
-
     //Порт для связи с установкой
     private int port = Integer.parseInt(ConsoleHelper.properties.getProperty("stendCOMPort"));
 
@@ -22,25 +21,25 @@ public abstract class StendDLLCommands {
     private String typeReferenceMeter;
 
     //Кол-во постадочных мест для счётчиков
-    public static int amountPlaces;
+    private int amountPlaces = Integer.parseInt(ConsoleHelper.properties.getProperty("stendAmountPlaces"));
 
     //Константа счётчика
-    private double constant = 8000.0;
+    private double constant = Double.parseDouble(ConsoleHelper.properties.getProperty("meterLastConstant"));
 
     //Пауза для стабилизации и установки заданных пар-ров установки
-    private int pauseForStabization = 3;
+    private int pauseForStabization = Integer.parseInt(ConsoleHelper.properties.getProperty("pauseForStabization"));
 
     //Количество (активных мест)
-    public static boolean[] amountActivePlaces = initializationAmountActivePlaces();
+    private boolean[] amountActivePlaces = initializationAmountActivePlaces();
 
     //Константы счётчиков
     //public static double[] constantsForMetersOnPlaces = initializationConstantsForMetersOnPlaces();
 
     //Необходимо для быстрого обхода в цикле
-    public static HashMap<Integer, Meter> amountActivePlacesForTest = initAmountActivePlacesForTest();
+    private HashMap<Integer, Meter> amountActivePlacesForTest = initAmountActivePlacesForTest();
 
     //Инициализирует посадочные места и устанавливает значения флага
-    private static boolean[] initializationAmountActivePlaces() {
+    private boolean[] initializationAmountActivePlaces() {
         boolean[] init = new boolean[amountPlaces + 1];
         for (int i = 1; i <= amountPlaces; i++) {
             init[i] = true;
@@ -49,7 +48,7 @@ public abstract class StendDLLCommands {
     }
 
     //Оставляет только места необходимые для теста
-    private static HashMap<Integer, Meter> initAmountActivePlacesForTest() {
+    private HashMap<Integer, Meter> initAmountActivePlacesForTest() {
         HashMap<Integer, Meter> init = new HashMap<>();
         for (int i = 1; i < amountActivePlaces.length; i++) {
             if (amountActivePlaces[i]) {
@@ -66,9 +65,13 @@ public abstract class StendDLLCommands {
     }
 
     public void setEnergyPulse (int channelFlag) {
-        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+        for (Map.Entry<Integer, Meter> meter : amountActivePlacesForTest.entrySet()) {
             setPulseChannel(meter.getKey(), channelFlag);
         }
+    }
+
+    public HashMap<Integer, Meter> getAmountActivePlacesForTest() {
+        return amountActivePlacesForTest;
     }
     //Инициализирует значения констант у посадочных мест
 //    private static double[] initializationConstantsForMetersOnPlaces() {
@@ -88,13 +91,13 @@ public abstract class StendDLLCommands {
         return amountPlaces;
     }
 
+    public double getConstant() {
+        return constant;
+    }
+
     //Пауза для стабилизации счётчика
     public int getPauseForStabization() {
         return pauseForStabization;
-    }
-
-    public double getConstant() {
-        return constant;
     }
 
     //Включить напряжение и ток без регулеровки пофазного напряжения

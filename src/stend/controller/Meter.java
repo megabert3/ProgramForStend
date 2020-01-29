@@ -4,6 +4,18 @@ public class Meter {
     private long id;
     private double[] errors = new double[10];
 
+    //Серийный номер счётчика
+    private String serNoMeter;
+
+    //Константа активной энергии счётчика
+    private int constantMeterAP;
+
+    //Константа реактивной энергии счётчика
+    private int constantMeterRP;
+
+    //Серийный номер счётчика
+    private String modelMeter;
+
     //Результат теста чувствительности к току
     private boolean startTestActiveEnergyDirect;
     private boolean startTestReactiveEnergyDirect;
@@ -52,5 +64,37 @@ public class Meter {
 
     public void setStartTestReactiveEnergyReverse(boolean startTestReactiveEnergyReverse) {
         this.startTestReactiveEnergyReverse = startTestReactiveEnergyReverse;
+    }
+
+    public int getConstantMeterAP() {
+        return constantMeterAP;
+    }
+
+    public int getConstantMeterRP() {
+        return constantMeterRP;
+    }
+
+    public String getModelMeter() {
+        return modelMeter;
+    }
+
+    public String getSerNoMeter() {
+        return serNoMeter;
+    }
+
+    public void setConstantMeterRP(int constantMeterRP) {
+        this.constantMeterRP = constantMeterRP;
+    }
+
+    public void setModelMeter(String modelMeter) {
+        this.modelMeter = modelMeter;
+    }
+
+    public void setConstantMeterAP(int constantMeterAP) {
+        this.constantMeterAP = constantMeterAP;
+    }
+
+    public void setSerNoMeter(String serNoMeter) {
+        this.serNoMeter = serNoMeter;
     }
 }

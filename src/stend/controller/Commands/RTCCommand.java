@@ -36,7 +36,7 @@ public class RTCCommand implements Commands {
     private int errorType;
 
     //Массив погрешностей одного счётчика
-    private HashMap<Integer, String> errorRTCList = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.size());
+    private HashMap<Integer, String> errorRTCList = new HashMap<>(stendDLLCommands.getAmountActivePlacesForTest().size());
 
     public HashMap<Integer, String> getErrorRTCList() {
         return errorRTCList;
@@ -61,14 +61,14 @@ public class RTCCommand implements Commands {
 
         ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
 
-        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
             stendDLLCommands.clockErrorStart(meter.getKey(), freg, pulseForRTC);
         }
 
         try {
             while (count < countResult) {
                 Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
-                for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+                for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
                     meter.getValue().setRTCTestResult(stendDLLCommands.clockErrorRead(freg, errorType, meter.getKey()));
                 }
                 count++;
