@@ -118,8 +118,6 @@ public class MethodicsAddEditDeleteFrameController {
             tglBtnRPPls.setSelected(false);
             tglBtnRPMns.setSelected(true);
         }
-
-        imitationTglGroup();
         toFront();
     }
 
@@ -153,10 +151,10 @@ public class MethodicsAddEditDeleteFrameController {
 
     @FXML
     void initialize() throws InfoExeption {
-        methodicsForTest.addMethodicToList("Test1", new Methodic());
-        methodicsForTest.addMethodicToList("Test2", new Methodic());
-        methodicsForTest.addMethodicToList("Test3", new Methodic());
-        metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
+//        methodicsForTest.addMethodicToList("Test1", new Methodic());
+//        methodicsForTest.addMethodicToList("Test2", new Methodic());
+//        methodicsForTest.addMethodicToList("Test3", new Methodic());
+//        metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
 
         tglBtnAPPls.setSelected(true);
 
@@ -288,6 +286,7 @@ public class MethodicsAddEditDeleteFrameController {
                 setListsView();
 
                 ListViewAPPls.toFront();
+                imitationTglGroup();
             }
         });
     }

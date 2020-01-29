@@ -35,6 +35,10 @@ public class MainFrameController {
         if(event.getSource() == mainFrameMethodicsBtn) {
             loadStage("/stend/view/method/methodicsAddEditDeleteFrame.fxml", "Методики");
         }
+
+        if (event.getSource() == mainFrameParamTestBtn) {
+            loadStage("/stend/view/testParametersFrame.fxml", "Параметры теста");
+        }
     }
 
     private void loadStage(String fxml, String stageName) {
