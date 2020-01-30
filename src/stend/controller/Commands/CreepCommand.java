@@ -89,13 +89,13 @@ public class CreepCommand implements Commands {
 
         //Перенос результата теста в разультата каждого отдельного счётчика
         for (Map.Entry<Integer, Boolean> result : creepCommandResult.entrySet()) {
-            StendDLLCommands.amountActivePlacesForTest.get(result.getKey()).setCreepTest(result.getValue());
+            stendDLLCommands.getAmountActivePlacesForTest().get(result.getKey()).setCreepTest(result.getValue());
         }
     }
 
     private HashMap<Integer, Boolean> initCreepCommandResult() {
-        HashMap<Integer, Boolean> init = new HashMap<>(StendDLLCommands.amountActivePlacesForTest.size());
-        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+        HashMap<Integer, Boolean> init = new HashMap<>(stendDLLCommands.getAmountActivePlacesForTest().size());
+        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
             init.put(meter.getKey(), true);
         }
         return init;
@@ -103,7 +103,7 @@ public class CreepCommand implements Commands {
 
     private HashMap<Integer, LocalMeter> initMeterList() {
         HashMap<Integer, LocalMeter> init = new HashMap<>();
-        for (Map.Entry<Integer, Meter> meter : StendDLLCommands.amountActivePlacesForTest.entrySet()) {
+        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
             init.put(meter.getKey(), new LocalMeter(meter.getKey()));
         }
         return  init;

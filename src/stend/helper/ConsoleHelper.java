@@ -4,17 +4,35 @@ package stend.helper;
         import java.util.Properties;
 
 public class ConsoleHelper {
+
+    //Директроия с файлом пропертиес
+    private static final String dir = "src/resourseFiles/stendProperties.properties";
+
     public static Properties properties = getProperties();
 
     private static Properties getProperties() {
         Properties initProperties = new Properties();
         try {
-            initProperties.load(new FileInputStream(new File("src/resourseFiles/stendProperties.properties")));
+            initProperties.load(new FileInputStream(new File(dir)));
         } catch (IOException e) {
             System.out.println("Указанный файл properties не найден");
             e.printStackTrace();
         }
         return initProperties;
+    }
+
+    public static boolean saveProperties() {
+        File propFile = new File(dir);
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream(propFile)) {
+            properties.store(fileOutputStream, "My comments");
+
+            properties = getProperties();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
