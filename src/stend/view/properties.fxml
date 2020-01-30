@@ -117,7 +117,7 @@
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="COM порт для связи" />
                               <ComboBox fx:id="standPaneCOMList" prefWidth="100.0" GridPane.columnIndex="1" />
-                              <TextField fx:id="txtFldCOMList" maxHeight="25.0" maxWidth="73.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" GridPane.columnIndex="1" />
+                              <TextField fx:id="txtFldCOMList" maxHeight="27.0" maxWidth="73.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                         <GridPane hgap="5.0" layoutX="20.0" layoutY="8.0" prefHeight="193.0" prefWidth="497.0">
@@ -154,7 +154,7 @@
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Установка" textAlignment="CENTER" wrappingWidth="246.3802032470703" />
                                     <ComboBox fx:id="stendPaneStendTypeList" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <ComboBox fx:id="stendPaneStendModel" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <TextField fx:id="txtStendModel" maxHeight="25.0" maxWidth="95.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <TextField fx:id="txtStendModel" maxHeight="27.0" maxWidth="95.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                  </children>
                               </GridPane>
                               <GridPane GridPane.columnIndex="1">
@@ -176,7 +176,7 @@
                                     <TextField fx:id="stendPaneRefAcrCl" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Серийный №" wrappingWidth="121.36067199707031" GridPane.rowIndex="2" />
                                     <ComboBox fx:id="stendPaneRefMetModel" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <TextField fx:id="txtFidRefMetModel" maxHeight="25.0" maxWidth="95.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="txtFidRefMetModel" maxHeight="27.0" maxWidth="95.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>

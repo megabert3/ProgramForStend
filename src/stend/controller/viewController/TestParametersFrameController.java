@@ -1,6 +1,7 @@
 package stend.controller.viewController;
 
 import java.net.URL;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,9 +17,11 @@ import stend.model.MethodicsForTest;
 
 public class TestParametersFrameController {
 
-    MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
+    private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
-    StendDLLCommands stendDLLCommands;
+    private StendDLLCommands stendDLLCommands;
+
+    private Properties properties = ConsoleHelper.properties;
 
     @FXML
     private ResourceBundle resources;
@@ -93,10 +96,21 @@ public class TestParametersFrameController {
 
     @FXML
     void initialize() {
-        if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
+        if (properties.getProperty("stendType").equals("ThreePhaseStend")) {
             stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
         } else stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
+    }
 
-        
+    //Инициирует комбо боксы и добавляет им слушателей
+    private void initComboBoxesAndAddListerners() {
+
+        String[] UnomComBox = properties.getProperty("Unom").split(",");
+        String[] FnomComBox = properties.getProperty("Fnom").split(",");
+        String[] InomAndImaxComBox = properties.getProperty("InomAndImax").split(",");
+        String[] accuracyClassMeterAPComBox = properties.getProperty("accuracyClassMeterAP").split(",");
+        String[] accuracyClassMeterRPComBox = properties.getProperty("accuracyClassMeterRP").split(",");
+        String[] typeCircuitComBox = properties.getProperty("typeCircuit").split(",");
+
+
     }
 }

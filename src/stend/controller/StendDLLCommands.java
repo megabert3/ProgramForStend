@@ -15,28 +15,35 @@ public abstract class StendDLLCommands {
     private StendDLL stend = StendDLL.INSTANCE;
 
     //Порт для связи с установкой
-    private int port = Integer.parseInt(ConsoleHelper.properties.getProperty("stendCOMPort"));
+    private int port;
 
     //Тип эталонного счётчика
     private String typeReferenceMeter;
 
     //Кол-во постадочных мест для счётчиков
-    private int amountPlaces = Integer.parseInt(ConsoleHelper.properties.getProperty("stendAmountPlaces"));
+    private int amountPlaces;
 
     //Константа счётчика
-    private double constant = Double.parseDouble(ConsoleHelper.properties.getProperty("meterLastConstant"));
+    private double constant;
 
     //Пауза для стабилизации и установки заданных пар-ров установки
-    private int pauseForStabization = Integer.parseInt(ConsoleHelper.properties.getProperty("pauseForStabization"));
+    private int pauseForStabization;
 
     //Количество (активных мест)
-    private boolean[] amountActivePlaces = initializationAmountActivePlaces();
+    private boolean[] amountActivePlaces; // = initializationAmountActivePlaces();
 
     //Константы счётчиков
     //public static double[] constantsForMetersOnPlaces = initializationConstantsForMetersOnPlaces();
 
     //Необходимо для быстрого обхода в цикле
-    private HashMap<Integer, Meter> amountActivePlacesForTest = initAmountActivePlacesForTest();
+    private HashMap<Integer, Meter> amountActivePlacesForTest; // = initAmountActivePlacesForTest();
+
+    public StendDLLCommands() {
+        String port = ConsoleHelper.properties.getProperty("stendCOMPort").trim().substring(3).trim();
+        this.port = Integer.parseInt(port);
+        this.amountPlaces = Integer.parseInt(ConsoleHelper.properties.getProperty("stendAmountPlaces"));
+        this.pauseForStabization = Integer.parseInt(ConsoleHelper.properties.getProperty("pauseForStabization"));
+    }
 
     //Инициализирует посадочные места и устанавливает значения флага
     private boolean[] initializationAmountActivePlaces() {
@@ -98,6 +105,10 @@ public abstract class StendDLLCommands {
     //Пауза для стабилизации счётчика
     public int getPauseForStabization() {
         return pauseForStabization;
+    }
+
+    public void setPauseForStabization(int pauseForStabization) {
+        this.pauseForStabization = pauseForStabization;
     }
 
     //Включить напряжение и ток без регулеровки пофазного напряжения
@@ -254,5 +265,4 @@ public abstract class StendDLLCommands {
     public static String[] massPort() {
         return SerialPortList.getPortNames();
     }
-
 }
