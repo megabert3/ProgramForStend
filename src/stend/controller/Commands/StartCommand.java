@@ -68,15 +68,14 @@ public class StartCommand implements Commands {
     private long timeEnd;
     private long currTime;
 
-    private HashMap<Integer, Boolean> startCommandResult = initCreepCommandResult();
-    private HashMap<Integer, LocalMeter> metersList = initMeterList();
+    private HashMap<Integer, Boolean> startCommandResult;
+    private HashMap<Integer, LocalMeter> metersList;
 
     public HashMap<Integer, Boolean> getCreepCommandResult() {
         return startCommandResult;
     }
 
     public StartCommand(StendDLLCommands stendDLLCommands, int revers, int channelFlag, boolean gostTest) {
-        this.stendDLLCommands = stendDLLCommands;
         this.revers = revers;
         this.channelFlag = channelFlag;
         this.gostTest = gostTest;
@@ -84,6 +83,9 @@ public class StartCommand implements Commands {
 
     @Override
     public void execute() {
+        startCommandResult = initCreepCommandResult();
+        metersList = initMeterList();
+
         stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq,0, revers,
                 100.0, 100.0, iABC, "1.0");
 

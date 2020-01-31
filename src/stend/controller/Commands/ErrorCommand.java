@@ -1,6 +1,5 @@
 package stend.controller.Commands;
 
-import com.sun.jmx.remote.internal.ClientListenerInfo;
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 import stend.helper.ConsoleHelper;
@@ -67,14 +66,10 @@ public class ErrorCommand implements Commands {
     private int countResult = 2;
 
     //Флаг для прекращения сбора погрешности
-    private HashMap<Integer, Boolean> flagInStop = initBoolList();
+    private HashMap<Integer, Boolean> flagInStop;
 
-    /**
-        Не забудь создать второй конструктор для другого окна
-     */
-    public ErrorCommand(StendDLLCommands stendDLLCommands, String id, int phase, String current,
+        public ErrorCommand(String id, int phase, String current,
                         int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
-        this.stendDLLCommands = stendDLLCommands;
         this.id = id;
         this.phase = phase;
         this.current = current;
@@ -93,9 +88,8 @@ public class ErrorCommand implements Commands {
         voltPer = 100.0;
     }
 
-    public ErrorCommand(String param, StendDLLCommands stendDLLCommands, String id, int phase, String current,
+    public ErrorCommand(String param, String id, int phase, String current,
                         double voltPer, int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
-        this.stendDLLCommands = stendDLLCommands;
         this.id = id;
         this.phase = phase;
         this.current = current;
@@ -115,6 +109,8 @@ public class ErrorCommand implements Commands {
 
     @Override
     public void execute() {
+            flagInStop = initBoolList();
+
         if (current.equals("Ib")) {
             ratedCurr = Ib;
         } else {
@@ -162,12 +158,16 @@ public class ErrorCommand implements Commands {
 
     private HashMap<Integer, Boolean> initBoolList() {
         HashMap<Integer, Boolean> init = new HashMap<>(stendDLLCommands.getAmountActivePlacesForTest().size());
+
         for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
             init.put(meter.getKey(), false);
         }
         return init;
     }
 
+    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
+        this.stendDLLCommands = stendDLLCommands;
+    }
 
     public void setRatedVolt(double ratedVolt) {
         this.ratedVolt = ratedVolt;

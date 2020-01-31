@@ -23,14 +23,26 @@ public abstract class StendDLLCommands {
     //Кол-во постадочных мест для счётчиков
     private int amountPlaces;
 
-    //Константа счётчика
-    private double constant;
-
     //Пауза для стабилизации и установки заданных пар-ров установки
     private int pauseForStabization;
 
     //Количество (активных мест)
-    private boolean[] amountActivePlaces; // = initializationAmountActivePlaces();
+    private boolean[] amountActivePlaces = initializationAmountActivePlaces();
+
+    //Номинальное напряжение
+    private double Unom;
+
+    //Максимальный ток
+    private double Imax;
+
+    //Базовый ток
+    private double Ib;
+
+    //Номинальная частота
+    private double Fn;
+
+    //Константа счётчика
+    private double constant;
 
     //Константы счётчиков
     //public static double[] constantsForMetersOnPlaces = initializationConstantsForMetersOnPlaces();
@@ -100,6 +112,45 @@ public abstract class StendDLLCommands {
 
     public double getConstant() {
         return constant;
+    }
+
+    public double getUnom() {
+        return Unom;
+    }
+
+    public double getImax() {
+        return Imax;
+    }
+    public double getIb() {
+        return Ib;
+    }
+
+    public double getFn() {
+        return Fn;
+    }
+
+    public void setImax(double imax) {
+        Imax = imax;
+    }
+
+    public void setUnom(double unom) {
+        Unom = unom;
+    }
+
+    public void setIb(double ib) {
+        Ib = ib;
+    }
+
+    public void setStend(StendDLL stend) {
+        this.stend = stend;
+    }
+
+    public void setFn(double fn) {
+        Fn = fn;
+    }
+
+    public void setConstant(double constant) {
+        this.constant = constant;
     }
 
     //Пауза для стабилизации счётчика

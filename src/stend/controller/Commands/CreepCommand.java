@@ -50,21 +50,23 @@ public class CreepCommand implements Commands {
     private long timeEnd;
     private long currTime;
 
-    private HashMap<Integer, Boolean> creepCommandResult = initCreepCommandResult();
-    private HashMap<Integer, LocalMeter> metersList = initMeterList();
+    private HashMap<Integer, Boolean> creepCommandResult;
+    private HashMap<Integer, LocalMeter> metersList;
 
     public HashMap<Integer, Boolean> getCreepCommandResult() {
         return creepCommandResult;
     }
 
-    public CreepCommand(StendDLLCommands stendDLLCommands, boolean gostTest, int channelFlag) {
-        this.stendDLLCommands = stendDLLCommands;
+    public CreepCommand(boolean gostTest, int channelFlag) {
         this.gostTest = gostTest;
         this.channelFlag = channelFlag;
     }
 
     @Override
     public void execute() {
+        creepCommandResult = initCreepCommandResult();
+        metersList = initMeterList();
+
         if (gostTest) {
             timeForTest = initTimeForGOSTTest();
         } else {
@@ -136,6 +138,10 @@ public class CreepCommand implements Commands {
         String seks = timearr[2];
 
         return ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+    }
+
+    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
+        this.stendDLLCommands = stendDLLCommands;
     }
 
     public void setConstMeterForTest(int constMeterForTest) {

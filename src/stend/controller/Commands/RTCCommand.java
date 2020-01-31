@@ -9,6 +9,10 @@ import java.util.Map;
 
 public class RTCCommand implements Commands {
 
+    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
+        this.stendDLLCommands = stendDLLCommands;
+    }
+
     private StendDLLCommands stendDLLCommands;
 
     private int phase;
@@ -36,14 +40,13 @@ public class RTCCommand implements Commands {
     private int errorType;
 
     //Массив погрешностей одного счётчика
-    private HashMap<Integer, String> errorRTCList = new HashMap<>(stendDLLCommands.getAmountActivePlacesForTest().size());
+    private HashMap<Integer, String> errorRTCList = new HashMap<>();
 
     public HashMap<Integer, String> getErrorRTCList() {
         return errorRTCList;
     }
 
-    public RTCCommand(StendDLLCommands stendDLLCommands, int pulseForRTC, double freg, int countResult, int errorType, double errorForFalseTest) {
-        this.stendDLLCommands = stendDLLCommands;
+    public RTCCommand(int pulseForRTC, double freg, int countResult, int errorType, double errorForFalseTest) {
         this.pulseForRTC = pulseForRTC;
         this.freg = freg;
         this.countResult = countResult;

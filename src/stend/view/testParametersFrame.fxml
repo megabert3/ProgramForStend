@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -30,7 +29,6 @@
       <Text layoutX="181.0" layoutY="421.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ток, А" />
       <Text layoutX="19.0" layoutY="551.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности Р.Э." />
       <Text layoutX="19.0" layoutY="490.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности А.Э." />
-      <ChoiceBox fx:id="chosBx" layoutX="757.0" layoutY="425.0" prefHeight="25.0" prefWidth="167.0" />
       <Text layoutX="861.0" layoutY="413.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Методика" />
       <Text layoutX="343.0" layoutY="421.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Частота, Гц" />
       <Text layoutX="181.0" layoutY="488.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип счётчика" />
@@ -55,5 +53,6 @@
       <TextField fx:id="txtFldAccuracyRP" layoutX="21.0" layoutY="558.0" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #505050; -fx-background-radius: 0;" />
       <TextField fx:id="txtFldCurrent" layoutX="181.0" layoutY="425.0" prefHeight="26.0" prefWidth="61.0" style="-fx-background-color: #505050; -fx-background-radius: 0;" />
       <TextField fx:id="txtFldFrg" layoutX="342.0" layoutY="426.0" prefHeight="26.0" prefWidth="61.0" style="-fx-background-color: #505050; -fx-background-radius: 0;" />
+      <ComboBox fx:id="chosBxMetodics" layoutX="772.0" layoutY="424.0" prefHeight="28.0" prefWidth="152.0" />
    </children>
 </AnchorPane>

@@ -844,7 +844,7 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами пользователя AP+
         if (event.getSource() == addTglBtnCRPAPPls) {
             if (addTglBtnCRPAPPls.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, false, 0);
+                creepCommand = new CreepCommand(false, 0);
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
                 creepCommand.setUserTimeTest(txtFieldTimeCRPAPPls.getText());
@@ -881,7 +881,7 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами по ГОСТу AP+
         if (event.getSource() == addTglBtnCRPAPPlsGOST) {
             if (addTglBtnCRPAPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, true, 0);
+                creepCommand = new CreepCommand(true, 0);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -909,7 +909,7 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами пользователя AP-
         if (event.getSource() == addTglBtnCRPAPMns) {
             if (addTglBtnCRPAPMns.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, false, 1);
+                creepCommand = new CreepCommand(false, 1);
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
                 creepCommand.setUserTimeTest(txtFieldTimeCRPAPMns.getText());
@@ -944,7 +944,7 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnCRPAPMnsGOST) {
             if (addTglBtnCRPAPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, true, 1);
+                creepCommand = new CreepCommand(true, 1);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -972,7 +972,7 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами пользователя RP+
         if (event.getSource() == addTglBtnCRPRPPls) {
             if (addTglBtnCRPRPPls.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, false, 2);
+                creepCommand = new CreepCommand(false, 2);
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
                 creepCommand.setUserTimeTest(txtFieldTimeCRPRPPls.getText());
@@ -1007,7 +1007,7 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnCRPRPPlsGOST) {
             if (addTglBtnCRPRPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, true, 2);
+                creepCommand = new CreepCommand(true, 2);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -1035,7 +1035,7 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами пользователя RP-
         if (event.getSource() == addTglBtnCRPRPMns) {
             if (addTglBtnCRPRPMns.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, false, 3);
+                creepCommand = new CreepCommand(false, 3);
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
                 creepCommand.setUserTimeTest(txtFieldTimeCRPRPMns.getText());
@@ -1070,7 +1070,7 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnCRPRPMnsGOST) {
             if (addTglBtnCRPRPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(stendDLLCommands, true, 3);
+                creepCommand = new CreepCommand(true, 3);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -1344,11 +1344,11 @@ public class AddEditFrameController {
             if (addTglBtnRTCAPPls.isSelected()) {
                 if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
 
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
+                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 0, Double.parseDouble(txtFieldRngEAPPls.getText()));
                     cbValue = "В ед. частоты";
                 } else {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
+                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 1, Double.parseDouble(txtFieldRngEAPPls.getText()));
                     cbValue = "Сутч. погрешность";
                 }
@@ -1390,11 +1390,11 @@ public class AddEditFrameController {
         if(event.getSource() == addTglBtnRTCAPMns) {
             if (addTglBtnRTCAPMns.isSelected()) {
                 if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
+                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 0, Double.parseDouble(txtFieldRngEAPMns.getText()));
                     cbValue = "В ед. частоты";
                 } else {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
+                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 1, Double.parseDouble(txtFieldRngEAPMns.getText()));
                     cbValue = "Сутч. погрешность";
                 }
@@ -1436,11 +1436,11 @@ public class AddEditFrameController {
         if(event.getSource() == addTglBtnRTCRPPls) {
             if (addTglBtnRTCRPPls.isSelected()) {
                 if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
+                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 0, Double.parseDouble(txtFieldRngERPPls.getText()));
                     cbValue = "В ед. частоты";
                 } else {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
+                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 1, Double.parseDouble(txtFieldRngERPPls.getText()));
                     cbValue = "Сутч. погрешность";
                 }
@@ -1483,11 +1483,11 @@ public class AddEditFrameController {
         if(event.getSource() == addTglBtnRTCRPMns) {
             if (addTglBtnRTCRPMns.isSelected()) {
                 if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
+                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 0, Double.parseDouble(txtFieldRngERPMns.getText()));
                     cbValue = "В ед. частоты";
                 } else {
-                    rtcCommand = new RTCCommand(stendDLLCommands, Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
+                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
                             Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 1, Double.parseDouble(txtFieldRngERPMns.getText()));
                     cbValue = "Сутч. погрешность";
                 }
@@ -2581,19 +2581,19 @@ public class AddEditFrameController {
 
 
         if (energyType.equals("A") && currentDirection.equals("P")) {
-            testListForCollumAPPls.add(new ErrorCommand(stendDLLCommands, testPoint, phase, current, 0, percent, iABC, powerFactor, 0));
+            testListForCollumAPPls.add(new ErrorCommand(testPoint, phase, current, 0, percent, iABC, powerFactor, 0));
         }
 
         if (energyType.equals("A") && currentDirection.equals("N")) {
-            testListForCollumAPMns.add(new ErrorCommand(stendDLLCommands, testPoint, phase, current, 1, percent, iABC, powerFactor, 1));
+            testListForCollumAPMns.add(new ErrorCommand(testPoint, phase, current, 1, percent, iABC, powerFactor, 1));
         }
 
         if (energyType.equals("R") && currentDirection.equals("P")) {
-            testListForCollumRPPls.add(new ErrorCommand(stendDLLCommands, testPoint, phase, current, 0, percent, iABC, powerFactor, 2));
+            testListForCollumRPPls.add(new ErrorCommand(testPoint, phase, current, 0, percent, iABC, powerFactor, 2));
         }
 
         if (energyType.equals("R") && currentDirection.equals("N")) {
-            testListForCollumRPMns.add(new ErrorCommand(stendDLLCommands, testPoint, phase, current, 1, percent, iABC, powerFactor, 3));
+            testListForCollumRPMns.add(new ErrorCommand(testPoint, phase, current, 1, percent, iABC, powerFactor, 3));
         }
     }
 

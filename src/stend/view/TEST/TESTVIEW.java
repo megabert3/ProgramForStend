@@ -1165,7 +1165,7 @@ public class TESTVIEW extends Application {
 
             if (influenceUorF.equals("U")) {
                 for (double influenceUprocAPPl : influenceUprocAPPls) {
-                    testListForCollumAPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceUprocAPPl,
+                    testListForCollumAPPls.add(new ErrorCommand(influenceUorF, testPoint, phase, current, influenceUprocAPPl,
                             0, percent, iABC, powerFactor, 0));
                 }
             }
@@ -1173,7 +1173,7 @@ public class TESTVIEW extends Application {
             if (influenceUorF.equals("F")) {
 
                 for (double influenceFprocAPPl : influenceFprocAPPls) {
-                    testListForCollumAPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceFprocAPPl,
+                    testListForCollumAPPls.add(new ErrorCommand(influenceUorF, testPoint, phase, current, influenceFprocAPPl,
                             0, percent, iABC, powerFactor, 0));
                 }
             }
@@ -1185,7 +1185,7 @@ public class TESTVIEW extends Application {
             if (influenceUorF.equals("U")) {
 
                 for (double influenceUprocAPMns : influenceUprocAPMns) {
-                    testListForCollumAPMns.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceUprocAPMns,
+                    testListForCollumAPMns.add(new ErrorCommand(influenceUorF, testPoint, phase, current, influenceUprocAPMns,
                             1, percent, iABC, powerFactor, 1));
                 }
             }
@@ -1193,7 +1193,7 @@ public class TESTVIEW extends Application {
             if (influenceUorF.equals("F")) {
 
                 for (double influenceFprocAPMns : influenceFprocAPMns) {
-                    testListForCollumAPMns.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceFprocAPMns,
+                    testListForCollumAPMns.add(new ErrorCommand(influenceUorF, testPoint, phase, current, influenceFprocAPMns,
                             1, percent, iABC, powerFactor, 1));
                 }
             }
@@ -1205,7 +1205,7 @@ public class TESTVIEW extends Application {
             if (influenceUorF.equals("U")) {
 
                 for (double influenceUprocRPPls : influenceUprocRPPls) {
-                    testListForCollumRPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceUprocRPPls,
+                    testListForCollumRPPls.add(new ErrorCommand(influenceUorF, testPoint, phase, current, influenceUprocRPPls,
                             0, percent, iABC, powerFactor, 2));
                 }
             }
@@ -1213,7 +1213,7 @@ public class TESTVIEW extends Application {
             if (influenceUorF.equals("F")) {
 
                 for (double influenceFprocRPPls : influenceFprocRPPls) {
-                    testListForCollumRPPls.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceFprocRPPls,
+                    testListForCollumRPPls.add(new ErrorCommand(influenceUorF, testPoint, phase, current, influenceFprocRPPls,
                             0, percent, iABC, powerFactor, 2));
                 }
             }
@@ -1225,7 +1225,7 @@ public class TESTVIEW extends Application {
 
             if (influenceUorF.equals("U")) {
                 for (double influenceUprocRPMns : influenceUprocRPMns) {
-                    testListForCollumRPMns.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceUprocRPMns,
+                    testListForCollumRPMns.add(new ErrorCommand(influenceUorF, testPoint, phase, current, influenceUprocRPMns,
                             1, percent, iABC, powerFactor, 3));
                 }
 
@@ -1233,7 +1233,7 @@ public class TESTVIEW extends Application {
 
             if (influenceUorF.equals("F")) {
                 for (double influenceFprocRPPls : influenceFprocRPMns) {
-                    testListForCollumRPMns.add(new ErrorCommand(influenceUorF, stendDLLCommands, testPoint, phase, current, influenceFprocRPPls,
+                    testListForCollumRPMns.add(new ErrorCommand(influenceUorF, testPoint, phase, current, influenceFprocRPPls,
                             1, percent, iABC, powerFactor, 3));
                 }
             }
