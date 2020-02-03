@@ -137,7 +137,7 @@ public class PropertiesController implements Initializable {
         stendPaneRefAcrCl.setText(properties.getProperty("refMeterAccuracyClass"));
         stendPaneStandAcrCl.setText(properties.getProperty("stendAccuracyClass"));
         txtFldCOMList.setText(properties.getProperty("stendCOMPort"));
-        standPaneAmoutPlase.setText(properties.getProperty("amountPlaces"));
+        standPaneAmoutPlase.setText(properties.getProperty("stendAmountPlaces"));
 
         stendPaneStendTypeList.getItems().addAll("Однофазная", "Трехфазная");
 

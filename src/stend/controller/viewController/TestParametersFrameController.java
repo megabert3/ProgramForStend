@@ -280,14 +280,10 @@ public class TestParametersFrameController {
         tabColConstAPMeter.setCellFactory(TextFieldTableCell.<Meter>forTableColumn());
         tabColConstAPMeter.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
 
-//            TablePosition<Meter, String> pos = event.getTablePosition();
-//
             String constAP = event.getNewValue();
-//
-//            int row = pos.getRow();
+
             Meter meter;
-//
-//            meter.setConstantMeterAP(constAP);
+
             for (int i = 0; i < metersList.size(); i++) {
                 meter = event.getTableView().getItems().get(i);
                 meter.setConstantMeterAP(constAP);
@@ -300,14 +296,15 @@ public class TestParametersFrameController {
         tabColConstRPMeter.setCellFactory(TextFieldTableCell.<Meter>forTableColumn());
         tabColConstRPMeter.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
 
-            TablePosition<Meter, String> pos = event.getTablePosition();
-
             String constRP = event.getNewValue();
 
-            int row = pos.getRow();
-            Meter meter = event.getTableView().getItems().get(row);
+            Meter meter;
 
-            meter.setConstantMeterRP(constRP);
+            for (int i = 0; i < metersList.size(); i++) {
+                meter = event.getTableView().getItems().get(i);
+                meter.setConstantMeterRP(constRP);
+            }
+            tabVParamMeters.refresh();
         });
 
         //Выбор модели счётчика из списка
