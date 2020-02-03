@@ -1,15 +1,23 @@
 package stend.controller.viewController;
 
-import java.net.URL;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.util.*;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
+import stend.controller.Meter;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
@@ -25,8 +33,33 @@ public class TestParametersFrameController {
 
     private Properties properties = ConsoleHelper.properties;
 
+    private List<Meter> metersList = new ArrayList<>(Integer.parseInt(properties.getProperty("stendAmountPlaces")));
+
+    private ObservableList<Meter> meterObservableList;
+
     @FXML
     private ComboBox<String> chosBxMetodics;
+
+    @FXML
+    private TableView<Meter> tabVParamMeters;
+
+    @FXML
+    private TableColumn<Meter, Boolean> tabColMeterDis;
+
+    @FXML
+    private TableColumn<Meter, Integer> tabColIdMeter;
+
+    @FXML
+    private TableColumn<Meter, String> tabColSerNoMeter;
+
+    @FXML
+    private TableColumn<Meter, String> tabColConstAPMeter;
+
+    @FXML
+    private TableColumn<Meter, String> tabColConstRPMeter;
+
+    @FXML
+    private TableColumn<Meter, String> tabColModelMeter;
 
     @FXML
     private Button btnNumbersMe;
@@ -177,5 +210,151 @@ public class TestParametersFrameController {
         chosBxWitness.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             txtFldWitness.setText(newValue);
         });
+
+        initTableView();
+    }
+
+    private void initTableView() {
+        for (int i = 1; i <= Integer.parseInt(properties.getProperty("stendAmountPlaces")); i++) {
+            Meter me = new Meter();
+            me.setId(String.valueOf(i));
+            me.setConstantMeterAP(properties.getProperty("meterLastConstantAP"));
+            me.setConstantMeterRP(properties.getProperty("meterLastConstantRP"));
+            me.setModelMeter(properties.getProperty("lastMeterModel"));
+            metersList.add(me);
+        }
+
+        meterObservableList = FXCollections.observableArrayList(metersList);
+
+        tabVParamMeters.setEditable(true);
+
+        //Установка чек боксов и добавление к ним слушателя
+        tabColMeterDis.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Meter, Boolean> param) {
+                Meter meter = param.getValue();
+                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(meter.isActive());
+
+                simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        meter.setActive(newValue);
+                    }
+                });
+
+                return simpleBooleanProperty;
+            }
+        });
+
+        tabColMeterDis.setCellFactory(new Callback<TableColumn<Meter, Boolean>, //
+                TableCell<Meter, Boolean>>() {
+            @Override
+            public TableCell<Meter, Boolean> call(TableColumn<Meter, Boolean> p) {
+                CheckBoxTableCell<Meter, Boolean> cell = new CheckBoxTableCell<Meter, Boolean>();
+                cell.setAlignment(Pos.CENTER);
+                return cell;
+            }
+        });
+
+        //Отображение айди счётчика
+        tabColIdMeter.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        //Отображение серийного номера счётчика
+        tabColSerNoMeter.setCellValueFactory(new PropertyValueFactory<>("serNoMeter"));
+        tabColSerNoMeter.setCellFactory(TextFieldTableCell.<Meter>forTableColumn());
+        tabColSerNoMeter.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String newSerNo = event.getNewValue();
+
+            int row = pos.getRow();
+
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setSerNoMeter(newSerNo);
+        });
+
+        //Отображение константы активной энергии
+        tabColConstAPMeter.setCellValueFactory(new PropertyValueFactory<>("constantMeterAP"));
+        tabColConstAPMeter.setCellFactory(TextFieldTableCell.<Meter>forTableColumn());
+        tabColConstAPMeter.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+
+//            TablePosition<Meter, String> pos = event.getTablePosition();
+//
+            String constAP = event.getNewValue();
+//
+//            int row = pos.getRow();
+            Meter meter;
+//
+//            meter.setConstantMeterAP(constAP);
+            for (int i = 0; i < metersList.size(); i++) {
+                meter = event.getTableView().getItems().get(i);
+                meter.setConstantMeterAP(constAP);
+            }
+            tabVParamMeters.refresh();
+        });
+
+        //Отображение константы реактивной энергии
+        tabColConstRPMeter.setCellValueFactory(new PropertyValueFactory<>("constantMeterRP"));
+        tabColConstRPMeter.setCellFactory(TextFieldTableCell.<Meter>forTableColumn());
+        tabColConstRPMeter.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String constRP = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setConstantMeterRP(constRP);
+        });
+
+        //Выбор модели счётчика из списка
+        ObservableList<String> meterModelList = FXCollections.observableArrayList(properties.getProperty("meterModel").split(", "));
+        tabColModelMeter.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
+
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
+                Meter meter = param.getValue();
+
+                String modelMeter = meter.getModelMeter();
+                return new SimpleObjectProperty<>(modelMeter);
+            }
+
+//            @Override
+//            public ObservableValue<String> call(CellDataFeatures<Person, Gender> param) {
+//                Person person = param.getValue();
+//                // F,M
+//                String genderCode = person.getGender();
+//                Gender gender = Gender.getByCode(genderCode);
+//                return new SimpleObjectProperty<Gender>(gender);
+//            }
+        });
+
+        tabColModelMeter.setCellFactory(ComboBoxTableCell.forTableColumn(meterModelList));
+
+        tabColModelMeter.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String newSerNo = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setModelMeter(newSerNo);
+        });
+
+        meterObservableList = FXCollections.observableArrayList(metersList);
+        tabVParamMeters.setItems(meterObservableList);
+
+        tabColMeterDis.setSortable(false);
+        tabColIdMeter.setSortable(false);
+        tabColSerNoMeter.setSortable(false);
+        tabColConstAPMeter.setSortable(false);
+        tabColConstRPMeter.setSortable(false);
+        tabColModelMeter.setSortable(false);
+
+        tabVParamMeters.setPlaceholder(new Label("Укажите количество мест в настрйках"));
     }
 }

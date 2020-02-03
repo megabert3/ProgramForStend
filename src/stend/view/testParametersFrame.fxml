@@ -14,14 +14,14 @@
       <ComboBox fx:id="chosBxController" layoutX="511.0" layoutY="489.0" prefHeight="25.0" prefWidth="170.0" />
       <ComboBox fx:id="chosBxOperator" layoutX="511.0" layoutY="427.0" prefHeight="25.0" prefWidth="170.0" />
       <AnchorPane prefHeight="113.0" prefWidth="955.0" style="-fx-background-color: #393939;" />
-      <TableView layoutX="19.0" layoutY="60.0" prefHeight="320.0" prefWidth="918.0">
+      <TableView fx:id="tabVParamMeters" layoutX="19.0" layoutY="60.0" prefHeight="320.0" prefWidth="918.0">
          <columns>
-            <TableColumn prefWidth="29.0" />
-            <TableColumn prefWidth="38.0" text="№" />
-            <TableColumn prefWidth="125.0" text="Серийный номер" />
-            <TableColumn prefWidth="110.0" text="Постоянная А.Э." />
-            <TableColumn prefWidth="129.0" text="Постоянная Р.Э." />
-            <TableColumn prefWidth="127.0" text="Модель счётчика" />
+            <TableColumn fx:id="tabColMeterDis" prefWidth="29.0" />
+            <TableColumn fx:id="tabColIdMeter" prefWidth="38.0" text="№" />
+            <TableColumn fx:id="tabColSerNoMeter" prefWidth="125.0" text="Серийный номер" />
+            <TableColumn fx:id="tabColConstAPMeter" prefWidth="110.0" text="Постоянная А.Э." />
+            <TableColumn fx:id="tabColConstRPMeter" prefWidth="129.0" text="Постоянная Р.Э." />
+            <TableColumn fx:id="tabColModelMeter" prefWidth="127.0" text="Модель счётчика" />
             <TableColumn prefWidth="122.0" text="Column X" />
          </columns>
       </TableView>

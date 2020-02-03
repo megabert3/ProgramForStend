@@ -1,17 +1,20 @@
 package stend.controller;
 
 public class Meter {
-    private long id;
+
+    private String id;
     private double[] errors = new double[10];
+
+    private boolean active = true;
 
     //Серийный номер счётчика
     private String serNoMeter;
 
     //Константа активной энергии счётчика
-    private int constantMeterAP;
+    private String constantMeterAP;
 
     //Константа реактивной энергии счётчика
-    private int constantMeterRP;
+    private String constantMeterRP;
 
     //Серийный номер счётчика
     private String modelMeter;
@@ -66,11 +69,11 @@ public class Meter {
         this.startTestReactiveEnergyReverse = startTestReactiveEnergyReverse;
     }
 
-    public int getConstantMeterAP() {
+    public String getConstantMeterAP() {
         return constantMeterAP;
     }
 
-    public int getConstantMeterRP() {
+    public String getConstantMeterRP() {
         return constantMeterRP;
     }
 
@@ -82,7 +85,7 @@ public class Meter {
         return serNoMeter;
     }
 
-    public void setConstantMeterRP(int constantMeterRP) {
+    public void setConstantMeterRP(String constantMeterRP) {
         this.constantMeterRP = constantMeterRP;
     }
 
@@ -90,11 +93,27 @@ public class Meter {
         this.modelMeter = modelMeter;
     }
 
-    public void setConstantMeterAP(int constantMeterAP) {
+    public void setConstantMeterAP(String constantMeterAP) {
         this.constantMeterAP = constantMeterAP;
     }
 
     public void setSerNoMeter(String serNoMeter) {
         this.serNoMeter = serNoMeter;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }
