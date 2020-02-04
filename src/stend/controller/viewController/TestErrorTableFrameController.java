@@ -1,5 +1,7 @@
 package stend.controller.viewController;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,17 +10,14 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.cell.PropertyValueFactory;
 import stend.controller.Commands.Commands;
 import stend.controller.Meter;
 import stend.model.Methodic;
-import stend.model.MethodicsForTest;
 
 import java.util.List;
 
 public class TestErrorTableFrameController {
-
-
-    private MethodicsForTest methodics = MethodicsForTest.getMethodicsForTestInstance();
 
     private List<Meter> listMetersForTest;
 
@@ -61,7 +60,7 @@ public class TestErrorTableFrameController {
     private TableColumn<Commands, String> tabColTestPointsAPPls;
 
     @FXML
-    private TableView<Meter> tabViewErrosAPPls;
+    private TableView<Meter.Error> tabViewErrosAPPls;
 
     @FXML
     private SplitPane splPaneAPMns;
@@ -73,7 +72,7 @@ public class TestErrorTableFrameController {
     private TableColumn<Commands, String> tabColTestPointsAPMns;
 
     @FXML
-    private TableView<Meter> tabViewErrosAPMns;
+    private TableView<Meter.Error> tabViewErrosAPMns;
 
     @FXML
     private SplitPane splPaneRPPls;
@@ -85,19 +84,19 @@ public class TestErrorTableFrameController {
     private TableColumn<Commands, String> tabColTestPointsRPPls;
 
     @FXML
-    private TableView<?> tabViewErrosRPPls;
+    private TableView<Meter.Error> tabViewErrosRPPls;
 
     @FXML
     private SplitPane splPaneRPMns;
 
     @FXML
-    private TableView<Meter> tabViewTestPointsRPMns;
+    private TableView<Commands> tabViewTestPointsRPMns;
 
     @FXML
     private TableColumn<Commands, String> tabColTestPointsRPMns;
 
     @FXML
-    private TableView<Meter> tabViewErrosRPMns;
+    private TableView<Meter.Error> tabViewErrosRPMns;
 
     @FXML
     private Button btnExit;
@@ -206,7 +205,37 @@ public class TestErrorTableFrameController {
 
     @FXML
     void actionEventSwithEnergyPane(ActionEvent event) {
+        if (event.getSource() == tglBtnAPPls) {
+            splPaneAPPls.toFront();
+            tglBtnAPPls.setSelected(true);
+            tglBtnAPMns.setSelected(false);
+            tglBtnRPPls.setSelected(false);
+            tglBtnRPMns.setSelected(false);
+        }
 
+        if (event.getSource() == tglBtnAPMns) {
+            splPaneAPMns.toFront();
+            tglBtnAPPls.setSelected(false);
+            tglBtnAPMns.setSelected(true);
+            tglBtnRPPls.setSelected(false);
+            tglBtnRPMns.setSelected(false);
+        }
+
+        if (event.getSource() == tglBtnRPPls) {
+            splPaneRPPls.toFront();
+            tglBtnAPPls.setSelected(false);
+            tglBtnAPMns.setSelected(false);
+            tglBtnRPPls.setSelected(true);
+            tglBtnRPMns.setSelected(false);
+        }
+
+        if (event.getSource() == tglBtnRPMns) {
+            splPaneRPMns.toFront();
+            tglBtnAPPls.setSelected(false);
+            tglBtnAPMns.setSelected(false);
+            tglBtnRPPls.setSelected(false);
+            tglBtnRPMns.setSelected(true);
+        }
     }
 
     @FXML
@@ -216,10 +245,83 @@ public class TestErrorTableFrameController {
 
     @FXML
     void initialize() {
-
+        tglBtnAPPls.setSelected(true);
+        splPaneAPPls.toFront();
     }
 
     public void myInitTestErrorTableFrame() {
+        initErrorsForMeters();
 
+        //Инициирую колонку с точками для испытаний AP+
+        tabColTestPointsAPPls.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabColTestPointsAPPls.setSortable(false);
+        ObservableList<Commands> commandsAPPls = FXCollections.observableArrayList(methodic.getCommandsMap().get(0));
+        tabViewTestPointsAPPls.setItems(commandsAPPls);
+
+        //Инициирую колонку с точками для испытаний AP-
+        tabColTestPointsAPMns.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabColTestPointsAPMns.setSortable(false);
+        ObservableList<Commands> commandsAPMns = FXCollections.observableArrayList(methodic.getCommandsMap().get(1));
+        tabViewTestPointsAPMns.setItems(commandsAPMns);
+
+        //Инициирую колонку с точками для испытаний RP+
+        tabColTestPointsRPPls.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabColTestPointsRPPls.setSortable(false);
+        ObservableList<Commands> commandsRPPls = FXCollections.observableArrayList(methodic.getCommandsMap().get(2));
+        tabViewTestPointsRPPls.setItems(commandsRPPls);
+
+        //Инициирую колонку с точками для испытаний RP+
+        tabColTestPointsRPMns.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabColTestPointsRPMns.setSortable(false);
+        ObservableList<Commands> commandsRPMns = FXCollections.observableArrayList(methodic.getCommandsMap().get(3));
+        tabViewTestPointsRPMns.setItems(commandsRPMns);
+
+        //-----------------------------------------------------------
+        //В зависимости от количества счётчиков инициализирую поля для отображения погрешности
+        for (int i = 0; i < listMetersForTest.size(); i++) {
+
+            //Создаю колонки счётчиков для splitPane AP+
+            TableColumn<Meter.Error, String> tableColumnAPPls = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            tableColumnAPPls.setCellValueFactory(new PropertyValueFactory<>("lastError"));
+            tableColumnAPPls.setSortable(false);
+            ObservableList<Meter.Error> observableListAPPls = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPPls());
+            tabViewErrosAPPls.setItems(observableListAPPls);
+            tabViewErrosAPPls.getColumns().add(tableColumnAPPls);
+
+            //Создаю колонки счётчиков для splitPane AP-
+            TableColumn<Meter.Error, String> tableColumnAPMns = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            tableColumnAPMns.setCellValueFactory(new PropertyValueFactory<>("lastError"));
+            tableColumnAPMns.setSortable(false);
+            ObservableList<Meter.Error> observableListAPMns = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPMns());
+            tabViewErrosAPMns.setItems(observableListAPMns);
+            tabViewErrosAPMns.getColumns().add(tableColumnAPMns);
+
+            //Создаю колонки счётчиков для splitPane RP+
+            TableColumn<Meter.Error, String> tableColumnRPPls = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            tableColumnRPPls.setCellValueFactory(new PropertyValueFactory<>("lastError"));
+            tableColumnRPPls.setSortable(false);
+            ObservableList<Meter.Error> observableListRPPls = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPPls());
+            tabViewErrosRPPls.setItems(observableListRPPls);
+            tabViewErrosRPPls.getColumns().add(tableColumnRPPls);
+
+            //Создаю колонки счётчиков для splitPane RP-
+            TableColumn<Meter.Error, String> tableColumnRPMns = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            tableColumnRPMns.setCellValueFactory(new PropertyValueFactory<>("lastError"));
+            tableColumnRPMns.setSortable(false);
+            ObservableList<Meter.Error> observableListRPMns = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns());
+            tabViewErrosRPMns.setItems(observableListRPMns);
+            tabViewErrosRPMns.getColumns().add(tableColumnRPMns);
+        }
+    }
+
+    //Добавляет объект error к каждому счётчику необходимому для теста
+    private void initErrorsForMeters() {
+        for (Meter meter : listMetersForTest) {
+            for (int i = 0; i < 4; i++) {
+                for (Commands commandName : methodic.getCommandsMap().get(i)) {
+                    meter.createError(i, commandName.getName());
+                }
+            }
+        }
     }
 }

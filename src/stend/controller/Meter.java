@@ -1,5 +1,8 @@
 package stend.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Meter {
 
     private String id;
@@ -19,6 +22,12 @@ public class Meter {
     //Серийный номер счётчика
     private String modelMeter;
 
+    //Лист с ошибками
+    private List<Error> errorListAPPls = new ArrayList<>();
+    private List<Error> errorListAPMns = new ArrayList<>();
+    private List<Error> errorListRPPls = new ArrayList<>();
+    private List<Error> errorListRPMns = new ArrayList<>();
+
     //Результат теста чувствительности к току
     private boolean startTestActiveEnergyDirect;
     private boolean startTestReactiveEnergyDirect;
@@ -36,6 +45,15 @@ public class Meter {
 
     //Результат теста самохода
     private boolean creepTest;
+
+    public void createError(int numberArrayList ,String name) {
+        switch (numberArrayList) {
+            case 0: errorListAPPls.add(new Error(name)); break;
+            case 1: errorListAPMns.add(new Error(name)); break;
+            case 2: errorListRPPls.add(new Error(name)); break;
+            case 3: errorListRPMns.add(new Error(name)); break;
+        }
+    }
 
     public void setErrors(double[] errors) {
         this.errors = errors;
@@ -115,5 +133,47 @@ public class Meter {
 
     public boolean isActive() {
         return active;
+    }
+
+    public List<Error> getErrorListAPPls() {
+        return errorListAPPls;
+    }
+
+    public List<Error> getErrorListAPMns() {
+        return errorListAPMns;
+    }
+
+    public List<Error> getErrorListRPPls() {
+        return errorListRPPls;
+    }
+
+    public List<Error> getErrorListRPMns() {
+        return errorListRPMns;
+    }
+
+
+    public class Error {
+
+        Error(String nameTestPointError) {
+            this.nameTestPointError = nameTestPointError;
+        }
+
+        String nameTestPointError;
+
+        String lastError;
+
+        String[] errors = new String[10];
+
+        public void setLastError(String lastError) {
+            this.lastError = lastError;
+        }
+
+        public void setErrors(String[] errors) {
+            this.errors = errors;
+        }
+
+        public String getLastError() {
+            return lastError;
+        }
     }
 }

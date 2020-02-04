@@ -850,8 +850,6 @@ public class AddEditFrameController {
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
                 creepCommand.setName("Самоход AP+");
 
-                System.out.println(creepCommand.getUserTimeTest());
-
                 txtFieldCRPAmtImpAPPls.setDisable(true);
                 txtFieldTimeCRPAPPls.setDisable(true);
                 txtFieldCRPUProcAPPls.setDisable(true);

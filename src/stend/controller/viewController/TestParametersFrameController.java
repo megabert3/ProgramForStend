@@ -144,7 +144,7 @@ public class TestParametersFrameController {
 
                 StringBuilder stringBuilder = new StringBuilder();
                 Pattern pat = Pattern.compile("[0-9]+");
-                Matcher mat = pat.matcher("10(60)");
+                Matcher mat = pat.matcher(txtFldCurrent.getText());
 
                 while (mat.find()) {
                     stringBuilder.append(mat.group()).append(",");
@@ -217,13 +217,24 @@ public class TestParametersFrameController {
                 testErrorTableFrameController.setOperator(txtFldOperator.getText());
                 testErrorTableFrameController.setWitness(txtFldWitness.getText());
 
+                for (int i = 0; i < metersList.size(); i++) {
+                    if (!metersList.get(i).isActive()) {
+                        metersList.remove(i);
+                        i--;
+                    }
+                }
+
+                testErrorTableFrameController.setListMetersForTest(metersList);
+
+                testErrorTableFrameController.myInitTestErrorTableFrame();
+
                 stage.show();
 
                 Stage stage1 = (Stage) txtFldController.getScene().getWindow();
                 stage1.close();
 
             }catch (NumberFormatException e) {
-                System.out.println("Произошла ошибка переносе значения");
+                System.out.println("Произошла ошибка при переносе значений");
                 e.printStackTrace();
             }catch (IOException e) {
                 System.out.println("Произошла ошибка при загрузке окна");
