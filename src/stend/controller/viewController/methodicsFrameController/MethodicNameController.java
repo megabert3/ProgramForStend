@@ -1,8 +1,5 @@
 package stend.controller.viewController.methodicsFrameController;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditFrameController;
-import stend.helper.exeptions.InfoExeption;
+import stend.helper.exeptions.InfoExсeption;
 import stend.model.Methodic;
 import stend.model.MethodicsForTest;
 
@@ -91,7 +88,7 @@ public class MethodicNameController {
 
                     clone = false;
 
-                }catch (InfoExeption | CloneNotSupportedException e) {
+                }catch (InfoExсeption | CloneNotSupportedException e) {
                     labelInfo.setText("Методика с таким именем уже существует");
                 }
 
@@ -120,7 +117,7 @@ public class MethodicNameController {
 
                     Stage stageMetodicName = (Stage) nameField.getScene().getWindow();
                     stageMetodicName.close();
-                } catch (InfoExeption e) {
+                } catch (InfoExсeption e) {
                     labelInfo.setText("Методика с таким именем уже существует");
                 } catch (IOException e) {
                     e.printStackTrace();

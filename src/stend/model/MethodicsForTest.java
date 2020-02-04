@@ -1,11 +1,9 @@
 package stend.model;
 
-import stend.helper.exeptions.InfoExeption;
+import stend.helper.exeptions.InfoExсeption;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class MethodicsForTest {
@@ -31,9 +29,9 @@ public class MethodicsForTest {
     private ArrayList<Methodic> methodics = new ArrayList<>();
 
     //Добавление методики в список
-    public boolean addMethodicToList(String name, Methodic methodicList) throws InfoExeption {
+    public boolean addMethodicToList(String name, Methodic methodicList) throws InfoExсeption {
         for (Methodic methodic : methodics) {
-            if (methodic.getMethodicName().equals(name)) throw new InfoExeption();
+            if (methodic.getMethodicName().equals(name)) throw new InfoExсeption();
         }
         methodicList.setMethodicName(name);
         methodics.add(methodicList);

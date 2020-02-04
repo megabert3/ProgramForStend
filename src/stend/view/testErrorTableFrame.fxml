@@ -1,32 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 
-
-<AnchorPane prefHeight="862.0" prefWidth="1208.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stend.view.TestErrorTableFrame">
+<AnchorPane prefHeight="858.0" prefWidth="1277.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stend.controller.viewController.TestErrorTableFrameController">
    <children>
-      <TableView layoutX="244.0" layoutY="54.0" prefHeight="672.0" prefWidth="902.0">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="C2" />
-        </columns>
-      </TableView>
-      <Button layoutX="1026.0" layoutY="749.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="120.0" text="Button" />
-      <Button layoutX="765.0" layoutY="749.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="120.0" text="Button" />
-      <Button layoutX="896.0" layoutY="749.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="120.0" text="Button" />
-      <Button layoutX="635.0" layoutY="749.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="120.0" text="Button" />
+      <Button fx:id="btnSave" layoutX="1032.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventSaveExit" prefHeight="70.0" prefWidth="100.0" text="Сохранить" />
+      <StackPane layoutX="36.0" layoutY="36.0" prefHeight="700.0" prefWidth="1200.0">
+         <children>
+            <SplitPane fx:id="splPaneAPPls" dividerPositions="0.16330114135206322" prefHeight="700.0" prefWidth="1200.0">
+              <items>
+                <AnchorPane maxHeight="700.0" maxWidth="200.0" minHeight="700.0" minWidth="200.0" prefHeight="700.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tabViewTestPointsAPPls" depthTest="DISABLE" layoutX="-8.0" maxHeight="700.0" maxWidth="250.0" minHeight="700.0" minWidth="250.0" prefHeight="700.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                            <TableColumn fx:id="tabColTestPointsAPPls" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Точки испытания" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0">
+                     <children>
+                        <TableView fx:id="tabViewErrosAPPls" depthTest="DISABLE" layoutX="14.0" maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+            <SplitPane fx:id="splPaneAPMns" dividerPositions="0.16330114135206322" prefHeight="700.0" prefWidth="1200.0">
+               <items>
+                  <AnchorPane maxHeight="700.0" maxWidth="200.0" minHeight="700.0" minWidth="200.0" prefHeight="700.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tabViewTestPointsAPMns" depthTest="DISABLE" layoutX="-8.0" maxHeight="700.0" maxWidth="250.0" minHeight="700.0" minWidth="250.0" prefHeight="700.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <columns>
+                              <TableColumn fx:id="tabColTestPointsAPMns" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Точки испытания" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0">
+                     <children>
+                        <TableView fx:id="tabViewErrosAPMns" depthTest="DISABLE" layoutX="14.0" maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+               </items>
+            </SplitPane>
+            <SplitPane fx:id="splPaneRPPls" dividerPositions="0.16330114135206322" prefHeight="700.0" prefWidth="1200.0">
+               <items>
+                  <AnchorPane maxHeight="700.0" maxWidth="200.0" minHeight="700.0" minWidth="200.0" prefHeight="700.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tabViewTestPointsRPPls" depthTest="DISABLE" layoutX="-8.0" maxHeight="700.0" maxWidth="250.0" minHeight="700.0" minWidth="250.0" prefHeight="700.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <columns>
+                              <TableColumn fx:id="tabColTestPointsRPPls" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Точки испытания" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0">
+                     <children>
+                        <TableView fx:id="tabViewErrosRPPls" depthTest="DISABLE" layoutX="14.0" maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+               </items>
+            </SplitPane>
+            <SplitPane fx:id="splPaneRPMns" dividerPositions="0.16330114135206322" prefHeight="700.0" prefWidth="1200.0">
+               <items>
+                  <AnchorPane maxHeight="700.0" maxWidth="200.0" minHeight="700.0" minWidth="200.0" prefHeight="700.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tabViewTestPointsRPMns" depthTest="DISABLE" layoutX="-8.0" maxHeight="700.0" maxWidth="250.0" minHeight="700.0" minWidth="250.0" prefHeight="700.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <columns>
+                              <TableColumn fx:id="tabColTestPointsRPMns" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Точки испытания" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0">
+                     <children>
+                        <TableView fx:id="tabViewErrosRPMns" depthTest="DISABLE" layoutX="14.0" maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+               </items>
+            </SplitPane>
+         </children>
+      </StackPane>
+      <Button fx:id="btnExit" layoutX="1144.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventSaveExit" prefHeight="70.0" prefWidth="100.0" text="Выйти" />
+      <Button fx:id="btnStop" layoutX="890.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" text="Остановка теста" />
+      <ToggleButton fx:id="tglBtnAuto" layoutX="530.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" text="Автоматический" />
+      <ToggleButton fx:id="tglBtnManualMode" layoutX="650.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" text="Ручной режим" />
+      <ToggleButton fx:id="tglBtnUnom" layoutX="770.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" text="Напряжение" />
+      <ToggleButton fx:id="tglBtnAPPls" layoutX="36.0" layoutY="737.0" mnemonicParsing="false" onAction="#actionEventSwithEnergyPane" prefHeight="46.0" prefWidth="108.0" text="А.Э. +" />
+      <ToggleButton fx:id="tglBtnAPMns" layoutX="144.0" layoutY="737.0" mnemonicParsing="false" onAction="#actionEventSwithEnergyPane" prefHeight="46.0" prefWidth="108.0" text="А.Э. -" />
+      <ToggleButton fx:id="tglBtnRPPls" layoutX="252.0" layoutY="737.0" mnemonicParsing="false" onAction="#actionEventSwithEnergyPane" prefHeight="46.0" prefWidth="108.0" text="Р.Э. +" />
+      <ToggleButton fx:id="tglBtnRPMns" layoutX="360.0" layoutY="737.0" mnemonicParsing="false" onAction="#actionEventSwithEnergyPane" prefHeight="46.0" prefWidth="108.0" text="Р.Э. -" />
+      <Label fx:id="txtLabInom" layoutX="123.0" layoutY="14.0" text="Iн = 5 А" />
+      <Label fx:id="txtLabFn" layoutX="278.0" layoutY="14.0" text="Fн = 50 Гц" />
+      <Label fx:id="txtLabImax" layoutX="186.0" layoutY="14.0" text="Iмак. = 60 А" />
+      <Label fx:id="txtLabUn" layoutX="36.0" layoutY="14.0" text="Uн = 230 В" />
+      <Label fx:id="txtLabAccuracyСlass" layoutX="472.0" layoutY="14.0" text="Класс точности: 1.0/1.0 Акт/Реак" />
+      <Label fx:id="txtLabTypeCircuit" layoutX="360.0" layoutY="14.0" text="Тип сети: 3P4W" />
+      <Label fx:id="txtLabDate" layoutX="681.0" layoutY="14.0" text="Дата: 04.02.2020" />
    </children>
 </AnchorPane>

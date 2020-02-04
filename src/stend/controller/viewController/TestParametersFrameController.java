@@ -1,6 +1,9 @@
 package stend.controller.viewController;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -10,17 +13,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import stend.controller.Meter;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
+import stend.controller.viewController.methodicsFrameController.MethodicNameController;
 import stend.helper.ConsoleHelper;
 import stend.model.Methodic;
 import stend.model.MethodicsForTest;
@@ -124,7 +133,103 @@ public class TestParametersFrameController {
 
     @FXML
     void buttonActionTestFrame(ActionEvent event) {
+        if (event.getSource() == btnStartTest) {
+            /**
+             * Сделать проверки полей
+             */
+            try {
+                double Un = Double.parseDouble(txtFldUnom.getText());
+                double accuracyClassAP = Double.parseDouble(txtFldAccuracyAP.getText());
+                double accuracyClassRP = Double.parseDouble(txtFldAccuracyRP.getText());
 
+                StringBuilder stringBuilder = new StringBuilder();
+                Pattern pat = Pattern.compile("[0-9]+");
+                Matcher mat = pat.matcher("10(60)");
+
+                while (mat.find()) {
+                    stringBuilder.append(mat.group()).append(",");
+                }
+
+                String[] current = new String(stringBuilder).split(",");
+
+                double Ib = Double.parseDouble(current[0]);
+                double Imax = Double.parseDouble(current[1]);
+                boolean typeOfMeasuringElementShunt = false;
+
+                if (chosBxTypeMeter.getValue().equals("Шунт")) {
+                    typeOfMeasuringElementShunt = true;
+                }
+
+                boolean typeCircuitThreePhase = false;
+                if (chosBxPowerType.getValue().equals("3P4W")) {
+                    typeCircuitThreePhase = true;
+                }
+
+                double Fn = Double.parseDouble(txtFldFrg.getText());
+
+                Methodic methodic = MethodicsForTest.getMethodicsForTestInstance().getMethodic(chosBxMetodics.getValue());
+
+                properties.setProperty("lastUnom", txtFldUnom.getText());
+                properties.setProperty("lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
+                properties.setProperty("lastAccuracyClassMeterRP", txtFldAccuracyRP.getText());
+                properties.setProperty("InomAndImax", txtFldCurrent.getText());
+                properties.setProperty("lastTypeOfMeasuringElement", chosBxTypeMeter.getValue());
+                properties.setProperty("lastTypeCircuit", chosBxPowerType.getValue());
+                properties.setProperty("lastFnom", txtFldFrg.getText());
+                properties.setProperty("lastOperator", txtFldOperator.getText());
+                properties.setProperty("lastController", txtFldController.getText());
+                properties.setProperty("lastWitness", txtFldWitness.getText());
+
+                //Подумать над этим должна быть ошибка при нулевой методике
+                if (chosBxMetodics.getValue() != null) {
+                    properties.setProperty("lastMethodicName", chosBxMetodics.getValue());
+                }
+
+                //Загрузка окна испытания
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/stend/view/testErrorTableFrame.fxml"));
+
+                fxmlLoader.load();
+
+                Parent root = fxmlLoader.getRoot();
+                Stage stage = new Stage();
+                stage.setTitle("Поверка счётчиков");
+                stage.setScene(new Scene(root));
+
+                TestErrorTableFrameController testErrorTableFrameController = fxmlLoader.getController();
+
+                properties.setProperty("lastOperator", txtFldOperator.getText());
+                properties.setProperty("lastController", txtFldController.getText());
+                properties.setProperty("lastWitness", txtFldWitness.getText());
+
+                //Учтановка и передача параметров
+                testErrorTableFrameController.setMethodic(methodic);
+                testErrorTableFrameController.setUn(Un);
+                testErrorTableFrameController.setAccuracyClassAP(accuracyClassAP);
+                testErrorTableFrameController.setAccuracyClassRP(accuracyClassRP);
+                testErrorTableFrameController.setFn(Fn);
+                testErrorTableFrameController.setIb(Ib);
+                testErrorTableFrameController.setImax(Imax);
+                testErrorTableFrameController.setTypeCircuit(typeCircuitThreePhase);
+                testErrorTableFrameController.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
+
+                testErrorTableFrameController.setController(txtFldController.getText());
+                testErrorTableFrameController.setOperator(txtFldOperator.getText());
+                testErrorTableFrameController.setWitness(txtFldWitness.getText());
+
+                stage.show();
+
+                Stage stage1 = (Stage) txtFldController.getScene().getWindow();
+                stage1.close();
+
+            }catch (NumberFormatException e) {
+                System.out.println("Произошла ошибка переносе значения");
+                e.printStackTrace();
+            }catch (IOException e) {
+                System.out.println("Произошла ошибка при загрузке окна");
+                e.getStackTrace();
+            }
+        }
     }
 
     @FXML
@@ -319,14 +424,6 @@ public class TestParametersFrameController {
                 return new SimpleObjectProperty<>(modelMeter);
             }
 
-//            @Override
-//            public ObservableValue<String> call(CellDataFeatures<Person, Gender> param) {
-//                Person person = param.getValue();
-//                // F,M
-//                String genderCode = person.getGender();
-//                Gender gender = Gender.getByCode(genderCode);
-//                return new SimpleObjectProperty<Gender>(gender);
-//            }
         });
 
         tabColModelMeter.setCellFactory(ComboBoxTableCell.forTableColumn(meterModelList));

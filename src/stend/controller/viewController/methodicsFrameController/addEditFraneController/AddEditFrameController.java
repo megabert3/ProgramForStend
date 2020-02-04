@@ -27,7 +27,6 @@ import stend.controller.ThreePhaseStend;
 import stend.controller.viewController.methodicsFrameController.MethodicNameController;
 import stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
 import stend.helper.ConsoleHelper;
-import stend.helper.exeptions.InfoExeption;
 import stend.model.Methodic;
 import stend.model.MethodicsForTest;
 

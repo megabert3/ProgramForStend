@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 import stend.controller.Commands.Commands;
 import stend.controller.viewController.YesOrNoFrameController;
 import stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditFrameController;
-import stend.helper.exeptions.InfoExeption;
+import stend.helper.exeptions.InfoExсeption;
 import stend.model.Methodic;
 import stend.model.MethodicsForTest;
 
@@ -150,7 +150,7 @@ public class MethodicsAddEditDeleteFrameController {
 
 
     @FXML
-    void initialize() throws InfoExeption {
+    void initialize() throws InfoExсeption {
         methodicsForTest.addMethodicToList("Test1", new Methodic());
         methodicsForTest.addMethodicToList("Test2", new Methodic());
         methodicsForTest.addMethodicToList("Test3", new Methodic());
