@@ -4,10 +4,11 @@ import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 import stend.helper.ConsoleHelper;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RTCCommand implements Commands {
+public class RTCCommand implements Commands, Serializable {
 
     public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
         this.stendDLLCommands = stendDLLCommands;

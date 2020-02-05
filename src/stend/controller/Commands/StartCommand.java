@@ -3,11 +3,12 @@ package stend.controller.Commands;
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StartCommand implements Commands {
+public class StartCommand implements Commands, Serializable {
 
     private StendDLLCommands stendDLLCommands;
 
@@ -256,7 +257,7 @@ public class StartCommand implements Commands {
         return ratedCurr;
     }
 
-    private class LocalMeter {
+    private class LocalMeter implements Serializable{
         int number;
         int counter = 0;
         boolean searchMark;

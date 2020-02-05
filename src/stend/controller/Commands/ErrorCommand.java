@@ -4,11 +4,12 @@ import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 import stend.helper.ConsoleHelper;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class ErrorCommand implements Commands {
+public class ErrorCommand implements Commands, Serializable {
 
     private StendDLLCommands stendDLLCommands;
 

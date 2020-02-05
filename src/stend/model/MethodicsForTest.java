@@ -2,11 +2,12 @@ package stend.model;
 
 import stend.helper.exeptions.InfoExсeption;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MethodicsForTest {
+public class MethodicsForTest implements Serializable {
 
     private static MethodicsForTest methodicsForTestInstance;
 
@@ -16,9 +17,12 @@ public class MethodicsForTest {
     //Значения выставленного тока
     private List<String> current = Arrays.asList("1.0 Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "1.0 Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.02 Ib", "0.01 Ib", "0.01 Ib");
 
-    private MethodicsForTest() {}
+    private MethodicsForTest() {
+        deserializationMetodics();
+    }
 
     public static MethodicsForTest getMethodicsForTestInstance() {
+
         if (methodicsForTestInstance == null) {
             methodicsForTestInstance = new MethodicsForTest();
         }
@@ -46,6 +50,48 @@ public class MethodicsForTest {
                 methodics.remove(methodic);
                 return true;
             }
+        }
+        return false;
+    }
+
+    //Запись сохранённых данных в файл
+    public boolean serializationMetodics() {
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream("metodics")) {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(MethodicsForTest.getMethodicsForTestInstance());
+
+            objectOutputStream.flush();
+            return true;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }return false;
+    }
+
+
+    //Считывание сохранённых методик
+    public boolean deserializationMetodics() {
+        try(FileInputStream fileInputStream = new FileInputStream("metodics")) {
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+            methodicsForTestInstance = (MethodicsForTest) objectInputStream.readObject();
+
+            return true;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+
+        } catch (ClassNotFoundException ignore) {
+            ignore.printStackTrace();
         }
         return false;
     }

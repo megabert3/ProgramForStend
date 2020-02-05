@@ -3,14 +3,13 @@ package stend.controller.viewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleButton;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ScrollEvent;
 import stend.controller.Commands.Commands;
 import stend.controller.Meter;
 import stend.model.Methodic;
@@ -311,6 +310,7 @@ public class TestErrorTableFrameController {
             ObservableList<Meter.Error> observableListRPMns = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns());
             tabViewErrosRPMns.setItems(observableListRPMns);
             tabViewErrosRPMns.getColumns().add(tableColumnRPMns);
+
         }
     }
 
@@ -324,4 +324,5 @@ public class TestErrorTableFrameController {
             }
         }
     }
+
 }

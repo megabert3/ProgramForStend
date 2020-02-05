@@ -1,7 +1,9 @@
 package stend.controller.Commands;
 
 
-public class ConstantCommand implements Commands {
+import java.io.Serializable;
+
+public class ConstantCommand implements Commands, Serializable {
 
     @Override
     public void execute() {

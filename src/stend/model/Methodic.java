@@ -2,12 +2,13 @@ package stend.model;
 
 import stend.controller.Commands.Commands;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Methodic implements Cloneable{
+public class Methodic implements Cloneable, Serializable {
 
     private String methodicName;
     private Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
@@ -178,7 +179,7 @@ public class Methodic implements Cloneable{
     }
 
     //Внутренний класс отвечающий за точки влияния
-    class InfluenceMetodic implements Cloneable{
+    class InfluenceMetodic implements Cloneable, Serializable{
 
         InfluenceMetodic() {
             influenceCommandsMap.put(0, new ArrayList<>());

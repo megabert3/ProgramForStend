@@ -819,6 +819,8 @@ public class AddEditFrameController {
             }else {
                 methodicsAddEditDeleteFrameController.refreshMethodicList();
             }
+
+            methodicsForTest.serializationMetodics();
         }
 
         if (event.getSource() == CancelBtn) {
