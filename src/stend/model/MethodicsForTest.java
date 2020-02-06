@@ -18,7 +18,6 @@ public class MethodicsForTest implements Serializable {
     private List<String> current = Arrays.asList("1.0 Imax", "0.5 Imax", "0.2 Imax", "0.5 Ib", "1.0 Ib","0.2 Ib", "0.1 Ib", "0.05 Ib", "0.02 Ib", "0.01 Ib", "0.01 Ib");
 
     private MethodicsForTest() {
-        deserializationMetodics();
     }
 
     public static MethodicsForTest getMethodicsForTestInstance() {

@@ -23,6 +23,8 @@ public class CreepCommand implements Commands, Serializable {
 
     private int channelFlag;
 
+    private boolean active = true;
+
     //Имя точки для отображения в таблице
     private String name;
 
@@ -203,6 +205,14 @@ public class CreepCommand implements Commands, Serializable {
 
     public String getUserTimeTest() {
         return userTimeTest;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

@@ -38,7 +38,10 @@ public class ErrorCommand implements Commands, Serializable {
     private double Imax;
 
     private int phase;
+
     private double ratedVolt;
+
+    private boolean active = true;
 
     //Будет расчётной
     private double ratedCurr;
@@ -216,6 +219,14 @@ public class ErrorCommand implements Commands, Serializable {
 
     public String getId() {
         return id;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

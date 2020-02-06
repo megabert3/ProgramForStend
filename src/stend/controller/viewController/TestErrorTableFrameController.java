@@ -1,16 +1,18 @@
 package stend.controller.viewController;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.geometry.Orientation;
-import javafx.scene.AccessibleAttribute;
-import javafx.scene.Node;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.Pane;
+import javafx.util.Callback;
 import stend.controller.Commands.Commands;
 import stend.controller.Meter;
 import stend.model.Methodic;
@@ -21,6 +23,13 @@ public class TestErrorTableFrameController {
 
     private List<Meter> listMetersForTest;
 
+    private Methodic methodic;
+
+    private ObservableList<Commands> commandsAPPls;
+    private ObservableList<Commands> commandsAPMns;
+    private ObservableList<Commands> commandsRPPls;
+    private ObservableList<Commands> commandsRPMns;
+
     private double Imax;
 
     private double Ib;
@@ -29,7 +38,6 @@ public class TestErrorTableFrameController {
 
     private double Fn;
 
-    private Methodic methodic;
 
     //Тип измерительного элемента счётчика шунт/трансформатор
     private boolean typeOfMeasuringElementShunt;
@@ -57,7 +65,16 @@ public class TestErrorTableFrameController {
     private TableView<Commands> tabViewTestPointsAPPls;
 
     @FXML
+    private Pane checBoxePaneAPPls;
+
+    @FXML
+    private CheckBox checkBoxDisableAllAPPls;
+
+    @FXML
     private TableColumn<Commands, String> tabColTestPointsAPPls;
+
+    @FXML
+    private TableColumn<Commands, Boolean> tabColTestPointsDisAPPls;
 
     @FXML
     private TableView<Meter.Error> tabViewErrosAPPls;
@@ -69,7 +86,16 @@ public class TestErrorTableFrameController {
     private TableView<Commands> tabViewTestPointsAPMns;
 
     @FXML
+    private Pane checBoxePaneAPMns;
+
+    @FXML
+    private CheckBox checkBoxDisableAllAPMns;
+
+    @FXML
     private TableColumn<Commands, String> tabColTestPointsAPMns;
+
+    @FXML
+    private TableColumn<Commands, Boolean> tabColTestPointsDisAPMns;
 
     @FXML
     private TableView<Meter.Error> tabViewErrosAPMns;
@@ -81,7 +107,16 @@ public class TestErrorTableFrameController {
     private TableView<Commands> tabViewTestPointsRPPls;
 
     @FXML
+    private Pane checBoxePaneRPPls;
+
+    @FXML
+    private CheckBox checkBoxDisableAllRPPls;
+
+    @FXML
     private TableColumn<Commands, String> tabColTestPointsRPPls;
+
+    @FXML
+    private TableColumn<Commands, Boolean> tabColTestPointsDisRPPls;
 
     @FXML
     private TableView<Meter.Error> tabViewErrosRPPls;
@@ -93,7 +128,16 @@ public class TestErrorTableFrameController {
     private TableView<Commands> tabViewTestPointsRPMns;
 
     @FXML
+    private Pane checBoxePaneRPMns;
+
+    @FXML
+    private CheckBox checkBoxDisableAllRPMns;
+
+    @FXML
     private TableColumn<Commands, String> tabColTestPointsRPMns;
+
+    @FXML
+    private TableColumn<Commands, Boolean> tabColTestPointsDisRPMns;
 
     @FXML
     private TableView<Meter.Error> tabViewErrosRPMns;
@@ -204,9 +248,74 @@ public class TestErrorTableFrameController {
     }
 
     @FXML
+    void checBoxAllDisAction(ActionEvent event) {
+        //Устанавливает значение для всех чек боксов сразу
+        //AP+
+        if (event.getSource() == checkBoxDisableAllAPPls) {
+            if (checkBoxDisableAllAPPls.isSelected()) {
+                for (Commands commsnd : commandsAPPls) {
+                    commsnd.setActive(true);
+                }
+                tabViewTestPointsAPPls.refresh();
+            } else {
+                for (Commands commsnd : commandsAPPls) {
+                    commsnd.setActive(false);
+                }
+                tabViewTestPointsAPPls.refresh();
+            }
+        }
+
+        //AP-
+        if (event.getSource() == checkBoxDisableAllAPMns) {
+            if (checkBoxDisableAllAPMns.isSelected()) {
+                for (Commands commsnd : commandsAPMns) {
+                    commsnd.setActive(true);
+                }
+                tabViewTestPointsAPMns.refresh();
+            } else {
+                for (Commands commsnd : commandsAPMns) {
+                    commsnd.setActive(false);
+                }
+                tabViewTestPointsAPMns.refresh();
+            }
+        }
+
+        //RP+
+        if (event.getSource() == checkBoxDisableAllRPPls) {
+            if (checkBoxDisableAllRPPls.isSelected()) {
+                for (Commands commsnd : commandsRPPls) {
+                    commsnd.setActive(true);
+                }
+                tabViewTestPointsRPPls.refresh();
+            } else {
+                for (Commands commsnd : commandsRPPls) {
+                    commsnd.setActive(false);
+                }
+                tabViewTestPointsRPPls.refresh();
+            }
+        }
+
+        //RP-
+        if (event.getSource() == checkBoxDisableAllRPMns) {
+            if (checkBoxDisableAllRPMns.isSelected()) {
+                for (Commands commsnd : commandsRPMns) {
+                    commsnd.setActive(true);
+                }
+                tabViewTestPointsRPMns.refresh();
+            } else {
+                for (Commands commsnd : commandsRPMns) {
+                    commsnd.setActive(false);
+                }
+                tabViewTestPointsRPMns.refresh();
+            }
+        }
+    }
+
+    @FXML
     void actionEventSwithEnergyPane(ActionEvent event) {
         if (event.getSource() == tglBtnAPPls) {
             splPaneAPPls.toFront();
+            checBoxePaneAPPls.toFront();
             tglBtnAPPls.setSelected(true);
             tglBtnAPMns.setSelected(false);
             tglBtnRPPls.setSelected(false);
@@ -215,6 +324,7 @@ public class TestErrorTableFrameController {
 
         if (event.getSource() == tglBtnAPMns) {
             splPaneAPMns.toFront();
+            checBoxePaneAPMns.toFront();
             tglBtnAPPls.setSelected(false);
             tglBtnAPMns.setSelected(true);
             tglBtnRPPls.setSelected(false);
@@ -223,6 +333,7 @@ public class TestErrorTableFrameController {
 
         if (event.getSource() == tglBtnRPPls) {
             splPaneRPPls.toFront();
+            checBoxePaneRPPls.toFront();
             tglBtnAPPls.setSelected(false);
             tglBtnAPMns.setSelected(false);
             tglBtnRPPls.setSelected(true);
@@ -231,6 +342,7 @@ public class TestErrorTableFrameController {
 
         if (event.getSource() == tglBtnRPMns) {
             splPaneRPMns.toFront();
+            checBoxePaneRPMns.toFront();
             tglBtnAPPls.setSelected(false);
             tglBtnAPMns.setSelected(false);
             tglBtnRPPls.setSelected(false);
@@ -243,10 +355,21 @@ public class TestErrorTableFrameController {
 
     }
 
+    /**
+     * Для кнопки начать тест сделать цикл из листа точек
+     * начиная с выбранного индекса пользователем  до конца с проверкой на дисайбл
+     */
     @FXML
     void initialize() {
         tglBtnAPPls.setSelected(true);
         splPaneAPPls.toFront();
+
+        checBoxePaneAPPls.toFront();
+
+        checkBoxDisableAllAPPls.setSelected(true);
+        checkBoxDisableAllAPMns.setSelected(true);
+        checkBoxDisableAllRPPls.setSelected(true);
+        checkBoxDisableAllRPMns.setSelected(true);
     }
 
     public void myInitTestErrorTableFrame() {
@@ -255,26 +378,157 @@ public class TestErrorTableFrameController {
         //Инициирую колонку с точками для испытаний AP+
         tabColTestPointsAPPls.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColTestPointsAPPls.setSortable(false);
-        ObservableList<Commands> commandsAPPls = FXCollections.observableArrayList(methodic.getCommandsMap().get(0));
+        commandsAPPls = FXCollections.observableArrayList(methodic.getCommandsMap().get(0));
         tabViewTestPointsAPPls.setItems(commandsAPPls);
 
         //Инициирую колонку с точками для испытаний AP-
         tabColTestPointsAPMns.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColTestPointsAPMns.setSortable(false);
-        ObservableList<Commands> commandsAPMns = FXCollections.observableArrayList(methodic.getCommandsMap().get(1));
+        commandsAPMns = FXCollections.observableArrayList(methodic.getCommandsMap().get(1));
         tabViewTestPointsAPMns.setItems(commandsAPMns);
 
         //Инициирую колонку с точками для испытаний RP+
         tabColTestPointsRPPls.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColTestPointsRPPls.setSortable(false);
-        ObservableList<Commands> commandsRPPls = FXCollections.observableArrayList(methodic.getCommandsMap().get(2));
+        commandsRPPls = FXCollections.observableArrayList(methodic.getCommandsMap().get(2));
         tabViewTestPointsRPPls.setItems(commandsRPPls);
 
         //Инициирую колонку с точками для испытаний RP+
         tabColTestPointsRPMns.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColTestPointsRPMns.setSortable(false);
-        ObservableList<Commands> commandsRPMns = FXCollections.observableArrayList(methodic.getCommandsMap().get(3));
+        commandsRPMns = FXCollections.observableArrayList(methodic.getCommandsMap().get(3));
         tabViewTestPointsRPMns.setItems(commandsRPMns);
+
+        //----------------------------------------------------------------------------------
+        //Установка чек боксов для отключения или включения точки
+        //AP+
+        tabViewTestPointsAPPls.setEditable(true);
+
+        tabColTestPointsDisAPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Commands, Boolean> param) {
+                Commands command = param.getValue();
+                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(command.isActive());
+
+                simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        command.setActive(newValue);
+                    }
+                });
+
+                return simpleBooleanProperty;
+            }
+        });
+
+        tabColTestPointsDisAPPls.setCellFactory(new Callback<TableColumn<Commands, Boolean>, //
+                TableCell<Commands, Boolean>>() {
+            @Override
+            public TableCell<Commands, Boolean> call(TableColumn<Commands, Boolean> p) {
+                CheckBoxTableCell<Commands, Boolean> cell = new CheckBoxTableCell<Commands, Boolean>();
+                cell.setAlignment(Pos.CENTER);
+                return cell;
+            }
+        });
+
+        tabColTestPointsDisAPPls.setSortable(false);
+
+        //AP-
+        tabViewTestPointsAPMns.setEditable(true);
+
+        tabColTestPointsDisAPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Commands, Boolean> param) {
+                Commands command = param.getValue();
+                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(command.isActive());
+
+                simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        command.setActive(newValue);
+                    }
+                });
+
+                return simpleBooleanProperty;
+            }
+        });
+
+        tabColTestPointsDisAPMns.setCellFactory(new Callback<TableColumn<Commands, Boolean>, //
+                TableCell<Commands, Boolean>>() {
+            @Override
+            public TableCell<Commands, Boolean> call(TableColumn<Commands, Boolean> p) {
+                CheckBoxTableCell<Commands, Boolean> cell = new CheckBoxTableCell<Commands, Boolean>();
+                cell.setAlignment(Pos.CENTER);
+                return cell;
+            }
+        });
+
+        tabColTestPointsDisAPMns.setSortable(false);
+
+        //RP+
+
+        tabViewTestPointsRPPls.setEditable(true);
+
+        tabColTestPointsDisRPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Commands, Boolean> param) {
+                Commands command = param.getValue();
+                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(command.isActive());
+
+                simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        command.setActive(newValue);
+                    }
+                });
+
+                return simpleBooleanProperty;
+            }
+        });
+
+        tabColTestPointsDisRPPls.setCellFactory(new Callback<TableColumn<Commands, Boolean>, //
+                TableCell<Commands, Boolean>>() {
+            @Override
+            public TableCell<Commands, Boolean> call(TableColumn<Commands, Boolean> p) {
+                CheckBoxTableCell<Commands, Boolean> cell = new CheckBoxTableCell<Commands, Boolean>();
+                cell.setAlignment(Pos.CENTER);
+                return cell;
+            }
+        });
+
+        tabColTestPointsDisRPPls.setSortable(false);
+
+        //RP-
+        tabViewTestPointsRPMns.setEditable(true);
+
+        tabColTestPointsDisRPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Commands, Boolean> param) {
+                Commands command = param.getValue();
+                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(command.isActive());
+
+                simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        command.setActive(newValue);
+                    }
+                });
+
+                return simpleBooleanProperty;
+            }
+        });
+
+        tabColTestPointsDisRPMns.setCellFactory(new Callback<TableColumn<Commands, Boolean>, //
+                TableCell<Commands, Boolean>>() {
+            @Override
+            public TableCell<Commands, Boolean> call(TableColumn<Commands, Boolean> p) {
+                CheckBoxTableCell<Commands, Boolean> cell = new CheckBoxTableCell<Commands, Boolean>();
+                cell.setAlignment(Pos.CENTER);
+                return cell;
+            }
+        });
+
+        tabColTestPointsDisRPMns.setSortable(false);
 
         //-----------------------------------------------------------
         //В зависимости от количества счётчиков инициализирую поля для отображения погрешности
@@ -311,6 +565,8 @@ public class TestErrorTableFrameController {
             ObservableList<Meter.Error> observableListRPMns = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns());
             tabViewErrosRPMns.setItems(observableListRPMns);
             tabViewErrosRPMns.getColumns().add(tableColumnRPMns);
+
+
         }
 
     }
@@ -324,6 +580,34 @@ public class TestErrorTableFrameController {
                 }
             }
         }
+    }
+
+    public Label getTxtLabUn() {
+        return txtLabUn;
+    }
+
+    public Label getTxtLabInom() {
+        return txtLabInom;
+    }
+
+    public Label getTxtLabImax() {
+        return txtLabImax;
+    }
+
+    public Label getTxtLabFn() {
+        return txtLabFn;
+    }
+
+    public Label getTxtLabTypeCircuit() {
+        return txtLabTypeCircuit;
+    }
+
+    public Label getTxtLabAccuracyСlass() {
+        return txtLabAccuracyСlass;
+    }
+
+    public Label getTxtLabDate() {
+        return txtLabDate;
     }
 
 }

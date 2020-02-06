@@ -1,6 +1,7 @@
 package stend.controller.viewController;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -217,6 +218,16 @@ public class TestParametersFrameController {
                 testErrorTableFrameController.setOperator(txtFldOperator.getText());
                 testErrorTableFrameController.setWitness(txtFldWitness.getText());
 
+                //Установка информации в окне теста
+                testErrorTableFrameController.getTxtLabUn().setText("Uн = " + Un + " В");
+                testErrorTableFrameController.getTxtLabInom().setText("Iн = "+ Ib +" А");
+                testErrorTableFrameController.getTxtLabImax().setText("Iмакc = " + Imax + " А");
+                testErrorTableFrameController.getTxtLabFn().setText("Fн = " + Fn + " Гц");
+                testErrorTableFrameController.getTxtLabTypeCircuit().setText("Тип сети: " + chosBxPowerType.getValue());
+                testErrorTableFrameController.getTxtLabAccuracyСlass().setText("Класс точности: " + txtFldAccuracyAP.getText() + "/" + txtFldAccuracyRP.getText()  + " Акт/Реак");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+                testErrorTableFrameController.getTxtLabDate().setText("Дата: " + simpleDateFormat.format(new Date()));
+
                 for (int i = 0; i < metersList.size(); i++) {
                     if (!metersList.get(i).isActive()) {
                         metersList.remove(i);
@@ -245,12 +256,6 @@ public class TestParametersFrameController {
 
     @FXML
     void initialize() {
-
-        /**
-         * Продолжи инициировать таблицу настроек для испытания счётчиков
-         * Количество посадочных мест
-         * И новые объекты счётчиков
-         */
 
         if (properties.getProperty("stendType").equals("ThreePhaseStend")) {
             stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();

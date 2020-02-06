@@ -22,6 +22,8 @@ public class RTCCommand implements Commands, Serializable {
 
     private int channelFlag = 4;
 
+    private boolean active = true;
+
     //Дианазон ошибки
     private double errorForFalseTest;
 
@@ -114,5 +116,13 @@ public class RTCCommand implements Commands, Serializable {
 
     public int getCountResult() {
         return countResult;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

@@ -1,94 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
 <AnchorPane prefHeight="858.0" prefWidth="1277.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stend.controller.viewController.TestErrorTableFrameController">
    <children>
       <Button fx:id="btnSave" layoutX="1032.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventSaveExit" prefHeight="70.0" prefWidth="100.0" text="Сохранить" />
-      <StackPane layoutX="36.0" layoutY="36.0" prefHeight="700.0" prefWidth="1200.0">
+      <StackPane layoutX="36.0" layoutY="36.0" maxHeight="800.0" maxWidth="1300.0" minHeight="500.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1200.0">
          <children>
-            <SplitPane fx:id="splPaneRPPls" dividerPositions="0.16330114135206322" prefHeight="700.0" prefWidth="1200.0">
+            <SplitPane fx:id="splPaneAPMns" dividerPositions="0.16330114135206322" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0">
                <items>
-                  <AnchorPane maxHeight="700.0" maxWidth="200.0" minHeight="700.0" minWidth="200.0" prefHeight="700.0" prefWidth="200.0">
-                     <children>
-                        <TableView fx:id="tabViewTestPointsRPPls" depthTest="DISABLE" layoutX="-8.0" maxHeight="700.0" maxWidth="250.0" minHeight="700.0" minWidth="250.0" prefHeight="700.0" prefWidth="250.0" stylesheets="@styleCSS/hideScrollBars.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <columns>
-                              <TableColumn fx:id="tabColTestPointsRPPls" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="-1.0" text="Точки испытания" />
-                           </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0">
-                     <children>
-                        <TableView fx:id="tabViewErrosRPPls" depthTest="DISABLE" layoutX="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
+                  <TableView fx:id="tabViewTestPointsAPMns" depthTest="DISABLE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="200.0" stylesheets="@styleCSS/hideScrollBars.css">
+                     <columns>
+                        <TableColumn fx:id="tabColTestPointsDisAPMns" maxWidth="36.0" minWidth="30.0" prefWidth="30.0" />
+                        <TableColumn fx:id="tabColTestPointsAPMns" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="170.0" text="Точки испытания" />
+                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <TableView fx:id="tabViewErrosAPMns" depthTest="DISABLE" maxHeight="800.0" maxWidth="1200.0" minHeight="500.0" minWidth="800.0" prefHeight="700.0" prefWidth="1000.0" />
                </items>
             </SplitPane>
-            <SplitPane fx:id="splPaneRPMns" dividerPositions="0.16330114135206322" prefHeight="700.0" prefWidth="1200.0">
+            <SplitPane fx:id="splPaneRPPls" dividerPositions="0.16330114135206322" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0">
                <items>
-                  <AnchorPane maxHeight="700.0" maxWidth="200.0" minHeight="700.0" minWidth="200.0" prefHeight="700.0" prefWidth="200.0">
-                     <children>
-                        <TableView fx:id="tabViewTestPointsRPMns" depthTest="DISABLE" layoutX="-8.0" maxHeight="700.0" maxWidth="250.0" minHeight="700.0" minWidth="250.0" prefHeight="700.0" prefWidth="250.0" stylesheets="@styleCSS/hideScrollBars.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <columns>
-                              <TableColumn fx:id="tabColTestPointsRPMns" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="-1.0" text="Точки испытания" />
-                           </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0">
-                     <children>
-                        <TableView fx:id="tabViewErrosRPMns" depthTest="DISABLE" layoutX="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" />
-                     </children>
-                  </AnchorPane>
+                  <TableView fx:id="tabViewTestPointsRPPls" depthTest="DISABLE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="200.0" stylesheets="@styleCSS/hideScrollBars.css">
+                     <columns>
+                        <TableColumn fx:id="tabColTestPointsDisRPPls" maxWidth="42.0" minWidth="30.0" prefWidth="30.0" />
+                        <TableColumn fx:id="tabColTestPointsRPPls" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="170.0" text="Точки испытания" />
+                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <TableView fx:id="tabViewErrosRPPls" depthTest="DISABLE" maxHeight="800.0" maxWidth="1200.0" minHeight="500.0" minWidth="800.0" prefHeight="700.0" prefWidth="1000.0" />
                </items>
             </SplitPane>
-            <SplitPane fx:id="splPaneAPPls" dividerPositions="0.16330114135206322" prefHeight="700.0" prefWidth="1200.0">
+            <SplitPane fx:id="splPaneRPMns" dividerPositions="0.16330114135206322" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0">
+               <items>
+                  <TableView fx:id="tabViewTestPointsRPMns" depthTest="DISABLE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="200.0" stylesheets="@styleCSS/hideScrollBars.css">
+                     <columns>
+                        <TableColumn fx:id="tabColTestPointsDisRPMns" maxWidth="36.0" minWidth="30.0" prefWidth="30.0" />
+                        <TableColumn fx:id="tabColTestPointsRPMns" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="170.0" text="Точки испытания" />
+                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <TableView fx:id="tabViewErrosRPMns" depthTest="DISABLE" maxHeight="800.0" maxWidth="1200.0" minHeight="500.0" minWidth="800.0" prefHeight="700.0" prefWidth="1000.0" />
+               </items>
+            </SplitPane>
+            <SplitPane fx:id="splPaneAPPls" dividerPositions="0.16330114135206322" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0">
               <items>
-                <AnchorPane maxHeight="700.0" maxWidth="200.0" minHeight="700.0" minWidth="200.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="700.0" prefWidth="200.0">
-                     <children>
-                        <TableView fx:id="tabViewTestPointsAPPls" depthTest="DISABLE" layoutX="-8.0" maxHeight="700.0" maxWidth="250.0" minHeight="700.0" minWidth="250.0" prefHeight="700.0" prefWidth="250.0" stylesheets="@styleCSS/hideScrollBars.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columns>
-                            <TableColumn fx:id="tabColTestPointsAPPls" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="-1.0" text="Точки испытания" />
-                          </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-                <AnchorPane maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0">
-                     <children>
-                        <TableView fx:id="tabViewErrosAPPls" depthTest="DISABLE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" />
-                     </children>
-                  </AnchorPane>
+                  <TableView fx:id="tabViewTestPointsAPPls" depthTest="DISABLE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="200.0" stylesheets="@styleCSS/hideScrollBars.css">
+                    <columns>
+                        <TableColumn fx:id="tabColTestPointsDisAPPls" maxWidth="36.0" minWidth="30.0" prefWidth="30.0" />
+                      <TableColumn fx:id="tabColTestPointsAPPls" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="170.0" text="Точки испытания" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <TableView fx:id="tabViewErrosAPPls" depthTest="DISABLE" maxHeight="800.0" maxWidth="1200.0" minHeight="500.0" minWidth="800.0" prefHeight="700.0" prefWidth="1000.0" />
               </items>
             </SplitPane>
-            <SplitPane fx:id="splPaneAPMns" dividerPositions="0.16330114135206322" prefHeight="700.0" prefWidth="1200.0">
-               <items>
-                  <AnchorPane maxHeight="700.0" maxWidth="200.0" minHeight="700.0" minWidth="200.0" prefHeight="700.0" prefWidth="200.0">
-                     <children>
-                        <TableView fx:id="tabViewTestPointsAPMns" depthTest="DISABLE" layoutX="-8.0" maxHeight="700.0" maxWidth="250.0" minHeight="700.0" minWidth="250.0" prefHeight="700.0" prefWidth="250.0" stylesheets="@styleCSS/scrolPaneStyleBlack.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <columns>
-                              <TableColumn fx:id="tabColTestPointsAPMns" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="-1.0" text="Точки испытания" />
-                           </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane maxHeight="700.0" maxWidth="1000.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0">
-                     <children>
-                        <TableView fx:id="tabViewErrosAPMns" depthTest="DISABLE" layoutX="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-               </items>
-            </SplitPane>
+            <Pane fx:id="checBoxePaneRPMns" maxHeight="25.0" maxWidth="30.0" minHeight="25.0" minWidth="30.0" prefHeight="25.0" prefWidth="30.0" StackPane.alignment="TOP_LEFT">
+               <children>
+                  <CheckBox fx:id="checkBoxDisableAllRPMns" layoutX="6.0" layoutY="3.0" mnemonicParsing="false" onAction="#checBoxAllDisAction" />
+               </children>
+            </Pane>
+            <Pane fx:id="checBoxePaneRPPls" maxHeight="25.0" maxWidth="30.0" minHeight="25.0" minWidth="30.0" prefHeight="25.0" prefWidth="30.0" StackPane.alignment="TOP_LEFT">
+               <children>
+                  <CheckBox fx:id="checkBoxDisableAllRPPls" layoutX="6.0" layoutY="3.0" mnemonicParsing="false" onAction="#checBoxAllDisAction" />
+               </children>
+            </Pane>
+            <Pane fx:id="checBoxePaneAPMns" maxHeight="25.0" maxWidth="30.0" minHeight="25.0" minWidth="30.0" prefHeight="25.0" prefWidth="30.0" StackPane.alignment="TOP_LEFT">
+               <children>
+                  <CheckBox fx:id="checkBoxDisableAllAPMns" layoutX="6.0" layoutY="3.0" mnemonicParsing="false" onAction="#checBoxAllDisAction" />
+               </children>
+            </Pane>
+            <Pane fx:id="checBoxePaneAPPls" maxHeight="25.0" maxWidth="30.0" minHeight="25.0" minWidth="30.0" prefHeight="25.0" prefWidth="30.0" StackPane.alignment="TOP_LEFT">
+               <children>
+                  <CheckBox fx:id="checkBoxDisableAllAPPls" layoutX="6.0" layoutY="3.0" mnemonicParsing="false" onAction="#checBoxAllDisAction" />
+               </children>
+            </Pane>
          </children>
       </StackPane>
       <Button fx:id="btnExit" layoutX="1144.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventSaveExit" prefHeight="70.0" prefWidth="100.0" text="Выйти" />
