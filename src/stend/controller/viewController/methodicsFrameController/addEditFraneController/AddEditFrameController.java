@@ -1225,9 +1225,9 @@ public class AddEditFrameController {
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPPls.getText()));
                 startCommand.setName("Чувствительность RP+");
 
-                txtFieldSTAAmtImpRPPls.setDisable(false);
-                txtFieldTimeSRARPPls.setDisable(false);
-                txtFieldSTAIProcRPPls.setDisable(false);
+                txtFieldSTAAmtImpRPPls.setDisable(true);
+                txtFieldTimeSRARPPls.setDisable(true);
+                txtFieldSTAIProcRPPls.setDisable(true);
 
                 STATogBtnRPPls.setSelected(true);
                 testListForCollumRPPls.add(startCommand);
@@ -1241,9 +1241,9 @@ public class AddEditFrameController {
                         }
                     }
                 }
-                txtFieldSTAAmtImpRPPls.setDisable(true);
-                txtFieldTimeSRARPPls.setDisable(true);
-                txtFieldSTAIProcRPPls.setDisable(true);
+                txtFieldSTAAmtImpRPPls.setDisable(false);
+                txtFieldTimeSRARPPls.setDisable(false);
+                txtFieldSTAIProcRPPls.setDisable(false);
 
                 if (addTglBtnSTARPPlsGOST.isSelected()) {
                     STATogBtnRPPls.setSelected(true);

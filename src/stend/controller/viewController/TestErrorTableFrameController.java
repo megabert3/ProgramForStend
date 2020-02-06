@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
+import javafx.scene.AccessibleAttribute;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -310,8 +311,8 @@ public class TestErrorTableFrameController {
             ObservableList<Meter.Error> observableListRPMns = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns());
             tabViewErrosRPMns.setItems(observableListRPMns);
             tabViewErrosRPMns.getColumns().add(tableColumnRPMns);
-
         }
+
     }
 
     //Добавляет объект error к каждому счётчику необходимому для теста

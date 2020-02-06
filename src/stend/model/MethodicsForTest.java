@@ -9,7 +9,7 @@ import java.util.List;
 
 public class MethodicsForTest implements Serializable {
 
-    private static MethodicsForTest methodicsForTestInstance;
+    private static MethodicsForTest methodicsForTestInstance = deserializationMetodics();
 
     //Значения коэффициента мощности
     private List<String> powerFactor = Arrays.asList("1.0", "0.5L", "0.5C", "0.25L", "0.25C", "0.8L", "0.8C");
@@ -74,26 +74,22 @@ public class MethodicsForTest implements Serializable {
 
 
     //Считывание сохранённых методик
-    public boolean deserializationMetodics() {
+    private static MethodicsForTest deserializationMetodics() {
         try(FileInputStream fileInputStream = new FileInputStream("metodics")) {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-            methodicsForTestInstance = (MethodicsForTest) objectInputStream.readObject();
-
-            return true;
+            return (MethodicsForTest) objectInputStream.readObject();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return false;
 
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
 
         } catch (ClassNotFoundException ignore) {
             ignore.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     public ArrayList<Methodic> getMethodics() {
