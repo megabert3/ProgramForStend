@@ -241,6 +241,8 @@ public class TestParametersFrameController {
 
                 stage.show();
 
+                testErrorTableFrameController.initScrolBars();
+
                 Stage stage1 = (Stage) txtFldController.getScene().getWindow();
                 stage1.close();
 

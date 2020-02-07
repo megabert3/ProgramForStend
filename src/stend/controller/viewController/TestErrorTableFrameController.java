@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,9 +15,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import stend.controller.Commands.Commands;
+import stend.controller.Commands.ErrorCommand;
 import stend.controller.Meter;
 import stend.model.Methodic;
 
+import javax.annotation.processing.SupportedSourceVersion;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class TestErrorTableFrameController {
@@ -37,7 +41,6 @@ public class TestErrorTableFrameController {
     private double Un;
 
     private double Fn;
-
 
     //Тип измерительного элемента счётчика шунт/трансформатор
     private boolean typeOfMeasuringElementShunt;
@@ -320,6 +323,8 @@ public class TestErrorTableFrameController {
             tglBtnAPMns.setSelected(false);
             tglBtnRPPls.setSelected(false);
             tglBtnRPMns.setSelected(false);
+
+            System.out.println(tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex());
         }
 
         if (event.getSource() == tglBtnAPMns) {
@@ -565,10 +570,33 @@ public class TestErrorTableFrameController {
             ObservableList<Meter.Error> observableListRPMns = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns());
             tabViewErrosRPMns.setItems(observableListRPMns);
             tabViewErrosRPMns.getColumns().add(tableColumnRPMns);
-
-
         }
 
+        //ObservableList<Commands> observableListAPPlsCommand = tabViewTestPointsAPPls.getSelectionModel().getSelectedItems();
+
+        //Действие при изменении информации в колонке
+//        tabColTestPointsAPPls.setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+//            TablePosition<Commands, String> pos = event.getTablePosition();
+//
+//            System.out.println("Позиция таблицы? " + pos);
+//
+//            String newImpulseValue = event.getNewValue();
+//
+//            int row = pos.getRow();
+//
+//            System.out.println("Индекс " + row);
+//
+//            Commands command = event.getTableView().getItems().get(row);
+//
+//            ((ErrorCommand) command).setEmax(newImpulseValue);
+//
+//        });
+
+        tabViewTestPointsAPPls.getSelectionModel().getSelectedCells().addListener(new ListChangeListener<TablePosition>() {
+            @Override
+            public void onChanged(Change<? extends TablePosition> c) {
+            }
+        });
     }
 
     //Добавляет объект error к каждому счётчику необходимому для теста
@@ -582,31 +610,72 @@ public class TestErrorTableFrameController {
         }
     }
 
-    public Label getTxtLabUn() {
+    //Находит все скрол бары
+    void initScrolBars() {
+        ScrollBar verticalBarCommands;
+        ScrollBar verticalBarErrors;
+
+        //Получаю скрол бары определённого окна
+        //AP+
+        verticalBarCommands = (ScrollBar) tabViewTestPointsAPPls.lookup(".scroll-bar:vertical");
+        verticalBarErrors = (ScrollBar) tabViewErrosAPPls.lookup(".scroll-bar:vertical");
+
+        bindScrolls(verticalBarCommands, verticalBarErrors);
+
+        //AP-
+        verticalBarCommands = (ScrollBar) tabViewTestPointsAPMns.lookup(".scroll-bar:vertical");
+        verticalBarErrors = (ScrollBar) tabViewErrosAPMns.lookup(".scroll-bar:vertical");
+
+        bindScrolls(verticalBarCommands, verticalBarErrors);
+
+        //RP+
+        verticalBarCommands = (ScrollBar) tabViewTestPointsRPPls.lookup(".scroll-bar:vertical");
+        verticalBarErrors = (ScrollBar) tabViewErrosRPPls.lookup(".scroll-bar:vertical");
+
+        bindScrolls(verticalBarCommands, verticalBarErrors);
+
+        //RP-
+        verticalBarCommands = (ScrollBar) tabViewTestPointsRPMns.lookup(".scroll-bar:vertical");
+        verticalBarErrors = (ScrollBar) tabViewErrosRPMns.lookup(".scroll-bar:vertical");
+
+        bindScrolls(verticalBarCommands, verticalBarErrors);
+    }
+
+    //Делает проверку и привязывает скроллы друг к другу
+    private void bindScrolls(ScrollBar verticalBarCommands, ScrollBar verticalBarErrors) {
+        if (verticalBarCommands != null && verticalBarErrors != null) {
+            verticalBarCommands.valueProperty().bindBidirectional(verticalBarErrors.valueProperty());
+
+            //Скрываю скролл окна ошибок
+
+        }
+    }
+
+    Label getTxtLabUn() {
         return txtLabUn;
     }
 
-    public Label getTxtLabInom() {
+    Label getTxtLabInom() {
         return txtLabInom;
     }
 
-    public Label getTxtLabImax() {
+    Label getTxtLabImax() {
         return txtLabImax;
     }
 
-    public Label getTxtLabFn() {
+    Label getTxtLabFn() {
         return txtLabFn;
     }
 
-    public Label getTxtLabTypeCircuit() {
+    Label getTxtLabTypeCircuit() {
         return txtLabTypeCircuit;
     }
 
-    public Label getTxtLabAccuracyСlass() {
+    Label getTxtLabAccuracyСlass() {
         return txtLabAccuracyСlass;
     }
 
-    public Label getTxtLabDate() {
+    Label getTxtLabDate() {
         return txtLabDate;
     }
 

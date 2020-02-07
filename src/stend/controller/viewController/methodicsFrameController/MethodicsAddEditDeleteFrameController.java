@@ -272,7 +272,7 @@ public class MethodicsAddEditDeleteFrameController {
 
         viewPointTable.setItems(metodicsNameList);
 
-        viewPointTable.setPlaceholder(new Label("У вас не создано ни одоной методики"));
+        viewPointTable.setPlaceholder(new Label("У вас не создано ни одной методики"));
 
         metodicsNameList = viewPointTable.getSelectionModel().getSelectedItems();
 

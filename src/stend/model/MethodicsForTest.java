@@ -9,6 +9,8 @@ import java.util.List;
 
 public class MethodicsForTest implements Serializable {
 
+    private static final long serialVersionUID = 19930826L;
+
     private static MethodicsForTest methodicsForTestInstance = deserializationMetodics();
 
     //Значения коэффициента мощности
