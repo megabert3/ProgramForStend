@@ -151,11 +151,6 @@ public class MethodicsAddEditDeleteFrameController {
 
     @FXML
     void initialize() throws InfoExсeption {
-//        methodicsForTest.addMethodicToList("Test1", new Methodic());
-//        methodicsForTest.addMethodicToList("Test2", new Methodic());
-//        methodicsForTest.addMethodicToList("Test3", new Methodic());
-//        metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
-
         tglBtnAPPls.setSelected(true);
 
         initMethodicListName();
@@ -276,7 +271,6 @@ public class MethodicsAddEditDeleteFrameController {
 
         metodicsNameList = viewPointTable.getSelectionModel().getSelectedItems();
 
-
         metodicsNameList.addListener(new ListChangeListener<Methodic>() {
             @Override
             public void onChanged(Change<? extends Methodic> c) {
@@ -364,20 +358,6 @@ public class MethodicsAddEditDeleteFrameController {
         metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
 
         initMethodicListName();
-    }
-
-    //Обновление списка после редактирования методики
-    public void refreshAfterEdite(Methodic methodic) {
-        metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
-
-        initMethodicListName();
-
-        setListsView();
-
-        ListViewAPPls.setItems(FXCollections.observableArrayList(comandListAPPls));
-        ListViewAPMns.setItems(FXCollections.observableArrayList(comandListAPMns));
-        ListViewRPPls.setItems(FXCollections.observableArrayList(comandListRPPls));
-        ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
     }
 
     //Обновление списка после удаления методики

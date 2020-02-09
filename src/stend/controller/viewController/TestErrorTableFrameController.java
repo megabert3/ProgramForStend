@@ -323,8 +323,6 @@ public class TestErrorTableFrameController {
             tglBtnAPMns.setSelected(false);
             tglBtnRPPls.setSelected(false);
             tglBtnRPMns.setSelected(false);
-
-            System.out.println(tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex());
         }
 
         if (event.getSource() == tglBtnAPMns) {
@@ -572,29 +570,57 @@ public class TestErrorTableFrameController {
             tabViewErrosRPMns.getColumns().add(tableColumnRPMns);
         }
 
-        //ObservableList<Commands> observableListAPPlsCommand = tabViewTestPointsAPPls.getSelectionModel().getSelectedItems();
+        //--------------------------------------------------------------------
+        //Устанавливаю фокусировку на окне ошибок такующе как и в окне точек
+        //AP+
+        ObservableList<TablePosition> tablePositionsAPPls = tabViewTestPointsAPPls.getSelectionModel().getSelectedCells();
 
-        //Действие при изменении информации в колонке
-//        tabColTestPointsAPPls.setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
-//            TablePosition<Commands, String> pos = event.getTablePosition();
-//
-//            System.out.println("Позиция таблицы? " + pos);
-//
-//            String newImpulseValue = event.getNewValue();
-//
-//            int row = pos.getRow();
-//
-//            System.out.println("Индекс " + row);
-//
-//            Commands command = event.getTableView().getItems().get(row);
-//
-//            ((ErrorCommand) command).setEmax(newImpulseValue);
-//
-//        });
-
-        tabViewTestPointsAPPls.getSelectionModel().getSelectedCells().addListener(new ListChangeListener<TablePosition>() {
+        tablePositionsAPPls.addListener(new ListChangeListener<TablePosition>() {
             @Override
             public void onChanged(Change<? extends TablePosition> c) {
+                int i = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
+
+                tabViewErrosAPPls.getSelectionModel().select(i);
+                tabViewErrosAPPls.getFocusModel().focus(i);
+            }
+        });
+
+        //AP-
+        ObservableList<TablePosition> tablePositionsAPMns = tabViewTestPointsAPMns.getSelectionModel().getSelectedCells();
+
+        tablePositionsAPMns.addListener(new ListChangeListener<TablePosition>() {
+            @Override
+            public void onChanged(Change<? extends TablePosition> c) {
+                int i = tabViewTestPointsAPMns.getSelectionModel().getFocusedIndex();
+
+                tabViewErrosAPMns.getSelectionModel().select(i);
+                tabViewErrosAPMns.getFocusModel().focus(i);
+            }
+        });
+
+        //RP+
+        ObservableList<TablePosition> tablePositionsRPPls = tabViewTestPointsRPPls.getSelectionModel().getSelectedCells();
+
+        tablePositionsRPPls.addListener(new ListChangeListener<TablePosition>() {
+            @Override
+            public void onChanged(Change<? extends TablePosition> c) {
+                int i = tabViewTestPointsRPPls.getSelectionModel().getFocusedIndex();
+
+                tabViewErrosRPPls.getSelectionModel().select(i);
+                tabViewErrosRPPls.getFocusModel().focus(i);
+            }
+        });
+
+        //AP-
+        ObservableList<TablePosition> tablePositionsRPMns = tabViewTestPointsRPMns.getSelectionModel().getSelectedCells();
+
+        tablePositionsRPMns.addListener(new ListChangeListener<TablePosition>() {
+            @Override
+            public void onChanged(Change<? extends TablePosition> c) {
+                int i = tabViewTestPointsRPMns.getSelectionModel().getFocusedIndex();
+
+                tabViewErrosRPMns.getSelectionModel().select(i);
+                tabViewErrosRPMns.getFocusModel().focus(i);
             }
         });
     }
@@ -645,9 +671,6 @@ public class TestErrorTableFrameController {
     private void bindScrolls(ScrollBar verticalBarCommands, ScrollBar verticalBarErrors) {
         if (verticalBarCommands != null && verticalBarErrors != null) {
             verticalBarCommands.valueProperty().bindBidirectional(verticalBarErrors.valueProperty());
-
-            //Скрываю скролл окна ошибок
-
         }
     }
 
