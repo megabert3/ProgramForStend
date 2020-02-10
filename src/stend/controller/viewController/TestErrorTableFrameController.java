@@ -19,8 +19,6 @@ import stend.controller.Commands.ErrorCommand;
 import stend.controller.Meter;
 import stend.model.Methodic;
 
-import javax.annotation.processing.SupportedSourceVersion;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 public class TestErrorTableFrameController {
@@ -355,6 +353,58 @@ public class TestErrorTableFrameController {
 
     @FXML
     void actionEventTestControl(ActionEvent event) {
+        //Логика работы автоматического режима работы
+        if (event.getSource() == tglBtnAuto) {
+            tglBtnAuto.setSelected(true);
+            tglBtnManualMode.setSelected(false);
+            tglBtnUnom.setSelected(false);
+
+            //Если выбрана панель AP+
+            if (tglBtnAPPls.isSelected()) {
+                int ind = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
+
+                for (int i = ind; i < commandsAPPls.size(); i++) {
+                    Commands command = commandsAPPls.get(i);
+
+                    if (command instanceof ErrorCommand) {
+
+                        ((ErrorCommand) command).setRatedVolt(Un);
+                        ((ErrorCommand) command).setIb(Ib);
+                        ((ErrorCommand) command).setImax(Imax);
+                        ((ErrorCommand) command).setRatedFreq(Fn);
+
+                        command.execute();
+                    }
+
+
+                }
+            }
+
+
+        }
+
+        //Логика работы ручного режима работы
+        if (event.getSource() == tglBtnManualMode) {
+            tglBtnAuto.setSelected(false);
+            tglBtnManualMode.setSelected(true);
+            tglBtnUnom.setSelected(false);
+
+        }
+
+        //Логика работы подачи напряжения
+        if (event.getSource() == tglBtnUnom) {
+            tglBtnAuto.setSelected(false);
+            tglBtnManualMode.setSelected(false);
+            tglBtnUnom.setSelected(true);
+
+        }
+
+        //Логика работы остановки теста
+        if (event.getSource() == btnStop) {
+            tglBtnAuto.setSelected(false);
+            tglBtnManualMode.setSelected(false);
+            tglBtnUnom.setSelected(false);
+        }
 
     }
 
@@ -573,6 +623,9 @@ public class TestErrorTableFrameController {
         //--------------------------------------------------------------------
         //Устанавливаю фокусировку на окне ошибок такующе как и в окне точек
         //AP+
+        tabViewTestPointsAPPls.getSelectionModel().select(0);
+        tabViewErrosAPPls.getSelectionModel().select(0);
+
         ObservableList<TablePosition> tablePositionsAPPls = tabViewTestPointsAPPls.getSelectionModel().getSelectedCells();
 
         tablePositionsAPPls.addListener(new ListChangeListener<TablePosition>() {
@@ -586,6 +639,9 @@ public class TestErrorTableFrameController {
         });
 
         //AP-
+        tabViewTestPointsAPMns.getSelectionModel().select(0);
+        tabViewErrosAPMns.getSelectionModel().select(0);
+
         ObservableList<TablePosition> tablePositionsAPMns = tabViewTestPointsAPMns.getSelectionModel().getSelectedCells();
 
         tablePositionsAPMns.addListener(new ListChangeListener<TablePosition>() {
@@ -599,6 +655,9 @@ public class TestErrorTableFrameController {
         });
 
         //RP+
+        tabViewTestPointsRPPls.getSelectionModel().select(0);
+        tabViewErrosRPPls.getSelectionModel().select(0);
+
         ObservableList<TablePosition> tablePositionsRPPls = tabViewTestPointsRPPls.getSelectionModel().getSelectedCells();
 
         tablePositionsRPPls.addListener(new ListChangeListener<TablePosition>() {
@@ -612,6 +671,9 @@ public class TestErrorTableFrameController {
         });
 
         //AP-
+        tabViewTestPointsRPMns.getSelectionModel().select(0);
+        tabViewErrosRPMns.getSelectionModel().select(0);
+
         ObservableList<TablePosition> tablePositionsRPMns = tabViewTestPointsRPMns.getSelectionModel().getSelectedCells();
 
         tablePositionsRPMns.addListener(new ListChangeListener<TablePosition>() {
@@ -671,6 +733,23 @@ public class TestErrorTableFrameController {
     private void bindScrolls(ScrollBar verticalBarCommands, ScrollBar verticalBarErrors) {
         if (verticalBarCommands != null && verticalBarErrors != null) {
             verticalBarCommands.valueProperty().bindBidirectional(verticalBarErrors.valueProperty());
+        }
+    }
+
+    private void imitTogGroupTestControl() {
+        if (tglBtnAuto.isSelected()) {
+            tglBtnManualMode.setSelected(false);
+            tglBtnUnom.setSelected(false);
+        }
+
+        if (tglBtnManualMode.isSelected()) {
+            tglBtnAuto.setSelected(false);
+            tglBtnUnom.setSelected(false);
+        }
+
+        if (tglBtnUnom.isSelected()) {
+            tglBtnAuto.setSelected(false);
+            tglBtnManualMode.setSelected(false);
         }
     }
 
