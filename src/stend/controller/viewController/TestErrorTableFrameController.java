@@ -372,7 +372,6 @@ public class TestErrorTableFrameController {
                         ((ErrorCommand) command).setIb(Ib);
                         ((ErrorCommand) command).setImax(Imax);
                         ((ErrorCommand) command).setRatedFreq(Fn);
-
                         command.execute();
                     }
 
