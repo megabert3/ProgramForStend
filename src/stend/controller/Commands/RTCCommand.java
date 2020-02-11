@@ -6,13 +6,15 @@ import stend.helper.ConsoleHelper;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RTCCommand implements Commands, Serializable {
 
-    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
-        this.stendDLLCommands = stendDLLCommands;
-    }
+    private List<Meter> meterList;
+
+    //Команда для прерывания метода
+    private boolean interrupt;
 
     private StendDLLCommands stendDLLCommands;
 
@@ -58,12 +60,17 @@ public class RTCCommand implements Commands, Serializable {
     }
 
     @Override
+    public void setInterrupt(boolean interrupt) {
+        this.interrupt = interrupt;
+    }
+
+    @Override
     public void execute() {
         int count = 0;
         stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
                 0.0, 0.0, "H", "1.0");
 
-        stendDLLCommands.setEnergyPulse(channelFlag);
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
         ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
 
@@ -124,5 +131,13 @@ public class RTCCommand implements Commands, Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
+        this.stendDLLCommands = stendDLLCommands;
+    }
+
+    public void setMeterList(List<Meter> meterList) {
+        this.meterList = meterList;
     }
 }

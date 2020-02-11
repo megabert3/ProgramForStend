@@ -5,8 +5,10 @@ import java.util.List;
 
 public class Meter {
 
-    private String id;
-    private double[] errors = new double[10];
+    private int id;
+
+    //Локальный массив ошибок нужен для быстрого теста
+    private String[] localErrors = new String[10];
 
     private boolean active = true;
 
@@ -55,16 +57,60 @@ public class Meter {
         }
     }
 
-    public void setErrors(double[] errors) {
-        this.errors = errors;
+    //Добавление последнего значения в класс еррорс
+    public void setLastError (int index, String error, int energyPulseChanel) {
+
+        switch (energyPulseChanel) {
+            case 0: {
+                errorListAPPls.get(index).setLastError(error);
+            }break;
+
+            case 1: {
+                errorListAPMns.get(index).setLastError(error);
+            }break;
+
+            case 2: {
+                errorListRPPls.get(index).setLastError(error);
+            }break;
+
+            case 3: {
+                errorListRPMns.get(index).setLastError(error);
+            }break;
+        }
+    }
+
+    //Добавление локального массива погрешностей в погрешность
+    public void addLocalErrorInMain(int index, int energyPulseChanel) {
+
+        switch (energyPulseChanel) {
+            case 0: {
+                errorListAPPls.get(index).setErrors(localErrors);
+                localErrors = new String[10];
+            }
+
+            case 1: {
+                errorListAPMns.get(index).setErrors(localErrors);
+                localErrors = new String[10];
+            }
+
+            case 2: {
+                errorListRPPls.get(index).setErrors(localErrors);
+                localErrors = new String[10];
+            }
+
+            case 3: {
+                errorListRPMns.get(index).setErrors(localErrors);
+                localErrors = new String[10];
+            }
+        }
     }
 
     public void setCreepTest(boolean creepTest) {
         this.creepTest = creepTest;
     }
 
-    public double[] getErrors() {
-        return errors;
+    public String[] getLocalErrors() {
+        return localErrors;
     }
 
     public void setRTCTestResult(String RTCTestResult) {
@@ -119,11 +165,11 @@ public class Meter {
         this.serNoMeter = serNoMeter;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -174,6 +220,14 @@ public class Meter {
 
         public String getLastError() {
             return lastError;
+        }
+
+        public String[] getErrors() {
+            return errors;
+        }
+
+        public String getNameTestPointError() {
+            return nameTestPointError;
         }
     }
 }

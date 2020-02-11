@@ -6,7 +6,7 @@ import stend.helper.ConsoleHelper;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 
 public class ErrorCommand implements Commands, Serializable {
@@ -43,14 +43,23 @@ public class ErrorCommand implements Commands, Serializable {
 
     private StendDLLCommands stendDLLCommands;
 
+    //Необходим для быстрого доступа к Объекту класса Error
+    private int index;
+
+    //Команда для прерывания метода
+    private boolean interrupt;
+
+    //Лист с счётчиками для испытания
+    private List<Meter> meterForTestList;
+
     //Максимальный порог ошибки
-    private String emin = "-1.0";
+    private double emin = -1.0;
 
     //Минимальный порог ошибки
-    private String emax = "1.0";
+    private double emax = 1.0;
 
     //Кол-во импульсов для расчёта ошибки
-    private String pulse = "20";
+    private int pulse = 20;
 
     //Имя точки для отображения в таблице
     private String name;
@@ -100,6 +109,7 @@ public class ErrorCommand implements Commands, Serializable {
     //По каким фазам пустить ток
     private String iABC;
 
+    //Активная ли точка
     private boolean active = true;
 
     //Импульсный выход
@@ -107,6 +117,9 @@ public class ErrorCommand implements Commands, Serializable {
 
     //Количество повторов теста
     private int countResult = 2;
+
+    //Константа счётчика для теста
+    private int constantMeter;
 
     //Флаг для прекращения сбора погрешности
     private HashMap<Integer, Boolean> flagInStop;
@@ -151,41 +164,62 @@ public class ErrorCommand implements Commands, Serializable {
     }
 
     @Override
+    public void setInterrupt(boolean interrupt) {
+        this.interrupt = interrupt;
+    }
+
+    @Override
     public void execute() {
-            flagInStop = initBoolList();
+
+        //Выбор константы в зависимости от энергии
+        if (channelFlag == 0 || channelFlag == 1) {
+            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
+        } else {
+            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
+        }
+
+        flagInStop = initBoolList();
+
+        //Ток максимальный или базоый использовать для точки
+        System.out.println(current.equals("Ib"));
 
         if (current.equals("Ib")) {
             ratedCurr = Ib;
         } else {
             ratedCurr = Imax;
         }
+
         stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPer, currPer, iABC, cosP);
 
-        stendDLLCommands.setEnergyPulse(channelFlag);
+        //Устанавливаем местам импульсный выход
+        stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
 
         ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
 
-        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-            //Подумать над константой, скорее всего необходимо будет сделать одной для всех
-            stendDLLCommands.errorStart(meter.getKey(), stendDLLCommands.getConstant(), Integer.parseInt(pulse));
-        }
+        //Сказать константу счётчика стенду для кажого места
+        stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
 
-        while (flagInStop.containsValue(false)) {
+        while (flagInStop.containsValue(false) || !interrupt) {
             int resultNo;
             String strError;
             String[] strMass;
-            double error;
+            String error;
 
-            for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-                strError = stendDLLCommands.meterErrorRead(meter.getKey());
+            for (Meter meter : meterForTestList) {
+                strError = stendDLLCommands.meterErrorRead(meter.getId());
+                System.out.println(meter.getId() + "  " +strError);
                 strMass = strError.split(",");
                 resultNo = Integer.parseInt(strMass[0]);
-                error = Double.parseDouble(strMass[1]);
-                stendDLLCommands.getAmountActivePlacesForTest().get(meter.getKey()).getErrors()[resultNo] = error;
+                error = strMass[1];
+
+                viewParam();
+
+                meter.setLastError(index, error, channelFlag);
+                meter.getLocalErrors()[resultNo] = error;
 
                 if (resultNo >= countResult) {
-                    flagInStop.put(meter.getKey(), true);
+                    flagInStop.put(meter.getId(), true);
                 }
             }
 
@@ -195,15 +229,75 @@ public class ErrorCommand implements Commands, Serializable {
                 e.printStackTrace();
             }
         }
+
+        for (Meter meter : meterForTestList) {
+            meter.addLocalErrorInMain(index, channelFlag);
+        }
+
         stendDLLCommands.powerOf();
         stendDLLCommands.errorClear();
     }
 
-    private HashMap<Integer, Boolean> initBoolList() {
-        HashMap<Integer, Boolean> init = new HashMap<>(stendDLLCommands.getAmountActivePlacesForTest().size());
+    private void viewParam() {
 
-        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-            init.put(meter.getKey(), false);
+//
+//        //Процент от напряжения
+//        private double voltPer;
+//
+//        //Ток
+//        private double ratedCurr;
+//
+//        //Процен от тока
+//        private double currPer;
+//
+//        //Частота
+//        private double ratedFreq;
+//
+//        //Коэфициент мощности
+//        private String cosP;
+//
+//        //Необходимо сделать в доп тестовом окне
+//        private int phaseSrequence;
+//
+//        //Направление тока
+//        private int revers;
+//
+//        //По каким фазам пустить ток
+//        private String iABC;
+//
+//        //Активная ли точка
+//        private boolean active = true;
+//
+//        //Импульсный выход
+//        private int channelFlag;
+//
+//        //Количество повторов теста
+//        private int countResult = 2;
+//
+//        //Константа счётчика для теста
+//        private int constantMeter;
+        System.out.println("Минимально допустимая ошибка " + emin);
+        System.out.println("Максимально допустимая ошибка " + emax);
+        System.out.println("Кол-во импульсов для расчёта ошибки "+ pulse);
+        System.out.println("Имя точки для отображения в таблице " + name);
+        System.out.println("Базовый или максимальный ток из конструктора " + current);
+        System.out.println("Стринговый процент получаемый из конструктора " + currentPerсent);
+        System.out.println("Базовый ток " + Ib);
+        System.out.println("Максимальный ток " + Imax);
+        System.out.println("Напряжение " + ratedVolt);
+        System.out.println("Процент от напряжения " + voltPer);
+        System.out.println("Процент от тока " + currPer);
+        System.out.println("Частота " + ratedFreq);
+        System.out.println("Коэф мощности " + cosP);
+        System.out.println("Ток " + ratedCurr);
+    }
+
+    //Опрашивает счётчики до нужно значения проходов
+    private HashMap<Integer, Boolean> initBoolList() {
+        HashMap<Integer, Boolean> init = new HashMap<>(meterForTestList.size());
+
+        for (Meter meter : meterForTestList) {
+            init.put(meter.getId(), false);
         }
         return init;
     }
@@ -221,15 +315,15 @@ public class ErrorCommand implements Commands, Serializable {
     }
 
     public void setPulse(String pulse) {
-        this.pulse = pulse;
+        this.pulse = Integer.parseInt(pulse);
     }
 
     public void setEmin(String emin) {
-        this.emin = emin;
+        this.emin = Double.parseDouble(emin);
     }
 
     public void setEmax(String emax) {
-        this.emax = emax;
+        this.emax = Double.parseDouble(emax);
     }
 
     public String getName() {
@@ -237,15 +331,15 @@ public class ErrorCommand implements Commands, Serializable {
     }
 
     public String getEmin() {
-        return emin;
+        return String.valueOf(emin);
     }
 
     public String getEmax() {
-        return emax;
+        return String.valueOf(emax);
     }
 
     public String getPulse() {
-        return pulse;
+        return String.valueOf(pulse);
     }
 
     public void setImax(double imax) {
@@ -266,6 +360,14 @@ public class ErrorCommand implements Commands, Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void setMeterForTestList(List<Meter> meterForTestList) {
+        this.meterForTestList = meterForTestList;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     @Override

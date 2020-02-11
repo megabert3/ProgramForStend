@@ -6,11 +6,17 @@ import stend.controller.StendDLLCommands;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StartCommand implements Commands, Serializable {
 
     private StendDLLCommands stendDLLCommands;
+
+    private List<Meter> meterList;
+
+    //Команда для прерывания метода
+    private boolean interrupt;
 
     //Выставлять в зависимости от выбранного параметра перед тестом
     private int phase;
@@ -72,7 +78,7 @@ public class StartCommand implements Commands, Serializable {
     private long currTime;
 
     private HashMap<Integer, Boolean> startCommandResult;
-    private HashMap<Integer, LocalMeter> metersList;
+    private HashMap<Integer, LocalMeter> localMetersList;
 
     public HashMap<Integer, Boolean> getCreepCommandResult() {
         return startCommandResult;
@@ -85,9 +91,14 @@ public class StartCommand implements Commands, Serializable {
     }
 
     @Override
+    public void setInterrupt(boolean interrupt) {
+        this.interrupt = interrupt;
+    }
+
+    @Override
     public void execute() {
         startCommandResult = initCreepCommandResult();
-        metersList = initMeterList();
+        localMetersList = initMeterList();
 
         stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq,0, revers,
                 100.0, 100.0, iABC, "1.0");
@@ -98,13 +109,13 @@ public class StartCommand implements Commands, Serializable {
             timeForTest = initTimeForTest();
         }
 
-        stendDLLCommands.setEnergyPulse(channelFlag);
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
         currTime = System.currentTimeMillis();
         timeEnd = currTime + timeForTest;
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
             for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-                if (!(metersList.get(meter.getKey()).run())) {
+                if (!(localMetersList.get(meter.getKey()).run())) {
                     startCommandResult.put(meter.getKey(), true);
                 }
             }
@@ -265,6 +276,10 @@ public class StartCommand implements Commands, Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void setMeterList(List<Meter> meterList) {
+        this.meterList = meterList;
     }
 
     private class LocalMeter implements Serializable{

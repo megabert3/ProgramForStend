@@ -1,28 +1,13 @@
 package stend.controller;
 
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Arrays;
 
 public class MainStend {
 
-    String name = "Хуета";
-
     public static void main(String[] args) {
+        String[] mass = new String[10];
 
-        StringBuilder stringBuilder = new StringBuilder();
-
-        Pattern pat = Pattern.compile("[0-9]+");
-        Matcher mat = pat.matcher("10(60)");
-
-        while (mat.find()) {
-            stringBuilder.append(mat.group()).append(",");
-        }
-
-        System.out.println(new String(stringBuilder));
-    }
-
-    private void idiNaXyi() throws IOException {
+        System.out.println(Arrays.toString(mass));
     }
 
 }

@@ -6,12 +6,19 @@ import stend.controller.StendDLLCommands;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class CreepCommand implements Commands, Serializable {
 
     private StendDLLCommands stendDLLCommands;
+
+    //лист с счётчиками
+    private List<Meter> meterList;
+
+    //Команда для прерывания метода
+    private boolean interrupt;
 
     private int phase;
 
@@ -54,7 +61,7 @@ public class CreepCommand implements Commands, Serializable {
     private long currTime;
 
     private HashMap<Integer, Boolean> creepCommandResult;
-    private HashMap<Integer, LocalMeter> metersList;
+    private HashMap<Integer, LocalMeter> localMetersList;
 
     public HashMap<Integer, Boolean> getCreepCommandResult() {
         return creepCommandResult;
@@ -66,9 +73,14 @@ public class CreepCommand implements Commands, Serializable {
     }
 
     @Override
+    public void setInterrupt(boolean interrupt) {
+        this.interrupt = interrupt;
+    }
+
+    @Override
     public void execute() {
         creepCommandResult = initCreepCommandResult();
-        metersList = initMeterList();
+        localMetersList = initMeterList();
 
         if (gostTest) {
             timeForTest = initTimeForGOSTTest();
@@ -79,14 +91,14 @@ public class CreepCommand implements Commands, Serializable {
         stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
                 voltPer, 0.0, "H", "1.0");
 
-        stendDLLCommands.setEnergyPulse(channelFlag);
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
         currTime = System.currentTimeMillis();
         timeEnd = currTime + timeForTest;
 
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
-            for (Map.Entry<Integer, LocalMeter> localMeter : metersList.entrySet()) {
-                if (!(metersList.get(localMeter.getKey()).run())) {
+            for (Map.Entry<Integer, LocalMeter> localMeter : localMetersList.entrySet()) {
+                if (!(localMetersList.get(localMeter.getKey()).run())) {
                     creepCommandResult.put(localMeter.getKey(), false);
                 }
             }
@@ -213,6 +225,10 @@ public class CreepCommand implements Commands, Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void setMeterList(List<Meter> meterList) {
+        this.meterList = meterList;
     }
 
     @Override

@@ -10,6 +10,9 @@ import java.util.Map;
 
 public class Methodic implements Cloneable, Serializable {
 
+    //Эта методика сделала для трехфащного стенда?
+    private boolean threePhaseStendMethodic;
+
     private String methodicName;
     private Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
 
@@ -145,6 +148,14 @@ public class Methodic implements Cloneable, Serializable {
         return influenceMetodic.saveInfluenceInbURPMns;
     }
 
+    public boolean isThreePhaseStendMethodic() {
+        return threePhaseStendMethodic;
+    }
+
+    public void setThreePhaseStendMethodic(boolean threePhaseStendMethodic) {
+        this.threePhaseStendMethodic = threePhaseStendMethodic;
+    }
+
     public Methodic() {
         commandsMap.put(0, new ArrayList<Commands>());
         commandsMap.put(1, new ArrayList<Commands>());
@@ -189,13 +200,6 @@ public class Methodic implements Cloneable, Serializable {
         }
 
         private Map<Integer, List<Commands>> influenceCommandsMap = new HashMap<>(4);
-
-
-//        //листы с точками после сохранения
-//        private List<Commands> saveInflListForCollumAPPls = new ArrayList<>();
-//        private List<Commands> saveInflListForCollumAPMns = new ArrayList<>();
-//        private List<Commands> saveInflListForCollumRPPls = new ArrayList<>();
-//        private List<Commands> saveInflListForCollumRPMns = new ArrayList<>();
 
         //Для теста влияния значения в в процентах
         //AP-

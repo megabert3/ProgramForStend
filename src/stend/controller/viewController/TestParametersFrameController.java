@@ -23,14 +23,12 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import stend.controller.Meter;
 import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
-import stend.controller.viewController.methodicsFrameController.MethodicNameController;
 import stend.helper.ConsoleHelper;
 import stend.model.Methodic;
 import stend.model.MethodicsForTest;
@@ -204,6 +202,7 @@ public class TestParametersFrameController {
                 properties.setProperty("lastWitness", txtFldWitness.getText());
 
                 //Учтановка и передача параметров
+                testErrorTableFrameController.setStendDLLCommands(stendDLLCommands);
                 testErrorTableFrameController.setMethodic(methodic);
                 testErrorTableFrameController.setUn(Un);
                 testErrorTableFrameController.setAccuracyClassAP(accuracyClassAP);
@@ -340,7 +339,7 @@ public class TestParametersFrameController {
     private void initTableView() {
         for (int i = 1; i <= Integer.parseInt(properties.getProperty("stendAmountPlaces")); i++) {
             Meter me = new Meter();
-            me.setId(String.valueOf(i));
+            me.setId(i);
             me.setConstantMeterAP(properties.getProperty("meterLastConstantAP"));
             me.setConstantMeterRP(properties.getProperty("meterLastConstantRP"));
             me.setModelMeter(properties.getProperty("lastMeterModel"));

@@ -17,11 +17,14 @@ import javafx.util.Callback;
 import stend.controller.Commands.Commands;
 import stend.controller.Commands.ErrorCommand;
 import stend.controller.Meter;
+import stend.controller.StendDLLCommands;
 import stend.model.Methodic;
 
 import java.util.List;
 
 public class TestErrorTableFrameController {
+
+    StendDLLCommands stendDLLCommands;
 
     private List<Meter> listMetersForTest;
 
@@ -55,6 +58,8 @@ public class TestErrorTableFrameController {
     private String controller;
 
     private String witness;
+
+    private boolean run;
 
     @FXML
     private Button btnSave;
@@ -243,6 +248,10 @@ public class TestErrorTableFrameController {
         this.witness = witness;
     }
 
+    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
+        this.stendDLLCommands = stendDLLCommands;
+    }
+
     @FXML
     void actionEventSaveExit(ActionEvent event) {
 
@@ -359,26 +368,45 @@ public class TestErrorTableFrameController {
             tglBtnManualMode.setSelected(false);
             tglBtnUnom.setSelected(false);
 
+            Commands command;
+
             //Если выбрана панель AP+
             if (tglBtnAPPls.isSelected()) {
-                int ind = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
+                run = true;
+                int i = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
 
-                for (int i = ind; i < commandsAPPls.size(); i++) {
-                    Commands command = commandsAPPls.get(i);
+                while (run || i < commandsAPPls.size()) {
+                    command = commandsAPPls.get(i);
 
-                    if (command instanceof ErrorCommand) {
+                    //Если тестовая точка активна
+                    if (command.isActive()) {
 
-                        ((ErrorCommand) command).setRatedVolt(Un);
-                        ((ErrorCommand) command).setIb(Ib);
-                        ((ErrorCommand) command).setImax(Imax);
-                        ((ErrorCommand) command).setRatedFreq(Fn);
-                        command.execute();
+                        if (command instanceof ErrorCommand) {
+                            ((ErrorCommand) command).setStendDLLCommands(stendDLLCommands);
+                            ((ErrorCommand) command).setRatedVolt(Un);
+                            ((ErrorCommand) command).setIb(Ib);
+                            ((ErrorCommand) command).setImax(Imax);
+                            ((ErrorCommand) command).setRatedFreq(Fn);
+                            ((ErrorCommand) command).setIndex(i);
+                            ((ErrorCommand) command).setMeterForTestList(listMetersForTest);
+
+                            command.execute();
+                        }
                     }
 
-
+                    i++;
+                    //Устанавливаю строчку на следующей команде
+                    /**
+                     * Возможно нужно будет добавить и для окна ошибок авто фокусировку
+                     */
+                    tabViewErrosAPPls.getSelectionModel().select(i);
+                    tabViewErrosAPPls.getFocusModel().focus(i);
                 }
             }
 
+            if (event.getSource() == btnStop) {
+                run = false;
+            }
 
         }
 
@@ -620,7 +648,7 @@ public class TestErrorTableFrameController {
         }
 
         //--------------------------------------------------------------------
-        //Устанавливаю фокусировку на окне ошибок такующе как и в окне точек
+        //Устанавливаю фокусировку на окне ошибок такуюже как и в окне точек
         //AP+
         tabViewTestPointsAPPls.getSelectionModel().select(0);
         tabViewErrosAPPls.getSelectionModel().select(0);
@@ -732,23 +760,6 @@ public class TestErrorTableFrameController {
     private void bindScrolls(ScrollBar verticalBarCommands, ScrollBar verticalBarErrors) {
         if (verticalBarCommands != null && verticalBarErrors != null) {
             verticalBarCommands.valueProperty().bindBidirectional(verticalBarErrors.valueProperty());
-        }
-    }
-
-    private void imitTogGroupTestControl() {
-        if (tglBtnAuto.isSelected()) {
-            tglBtnManualMode.setSelected(false);
-            tglBtnUnom.setSelected(false);
-        }
-
-        if (tglBtnManualMode.isSelected()) {
-            tglBtnAuto.setSelected(false);
-            tglBtnUnom.setSelected(false);
-        }
-
-        if (tglBtnUnom.isSelected()) {
-            tglBtnAuto.setSelected(false);
-            tglBtnManualMode.setSelected(false);
         }
     }
 

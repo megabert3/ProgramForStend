@@ -8,6 +8,7 @@ import stend.helper.ConsoleHelper;
 import stend.model.StendDLL;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -83,28 +84,16 @@ public abstract class StendDLLCommands {
         amountActivePlacesForTest = initAmountActivePlacesForTest();
     }
 
-    public void setEnergyPulse (int channelFlag) {
-        for (Map.Entry<Integer, Meter> meter : amountActivePlacesForTest.entrySet()) {
-            setPulseChannel(meter.getKey(), channelFlag);
+    //Устанавливает значение импульсного выхода у установки для каждого метса
+    public void setEnergyPulse (List<Meter> meterList, int channelFlag) {
+        for (Meter meter : meterList) {
+            setPulseChannel(meter.getId(), channelFlag);
         }
     }
 
     public HashMap<Integer, Meter> getAmountActivePlacesForTest() {
         return amountActivePlacesForTest;
     }
-    //Инициализирует значения констант у посадочных мест
-//    private static double[] initializationConstantsForMetersOnPlaces() {
-//        double[] init = new double[amountPlaces + 1];
-//        for (int i = 1; i <= amountPlaces; i++) {
-//            init[i] = constant;
-//        }
-//        return init;
-//    }
-
-//    //Инициализирует значение константы каждого отдельного счётчика
-//    public void setConstant(int number, double constant) {
-//        constantsForMetersOnPlaces[number] = constant;
-//    }
 
     public int getAmountPlaces() {
         return amountPlaces;
@@ -121,6 +110,7 @@ public abstract class StendDLLCommands {
     public double getImax() {
         return Imax;
     }
+
     public double getIb() {
         return Ib;
     }
@@ -217,6 +207,14 @@ public abstract class StendDLLCommands {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.Error_Read(pointer, meterNo, port);
         return pointer.getValue().getString(0, "ASCII");
+    }
+
+    //Сказать константу счётчика стенду для кажого места
+    public boolean setMetersConstantToStend(List<Meter> metersList, int constant, int amountImpulse) {
+        for (Meter meter : metersList) {
+            errorStart(meter.getId(), constant, amountImpulse);
+        }
+        return true;
     }
 
     // Запустить проверку навешенного счетчика (напряжение и ток должны быть включены)
