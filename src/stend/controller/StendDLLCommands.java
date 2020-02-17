@@ -5,11 +5,11 @@ import com.sun.jna.Memory;
 import com.sun.jna.ptr.PointerByReference;
 import jssc.SerialPortList;
 import stend.helper.ConsoleHelper;
+import stend.helper.exeptions.ConnectForStendExeption;
 import stend.model.StendDLL;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public abstract class StendDLLCommands {
@@ -85,9 +85,9 @@ public abstract class StendDLLCommands {
     }
 
     //Устанавливает значение импульсного выхода у установки для каждого метса
-    public void setEnergyPulse (List<Meter> meterList, int channelFlag) {
+    public void setEnergyPulse (List<Meter> meterList, int channelFlag) throws ConnectForStendExeption {
         for (Meter meter : meterList) {
-            setPulseChannel(meter.getId(), channelFlag);
+            if (!setPulseChannel(meter.getId(), channelFlag)) throw new ConnectForStendExeption();
         }
     }
 
@@ -203,16 +203,16 @@ public abstract class StendDLLCommands {
     }
 
     // Получить ошибку навешенного счетчика
-    public String meterErrorRead(int meterNo) {
+    public String meterErrorRead(int meterNo) throws ConnectForStendExeption {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
-        stend.Error_Read(pointer, meterNo, port);
+        if (!stend.Error_Read(pointer, meterNo, port)) throw new ConnectForStendExeption();
         return pointer.getValue().getString(0, "ASCII");
     }
 
     //Сказать константу счётчика стенду для кажого места
-    public boolean setMetersConstantToStend(List<Meter> metersList, int constant, int amountImpulse) {
+    public boolean setMetersConstantToStend(List<Meter> metersList, int constant, int amountImpulse) throws ConnectForStendExeption {
         for (Meter meter : metersList) {
-            errorStart(meter.getId(), constant, amountImpulse);
+            if (!errorStart(meter.getId(), constant, amountImpulse)) throw new ConnectForStendExeption();
         }
         return true;
     }

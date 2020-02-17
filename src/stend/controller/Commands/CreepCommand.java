@@ -2,6 +2,8 @@ package stend.controller.Commands;
 
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
+import stend.helper.exeptions.ConnectForStendExeption;
+import stend.helper.exeptions.InterruptedTestException;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -63,10 +65,6 @@ public class CreepCommand implements Commands, Serializable {
     private HashMap<Integer, Boolean> creepCommandResult;
     private HashMap<Integer, LocalMeter> localMetersList;
 
-    public HashMap<Integer, Boolean> getCreepCommandResult() {
-        return creepCommandResult;
-    }
-
     public CreepCommand(boolean gostTest, int channelFlag) {
         this.gostTest = gostTest;
         this.channelFlag = channelFlag;
@@ -78,7 +76,8 @@ public class CreepCommand implements Commands, Serializable {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+        if (interrupt) throw new InterruptedTestException();
         creepCommandResult = initCreepCommandResult();
         localMetersList = initMeterList();
 
@@ -88,16 +87,22 @@ public class CreepCommand implements Commands, Serializable {
             timeForTest = initTimeForTest();
         }
 
-        stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
-                voltPer, 0.0, "H", "1.0");
+        if (interrupt) throw new InterruptedTestException();
+        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
+                voltPer, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
+        if (interrupt) throw new InterruptedTestException();
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+
+        Thread.sleep(stendDLLCommands.getPauseForStabization());
 
         currTime = System.currentTimeMillis();
         timeEnd = currTime + timeForTest;
 
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
             for (Map.Entry<Integer, LocalMeter> localMeter : localMetersList.entrySet()) {
+                if (interrupt) throw new InterruptedTestException();
+
                 if (!(localMetersList.get(localMeter.getKey()).run())) {
                     creepCommandResult.put(localMeter.getKey(), false);
                 }
@@ -111,17 +116,17 @@ public class CreepCommand implements Commands, Serializable {
     }
 
     private HashMap<Integer, Boolean> initCreepCommandResult() {
-        HashMap<Integer, Boolean> init = new HashMap<>(stendDLLCommands.getAmountActivePlacesForTest().size());
-        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-            init.put(meter.getKey(), true);
+        HashMap<Integer, Boolean> init = new HashMap<>(meterList.size());
+        for (Meter meter : meterList) {
+            init.put(meter.getId(), true);
         }
         return init;
     }
 
     private HashMap<Integer, LocalMeter> initMeterList() {
         HashMap<Integer, LocalMeter> init = new HashMap<>();
-        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-            init.put(meter.getKey(), new LocalMeter(meter.getKey()));
+        for (Meter meter : meterList) {
+            init.put(meter.getId(), new LocalMeter(meter.getId()));
         }
         return  init;
     }

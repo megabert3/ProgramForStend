@@ -3,6 +3,8 @@ package stend.controller.Commands;
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 import stend.helper.ConsoleHelper;
+import stend.helper.exeptions.ConnectForStendExeption;
+import stend.helper.exeptions.InterruptedTestException;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -66,31 +68,44 @@ public class RTCCommand implements Commands, Serializable {
 
     @Override
     public void execute() {
-        int count = 0;
-        stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
-                0.0, 0.0, "H", "1.0");
-
-        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-
-        ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
-
-        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-            stendDLLCommands.clockErrorStart(meter.getKey(), freg, pulseForRTC);
-        }
-
         try {
-            while (count < countResult) {
-                Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
+            try {
+                if (interrupt) throw new InterruptedTestException();
+                int count = 0;
+                if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
+                        0.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
+
+                if (interrupt) throw new InterruptedTestException();
+                stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+
+                Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+                if (interrupt) throw new InterruptedTestException();
                 for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-                    meter.getValue().setRTCTestResult(stendDLLCommands.clockErrorRead(freg, errorType, meter.getKey()));
+                    if (!stendDLLCommands.clockErrorStart(meter.getKey(), freg, pulseForRTC)) throw new ConnectForStendExeption();
                 }
-                count++;
+
+                try {
+                    while (count < countResult) {
+                        if (interrupt) throw new InterruptedTestException();
+                        Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
+                        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
+                            meter.getValue().setRTCTestResult(stendDLLCommands.clockErrorRead(freg, errorType, meter.getKey()));
+                        }
+                        count++;
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                stendDLLCommands.errorClear();
+                stendDLLCommands.powerOf();
+            }catch (InterruptedException | InterruptedTestException e) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             }
-        }catch (InterruptedException e) {
-            e.printStackTrace();
+        }catch (ConnectForStendExeption e) {
+
         }
-        stendDLLCommands.errorClear();
-        stendDLLCommands.powerOf();
     }
 
     public void setName(String name) {

@@ -1098,7 +1098,7 @@ public class AddEditFrameController {
         StartCommand startCommand;
         if (event.getSource() == addTglBtnSTAAPPls) {
             if (addTglBtnSTAAPPls.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 0, 0, false);
+                startCommand = new StartCommand(0, 0, false);
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPPls.getText()));
                 startCommand.setUserTimeTest(txtFieldTimeSRAAPPls.getText());
@@ -1133,7 +1133,7 @@ public class AddEditFrameController {
         //Добаление теста на чувствительность с параметрами по ГОСТу AP+
         if (event.getSource() == addTglBtnSTAAPPlsGOST) {
             if (addTglBtnSTAAPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 0, 0, true);
+                startCommand = new StartCommand(0, 0, true);
 
                 startCommand.setName("Чувствительность ГОСТ AP+");
 
@@ -1158,7 +1158,7 @@ public class AddEditFrameController {
         //Добаление теста на чувствительность с параметрами пользователя AP-
         if (event.getSource() == addTglBtnSTAAPMns) {
             if (addTglBtnSTAAPMns.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 1, 1, false);
+                startCommand = new StartCommand(1, 1, false);
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPMns.getText()));
                 startCommand.setUserTimeTest(txtFieldTimeSRAAPMns.getText());
@@ -1193,7 +1193,7 @@ public class AddEditFrameController {
         //Добаление теста на чувствительность с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnSTAAPMnsGOST) {
             if (addTglBtnSTAAPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 1, 1, true);
+                startCommand = new StartCommand(1, 1, true);
 
                 startCommand.setName("Чувствительность ГОСТ AP-");
 
@@ -1218,7 +1218,7 @@ public class AddEditFrameController {
         //Добаление теста на чувствительность с параметрами пользователя RP+
         if (event.getSource() == addTglBtnSTARPPls) {
             if (addTglBtnSTARPPls.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 0, 2, false);
+                startCommand = new StartCommand(0, 2, false);
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPPls.getText()));
                 startCommand.setUserTimeTest(txtFieldTimeSRARPPls.getText());
@@ -1254,7 +1254,7 @@ public class AddEditFrameController {
         //Добаление теста на чувствительность с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnSTARPPlsGOST) {
             if (addTglBtnSTARPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 0, 1, true);
+                startCommand = new StartCommand(0, 1, true);
 
                 startCommand.setName("Чувствительность ГОСТ RP+");
 
@@ -1279,7 +1279,7 @@ public class AddEditFrameController {
         //Добаление теста на чувствительность с параметрами пользователя RP-
         if (event.getSource() == addTglBtnSTARPMns) {
             if (addTglBtnSTARPMns.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 1, 3, false);
+                startCommand = new StartCommand(1, 3, false);
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPMns.getText()));
                 startCommand.setUserTimeTest(txtFieldTimeSRARPMns.getText());
@@ -1314,7 +1314,7 @@ public class AddEditFrameController {
         //Добаление теста на чувствительность с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnSTARPMnsGOST) {
             if (addTglBtnSTARPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(stendDLLCommands, 0, 3, true);
+                startCommand = new StartCommand(0, 3, true);
 
                 startCommand.setName("Чувствительность ГОСТ RP-");
 

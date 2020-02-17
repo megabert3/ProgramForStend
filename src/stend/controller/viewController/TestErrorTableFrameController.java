@@ -8,23 +8,34 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import stend.controller.Commands.Commands;
 import stend.controller.Commands.ErrorCommand;
+import stend.controller.Commands.StartCommand;
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
+import stend.helper.exeptions.ConnectForStendExeption;
+import stend.helper.exeptions.InterruptedTestException;
 import stend.model.Methodic;
 
+import java.io.IOException;
 import java.util.List;
 
 public class TestErrorTableFrameController {
 
     StendDLLCommands stendDLLCommands;
+
+    //Исполняемая команда
+    Commands command;
 
     private List<Meter> listMetersForTest;
 
@@ -58,8 +69,6 @@ public class TestErrorTableFrameController {
     private String controller;
 
     private String witness;
-
-    private boolean run;
 
     @FXML
     private Button btnSave;
@@ -362,24 +371,25 @@ public class TestErrorTableFrameController {
 
     @FXML
     void actionEventTestControl(ActionEvent event) {
+        try {
+            try {
+
         //Логика работы автоматического режима работы
         if (event.getSource() == tglBtnAuto) {
             tglBtnAuto.setSelected(true);
             tglBtnManualMode.setSelected(false);
             tglBtnUnom.setSelected(false);
 
-            Commands command;
-
             //Если выбрана панель AP+
             if (tglBtnAPPls.isSelected()) {
-                run = true;
                 int i = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
 
-                while (run || i < commandsAPPls.size()) {
+                while (i < commandsAPPls.size()) {
                     command = commandsAPPls.get(i);
 
                     //Если тестовая точка активна
                     if (command.isActive()) {
+
 
                         if (command instanceof ErrorCommand) {
                             ((ErrorCommand) command).setStendDLLCommands(stendDLLCommands);
@@ -392,6 +402,10 @@ public class TestErrorTableFrameController {
 
                             command.execute();
                         }
+
+                        if (command instanceof StartCommand) {
+
+                        }
                     }
 
                     i++;
@@ -399,13 +413,15 @@ public class TestErrorTableFrameController {
                     /**
                      * Возможно нужно будет добавить и для окна ошибок авто фокусировку
                      */
-                    tabViewErrosAPPls.getSelectionModel().select(i);
+
                     tabViewErrosAPPls.getFocusModel().focus(i);
+                    tabViewTestPointsAPPls.getFocusModel().focus(i);
                 }
             }
 
+            //Если нажата кнопка остановки
             if (event.getSource() == btnStop) {
-                run = false;
+                command.setInterrupt(true);
             }
 
         }
@@ -433,6 +449,36 @@ public class TestErrorTableFrameController {
             tglBtnUnom.setSelected(false);
         }
 
+                //Если остановка потока или пользователь нажал кнопку стоп или сменил режим работы
+            }catch (InterruptedTestException | InterruptedException e) {
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+
+            }
+        //Если разорвана связь со стендом
+        }catch (ConnectForStendExeption e){
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/stend/view/exceptionFrame.fxml/"));
+            try {
+                fxmlLoader.load();
+            } catch (IOException er) {
+                e.printStackTrace();
+            }
+
+            ExceptionFrameController exceptionFrameController = fxmlLoader.getController();
+            exceptionFrameController.getExceptionLabel().setText("Потеряна связь с установной,\n проверьте подключение");
+
+            Parent root = fxmlLoader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Ошибка");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            tglBtnAuto.setSelected(false);
+            tglBtnManualMode.setSelected(false);
+            tglBtnUnom.setSelected(false);
+        }
     }
 
     /**
@@ -616,6 +662,7 @@ public class TestErrorTableFrameController {
 
             //Создаю колонки счётчиков для splitPane AP+
             TableColumn<Meter.Error, String> tableColumnAPPls = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            tableColumnAPPls.setStyle( "-fx-alignment: CENTER;");
             tableColumnAPPls.setCellValueFactory(new PropertyValueFactory<>("lastError"));
             tableColumnAPPls.setSortable(false);
             ObservableList<Meter.Error> observableListAPPls = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPPls());
@@ -624,6 +671,7 @@ public class TestErrorTableFrameController {
 
             //Создаю колонки счётчиков для splitPane AP-
             TableColumn<Meter.Error, String> tableColumnAPMns = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            tableColumnAPMns.setStyle( "-fx-alignment: CENTER;");
             tableColumnAPMns.setCellValueFactory(new PropertyValueFactory<>("lastError"));
             tableColumnAPMns.setSortable(false);
             ObservableList<Meter.Error> observableListAPMns = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPMns());
@@ -632,6 +680,7 @@ public class TestErrorTableFrameController {
 
             //Создаю колонки счётчиков для splitPane RP+
             TableColumn<Meter.Error, String> tableColumnRPPls = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            tableColumnRPPls.setStyle( "-fx-alignment: CENTER;");
             tableColumnRPPls.setCellValueFactory(new PropertyValueFactory<>("lastError"));
             tableColumnRPPls.setSortable(false);
             ObservableList<Meter.Error> observableListRPPls = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPPls());
@@ -640,6 +689,7 @@ public class TestErrorTableFrameController {
 
             //Создаю колонки счётчиков для splitPane RP-
             TableColumn<Meter.Error, String> tableColumnRPMns = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            tableColumnRPMns.setStyle( "-fx-alignment: CENTER;");
             tableColumnRPMns.setCellValueFactory(new PropertyValueFactory<>("lastError"));
             tableColumnRPMns.setSortable(false);
             ObservableList<Meter.Error> observableListRPMns = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns());

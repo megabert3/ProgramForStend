@@ -2,6 +2,9 @@ package stend.controller.Commands;
 
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
+import stend.helper.ConsoleHelper;
+import stend.helper.exeptions.ConnectForStendExeption;
+import stend.helper.exeptions.InterruptedTestException;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -84,7 +87,7 @@ public class StartCommand implements Commands, Serializable {
         return startCommandResult;
     }
 
-    public StartCommand(StendDLLCommands stendDLLCommands, int revers, int channelFlag, boolean gostTest) {
+    public StartCommand(int revers, int channelFlag, boolean gostTest) {
         this.revers = revers;
         this.channelFlag = channelFlag;
         this.gostTest = gostTest;
@@ -97,30 +100,42 @@ public class StartCommand implements Commands, Serializable {
 
     @Override
     public void execute() {
-        startCommandResult = initCreepCommandResult();
-        localMetersList = initMeterList();
+        try {
+            try {
+                if (interrupt) throw  new InterruptedTestException();
+                startCommandResult = initCreepCommandResult();
+                localMetersList = initMeterList();
 
-        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq,0, revers,
-                100.0, 100.0, iABC, "1.0");
+                stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
+                        100.0, 100.0, iABC, "1.0");
 
-        if (gostTest) {
-            timeForTest = initTimeForGOSTTest();
-        } else {
-            timeForTest = initTimeForTest();
-        }
+                Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-
-        currTime = System.currentTimeMillis();
-        timeEnd = currTime + timeForTest;
-        while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-            for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-                if (!(localMetersList.get(meter.getKey()).run())) {
-                    startCommandResult.put(meter.getKey(), true);
+                if (gostTest) {
+                    timeForTest = initTimeForGOSTTest();
+                } else {
+                    timeForTest = initTimeForTest();
                 }
+
+                stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+
+                currTime = System.currentTimeMillis();
+                timeEnd = currTime + timeForTest;
+                while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+                    for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
+                        if (!(localMetersList.get(meter.getKey()).run())) {
+                            startCommandResult.put(meter.getKey(), true);
+                        }
+                    }
+                }
+                addResultOnMeter();
+
+            }catch (InterruptedException | InterruptedTestException e) {
+
             }
+        }catch (ConnectForStendExeption e) {
+
         }
-        addResultOnMeter();
     }
 
     private HashMap<Integer, Boolean> initCreepCommandResult() {
@@ -160,7 +175,7 @@ public class StartCommand implements Commands, Serializable {
     }
 
     //Расчётная формула времени теста по ГОСТ
-    public long initTimeForGOSTTest() {
+    private long initTimeForGOSTTest() {
         if (treePhaseMeter) {
             amountMeasElem = 3;
         } else amountMeasElem = 1;

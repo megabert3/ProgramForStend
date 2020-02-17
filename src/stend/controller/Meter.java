@@ -1,5 +1,7 @@
 package stend.controller;
 
+import javafx.beans.property.SimpleStringProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,10 @@ public class Meter {
     //Локальный массив ошибок нужен для быстрого теста
     private String[] localErrors = new String[10];
 
+    //Установлен ли счётчик на посадочное место
     private boolean active = true;
+
+    private int amountMeasur;
 
     //Серийный номер счётчика
     private String serNoMeter;
@@ -58,7 +63,7 @@ public class Meter {
     }
 
     //Добавление последнего значения в класс еррорс
-    public void setLastError (int index, String error, int energyPulseChanel) {
+    public void addLastErrorInErrorList(int index, String error, int energyPulseChanel) {
 
         switch (energyPulseChanel) {
             case 0: {
@@ -197,6 +202,13 @@ public class Meter {
         return errorListRPMns;
     }
 
+    public int getAmountMeasur() {
+        return amountMeasur;
+    }
+
+    public void setAmountMeasur(int amountMeasur) {
+        this.amountMeasur = amountMeasur;
+    }
 
     public class Error {
 
@@ -206,20 +218,24 @@ public class Meter {
 
         String nameTestPointError;
 
-        String lastError;
+        SimpleStringProperty lastError = new SimpleStringProperty("15");
 
-        String[] errors = new String[10];
-
-        public void setLastError(String lastError) {
-            this.lastError = lastError;
-        }
-
-        public void setErrors(String[] errors) {
-            this.errors = errors;
+        public SimpleStringProperty lastErrorProperty() {
+            return lastError;
         }
 
         public String getLastError() {
-            return lastError;
+            return lastError.get();
+        }
+
+        public void setLastError(String lastError) {
+            this.lastError.set(lastError);
+        }
+
+        String[] errors = new String[10];
+
+        public void setErrors(String[] errors) {
+            this.errors = errors;
         }
 
         public String[] getErrors() {
@@ -228,6 +244,10 @@ public class Meter {
 
         public String getNameTestPointError() {
             return nameTestPointError;
+        }
+
+        public void setNameTestPointError(String nameTestPointError) {
+            this.nameTestPointError = nameTestPointError;
         }
     }
 }

@@ -3,6 +3,8 @@ package stend.controller.Commands;
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 import stend.helper.ConsoleHelper;
+import stend.helper.exeptions.ConnectForStendExeption;
+import stend.helper.exeptions.InterruptedTestException;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -169,7 +171,8 @@ public class ErrorCommand implements Commands, Serializable {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+        if (interrupt) throw new InterruptedTestException();
 
         //Выбор константы в зависимости от энергии
         if (channelFlag == 0 || channelFlag == 1) {
@@ -180,67 +183,67 @@ public class ErrorCommand implements Commands, Serializable {
 
         flagInStop = initBoolList();
 
-        //Ток максимальный или базоый использовать для точки
-        System.out.println(current.equals("Ib"));
-
         if (current.equals("Ib")) {
             ratedCurr = Ib;
         } else {
-            ratedCurr = Imax;
+           ratedCurr = Imax;
         }
 
-        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPer, currPer, iABC, cosP);
+        if (interrupt) throw new InterruptedTestException();
 
+        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+        if (interrupt) throw new InterruptedTestException();
         //Устанавливаем местам импульсный выход
         stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
 
-        ConsoleHelper.sleep(stendDLLCommands.getPauseForStabization());
+        Thread.sleep(stendDLLCommands.getPauseForStabization());
 
+        if (interrupt) throw new InterruptedTestException();
         //Сказать константу счётчика стенду для кажого места
         stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
 
-        while (flagInStop.containsValue(false) || !interrupt) {
-            int resultNo;
-            String strError;
-            String[] strMass;
-            String error;
+        if (interrupt) throw new InterruptedTestException();
+        /**
+         * Разобраться с flagInStop.
+         */
+        while (flagInStop.containsValue(false)) {
 
-            for (Meter meter : meterForTestList) {
-                strError = stendDLLCommands.meterErrorRead(meter.getId());
-                System.out.println(meter.getId() + "  " +strError);
-                strMass = strError.split(",");
-                resultNo = Integer.parseInt(strMass[0]);
-                error = strMass[1];
+                if (interrupt) throw new InterruptedTestException();
+                int resultNo;
+                String strError;
+                String[] strMass;
+                String error;
 
-                viewParam();
+                for (Meter meter : meterForTestList) {
+                    strError = stendDLLCommands.meterErrorRead(meter.getId());
+                    System.out.println(meter.getId() + "  " + strError);
+                    strMass = strError.split(",");
+                    resultNo = Integer.parseInt(strMass[0]);
+                    error = strMass[1];
 
-                meter.setLastError(index, error, channelFlag);
-                meter.getLocalErrors()[resultNo] = error;
+                    meter.addLastErrorInErrorList(index, error, channelFlag);
+                    meter.getLocalErrors()[resultNo] = error;
 
-                if (resultNo >= countResult) {
-                    flagInStop.put(meter.getId(), true);
+                    meter.setAmountMeasur(meter.getAmountMeasur() + 1);
+
+                    if (meter.getAmountMeasur() >= countResult) {
+                        flagInStop.put(meter.getId(), true);
+                    }
                 }
-            }
-
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
 
         for (Meter meter : meterForTestList) {
             meter.addLocalErrorInMain(index, channelFlag);
+            meter.setAmountMeasur(0);
         }
 
-        stendDLLCommands.powerOf();
-        stendDLLCommands.errorClear();
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
     }
 
     private void viewParam() {
-
-//
 //        //Процент от напряжения
 //        private double voltPer;
 //
