@@ -1344,11 +1344,11 @@ public class AddEditFrameController {
                 if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
 
                     rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 0, Double.parseDouble(txtFieldRngEAPPls.getText()));
+                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 0, Double.parseDouble(txtFieldRngEAPPls.getText()), 0);
                     cbValue = "В ед. частоты";
                 } else {
                     rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 1, Double.parseDouble(txtFieldRngEAPPls.getText()));
+                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 1, Double.parseDouble(txtFieldRngEAPPls.getText()), 0);
                     cbValue = "Сутч. погрешность";
                 }
 
@@ -1390,11 +1390,11 @@ public class AddEditFrameController {
             if (addTglBtnRTCAPMns.isSelected()) {
                 if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
                     rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 0, Double.parseDouble(txtFieldRngEAPMns.getText()));
+                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 0, Double.parseDouble(txtFieldRngEAPMns.getText()), 1);
                     cbValue = "В ед. частоты";
                 } else {
                     rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 1, Double.parseDouble(txtFieldRngEAPMns.getText()));
+                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 1, Double.parseDouble(txtFieldRngEAPMns.getText()), 1);
                     cbValue = "Сутч. погрешность";
                 }
 
@@ -1436,11 +1436,11 @@ public class AddEditFrameController {
             if (addTglBtnRTCRPPls.isSelected()) {
                 if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
                     rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 0, Double.parseDouble(txtFieldRngERPPls.getText()));
+                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 0, Double.parseDouble(txtFieldRngERPPls.getText()), 2);
                     cbValue = "В ед. частоты";
                 } else {
                     rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 1, Double.parseDouble(txtFieldRngERPPls.getText()));
+                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 1, Double.parseDouble(txtFieldRngERPPls.getText()), 2);
                     cbValue = "Сутч. погрешность";
                 }
 
@@ -1483,11 +1483,11 @@ public class AddEditFrameController {
             if (addTglBtnRTCRPMns.isSelected()) {
                 if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
                     rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 0, Double.parseDouble(txtFieldRngERPMns.getText()));
+                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 0, Double.parseDouble(txtFieldRngERPMns.getText()), 3);
                     cbValue = "В ед. частоты";
                 } else {
                     rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 1, Double.parseDouble(txtFieldRngERPMns.getText()));
+                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 1, Double.parseDouble(txtFieldRngERPMns.getText()), 3);
                     cbValue = "Сутч. погрешность";
                 }
 

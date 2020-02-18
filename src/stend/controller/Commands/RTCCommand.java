@@ -26,6 +26,9 @@ public class RTCCommand implements Commands, Serializable {
 
     private int channelFlag = 4;
 
+    //Для сохранения результата теста в нужное направление
+    private int channelFlagForSave;
+
     private boolean active = true;
 
     //Дианазон ошибки
@@ -46,19 +49,13 @@ public class RTCCommand implements Commands, Serializable {
     //Тип измерения
     private int errorType;
 
-    //Массив погрешностей одного счётчика
-    private HashMap<Integer, String> errorRTCList = new HashMap<>();
-
-    public HashMap<Integer, String> getErrorRTCList() {
-        return errorRTCList;
-    }
-
-    public RTCCommand(int pulseForRTC, double freg, int countResult, int errorType, double errorForFalseTest) {
+    public RTCCommand(int pulseForRTC, double freg, int countResult, int errorType, double errorForFalseTest, int channelFlagForSave) {
         this.pulseForRTC = pulseForRTC;
         this.freg = freg;
         this.countResult = countResult;
         this.errorType = errorType;
         this.errorForFalseTest = errorForFalseTest;
+        this.channelFlagForSave = channelFlagForSave;
     }
 
     @Override
@@ -67,44 +64,75 @@ public class RTCCommand implements Commands, Serializable {
     }
 
     @Override
-    public void execute() {
-        try {
-            try {
-                if (interrupt) throw new InterruptedTestException();
-                int count = 0;
-                if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
-                        0.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
+    public void execute() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+        if (interrupt) throw new InterruptedTestException();
+        int count = 0;
 
-                if (interrupt) throw new InterruptedTestException();
-                stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
+                0.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
-                Thread.sleep(stendDLLCommands.getPauseForStabization());
+        if (interrupt) throw new InterruptedTestException();
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-                if (interrupt) throw new InterruptedTestException();
-                for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-                    if (!stendDLLCommands.clockErrorStart(meter.getKey(), freg, pulseForRTC)) throw new ConnectForStendExeption();
-                }
+        Thread.sleep(stendDLLCommands.getPauseForStabization());
 
+        if (interrupt) throw new InterruptedTestException();
+        for (Meter meter : meterList) {
+            if (!stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC)) throw new ConnectForStendExeption();
+        }
+
+        while (count < countResult) {
+
+            if (interrupt) throw new InterruptedTestException();
+
+            Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
+
+            for (Meter meter : meterList) {
                 try {
-                    while (count < countResult) {
-                        if (interrupt) throw new InterruptedTestException();
-                        Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
-                        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-                            meter.getValue().setRTCTestResult(stendDLLCommands.clockErrorRead(freg, errorType, meter.getKey()));
-                        }
-                        count++;
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                stendDLLCommands.errorClear();
-                stendDLLCommands.powerOf();
-            }catch (InterruptedException | InterruptedTestException e) {
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-            }
-        }catch (ConnectForStendExeption e) {
+                    /**
+                     * Проверить на тру или фолс в корневом методе
+                     */
+                    double result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId())) - 1.000000;
 
+                    if (result > errorForFalseTest || result < -errorForFalseTest) {
+                        addRTCTestResult(meter, result, false, channelFlagForSave);
+                    } else {
+                        addRTCTestResult(meter, result, true, channelFlagForSave);
+                    }
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    System.out.println("Пустая строчка");
+                }
+            }
+
+            count++;
+        }
+
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+    }
+
+    private void addRTCTestResult(Meter meter, double RTCError, boolean passOrNot, int channelFlagForSave) {
+        switch (channelFlagForSave) {
+            case 0: {
+                meter.setRTCTestErrorAPPls(String.valueOf(RTCError));
+                meter.setRTCTestResultAPPls(passOrNot);
+            }break;
+
+            case 1: {
+                meter.setRTCTestErrorAPMns(String.valueOf(RTCError));
+                meter.setRTCTestResultAPMns(passOrNot);
+            }break;
+
+            case 2: {
+                meter.setRTCTestErrorRPPls(String.valueOf(RTCError));
+                meter.setRTCTestResultRPPls(passOrNot);
+            }break;
+
+            case 3: {
+                meter.setRTCTestErrorRPMns(String.valueOf(RTCError));
+                meter.setRTCTestResultRPMns(passOrNot);
+            }break;
         }
     }
 

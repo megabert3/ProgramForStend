@@ -2,7 +2,6 @@ package stend.controller.Commands;
 
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
-import stend.helper.ConsoleHelper;
 import stend.helper.exeptions.ConnectForStendExeption;
 import stend.helper.exeptions.InterruptedTestException;
 
@@ -35,8 +34,10 @@ public class StartCommand implements Commands, Serializable {
 
     private int revers;
 
+    //Возможно пригодится
     private double currPer;
 
+    //Возможно пригодится
     private String iABC;
 
     private int channelFlag;
@@ -65,14 +66,11 @@ public class StartCommand implements Commands, Serializable {
     private double baseCurrMeter;
 
     //Это трехфазный счётчик?
-    private boolean treePhaseMeter;
+    private boolean threePhaseMeter;
 
-    //Датчик тока трансформаторный?
-    private boolean transfDetect;
+    //Датчик тока шунт?
+    private boolean transfDetectShunt;
 
-    //Значение тока введённое пользователем
-    private double userCurr;
-    
     //Количество измерительных элементов (фрехфазный или однофазный)
     private int amountMeasElem;
 
@@ -81,11 +79,6 @@ public class StartCommand implements Commands, Serializable {
     private long currTime;
 
     private HashMap<Integer, Boolean> startCommandResult;
-    private HashMap<Integer, LocalMeter> localMetersList;
-
-    public HashMap<Integer, Boolean> getCreepCommandResult() {
-        return startCommandResult;
-    }
 
     public StartCommand(int revers, int channelFlag, boolean gostTest) {
         this.revers = revers;
@@ -99,88 +92,61 @@ public class StartCommand implements Commands, Serializable {
     }
 
     @Override
-    public void execute() {
-        try {
-            try {
-                if (interrupt) throw  new InterruptedTestException();
-                startCommandResult = initCreepCommandResult();
-                localMetersList = initMeterList();
+    public void execute() throws InterruptedException, InterruptedTestException, ConnectForStendExeption {
 
-                stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
-                        100.0, 100.0, iABC, "1.0");
+        if (interrupt) throw  new InterruptedTestException();
+        startCommandResult = initCreepCommandResult();
 
-                Thread.sleep(stendDLLCommands.getPauseForStabization());
-
-                if (gostTest) {
-                    timeForTest = initTimeForGOSTTest();
-                } else {
-                    timeForTest = initTimeForTest();
-                }
-
-                stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-
-                currTime = System.currentTimeMillis();
-                timeEnd = currTime + timeForTest;
-                while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-                    for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-                        if (!(localMetersList.get(meter.getKey()).run())) {
-                            startCommandResult.put(meter.getKey(), true);
-                        }
-                    }
-                }
-                addResultOnMeter();
-
-            }catch (InterruptedException | InterruptedTestException e) {
-
-            }
-        }catch (ConnectForStendExeption e) {
-
+        if (gostTest) {
+            timeForTest = initTimeForGOSTTest();
+        } else {
+            timeForTest = initTimeForTest();
         }
+
+        if (interrupt) throw  new InterruptedTestException();
+        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
+                100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
+
+        if (interrupt) throw  new InterruptedTestException();
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+
+        if (interrupt) throw  new InterruptedTestException();
+        Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+        currTime = System.currentTimeMillis();
+        timeEnd = currTime + timeForTest;
+
+        while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+            if (interrupt) throw  new InterruptedTestException();
+
+            for (Meter meter : meterList) {
+                if (!meter.run(pulseValue, stendDLLCommands)) {
+                    addTestTimeToPass(meter, channelFlag, System.currentTimeMillis() - currTime);
+                    startCommandResult.put(meter.getId(), true);
+                }
+            }
+        }
+        addTestResultInMeters(startCommandResult, channelFlag);
+
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
     }
 
     private HashMap<Integer, Boolean> initCreepCommandResult() {
-        HashMap<Integer, Boolean> init = new HashMap<>(stendDLLCommands.getAmountActivePlacesForTest().size());
-        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-            init.put(meter.getKey(), false);
+        HashMap<Integer, Boolean> init = new HashMap<>(meterList.size());
+        for (Meter meter : meterList) {
+            init.put(meter.getId(), false);
         }
         return init;
     }
 
-    private HashMap<Integer, LocalMeter> initMeterList() {
-        HashMap<Integer, LocalMeter> init = new HashMap<>();
-        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-            init.put(meter.getKey(), new LocalMeter(meter.getKey()));
-        }
-        return  init;
-    }
-
-    //Довавляет результат в счётчик в зависимости от направления тока
-    private void addResultOnMeter() {
-        for (Map.Entry<Integer, Meter> meter : stendDLLCommands.getAmountActivePlacesForTest().entrySet()) {
-            switch (channelFlag) {
-                case 0: {
-                    meter.getValue().setStartTestActiveEnergyDirect(startCommandResult.get(meter.getKey()));
-                }break;
-                case 1: {
-                    meter.getValue().setStartTestActiveEnergyReverse(startCommandResult.get(meter.getKey()));
-                }break;
-                case 2: {
-                    meter.getValue().setStartTestReactiveEnergyDirect(startCommandResult.get(meter.getKey()));
-                }break;
-                case 3: {
-                    meter.getValue().setStartTestReactiveEnergyReverse(startCommandResult.get(meter.getKey()));
-                }
-            }
-        }
-    }
-
     //Расчётная формула времени теста по ГОСТ
     private long initTimeForGOSTTest() {
-        if (treePhaseMeter) {
+        if (threePhaseMeter) {
             amountMeasElem = 3;
         } else amountMeasElem = 1;
 
-        if (transfDetect) {
+        if (!transfDetectShunt) {
             if (accuracyClass == 1.0) {
                 ratedCurr = baseCurrMeter * 0.002;
             } else {
@@ -213,12 +179,107 @@ public class StartCommand implements Commands, Serializable {
         return ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
     }
 
-    public void setTransfDetect(boolean transfDetect) {
-        this.transfDetect = transfDetect;
+    //В зависимости от направления тока переносит время прохождения теста в нужную строку
+    private void addTestTimeToPass(Meter meter, int channelFlag, long timePass) {
+        switch (channelFlag) {
+            case  0: {
+                if (gostTest) {
+                    meter.setStartTestPassTimeAPPlsGOST(timePass);
+                } else {
+                    meter.setStartTestPassTimeAPPls(timePass);
+                }
+            }break;
+
+            case  1: {
+                if (gostTest) {
+                    meter.setStartTestPassTimeAPMnsGOST(timePass);
+                } else {
+                    meter.setStartTestPassTimeAPMns(timePass);
+                }
+            }break;
+
+            case  2: {
+                if (gostTest) {
+                    meter.setStartTestPassTimeRPPlsGOST(timePass);
+                } else {
+                    meter.setStartTestPassTimeRPPls(timePass);
+                }
+            }break;
+
+            case  3: {
+                if (gostTest) {
+                    meter.setStartTestPassTimeRPMnsGOST(timePass);
+                } else {
+                    meter.setStartTestPassTimeRPMns(timePass);
+                }
+            }break;
+        }
     }
 
-    public void setGostTest(boolean gostTest) {
-        this.gostTest = gostTest;
+    //В зависимости от направления тока переносит результаты теста в нужную строку
+    private void addTestResultInMeters(Map<Integer, Boolean> metersResult, int channelFlag) {
+        switch (channelFlag) {
+            case 0: {
+                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
+                    for (Meter meter : meterList) {
+                        if (meter.getId() == metRes.getKey()) {
+
+                            if (gostTest) {
+                                meter.setStartTestResultAPPlsGOST(metRes.getValue());
+                            } else {
+                                meter.setStartTestResultAPPls(metRes.getValue());
+                            }
+                        }
+                    }
+                }
+            }break;
+            case 1: {
+                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
+                    for (Meter meter : meterList) {
+                        if (meter.getId() == metRes.getKey()) {
+
+                            if (gostTest) {
+                                meter.setStartTestResultAPMnsGOST(metRes.getValue());
+                            } else {
+                                meter.setStartTestResultAPMns(metRes.getValue());
+                            }
+                        }
+                    }
+                }
+            }break;
+            case 2: {
+                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
+                    for (Meter meter : meterList) {
+                        if (meter.getId() == metRes.getKey()) {
+
+                            if (gostTest) {
+                                meter.setStartTestResultRPPlsGOST(metRes.getValue());
+                            } else {
+                                meter.setStartTestResultRPPls(metRes.getValue());
+                            }
+                        }
+                    }
+                }
+            }break;
+            case 3: {
+                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
+                    for (Meter meter : meterList) {
+                        if (meter.getId() == metRes.getKey()) {
+
+                            if (gostTest) {
+                                meter.setStartTestResultRPMnsGOST(metRes.getValue());
+                            } else {
+                                meter.setStartTestResultRPMns(metRes.getValue());
+                            }
+                        }
+                    }
+                }
+            }break;
+        }
+    }
+
+    public void setTransfDetectShunt(boolean transfDetectShunt) {
+        this.transfDetectShunt = transfDetectShunt;
     }
 
     public void setName(String name) {
@@ -241,8 +302,8 @@ public class StartCommand implements Commands, Serializable {
         this.baseCurrMeter = baseCurrMeter;
     }
 
-    public void setTreePhaseMeter(boolean treePhaseMeter) {
-        this.treePhaseMeter = treePhaseMeter;
+    public void setThreePhaseMeter(boolean treePhaseMeter) {
+        this.threePhaseMeter = treePhaseMeter;
     }
 
     public void setAccuracyClass(double accuracyClass) {
@@ -297,28 +358,7 @@ public class StartCommand implements Commands, Serializable {
         this.meterList = meterList;
     }
 
-    private class LocalMeter implements Serializable{
-        int number;
-        int counter = 0;
-        boolean searchMark;
-
-        LocalMeter(int number) {
-            this.number = number;
-        }
-
-        public boolean run() {
-            if (counter < pulseValue) {
-                if (!searchMark) {
-                    stendDLLCommands.searchMark(number);
-                    searchMark = true;
-                } else {
-                    if (stendDLLCommands.searchMarkResult(number)) {
-                        counter++;
-                        searchMark = false;
-                    }
-                }
-            } else return false;
-            return true;
-        }
+    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
+        this.stendDLLCommands = stendDLLCommands;
     }
 }

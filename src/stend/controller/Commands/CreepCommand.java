@@ -53,7 +53,7 @@ public class CreepCommand implements Commands, Serializable {
     private double maxCurrMeter;
 
     //Это трехфазный счётчик?
-    private boolean treePhaseMeter;
+    private boolean threePhaseMeter;
 
     //Количество измерительных элементов (фрехфазный или однофазный)
     private int amountMeasElem;
@@ -63,7 +63,6 @@ public class CreepCommand implements Commands, Serializable {
     private long currTime;
 
     private HashMap<Integer, Boolean> creepCommandResult;
-    private HashMap<Integer, LocalMeter> localMetersList;
 
     public CreepCommand(boolean gostTest, int channelFlag) {
         this.gostTest = gostTest;
@@ -79,7 +78,6 @@ public class CreepCommand implements Commands, Serializable {
     public void execute() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
         if (interrupt) throw new InterruptedTestException();
         creepCommandResult = initCreepCommandResult();
-        localMetersList = initMeterList();
 
         if (gostTest) {
             timeForTest = initTimeForGOSTTest();
@@ -100,19 +98,21 @@ public class CreepCommand implements Commands, Serializable {
         timeEnd = currTime + timeForTest;
 
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
-            for (Map.Entry<Integer, LocalMeter> localMeter : localMetersList.entrySet()) {
-                if (interrupt) throw new InterruptedTestException();
+            if (interrupt) throw new InterruptedTestException();
 
-                if (!(localMetersList.get(localMeter.getKey()).run())) {
-                    creepCommandResult.put(localMeter.getKey(), false);
+            for (Meter meter : meterList) {
+                if (!meter.run(pulseValue, stendDLLCommands)) {
+                    addTestTimeToFail(meter, channelFlag, System.currentTimeMillis() - currTime);
+                    creepCommandResult.put(meter.getId(), false);
                 }
             }
         }
 
         //Перенос результата теста в разультата каждого отдельного счётчика
-        for (Map.Entry<Integer, Boolean> result : creepCommandResult.entrySet()) {
-            stendDLLCommands.getAmountActivePlacesForTest().get(result.getKey()).setCreepTest(result.getValue());
-        }
+        addTestResultInMeters(creepCommandResult, channelFlag);
+
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
     }
 
     private HashMap<Integer, Boolean> initCreepCommandResult() {
@@ -123,17 +123,9 @@ public class CreepCommand implements Commands, Serializable {
         return init;
     }
 
-    private HashMap<Integer, LocalMeter> initMeterList() {
-        HashMap<Integer, LocalMeter> init = new HashMap<>();
-        for (Meter meter : meterList) {
-            init.put(meter.getId(), new LocalMeter(meter.getId()));
-        }
-        return  init;
-    }
-
     //Расчётная формула времени теста по ГОСТ
     private long initTimeForGOSTTest() {
-        if (treePhaseMeter) {
+        if (threePhaseMeter) {
             amountMeasElem = 3;
         } else amountMeasElem = 1;
 
@@ -160,6 +152,105 @@ public class CreepCommand implements Commands, Serializable {
         return ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
     }
 
+    //В зависимости от направления тока переносит результаты теста в нужную строку
+    private void addTestResultInMeters(Map<Integer, Boolean> metersResult, int channelFlag) {
+        switch (channelFlag) {
+            case 0: {
+                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
+                    for (Meter meter : meterList) {
+                        if (meter.getId() == metRes.getKey()) {
+
+                            if (gostTest) {
+                                meter.setCreepTestResultAPPlsGOST(metRes.getValue());
+                            } else {
+                                meter.setCreepTestResultAPPls(metRes.getValue());
+                            }
+                        }
+                    }
+                }
+            }break;
+            case 1: {
+                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
+                    for (Meter meter : meterList) {
+                        if (meter.getId() == metRes.getKey()) {
+
+                            if (gostTest) {
+                                meter.setCreepTestResultAPMnsGOST(metRes.getValue());
+                            } else {
+                                meter.setCreepTestResultAPMns(metRes.getValue());
+                            }
+                        }
+                    }
+                }
+            }break;
+            case 2: {
+                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
+                    for (Meter meter : meterList) {
+                        if (meter.getId() == metRes.getKey()) {
+
+                            if (gostTest) {
+                                meter.setCreepTestResultRPPlsGOST(metRes.getValue());
+                            } else {
+                                meter.setCreepTestResultRPPls(metRes.getValue());
+                            }
+                        }
+                    }
+                }
+            }break;
+            case 3: {
+                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
+                    for (Meter meter : meterList) {
+                        if (meter.getId() == metRes.getKey()) {
+
+                            if (gostTest) {
+                                meter.setCreepTestResultRPMnsGOST(metRes.getValue());
+                            } else {
+                                meter.setCreepTestResultRPMns(metRes.getValue());
+                            }
+                        }
+                    }
+                }
+            }break;
+        }
+    }
+
+    //В зависимости от направления тока переносит время провала теста в нужную строку
+    private void addTestTimeToFail(Meter meter, int channelFlag, long timeFail) {
+        switch (channelFlag) {
+            case  0: {
+                if (gostTest) {
+                    meter.setCreepTestFailTimeAPPlsGOST(timeFail);
+                } else {
+                    meter.setCreepTestFailTimeAPPls(timeFail);
+                }
+            }break;
+
+            case  1: {
+                if (gostTest) {
+                    meter.setCreepTestFailTimeAPMnsGOST(timeFail);
+                } else {
+                    meter.setCreepTestFailTimeAPMns(timeFail);
+                }
+            }break;
+
+            case  2: {
+                if (gostTest) {
+                    meter.setCreepTestFailTimeRPPlsGOST(timeFail);
+                } else {
+                    meter.setCreepTestFailTimeRPPls(timeFail);
+                }
+            }break;
+
+            case  3: {
+                if (gostTest) {
+                    meter.setCreepTestFailTimeRPMnsGOST(timeFail);
+                } else {
+                    meter.setCreepTestFailTimeRPMns(timeFail);
+                }
+            }break;
+        }
+    }
+
     public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
         this.stendDLLCommands = stendDLLCommands;
     }
@@ -168,7 +259,7 @@ public class CreepCommand implements Commands, Serializable {
         this.constMeterForTest = constMeterForTest;
     }
 
-    public void setMaxCurrMeter(int maxCurrMeter) {
+    public void setMaxCurrMeter(double maxCurrMeter) {
         this.maxCurrMeter = maxCurrMeter;
     }
 
@@ -180,8 +271,8 @@ public class CreepCommand implements Commands, Serializable {
         this.name = name;
     }
 
-    public void setTreePhaseMeter(boolean treePhaseMeter) {
-        this.treePhaseMeter = treePhaseMeter;
+    public void setThreePhaseMeter(boolean treePhaseMeter) {
+        this.threePhaseMeter = treePhaseMeter;
     }
 
     public void setPulseValue(int pulseValue) {
@@ -241,28 +332,4 @@ public class CreepCommand implements Commands, Serializable {
         return name;
     }
 
-    private class LocalMeter implements Serializable{
-        int number;
-        int counter = 0;
-        boolean searchMark;
-
-        LocalMeter(int number) {
-            this.number = number;
-        }
-
-        boolean run() {
-            if (counter < pulseValue) {
-                if (!searchMark) {
-                    stendDLLCommands.searchMark(number);
-                    searchMark = true;
-                } else {
-                    if (stendDLLCommands.searchMarkResult(number)) {
-                        counter++;
-                        searchMark = false;
-                    }
-                }
-            } else return false;
-            return true;
-        }
-    }
 }

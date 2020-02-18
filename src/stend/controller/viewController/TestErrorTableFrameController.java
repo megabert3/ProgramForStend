@@ -18,9 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import stend.controller.Commands.Commands;
-import stend.controller.Commands.ErrorCommand;
-import stend.controller.Commands.StartCommand;
+import stend.controller.Commands.*;
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
 import stend.helper.exeptions.ConnectForStendExeption;
@@ -380,9 +378,15 @@ public class TestErrorTableFrameController {
             tglBtnManualMode.setSelected(false);
             tglBtnUnom.setSelected(false);
 
+            int phase;
+
             //Если выбрана панель AP+
             if (tglBtnAPPls.isSelected()) {
                 int i = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
+
+                if (typeCircuitThreePhase) {
+                    phase = 1;
+                } else phase = 0;
 
                 while (i < commandsAPPls.size()) {
                     command = commandsAPPls.get(i);
@@ -390,21 +394,38 @@ public class TestErrorTableFrameController {
                     //Если тестовая точка активна
                     if (command.isActive()) {
 
-
                         if (command instanceof ErrorCommand) {
-                            ((ErrorCommand) command).setStendDLLCommands(stendDLLCommands);
-                            ((ErrorCommand) command).setRatedVolt(Un);
-                            ((ErrorCommand) command).setIb(Ib);
-                            ((ErrorCommand) command).setImax(Imax);
-                            ((ErrorCommand) command).setRatedFreq(Fn);
-                            ((ErrorCommand) command).setIndex(i);
-                            ((ErrorCommand) command).setMeterForTestList(listMetersForTest);
+
+
+                            initAllParamForErrorCommand((ErrorCommand) command, i);
+
+                            command.execute();
+                        }
+
+                        if (command instanceof CreepCommand) {
+                            /**
+                             * Подумать над отображением времени теста
+                             */
+
+                            initAllParamForStartCommand((CreepCommand) command, Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP()), phase);
 
                             command.execute();
                         }
 
                         if (command instanceof StartCommand) {
+                            /**
+                             * Подумать над отображением времени теста
+                             */
+                            initAllParamForStartCommand((StartCommand) command, Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP()),phase);
 
+                            command.execute();
+                        }
+
+                        if (command instanceof RTCCommand) {
+
+                            initAllParamForRTCCommand((RTCCommand) command, phase);
+
+                            command.execute();
                         }
                     }
 
@@ -479,6 +500,51 @@ public class TestErrorTableFrameController {
             tglBtnManualMode.setSelected(false);
             tglBtnUnom.setSelected(false);
         }
+    }
+
+    //Инициализирует параметры необходимые для снятия погрешности в точке
+    private void initAllParamForErrorCommand(ErrorCommand errorCommand, int i){
+        errorCommand.setStendDLLCommands(stendDLLCommands);
+        errorCommand.setRatedVolt(Un);
+        errorCommand.setIb(Ib);
+        errorCommand.setImax(Imax);
+        errorCommand.setRatedFreq(Fn);
+        errorCommand.setIndex(i);
+        errorCommand.setMeterForTestList(listMetersForTest);
+    }
+
+    //Инициализирует параметры необходимые для команды самохода
+    private void initAllParamForStartCommand(CreepCommand creepCommand, int meterConstant,  int phase){
+        creepCommand.setStendDLLCommands(stendDLLCommands);
+        creepCommand.setPhase(phase);
+        creepCommand.setRatedVolt(Un);
+        creepCommand.setRatedFreq(Fn);
+        creepCommand.setConstMeterForTest(meterConstant);
+        creepCommand.setMaxCurrMeter(Imax);
+        creepCommand.setThreePhaseMeter(typeCircuitThreePhase);
+        creepCommand.setMeterList(listMetersForTest);
+    }
+
+    //Инициализирует параметры необходимые для команды чувствительность
+    private void initAllParamForStartCommand(StartCommand startCommand, int meterConstant, int phase) {
+        startCommand.setStendDLLCommands(stendDLLCommands);
+        startCommand.setPhase(phase);
+        startCommand.setRatedFreq(Fn);
+        startCommand.setRatedVolt(Un);
+        startCommand.setAccuracyClass(accuracyClassAP);
+        startCommand.setThreePhaseMeter(typeCircuitThreePhase);
+        startCommand.setBaseCurrMeter(Ib);
+        startCommand.setConstMeterForTest(meterConstant);
+        startCommand.setTransfDetectShunt(typeOfMeasuringElementShunt);
+        startCommand.setMeterList(listMetersForTest);
+    }
+
+    //Инициализирует параметры необходимые для команды чувстви
+    private void initAllParamForRTCCommand(RTCCommand rTCCommand, int phase) {
+        rTCCommand.setStendDLLCommands(stendDLLCommands);
+        rTCCommand.setPhase(phase);
+        rTCCommand.setRatedVolt(Un);
+        rTCCommand.setMeterList(listMetersForTest);
     }
 
     /**

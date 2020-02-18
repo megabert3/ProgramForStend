@@ -30,8 +30,11 @@ import stend.controller.OnePhaseStend;
 import stend.controller.StendDLLCommands;
 import stend.controller.ThreePhaseStend;
 import stend.helper.ConsoleHelper;
+import stend.helper.exeptions.InfoExсeption;
 import stend.model.Methodic;
 import stend.model.MethodicsForTest;
+
+import javax.sound.sampled.Line;
 
 public class TestParametersFrameController {
 
@@ -133,10 +136,19 @@ public class TestParametersFrameController {
     @FXML
     void buttonActionTestFrame(ActionEvent event) {
         if (event.getSource() == btnStartTest) {
+            //Оставляем только выделенные счётчики
+            for (int i = 0; i < metersList.size(); i++) {
+                if (!metersList.get(i).isActive()) {
+                    metersList.remove(i);
+                    i--;
+                }
+            }
+
             /**
              * Сделать проверки полей
              */
             try {
+                if (metersList.isEmpty()) throw new InfoExсeption();
                 double Un = Double.parseDouble(txtFldUnom.getText());
                 double accuracyClassAP = Double.parseDouble(txtFldAccuracyAP.getText());
                 double accuracyClassRP = Double.parseDouble(txtFldAccuracyRP.getText());
@@ -227,13 +239,6 @@ public class TestParametersFrameController {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 testErrorTableFrameController.getTxtLabDate().setText("Дата: " + simpleDateFormat.format(new Date()));
 
-                for (int i = 0; i < metersList.size(); i++) {
-                    if (!metersList.get(i).isActive()) {
-                        metersList.remove(i);
-                        i--;
-                    }
-                }
-
                 testErrorTableFrameController.setListMetersForTest(metersList);
 
                 testErrorTableFrameController.myInitTestErrorTableFrame();
@@ -251,6 +256,23 @@ public class TestParametersFrameController {
             }catch (IOException e) {
                 System.out.println("Произошла ошибка при загрузке окна");
                 e.getStackTrace();
+            }catch (InfoExсeption e) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/stend/view/exceptionFrame.fxml/"));
+                try {
+                    fxmlLoader.load();
+                } catch (IOException er) {
+                    e.printStackTrace();
+                }
+
+                ExceptionFrameController exceptionFrameController = fxmlLoader.getController();
+                exceptionFrameController.getExceptionLabel().setText("Должен быть выбран хотябы\n один счётчик");
+
+                Parent root = fxmlLoader.getRoot();
+                Stage stage = new Stage();
+                stage.setTitle("Ошибка");
+                stage.setScene(new Scene(root));
+                stage.show();
             }
         }
     }
