@@ -13,6 +13,9 @@ import java.util.Map;
 
 public class StartCommand implements Commands, Serializable {
 
+    //Необходим для быстрого доступа к Объекту класса resultCommand
+    private int index;
+
     private StendDLLCommands stendDLLCommands;
 
     private List<Meter> meterList;
@@ -116,17 +119,75 @@ public class StartCommand implements Commands, Serializable {
         currTime = System.currentTimeMillis();
         timeEnd = currTime + timeForTest;
 
+        /**
+         * Необходимо записывать время и результат в массив
+         * Вид записи результата:
+         * Начало это просто время теста
+         * Как только пользователь нажимает старт (очистка и таймер теста)
+         * Если прошёл "Время теста + P" и цвет пройденного теста
+         * Если нет, то "Время теста + F" и цвет проваленного теста
+         */
+
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
             if (interrupt) throw  new InterruptedTestException();
 
             for (Meter meter : meterList) {
                 if (!meter.run(pulseValue, stendDLLCommands)) {
-                    addTestTimeToPass(meter, channelFlag, System.currentTimeMillis() - currTime);
+                    addTestTimeAndPass(meter, channelFlag, System.currentTimeMillis() - currTime);
                     startCommandResult.put(meter.getId(), true);
                 }
             }
         }
-        addTestResultInMeters(startCommandResult, channelFlag);
+
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+    }
+
+    @Override
+    public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+        if (interrupt) throw  new InterruptedTestException();
+        startCommandResult = initCreepCommandResult();
+
+        if (gostTest) {
+            timeForTest = initTimeForGOSTTest();
+        } else {
+            timeForTest = initTimeForTest();
+        }
+
+        if (interrupt) throw  new InterruptedTestException();
+        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
+                100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
+
+        if (interrupt) throw  new InterruptedTestException();
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+
+        if (interrupt) throw  new InterruptedTestException();
+        Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+        /**
+         * Необходимо записывать время и результат в массив
+         * Вид записи результата:
+         * Начало это просто время теста
+         * Как только пользователь нажимает старт (очистка и таймер теста)
+         * Если прошёл "Время теста + P" и цвет пройденного теста
+         * Если нет, то "Время теста + F" и цвет проваленного теста
+         */
+
+        while (!interrupt) {
+            currTime = System.currentTimeMillis();
+            timeEnd = currTime + timeForTest;
+
+            while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+                if (interrupt) throw new InterruptedTestException();
+
+                for (Meter meter : meterList) {
+                    if (!meter.run(pulseValue, stendDLLCommands)) {
+                        addTestTimeAndPass(meter, channelFlag, System.currentTimeMillis() - currTime);
+                        startCommandResult.put(meter.getId(), true);
+                    }
+                }
+            }
+        }
 
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
@@ -180,102 +241,37 @@ public class StartCommand implements Commands, Serializable {
     }
 
     //В зависимости от направления тока переносит время прохождения теста в нужную строку
-    private void addTestTimeToPass(Meter meter, int channelFlag, long timePass) {
+    private void addTestTimeAndPass(Meter meter, int channelFlag, long timePass) {
+        Meter.StartResult commandResult;
         switch (channelFlag) {
             case  0: {
-                if (gostTest) {
-                    meter.setStartTestPassTimeAPPlsGOST(timePass);
-                } else {
-                    meter.setStartTestPassTimeAPPls(timePass);
-                }
+                commandResult = (Meter.StartResult) meter.getErrorListAPPls().get(index);
+                commandResult.setTimeToPass(timePass);
+                commandResult.setPassTest(true);
             }break;
 
             case  1: {
-                if (gostTest) {
-                    meter.setStartTestPassTimeAPMnsGOST(timePass);
-                } else {
-                    meter.setStartTestPassTimeAPMns(timePass);
-                }
+                commandResult = (Meter.StartResult) meter.getErrorListAPMns().get(index);
+                commandResult.setTimeToPass(timePass);
+                commandResult.setPassTest(true);
             }break;
 
             case  2: {
-                if (gostTest) {
-                    meter.setStartTestPassTimeRPPlsGOST(timePass);
-                } else {
-                    meter.setStartTestPassTimeRPPls(timePass);
-                }
+                commandResult = (Meter.StartResult) meter.getErrorListRPPls().get(index);
+                commandResult.setTimeToPass(timePass);
+                commandResult.setPassTest(true);
             }break;
 
             case  3: {
-                if (gostTest) {
-                    meter.setStartTestPassTimeRPMnsGOST(timePass);
-                } else {
-                    meter.setStartTestPassTimeRPMns(timePass);
-                }
+                commandResult = (Meter.StartResult) meter.getErrorListRPMns().get(index);
+                commandResult.setTimeToPass(timePass);
+                commandResult.setPassTest(true);
             }break;
         }
     }
 
-    //В зависимости от направления тока переносит результаты теста в нужную строку
-    private void addTestResultInMeters(Map<Integer, Boolean> metersResult, int channelFlag) {
-        switch (channelFlag) {
-            case 0: {
-                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
-                    for (Meter meter : meterList) {
-                        if (meter.getId() == metRes.getKey()) {
-
-                            if (gostTest) {
-                                meter.setStartTestResultAPPlsGOST(metRes.getValue());
-                            } else {
-                                meter.setStartTestResultAPPls(metRes.getValue());
-                            }
-                        }
-                    }
-                }
-            }break;
-            case 1: {
-                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
-                    for (Meter meter : meterList) {
-                        if (meter.getId() == metRes.getKey()) {
-
-                            if (gostTest) {
-                                meter.setStartTestResultAPMnsGOST(metRes.getValue());
-                            } else {
-                                meter.setStartTestResultAPMns(metRes.getValue());
-                            }
-                        }
-                    }
-                }
-            }break;
-            case 2: {
-                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
-                    for (Meter meter : meterList) {
-                        if (meter.getId() == metRes.getKey()) {
-
-                            if (gostTest) {
-                                meter.setStartTestResultRPPlsGOST(metRes.getValue());
-                            } else {
-                                meter.setStartTestResultRPPls(metRes.getValue());
-                            }
-                        }
-                    }
-                }
-            }break;
-            case 3: {
-                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
-                    for (Meter meter : meterList) {
-                        if (meter.getId() == metRes.getKey()) {
-
-                            if (gostTest) {
-                                meter.setStartTestResultRPMnsGOST(metRes.getValue());
-                            } else {
-                                meter.setStartTestResultRPMns(metRes.getValue());
-                            }
-                        }
-                    }
-                }
-            }break;
-        }
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public void setTransfDetectShunt(boolean transfDetectShunt) {

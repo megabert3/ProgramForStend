@@ -10,6 +10,8 @@ public interface Commands{
     //Выполнение команды
     void execute() throws InterruptedTestException, ConnectForStendExeption, InterruptedException;
 
+    void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException;
+
     //Имя команды
     String getName();
 

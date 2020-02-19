@@ -14,6 +14,9 @@ import java.util.Map;
 
 public class CreepCommand implements Commands, Serializable {
 
+    //Необходим для быстрого доступа к Объекту класса resultCommand
+    private int index;
+
     private StendDLLCommands stendDLLCommands;
 
     //лист с счётчиками
@@ -96,20 +99,65 @@ public class CreepCommand implements Commands, Serializable {
 
         currTime = System.currentTimeMillis();
         timeEnd = currTime + timeForTest;
+        /**
+         * Необходимо записывать время и результат в массив
+         * Вид записи результата:
+         * Начало это просто время теста
+         * Как только пользователь нажимает старт (очистка и таймер теста)
+         * Если прошёл "Время теста + P" и цвет пройденного теста
+         * Если нет, то "Время теста + F" и цвет проваленного теста
+         */
 
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
             if (interrupt) throw new InterruptedTestException();
 
             for (Meter meter : meterList) {
                 if (!meter.run(pulseValue, stendDLLCommands)) {
-                    addTestTimeToFail(meter, channelFlag, System.currentTimeMillis() - currTime);
+                    addTestTimeAndFail(meter, channelFlag, System.currentTimeMillis() - currTime);
                     creepCommandResult.put(meter.getId(), false);
                 }
             }
         }
 
-        //Перенос результата теста в разультата каждого отдельного счётчика
-        addTestResultInMeters(creepCommandResult, channelFlag);
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+    }
+
+    @Override
+    public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+        if (interrupt) throw new InterruptedTestException();
+        creepCommandResult = initCreepCommandResult();
+
+        if (gostTest) {
+            timeForTest = initTimeForGOSTTest();
+        } else {
+            timeForTest = initTimeForTest();
+        }
+
+        if (interrupt) throw new InterruptedTestException();
+        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
+                voltPer, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
+
+        if (interrupt) throw new InterruptedTestException();
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+
+        Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+        while (!interrupt) {
+            currTime = System.currentTimeMillis();
+            timeEnd = currTime + timeForTest;
+
+            while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
+                if (interrupt) throw new InterruptedTestException();
+
+                for (Meter meter : meterList) {
+                    if (!meter.run(pulseValue, stendDLLCommands)) {
+                        addTestTimeAndFail(meter, channelFlag, System.currentTimeMillis() - currTime);
+                        creepCommandResult.put(meter.getId(), false);
+                    }
+                }
+            }
+        }
 
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
@@ -152,101 +200,36 @@ public class CreepCommand implements Commands, Serializable {
         return ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
     }
 
-    //В зависимости от направления тока переносит результаты теста в нужную строку
-    private void addTestResultInMeters(Map<Integer, Boolean> metersResult, int channelFlag) {
-        switch (channelFlag) {
-            case 0: {
-                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
-                    for (Meter meter : meterList) {
-                        if (meter.getId() == metRes.getKey()) {
-
-                            if (gostTest) {
-                                meter.setCreepTestResultAPPlsGOST(metRes.getValue());
-                            } else {
-                                meter.setCreepTestResultAPPls(metRes.getValue());
-                            }
-                        }
-                    }
-                }
-            }break;
-            case 1: {
-                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
-                    for (Meter meter : meterList) {
-                        if (meter.getId() == metRes.getKey()) {
-
-                            if (gostTest) {
-                                meter.setCreepTestResultAPMnsGOST(metRes.getValue());
-                            } else {
-                                meter.setCreepTestResultAPMns(metRes.getValue());
-                            }
-                        }
-                    }
-                }
-            }break;
-            case 2: {
-                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
-                    for (Meter meter : meterList) {
-                        if (meter.getId() == metRes.getKey()) {
-
-                            if (gostTest) {
-                                meter.setCreepTestResultRPPlsGOST(metRes.getValue());
-                            } else {
-                                meter.setCreepTestResultRPPls(metRes.getValue());
-                            }
-                        }
-                    }
-                }
-            }break;
-            case 3: {
-                for (Map.Entry<Integer, Boolean> metRes : metersResult.entrySet()) {
-                    for (Meter meter : meterList) {
-                        if (meter.getId() == metRes.getKey()) {
-
-                            if (gostTest) {
-                                meter.setCreepTestResultRPMnsGOST(metRes.getValue());
-                            } else {
-                                meter.setCreepTestResultRPMns(metRes.getValue());
-                            }
-                        }
-                    }
-                }
-            }break;
-        }
-    }
-
     //В зависимости от направления тока переносит время провала теста в нужную строку
-    private void addTestTimeToFail(Meter meter, int channelFlag, long timeFail) {
+    private void addTestTimeAndFail(Meter meter, int channelFlag, long timeFail) {
+        Meter.CreepResult commandResult;
+
         switch (channelFlag) {
             case  0: {
-                if (gostTest) {
-                    meter.setCreepTestFailTimeAPPlsGOST(timeFail);
-                } else {
-                    meter.setCreepTestFailTimeAPPls(timeFail);
-                }
+                commandResult = (Meter.CreepResult) meter.getErrorListAPPls().get(index);
+                commandResult.setTimeToFail(timeFail);
+                commandResult.setPassTest(false);
+                /**
+                 * Необходимо записывать время и результат в массив
+                 */
             }break;
 
             case  1: {
-                if (gostTest) {
-                    meter.setCreepTestFailTimeAPMnsGOST(timeFail);
-                } else {
-                    meter.setCreepTestFailTimeAPMns(timeFail);
-                }
+                commandResult = (Meter.CreepResult) meter.getErrorListAPMns().get(index);
+                commandResult.setTimeToFail(timeFail);
+                commandResult.setPassTest(false);
             }break;
 
             case  2: {
-                if (gostTest) {
-                    meter.setCreepTestFailTimeRPPlsGOST(timeFail);
-                } else {
-                    meter.setCreepTestFailTimeRPPls(timeFail);
-                }
+                commandResult = (Meter.CreepResult) meter.getErrorListRPPls().get(index);
+                commandResult.setTimeToFail(timeFail);
+                commandResult.setPassTest(false);
             }break;
 
             case  3: {
-                if (gostTest) {
-                    meter.setCreepTestFailTimeRPMnsGOST(timeFail);
-                } else {
-                    meter.setCreepTestFailTimeRPMns(timeFail);
-                }
+                commandResult = (Meter.CreepResult) meter.getErrorListRPPls().get(index);
+                commandResult.setTimeToFail(timeFail);
+                commandResult.setPassTest(false);
             }break;
         }
     }
@@ -330,6 +313,10 @@ public class CreepCommand implements Commands, Serializable {
     @Override
     public String toString() {
         return name;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
 }

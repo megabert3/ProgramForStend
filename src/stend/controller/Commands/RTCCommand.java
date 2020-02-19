@@ -13,6 +13,9 @@ import java.util.Map;
 
 public class RTCCommand implements Commands, Serializable {
 
+    //Необходим для быстрого доступа к Объекту класса resultCommand
+    private int index;
+
     private List<Meter> meterList;
 
     //Команда для прерывания метода
@@ -112,28 +115,89 @@ public class RTCCommand implements Commands, Serializable {
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
     }
 
+    @Override
+    public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+        if (interrupt) throw new InterruptedTestException();
+        int count = 0;
+
+        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
+                0.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
+
+        if (interrupt) throw new InterruptedTestException();
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+
+        Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+        if (interrupt) throw new InterruptedTestException();
+        for (Meter meter : meterList) {
+            if (!stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC)) throw new ConnectForStendExeption();
+        }
+
+        while (!interrupt) {
+
+            Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
+
+            for (Meter meter : meterList) {
+                try {
+                    /**
+                     * Проверить на тру или фолс в корневом методе
+                     */
+                    double result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId())) - 1.000000;
+
+                    /**
+                     *Сохранять результат в массив результатов и изменять цвет в зависимости от того прошел тест или нет
+                     */
+                    if (result > errorForFalseTest || result < -errorForFalseTest) {
+                        addRTCTestResult(meter, result, false, channelFlagForSave);
+                    } else {
+                        addRTCTestResult(meter, result, true, channelFlagForSave);
+                    }
+
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    System.out.println("Пустая строчка");
+                }
+            }
+
+            count++;
+        }
+
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+    }
+
     private void addRTCTestResult(Meter meter, double RTCError, boolean passOrNot, int channelFlagForSave) {
+        Meter.CommandResult commandResult;
+
         switch (channelFlagForSave) {
             case 0: {
-                meter.setRTCTestErrorAPPls(String.valueOf(RTCError));
-                meter.setRTCTestResultAPPls(passOrNot);
+                commandResult = meter.getErrorListAPPls().get(index);
+                commandResult.setLastResult(String.valueOf(RTCError));
+                commandResult.setPassTest(passOrNot);
             }break;
 
             case 1: {
-                meter.setRTCTestErrorAPMns(String.valueOf(RTCError));
-                meter.setRTCTestResultAPMns(passOrNot);
+                commandResult = meter.getErrorListAPMns().get(index);
+                commandResult.setLastResult(String.valueOf(RTCError));
+                commandResult.setPassTest(passOrNot);
             }break;
 
             case 2: {
-                meter.setRTCTestErrorRPPls(String.valueOf(RTCError));
-                meter.setRTCTestResultRPPls(passOrNot);
+                commandResult = meter.getErrorListRPPls().get(index);
+                commandResult.setLastResult(String.valueOf(RTCError));
+                commandResult.setPassTest(passOrNot);
             }break;
 
             case 3: {
-                meter.setRTCTestErrorRPMns(String.valueOf(RTCError));
-                meter.setRTCTestResultRPMns(passOrNot);
+                commandResult = meter.getErrorListRPMns().get(index);
+                commandResult.setLastResult(String.valueOf(RTCError));
+                commandResult.setPassTest(passOrNot);
             }break;
         }
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public void setName(String name) {

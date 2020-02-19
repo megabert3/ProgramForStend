@@ -2,7 +2,6 @@ package stend.controller.Commands;
 
 import stend.controller.Meter;
 import stend.controller.StendDLLCommands;
-import stend.helper.ConsoleHelper;
 import stend.helper.exeptions.ConnectForStendExeption;
 import stend.helper.exeptions.InterruptedTestException;
 
@@ -45,7 +44,7 @@ public class ErrorCommand implements Commands, Serializable {
 
     private StendDLLCommands stendDLLCommands;
 
-    //Необходим для быстрого доступа к Объекту класса Error
+    //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
 
     //Команда для прерывания метода
@@ -205,9 +204,6 @@ public class ErrorCommand implements Commands, Serializable {
         stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
 
         if (interrupt) throw new InterruptedTestException();
-        /**
-         * Разобраться с flagInStop.
-         */
         while (flagInStop.containsValue(false)) {
 
                 if (interrupt) throw new InterruptedTestException();
@@ -218,13 +214,11 @@ public class ErrorCommand implements Commands, Serializable {
 
                 for (Meter meter : meterForTestList) {
                     strError = stendDLLCommands.meterErrorRead(meter.getId());
-                    System.out.println(meter.getId() + "  " + strError);
                     strMass = strError.split(",");
                     resultNo = Integer.parseInt(strMass[0]);
                     error = strMass[1];
 
-                    meter.addLastErrorInErrorList(index, error, channelFlag);
-                    meter.getLocalErrors()[resultNo] = error;
+                    meter.setResultsInErrorList(index, resultNo, error, channelFlag);
 
                     meter.setAmountMeasur(meter.getAmountMeasur() + 1);
 
@@ -235,7 +229,6 @@ public class ErrorCommand implements Commands, Serializable {
         }
 
         for (Meter meter : meterForTestList) {
-            meter.addLocalErrorInMain(index, channelFlag);
             meter.setAmountMeasur(0);
         }
 
@@ -243,56 +236,61 @@ public class ErrorCommand implements Commands, Serializable {
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
     }
 
-    private void viewParam() {
-//        //Процент от напряжения
-//        private double voltPer;
-//
-//        //Ток
-//        private double ratedCurr;
-//
-//        //Процен от тока
-//        private double currPer;
-//
-//        //Частота
-//        private double ratedFreq;
-//
-//        //Коэфициент мощности
-//        private String cosP;
-//
-//        //Необходимо сделать в доп тестовом окне
-//        private int phaseSrequence;
-//
-//        //Направление тока
-//        private int revers;
-//
-//        //По каким фазам пустить ток
-//        private String iABC;
-//
-//        //Активная ли точка
-//        private boolean active = true;
-//
-//        //Импульсный выход
-//        private int channelFlag;
-//
-//        //Количество повторов теста
-//        private int countResult = 2;
-//
-//        //Константа счётчика для теста
-//        private int constantMeter;
-        System.out.println("Минимально допустимая ошибка " + emin);
-        System.out.println("Максимально допустимая ошибка " + emax);
-        System.out.println("Кол-во импульсов для расчёта ошибки "+ pulse);
-        System.out.println("Имя точки для отображения в таблице " + name);
-        System.out.println("Базовый или максимальный ток из конструктора " + current);
-        System.out.println("Стринговый процент получаемый из конструктора " + currentPerсent);
-        System.out.println("Базовый ток " + Ib);
-        System.out.println("Максимальный ток " + Imax);
-        System.out.println("Напряжение " + ratedVolt);
-        System.out.println("Процент от напряжения " + voltPer);
-        System.out.println("Процент от тока " + currPer);
-        System.out.println("Частота " + ratedFreq);
-        System.out.println("Коэф мощности " + cosP);
-        System.out.println("Ток " + ratedCurr);
+    @Override
+    public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+        if (interrupt) throw new InterruptedTestException();
+
+        //Выбор константы в зависимости от энергии
+        if (channelFlag == 0 || channelFlag == 1) {
+            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
+        } else {
+            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
+        }
+
+        //flagInStop = initBoolList();
+
+        if (current.equals("Ib")) {
+            ratedCurr = Ib;
+        } else {
+            ratedCurr = Imax;
+        }
+
+        if (interrupt) throw new InterruptedTestException();
+
+        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+        if (interrupt) throw new InterruptedTestException();
+        //Устанавливаем местам импульсный выход
+        stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
+
+        Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+        if (interrupt) throw new InterruptedTestException();
+        //Сказать константу счётчика стенду для кажого места
+        stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
+
+        if (interrupt) throw new InterruptedTestException();
+
+        while (!interrupt) {
+
+            int resultNo;
+            String strError;
+            String[] strMass;
+            String error;
+
+            for (Meter meter : meterForTestList) {
+                strError = stendDLLCommands.meterErrorRead(meter.getId());
+                strMass = strError.split(",");
+                resultNo = Integer.parseInt(strMass[0]);
+                error = strMass[1];
+
+                meter.setResultsInErrorList(index, resultNo, error, channelFlag);
+            }
+        }
+
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
     }
 
     //Опрашивает счётчики до нужно значения проходов
