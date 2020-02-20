@@ -136,21 +136,17 @@ public class TestParametersFrameController {
     @FXML
     void buttonActionTestFrame(ActionEvent event) {
         if (event.getSource() == btnStartTest) {
-            //Оставляем только выделенные счётчики
-            for (int i = 0; i < metersList.size(); i++) {
-                if (!metersList.get(i).isActive()) {
-                    metersList.remove(i);
-                    i--;
-                }
-            }
-
-            /**
-             * Сделать проверки полей
-             */
             try {
-                if (metersList.isEmpty()) throw new InfoExсeption();
+                //Номинальное напряжение
                 double Un = Double.parseDouble(txtFldUnom.getText());
+
+                //Частота
+                double Fn = Double.parseDouble(txtFldFrg.getText());
+
+                //Класс точности AP
                 double accuracyClassAP = Double.parseDouble(txtFldAccuracyAP.getText());
+
+                //Класс точности RP
                 double accuracyClassRP = Double.parseDouble(txtFldAccuracyRP.getText());
 
                 StringBuilder stringBuilder = new StringBuilder();
@@ -163,20 +159,62 @@ public class TestParametersFrameController {
 
                 String[] current = new String(stringBuilder).split(",");
 
+                //Базовый ток
                 double Ib = Double.parseDouble(current[0]);
+
+                //Максимальный ток
                 double Imax = Double.parseDouble(current[1]);
+
+                //Тип измерительного элемета
                 boolean typeOfMeasuringElementShunt = false;
 
                 if (chosBxTypeMeter.getValue().equals("Шунт")) {
                     typeOfMeasuringElementShunt = true;
                 }
 
+                //Тип сети
                 boolean typeCircuitThreePhase = false;
                 if (chosBxPowerType.getValue().equals("3P4W")) {
                     typeCircuitThreePhase = true;
                 }
 
-                double Fn = Double.parseDouble(txtFldFrg.getText());
+                //Оператор
+                String operator = txtFldOperator.getText();
+
+                //Контролер
+                String controller = txtFldController.getText();
+
+                //Поверитель
+                String witness = txtFldWitness.getText();
+
+                //Оставляем только выделенные счётчики
+                for (int i = 0; i < metersList.size(); i++) {
+                    if (!metersList.get(i).isActive()) {
+                        metersList.remove(i);
+                        i--;
+                    }
+                }
+
+                //Передаю установленные параметры всем счётчикам
+                for (Meter meter : metersList) {
+                    meter.setIb(Ib);
+                    meter.setImax(Imax);
+                    meter.setFn(Fn);
+                    meter.setUn(Un);
+                    meter.setTypeCircuitThreePhase(typeCircuitThreePhase);
+                    meter.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
+                    meter.setAccuracyClassAP(accuracyClassAP);
+                    meter.setAccuracyClassRP(accuracyClassRP);
+                    meter.setOperator(operator);
+                    meter.setController(controller);
+                    meter.setWitness(witness);
+                }
+
+                /**
+                *  Сделать проверки полей
+                */
+
+                if (metersList.isEmpty()) throw new InfoExсeption();
 
                 Methodic methodic = MethodicsForTest.getMethodicsForTestInstance().getMethodic(chosBxMetodics.getValue());
 
@@ -187,9 +225,9 @@ public class TestParametersFrameController {
                 properties.setProperty("lastTypeOfMeasuringElement", chosBxTypeMeter.getValue());
                 properties.setProperty("lastTypeCircuit", chosBxPowerType.getValue());
                 properties.setProperty("lastFnom", txtFldFrg.getText());
-                properties.setProperty("lastOperator", txtFldOperator.getText());
-                properties.setProperty("lastController", txtFldController.getText());
-                properties.setProperty("lastWitness", txtFldWitness.getText());
+                properties.setProperty("lastOperator", operator);
+                properties.setProperty("lastController", controller);
+                properties.setProperty("lastWitness", witness);
 
                 //Подумать над этим должна быть ошибка при нулевой методике
                 if (chosBxMetodics.getValue() != null) {

@@ -3,12 +3,55 @@ package stend.controller;
 import javafx.beans.property.SimpleStringProperty;
 import stend.controller.Commands.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Meter {
 
     private int id;
+
+    //Максимальный ток
+    private double Imax;
+
+    //Базовый ток
+    private double Ib;
+
+    //Номинальное напряжение
+    private double Un;
+
+    //Номиальная частота
+    private double Fn;
+
+    //Тип измерительного элемента счётчика шунт/трансформатор
+    private boolean typeOfMeasuringElementShunt;
+
+    //Тип сети трёхфазная или однофазная
+    private boolean typeCircuitThreePhase;
+
+    //Класс точности активной энергии
+    private double accuracyClassAP;
+
+    //Класс точночти реактивной энергии
+    private double accuracyClassRP;
+
+    private String operator;
+
+    private String controller;
+
+    private String witness;
+
+    //Время для теста Самоход ГОСТ
+    private long timeToCreepTestGOST;
+
+    //Время для теста Самоход
+    private long timeToCreepTest;
+
+    //Время для теста Чувствительность ГОСТ
+    private long timeToStartTestGOST;
+
+    //Время для теста Чувствительность
+    private long timeToStartTest;
 
     //Локальный массив ошибок нужен для быстрого теста
     private String[] localErrors = new String[10];
@@ -38,7 +81,6 @@ public class Meter {
     private String modelMeter;
 
 
-
     //Лист с ошибками
     private List<CommandResult> errorListAPPls = new ArrayList<>();
     private List<CommandResult> errorListAPMns = new ArrayList<>();
@@ -53,10 +95,27 @@ public class Meter {
                     errorListAPPls.add(new ErrorResult(name));
 
                 } else if (command instanceof CreepCommand) {
-                    errorListAPPls.add(new CreepResult(name));
+                    CreepResult creepResult = new CreepResult(name);
+
+                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    if (((CreepCommand) command).isGostTest()) {
+                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForGOSTTest()));
+                    } else {
+                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForTest()));
+                    }
+
+                    errorListAPPls.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
-                    errorListAPPls.add(new StartResult(name));
+                    StartResult startResult = new StartResult(name);
+
+                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    if (((StartCommand) command).isGostTest()) {
+                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForGOSTTest()));
+                    } else {
+                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForTest()));
+                    }
+                    errorListAPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
                     errorListAPPls.add(new RTCResult(name));
@@ -67,10 +126,27 @@ public class Meter {
                     errorListAPMns.add(new ErrorResult(name));
 
                 } else if (command instanceof CreepCommand) {
-                    errorListAPMns.add(new CreepResult(name));
+                    CreepResult creepResult = new CreepResult(name);
+
+                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    if (((CreepCommand) command).isGostTest()) {
+                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForGOSTTest()));
+                    } else {
+                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForTest()));
+                    }
+
+                    errorListAPPls.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
-                    errorListAPMns.add(new StartResult(name));
+                    StartResult startResult = new StartResult(name);
+
+                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    if (((StartCommand) command).isGostTest()) {
+                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForGOSTTest()));
+                    } else {
+                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForTest()));
+                    }
+                    errorListAPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
                     errorListAPMns.add(new RTCResult(name));
@@ -81,10 +157,27 @@ public class Meter {
                     errorListRPPls.add(new ErrorResult(name));
 
                 } else if (command instanceof CreepCommand) {
-                    errorListRPPls.add(new CreepResult(name));
+                    CreepResult creepResult = new CreepResult(name);
+
+                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    if (((CreepCommand) command).isGostTest()) {
+                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForGOSTTest()));
+                    } else {
+                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForTest()));
+                    }
+
+                    errorListAPPls.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
-                    errorListRPPls.add(new StartResult(name));
+                    StartResult startResult = new StartResult(name);
+
+                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    if (((StartCommand) command).isGostTest()) {
+                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForGOSTTest()));
+                    } else {
+                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForTest()));
+                    }
+                    errorListAPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
                     errorListRPPls.add(new RTCResult(name));
@@ -95,10 +188,27 @@ public class Meter {
                     errorListRPMns.add(new ErrorResult(name));
 
                 } else if (command instanceof CreepCommand) {
-                    errorListRPMns.add(new CreepResult(name));
+                    CreepResult creepResult = new CreepResult(name);
+
+                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    if (((CreepCommand) command).isGostTest()) {
+                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForGOSTTest()));
+                    } else {
+                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForTest()));
+                    }
+
+                    errorListAPPls.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
-                    errorListRPMns.add(new StartResult(name));
+                    StartResult startResult = new StartResult(name);
+
+                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    if (((StartCommand) command).isGostTest()) {
+                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForGOSTTest()));
+                    } else {
+                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForTest()));
+                    }
+                    errorListAPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
                     errorListRPMns.add(new RTCResult(name));
@@ -137,6 +247,8 @@ public class Meter {
         }
     }
 
+
+
     //Данная команда необходима для тестов самоход и чувствительность
     public boolean run(int pulseValue, StendDLLCommands stendDLLCommands) {
         if (amountImn < pulseValue) {
@@ -151,6 +263,88 @@ public class Meter {
             }
         } else return false;
         return true;
+    }
+
+    //Формула для расчёта времени теста на самоход по ГОСТУ
+    public long initTimeForCreepTestGOST(boolean threePhaseMeter, int constMeterForTest, double ratedVolt, double maxCurrMeter) {
+        int amountMeasElem;
+
+        if (threePhaseMeter) {
+            amountMeasElem = 3;
+        } else amountMeasElem = 1;
+
+        double formulaResult = 600000000 / (constMeterForTest * amountMeasElem * ratedVolt * maxCurrMeter);
+
+        //Округляю результат до 3х знаков
+        BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
+
+        String[] timeArr = String.valueOf(bigDecimalResult).split("\\.");
+
+        //Округляю значение после запятой до целых секунд
+        BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
+
+        return  ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
+    }
+
+    //Расчёт времени теста на самоход введённая пользователем
+    public long initTimeForCreepTest(String userTimeTest) {
+        String[] timearr = userTimeTest.split(":");
+        String hours = timearr[0];
+        String mins = timearr[1];
+        String seks = timearr[2];
+
+        return ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+    }
+
+
+    //Расчётная формула времени теста на чувствительность по ГОСТ
+    public long initTimeForStartGOSTTest(double accuracyClass, int constMeterForTest) {
+        int amountMeasElem;
+        double ratedCurr;
+
+        if (typeCircuitThreePhase) {
+            amountMeasElem = 3;
+        } else amountMeasElem = 1;
+
+        if (typeOfMeasuringElementShunt) {
+            if (accuracyClass == 1.0) {
+                ratedCurr = Ib * 0.002;
+            } else {
+                ratedCurr = Ib * 0.001;
+            }
+        } else {
+            ratedCurr = Ib * 0.004;
+        }
+
+        double formulaResult = 2.3 * (60000 / (constMeterForTest * amountMeasElem * Un * ratedCurr));
+
+        //Округляю результат до 3х знаков
+        BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
+
+        String[] timeArr = String.valueOf(bigDecimalResult).split("\\.");
+
+        //Округляю значение после запятой до целых секунд
+        BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
+
+        return ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
+    }
+
+    //Расчёт времени теста на чувствительность исходя из параметров введённых пользователем
+    public long initTimeForStartTest(String userTimeTest) {
+        String[] timearr = userTimeTest.split(":");
+        String hours = timearr[0];
+        String mins = timearr[1];
+        String seks = timearr[2];
+
+        return ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+    }
+
+
+    private String getTime(long mlS){
+        long hours = mlS * 1000 / 3600;
+        long minutes = ((mlS * 1000) % 3600) / 60;
+        long seconds = (mlS * 1000) % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     public String[] getLocalErrors() {
@@ -227,6 +421,94 @@ public class Meter {
 
     public void setAmountMeasur(int amountMeasur) {
         this.amountMeasur = amountMeasur;
+    }
+
+    public void setImax(double imax) {
+        Imax = imax;
+    }
+
+    public void setIb(double ib) {
+        Ib = ib;
+    }
+
+    public void setUn(double un) {
+        Un = un;
+    }
+
+    public void setFn(double fn) {
+        Fn = fn;
+    }
+
+    public void setTypeOfMeasuringElementShunt(boolean typeOfMeasuringElementShunt) {
+        this.typeOfMeasuringElementShunt = typeOfMeasuringElementShunt;
+    }
+
+    public void setTypeCircuitThreePhase(boolean typeCircuitThreePhase) {
+        this.typeCircuitThreePhase = typeCircuitThreePhase;
+    }
+
+    public void setAccuracyClassAP(double accuracyClassAP) {
+        this.accuracyClassAP = accuracyClassAP;
+    }
+
+    public void setAccuracyClassRP(double accuracyClassRP) {
+        this.accuracyClassRP = accuracyClassRP;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public void setController(String controller) {
+        this.controller = controller;
+    }
+
+    public void setWitness(String witness) {
+        this.witness = witness;
+    }
+
+    public double getImax() {
+        return Imax;
+    }
+
+    public double getIb() {
+        return Ib;
+    }
+
+    public double getUn() {
+        return Un;
+    }
+
+    public double getFn() {
+        return Fn;
+    }
+
+    public boolean isTypeOfMeasuringElementShunt() {
+        return typeOfMeasuringElementShunt;
+    }
+
+    public boolean isTypeCircuitThreePhase() {
+        return typeCircuitThreePhase;
+    }
+
+    public double getAccuracyClassAP() {
+        return accuracyClassAP;
+    }
+
+    public double getAccuracyClassRP() {
+        return accuracyClassRP;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public String getController() {
+        return controller;
+    }
+
+    public String getWitness() {
+        return witness;
     }
 
 
@@ -352,6 +634,13 @@ public class Meter {
 
         public void setTimeToPass(long timeToPass) {
             this.timeToPass = timeToPass;
+        }
+
+        private String getTime(long mlS){
+            long hours = mlS * 1000 / 3600;
+            long minutes = ((mlS * 1000) % 3600) / 60;
+            long seconds = (mlS * 1000) % 60;
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
         }
     }
 

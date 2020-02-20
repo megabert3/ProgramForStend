@@ -701,8 +701,6 @@ public class TestErrorTableFrameController {
         }
     }
 
-
-
     /**Костанту нужно определять для кажого метода одинаково
      */
 

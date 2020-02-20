@@ -202,7 +202,7 @@ public class StartCommand implements Commands, Serializable {
     }
 
     //Расчётная формула времени теста по ГОСТ
-    private long initTimeForGOSTTest() {
+    public long initTimeForGOSTTest() {
         if (threePhaseMeter) {
             amountMeasElem = 3;
         } else amountMeasElem = 1;
@@ -231,7 +231,7 @@ public class StartCommand implements Commands, Serializable {
     }
 
     //Расчёт времени теста исходя из параметров введённых пользователем
-    private long initTimeForTest() {
+    public long initTimeForTest() {
         String[] timearr = userTimeTest.split(":");
         String hours = timearr[0];
         String mins = timearr[1];
