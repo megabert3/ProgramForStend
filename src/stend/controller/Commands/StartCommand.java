@@ -83,6 +83,29 @@ public class StartCommand implements Commands, Serializable {
 
     private HashMap<Integer, Boolean> startCommandResult;
 
+    public StartCommand(int revers, int channelFlag, boolean gostTest, String userTimeTest) {
+        this.userTimeTest = userTimeTest;
+        this.revers = revers;
+        this.channelFlag = channelFlag;
+        this.gostTest = gostTest;
+
+        if (!gostTest) {
+            try {
+                //Расчёт времени теста исходя из параметров введённых пользователем
+                String[] timearr = userTimeTest.split(":");
+                String hours = timearr[0];
+                String mins = timearr[1];
+                String seks = timearr[2];
+
+                timeForTest = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+            }catch (NullPointerException e) {
+                e.printStackTrace();
+                System.out.println("Введены неверные данные");
+            }
+
+        }
+    }
+
     public StartCommand(int revers, int channelFlag, boolean gostTest) {
         this.revers = revers;
         this.channelFlag = channelFlag;
@@ -102,8 +125,6 @@ public class StartCommand implements Commands, Serializable {
 
         if (gostTest) {
             timeForTest = initTimeForGOSTTest();
-        } else {
-            timeForTest = initTimeForTest();
         }
 
         if (interrupt) throw  new InterruptedTestException();
@@ -150,8 +171,6 @@ public class StartCommand implements Commands, Serializable {
 
         if (gostTest) {
             timeForTest = initTimeForGOSTTest();
-        } else {
-            timeForTest = initTimeForTest();
         }
 
         if (interrupt) throw  new InterruptedTestException();
@@ -230,16 +249,6 @@ public class StartCommand implements Commands, Serializable {
         return ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
     }
 
-    //Расчёт времени теста исходя из параметров введённых пользователем
-    public long initTimeForTest() {
-        String[] timearr = userTimeTest.split(":");
-        String hours = timearr[0];
-        String mins = timearr[1];
-        String seks = timearr[2];
-
-        return ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
-    }
-
     //В зависимости от направления тока переносит время прохождения теста в нужную строку
     private void addTestTimeAndPass(Meter meter, int channelFlag, long timePass) {
         Meter.StartResult commandResult;
@@ -306,10 +315,6 @@ public class StartCommand implements Commands, Serializable {
         this.accuracyClass = accuracyClass;
     }
 
-    public void setUserTimeTest(String userTimeTest) {
-        this.userTimeTest = userTimeTest;
-    }
-
     public void setRatedCurr(double ratedCurr) {
         this.ratedCurr = ratedCurr;
     }
@@ -356,5 +361,9 @@ public class StartCommand implements Commands, Serializable {
 
     public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
         this.stendDLLCommands = stendDLLCommands;
+    }
+
+    public long getTimeForTest() {
+        return timeForTest;
     }
 }

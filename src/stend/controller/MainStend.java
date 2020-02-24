@@ -5,14 +5,11 @@ public class MainStend {
 
     public static void main(String[] args) {
         MainStend mn = new MainStend();
-
-        for(int i = 0; i < 20; i++) {
-
-        }
-        System.out.println(new MainStend().getTime(1000));
+        System.out.println(mn.getTime(3661000));
     }
 
     private String getTime(long s){
+        s = s /1000;
         long hours = s / 3600;
         long minutes = (s % 3600) / 60;
         long seconds = s % 60;

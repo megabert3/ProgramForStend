@@ -27,6 +27,7 @@ import stend.helper.exeptions.InterruptedTestException;
 import stend.model.Methodic;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class TestErrorTableFrameController {
@@ -56,11 +57,27 @@ public class TestErrorTableFrameController {
 
     private double Fn;
 
+    //Время для теста Самоход ГОСТ активная энергия
+    private long timeToCreepTestGOSTAP;
+
+    //Время для теста Самоход ГОСТ реактивная энергия
+    private long timeToCreepTestGOSTRP;
+
+    //Время для теста Чувствительность ГОСТ активная энергия
+    private long timeToStartTestGOSTAP;
+
+    //Время для теста Чувствительность ГОСТ реактивная энергия
+    private long timeToStartTestGOSTRP;
+
     //Тип измерительного элемента счётчика шунт/трансформатор
     private boolean typeOfMeasuringElementShunt;
 
     //Тип сети трёхфазная или однофазная
     private boolean typeCircuitThreePhase;
+
+    private int constantMeterAP;
+
+    private int constantMeterRP;
 
     private double accuracyClassAP;
 
@@ -402,7 +419,7 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        constant = Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP());
+                        constant = constantMeterAP;
 
                         startTestOnSelectPane(tabViewTestPointsAPPls, tabViewErrorsAPPls, commandsAPPls, constant, phase);
 
@@ -494,8 +511,6 @@ public class TestErrorTableFrameController {
 
                         startContinuousTestOnSelectPane(tabViewTestPointsRPMns, commandsRPMns, constant, phase);
                     }
-
-
                 }
 
                 //------------------------------------------------------------------------------------------------
@@ -588,12 +603,9 @@ public class TestErrorTableFrameController {
             throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
 
         int i = tabViewTestPoints.getSelectionModel().getFocusedIndex();
-        //int i = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
 
         while (i < commands.size()) {
-            //while (i < commandsAPPls.size()) {
             command = commands.get(i);
-            //command = commandsAPPls.get(i);
 
             //Если тестовая точка активна
             if (command.isActive()) {
@@ -646,8 +658,6 @@ public class TestErrorTableFrameController {
 
             tabViewErrors.getFocusModel().focus(i);
             tabViewTestPoints.getFocusModel().focus(i);
-//            tabViewErrorsAPPls.getFocusModel().focus(i);
-//            tabViewTestPointsAPPls.getFocusModel().focus(i);
         }
     }
 
@@ -1037,10 +1047,18 @@ public class TestErrorTableFrameController {
 
     //Добавляет объект error к каждому счётчику необходимому для теста
     private void initErrorsForMeters() {
+
+        //Инициализицрую константы активной и реактивной энергии
+        constantMeterAP = Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP());
+        constantMeterRP = Integer.parseInt(listMetersForTest.get(0).getConstantMeterRP());
+
+        //Инициирую время теста для Самохода и чувствительности по ГОСТУ
+        intiTimeCRPSTATests();
+
         for (Meter meter : listMetersForTest) {
             for (int i = 0; i < 4; i++) {
                 for (Commands commandName : methodic.getCommandsMap().get(i)) {
-                    meter.createError(commandName, i, commandName.getName());
+                    meter.createError(commandName, i, commandName.getName(), this);
                 }
             }
         }
@@ -1084,6 +1102,84 @@ public class TestErrorTableFrameController {
         }
     }
 
+    //Формула для расчёта времени теста на самоход по ГОСТУ
+    public long initTimeForCreepTestGOST(int constMeterForTest) {
+        int amountMeasElem;
+
+        if (typeCircuitThreePhase) {
+            amountMeasElem = 3;
+        } else amountMeasElem = 1;
+
+//        System.out.println("typeCircuitThreePhase = " + typeCircuitThreePhase);
+//        System.out.println("amountMeasElem = " + amountMeasElem);
+//        System.out.println("Imax = " + Imax);
+//        System.out.println("Un = " + Un);
+//        System.out.println("constMeterForTest = " + constMeterForTest);
+
+        double formulaResult = 600000000 / (constMeterForTest * amountMeasElem * Un * Imax);
+
+        //Округляю результат до 3х знаков
+        BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
+
+//        System.out.println("bigDecimalResult = " + bigDecimalResult);
+
+        String[] timeArr = String.valueOf(bigDecimalResult).split("\\.");
+
+        //Округляю значение после запятой до целых секунд
+        BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
+
+        return  ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
+    }
+
+    //Расчётная формула времени теста на чувствительность по ГОСТ
+    public long initTimeForStartGOSTTest(double accuracyClass, int constMeterForTest) {
+        int amountMeasElem;
+        double ratedCurr;
+
+        if (typeCircuitThreePhase) {
+            amountMeasElem = 3;
+        } else amountMeasElem = 1;
+
+        if (!typeOfMeasuringElementShunt) {
+            if (accuracyClass > 0.5) {
+                ratedCurr = Ib * 0.002;
+            } else {
+                ratedCurr = Ib * 0.001;
+            }
+        } else {
+            ratedCurr = Ib * 0.004;
+        }
+
+//        System.out.println("amountMeasElem = " + amountMeasElem);
+//        System.out.println("Стартовый ток = " + ratedCurr);
+//        System.out.println("Класс точности = " + accuracyClass);
+
+        double formulaResult = 2.3 * (60000 / (constMeterForTest * amountMeasElem * Un * ratedCurr));
+
+//        System.out.println("formulaResult = " + formulaResult);
+
+        //Округляю результат до 3х знаков
+        BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
+
+        String[] timeArr = String.valueOf(bigDecimalResult).split("\\.");
+
+        //Округляю значение после запятой до целых секунд
+        BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
+
+        return ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
+    }
+
+    private void intiTimeCRPSTATests() {
+        //Время для самохода гостовские тесты
+        timeToCreepTestGOSTAP = initTimeForCreepTestGOST(constantMeterAP);
+
+        timeToCreepTestGOSTRP = initTimeForCreepTestGOST(constantMeterRP);
+
+        timeToStartTestGOSTAP = initTimeForStartGOSTTest(accuracyClassAP, constantMeterAP);
+
+        timeToStartTestGOSTRP = initTimeForStartGOSTTest(accuracyClassRP, constantMeterRP);
+    }
+
     Label getTxtLabUn() {
         return txtLabUn;
     }
@@ -1112,4 +1208,19 @@ public class TestErrorTableFrameController {
         return txtLabDate;
     }
 
+    public long getTimeToCreepTestGOSTAP() {
+        return timeToCreepTestGOSTAP;
+    }
+
+    public long getTimeToCreepTestGOSTRP() {
+        return timeToCreepTestGOSTRP;
+    }
+
+    public long getTimeToStartTestGOSTAP() {
+        return timeToStartTestGOSTAP;
+    }
+
+    public long getTimeToStartTestGOSTRP() {
+        return timeToStartTestGOSTRP;
+    }
 }

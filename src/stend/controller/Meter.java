@@ -2,6 +2,7 @@ package stend.controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import stend.controller.Commands.*;
+import stend.controller.viewController.TestErrorTableFrameController;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -41,18 +42,6 @@ public class Meter {
 
     private String witness;
 
-    //Время для теста Самоход ГОСТ
-    private long timeToCreepTestGOST;
-
-    //Время для теста Самоход
-    private long timeToCreepTest;
-
-    //Время для теста Чувствительность ГОСТ
-    private long timeToStartTestGOST;
-
-    //Время для теста Чувствительность
-    private long timeToStartTest;
-
     //Локальный массив ошибок нужен для быстрого теста
     private String[] localErrors = new String[10];
 
@@ -88,33 +77,37 @@ public class Meter {
     private List<CommandResult> errorListRPMns = new ArrayList<>();
 
 
-    public void createError(Commands command, int numberArrayList , String name) {
+    public void createError(Commands command, int numberArrayList , String name, TestErrorTableFrameController testErrorTableFrameController) {
         switch (numberArrayList) {
             case 0: {
                 if (command instanceof ErrorCommand) {
                     errorListAPPls.add(new ErrorResult(name));
 
                 } else if (command instanceof CreepCommand) {
+
                     CreepResult creepResult = new CreepResult(name);
 
-                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForGOSTTest()));
+                        creepResult.setLastResult(getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
                     } else {
-                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForTest()));
+
+                        creepResult.setLastResult(getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
                     errorListAPPls.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
+
                     StartResult startResult = new StartResult(name);
 
-                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForGOSTTest()));
-                    } else {
-                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForTest()));
+                        startResult.setLastResult(getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
+                    }else {
+                        startResult.setLastResult(getTime(((StartCommand) command).getTimeForTest()));
                     }
+
                     errorListAPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
@@ -128,25 +121,27 @@ public class Meter {
                 } else if (command instanceof CreepCommand) {
                     CreepResult creepResult = new CreepResult(name);
 
-                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForGOSTTest()));
+                        creepResult.setLastResult(getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
                     } else {
-                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForTest()));
+                        creepResult.setLastResult(getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
-                    errorListAPPls.add(creepResult);
+                    errorListAPMns.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
+
                     StartResult startResult = new StartResult(name);
 
-                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForGOSTTest()));
-                    } else {
-                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForTest()));
+                        startResult.setLastResult(getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
+                    }else {
+                        startResult.setLastResult(getTime(((StartCommand) command).getTimeForTest()));
                     }
-                    errorListAPPls.add(startResult);
+
+                    errorListAPMns.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
                     errorListAPMns.add(new RTCResult(name));
@@ -157,27 +152,30 @@ public class Meter {
                     errorListRPPls.add(new ErrorResult(name));
 
                 } else if (command instanceof CreepCommand) {
+
                     CreepResult creepResult = new CreepResult(name);
 
-                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForGOSTTest()));
+                        creepResult.setLastResult(getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
                     } else {
-                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForTest()));
+                        creepResult.setLastResult(getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
-                    errorListAPPls.add(creepResult);
+                    errorListRPPls.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
+
                     StartResult startResult = new StartResult(name);
 
-                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForGOSTTest()));
-                    } else {
-                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForTest()));
+                        startResult.setLastResult(getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
+                    }else {
+                        startResult.setLastResult(getTime(((StartCommand) command).getTimeForTest()));
                     }
-                    errorListAPPls.add(startResult);
+
+                    errorListRPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
                     errorListRPPls.add(new RTCResult(name));
@@ -188,27 +186,30 @@ public class Meter {
                     errorListRPMns.add(new ErrorResult(name));
 
                 } else if (command instanceof CreepCommand) {
+
                     CreepResult creepResult = new CreepResult(name);
 
-                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForGOSTTest()));
+                        creepResult.setLastResult(getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
                     } else {
-                        creepResult.setLastResult(creepResult.getTime(((CreepCommand) command).initTimeForTest()));
+                        creepResult.setLastResult(getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
-                    errorListAPPls.add(creepResult);
+                    errorListRPMns.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
+
                     StartResult startResult = new StartResult(name);
 
-                    //Устанавливаю отображение времени на тест для команды на гост и введённое пользователем время
+                    //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForGOSTTest()));
-                    } else {
-                        startResult.setLastResult(startResult.getTime(((StartCommand) command).initTimeForTest()));
+                        startResult.setLastResult(getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
+                    }else {
+                        startResult.setLastResult(getTime(((StartCommand) command).getTimeForTest()));
                     }
-                    errorListAPPls.add(startResult);
+
+                    errorListRPMns.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
                     errorListRPMns.add(new RTCResult(name));
@@ -247,7 +248,13 @@ public class Meter {
         }
     }
 
-
+    private String getTime(long mlS){
+        long s = mlS / 1000;
+        long hours = s / 3600;
+        long minutes = (s % 3600) / 60;
+        long seconds = s % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
 
     //Данная команда необходима для тестов самоход и чувствительность
     public boolean run(int pulseValue, StendDLLCommands stendDLLCommands) {
@@ -263,88 +270,6 @@ public class Meter {
             }
         } else return false;
         return true;
-    }
-
-    //Формула для расчёта времени теста на самоход по ГОСТУ
-    public long initTimeForCreepTestGOST(boolean threePhaseMeter, int constMeterForTest, double ratedVolt, double maxCurrMeter) {
-        int amountMeasElem;
-
-        if (threePhaseMeter) {
-            amountMeasElem = 3;
-        } else amountMeasElem = 1;
-
-        double formulaResult = 600000000 / (constMeterForTest * amountMeasElem * ratedVolt * maxCurrMeter);
-
-        //Округляю результат до 3х знаков
-        BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
-
-        String[] timeArr = String.valueOf(bigDecimalResult).split("\\.");
-
-        //Округляю значение после запятой до целых секунд
-        BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
-
-        return  ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
-    }
-
-    //Расчёт времени теста на самоход введённая пользователем
-    public long initTimeForCreepTest(String userTimeTest) {
-        String[] timearr = userTimeTest.split(":");
-        String hours = timearr[0];
-        String mins = timearr[1];
-        String seks = timearr[2];
-
-        return ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
-    }
-
-
-    //Расчётная формула времени теста на чувствительность по ГОСТ
-    public long initTimeForStartGOSTTest(double accuracyClass, int constMeterForTest) {
-        int amountMeasElem;
-        double ratedCurr;
-
-        if (typeCircuitThreePhase) {
-            amountMeasElem = 3;
-        } else amountMeasElem = 1;
-
-        if (typeOfMeasuringElementShunt) {
-            if (accuracyClass == 1.0) {
-                ratedCurr = Ib * 0.002;
-            } else {
-                ratedCurr = Ib * 0.001;
-            }
-        } else {
-            ratedCurr = Ib * 0.004;
-        }
-
-        double formulaResult = 2.3 * (60000 / (constMeterForTest * amountMeasElem * Un * ratedCurr));
-
-        //Округляю результат до 3х знаков
-        BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
-
-        String[] timeArr = String.valueOf(bigDecimalResult).split("\\.");
-
-        //Округляю значение после запятой до целых секунд
-        BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
-
-        return ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
-    }
-
-    //Расчёт времени теста на чувствительность исходя из параметров введённых пользователем
-    public long initTimeForStartTest(String userTimeTest) {
-        String[] timearr = userTimeTest.split(":");
-        String hours = timearr[0];
-        String mins = timearr[1];
-        String seks = timearr[2];
-
-        return ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
-    }
-
-
-    private String getTime(long mlS){
-        long hours = mlS * 1000 / 3600;
-        long minutes = ((mlS * 1000) % 3600) / 60;
-        long seconds = (mlS * 1000) % 60;
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     public String[] getLocalErrors() {

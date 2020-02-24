@@ -67,6 +67,28 @@ public class CreepCommand implements Commands, Serializable {
 
     private HashMap<Integer, Boolean> creepCommandResult;
 
+    public CreepCommand(boolean gostTest, int channelFlag, String userTimeTest) {
+        this.gostTest = gostTest;
+        this.channelFlag = channelFlag;
+        this.userTimeTest = userTimeTest;
+
+        if (!gostTest) {
+            try {
+                String[] timearr = userTimeTest.split(":");
+                String hours = timearr[0];
+                String mins = timearr[1];
+                String seks = timearr[2];
+
+                timeForTest = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+
+            }catch (NumberFormatException e){
+                e.printStackTrace();
+                System.out.println("Неверные данные для теста");
+            }
+
+        }
+    }
+
     public CreepCommand(boolean gostTest, int channelFlag) {
         this.gostTest = gostTest;
         this.channelFlag = channelFlag;
@@ -84,8 +106,6 @@ public class CreepCommand implements Commands, Serializable {
 
         if (gostTest) {
             timeForTest = initTimeForGOSTTest();
-        } else {
-            timeForTest = initTimeForTest();
         }
 
         if (interrupt) throw new InterruptedTestException();
@@ -130,8 +150,6 @@ public class CreepCommand implements Commands, Serializable {
 
         if (gostTest) {
             timeForTest = initTimeForGOSTTest();
-        } else {
-            timeForTest = initTimeForTest();
         }
 
         if (interrupt) throw new InterruptedTestException();
@@ -188,16 +206,6 @@ public class CreepCommand implements Commands, Serializable {
         BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
 
         return ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
-    }
-
-    //Расчёт времени теста исходя из параметров введённых пользователем
-    public long initTimeForTest() {
-        String[] timearr = userTimeTest.split(":");
-        String hours = timearr[0];
-        String mins = timearr[1];
-        String seks = timearr[2];
-
-        return ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
     }
 
     //В зависимости от направления тока переносит время провала теста в нужную строку
@@ -262,10 +270,6 @@ public class CreepCommand implements Commands, Serializable {
         this.pulseValue = pulseValue;
     }
 
-    public void setUserTimeTest(String userTimeTest) {
-        this.userTimeTest = userTimeTest;
-    }
-
     public void setVoltPer(double voltPer) {
         this.voltPer = voltPer;
     }
@@ -317,6 +321,10 @@ public class CreepCommand implements Commands, Serializable {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public long getTimeForTest() {
+        return timeForTest;
     }
 
 }

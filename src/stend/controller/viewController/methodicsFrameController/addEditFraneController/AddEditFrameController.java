@@ -845,10 +845,9 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами пользователя AP+
         if (event.getSource() == addTglBtnCRPAPPls) {
             if (addTglBtnCRPAPPls.isSelected()) {
-                creepCommand = new CreepCommand(false, 0);
+                creepCommand = new CreepCommand(false, 0, txtFieldTimeCRPAPPls.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
-                creepCommand.setUserTimeTest(txtFieldTimeCRPAPPls.getText());
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
                 creepCommand.setName("Самоход AP+");
 
@@ -908,10 +907,9 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами пользователя AP-
         if (event.getSource() == addTglBtnCRPAPMns) {
             if (addTglBtnCRPAPMns.isSelected()) {
-                creepCommand = new CreepCommand(false, 1);
+                creepCommand = new CreepCommand(false, 1, txtFieldTimeCRPAPMns.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
-                creepCommand.setUserTimeTest(txtFieldTimeCRPAPMns.getText());
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPMns.getText()));
                 creepCommand.setName("Самоход AP-");
 
@@ -971,10 +969,9 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами пользователя RP+
         if (event.getSource() == addTglBtnCRPRPPls) {
             if (addTglBtnCRPRPPls.isSelected()) {
-                creepCommand = new CreepCommand(false, 2);
+                creepCommand = new CreepCommand(false, 2, txtFieldTimeCRPRPPls.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
-                creepCommand.setUserTimeTest(txtFieldTimeCRPRPPls.getText());
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPPls.getText()));
                 creepCommand.setName("Самоход RP+");
 
@@ -1034,10 +1031,9 @@ public class AddEditFrameController {
         //Добаление самохода с параметрами пользователя RP-
         if (event.getSource() == addTglBtnCRPRPMns) {
             if (addTglBtnCRPRPMns.isSelected()) {
-                creepCommand = new CreepCommand(false, 3);
+                creepCommand = new CreepCommand(false, 3, txtFieldTimeCRPRPMns.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
-                creepCommand.setUserTimeTest(txtFieldTimeCRPRPMns.getText());
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPMns.getText()));
                 creepCommand.setName("Самоход RP-");
 
@@ -1098,10 +1094,9 @@ public class AddEditFrameController {
         StartCommand startCommand;
         if (event.getSource() == addTglBtnSTAAPPls) {
             if (addTglBtnSTAAPPls.isSelected()) {
-                startCommand = new StartCommand(0, 0, false);
+                startCommand = new StartCommand(0, 0, false, txtFieldTimeSRAAPPls.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPPls.getText()));
-                startCommand.setUserTimeTest(txtFieldTimeSRAAPPls.getText());
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPPls.getText()));
                 startCommand.setName("Чувствительность AP+");
 
@@ -1158,10 +1153,9 @@ public class AddEditFrameController {
         //Добаление теста на чувствительность с параметрами пользователя AP-
         if (event.getSource() == addTglBtnSTAAPMns) {
             if (addTglBtnSTAAPMns.isSelected()) {
-                startCommand = new StartCommand(1, 1, false);
+                startCommand = new StartCommand(1, 1, false, txtFieldTimeSRAAPMns.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPMns.getText()));
-                startCommand.setUserTimeTest(txtFieldTimeSRAAPMns.getText());
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPMns.getText()));
                 startCommand.setName("Чувствительность AP-");
 
@@ -1218,10 +1212,9 @@ public class AddEditFrameController {
         //Добаление теста на чувствительность с параметрами пользователя RP+
         if (event.getSource() == addTglBtnSTARPPls) {
             if (addTglBtnSTARPPls.isSelected()) {
-                startCommand = new StartCommand(0, 2, false);
+                startCommand = new StartCommand(0, 2, false, txtFieldTimeSRARPPls.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPPls.getText()));
-                startCommand.setUserTimeTest(txtFieldTimeSRARPPls.getText());
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPPls.getText()));
                 startCommand.setName("Чувствительность RP+");
 
@@ -1279,10 +1272,9 @@ public class AddEditFrameController {
         //Добаление теста на чувствительность с параметрами пользователя RP-
         if (event.getSource() == addTglBtnSTARPMns) {
             if (addTglBtnSTARPMns.isSelected()) {
-                startCommand = new StartCommand(1, 3, false);
+                startCommand = new StartCommand(1, 3, false, txtFieldTimeSRARPMns.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPMns.getText()));
-                startCommand.setUserTimeTest(txtFieldTimeSRARPMns.getText());
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPMns.getText()));
                 startCommand.setName("Чувствительность RP-");
 
