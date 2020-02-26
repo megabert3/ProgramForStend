@@ -25,38 +25,38 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button id="button" fx:id="mainFramePropertiesBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#mainFrameHandleClicks" prefHeight="150.0" prefWidth="312.0" stylesheets="@../../../../../resources/styleCSS/buttonStyle.css" text="Настройки">
+                  <Button id="button" fx:id="mainFramePropertiesBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#mainFrameHandleClicks" prefHeight="150.0" prefWidth="312.0" stylesheets="@../styleCSS/buttonStyle.css" text="Настройки">
                      <graphic>
                         <ImageView fitHeight="107.0" fitWidth="103.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../resources/image/mainFrame/settings.png" />
+                              <Image url="@../image/mainFrame/settings.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="mainFrameMethodicsBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#mainFrameHandleClicks" prefHeight="150.0" prefWidth="312.0" stylesheets="@../../../../../resources/styleCSS/buttonStyle.css" text="Методики" GridPane.columnIndex="1">
+                  <Button fx:id="mainFrameMethodicsBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#mainFrameHandleClicks" prefHeight="150.0" prefWidth="312.0" stylesheets="@../styleCSS/buttonStyle.css" text="Методики" GridPane.columnIndex="1">
                      <graphic>
                         <ImageView fitHeight="107.0" fitWidth="103.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../resources/image/mainFrame/bookmark.png" />
+                              <Image url="@../image/mainFrame/bookmark.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="mainFrameParamTestBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#mainFrameHandleClicks" prefHeight="150.0" prefWidth="312.0" stylesheets="@../../../../../resources/styleCSS/buttonStyle.css" text="Параметры теста" GridPane.rowIndex="1">
+                  <Button fx:id="mainFrameParamTestBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#mainFrameHandleClicks" prefHeight="150.0" prefWidth="312.0" stylesheets="@../styleCSS/buttonStyle.css" text="Параметры теста" GridPane.rowIndex="1">
                      <graphic>
                         <ImageView fitHeight="96.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../resources/image/mainFrame/suppor.png" />
+                              <Image url="@../image/mainFrame/suppor.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="mainFrameResultsBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#mainFrameHandleClicks" prefHeight="150.0" prefWidth="312.0" stylesheets="@../../../../../resources/styleCSS/buttonStyle.css" text="Результат" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Button fx:id="mainFrameResultsBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#mainFrameHandleClicks" prefHeight="150.0" prefWidth="312.0" stylesheets="@../styleCSS/buttonStyle.css" text="Результат" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <graphic>
                         <ImageView fitHeight="107.0" fitWidth="103.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../resources/image/mainFrame/scroll.png" />
+                              <Image url="@../image/mainFrame/scroll.png" />
                            </image>
                         </ImageView>
                      </graphic>

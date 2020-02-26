@@ -234,7 +234,7 @@ public class TestParametersFrameController {
 
                 //Загрузка окна испытания
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/org/taipit/stend/view/testErrorTableFrame.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/viewFXML/testErrorTableFrame.fxml"));
 
                 fxmlLoader.load();
 
@@ -294,7 +294,7 @@ public class TestParametersFrameController {
                 e.getStackTrace();
             }catch (InfoExсeption e) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/org/taipit/stend/view/exceptionFrame.fxml/"));
+                fxmlLoader.setLocation(getClass().getResource("/viewFXML/exceptionFrame.fxml/"));
                 try {
                     fxmlLoader.load();
                 } catch (IOException er) {

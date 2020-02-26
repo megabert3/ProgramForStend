@@ -19,7 +19,19 @@
                 </configuration>
             </plugin>
         </plugins>
+
+        <!--<resources>-->
+            <!--<resource>-->
+                <!--<directory>src/main/java</directory>-->
+                <!--<includes>-->
+                    <!--<include>**/*.fxml</include>-->
+                <!--</includes>-->
+            <!--</resource>-->
+        <!--</resources>-->
     </build>
+
+    <!--Указываю нахождение ресурсов-->
+
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/net.java.dev.jna/jna -->
@@ -37,6 +49,13 @@
             <version>2.8.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>11.0.1</version>
+        </dependency>
+
     </dependencies>
+
     
 </project>

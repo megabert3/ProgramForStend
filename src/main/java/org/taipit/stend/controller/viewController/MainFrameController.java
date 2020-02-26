@@ -28,15 +28,15 @@ public class MainFrameController {
     @FXML
     void mainFrameHandleClicks(ActionEvent event) {
         if (event.getSource() == mainFramePropertiesBtn) {
-            loadStage("/org/taipit/stend/view/properties.fxml", "Настройки");
+            loadStage("/viewFXML/properties.fxml", "Настройки");
         }
 
         if(event.getSource() == mainFrameMethodicsBtn) {
-            loadStage("/org/taipit/stend/view/method/methodicsAddEditDeleteFrame.fxml", "Методики");
+            loadStage("/viewFXML/method/methodicsAddEditDeleteFrame.fxml", "Методики");
         }
 
         if (event.getSource() == mainFrameParamTestBtn) {
-            loadStage("/org/taipit/stend/view/testParametersFrame.fxml", "Параметры теста");
+            loadStage("/viewFXML/testParametersFrame.fxml", "Параметры теста");
         }
     }
 

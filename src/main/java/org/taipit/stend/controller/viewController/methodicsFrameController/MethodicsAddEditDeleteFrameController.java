@@ -162,7 +162,7 @@ public class MethodicsAddEditDeleteFrameController {
         if (event.getSource() == addMetBtn) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/org/taipit/stend/view/method/metodicName.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/viewFXML/method/metodicName.fxml"));
                 fxmlLoader.load();
                 Parent root = fxmlLoader.getRoot();
                 Stage stage = new Stage();
@@ -188,7 +188,7 @@ public class MethodicsAddEditDeleteFrameController {
             }
 
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/org/taipit/stend/view/method/addEditMet.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/method/addEditMet.fxml"));
             try {
                 fxmlLoader.load();
             } catch (IOException e) {
@@ -215,7 +215,7 @@ public class MethodicsAddEditDeleteFrameController {
         if (event.getSource() == copyMetBtn) {
 
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/org/taipit/stend/view/method/metodicName.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/method/metodicName.fxml"));
             try {
                 fxmlLoader.load();
             } catch (IOException e) {
@@ -239,7 +239,7 @@ public class MethodicsAddEditDeleteFrameController {
         if (event.getSource() == deleteMetBtn) {
 
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/org/taipit/stend/view/yesOrNoFrame.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/yesOrNoFrame.fxml"));
             try {
                 fxmlLoader.load();
             } catch (IOException e) {

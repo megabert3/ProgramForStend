@@ -575,7 +575,7 @@ public class TestErrorTableFrameController {
         }catch (ConnectForStendExeption e){
 
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/org/taipit/stend/view/exceptionFrame.fxml/"));
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/exceptionFrame.fxml/"));
             try {
                 fxmlLoader.load();
             } catch (IOException er) {

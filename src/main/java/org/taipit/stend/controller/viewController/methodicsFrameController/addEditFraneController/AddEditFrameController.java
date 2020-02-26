@@ -777,7 +777,7 @@ public class AddEditFrameController {
     @FXML
     void influenceAction(ActionEvent event) {
         if (event.getSource() == influenceBtn) {
-            loadStage("/org/taipit/stend/view/influenceFrame.fxml", "Настройки теста влияния");
+            loadStage("/viewFXML/influenceFrame.fxml", "Настройки теста влияния");
         }
     }
 

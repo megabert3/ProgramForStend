@@ -21,29 +21,29 @@
          <children>
             <VBox layoutY="8.0" prefHeight="418.0" prefWidth="263.0">
                <children>
-                  <Button fx:id="passwordBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../../../../../resources/styleCSS/buttonStyle.css" text="Пароль">
+                  <Button fx:id="passwordBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/buttonStyle.css" text="Пароль">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../resources/image/settingsFrame/lock_32.png" />
+                              <Image url="@../image/settingsFrame/lock_32.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="stendBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../../../../../resources/styleCSS/buttonStyle.css" text="Установка">
+                  <Button fx:id="stendBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/buttonStyle.css" text="Установка">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../resources/image/settingsFrame/lock_32.png" />
+                              <Image url="@../image/settingsFrame/lock_32.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="demoBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../../../../../resources/styleCSS/buttonStyle.css" text="Дэмо">
+                  <Button fx:id="demoBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/buttonStyle.css" text="Дэмо">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../resources/image/settingsFrame/lock_32.png" />
+                              <Image url="@../image/settingsFrame/lock_32.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -96,11 +96,11 @@
                   </AnchorPane>
                   <AnchorPane fx:id="stendPane" prefHeight="418.0" prefWidth="536.0" style="-fx-background-color: #6A6A6A;">
                      <children>
-                        <Button fx:id="stendPaneSave" layoutX="326.0" layoutY="330.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#stendPaneActionEvent" prefHeight="38.0" prefWidth="180.0" stylesheets="@../../../../../resources/styleCSS/buttonStyle.css" text="Сохранить">
+                        <Button fx:id="stendPaneSave" layoutX="326.0" layoutY="330.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#stendPaneActionEvent" prefHeight="38.0" prefWidth="180.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить">
                            <graphic>
                               <ImageView fitHeight="23.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../../../resources/image/settingsFrame/icons8_save_32.png" />
+                                    <Image url="@../image/settingsFrame/icons8_save_32.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -181,11 +181,11 @@
                               </GridPane>
                            </children>
                         </GridPane>
-                        <Button layoutX="59.0" layoutY="330.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="38.0" prefWidth="180.0" stylesheets="@../../../../../resources/styleCSS/buttonStyle.css" text="Автопоиск">
+                        <Button layoutX="59.0" layoutY="330.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="38.0" prefWidth="180.0" stylesheets="@../styleCSS/buttonStyle.css" text="Автопоиск">
                            <graphic>
                               <ImageView fitHeight="23.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../../../resources/image/settingsFrame/search_32.png" />
+                                    <Image url="@../image/settingsFrame/search_32.png" />
                                  </image>
                               </ImageView>
                            </graphic>

@@ -108,7 +108,7 @@
                   </ToggleButton>
                </children>
             </HBox>
-            <ScrollPane layoutX="108.0" layoutY="34.0" prefHeight="230.0" prefWidth="643.0" stylesheets="@../../../../../../resources/styleCSS/scrolPaneStyleBlack.css">
+            <ScrollPane layoutX="108.0" layoutY="34.0" prefHeight="230.0" prefWidth="643.0" stylesheets="@../../styleCSS/scrolPaneStyleBlack.css">
                <content>
                   <StackPane prefHeight="230.0" prefWidth="643.0">
                      <children>
