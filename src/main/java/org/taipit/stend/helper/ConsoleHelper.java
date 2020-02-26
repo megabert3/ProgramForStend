@@ -6,7 +6,7 @@ package org.taipit.stend.helper;
 public class ConsoleHelper {
 
     //Директроия с файлом пропертиес
-    private static final String dir = "src/resourseFiles/stendProperties.properties";
+    private static final String dir = "stendProperties.properties";
 
     public static Properties properties = getProperties();
 
