@@ -7,14 +7,14 @@ package org.taipit.stend.helper;
 public class ConsoleHelper {
 
     //Директроия с файлом пропертиес
-    private static final URL dir = ConsoleHelper.class.getResource("/stendProperties.properties");
+    private static final String dir = ".\\src\\main\\resources\\stendProperties.properties";
 
     public static Properties properties = getProperties();
 
     private static Properties getProperties() {
         Properties initProperties = new Properties();
         try {
-            initProperties.load(new FileInputStream(new File(String.valueOf(dir))));
+            initProperties.load(new FileInputStream(new File(dir).getCanonicalPath()));
         } catch (IOException e) {
             System.out.println("Указанный файл properties не найден");
             e.printStackTrace();
@@ -23,9 +23,8 @@ public class ConsoleHelper {
     }
 
     public static boolean saveProperties() {
-        File propFile = new File(String.valueOf(dir));
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(propFile)) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(new File(dir).getCanonicalPath())) {
             properties.store(fileOutputStream, "My comments");
 
             properties = getProperties();

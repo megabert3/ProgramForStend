@@ -100,7 +100,7 @@ public class MethodicNameController {
                     methodicsForTest.addMethodicToList(name, new Methodic());
 
                     FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/method/addEditMet.fxml"));
+                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addEditMet.fxml"));
                     fxmlLoader.load();
                     Parent root = fxmlLoader.getRoot();
                     Stage stage = new Stage();

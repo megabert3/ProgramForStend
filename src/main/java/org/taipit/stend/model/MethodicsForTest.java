@@ -58,7 +58,7 @@ public class MethodicsForTest implements Serializable {
     //Запись сохранённых данных в файл
     public boolean serializationMetodics() {
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream("metodics")) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(new File(".\\src\\main\\resources\\methodics").getCanonicalPath())) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(MethodicsForTest.getMethodicsForTestInstance());
 
@@ -76,19 +76,18 @@ public class MethodicsForTest implements Serializable {
 
     //Считывание сохранённых методик
     private static MethodicsForTest deserializationMetodics() {
-        try(FileInputStream fileInputStream = new FileInputStream("metodics")) {
+        try(FileInputStream fileInputStream = new FileInputStream(new File(".\\src\\main\\resources\\methodics").getCanonicalPath())) {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
             return (MethodicsForTest) objectInputStream.readObject();
 
         } catch (FileNotFoundException e) {
+            System.out.println("Файл ненайден");
             e.printStackTrace();
 
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
 
-        } catch (ClassNotFoundException ignore) {
-            ignore.printStackTrace();
         }
         return null;
     }

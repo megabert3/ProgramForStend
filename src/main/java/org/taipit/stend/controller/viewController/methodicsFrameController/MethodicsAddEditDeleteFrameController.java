@@ -162,7 +162,7 @@ public class MethodicsAddEditDeleteFrameController {
         if (event.getSource() == addMetBtn) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/viewFXML/method/metodicName.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/metodicName.fxml"));
                 fxmlLoader.load();
                 Parent root = fxmlLoader.getRoot();
                 Stage stage = new Stage();
@@ -188,7 +188,7 @@ public class MethodicsAddEditDeleteFrameController {
             }
 
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/viewFXML/method/addEditMet.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addEditMet.fxml"));
             try {
                 fxmlLoader.load();
             } catch (IOException e) {
@@ -215,7 +215,7 @@ public class MethodicsAddEditDeleteFrameController {
         if (event.getSource() == copyMetBtn) {
 
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/viewFXML/method/metodicName.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/metodicName.fxml"));
             try {
                 fxmlLoader.load();
             } catch (IOException e) {

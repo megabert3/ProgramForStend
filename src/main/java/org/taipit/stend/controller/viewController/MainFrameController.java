@@ -32,7 +32,7 @@ public class MainFrameController {
         }
 
         if(event.getSource() == mainFrameMethodicsBtn) {
-            loadStage("/viewFXML/method/methodicsAddEditDeleteFrame.fxml", "Методики");
+            loadStage("/viewFXML/methodics/methodicsAddEditDeleteFrame.fxml", "Методики");
         }
 
         if (event.getSource() == mainFrameParamTestBtn) {

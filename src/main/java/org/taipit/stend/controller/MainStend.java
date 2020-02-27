@@ -1,19 +1,13 @@
 package org.taipit.stend.controller;
 
 
+import java.io.File;
+import java.io.IOException;
+
 public class MainStend {
 
-    public static void main(String[] args) {
-        MainStend mn = new MainStend();
-        System.out.println(mn.getTime(3661000));
+    public static void main(String[] args) throws IOException {
+        File file = new File(".\\src\\main\\resources\\stendProperties.properties").getCanonicalFile();
+        System.out.println(file.getPath());
     }
-
-    private String getTime(long s){
-        s = s /1000;
-        long hours = s / 3600;
-        long minutes = (s % 3600) / 60;
-        long seconds = s % 60;
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-    }
-
 }

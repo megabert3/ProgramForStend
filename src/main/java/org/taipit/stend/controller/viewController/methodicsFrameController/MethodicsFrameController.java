@@ -50,7 +50,7 @@ public class MethodicsFrameController {
     @FXML
     void actinonForMethodicsFrame(ActionEvent event) {
         if (event.getSource() == addMetBtn) {
-            loadStage("/viewFXML/method/addEditMet.fxml", "Добавление методики");
+            loadStage("/viewFXML/methodics/addEditMet.fxml", "Добавление методики");
         }
     }
 

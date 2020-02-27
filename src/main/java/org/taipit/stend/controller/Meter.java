@@ -516,7 +516,6 @@ public class Meter {
 
         ErrorResult(String name) {
             super.setNameCommand(name);
-            super.setLastResult(name);
         }
     }
 
@@ -529,7 +528,6 @@ public class Meter {
         CreepResult(String name) {
             super.setNameCommand(name);
             super.setPassTest(true);
-            super.setLastResult(name);
         }
 
         public long getTimeToFail() {
@@ -549,11 +547,6 @@ public class Meter {
 
         StartResult(String name) {
             super.setNameCommand(name);
-            super.setLastResult(name);
-        }
-
-        public long getTimeToPass() {
-            return timeToPass;
         }
 
         public void setTimeToPass(long timeToPass) {
@@ -573,7 +566,6 @@ public class Meter {
 
         RTCResult(String name) {
             super.setNameCommand(name);
-            super.setLastResult(name);
         }
     }
 }
