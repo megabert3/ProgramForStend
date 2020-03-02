@@ -28,6 +28,7 @@ import org.taipit.stend.model.Methodic;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestErrorTableFrameController {
@@ -44,10 +45,29 @@ public class TestErrorTableFrameController {
 
     private Methodic methodic;
 
+    //Список команд
     private ObservableList<Commands> commandsAPPls;
     private ObservableList<Commands> commandsAPMns;
     private ObservableList<Commands> commandsRPPls;
     private ObservableList<Commands> commandsRPMns;
+
+    //Список TableView для испытываемых счётчиков в разных направлениях
+    private List<TableView<Meter.CommandResult>> tabViewListAPPls = new ArrayList<>();
+    private List<TableView<Meter.CommandResult>> tabViewListAPMns = new ArrayList<>();
+    private List<TableView<Meter.CommandResult>> tabViewListRPPls = new ArrayList<>();
+    private List<TableView<Meter.CommandResult>> tabViewListRPMns = new ArrayList<>();
+
+    //Список TableColumn для испытываемых счётчиков в разных направлениях
+    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPPls = new ArrayList<>();
+    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPMns = new ArrayList<>();
+    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPPls = new ArrayList<>();
+    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPMns = new ArrayList<>();
+
+    //Список ScrollBar для TableView в разных направлениях
+    private List<ScrollBar> verticalScrollBarListAPPls = new ArrayList<>();
+    private List<ScrollBar> verticalScrollBarListAPMns = new ArrayList<>();
+    private List<ScrollBar> verticalScrollBarListRPPls = new ArrayList<>();
+    private List<ScrollBar> verticalScrollBarListRPMns = new ArrayList<>();
 
     private double Imax;
 
@@ -111,7 +131,16 @@ public class TestErrorTableFrameController {
     private TableColumn<Commands, Boolean> tabColTestPointsDisAPPls;
 
     @FXML
-    private TableView<Meter.CommandResult> tabViewErrorsAPPls;
+    private Pane paneErrorsAPPls;
+
+    @FXML
+    private Pane paneErrorsAPMns;
+
+    @FXML
+    private Pane paneErrorsRPPls;
+
+    @FXML
+    private Pane paneErrorsRPMns;
 
     @FXML
     private SplitPane splPaneAPMns;
@@ -421,7 +450,7 @@ public class TestErrorTableFrameController {
 
                         constant = constantMeterAP;
 
-                        startTestOnSelectPane(tabViewTestPointsAPPls, tabViewErrorsAPPls, commandsAPPls, constant, phase);
+                        startTestOnSelectPane(tabViewTestPointsAPPls, new TableView<>(), commandsAPPls, constant, phase);
 
                     //Если выбрана панель AP-
                     } else if(tglBtnAPMns.isSelected()) {
@@ -939,16 +968,27 @@ public class TestErrorTableFrameController {
 
         //-----------------------------------------------------------
         //В зависимости от количества счётчиков инициализирую поля для отображения погрешности
+        TableView<Meter.CommandResult> tableView;
+        TableColumn<Meter.CommandResult, String> column;
+
+
         for (int i = 0; i < listMetersForTest.size(); i++) {
 
             //Создаю колонки счётчиков для splitPane AP+
-            TableColumn<Meter.CommandResult, String> tableColumnAPPls = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
-            tableColumnAPPls.setStyle( "-fx-alignment: CENTER;");
-            tableColumnAPPls.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
-            tableColumnAPPls.setSortable(false);
-            ObservableList<Meter.CommandResult> observableListAPPls = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPPls());
-            tabViewErrorsAPPls.setItems(observableListAPPls);
-            tabViewErrorsAPPls.getColumns().add(tableColumnAPPls);
+            tableView = new TableView<>();
+            column = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            column.setStyle( "-fx-alignment: CENTER;");
+            column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
+            column.setSortable(false);
+            column.setPrefWidth(paneErrorsAPPls.getPrefWidth() / listMetersForTest.size());
+            tableView.setPrefSize(paneErrorsAPPls.getPrefWidth() / listMetersForTest.size(), paneErrorsAPPls.getPrefHeight());
+            tableView.setLayoutX(i * column.getPrefWidth());
+            tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
+            tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPPls()));
+            tableView.getColumns().add(column);
+            tabViewListAPPls.add(tableView);
+            tabColumnListAPPls.add(column);
+            paneErrorsAPPls.getChildren().add(tableView);
 
             //Создаю колонки счётчиков для splitPane AP-
             TableColumn<Meter.CommandResult, String> tableColumnAPMns = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
@@ -981,9 +1021,14 @@ public class TestErrorTableFrameController {
         //--------------------------------------------------------------------
         //Устанавливаю фокусировку на окне ошибок такуюже как и в окне точек
         //AP+
+        //Значение при инициализации
         tabViewTestPointsAPPls.getSelectionModel().select(0);
-        tabViewErrorsAPPls.getSelectionModel().select(0);
 
+        for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
+            tableViewError.getSelectionModel().select(0);
+        }
+
+        //Если выбираю точку испытания, то должна выставляться фокусировка и на панели с погрешностью
         ObservableList<TablePosition> tablePositionsAPPls = tabViewTestPointsAPPls.getSelectionModel().getSelectedCells();
 
         tablePositionsAPPls.addListener(new ListChangeListener<TablePosition>() {
@@ -991,10 +1036,39 @@ public class TestErrorTableFrameController {
             public void onChanged(Change<? extends TablePosition> c) {
                 int i = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
 
-                tabViewErrorsAPPls.getSelectionModel().select(i);
-                tabViewErrorsAPPls.getFocusModel().focus(i);
+                for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
+                    tableViewError.getSelectionModel().select(i);
+                    tableViewError.getFocusModel().focus(i);
+                }
             }
         });
+
+
+//        //Устанавливаю общий селект для таблиц с погрешностью
+        for (int i = 0; i < tabViewListAPPls.size(); i++) {
+
+            ObservableList<TablePosition> tableErrorPositionsAPPls = tabViewListAPPls.get(i).getSelectionModel().getSelectedCells();
+
+            int finalI = i;
+            tableErrorPositionsAPPls.addListener(new ListChangeListener<TablePosition>() {
+                @Override
+                public void onChanged(Change<? extends TablePosition> c) {
+                    int index = tabViewListAPPls.get(finalI).getSelectionModel().getFocusedIndex();
+
+                    System.out.println(index);
+
+                    for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
+
+                        System.out.println(tableViewError.getFocusModel().getFocusedIndex());
+
+                        tableViewError.getFocusModel().focus(index);
+                        tableViewError.getSelectionModel().select(tableViewError.getFocusModel().getFocusedIndex());
+
+                    }
+                }
+            });
+        }
+
 
         //AP-
         tabViewTestPointsAPMns.getSelectionModel().select(0);
@@ -1072,27 +1146,40 @@ public class TestErrorTableFrameController {
         //Получаю скрол бары определённого окна
         //AP+
         verticalBarCommands = (ScrollBar) tabViewTestPointsAPPls.lookup(".scroll-bar:vertical");
-        verticalBarErrors = (ScrollBar) tabViewErrorsAPPls.lookup(".scroll-bar:vertical");
 
-        bindScrolls(verticalBarCommands, verticalBarErrors);
+        for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
+            verticalBarErrors = (ScrollBar) tableViewError.lookup(".scroll-bar:vertical");
+
+            bindScrolls(verticalBarCommands, verticalBarErrors);
+        }
 
         //AP-
         verticalBarCommands = (ScrollBar) tabViewTestPointsAPMns.lookup(".scroll-bar:vertical");
-        verticalBarErrors = (ScrollBar) tabViewErrorsAPMns.lookup(".scroll-bar:vertical");
 
-        bindScrolls(verticalBarCommands, verticalBarErrors);
+        for (TableView<Meter.CommandResult> tableViewError : tabViewListAPMns) {
+            verticalBarErrors = (ScrollBar) tableViewError.lookup(".scroll-bar:vertical");
+
+            bindScrolls(verticalBarCommands, verticalBarErrors);
+        }
+
 
         //RP+
         verticalBarCommands = (ScrollBar) tabViewTestPointsRPPls.lookup(".scroll-bar:vertical");
-        verticalBarErrors = (ScrollBar) tabViewErrorsRPPls.lookup(".scroll-bar:vertical");
 
-        bindScrolls(verticalBarCommands, verticalBarErrors);
+        for (TableView<Meter.CommandResult> tableViewError : tabViewListRPPls) {
+            verticalBarErrors = (ScrollBar) tableViewError.lookup(".scrol-bar:vertical");
+
+            bindScrolls(verticalBarCommands, verticalBarErrors);
+        }
 
         //RP-
         verticalBarCommands = (ScrollBar) tabViewTestPointsRPMns.lookup(".scroll-bar:vertical");
-        verticalBarErrors = (ScrollBar) tabViewErrorsRPMns.lookup(".scroll-bar:vertical");
 
-        bindScrolls(verticalBarCommands, verticalBarErrors);
+        for (TableView<Meter.CommandResult> tableViewError : tabViewListRPMns) {
+            verticalBarErrors = (ScrollBar) tableViewError.lookup(".scroll-bar:vertical");
+
+            bindScrolls(verticalBarCommands, verticalBarErrors);
+        }
     }
 
     //Делает проверку и привязывает скроллы друг к другу
