@@ -443,7 +443,7 @@ public class Meter {
         String nameCommand;
 
         //Последний результат теста
-        SimpleStringProperty lastResult = new SimpleStringProperty();
+        SimpleStringProperty lastResult = new SimpleStringProperty("");
 
         //Верхняя граница погрешности
         String maxError;

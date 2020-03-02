@@ -57,18 +57,6 @@ public class TestErrorTableFrameController {
     private List<TableView<Meter.CommandResult>> tabViewListRPPls = new ArrayList<>();
     private List<TableView<Meter.CommandResult>> tabViewListRPMns = new ArrayList<>();
 
-    //Список TableColumn для испытываемых счётчиков в разных направлениях
-    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPPls = new ArrayList<>();
-    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPMns = new ArrayList<>();
-    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPPls = new ArrayList<>();
-    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPMns = new ArrayList<>();
-
-    //Список ScrollBar для TableView в разных направлениях
-    private List<ScrollBar> verticalScrollBarListAPPls = new ArrayList<>();
-    private List<ScrollBar> verticalScrollBarListAPMns = new ArrayList<>();
-    private List<ScrollBar> verticalScrollBarListRPPls = new ArrayList<>();
-    private List<ScrollBar> verticalScrollBarListRPMns = new ArrayList<>();
-
     private double Imax;
 
     private double Ib;
@@ -987,35 +975,52 @@ public class TestErrorTableFrameController {
             tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPPls()));
             tableView.getColumns().add(column);
             tabViewListAPPls.add(tableView);
-            tabColumnListAPPls.add(column);
             paneErrorsAPPls.getChildren().add(tableView);
 
             //Создаю колонки счётчиков для splitPane AP-
-            TableColumn<Meter.CommandResult, String> tableColumnAPMns = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
-            tableColumnAPMns.setStyle( "-fx-alignment: CENTER;");
-            tableColumnAPMns.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
-            tableColumnAPMns.setSortable(false);
-            ObservableList<Meter.CommandResult> observableListAPMns = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPMns());
-            tabViewErrorsAPMns.setItems(observableListAPMns);
-            tabViewErrorsAPMns.getColumns().add(tableColumnAPMns);
+            tableView = new TableView<>();
+            column = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            column.setStyle( "-fx-alignment: CENTER;");
+            column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
+            column.setSortable(false);
+            column.setPrefWidth(paneErrorsAPMns.getPrefWidth() / listMetersForTest.size());
+            tableView.setPrefSize(paneErrorsAPMns.getPrefWidth() / listMetersForTest.size(), paneErrorsAPMns.getPrefHeight());
+            tableView.setLayoutX(i * column.getPrefWidth());
+            tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
+            tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPMns()));
+            tableView.getColumns().add(column);
+            tabViewListAPMns.add(tableView);
+            paneErrorsAPMns.getChildren().add(tableView);
 
             //Создаю колонки счётчиков для splitPane RP+
-            TableColumn<Meter.CommandResult, String> tableColumnRPPls = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
-            tableColumnRPPls.setStyle( "-fx-alignment: CENTER;");
-            tableColumnRPPls.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
-            tableColumnRPPls.setSortable(false);
-            ObservableList<Meter.CommandResult> observableListRPPls = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPPls());
-            tabViewErrorsRPPls.setItems(observableListRPPls);
-            tabViewErrorsRPPls.getColumns().add(tableColumnRPPls);
+            tableView = new TableView<>();
+            column = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            column.setStyle( "-fx-alignment: CENTER;");
+            column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
+            column.setSortable(false);
+            column.setPrefWidth(paneErrorsRPPls.getPrefWidth() / listMetersForTest.size());
+            tableView.setPrefSize(paneErrorsRPPls.getPrefWidth() / listMetersForTest.size(), paneErrorsRPPls.getPrefHeight());
+            tableView.setLayoutX(i * column.getPrefWidth());
+            tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
+            tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPPls()));
+            tableView.getColumns().add(column);
+            tabViewListRPPls.add(tableView);
+            paneErrorsRPPls.getChildren().add(tableView);
 
             //Создаю колонки счётчиков для splitPane RP-
-            TableColumn<Meter.CommandResult, String> tableColumnRPMns = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
-            tableColumnRPMns.setStyle( "-fx-alignment: CENTER;");
-            tableColumnRPMns.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
-            tableColumnRPMns.setSortable(false);
-            ObservableList<Meter.CommandResult> observableListRPMns = FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns());
-            tabViewErrorsRPMns.setItems(observableListRPMns);
-            tabViewErrorsRPMns.getColumns().add(tableColumnRPMns);
+            tableView = new TableView<>();
+            column = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
+            column.setStyle( "-fx-alignment: CENTER;");
+            column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
+            column.setSortable(false);
+            column.setPrefWidth(paneErrorsRPMns.getPrefWidth() / listMetersForTest.size());
+            tableView.setPrefSize(paneErrorsRPMns.getPrefWidth() / listMetersForTest.size(), paneErrorsRPMns.getPrefHeight());
+            tableView.setLayoutX(i * column.getPrefWidth());
+            tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
+            tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns()));
+            tableView.getColumns().add(column);
+            tabViewListRPMns.add(tableView);
+            paneErrorsRPMns.getChildren().add(tableView);
         }
 
         //--------------------------------------------------------------------
@@ -1037,14 +1042,17 @@ public class TestErrorTableFrameController {
                 int i = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
 
                 for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
-                    tableViewError.getSelectionModel().select(i);
+                    if (tableViewError.getSelectionModel().isSelected(i)) {
+                        continue;
+                    }
                     tableViewError.getFocusModel().focus(i);
+                    tableViewError.getSelectionModel().select(i);
                 }
             }
         });
 
 
-//        //Устанавливаю общий селект для таблиц с погрешностью
+        //Устанавливаю общий селект для таблиц с погрешностью
         for (int i = 0; i < tabViewListAPPls.size(); i++) {
 
             ObservableList<TablePosition> tableErrorPositionsAPPls = tabViewListAPPls.get(i).getSelectionModel().getSelectedCells();
@@ -1053,17 +1061,15 @@ public class TestErrorTableFrameController {
             tableErrorPositionsAPPls.addListener(new ListChangeListener<TablePosition>() {
                 @Override
                 public void onChanged(Change<? extends TablePosition> c) {
-                    int index = tabViewListAPPls.get(finalI).getSelectionModel().getFocusedIndex();
-
-                    System.out.println(index);
+                    TableView<Meter.CommandResult> tableView1 = tabViewListAPPls.get(finalI);
+                    int index = tableView1.getSelectionModel().getFocusedIndex();
 
                     for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
-
-                        System.out.println(tableViewError.getFocusModel().getFocusedIndex());
-
+                        if (tableViewError.getSelectionModel().isSelected(index)) {
+                            continue;
+                        }
                         tableViewError.getFocusModel().focus(index);
-                        tableViewError.getSelectionModel().select(tableViewError.getFocusModel().getFocusedIndex());
-
+                        tableViewError.getSelectionModel().select(index);
                     }
                 }
             });
@@ -1072,7 +1078,9 @@ public class TestErrorTableFrameController {
 
         //AP-
         tabViewTestPointsAPMns.getSelectionModel().select(0);
-        tabViewErrorsAPMns.getSelectionModel().select(0);
+        for (TableView<Meter.CommandResult> tableViewError : tabViewListAPMns) {
+            tableViewError.getSelectionModel().select(0);
+        }
 
         ObservableList<TablePosition> tablePositionsAPMns = tabViewTestPointsAPMns.getSelectionModel().getSelectedCells();
 
@@ -1081,14 +1089,44 @@ public class TestErrorTableFrameController {
             public void onChanged(Change<? extends TablePosition> c) {
                 int i = tabViewTestPointsAPMns.getSelectionModel().getFocusedIndex();
 
-                tabViewErrorsAPMns.getSelectionModel().select(i);
-                tabViewErrorsAPMns.getFocusModel().focus(i);
+                for (TableView<Meter.CommandResult> tableViewError : tabViewListAPMns) {
+                    if (tableViewError.getSelectionModel().isSelected(i)) {
+                        continue;
+                    }
+                    tableViewError.getFocusModel().focus(i);
+                    tableViewError.getSelectionModel().select(i);
+                }
             }
         });
 
+        //Устанавливаю общий селект для таблиц с погрешностью
+        for (int i = 0; i < tabViewListAPMns.size(); i++) {
+
+            ObservableList<TablePosition> tableErrorPositionsAPMns = tabViewListAPMns.get(i).getSelectionModel().getSelectedCells();
+
+            int finalI = i;
+            tableErrorPositionsAPMns.addListener(new ListChangeListener<TablePosition>() {
+                @Override
+                public void onChanged(Change<? extends TablePosition> c) {
+                    TableView<Meter.CommandResult> tableView1 = tabViewListAPMns.get(finalI);
+                    int index = tableView1.getSelectionModel().getFocusedIndex();
+
+                    for (TableView<Meter.CommandResult> tableViewError : tabViewListAPMns) {
+                        if (tableViewError.getSelectionModel().isSelected(index)) {
+                            continue;
+                        }
+                        tableViewError.getFocusModel().focus(index);
+                        tableViewError.getSelectionModel().select(index);
+                    }
+                }
+            });
+        }
+
         //RP+
         tabViewTestPointsRPPls.getSelectionModel().select(0);
-        tabViewErrorsRPPls.getSelectionModel().select(0);
+        for (TableView<Meter.CommandResult> tableViewError : tabViewListRPPls) {
+            tableViewError.getSelectionModel().select(0);
+        }
 
         ObservableList<TablePosition> tablePositionsRPPls = tabViewTestPointsRPPls.getSelectionModel().getSelectedCells();
 
@@ -1097,14 +1135,44 @@ public class TestErrorTableFrameController {
             public void onChanged(Change<? extends TablePosition> c) {
                 int i = tabViewTestPointsRPPls.getSelectionModel().getFocusedIndex();
 
-                tabViewErrorsRPPls.getSelectionModel().select(i);
-                tabViewErrorsRPPls.getFocusModel().focus(i);
+                for (TableView<Meter.CommandResult> tableViewError : tabViewListRPPls) {
+                    if (tableViewError.getSelectionModel().isSelected(i)) {
+                        continue;
+                    }
+                    tableViewError.getFocusModel().focus(i);
+                    tableViewError.getSelectionModel().select(i);
+                }
             }
         });
 
-        //AP-
+        //Устанавливаю общий селект для таблиц с погрешностью
+        for (int i = 0; i < tabViewListRPPls.size(); i++) {
+
+            ObservableList<TablePosition> tableErrorPositionsRPPls = tabViewListRPPls.get(i).getSelectionModel().getSelectedCells();
+
+            int finalI = i;
+            tableErrorPositionsRPPls.addListener(new ListChangeListener<TablePosition>() {
+                @Override
+                public void onChanged(Change<? extends TablePosition> c) {
+                    TableView<Meter.CommandResult> tableView1 = tabViewListRPPls.get(finalI);
+                    int index = tableView1.getSelectionModel().getFocusedIndex();
+
+                    for (TableView<Meter.CommandResult> tableViewError : tabViewListRPPls) {
+                        if (tableViewError.getSelectionModel().isSelected(index)) {
+                            continue;
+                        }
+                        tableViewError.getFocusModel().focus(index);
+                        tableViewError.getSelectionModel().select(index);
+                    }
+                }
+            });
+        }
+
+        //RP-
         tabViewTestPointsRPMns.getSelectionModel().select(0);
-        tabViewErrorsRPMns.getSelectionModel().select(0);
+        for (TableView<Meter.CommandResult> tableViewError : tabViewListRPMns) {
+            tableViewError.getSelectionModel().select(0);
+        }
 
         ObservableList<TablePosition> tablePositionsRPMns = tabViewTestPointsRPMns.getSelectionModel().getSelectedCells();
 
@@ -1113,10 +1181,38 @@ public class TestErrorTableFrameController {
             public void onChanged(Change<? extends TablePosition> c) {
                 int i = tabViewTestPointsRPMns.getSelectionModel().getFocusedIndex();
 
-                tabViewErrorsRPMns.getSelectionModel().select(i);
-                tabViewErrorsRPMns.getFocusModel().focus(i);
+                for (TableView<Meter.CommandResult> tableViewError : tabViewListRPMns) {
+                    if (tableViewError.getSelectionModel().isSelected(i)) {
+                        continue;
+                    }
+                    tableViewError.getFocusModel().focus(i);
+                    tableViewError.getSelectionModel().select(i);
+                }
             }
         });
+
+        //Устанавливаю общий селект для таблиц с погрешностью
+        for (int i = 0; i < tabViewListRPMns.size(); i++) {
+
+            ObservableList<TablePosition> tableErrorPositionsRPMns = tabViewListRPMns.get(i).getSelectionModel().getSelectedCells();
+
+            int finalI = i;
+            tableErrorPositionsRPMns.addListener(new ListChangeListener<TablePosition>() {
+                @Override
+                public void onChanged(Change<? extends TablePosition> c) {
+                    TableView<Meter.CommandResult> tableView1 = tabViewListRPMns.get(finalI);
+                    int index = tableView1.getSelectionModel().getFocusedIndex();
+
+                    for (TableView<Meter.CommandResult> tableViewError : tabViewListRPMns) {
+                        if (tableViewError.getSelectionModel().isSelected(index)) {
+                            continue;
+                        }
+                        tableViewError.getFocusModel().focus(index);
+                        tableViewError.getSelectionModel().select(index);
+                    }
+                }
+            });
+        }
     }
 
     //Добавляет объект error к каждому счётчику необходимому для теста
