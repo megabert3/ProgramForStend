@@ -39,7 +39,7 @@ public class TestErrorTableFrameController {
     Commands command;
 
     //Завершает выполнение команды подачи напряжения
-    boolean interrupt;
+    private static boolean interrupt;
 
     private List<Meter> listMetersForTest;
 
@@ -412,6 +412,7 @@ public class TestErrorTableFrameController {
                 //Логика работы автоматического режима работы
                 if (event.getSource() == tglBtnAuto) {
                 interrupt = true;
+
                 try {
                     command.setInterrupt(true);
                 }catch (NullPointerException ignored){
@@ -547,13 +548,8 @@ public class TestErrorTableFrameController {
                         phase = 0;
                     }
 
-                    if (!stendDLLCommands.getUI(phase, Un, 0, Fn, 0, 0, 0, 0, "H", "1.0")) throw new ConnectForStendExeption();
+                    if (!stendDLLCommands.getUI(phase, Un, 0, Fn, 0, 0, 100.0, 0, "H", "1.0")) throw new ConnectForStendExeption();
 
-                    while (!interrupt) {
-                        Thread.sleep(200);
-                    }
-
-                    throw new InterruptedException();
                 }
 
                 //------------------------------------------------------------------------------------------------
@@ -572,6 +568,8 @@ public class TestErrorTableFrameController {
                         command.setInterrupt(true);
                     }catch (NullPointerException ignored){
                     }
+
+                    throw new InterruptedTestException();
                 }
 
             //Если остановка потока или пользователь нажал кнопку стоп или сменил режим работы
@@ -611,7 +609,7 @@ public class TestErrorTableFrameController {
                                        ObservableList<Commands> commands,int constant, int phase)
             throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
 
-        int i = tabViewTestPoints.getSelectionModel().getFocusedIndex();
+        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 
         while (i < commands.size()) {
             command = commands.get(i);
@@ -634,7 +632,6 @@ public class TestErrorTableFrameController {
                      */
 
                     initAllParamForStartCommand((CreepCommand) command, errorColumnList, constant, phase, i);
-                    //Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP()
 
                     command.setInterrupt(false);
                     command.execute();
