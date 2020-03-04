@@ -412,6 +412,10 @@ public class ErrorCommand implements Commands, Serializable {
         this.tableColumnError = tableColumnError;
     }
 
+    public void setCountResult(int countResult) {
+        this.countResult = countResult;
+    }
+
     @Override
     public String toString() {
         if (iABC.equals("H")) {

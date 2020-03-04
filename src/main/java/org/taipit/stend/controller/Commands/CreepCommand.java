@@ -1,7 +1,6 @@
 package org.taipit.stend.controller.Commands;
 
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
@@ -109,9 +108,9 @@ public class CreepCommand implements Commands, Serializable {
         if (interrupt) throw new InterruptedTestException();
         creepCommandResult = initCreepCommandResult();
 
-        if (gostTest) {
-            timeForTest = initTimeForGOSTTest();
-        }
+//        if (gostTest) {
+//            timeForTest = initTimeForGOSTTest();
+//        }
 
         if (interrupt) throw new InterruptedTestException();
         if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
@@ -153,10 +152,6 @@ public class CreepCommand implements Commands, Serializable {
         if (interrupt) throw new InterruptedTestException();
         creepCommandResult = initCreepCommandResult();
 
-        if (gostTest) {
-            timeForTest = initTimeForGOSTTest();
-        }
-
         if (interrupt) throw new InterruptedTestException();
         if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
                 voltPer, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
@@ -192,25 +187,6 @@ public class CreepCommand implements Commands, Serializable {
             init.put(meter.getId(), true);
         }
         return init;
-    }
-
-    //Расчётная формула времени теста по ГОСТ
-    public long initTimeForGOSTTest() {
-        if (threePhaseMeter) {
-            amountMeasElem = 3;
-        } else amountMeasElem = 1;
-
-        double formulaResult = 600000000 / (constMeterForTest * amountMeasElem * ratedVolt * maxCurrMeter);
-
-        //Округляю результат до 3х знаков
-        BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
-
-        String[] timeArr = String.valueOf(bigDecimalResult).split("\\.");
-
-        //Округляю значение после запятой до целых секунд
-        BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
-
-        return ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
     }
 
     //В зависимости от направления тока переносит время провала теста в нужную строку
@@ -334,5 +310,9 @@ public class CreepCommand implements Commands, Serializable {
 
     public void setTableColumnError(List<TableColumn<Meter.CommandResult, String>> tableColumnError) {
         this.tableColumnError = tableColumnError;
+    }
+
+    public void setTimeForTest(long timeForTest) {
+        this.timeForTest = timeForTest;
     }
 }

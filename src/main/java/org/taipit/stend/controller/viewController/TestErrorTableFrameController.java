@@ -426,17 +426,13 @@ public class TestErrorTableFrameController {
                 tglBtnUnom.setDisable(false);
                 tglBtnUnom.setSelected(false);
 
-                int constant;
-
                     //Если выбрана панель AP+
                     if (tglBtnAPPls.isSelected()) {
                         if (typeCircuitThreePhase) {
                             phase = 1;
                         } else phase = 0;
 
-                        constant = constantMeterAP;
-
-                        startTestOnSelectPane(tabViewTestPointsAPPls, tabColumnListAPPls,commandsAPPls, constant, phase);
+                        startTestOnSelectPane(tabViewTestPointsAPPls, tabColumnListAPPls,commandsAPPls, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
                     //Если выбрана панель AP-
                     } else if(tglBtnAPMns.isSelected()) {
@@ -444,27 +440,24 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        constant = Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP());
+                        startTestOnSelectPane(tabViewTestPointsAPMns, tabColumnListAPMns,commandsAPMns, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
-                        startTestOnSelectPane(tabViewTestPointsAPMns, tabColumnListAPMns,commandsAPMns, constant, phase);
-
+                    //Если выбрана панель RP+
                     } else if(tglBtnRPPls.isSelected()) {
                         if (typeCircuitThreePhase) {
                             phase = 5;
                         } else phase = 7;
 
-                        constant = Integer.parseInt(listMetersForTest.get(0).getConstantMeterRP());
+                        startTestOnSelectPane(tabViewTestPointsRPPls, tabColumnListRPPls ,commandsRPPls, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
 
-                        startTestOnSelectPane(tabViewTestPointsRPPls, tabColumnListRPPls ,commandsRPPls, constant, phase);
+                    //Если выбрана панель RP-
                     } else if(tglBtnRPMns.isSelected()) {
 
                         if (typeCircuitThreePhase) {
                             phase = 5;
                         } else phase = 7;
 
-                        constant = Integer.parseInt(listMetersForTest.get(0).getConstantMeterRP());
-
-                        startTestOnSelectPane(tabViewTestPointsRPMns, tabColumnListRPMns, commandsRPMns, constant, phase);
+                        startTestOnSelectPane(tabViewTestPointsRPMns, tabColumnListRPMns, commandsRPMns, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
                     }
                 }
 
@@ -493,7 +486,7 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        startContinuousTestOnSelectPane(tabViewTestPointsAPPls, tabColumnListAPPls,commandsAPPls, constantMeterAP, phase);
+                        startContinuousTestOnSelectPane(tabViewTestPointsAPPls, tabColumnListAPPls,commandsAPPls, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
                         //Если выбрана панель AP-
                     } else if(tglBtnAPMns.isSelected()) {
@@ -501,7 +494,7 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        startContinuousTestOnSelectPane(tabViewTestPointsAPMns, tabColumnListAPMns, commandsAPMns, constantMeterAP, phase);
+                        startContinuousTestOnSelectPane(tabViewTestPointsAPMns, tabColumnListAPMns, commandsAPMns, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
                         //Если выбрана панель RP+
                     } else if(tglBtnRPPls.isSelected()) {
@@ -509,7 +502,7 @@ public class TestErrorTableFrameController {
                             phase = 5;
                         } else phase = 7;
 
-                        startContinuousTestOnSelectPane(tabViewTestPointsRPPls, tabColumnListRPPls, commandsRPPls, constantMeterRP, phase);
+                        startContinuousTestOnSelectPane(tabViewTestPointsRPPls, tabColumnListRPPls, commandsRPPls, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
 
                         //Если выбрана панель RP-
                     } else if(tglBtnRPMns.isSelected()) {
@@ -518,7 +511,7 @@ public class TestErrorTableFrameController {
                             phase = 5;
                         } else phase = 7;
 
-                        startContinuousTestOnSelectPane(tabViewTestPointsRPMns,  tabColumnListRPMns, commandsRPMns, constantMeterRP, phase);
+                        startContinuousTestOnSelectPane(tabViewTestPointsRPMns,  tabColumnListRPMns, commandsRPMns, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
                     }
                 }
 
@@ -606,7 +599,7 @@ public class TestErrorTableFrameController {
 
     //Старт автоматического теста
     private void startTestOnSelectPane(TableView<Commands> tabViewTestPoints, List<TableColumn<Meter.CommandResult, String>> errorColumnList,
-                                       ObservableList<Commands> commands,int constant, int phase)
+                                       ObservableList<Commands> commands,int constant, int phase, long timeCRPForGOST, long timeSTAForGOST)
             throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
@@ -631,7 +624,7 @@ public class TestErrorTableFrameController {
                      * Подумать над отображением времени теста
                      */
 
-                    initAllParamForStartCommand((CreepCommand) command, errorColumnList, constant, phase, i);
+                    initAllParamForCreepCommand((CreepCommand) command, errorColumnList, constant, phase, i, timeCRPForGOST);
 
                     command.setInterrupt(false);
                     command.execute();
@@ -641,7 +634,7 @@ public class TestErrorTableFrameController {
                     /**
                      * Подумать над отображением времени теста
                      */
-                    initAllParamForStartCommand((StartCommand) command, errorColumnList, constant,phase, i);
+                    initAllParamForStartCommand((StartCommand) command, errorColumnList, constant,phase, i, timeSTAForGOST);
 
                     command.setInterrupt(false);
                     command.execute();
@@ -670,7 +663,7 @@ public class TestErrorTableFrameController {
 
     //Старт автоматического теста
     private void startContinuousTestOnSelectPane(TableView<Commands> tabViewTestPoints, List<TableColumn<Meter.CommandResult, String>> tableColumErrorList,
-                                                 ObservableList<Commands> commands,int constant, int phase)
+                                                 ObservableList<Commands> commands, int constant, int phase, long timeCRPForGOST, long timeSTAForGOST)
             throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
@@ -688,11 +681,8 @@ public class TestErrorTableFrameController {
         }
 
         if (command instanceof CreepCommand) {
-            /**
-             * Подумать над отображением времени теста
-             */
 
-            initAllParamForStartCommand((CreepCommand) command, tableColumErrorList, constant, phase, i);
+            initAllParamForCreepCommand((CreepCommand) command, tableColumErrorList, constant, phase, i, timeCRPForGOST);
 
             command.setInterrupt(false);
             command.executeForContinuousTest();
@@ -702,7 +692,7 @@ public class TestErrorTableFrameController {
             /**
              * Подумать над отображением времени теста
              */
-            initAllParamForStartCommand((StartCommand) command, tableColumErrorList,constant,phase, i);
+            initAllParamForStartCommand((StartCommand) command, tableColumErrorList,constant,phase, i, timeSTAForGOST);
 
             command.setInterrupt(false);
             command.executeForContinuousTest();
@@ -733,7 +723,7 @@ public class TestErrorTableFrameController {
     }
 
     //Инициализирует параметры необходимые для команды самохода
-    private void initAllParamForStartCommand(CreepCommand creepCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList,int meterConstant,  int phase, int index){
+    private void initAllParamForCreepCommand(CreepCommand creepCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList, int meterConstant, int phase, int index, long timeForGOSTtest){
         creepCommand.setStendDLLCommands(stendDLLCommands);
         creepCommand.setPhase(phase);
         creepCommand.setRatedVolt(Un);
@@ -744,15 +734,19 @@ public class TestErrorTableFrameController {
         creepCommand.setIndex(index);
         creepCommand.setMeterList(listMetersForTest);
         creepCommand.setTableColumnError(errorColumnList);
+
+        if (creepCommand.isGostTest()) {
+            creepCommand.setTimeForTest(timeForGOSTtest);
+        }
     }
 
     //Инициализирует параметры необходимые для команды чувствительность
-    private void initAllParamForStartCommand(StartCommand startCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList, int meterConstant, int phase, int index) {
+    private void initAllParamForStartCommand(StartCommand startCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList, int meterConstant, int phase, int index, long timeForGOSTtest) {
         startCommand.setStendDLLCommands(stendDLLCommands);
         startCommand.setPhase(phase);
         startCommand.setRatedFreq(Fn);
         startCommand.setRatedVolt(Un);
-        startCommand.setAccuracyClass(accuracyClassAP);
+        startCommand.setAccuracyClass(accuracyClassAP); //Почему класс точности AP?
         startCommand.setThreePhaseMeter(typeCircuitThreePhase);
         startCommand.setBaseCurrMeter(Ib);
         startCommand.setConstMeterForTest(meterConstant);
@@ -760,6 +754,10 @@ public class TestErrorTableFrameController {
         startCommand.setIndex(index);
         startCommand.setMeterList(listMetersForTest);
         startCommand.setTableColumnError(errorColumnList);
+
+        if (startCommand.isGostTest()) {
+            startCommand.setTimeForTest(timeForGOSTtest);
+        }
     }
 
     //Инициализирует параметры необходимые для команды чувстви

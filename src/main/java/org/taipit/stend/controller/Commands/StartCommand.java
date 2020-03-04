@@ -127,10 +127,6 @@ public class StartCommand implements Commands, Serializable {
         if (interrupt) throw  new InterruptedTestException();
         startCommandResult = initCreepCommandResult();
 
-        if (gostTest) {
-            timeForTest = initTimeForGOSTTest();
-        }
-
         if (interrupt) throw  new InterruptedTestException();
         if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
                 100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
@@ -172,10 +168,6 @@ public class StartCommand implements Commands, Serializable {
     public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
         if (interrupt) throw  new InterruptedTestException();
         startCommandResult = initCreepCommandResult();
-
-        if (gostTest) {
-            timeForTest = initTimeForGOSTTest();
-        }
 
         if (interrupt) throw  new InterruptedTestException();
         if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
@@ -373,5 +365,9 @@ public class StartCommand implements Commands, Serializable {
 
     public long getTimeForTest() {
         return timeForTest;
+    }
+
+    public void setTimeForTest(long timeForTest) {
+        this.timeForTest = timeForTest;
     }
 }
