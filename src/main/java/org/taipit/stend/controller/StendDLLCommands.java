@@ -19,7 +19,7 @@ public abstract class StendDLLCommands {
     private int port;
 
     //Тип эталонного счётчика
-    private String typeReferenceMeter;
+    private String typeReferenceMeter = ConsoleHelper.properties.getProperty("refMeterModel");
 
     //Кол-во постадочных мест для счётчиков
     private int amountPlaces;

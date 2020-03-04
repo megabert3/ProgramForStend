@@ -2503,7 +2503,7 @@ public class AddEditFrameController {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
-                ((ErrorCommand) command).setEmax(newImpulseValue);
+                ((ErrorCommand) command).setEmin(newImpulseValue);
 
             });
 
@@ -2515,7 +2515,7 @@ public class AddEditFrameController {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
-                ((ErrorCommand) command).setEmax(newImpulseValue);
+                ((ErrorCommand) command).setPulse(newImpulseValue);
 
             });
         }

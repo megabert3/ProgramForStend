@@ -1,5 +1,7 @@
 package org.taipit.stend.controller.Commands;
 
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
@@ -35,6 +37,10 @@ public class CreepCommand implements Commands, Serializable {
     private int channelFlag;
 
     private boolean active = true;
+
+
+    //Лист со столбами счётчикв для изменения флага и цвета
+    private List<TableColumn<Meter.CommandResult, String>> tableColumnError;
 
     //Имя точки для отображения в таблице
     private String name;
@@ -326,4 +332,7 @@ public class CreepCommand implements Commands, Serializable {
         return timeForTest;
     }
 
+    public void setTableColumnError(List<TableColumn<Meter.CommandResult, String>> tableColumnError) {
+        this.tableColumnError = tableColumnError;
+    }
 }

@@ -218,33 +218,38 @@ public class Meter {
     }
 
     //Установка результата теста
-    public void setResultsInErrorList(int index, int resultNo, String error, int energyPulseChanel) {
+    public Meter.CommandResult setResultsInErrorList(int index, int resultNo, String error, int energyPulseChanel) {
         CommandResult commandResult;
         switch (energyPulseChanel) {
             case 0: {
                 commandResult = errorListAPPls.get(index);
                 commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
-            }break;
+                return commandResult;
+            }
 
             case 1: {
                 commandResult = errorListAPMns.get(index);
                 commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
-            }break;
+                return commandResult;
+            }
 
             case 2: {
                 commandResult = errorListRPPls.get(index);
                 commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
-            }break;
+                return commandResult;
+            }
 
             case 3: {
                 commandResult = errorListRPMns.get(index);
                 commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
-            }break;
+                return commandResult;
+            }
         }
+        return null;
     }
 
     private String getTime(long mlS){
@@ -443,7 +448,7 @@ public class Meter {
         String nameCommand;
 
         //Последний результат теста
-        SimpleStringProperty lastResult = new SimpleStringProperty("");
+        SimpleStringProperty lastResult = new SimpleStringProperty();
 
         //Верхняя граница погрешности
         String maxError;
@@ -453,6 +458,10 @@ public class Meter {
 
         //10-ть последних результатов
         String[] results = new String[10];
+
+        public CommandResult() {
+            this.lastResult = new SimpleStringProperty();
+        }
 
         //Погрешность в диапазоне (прошла тест или нет)
         boolean passTest;
@@ -512,7 +521,7 @@ public class Meter {
     }
 
     //Класс для записи результата исполнения ErrorCommnad
-    private class ErrorResult extends CommandResult {
+    public class ErrorResult extends CommandResult {
 
         ErrorResult(String name) {
             super.setNameCommand(name);

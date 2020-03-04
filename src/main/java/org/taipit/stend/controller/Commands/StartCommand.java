@@ -1,5 +1,7 @@
 package org.taipit.stend.controller.Commands;
 
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
@@ -75,6 +77,9 @@ public class StartCommand implements Commands, Serializable {
 
     //Количество измерительных элементов (фрехфазный или однофазный)
     private int amountMeasElem;
+
+    //Лист со столбами счётчикв для изменения флага и цвета
+    private List<TableColumn<Meter.CommandResult, String>> tableColumnError;
 
     private long timeForTest;
     private long timeEnd;
@@ -276,6 +281,10 @@ public class StartCommand implements Commands, Serializable {
                 commandResult.setPassTest(true);
             }break;
         }
+    }
+
+    public void setTableColumnError(List<TableColumn<Meter.CommandResult, String>> tableColumnError) {
+        this.tableColumnError = tableColumnError;
     }
 
     public void setIndex(int index) {

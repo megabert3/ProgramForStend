@@ -57,6 +57,12 @@ public class TestErrorTableFrameController {
     private List<TableView<Meter.CommandResult>> tabViewListRPPls = new ArrayList<>();
     private List<TableView<Meter.CommandResult>> tabViewListRPMns = new ArrayList<>();
 
+    //Список TableColumn для испытываемых счётчиков в разных направлениях
+    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPPls = new ArrayList<>();
+    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPMns = new ArrayList<>();
+    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPPls = new ArrayList<>();
+    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPMns = new ArrayList<>();
+
     private double Imax;
 
     private double Ib;
@@ -149,9 +155,6 @@ public class TestErrorTableFrameController {
     private TableColumn<Commands, Boolean> tabColTestPointsDisAPMns;
 
     @FXML
-    private TableView<Meter.CommandResult> tabViewErrorsAPMns;
-
-    @FXML
     private SplitPane splPaneRPPls;
 
     @FXML
@@ -170,9 +173,6 @@ public class TestErrorTableFrameController {
     private TableColumn<Commands, Boolean> tabColTestPointsDisRPPls;
 
     @FXML
-    private TableView<Meter.CommandResult> tabViewErrorsRPPls;
-
-    @FXML
     private SplitPane splPaneRPMns;
 
     @FXML
@@ -189,9 +189,6 @@ public class TestErrorTableFrameController {
 
     @FXML
     private TableColumn<Commands, Boolean> tabColTestPointsDisRPMns;
-
-    @FXML
-    private TableView<Meter.CommandResult> tabViewErrorsRPMns;
 
     @FXML
     private Button btnExit;
@@ -438,7 +435,7 @@ public class TestErrorTableFrameController {
 
                         constant = constantMeterAP;
 
-                        startTestOnSelectPane(tabViewTestPointsAPPls, new TableView<>(), commandsAPPls, constant, phase);
+                        startTestOnSelectPane(tabViewTestPointsAPPls, tabColumnListAPPls,commandsAPPls, constant, phase);
 
                     //Если выбрана панель AP-
                     } else if(tglBtnAPMns.isSelected()) {
@@ -448,7 +445,7 @@ public class TestErrorTableFrameController {
 
                         constant = Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP());
 
-                        startTestOnSelectPane(tabViewTestPointsAPMns, tabViewErrorsAPMns, commandsAPMns, constant, phase);
+                        startTestOnSelectPane(tabViewTestPointsAPMns, tabColumnListAPMns,commandsAPMns, constant, phase);
 
                     } else if(tglBtnRPPls.isSelected()) {
                         if (typeCircuitThreePhase) {
@@ -457,7 +454,7 @@ public class TestErrorTableFrameController {
 
                         constant = Integer.parseInt(listMetersForTest.get(0).getConstantMeterRP());
 
-                        startTestOnSelectPane(tabViewTestPointsRPPls, tabViewErrorsRPPls, commandsRPPls, constant, phase);
+                        startTestOnSelectPane(tabViewTestPointsRPPls, tabColumnListRPPls ,commandsRPPls, constant, phase);
                     } else if(tglBtnRPMns.isSelected()) {
 
                         if (typeCircuitThreePhase) {
@@ -466,7 +463,7 @@ public class TestErrorTableFrameController {
 
                         constant = Integer.parseInt(listMetersForTest.get(0).getConstantMeterRP());
 
-                        startTestOnSelectPane(tabViewTestPointsRPMns, tabViewErrorsRPMns, commandsRPMns, constant, phase);
+                        startTestOnSelectPane(tabViewTestPointsRPMns, tabColumnListRPMns, commandsRPMns, constant, phase);
                     }
                 }
 
@@ -488,7 +485,6 @@ public class TestErrorTableFrameController {
                     tglBtnUnom.setDisable(false);
                     tglBtnUnom.setSelected(false);
 
-                    int constant;
 
                     //Если выбрана панель AP+
                     if (tglBtnAPPls.isSelected()) {
@@ -496,9 +492,7 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        constant = Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP());
-
-                        startContinuousTestOnSelectPane(tabViewTestPointsAPPls, commandsAPPls, constant, phase);
+                        startContinuousTestOnSelectPane(tabViewTestPointsAPPls, tabColumnListAPPls,commandsAPPls, constantMeterAP, phase);
 
                         //Если выбрана панель AP-
                     } else if(tglBtnAPMns.isSelected()) {
@@ -506,27 +500,24 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        constant = Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP());
+                        startContinuousTestOnSelectPane(tabViewTestPointsAPMns, tabColumnListAPMns, commandsAPMns, constantMeterAP, phase);
 
-                        startContinuousTestOnSelectPane(tabViewTestPointsAPMns, commandsAPMns, constant, phase);
-
+                        //Если выбрана панель RP+
                     } else if(tglBtnRPPls.isSelected()) {
                         if (typeCircuitThreePhase) {
                             phase = 5;
                         } else phase = 7;
 
-                        constant = Integer.parseInt(listMetersForTest.get(0).getConstantMeterRP());
+                        startContinuousTestOnSelectPane(tabViewTestPointsRPPls, tabColumnListRPPls, commandsRPPls, constantMeterRP, phase);
 
-                        startContinuousTestOnSelectPane(tabViewTestPointsRPPls, commandsRPPls, constant, phase);
+                        //Если выбрана панель RP-
                     } else if(tglBtnRPMns.isSelected()) {
 
                         if (typeCircuitThreePhase) {
                             phase = 5;
                         } else phase = 7;
 
-                        constant = Integer.parseInt(listMetersForTest.get(0).getConstantMeterRP());
-
-                        startContinuousTestOnSelectPane(tabViewTestPointsRPMns, commandsRPMns, constant, phase);
+                        startContinuousTestOnSelectPane(tabViewTestPointsRPMns,  tabColumnListRPMns, commandsRPMns, constantMeterRP, phase);
                     }
                 }
 
@@ -616,7 +607,8 @@ public class TestErrorTableFrameController {
     }
 
     //Старт автоматического теста
-    private void startTestOnSelectPane(TableView<Commands> tabViewTestPoints, TableView<Meter.CommandResult> tabViewErrors, ObservableList<Commands> commands,int constant, int phase)
+    private void startTestOnSelectPane(TableView<Commands> tabViewTestPoints, List<TableColumn<Meter.CommandResult, String>> errorColumnList,
+                                       ObservableList<Commands> commands,int constant, int phase)
             throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
 
         int i = tabViewTestPoints.getSelectionModel().getFocusedIndex();
@@ -630,7 +622,7 @@ public class TestErrorTableFrameController {
                 if (command instanceof ErrorCommand) {
 
 
-                    initAllParamForErrorCommand((ErrorCommand) command, i);
+                    initAllParamForErrorCommand((ErrorCommand) command, errorColumnList, i);
 
                     command.setInterrupt(false);
                     command.execute();
@@ -641,7 +633,7 @@ public class TestErrorTableFrameController {
                      * Подумать над отображением времени теста
                      */
 
-                    initAllParamForStartCommand((CreepCommand) command, constant, phase, i);
+                    initAllParamForStartCommand((CreepCommand) command, errorColumnList, constant, phase, i);
                     //Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP()
 
                     command.setInterrupt(false);
@@ -652,7 +644,7 @@ public class TestErrorTableFrameController {
                     /**
                      * Подумать над отображением времени теста
                      */
-                    initAllParamForStartCommand((StartCommand) command, constant,phase, i);
+                    initAllParamForStartCommand((StartCommand) command, errorColumnList, constant,phase, i);
 
                     command.setInterrupt(false);
                     command.execute();
@@ -660,7 +652,7 @@ public class TestErrorTableFrameController {
 
                 if (command instanceof RTCCommand) {
 
-                    initAllParamForRTCCommand((RTCCommand) command, phase, i);
+                    initAllParamForRTCCommand((RTCCommand) command, errorColumnList, phase, i);
 
                     command.setInterrupt(false);
                     command.execute();
@@ -673,18 +665,18 @@ public class TestErrorTableFrameController {
              * Возможно нужно будет добавить и для окна ошибок авто фокусировку
              */
 
-            tabViewErrors.getFocusModel().focus(i);
-            tabViewTestPoints.getFocusModel().focus(i);
+            tabViewTestPoints.getSelectionModel().select(i);
         }
     }
 
     //Метод для того чтобы узнать выбран ли какой-то режим работы уже
 
     //Старт автоматического теста
-    private void startContinuousTestOnSelectPane(TableView<Commands> tabViewTestPoints, ObservableList<Commands> commands,int constant, int phase)
+    private void startContinuousTestOnSelectPane(TableView<Commands> tabViewTestPoints, List<TableColumn<Meter.CommandResult, String>> tableColumErrorList,
+                                                 ObservableList<Commands> commands,int constant, int phase)
             throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
 
-        int i = tabViewTestPoints.getSelectionModel().getFocusedIndex();
+        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 
         command = commands.get(i);
 
@@ -692,7 +684,7 @@ public class TestErrorTableFrameController {
         if (command instanceof ErrorCommand) {
 
 
-            initAllParamForErrorCommand((ErrorCommand) command, i);
+            initAllParamForErrorCommand((ErrorCommand) command, tableColumErrorList, i);
 
             command.setInterrupt(false);
             command.executeForContinuousTest();
@@ -703,7 +695,7 @@ public class TestErrorTableFrameController {
              * Подумать над отображением времени теста
              */
 
-            initAllParamForStartCommand((CreepCommand) command, constant, phase, i);
+            initAllParamForStartCommand((CreepCommand) command, tableColumErrorList, constant, phase, i);
 
             command.setInterrupt(false);
             command.executeForContinuousTest();
@@ -713,7 +705,7 @@ public class TestErrorTableFrameController {
             /**
              * Подумать над отображением времени теста
              */
-            initAllParamForStartCommand((StartCommand) command, constant,phase, i);
+            initAllParamForStartCommand((StartCommand) command, tableColumErrorList,constant,phase, i);
 
             command.setInterrupt(false);
             command.executeForContinuousTest();
@@ -721,7 +713,7 @@ public class TestErrorTableFrameController {
 
         if (command instanceof RTCCommand) {
 
-            initAllParamForRTCCommand((RTCCommand) command, phase, i);
+            initAllParamForRTCCommand((RTCCommand) command, tableColumErrorList, phase, i);
 
             command.setInterrupt(false);
             command.executeForContinuousTest();
@@ -732,7 +724,7 @@ public class TestErrorTableFrameController {
      */
 
     //Инициализирует параметры необходимые для снятия погрешности в точке
-    private void initAllParamForErrorCommand(ErrorCommand errorCommand, int index){
+    private void initAllParamForErrorCommand(ErrorCommand errorCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList, int index){
         errorCommand.setStendDLLCommands(stendDLLCommands);
         errorCommand.setRatedVolt(Un);
         errorCommand.setIb(Ib);
@@ -740,10 +732,11 @@ public class TestErrorTableFrameController {
         errorCommand.setRatedFreq(Fn);
         errorCommand.setIndex(index);
         errorCommand.setMeterForTestList(listMetersForTest);
+        errorCommand.setTableColumnError(errorColumnList);
     }
 
     //Инициализирует параметры необходимые для команды самохода
-    private void initAllParamForStartCommand(CreepCommand creepCommand, int meterConstant,  int phase, int index){
+    private void initAllParamForStartCommand(CreepCommand creepCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList,int meterConstant,  int phase, int index){
         creepCommand.setStendDLLCommands(stendDLLCommands);
         creepCommand.setPhase(phase);
         creepCommand.setRatedVolt(Un);
@@ -753,10 +746,11 @@ public class TestErrorTableFrameController {
         creepCommand.setThreePhaseMeter(typeCircuitThreePhase);
         creepCommand.setIndex(index);
         creepCommand.setMeterList(listMetersForTest);
+        creepCommand.setTableColumnError(errorColumnList);
     }
 
     //Инициализирует параметры необходимые для команды чувствительность
-    private void initAllParamForStartCommand(StartCommand startCommand, int meterConstant, int phase, int index) {
+    private void initAllParamForStartCommand(StartCommand startCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList, int meterConstant, int phase, int index) {
         startCommand.setStendDLLCommands(stendDLLCommands);
         startCommand.setPhase(phase);
         startCommand.setRatedFreq(Fn);
@@ -768,15 +762,17 @@ public class TestErrorTableFrameController {
         startCommand.setTransfDetectShunt(typeOfMeasuringElementShunt);
         startCommand.setIndex(index);
         startCommand.setMeterList(listMetersForTest);
+        startCommand.setTableColumnError(errorColumnList);
     }
 
     //Инициализирует параметры необходимые для команды чувстви
-    private void initAllParamForRTCCommand(RTCCommand rTCCommand, int phase, int index) {
+    private void initAllParamForRTCCommand(RTCCommand rTCCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList, int phase, int index) {
         rTCCommand.setStendDLLCommands(stendDLLCommands);
         rTCCommand.setPhase(phase);
         rTCCommand.setRatedVolt(Un);
         rTCCommand.setIndex(index);
         rTCCommand.setMeterList(listMetersForTest);
+        rTCCommand.setTableColumnError(errorColumnList);
     }
 
     /**
@@ -975,6 +971,7 @@ public class TestErrorTableFrameController {
             tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPPls()));
             tableView.getColumns().add(column);
             tabViewListAPPls.add(tableView);
+            tabColumnListAPPls.add(column);
             paneErrorsAPPls.getChildren().add(tableView);
 
             //Создаю колонки счётчиков для splitPane AP-
@@ -990,6 +987,7 @@ public class TestErrorTableFrameController {
             tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPMns()));
             tableView.getColumns().add(column);
             tabViewListAPMns.add(tableView);
+            tabColumnListAPMns.add(column);
             paneErrorsAPMns.getChildren().add(tableView);
 
             //Создаю колонки счётчиков для splitPane RP+
@@ -1005,6 +1003,7 @@ public class TestErrorTableFrameController {
             tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPPls()));
             tableView.getColumns().add(column);
             tabViewListRPPls.add(tableView);
+            tabColumnListRPPls.add(column);
             paneErrorsRPPls.getChildren().add(tableView);
 
             //Создаю колонки счётчиков для splitPane RP-
@@ -1020,6 +1019,7 @@ public class TestErrorTableFrameController {
             tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns()));
             tableView.getColumns().add(column);
             tabViewListRPMns.add(tableView);
+            tabColumnListRPMns.add(column);
             paneErrorsRPMns.getChildren().add(tableView);
         }
 
@@ -1042,11 +1042,10 @@ public class TestErrorTableFrameController {
                 int i = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
 
                 for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
-                    if (tableViewError.getSelectionModel().isSelected(i)) {
-                        continue;
+                    if (!tableViewError.getSelectionModel().isSelected(i)) {
+                        tableViewError.getFocusModel().focus(i);
+                        tableViewError.getSelectionModel().select(i);
                     }
-                    tableViewError.getFocusModel().focus(i);
-                    tableViewError.getSelectionModel().select(i);
                 }
             }
         });
@@ -1065,11 +1064,10 @@ public class TestErrorTableFrameController {
                     int index = tableView1.getSelectionModel().getFocusedIndex();
 
                     for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
-                        if (tableViewError.getSelectionModel().isSelected(index)) {
-                            continue;
+                        if (!tableViewError.getSelectionModel().isSelected(index)) {
+                            tableViewError.getFocusModel().focus(index);
+                            tableViewError.getSelectionModel().select(index);
                         }
-                        tableViewError.getFocusModel().focus(index);
-                        tableViewError.getSelectionModel().select(index);
                     }
                 }
             });
@@ -1090,11 +1088,10 @@ public class TestErrorTableFrameController {
                 int i = tabViewTestPointsAPMns.getSelectionModel().getFocusedIndex();
 
                 for (TableView<Meter.CommandResult> tableViewError : tabViewListAPMns) {
-                    if (tableViewError.getSelectionModel().isSelected(i)) {
-                        continue;
+                    if (!tableViewError.getSelectionModel().isSelected(i)) {
+                        tableViewError.getFocusModel().focus(i);
+                        tableViewError.getSelectionModel().select(i);
                     }
-                    tableViewError.getFocusModel().focus(i);
-                    tableViewError.getSelectionModel().select(i);
                 }
             }
         });
@@ -1112,11 +1109,10 @@ public class TestErrorTableFrameController {
                     int index = tableView1.getSelectionModel().getFocusedIndex();
 
                     for (TableView<Meter.CommandResult> tableViewError : tabViewListAPMns) {
-                        if (tableViewError.getSelectionModel().isSelected(index)) {
-                            continue;
+                        if (!tableViewError.getSelectionModel().isSelected(index)) {
+                            tableViewError.getFocusModel().focus(index);
+                            tableViewError.getSelectionModel().select(index);
                         }
-                        tableViewError.getFocusModel().focus(index);
-                        tableViewError.getSelectionModel().select(index);
                     }
                 }
             });
@@ -1136,11 +1132,10 @@ public class TestErrorTableFrameController {
                 int i = tabViewTestPointsRPPls.getSelectionModel().getFocusedIndex();
 
                 for (TableView<Meter.CommandResult> tableViewError : tabViewListRPPls) {
-                    if (tableViewError.getSelectionModel().isSelected(i)) {
-                        continue;
+                    if (!tableViewError.getSelectionModel().isSelected(i)) {
+                        tableViewError.getFocusModel().focus(i);
+                        tableViewError.getSelectionModel().select(i);
                     }
-                    tableViewError.getFocusModel().focus(i);
-                    tableViewError.getSelectionModel().select(i);
                 }
             }
         });
@@ -1158,11 +1153,11 @@ public class TestErrorTableFrameController {
                     int index = tableView1.getSelectionModel().getFocusedIndex();
 
                     for (TableView<Meter.CommandResult> tableViewError : tabViewListRPPls) {
-                        if (tableViewError.getSelectionModel().isSelected(index)) {
-                            continue;
+                        if (!tableViewError.getSelectionModel().isSelected(index)) {
+                            tableViewError.getFocusModel().focus(index);
+                            tableViewError.getSelectionModel().select(index);
                         }
-                        tableViewError.getFocusModel().focus(index);
-                        tableViewError.getSelectionModel().select(index);
+
                     }
                 }
             });
@@ -1182,11 +1177,10 @@ public class TestErrorTableFrameController {
                 int i = tabViewTestPointsRPMns.getSelectionModel().getFocusedIndex();
 
                 for (TableView<Meter.CommandResult> tableViewError : tabViewListRPMns) {
-                    if (tableViewError.getSelectionModel().isSelected(i)) {
-                        continue;
+                    if (!tableViewError.getSelectionModel().isSelected(i)) {
+                        tableViewError.getFocusModel().focus(i);
+                        tableViewError.getSelectionModel().select(i);
                     }
-                    tableViewError.getFocusModel().focus(i);
-                    tableViewError.getSelectionModel().select(i);
                 }
             }
         });
@@ -1204,11 +1198,10 @@ public class TestErrorTableFrameController {
                     int index = tableView1.getSelectionModel().getFocusedIndex();
 
                     for (TableView<Meter.CommandResult> tableViewError : tabViewListRPMns) {
-                        if (tableViewError.getSelectionModel().isSelected(index)) {
-                            continue;
+                        if (!tableViewError.getSelectionModel().isSelected(index)) {
+                            tableViewError.getFocusModel().focus(index);
+                            tableViewError.getSelectionModel().select(index);
                         }
-                        tableViewError.getFocusModel().focus(index);
-                        tableViewError.getSelectionModel().select(index);
                     }
                 }
             });

@@ -1,7 +1,12 @@
 package org.taipit.stend.controller.Commands;
 
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import org.taipit.stend.controller.Meter;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.helper.exeptions.InterruptedTestException;
+
+import java.util.List;
 
 public interface Commands{
     //Прерывает работу метода

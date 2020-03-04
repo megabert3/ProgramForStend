@@ -1,5 +1,7 @@
 package org.taipit.stend.controller.Commands;
 
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
@@ -48,6 +50,13 @@ public class RTCCommand implements Commands, Serializable {
 
     //Тип измерения
     private int errorType;
+
+    public void setTableColumnError(List<TableColumn<Meter.CommandResult, String>> tableColumnError) {
+        this.tableColumnError = tableColumnError;
+    }
+
+    //Лист со столбами счётчикв для изменения флага и цвета
+    private List<TableColumn<Meter.CommandResult, String>> tableColumnError;
 
     public RTCCommand(int pulseForRTC, double freg, int countResult, int errorType, double errorForFalseTest, int channelFlagForSave) {
         this.pulseForRTC = pulseForRTC;
