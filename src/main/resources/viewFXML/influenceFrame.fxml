@@ -270,36 +270,40 @@
             <children>
                 <StackPane prefHeight="534.0" prefWidth="405.0">
                     <children>
-                        <TableView fx:id="viewPointTableAPPls" prefHeight="624.0" prefWidth="402.0">
+                        <TableView fx:id="viewPointTableRPPls" prefHeight="500.0" prefWidth="405.0">
                             <columns>
-                                <TableColumn fx:id="loadCurrTabColAPPls" prefWidth="125.0" text="Нагрузка" />
-                                <TableColumn fx:id="eMaxTabColAPPls" prefWidth="95.0" text="Emax" />
-                                <TableColumn fx:id="eMinTabColAPPls" prefWidth="95.0" text="Emin" />
-                                <TableColumn fx:id="amountImplTabColAPPls" prefWidth="90.0" text="Импульсы" />
+                                <TableColumn fx:id="loadCurrTabColRPPls" prefWidth="125.0" text="Нагрузка" />
+                                <TableColumn fx:id="eMaxTabColRPPls" prefWidth="65.0" text="Emax" />
+                                <TableColumn fx:id="eMinTabColRPPls" prefWidth="65.0" text="Emin" />
+                                <TableColumn fx:id="amountImplTabColRPPls" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColRPPls" text="Измерения" />
                             </columns>
                         </TableView>
                         <TableView fx:id="viewPointTableRPMns" prefHeight="624.0" prefWidth="402.0">
                             <columns>
                                 <TableColumn fx:id="loadCurrTabColRPMns" prefWidth="125.0" text="Нагрузка" />
-                                <TableColumn fx:id="eMaxTabColRPMns" prefWidth="95.0" text="Emax" />
-                                <TableColumn fx:id="eMinTabColRPMns" prefWidth="95.0" text="Emin" />
-                                <TableColumn fx:id="amountImplTabColRPMns" prefWidth="90.0" text="Импульсы" />
+                                <TableColumn fx:id="eMaxTabColRPMns" prefWidth="65.0" text="Emax" />
+                                <TableColumn fx:id="eMinTabColRPMns" prefWidth="65.0" text="Emin" />
+                                <TableColumn fx:id="amountImplTabColRPMns" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColRPMns" text="Измерения" />
+                            </columns>
+                        </TableView>
+                        <TableView fx:id="viewPointTableAPPls" prefHeight="624.0" prefWidth="402.0">
+                            <columns>
+                                <TableColumn fx:id="loadCurrTabColAPPls" prefWidth="125.0" text="Нагрузка" />
+                                <TableColumn fx:id="eMaxTabColAPPls" prefWidth="65.0" text="Emax" />
+                                <TableColumn fx:id="eMinTabColAPPls" prefWidth="65.0" text="Emin" />
+                                <TableColumn fx:id="amountImplTabColAPPls" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColAPPls" text="Измерения" />
                             </columns>
                         </TableView>
                         <TableView fx:id="viewPointTableAPMns" prefHeight="624.0" prefWidth="402.0">
                             <columns>
                                 <TableColumn fx:id="loadCurrTabColAPMns" prefWidth="125.0" text="Нагрузка" />
-                                <TableColumn fx:id="eMaxTabColAPMns" prefWidth="95.0" text="Emax" />
-                                <TableColumn fx:id="eMinTabColAPMns" prefWidth="95.0" text="Emin" />
-                                <TableColumn fx:id="amountImplTabColAPMns" prefWidth="90.0" text="Импульсы" />
-                            </columns>
-                        </TableView>
-                        <TableView fx:id="viewPointTableRPPls" prefHeight="500.0" prefWidth="405.0">
-                            <columns>
-                                <TableColumn fx:id="loadCurrTabColRPPls" prefWidth="125.0" text="Нагрузка" />
-                                <TableColumn fx:id="eMaxTabColRPPls" prefWidth="95.0" text="Emax" />
-                                <TableColumn fx:id="eMinTabColRPPls" prefWidth="95.0" text="Emin" />
-                                <TableColumn fx:id="amountImplTabColRPPls" prefWidth="90.0" text="Импульсы" />
+                                <TableColumn fx:id="eMaxTabColAPMns" prefWidth="65.0" text="Emax" />
+                                <TableColumn fx:id="eMinTabColAPMns" prefWidth="65.0" text="Emin" />
+                                <TableColumn fx:id="amountImplTabColAPMns" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColAPMns" text="Измерения" />
                             </columns>
                         </TableView>
                     </children>

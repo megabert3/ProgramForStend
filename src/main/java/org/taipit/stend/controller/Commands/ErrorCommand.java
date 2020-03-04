@@ -19,7 +19,7 @@ public class ErrorCommand implements Commands, Serializable {
     private StendDLLCommands stendDLLCommands;
 
     //Флаг прохождения теста для счётчика
-    boolean passTest = false;
+    private boolean passTest = false;
 
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
@@ -412,8 +412,12 @@ public class ErrorCommand implements Commands, Serializable {
         this.tableColumnError = tableColumnError;
     }
 
-    public void setCountResult(int countResult) {
-        this.countResult = countResult;
+    public void setCountResult(String countResult) {
+        this.countResult = Integer.parseInt(countResult);
+    }
+
+    public String getCountResult() {
+        return String.valueOf(countResult);
     }
 
     @Override

@@ -7,7 +7,6 @@ import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.helper.exeptions.InterruptedTestException;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,17 +52,17 @@ public class CreepCommand implements Commands, Serializable {
     //Количество импоульсов для провала теста
     private int pulseValue;
 
-    //Константа счётчика для расчёта по ГОСТ формуле
-    private int constMeterForTest;
-
-    //Максимальный ток счётчика для формулы по ГОСТ
-    private double maxCurrMeter;
-
-    //Это трехфазный счётчик?
-    private boolean threePhaseMeter;
-
-    //Количество измерительных элементов (фрехфазный или однофазный)
-    private int amountMeasElem;
+//    //Константа счётчика для расчёта по ГОСТ формуле
+//    private int constMeterForTest;
+//
+//    //Максимальный ток счётчика для формулы по ГОСТ
+//    private double maxCurrMeter;
+//
+//    //Это трехфазный счётчик?
+//    private boolean threePhaseMeter;
+//
+//    //Количество измерительных элементов (фрехфазный или однофазный)
+//    private int amountMeasElem;
 
     private long timeForTest;
     private long timeEnd;
@@ -227,24 +226,12 @@ public class CreepCommand implements Commands, Serializable {
         this.stendDLLCommands = stendDLLCommands;
     }
 
-    public void setConstMeterForTest(int constMeterForTest) {
-        this.constMeterForTest = constMeterForTest;
-    }
-
-    public void setMaxCurrMeter(double maxCurrMeter) {
-        this.maxCurrMeter = maxCurrMeter;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setThreePhaseMeter(boolean treePhaseMeter) {
-        this.threePhaseMeter = treePhaseMeter;
     }
 
     public void setPulseValue(int pulseValue) {
@@ -315,4 +302,5 @@ public class CreepCommand implements Commands, Serializable {
     public void setTimeForTest(long timeForTest) {
         this.timeForTest = timeForTest;
     }
+
 }

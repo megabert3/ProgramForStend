@@ -1,7 +1,6 @@
 package org.taipit.stend.controller.Commands;
 
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
@@ -253,4 +252,5 @@ public class RTCCommand implements Commands, Serializable {
     public void setMeterList(List<Meter> meterList) {
         this.meterList = meterList;
     }
+
 }

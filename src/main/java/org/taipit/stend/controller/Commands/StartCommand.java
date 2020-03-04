@@ -60,23 +60,23 @@ public class StartCommand implements Commands, Serializable {
     //Количество импульсов для провала теста
     private int pulseValue;
 
-    //Класс точности счётчика
-    private double accuracyClass;
-
-    //Константа счётчика для расчёта по ГОСТ формуле
-    private int constMeterForTest;
-
-    //Базовый ток счётчика для формулы по ГОСТ
-    private double baseCurrMeter;
-
-    //Это трехфазный счётчик?
-    private boolean threePhaseMeter;
-
-    //Датчик тока шунт?
-    private boolean transfDetectShunt;
-
-    //Количество измерительных элементов (фрехфазный или однофазный)
-    private int amountMeasElem;
+//    //Класс точности счётчика
+//    private double accuracyClass;
+//
+//    //Константа счётчика для расчёта по ГОСТ формуле
+//    private int constMeterForTest;
+//
+//    //Базовый ток счётчика для формулы по ГОСТ
+//    private double baseCurrMeter;
+//
+//    //Это трехфазный счётчик?
+//    private boolean threePhaseMeter;
+//
+//    //Датчик тока шунт?
+//    private boolean transfDetectShunt;
+//
+//    //Количество измерительных элементов (фрехфазный или однофазный)
+//    private int amountMeasElem;
 
     //Лист со столбами счётчикв для изменения флага и цвета
     private List<TableColumn<Meter.CommandResult, String>> tableColumnError;
@@ -216,34 +216,34 @@ public class StartCommand implements Commands, Serializable {
         return init;
     }
 
-    //Расчётная формула времени теста по ГОСТ
-    public long initTimeForGOSTTest() {
-        if (threePhaseMeter) {
-            amountMeasElem = 3;
-        } else amountMeasElem = 1;
-
-        if (!transfDetectShunt) {
-            if (accuracyClass == 1.0) {
-                ratedCurr = baseCurrMeter * 0.002;
-            } else {
-                ratedCurr = baseCurrMeter * 0.001;
-            }
-        } else {
-            ratedCurr = baseCurrMeter * 0.004;
-        }
-
-        double formulaResult = 2.3 * (60000 / (constMeterForTest * amountMeasElem * ratedVolt * ratedCurr));
-        
-        //Округляю результат до 3х знаков
-        BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
-
-        String[] timeArr = String.valueOf(bigDecimalResult).split("\\.");
-
-        //Округляю значение после запятой до целых секунд
-        BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
-
-        return ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
-    }
+//    //Расчётная формула времени теста по ГОСТ
+//    public long initTimeForGOSTTest() {
+//        if (threePhaseMeter) {
+//            amountMeasElem = 3;
+//        } else amountMeasElem = 1;
+//
+//        if (!transfDetectShunt) {
+//            if (accuracyClass == 1.0) {
+//                ratedCurr = baseCurrMeter * 0.002;
+//            } else {
+//                ratedCurr = baseCurrMeter * 0.001;
+//            }
+//        } else {
+//            ratedCurr = baseCurrMeter * 0.004;
+//        }
+//
+//        double formulaResult = 2.3 * (60000 / (constMeterForTest * amountMeasElem * ratedVolt * ratedCurr));
+//
+//        //Округляю результат до 3х знаков
+//        BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
+//
+//        String[] timeArr = String.valueOf(bigDecimalResult).split("\\.");
+//
+//        //Округляю значение после запятой до целых секунд
+//        BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
+//
+//        return ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
+//    }
 
     //В зависимости от направления тока переносит время прохождения теста в нужную строку
     private void addTestTimeAndPass(Meter meter, int channelFlag, long timePass) {
@@ -283,10 +283,6 @@ public class StartCommand implements Commands, Serializable {
         this.index = index;
     }
 
-    public void setTransfDetectShunt(boolean transfDetectShunt) {
-        this.transfDetectShunt = transfDetectShunt;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -299,21 +295,25 @@ public class StartCommand implements Commands, Serializable {
         this.pulseValue = pulseValue;
     }
 
-    public void setConstMeterForTest(int constMeterForTest) {
-        this.constMeterForTest = constMeterForTest;
-    }
+//    public void setTransfDetectShunt(boolean transfDetectShunt) {
+//        this.transfDetectShunt = transfDetectShunt;
+//    }
 
-    public void setBaseCurrMeter(double baseCurrMeter) {
-        this.baseCurrMeter = baseCurrMeter;
-    }
-
-    public void setThreePhaseMeter(boolean treePhaseMeter) {
-        this.threePhaseMeter = treePhaseMeter;
-    }
-
-    public void setAccuracyClass(double accuracyClass) {
-        this.accuracyClass = accuracyClass;
-    }
+//    public void setConstMeterForTest(int constMeterForTest) {
+//        this.constMeterForTest = constMeterForTest;
+//    }
+//
+//    public void setBaseCurrMeter(double baseCurrMeter) {
+//        this.baseCurrMeter = baseCurrMeter;
+//    }
+//
+//    public void setThreePhaseMeter(boolean treePhaseMeter) {
+//        this.threePhaseMeter = treePhaseMeter;
+//    }
+//
+//    public void setAccuracyClass(double accuracyClass) {
+//        this.accuracyClass = accuracyClass;
+//    }
 
     public void setRatedCurr(double ratedCurr) {
         this.ratedCurr = ratedCurr;
@@ -370,4 +370,5 @@ public class StartCommand implements Commands, Serializable {
     public void setTimeForTest(long timeForTest) {
         this.timeForTest = timeForTest;
     }
+
 }

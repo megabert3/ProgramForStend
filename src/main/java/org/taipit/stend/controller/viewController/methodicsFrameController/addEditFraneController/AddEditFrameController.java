@@ -150,6 +150,9 @@ public class AddEditFrameController {
     @FXML
     private TableColumn<Commands, String> amountImplTabColAPPls;
 
+    @FXML
+    private TableColumn<Commands, String> amountMeasTabColAPPls;
+
     //-------------------------------------------------------
     //Активная энергия в обратном направлении тока
     @FXML
@@ -166,6 +169,9 @@ public class AddEditFrameController {
 
     @FXML
     private TableColumn<Commands, String> amountImplTabColAPMns;
+
+    @FXML
+    private TableColumn<Commands, String> amountMeasTabColAPMns;
 
     //--------------------------------------------------------
     //Реактивная энергия в прямом напралении тока
@@ -184,6 +190,9 @@ public class AddEditFrameController {
     @FXML
     private TableColumn<Commands, String> amountImplTabColRPPls;
 
+    @FXML
+    private TableColumn<Commands, String> amountMeasTabColRPPls;
+
     //--------------------------------------------------------
     //Реактивная энергия в обратном напралении тока
     @FXML
@@ -200,6 +209,9 @@ public class AddEditFrameController {
 
     @FXML
     private TableColumn<Commands, String> amountImplTabColRPMns;
+
+    @FXML
+    private TableColumn<Commands, String> amountMeasTabColRPMns;
     //-------------------------------------------------------
     //Данный блок отвечает за сетку выбора точки.
     //Активная энергия в прямом направлении, Все фазы и отдельно А В С
@@ -2434,28 +2446,32 @@ public class AddEditFrameController {
                 loadCurrTabColAPPls,
                 eMaxTabColAPPls,
                 eMinTabColAPPls,
-                amountImplTabColAPPls
+                amountImplTabColAPPls,
+                amountMeasTabColAPPls
         );
 
         List<TableColumn<Commands, String>> collumnListAPMns = Arrays.asList(
                 loadCurrTabColAPMns,
                 eMaxTabColAPMns,
                 eMinTabColAPMns,
-                amountImplTabColAPMns
+                amountImplTabColAPMns,
+                amountMeasTabColAPMns
         );
 
         List<TableColumn<Commands, String>> collumnListRPPls = Arrays.asList(
                 loadCurrTabColRPPls,
                 eMaxTabColRPPls,
                 eMinTabColRPPls,
-                amountImplTabColRPPls
+                amountImplTabColRPPls,
+                amountMeasTabColRPPls
         );
 
         List<TableColumn<Commands, String>> collumnListRPMns = Arrays.asList(
                 loadCurrTabColRPMns,
                 eMaxTabColRPMns,
                 eMinTabColRPMns,
-                amountImplTabColRPMns
+                amountImplTabColRPMns,
+                amountMeasTabColRPMns
         );
 
         Map<Integer, List<TableColumn<Commands, String>>> mapTableColumn = new HashMap<>();
@@ -2471,16 +2487,19 @@ public class AddEditFrameController {
             mapTableColumn.get(i).get(1).setCellValueFactory(new PropertyValueFactory<>("emax"));
             mapTableColumn.get(i).get(2).setCellValueFactory(new PropertyValueFactory<>("emin"));
             mapTableColumn.get(i).get(3).setCellValueFactory(new PropertyValueFactory<>("pulse"));
+            mapTableColumn.get(i).get(4).setCellValueFactory(new PropertyValueFactory<>("countResult"));
 
             //Выставляем отображение информации в колонке "по центру"
             mapTableColumn.get(i).get(1).setStyle( "-fx-alignment: CENTER;");
             mapTableColumn.get(i).get(2).setStyle( "-fx-alignment: CENTER;");
             mapTableColumn.get(i).get(3).setStyle( "-fx-alignment: CENTER;");
+            mapTableColumn.get(i).get(4).setStyle( "-fx-alignment: CENTER;");
 
             //Устанавливаем возможность редактирования информации в колонке
             mapTableColumn.get(i).get(1).setCellFactory(TextFieldTableCell.forTableColumn());
             mapTableColumn.get(i).get(2).setCellFactory(TextFieldTableCell.forTableColumn());
             mapTableColumn.get(i).get(3).setCellFactory(TextFieldTableCell.forTableColumn());
+            mapTableColumn.get(i).get(4).setCellFactory(TextFieldTableCell.forTableColumn());
 
             //Действие при изменении информации в колонке
             mapTableColumn.get(i).get(1).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
@@ -2516,6 +2535,18 @@ public class AddEditFrameController {
                 Commands command = event.getTableView().getItems().get(row);
 
                 ((ErrorCommand) command).setPulse(newImpulseValue);
+
+            });
+
+            mapTableColumn.get(i).get(4).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+                TablePosition<Commands, String> pos = event.getTablePosition();
+
+                String newImpulseValue = event.getNewValue();
+
+                int row = pos.getRow();
+                Commands command = event.getTableView().getItems().get(row);
+
+                ((ErrorCommand) command).setCountResult(newImpulseValue);
 
             });
         }

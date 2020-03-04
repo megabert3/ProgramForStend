@@ -728,9 +728,9 @@ public class TestErrorTableFrameController {
         creepCommand.setPhase(phase);
         creepCommand.setRatedVolt(Un);
         creepCommand.setRatedFreq(Fn);
-        creepCommand.setConstMeterForTest(meterConstant);
-        creepCommand.setMaxCurrMeter(Imax);
-        creepCommand.setThreePhaseMeter(typeCircuitThreePhase);
+//        creepCommand.setConstMeterForTest(meterConstant);
+//        creepCommand.setMaxCurrMeter(Imax);
+//        creepCommand.setThreePhaseMeter(typeCircuitThreePhase);
         creepCommand.setIndex(index);
         creepCommand.setMeterList(listMetersForTest);
         creepCommand.setTableColumnError(errorColumnList);
@@ -746,11 +746,11 @@ public class TestErrorTableFrameController {
         startCommand.setPhase(phase);
         startCommand.setRatedFreq(Fn);
         startCommand.setRatedVolt(Un);
-        startCommand.setAccuracyClass(accuracyClassAP); //Почему класс точности AP?
-        startCommand.setThreePhaseMeter(typeCircuitThreePhase);
-        startCommand.setBaseCurrMeter(Ib);
-        startCommand.setConstMeterForTest(meterConstant);
-        startCommand.setTransfDetectShunt(typeOfMeasuringElementShunt);
+//        startCommand.setAccuracyClass(accuracyClassAP); //Почему класс точности AP?
+//        startCommand.setThreePhaseMeter(typeCircuitThreePhase);
+//        startCommand.setBaseCurrMeter(Ib);
+//        startCommand.setConstMeterForTest(meterConstant);
+//        startCommand.setTransfDetectShunt(typeOfMeasuringElementShunt);
         startCommand.setIndex(index);
         startCommand.setMeterList(listMetersForTest);
         startCommand.setTableColumnError(errorColumnList);
