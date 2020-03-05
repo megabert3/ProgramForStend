@@ -16,6 +16,8 @@ import java.util.List;
 
 public class ErrorCommand implements Commands, Serializable {
 
+
+
     private StendDLLCommands stendDLLCommands;
 
     //Флаг прохождения теста для счётчика
@@ -105,7 +107,7 @@ public class ErrorCommand implements Commands, Serializable {
     //Флаг для прекращения сбора погрешности
     private HashMap<Integer, Boolean> flagInStop;
 
-    //Настройка для отдельного поля счётчика
+    //Настройка для отдельного поля счётчика изменения цвета погрешности
     private transient Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>> cellFactory =
             new Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>>() {
                 public TableCell call(TableColumn p) {

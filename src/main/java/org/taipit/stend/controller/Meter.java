@@ -4,10 +4,11 @@ import javafx.beans.property.SimpleStringProperty;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Meter {
+public class Meter implements Serializable{
 
     private int id;
 
@@ -442,7 +443,7 @@ public class Meter {
 
 
     //Абстрактный класс для записи результата каждой точки
-    public abstract class CommandResult {
+    public abstract class CommandResult implements Serializable{
 
         //Имя команды
         String nameCommand;
@@ -521,7 +522,7 @@ public class Meter {
     }
 
     //Класс для записи результата исполнения ErrorCommnad
-    public class ErrorResult extends CommandResult {
+    public class ErrorResult extends CommandResult implements Serializable {
 
         ErrorResult(String name) {
             super.setNameCommand(name);
@@ -529,27 +530,27 @@ public class Meter {
     }
 
     //Класс для записи результата исполнения CreepCommnad
-    public class CreepResult extends CommandResult {
+    public class CreepResult extends CommandResult implements Serializable{
 
         //Время провала теста
-        long timeToFail;
+        String timeToAllTest;
 
         CreepResult(String name) {
             super.setNameCommand(name);
             super.setPassTest(true);
         }
 
-        public long getTimeToFail() {
-            return timeToFail;
+        public String getTimeToAllTest() {
+            return timeToAllTest;
         }
 
-        public void setTimeToFail(long timeToFail) {
-            this.timeToFail = timeToFail;
+        public void setTimeToAllTest(String timeToAllTest) {
+            this.timeToAllTest = timeToAllTest;
         }
     }
 
     //Класс для записи результата исполнения StartCommnad
-    public class StartResult extends CommandResult {
+    public class StartResult extends CommandResult implements Serializable{
 
         //Время прохождения теста
         long timeToPass;
@@ -571,7 +572,7 @@ public class Meter {
     }
 
     //Класс для записи результата исполнения StartCommnad
-    private class RTCResult extends CommandResult {
+    private class RTCResult extends CommandResult implements Serializable{
 
         RTCResult(String name) {
             super.setNameCommand(name);

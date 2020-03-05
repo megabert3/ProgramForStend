@@ -432,7 +432,7 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        startTestOnSelectPane(tabViewTestPointsAPPls, tabColumnListAPPls,commandsAPPls, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+                        startTestOnSelectPane(tabViewTestPointsAPPls, tabColumnListAPPls, commandsAPPls, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
                     //Если выбрана панель AP-
                     } else if(tglBtnAPMns.isSelected()) {
@@ -440,7 +440,7 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        startTestOnSelectPane(tabViewTestPointsAPMns, tabColumnListAPMns,commandsAPMns, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+                        startTestOnSelectPane(tabViewTestPointsAPMns, tabColumnListAPMns, commandsAPMns, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
                     //Если выбрана панель RP+
                     } else if(tglBtnRPPls.isSelected()) {
@@ -448,7 +448,7 @@ public class TestErrorTableFrameController {
                             phase = 5;
                         } else phase = 7;
 
-                        startTestOnSelectPane(tabViewTestPointsRPPls, tabColumnListRPPls ,commandsRPPls, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+                        startTestOnSelectPane(tabViewTestPointsRPPls, tabColumnListRPPls, commandsRPPls, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
 
                     //Если выбрана панель RP-
                     } else if(tglBtnRPMns.isSelected()) {
