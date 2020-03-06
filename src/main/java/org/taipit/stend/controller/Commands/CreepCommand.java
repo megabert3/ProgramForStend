@@ -1,9 +1,5 @@
 package org.taipit.stend.controller.Commands;
 
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.paint.Color;
-import javafx.util.Callback;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
@@ -40,10 +36,6 @@ public class CreepCommand implements Commands, Serializable {
 
     private boolean active = true;
 
-
-    //Лист со столбами счётчикв для изменения флага и цвета
-    private List<TableColumn<Meter.CommandResult, String>> tableColumnError;
-
     //Имя точки для отображения в таблице
     private String name;
 
@@ -56,63 +48,11 @@ public class CreepCommand implements Commands, Serializable {
     //Количество импоульсов для провала теста
     private int pulseValue = 2;
 
-//    //Константа счётчика для расчёта по ГОСТ формуле
-//    private int constMeterForTest;
-//
-//    //Максимальный ток счётчика для формулы по ГОСТ
-//    private double maxCurrMeter;
-//
-//    //Это трехфазный счётчик?
-//    private boolean threePhaseMeter;
-//
-//    //Количество измерительных элементов (фрехфазный или однофазный)
-//    private int amountMeasElem;
-
     private long timeForTest;
     private long timeEnd;
     private long currTime;
 
     private HashMap<Integer, Boolean> creepCommandResult;
-
-    //Настройка для отдельного поля счётчика изменения цвета погрешности перед началом теста
-    private transient Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>> cellFactoryStartTest =
-            new Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>>() {
-                public TableCell call(TableColumn p) {
-                    return new TableCell<Meter.CommandResult, String>() {
-                        @Override
-                        public void updateItem(String item, boolean empty) {
-                            super.updateItem(item, empty);
-                                setText(item);
-                        }
-                    };
-                }
-            };
-
-    //Настройка для отдельного поля счётчика изменения цвета погрешности после окончания теста
-    private transient Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>> cellFactoryEndTest =
-            new Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>>() {
-                public TableCell call(TableColumn p) {
-                    return new TableCell<Meter.CommandResult, String>() {
-                        @Override
-                        public void updateItem(String item, boolean empty) {
-                            super.updateItem(item, empty);
-
-                            if (item == null || empty) {
-                                setText("");
-                            } else {
-                                if (item.contains("+")) {
-                                    setText(item);
-                                    setTextFill(Color.BLUE);
-                                } else if (item.contains("-")) {
-                                    setText(item);
-                                    setTextFill(Color.RED);
-                                }
-                            }
-                        }
-                    };
-                }
-            };
-
 
     public CreepCommand(boolean gostTest, int channelFlag, String userTimeTest) {
         this.gostTest = gostTest;
@@ -163,6 +103,7 @@ public class CreepCommand implements Commands, Serializable {
         //Номер измерения
         int countResult = 1;
         Meter meter;
+        Meter.CommandResult errorCommand;
 
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
         for (Meter meter1 : meterList) {
@@ -179,15 +120,16 @@ public class CreepCommand implements Commands, Serializable {
                 if (mapResult.getValue()) {
                     meter = meterList.get(mapResult.getKey() - 1);
 
-                    //Если на данный момен времени всё хорошо и счётчик не получал импульсов
+                    //Если на данный момент времени всё хорошо и счётчик не получал импульсов
                     if (meter.run(pulseValue, stendDLLCommands)) {
 
-                        meter.setResultsInErrorList(index, countResult, getTime(timeEnd - System.currentTimeMillis()), channelFlag);
+                        errorCommand = meter.returnResultCommand(index, channelFlag);
+                        errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
 
                         //Если количество импульсов переваливает и тест провален
                     } else {
                         //Если счётчик провалили тест
-                        addTestTimeAndFail(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult, tableColumnError);
+                        addTestTimeFail(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
                         creepCommandResult.put(meter.getId(), false);
                     }
                 }
@@ -198,8 +140,7 @@ public class CreepCommand implements Commands, Serializable {
         //Выставляю результат теста счётчиков, которые прошли тест
         for(Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
             if (mapResultPass.getValue()) {
-                tableColumnError.get(mapResultPass.getKey() - 1).setCellFactory(cellFactoryEndTest);
-                meterList.get(mapResultPass.getKey()).setResultsInErrorList(index, countResult, getTime(timeForTest) + " " + "+", channelFlag);
+                addTestTimePass(meterList.get(mapResultPass.getKey()), channelFlag, getTime(timeForTest), channelFlag);
             }
         }
 
@@ -223,6 +164,7 @@ public class CreepCommand implements Commands, Serializable {
 
         //Номер измерения
         int countResult = 1;
+        Meter.CommandResult errorCommand;
         Meter meter;
 
         while (!interrupt) {
@@ -245,12 +187,13 @@ public class CreepCommand implements Commands, Serializable {
                         //Если на данный момен времени всё хорошо и счётчик не получал импульсов
                         if (meter.run(pulseValue, stendDLLCommands)) {
 
-                            meter.setResultsInErrorList(index, countResult, getTime(timeEnd - System.currentTimeMillis()), channelFlag);
+                            errorCommand = meter.returnResultCommand(index, channelFlag);
+                            errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
 
                             //Если количество импульсов переваливает и тест провален
                         } else {
                             //Если счётчик провалили тест
-                            addTestTimeAndFail(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult, tableColumnError);
+                            addTestTimeFail(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
                             creepCommandResult.put(meter.getId(), false);
                         }
                     }
@@ -261,8 +204,7 @@ public class CreepCommand implements Commands, Serializable {
             //Выставляю результат теста счётчиков, которые прошли тест
             for(Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
                 if (mapResultPass.getValue()) {
-                    tableColumnError.get(mapResultPass.getKey() - 1).setCellFactory(cellFactoryEndTest);
-                    meterList.get(mapResultPass.getKey()).setResultsInErrorList(index, countResult, getTime(timeForTest) + " " + "+", channelFlag);
+                    addTestTimePass(meterList.get(mapResultPass.getKey()), channelFlag, getTime(timeForTest), channelFlag);
                 }
             }
 
@@ -281,79 +223,29 @@ public class CreepCommand implements Commands, Serializable {
         return init;
     }
 
+    //reset
     private void setDefTestrResults(Meter meter, int channelFlag, int index) {
-        Meter.CreepResult creepResult;
-
-        switch (channelFlag) {
-            case 0: {
-                creepResult = (Meter.CreepResult) meter.getErrorListAPPls().get(index);
-                creepResult.setLastResult(null);
-                creepResult.setPassTest(true);
-                tableColumnError.get(meter.getId() - 1).setCellFactory(cellFactoryStartTest);
-            } break;
-            case 1: {
-                creepResult = (Meter.CreepResult) meter.getErrorListAPMns().get(index);
-                creepResult.setLastResult("");
-                creepResult.setPassTest(true);
-                tableColumnError.get(meter.getId() - 1).setCellFactory(cellFactoryStartTest);
-            } break;
-            case 2: {
-                creepResult = (Meter.CreepResult) meter.getErrorListRPPls().get(index);
-                creepResult.setLastResult("");
-                creepResult.setPassTest(true);
-                tableColumnError.get(meter.getId() - 1).setCellFactory(cellFactoryStartTest);
-            } break;
-            case 3: {
-                creepResult = (Meter.CreepResult) meter.getErrorListRPMns().get(index);
-                creepResult.setLastResult("");
-                creepResult.setPassTest(true);
-                tableColumnError.get(meter.getId() - 1).setCellFactory(cellFactoryStartTest);
-            } break;
-        }
+        Meter.CreepResult creepResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
+        creepResult.setLastResult(null);
+        creepResult.setPassTest(true);
+        meter.setAmountImn(0);
+        meter.setSearchMark(false);
     }
 
-    //В зависимости от направления тока переносит время провала теста в нужную строку
-    private void addTestTimeAndFail(Meter meter, int channelFlag, String timeFail, int countResult, List<TableColumn<Meter.CommandResult, String>> columnList) {
-        Meter.CreepResult commandResult;
+    //Переносит время провала теста в нужную строку
+    private void addTestTimeFail(Meter meter, int channelFlag, String timeFail, int countResult) {
+        Meter.CreepResult commandResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
+        commandResult.setPassTest(false);
+        commandResult.setLastResult("F" + timeFail + " " + "-");
+        commandResult.getResults()[countResult] = commandResult.getLastResult().substring(1, commandResult.getLastResult().length() - 2);
+    }
 
-        switch (channelFlag) {
-            case  0: {
-                commandResult = (Meter.CreepResult) meter.getErrorListAPPls().get(index);
-                commandResult.setTimeToAllTest(timeFail);
-                commandResult.setPassTest(false);
-                columnList.get(meter.getId() - 1).setCellFactory(cellFactoryEndTest);
-                commandResult.setLastResult(timeFail + " " + "-");
-                commandResult.getResults()[countResult] = commandResult.getLastResult();
-            }break;
-
-            case  1: {
-                commandResult = (Meter.CreepResult) meter.getErrorListAPMns().get(index);
-                commandResult.setTimeToAllTest(timeFail);
-                commandResult.setPassTest(false);
-                columnList.get(meter.getId() - 1).setCellFactory(cellFactoryEndTest);
-                commandResult.setLastResult(timeFail + " " + "-");
-                commandResult.getResults()[countResult] = commandResult.getLastResult();
-            }break;
-
-            case  2: {
-                commandResult = (Meter.CreepResult) meter.getErrorListRPPls().get(index);
-                commandResult.setTimeToAllTest(timeFail);
-                commandResult.setPassTest(false);
-                columnList.get(meter.getId() - 1).setCellFactory(cellFactoryEndTest);
-                commandResult.setLastResult(timeFail + " " + "-");
-                commandResult.getResults()[countResult] = commandResult.getLastResult();
-            }break;
-
-            case  3: {
-                commandResult = (Meter.CreepResult) meter.getErrorListRPMns().get(index);
-                commandResult.setTimeToAllTest(timeFail);
-                commandResult.setPassTest(false);
-                columnList.get(meter.getId() - 1).setCellFactory(cellFactoryEndTest);
-                commandResult.setLastResult(timeFail + " " + "-");
-                commandResult.getResults()[countResult] = commandResult.getLastResult();
-
-            }break;
-        }
+    //Переносит время провала теста в нужную строку
+    private void addTestTimePass(Meter meter, int channelFlag, String timeFail, int countResult) {
+        Meter.CreepResult commandResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
+        commandResult.setPassTest(true);
+        commandResult.setLastResult("P" + timeFail + " " + "+");
+        commandResult.getResults()[countResult] = commandResult.getLastResult().substring(1, commandResult.getLastResult().length() - 2);
     }
 
     //Переводит милисикунды в нужный формат
@@ -436,10 +328,6 @@ public class CreepCommand implements Commands, Serializable {
 
     public long getTimeForTest() {
         return timeForTest;
-    }
-
-    public void setTableColumnError(List<TableColumn<Meter.CommandResult, String>> tableColumnError) {
-        this.tableColumnError = tableColumnError;
     }
 
     public void setTimeForTest(long timeForTest) {

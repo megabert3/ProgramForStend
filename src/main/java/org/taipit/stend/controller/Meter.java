@@ -51,6 +51,9 @@ public class Meter implements Serializable{
     //Количество измерений погрешности
     private int amountMeasur;
 
+    //Необходимо для количетва вычислений
+    private int errorResultChange;
+
     //Количество импульсов полученных в результате теста чувств. сам.
     private int amountImn;
 
@@ -218,34 +221,52 @@ public class Meter implements Serializable{
         }
     }
 
+    public Meter.CommandResult returnResultCommand (int index, int energyPulseChanel) {
+
+        switch (energyPulseChanel) {
+            case 0: {
+                return errorListAPPls.get(index);
+            }
+
+            case 1: {
+                return errorListAPMns.get(index);
+            }
+
+            case 2: {
+                return errorListRPPls.get(index);
+            }
+
+            case 3: {
+                return errorListRPMns.get(index);
+            }
+        }
+        return null;
+    }
+
     //Установка результата теста
     public Meter.CommandResult setResultsInErrorList(int index, int resultNo, String error, int energyPulseChanel) {
-        CommandResult commandResult;
+        CommandResult commandResult = returnResultCommand(index, energyPulseChanel);
         switch (energyPulseChanel) {
             case 0: {
                 commandResult = errorListAPPls.get(index);
-                commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
 
             case 1: {
                 commandResult = errorListAPMns.get(index);
-                commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
 
             case 2: {
                 commandResult = errorListRPPls.get(index);
-                commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
 
             case 3: {
                 commandResult = errorListRPMns.get(index);
-                commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
@@ -441,6 +462,21 @@ public class Meter implements Serializable{
         return witness;
     }
 
+    public int getErrorResultChange() {
+        return errorResultChange;
+    }
+
+    public void setErrorResultChange(int errorResultChange) {
+        this.errorResultChange = errorResultChange;
+    }
+
+    public void setAmountImn(int amountImn) {
+        this.amountImn = amountImn;
+    }
+
+    public void setSearchMark(boolean searchMark) {
+        this.searchMark = searchMark;
+    }
 
     //Абстрактный класс для записи результата каждой точки
     public abstract class CommandResult implements Serializable{

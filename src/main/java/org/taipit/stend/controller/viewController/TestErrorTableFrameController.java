@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -56,12 +57,12 @@ public class TestErrorTableFrameController {
     private List<TableView<Meter.CommandResult>> tabViewListAPMns = new ArrayList<>();
     private List<TableView<Meter.CommandResult>> tabViewListRPPls = new ArrayList<>();
     private List<TableView<Meter.CommandResult>> tabViewListRPMns = new ArrayList<>();
-
-    //Список TableColumn для испытываемых счётчиков в разных направлениях
-    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPPls = new ArrayList<>();
-    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPMns = new ArrayList<>();
-    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPPls = new ArrayList<>();
-    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPMns = new ArrayList<>();
+//
+//    //Список TableColumn для испытываемых счётчиков в разных направлениях
+//    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPPls = new ArrayList<>();
+//    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPMns = new ArrayList<>();
+//    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPPls = new ArrayList<>();
+//    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPMns = new ArrayList<>();
 
     private double Imax;
 
@@ -102,6 +103,39 @@ public class TestErrorTableFrameController {
     private String controller;
 
     private String witness;
+
+    //Настройка для отдельного поля счётчика изменения цвета погрешности после окончания теста
+    private transient Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>> cellFactoryEndTest =
+            new Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>>() {
+                public TableCell call(TableColumn p) {
+                    return new TableCell<Meter.CommandResult, String>() {
+                        @Override
+                        public void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+
+                            char firstSymbol;
+
+                            if (item == null || empty) {
+                                setText("");
+                            } else {
+                                firstSymbol = item.charAt(0);
+
+                                if (firstSymbol == 'N') {
+                                    setText(item.substring(1));
+
+                                } else if (firstSymbol == 'P') {
+                                    setText(item.substring(1));
+                                    setTextFill(Color.BLUE);
+
+                                } else if (firstSymbol == 'F') {
+                                    setText(item.substring(1));
+                                    setTextFill(Color.RED);
+                                }
+                            }
+                        }
+                    };
+                }
+            };
 
     @FXML
     private Button btnSave;
@@ -432,7 +466,7 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        startTestOnSelectPane(tabViewTestPointsAPPls, tabColumnListAPPls, commandsAPPls, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+                        startTestOnSelectPane(tabViewTestPointsAPPls, commandsAPPls, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
                     //Если выбрана панель AP-
                     } else if(tglBtnAPMns.isSelected()) {
@@ -440,7 +474,7 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        startTestOnSelectPane(tabViewTestPointsAPMns, tabColumnListAPMns, commandsAPMns, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+                        startTestOnSelectPane(tabViewTestPointsAPMns, commandsAPMns, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
                     //Если выбрана панель RP+
                     } else if(tglBtnRPPls.isSelected()) {
@@ -448,7 +482,7 @@ public class TestErrorTableFrameController {
                             phase = 5;
                         } else phase = 7;
 
-                        startTestOnSelectPane(tabViewTestPointsRPPls, tabColumnListRPPls, commandsRPPls, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+                        startTestOnSelectPane(tabViewTestPointsRPPls, commandsRPPls, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
 
                     //Если выбрана панель RP-
                     } else if(tglBtnRPMns.isSelected()) {
@@ -457,7 +491,7 @@ public class TestErrorTableFrameController {
                             phase = 5;
                         } else phase = 7;
 
-                        startTestOnSelectPane(tabViewTestPointsRPMns, tabColumnListRPMns, commandsRPMns, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+                        startTestOnSelectPane(tabViewTestPointsRPMns, commandsRPMns, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
                     }
                 }
 
@@ -486,7 +520,7 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        startContinuousTestOnSelectPane(tabViewTestPointsAPPls, tabColumnListAPPls,commandsAPPls, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+                        startContinuousTestOnSelectPane(tabViewTestPointsAPPls, commandsAPPls, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
                         //Если выбрана панель AP-
                     } else if(tglBtnAPMns.isSelected()) {
@@ -494,7 +528,7 @@ public class TestErrorTableFrameController {
                             phase = 1;
                         } else phase = 0;
 
-                        startContinuousTestOnSelectPane(tabViewTestPointsAPMns, tabColumnListAPMns, commandsAPMns, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+                        startContinuousTestOnSelectPane(tabViewTestPointsAPMns, commandsAPMns, constantMeterAP, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
                         //Если выбрана панель RP+
                     } else if(tglBtnRPPls.isSelected()) {
@@ -502,7 +536,7 @@ public class TestErrorTableFrameController {
                             phase = 5;
                         } else phase = 7;
 
-                        startContinuousTestOnSelectPane(tabViewTestPointsRPPls, tabColumnListRPPls, commandsRPPls, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+                        startContinuousTestOnSelectPane(tabViewTestPointsRPPls, commandsRPPls, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
 
                         //Если выбрана панель RP-
                     } else if(tglBtnRPMns.isSelected()) {
@@ -511,7 +545,7 @@ public class TestErrorTableFrameController {
                             phase = 5;
                         } else phase = 7;
 
-                        startContinuousTestOnSelectPane(tabViewTestPointsRPMns,  tabColumnListRPMns, commandsRPMns, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+                        startContinuousTestOnSelectPane(tabViewTestPointsRPMns, commandsRPMns, constantMeterRP, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
                     }
                 }
 
@@ -598,8 +632,8 @@ public class TestErrorTableFrameController {
     }
 
     //Старт автоматического теста
-    private void startTestOnSelectPane(TableView<Commands> tabViewTestPoints, List<TableColumn<Meter.CommandResult, String>> errorColumnList,
-                                       ObservableList<Commands> commands,int constant, int phase, long timeCRPForGOST, long timeSTAForGOST)
+    private void startTestOnSelectPane(TableView<Commands> tabViewTestPoints,
+                                       ObservableList<Commands> commands, int phase, long timeCRPForGOST, long timeSTAForGOST)
             throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
@@ -613,9 +647,15 @@ public class TestErrorTableFrameController {
                 if (command instanceof ErrorCommand) {
 
 
-                    initAllParamForErrorCommand((ErrorCommand) command, errorColumnList, i);
+                    initAllParamForErrorCommand((ErrorCommand) command, i);
 
                     command.setInterrupt(false);
+
+                    if (i != commands.size() - 1) {
+                        if (commands.get(i + 1) instanceof ErrorCommand) {
+                            ((ErrorCommand) command).setNextCommandError(true);
+                        }
+                    }
                     command.execute();
                 }
 
@@ -624,7 +664,7 @@ public class TestErrorTableFrameController {
                      * Подумать над отображением времени теста
                      */
 
-                    initAllParamForCreepCommand((CreepCommand) command, errorColumnList, constant, phase, i, timeCRPForGOST);
+                    initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
 
                     command.setInterrupt(false);
                     command.execute();
@@ -634,7 +674,7 @@ public class TestErrorTableFrameController {
                     /**
                      * Подумать над отображением времени теста
                      */
-                    initAllParamForStartCommand((StartCommand) command, errorColumnList, constant,phase, i, timeSTAForGOST);
+                    initAllParamForStartCommand((StartCommand) command, phase, i, timeSTAForGOST);
 
                     command.setInterrupt(false);
                     command.execute();
@@ -642,7 +682,7 @@ public class TestErrorTableFrameController {
 
                 if (command instanceof RTCCommand) {
 
-                    initAllParamForRTCCommand((RTCCommand) command, errorColumnList, phase, i);
+                    initAllParamForRTCCommand((RTCCommand) command, phase, i);
 
                     command.setInterrupt(false);
                     command.execute();
@@ -662,7 +702,7 @@ public class TestErrorTableFrameController {
     //Метод для того чтобы узнать выбран ли какой-то режим работы уже
 
     //Старт автоматического теста
-    private void startContinuousTestOnSelectPane(TableView<Commands> tabViewTestPoints, List<TableColumn<Meter.CommandResult, String>> tableColumErrorList,
+    private void startContinuousTestOnSelectPane(TableView<Commands> tabViewTestPoints,
                                                  ObservableList<Commands> commands, int constant, int phase, long timeCRPForGOST, long timeSTAForGOST)
             throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
 
@@ -674,7 +714,7 @@ public class TestErrorTableFrameController {
         if (command instanceof ErrorCommand) {
 
 
-            initAllParamForErrorCommand((ErrorCommand) command, tableColumErrorList, i);
+            initAllParamForErrorCommand((ErrorCommand) command, i);
 
             command.setInterrupt(false);
             command.executeForContinuousTest();
@@ -682,7 +722,7 @@ public class TestErrorTableFrameController {
 
         if (command instanceof CreepCommand) {
 
-            initAllParamForCreepCommand((CreepCommand) command, tableColumErrorList, constant, phase, i, timeCRPForGOST);
+            initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
 
             command.setInterrupt(false);
             command.executeForContinuousTest();
@@ -692,7 +732,7 @@ public class TestErrorTableFrameController {
             /**
              * Подумать над отображением времени теста
              */
-            initAllParamForStartCommand((StartCommand) command, tableColumErrorList,constant,phase, i, timeSTAForGOST);
+            initAllParamForStartCommand((StartCommand) command,phase, i, timeSTAForGOST);
 
             command.setInterrupt(false);
             command.executeForContinuousTest();
@@ -700,7 +740,7 @@ public class TestErrorTableFrameController {
 
         if (command instanceof RTCCommand) {
 
-            initAllParamForRTCCommand((RTCCommand) command, tableColumErrorList, phase, i);
+            initAllParamForRTCCommand((RTCCommand) command, phase, i);
 
             command.setInterrupt(false);
             command.executeForContinuousTest();
@@ -711,7 +751,7 @@ public class TestErrorTableFrameController {
      */
 
     //Инициализирует параметры необходимые для снятия погрешности в точке
-    private void initAllParamForErrorCommand(ErrorCommand errorCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList, int index){
+    private void initAllParamForErrorCommand(ErrorCommand errorCommand, int index){
         errorCommand.setStendDLLCommands(stendDLLCommands);
         errorCommand.setRatedVolt(Un);
         errorCommand.setIb(Ib);
@@ -719,21 +759,16 @@ public class TestErrorTableFrameController {
         errorCommand.setRatedFreq(Fn);
         errorCommand.setIndex(index);
         errorCommand.setMeterForTestList(listMetersForTest);
-        errorCommand.setTableColumnError(errorColumnList);
     }
 
     //Инициализирует параметры необходимые для команды самохода
-    private void initAllParamForCreepCommand(CreepCommand creepCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList, int meterConstant, int phase, int index, long timeForGOSTtest){
+    private void initAllParamForCreepCommand(CreepCommand creepCommand, int phase, int index, long timeForGOSTtest){
         creepCommand.setStendDLLCommands(stendDLLCommands);
         creepCommand.setPhase(phase);
         creepCommand.setRatedVolt(Un);
         creepCommand.setRatedFreq(Fn);
-//        creepCommand.setConstMeterForTest(meterConstant);
-//        creepCommand.setMaxCurrMeter(Imax);
-//        creepCommand.setThreePhaseMeter(typeCircuitThreePhase);
         creepCommand.setIndex(index);
         creepCommand.setMeterList(listMetersForTest);
-        creepCommand.setTableColumnError(errorColumnList);
 
         if (creepCommand.isGostTest()) {
             creepCommand.setTimeForTest(timeForGOSTtest);
@@ -741,19 +776,13 @@ public class TestErrorTableFrameController {
     }
 
     //Инициализирует параметры необходимые для команды чувствительность
-    private void initAllParamForStartCommand(StartCommand startCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList, int meterConstant, int phase, int index, long timeForGOSTtest) {
+    private void initAllParamForStartCommand(StartCommand startCommand, int phase, int index, long timeForGOSTtest) {
         startCommand.setStendDLLCommands(stendDLLCommands);
         startCommand.setPhase(phase);
         startCommand.setRatedFreq(Fn);
         startCommand.setRatedVolt(Un);
-//        startCommand.setAccuracyClass(accuracyClassAP); //Почему класс точности AP?
-//        startCommand.setThreePhaseMeter(typeCircuitThreePhase);
-//        startCommand.setBaseCurrMeter(Ib);
-//        startCommand.setConstMeterForTest(meterConstant);
-//        startCommand.setTransfDetectShunt(typeOfMeasuringElementShunt);
         startCommand.setIndex(index);
         startCommand.setMeterList(listMetersForTest);
-        startCommand.setTableColumnError(errorColumnList);
 
         if (startCommand.isGostTest()) {
             startCommand.setTimeForTest(timeForGOSTtest);
@@ -761,13 +790,12 @@ public class TestErrorTableFrameController {
     }
 
     //Инициализирует параметры необходимые для команды чувстви
-    private void initAllParamForRTCCommand(RTCCommand rTCCommand, List<TableColumn<Meter.CommandResult, String>> errorColumnList, int phase, int index) {
+    private void initAllParamForRTCCommand(RTCCommand rTCCommand, int phase, int index) {
         rTCCommand.setStendDLLCommands(stendDLLCommands);
         rTCCommand.setPhase(phase);
         rTCCommand.setRatedVolt(Un);
         rTCCommand.setIndex(index);
         rTCCommand.setMeterList(listMetersForTest);
-        rTCCommand.setTableColumnError(errorColumnList);
     }
 
     /**
@@ -960,13 +988,12 @@ public class TestErrorTableFrameController {
             column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
             column.setSortable(false);
             column.setPrefWidth(paneErrorsAPPls.getPrefWidth() / listMetersForTest.size());
+            column.setCellFactory(cellFactoryEndTest);
             tableView.setPrefSize(paneErrorsAPPls.getPrefWidth() / listMetersForTest.size(), paneErrorsAPPls.getPrefHeight());
             tableView.setLayoutX(i * column.getPrefWidth());
             tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
             tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPPls()));
             tableView.getColumns().add(column);
-            tabViewListAPPls.add(tableView);
-            tabColumnListAPPls.add(column);
             paneErrorsAPPls.getChildren().add(tableView);
 
             //Создаю колонки счётчиков для splitPane AP-
@@ -976,13 +1003,12 @@ public class TestErrorTableFrameController {
             column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
             column.setSortable(false);
             column.setPrefWidth(paneErrorsAPMns.getPrefWidth() / listMetersForTest.size());
+            column.setCellFactory(cellFactoryEndTest);
             tableView.setPrefSize(paneErrorsAPMns.getPrefWidth() / listMetersForTest.size(), paneErrorsAPMns.getPrefHeight());
             tableView.setLayoutX(i * column.getPrefWidth());
             tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
             tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPMns()));
             tableView.getColumns().add(column);
-            tabViewListAPMns.add(tableView);
-            tabColumnListAPMns.add(column);
             paneErrorsAPMns.getChildren().add(tableView);
 
             //Создаю колонки счётчиков для splitPane RP+
@@ -992,13 +1018,12 @@ public class TestErrorTableFrameController {
             column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
             column.setSortable(false);
             column.setPrefWidth(paneErrorsRPPls.getPrefWidth() / listMetersForTest.size());
+            column.setCellFactory(cellFactoryEndTest);
             tableView.setPrefSize(paneErrorsRPPls.getPrefWidth() / listMetersForTest.size(), paneErrorsRPPls.getPrefHeight());
             tableView.setLayoutX(i * column.getPrefWidth());
             tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
             tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPPls()));
             tableView.getColumns().add(column);
-            tabViewListRPPls.add(tableView);
-            tabColumnListRPPls.add(column);
             paneErrorsRPPls.getChildren().add(tableView);
 
             //Создаю колонки счётчиков для splitPane RP-
@@ -1008,13 +1033,12 @@ public class TestErrorTableFrameController {
             column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
             column.setSortable(false);
             column.setPrefWidth(paneErrorsRPMns.getPrefWidth() / listMetersForTest.size());
+            column.setCellFactory(cellFactoryEndTest);
             tableView.setPrefSize(paneErrorsRPMns.getPrefWidth() / listMetersForTest.size(), paneErrorsRPMns.getPrefHeight());
             tableView.setLayoutX(i * column.getPrefWidth());
             tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
             tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns()));
             tableView.getColumns().add(column);
-            tabViewListRPMns.add(tableView);
-            tabColumnListRPMns.add(column);
             paneErrorsRPMns.getChildren().add(tableView);
         }
 

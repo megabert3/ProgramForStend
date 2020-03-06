@@ -1,16 +1,14 @@
 package org.taipit.stend.controller.Commands;
 
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.helper.exeptions.InterruptedTestException;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StartCommand implements Commands, Serializable {
 
@@ -59,27 +57,6 @@ public class StartCommand implements Commands, Serializable {
 
     //Количество импульсов для провала теста
     private int pulseValue;
-
-//    //Класс точности счётчика
-//    private double accuracyClass;
-//
-//    //Константа счётчика для расчёта по ГОСТ формуле
-//    private int constMeterForTest;
-//
-//    //Базовый ток счётчика для формулы по ГОСТ
-//    private double baseCurrMeter;
-//
-//    //Это трехфазный счётчик?
-//    private boolean threePhaseMeter;
-//
-//    //Датчик тока шунт?
-//    private boolean transfDetectShunt;
-//
-//    //Количество измерительных элементов (фрехфазный или однофазный)
-//    private int amountMeasElem;
-
-    //Лист со столбами счётчикв для изменения флага и цвета
-    private List<TableColumn<Meter.CommandResult, String>> tableColumnError;
 
     private long timeForTest;
     private long timeEnd;
@@ -134,29 +111,48 @@ public class StartCommand implements Commands, Serializable {
         if (interrupt) throw  new InterruptedTestException();
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-        if (interrupt) throw  new InterruptedTestException();
         Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+        //Номер измерения
+        int countResult = 1;
+        Meter meter;
+        Meter.CommandResult errorCommand;
+
+        //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
+        for (Meter meter1 : meterList) {
+            setDefTestrResults(meter1, channelFlag, index);
+        }
 
         currTime = System.currentTimeMillis();
         timeEnd = currTime + timeForTest;
 
-        /**
-         * Необходимо записывать время и результат в массив
-         * Вид записи результата:
-         * Начало это просто время теста
-         * Как только пользователь нажимает старт (очистка и таймер теста)
-         * Если прошёл "Время теста + P" и цвет пройденного теста
-         * Если нет, то "Время теста + F" и цвет проваленного теста
-         */
-
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
             if (interrupt) throw  new InterruptedTestException();
 
-            for (Meter meter : meterList) {
-                if (!meter.run(pulseValue, stendDLLCommands)) {
-                    addTestTimeAndPass(meter, channelFlag, System.currentTimeMillis() - currTime);
-                    startCommandResult.put(meter.getId(), true);
+            for (Map.Entry<Integer, Boolean> mapForTest : startCommandResult.entrySet()) {
+                if (!mapForTest.getValue()) {
+                    meter = meterList.get(mapForTest.getKey() - 1);
+
+                    //Если на данный момен времени счётчик получил свои импульсы
+                    if (meter.run(pulseValue, stendDLLCommands)) {
+
+                        addTestTimePass(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
+                        startCommandResult.put(meter.getId(), true);
+
+                        //Если количество импульсов не хватает тест идёт дальше провален
+                    } else {
+                        errorCommand = meter.returnResultCommand(index, channelFlag);
+                        errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                    }
                 }
+            }
+            Thread.sleep(500);
+        }
+
+        //Выставляю результат теста счётчиков, которые прошли тест
+        for(Map.Entry<Integer, Boolean> mapResultPass : startCommandResult.entrySet()) {
+            if (!mapResultPass.getValue()) {
+                addTestTimeFail(meterList.get(mapResultPass.getKey()), channelFlag, getTime(timeForTest), channelFlag);
             }
         }
 
@@ -179,29 +175,52 @@ public class StartCommand implements Commands, Serializable {
         if (interrupt) throw  new InterruptedTestException();
         Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-        /**
-         * Необходимо записывать время и результат в массив
-         * Вид записи результата:
-         * Начало это просто время теста
-         * Как только пользователь нажимает старт (очистка и таймер теста)
-         * Если прошёл "Время теста + P" и цвет пройденного теста
-         * Если нет, то "Время теста + F" и цвет проваленного теста
-         */
+        //Номер измерения
+        int countResult = 1;
+        Meter meter;
+        Meter.CommandResult errorCommand;
 
         while (!interrupt) {
+
+            //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
+            for (Meter meter1 : meterList) {
+                setDefTestrResults(meter1, channelFlag, index);
+            }
+
             currTime = System.currentTimeMillis();
             timeEnd = currTime + timeForTest;
 
             while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-                if (interrupt) throw new InterruptedTestException();
+                if (interrupt) throw  new InterruptedTestException();
 
-                for (Meter meter : meterList) {
-                    if (!meter.run(pulseValue, stendDLLCommands)) {
-                        addTestTimeAndPass(meter, channelFlag, System.currentTimeMillis() - currTime);
-                        startCommandResult.put(meter.getId(), true);
+                for (Map.Entry<Integer, Boolean> mapForTest : startCommandResult.entrySet()) {
+                    if (!mapForTest.getValue()) {
+                        meter = meterList.get(mapForTest.getKey() - 1);
+
+                        //Если на данный момен времени счётчик получил свои импульсы
+                        if (meter.run(pulseValue, stendDLLCommands)) {
+
+                            addTestTimePass(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
+                            startCommandResult.put(meter.getId(), true);
+
+                            //Если количество импульсов не хватает тест идёт дальше провален
+                        } else {
+                            errorCommand = meter.returnResultCommand(index, channelFlag);
+                            errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                        }
                     }
                 }
+                Thread.sleep(500);
             }
+
+            //Выставляю результат теста счётчиков, которые прошли тест
+            for(Map.Entry<Integer, Boolean> mapResultPass : startCommandResult.entrySet()) {
+                if (!mapResultPass.getValue()) {
+                    addTestTimeFail(meterList.get(mapResultPass.getKey()), channelFlag, getTime(timeForTest), channelFlag);
+                }
+            }
+
+            countResult++;
         }
 
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
@@ -216,67 +235,29 @@ public class StartCommand implements Commands, Serializable {
         return init;
     }
 
-//    //Расчётная формула времени теста по ГОСТ
-//    public long initTimeForGOSTTest() {
-//        if (threePhaseMeter) {
-//            amountMeasElem = 3;
-//        } else amountMeasElem = 1;
-//
-//        if (!transfDetectShunt) {
-//            if (accuracyClass == 1.0) {
-//                ratedCurr = baseCurrMeter * 0.002;
-//            } else {
-//                ratedCurr = baseCurrMeter * 0.001;
-//            }
-//        } else {
-//            ratedCurr = baseCurrMeter * 0.004;
-//        }
-//
-//        double formulaResult = 2.3 * (60000 / (constMeterForTest * amountMeasElem * ratedVolt * ratedCurr));
-//
-//        //Округляю результат до 3х знаков
-//        BigDecimal bigDecimalResult = new BigDecimal(String.valueOf(formulaResult)).setScale(3, BigDecimal.ROUND_CEILING);
-//
-//        String[] timeArr = String.valueOf(bigDecimalResult).split("\\.");
-//
-//        //Округляю значение после запятой до целых секунд
-//        BigDecimal bigDecimal = new BigDecimal(Integer.parseInt(timeArr[1]) * 0.06).setScale(0, BigDecimal.ROUND_CEILING);
-//
-//        return ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
-//    }
-
-    //В зависимости от направления тока переносит время прохождения теста в нужную строку
-    private void addTestTimeAndPass(Meter meter, int channelFlag, long timePass) {
-        Meter.StartResult commandResult;
-        switch (channelFlag) {
-            case  0: {
-                commandResult = (Meter.StartResult) meter.getErrorListAPPls().get(index);
-                commandResult.setTimeToPass(timePass);
-                commandResult.setPassTest(true);
-            }break;
-
-            case  1: {
-                commandResult = (Meter.StartResult) meter.getErrorListAPMns().get(index);
-                commandResult.setTimeToPass(timePass);
-                commandResult.setPassTest(true);
-            }break;
-
-            case  2: {
-                commandResult = (Meter.StartResult) meter.getErrorListRPPls().get(index);
-                commandResult.setTimeToPass(timePass);
-                commandResult.setPassTest(true);
-            }break;
-
-            case  3: {
-                commandResult = (Meter.StartResult) meter.getErrorListRPMns().get(index);
-                commandResult.setTimeToPass(timePass);
-                commandResult.setPassTest(true);
-            }break;
-        }
+    //Переводит милисикунды в нужный формат
+    private String getTime(long mlS){
+        long s = mlS / 1000;
+        long hours = s / 3600;
+        long minutes = (s % 3600) / 60;
+        long seconds = s % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
-    public void setTableColumnError(List<TableColumn<Meter.CommandResult, String>> tableColumnError) {
-        this.tableColumnError = tableColumnError;
+    //Переносит время провала теста в нужную строку
+    private void addTestTimeFail(Meter meter, int channelFlag, String timeFail, int countResult) {
+        Meter.StartResult commandResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
+        commandResult.setPassTest(false);
+        commandResult.setLastResult("F" + timeFail + " " + "-");
+        commandResult.getResults()[countResult] = commandResult.getLastResult().substring(1, commandResult.getLastResult().length() - 2);
+    }
+
+    //Переносит время провала теста в нужную строку
+    private void addTestTimePass(Meter meter, int channelFlag, String timePass, int countResult) {
+        Meter.StartResult commandResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
+        commandResult.setPassTest(true);
+        commandResult.setLastResult("P" + timePass + " " + "+");
+        commandResult.getResults()[countResult] = commandResult.getLastResult().substring(1, commandResult.getLastResult().length() - 2);
     }
 
     public void setIndex(int index) {
@@ -294,26 +275,6 @@ public class StartCommand implements Commands, Serializable {
     public void setPulseValue(int pulseValue) {
         this.pulseValue = pulseValue;
     }
-
-//    public void setTransfDetectShunt(boolean transfDetectShunt) {
-//        this.transfDetectShunt = transfDetectShunt;
-//    }
-
-//    public void setConstMeterForTest(int constMeterForTest) {
-//        this.constMeterForTest = constMeterForTest;
-//    }
-//
-//    public void setBaseCurrMeter(double baseCurrMeter) {
-//        this.baseCurrMeter = baseCurrMeter;
-//    }
-//
-//    public void setThreePhaseMeter(boolean treePhaseMeter) {
-//        this.threePhaseMeter = treePhaseMeter;
-//    }
-//
-//    public void setAccuracyClass(double accuracyClass) {
-//        this.accuracyClass = accuracyClass;
-//    }
 
     public void setRatedCurr(double ratedCurr) {
         this.ratedCurr = ratedCurr;
@@ -369,6 +330,16 @@ public class StartCommand implements Commands, Serializable {
 
     public void setTimeForTest(long timeForTest) {
         this.timeForTest = timeForTest;
+    }
+
+    //reset
+    private void setDefTestrResults(Meter meter, int channelFlag, int index) {
+        Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
+        startResult.setLastResult(null);
+        startResult.setPassTest(false);
+        meter.setAmountImn(0);
+        meter.setSearchMark(false);
+
     }
 
 }

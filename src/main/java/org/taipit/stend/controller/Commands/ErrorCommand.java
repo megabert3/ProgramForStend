@@ -1,9 +1,6 @@
 package org.taipit.stend.controller.Commands;
 
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.paint.Color;
-import javafx.util.Callback;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
@@ -20,11 +17,11 @@ public class ErrorCommand implements Commands, Serializable {
 
     private StendDLLCommands stendDLLCommands;
 
-    //Флаг прохождения теста для счётчика
-    private boolean passTest = false;
-
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
+
+    //Следующая команда ErrorCommand?
+    private boolean nextCommandError;
 
     //Команда для прерывания метода
     private boolean interrupt;
@@ -101,43 +98,8 @@ public class ErrorCommand implements Commands, Serializable {
     //Константа счётчика для теста
     private int constantMeter;
 
-    //Лист со столбами счётчикв для изменения флага и цвета
-    private List<TableColumn<Meter.CommandResult, String>> tableColumnError;
-
     //Флаг для прекращения сбора погрешности
     private HashMap<Integer, Boolean> flagInStop;
-
-    //Настройка для отдельного поля счётчика изменения цвета погрешности
-    private transient Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>> cellFactory =
-            new Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>>() {
-                public TableCell call(TableColumn p) {
-                    return new TableCell<Meter.CommandResult, String>() {
-                        double err;
-                        @Override
-                        public void updateItem(String item, boolean empty) {
-                            super.updateItem(item, empty);
-
-                            if (item == null || empty) {
-                                setText("");
-                            } else {
-
-                                err = Double.parseDouble(item);
-
-                                if (err > emax || err < emin) {
-                                    setText(item);
-                                    setTextFill(Color.RED);
-                                    passTest = false;
-                                } else {
-                                    setText(item);
-                                    setTextFill(Color.BLUE);
-                                    passTest = true;
-                                }
-                            }
-                        }
-                    };
-                }
-            };
-
 
     public ErrorCommand(String id, int phase, String current, int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
         this.id = id;
@@ -186,10 +148,6 @@ public class ErrorCommand implements Commands, Serializable {
     public void execute() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
         if (interrupt) throw new InterruptedTestException();
 
-        for (TableColumn<Meter.CommandResult, String> tableColumn : tableColumnError) {
-            tableColumn.setCellFactory(cellFactory);
-        }
-
         //Выбор константы в зависимости от энергии
         if (channelFlag == 0 || channelFlag == 1) {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
@@ -222,16 +180,25 @@ public class ErrorCommand implements Commands, Serializable {
 
         if (interrupt) throw new InterruptedTestException();
 
+        for (Meter meter : meterForTestList) {
+            meter.setAmountMeasur(0);
+            meter.setErrorResultChange(0);
+        }
+
         //Для быстрой становки флага прошёл счётчик тест или нет
         Meter.CommandResult resultMeter;
+
+        int resultNo;
+        String strError;
+        String[] strMass;
+        String error;
+        //Для сравнения
+        double doubleErr;
+        //Для количества измерений
 
         while (flagInStop.containsValue(false)) {
 
                 if (interrupt) throw new InterruptedTestException();
-                int resultNo;
-                String strError;
-                String[] strMass;
-                String error;
 
                 for (Meter meter : meterForTestList) {
                     strError = stendDLLCommands.meterErrorRead(meter.getId());
@@ -241,32 +208,42 @@ public class ErrorCommand implements Commands, Serializable {
 
                     if (resultNo != 0) {
                         resultMeter = meter.setResultsInErrorList(index, resultNo, error, channelFlag);
-                        resultMeter.setPassTest(passTest);
-                        meter.setAmountMeasur(meter.getAmountMeasur() + 1);
+                        doubleErr = Double.parseDouble(error);
+
+                        if (doubleErr > emax || doubleErr < emin) {
+                            resultMeter.setLastResult("F" + error);
+                            resultMeter.setPassTest(false);
+                        } else {
+                            resultMeter.setLastResult("P" + error);
+                            resultMeter.setPassTest(true);
+                        }
+
+                        if (meter.getErrorResultChange() != resultNo) {
+                            meter.setAmountMeasur(meter.getAmountMeasur() + 1);
+                            meter.setErrorResultChange(resultNo);
+                        }
                     }
 
                     if (meter.getAmountMeasur() >= countResult) {
                         flagInStop.put(meter.getId(), true);
                     }
+
+                    for (Meter meter1 : meterForTestList) {
+                        meter1.setErrorResultChange(0);
+                    }
                 }
         }
 
-        for (Meter meter : meterForTestList) {
-            meter.setAmountMeasur(0);
-        }
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        if (nextCommandError) return;
 
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
     }
 
     //Метод для цикличной поверки счётчиков
     @Override
     public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
         if (interrupt) throw new InterruptedTestException();
-
-        for (TableColumn<Meter.CommandResult, String> tableColumn : tableColumnError) {
-            tableColumn.setCellFactory(cellFactory);
-        }
 
         //Выбор константы в зависимости от энергии
         if (channelFlag == 0 || channelFlag == 1) {
@@ -298,15 +275,23 @@ public class ErrorCommand implements Commands, Serializable {
 
         if (interrupt) throw new InterruptedTestException();
 
+        //Выставляю значения для количества тестов в положение старта
+        for (Meter meter : meterForTestList) {
+            meter.setAmountMeasur(0);
+            meter.setErrorResultChange(0);
+        }
+
         //Для быстрой становки флага прошёл счётчик тест или нет
         Meter.CommandResult resultMeter;
 
+        int resultNo;
+        String strError;
+        String[] strMass;
+        String error;
+        double doubleErr;
+
         while (!interrupt) {
 
-            int resultNo;
-            String strError;
-            String[] strMass;
-            String error;
 
             for (Meter meter : meterForTestList) {
                 strError = stendDLLCommands.meterErrorRead(meter.getId());
@@ -316,15 +301,25 @@ public class ErrorCommand implements Commands, Serializable {
 
                 if (resultNo != 0) {
                     resultMeter = meter.setResultsInErrorList(index, resultNo, error, channelFlag);
-                    resultMeter.setPassTest(passTest);
+                    doubleErr = Double.parseDouble(error);
+
+                    if (doubleErr > emax || doubleErr < emin) {
+                        resultMeter.setLastResult("F" + error);
+                        resultMeter.setPassTest(false);
+                    } else {
+                        resultMeter.setLastResult("P" + error);
+                        resultMeter.setPassTest(true);
+                    }
+
+                    meter.setAmountMeasur(meter.getAmountMeasur() + 1);
                 }
             }
 
             Thread.sleep(300);
         }
 
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     //Опрашивает счётчики до нужно значения проходов
@@ -410,16 +405,16 @@ public class ErrorCommand implements Commands, Serializable {
         this.interrupt = interrupt;
     }
 
-    public void setTableColumnError(List<TableColumn<Meter.CommandResult, String>> tableColumnError) {
-        this.tableColumnError = tableColumnError;
-    }
-
     public void setCountResult(String countResult) {
         this.countResult = Integer.parseInt(countResult);
     }
 
     public String getCountResult() {
         return String.valueOf(countResult);
+    }
+
+    public void setNextCommandError(boolean nextCommandError) {
+        this.nextCommandError = nextCommandError;
     }
 
     @Override
