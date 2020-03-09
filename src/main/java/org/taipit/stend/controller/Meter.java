@@ -57,9 +57,6 @@ public class Meter implements Serializable{
     //Количество импульсов полученных в результате теста чувств. сам.
     private int amountImn;
 
-    //Поиск метки сам. чувств.
-    boolean searchMark;
-
     //Серийный номер счётчика
     private String serNoMeter;
 
@@ -282,21 +279,6 @@ public class Meter implements Serializable{
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
-    //Данная команда необходима для тестов самоход и чувствительность
-    public boolean run(int pulseValue, StendDLLCommands stendDLLCommands) {
-        if (amountImn < pulseValue) {
-            if (!searchMark) {
-                stendDLLCommands.searchMark(id);
-                searchMark = true;
-            } else {
-                if (stendDLLCommands.searchMarkResult(id)) {
-                    amountImn++;
-                    searchMark = false;
-                }
-            }
-        } else return false;
-        return true;
-    }
 
     public String[] getLocalErrors() {
         return localErrors;
@@ -474,8 +456,8 @@ public class Meter implements Serializable{
         this.amountImn = amountImn;
     }
 
-    public void setSearchMark(boolean searchMark) {
-        this.searchMark = searchMark;
+    public int getAmountImn() {
+        return amountImn;
     }
 
     //Абстрактный класс для записи результата каждой точки

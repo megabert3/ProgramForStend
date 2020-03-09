@@ -50,13 +50,6 @@ public class RTCCommand implements Commands, Serializable {
     //Тип измерения
     private int errorType;
 
-    public void setTableColumnError(List<TableColumn<Meter.CommandResult, String>> tableColumnError) {
-        this.tableColumnError = tableColumnError;
-    }
-
-    //Лист со столбами счётчикв для изменения флага и цвета
-    private List<TableColumn<Meter.CommandResult, String>> tableColumnError;
-
     public RTCCommand(int pulseForRTC, double freg, int countResult, int errorType, double errorForFalseTest, int channelFlagForSave) {
         this.pulseForRTC = pulseForRTC;
         this.freg = freg;
@@ -77,7 +70,7 @@ public class RTCCommand implements Commands, Serializable {
         int count = 0;
 
         if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
-                0.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
+                100.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
         if (interrupt) throw new InterruptedTestException();
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
@@ -85,9 +78,11 @@ public class RTCCommand implements Commands, Serializable {
         Thread.sleep(stendDLLCommands.getPauseForStabization());
 
         if (interrupt) throw new InterruptedTestException();
+
         for (Meter meter : meterList) {
             if (!stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC)) throw new ConnectForStendExeption();
         }
+        Meter.CommandResult errorCommand;
 
         while (count < countResult) {
 
@@ -97,9 +92,9 @@ public class RTCCommand implements Commands, Serializable {
 
             for (Meter meter : meterList) {
                 try {
-                    /**
-                     * Проверить на тру или фолс в корневом методе
-                     */
+                    meter = meterList.get(mapResult.getKey() - 1);
+                    errorCommand = meter.returnResultCommand(index, channelFlag);
+
                     double result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId())) - 1.000000;
 
                     if (result > errorForFalseTest || result < -errorForFalseTest) {
@@ -112,6 +107,7 @@ public class RTCCommand implements Commands, Serializable {
                     System.out.println("Пустая строчка");
                 }
             }
+
 
             count++;
         }
@@ -169,6 +165,10 @@ public class RTCCommand implements Commands, Serializable {
 
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+    }
+
+    private void addRTCTestResultRass(Meter meter, double RTCError, boolean passOrNot, int channelFlagForSave) {
+
     }
 
     private void addRTCTestResult(Meter meter, double RTCError, boolean passOrNot, int channelFlagForSave) {

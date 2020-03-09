@@ -106,8 +106,8 @@ public class CreepCommand implements Commands, Serializable {
         Meter.CommandResult errorCommand;
 
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-        for (Meter meter1 : meterList) {
-            setDefTestrResults(meter1, channelFlag, index);
+        for (Meter meterForReset : meterList) {
+            setDefTestrResults(meterForReset, channelFlag, index);
         }
 
         currTime = System.currentTimeMillis();
@@ -118,19 +118,23 @@ public class CreepCommand implements Commands, Serializable {
 
             for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
                 if (mapResult.getValue()) {
+
                     meter = meterList.get(mapResult.getKey() - 1);
+                    errorCommand = meter.returnResultCommand(index, channelFlag);
 
-                    //Если на данный момент времени всё хорошо и счётчик не получал импульсов
-                    if (meter.run(pulseValue, stendDLLCommands)) {
+                    if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
+                        meter.setAmountMeasur(meter.getAmountImn() + 1);
 
-                        errorCommand = meter.returnResultCommand(index, channelFlag);
-                        errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                        if (meter.getAmountImn() > pulseValue) {
+                            addTestTimeFail(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
+                            creepCommandResult.put(mapResult.getKey(), false);
+                        } else {
+                            stendDLLCommands.searchMark(mapResult.getKey());
+                            errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                        }
 
-                        //Если количество импульсов переваливает и тест провален
                     } else {
-                        //Если счётчик провалили тест
-                        addTestTimeFail(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
-                        creepCommandResult.put(meter.getId(), false);
+                        errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
                     }
                 }
             }
@@ -140,7 +144,7 @@ public class CreepCommand implements Commands, Serializable {
         //Выставляю результат теста счётчиков, которые прошли тест
         for(Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
             if (mapResultPass.getValue()) {
-                addTestTimePass(meterList.get(mapResultPass.getKey()), channelFlag, getTime(timeForTest), channelFlag);
+                addTestTimePass(meterList.get(mapResultPass.getKey() - 1), channelFlag, getTime(timeForTest), channelFlag);
             }
         }
 
@@ -170,8 +174,8 @@ public class CreepCommand implements Commands, Serializable {
         while (!interrupt) {
 
             //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-            for (Meter meter1 : meterList) {
-                setDefTestrResults(meter1, channelFlag, index);
+            for (Meter meterForReset : meterList) {
+                setDefTestrResults(meterForReset, channelFlag, index);
             }
 
             currTime = System.currentTimeMillis();
@@ -182,19 +186,22 @@ public class CreepCommand implements Commands, Serializable {
 
                 for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
                     if (mapResult.getValue()) {
-                        meter = meterList.get(mapResult.getKey());
+                        meter = meterList.get(mapResult.getKey() - 1);
+                        errorCommand = meter.returnResultCommand(index, channelFlag);
 
-                        //Если на данный момен времени всё хорошо и счётчик не получал импульсов
-                        if (meter.run(pulseValue, stendDLLCommands)) {
+                        if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
+                            meter.setAmountMeasur(meter.getAmountImn() + 1);
 
-                            errorCommand = meter.returnResultCommand(index, channelFlag);
-                            errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                            if (meter.getAmountImn() >= pulseValue) {
+                                addTestTimeFail(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
+                                creepCommandResult.put(mapResult.getKey(), false);
+                            } else {
+                                stendDLLCommands.searchMark(mapResult.getKey());
+                                errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                            }
 
-                            //Если количество импульсов переваливает и тест провален
                         } else {
-                            //Если счётчик провалили тест
-                            addTestTimeFail(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
-                            creepCommandResult.put(meter.getId(), false);
+                            errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
                     }
                 }
@@ -204,7 +211,7 @@ public class CreepCommand implements Commands, Serializable {
             //Выставляю результат теста счётчиков, которые прошли тест
             for(Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
                 if (mapResultPass.getValue()) {
-                    addTestTimePass(meterList.get(mapResultPass.getKey()), channelFlag, getTime(timeForTest), channelFlag);
+                    addTestTimePass(meterList.get(mapResultPass.getKey() - 1), channelFlag, getTime(timeForTest), channelFlag);
                 }
             }
 
@@ -229,7 +236,7 @@ public class CreepCommand implements Commands, Serializable {
         creepResult.setLastResult(null);
         creepResult.setPassTest(true);
         meter.setAmountImn(0);
-        meter.setSearchMark(false);
+        stendDLLCommands.searchMark(meter.getId());
     }
 
     //Переносит время провала теста в нужную строку

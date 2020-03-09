@@ -180,11 +180,6 @@ public class ErrorCommand implements Commands, Serializable {
 
         if (interrupt) throw new InterruptedTestException();
 
-        for (Meter meter : meterForTestList) {
-            meter.setAmountMeasur(0);
-            meter.setErrorResultChange(0);
-        }
-
         //Для быстрой становки флага прошёл счётчик тест или нет
         Meter.CommandResult resultMeter;
 
@@ -198,40 +193,41 @@ public class ErrorCommand implements Commands, Serializable {
 
         while (flagInStop.containsValue(false)) {
 
-                if (interrupt) throw new InterruptedTestException();
+            if (interrupt) throw new InterruptedTestException();
 
-                for (Meter meter : meterForTestList) {
-                    strError = stendDLLCommands.meterErrorRead(meter.getId());
-                    strMass = strError.split(",");
-                    resultNo = Integer.parseInt(strMass[0]);
-                    error = strMass[1];
+            for (Meter meter : meterForTestList) {
+                strError = stendDLLCommands.meterErrorRead(meter.getId());
+                strMass = strError.split(",");
+                resultNo = Integer.parseInt(strMass[0]);
+                error = strMass[1];
 
-                    if (resultNo != 0) {
-                        resultMeter = meter.setResultsInErrorList(index, resultNo, error, channelFlag);
-                        doubleErr = Double.parseDouble(error);
+                if (resultNo != 0) {
+                    resultMeter = meter.setResultsInErrorList(index, resultNo, error, channelFlag);
+                    doubleErr = Double.parseDouble(error);
 
-                        if (doubleErr > emax || doubleErr < emin) {
-                            resultMeter.setLastResult("F" + error);
-                            resultMeter.setPassTest(false);
-                        } else {
-                            resultMeter.setLastResult("P" + error);
-                            resultMeter.setPassTest(true);
-                        }
-
-                        if (meter.getErrorResultChange() != resultNo) {
-                            meter.setAmountMeasur(meter.getAmountMeasur() + 1);
-                            meter.setErrorResultChange(resultNo);
-                        }
+                    if (doubleErr > emax || doubleErr < emin) {
+                        resultMeter.setLastResult("F" + error);
+                        resultMeter.setPassTest(false);
+                    } else {
+                        resultMeter.setLastResult("P" + error);
+                        resultMeter.setPassTest(true);
                     }
 
-                    if (meter.getAmountMeasur() >= countResult) {
-                        flagInStop.put(meter.getId(), true);
-                    }
-
-                    for (Meter meter1 : meterForTestList) {
-                        meter1.setErrorResultChange(0);
+                    if (meter.getErrorResultChange() != resultNo) {
+                        meter.setAmountMeasur(meter.getAmountMeasur() + 1);
+                        meter.setErrorResultChange(resultNo);
                     }
                 }
+
+                if (meter.getAmountMeasur() >= countResult) {
+                    flagInStop.put(meter.getId(), true);
+                }
+            }
+        }
+
+        for (Meter meter : meterForTestList) {
+            meter.setAmountMeasur(0);
+            meter.setErrorResultChange(0);
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
@@ -270,16 +266,11 @@ public class ErrorCommand implements Commands, Serializable {
         Thread.sleep(stendDLLCommands.getPauseForStabization());
 
         if (interrupt) throw new InterruptedTestException();
+
         //Сказать константу счётчика стенду для кажого места
         stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
 
         if (interrupt) throw new InterruptedTestException();
-
-        //Выставляю значения для количества тестов в положение старта
-        for (Meter meter : meterForTestList) {
-            meter.setAmountMeasur(0);
-            meter.setErrorResultChange(0);
-        }
 
         //Для быстрой становки флага прошёл счётчик тест или нет
         Meter.CommandResult resultMeter;
@@ -291,7 +282,6 @@ public class ErrorCommand implements Commands, Serializable {
         double doubleErr;
 
         while (!interrupt) {
-
 
             for (Meter meter : meterForTestList) {
                 strError = stendDLLCommands.meterErrorRead(meter.getId());
@@ -311,7 +301,6 @@ public class ErrorCommand implements Commands, Serializable {
                         resultMeter.setPassTest(true);
                     }
 
-                    meter.setAmountMeasur(meter.getAmountMeasur() + 1);
                 }
             }
 

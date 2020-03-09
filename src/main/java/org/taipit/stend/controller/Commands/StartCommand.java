@@ -119,8 +119,8 @@ public class StartCommand implements Commands, Serializable {
         Meter.CommandResult errorCommand;
 
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-        for (Meter meter1 : meterList) {
-            setDefTestrResults(meter1, channelFlag, index);
+        for (Meter meterForReset : meterList) {
+            setDefTestrResults(meterForReset, channelFlag, index);
         }
 
         currTime = System.currentTimeMillis();
@@ -129,19 +129,24 @@ public class StartCommand implements Commands, Serializable {
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
             if (interrupt) throw  new InterruptedTestException();
 
-            for (Map.Entry<Integer, Boolean> mapForTest : startCommandResult.entrySet()) {
-                if (!mapForTest.getValue()) {
-                    meter = meterList.get(mapForTest.getKey() - 1);
+            for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
+                if (!mapResult.getValue()) {
 
-                    //Если на данный момен времени счётчик получил свои импульсы
-                    if (meter.run(pulseValue, stendDLLCommands)) {
+                    meter = meterList.get(mapResult.getKey() - 1);
+                    errorCommand = meter.returnResultCommand(index, channelFlag);
 
-                        addTestTimePass(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
-                        startCommandResult.put(meter.getId(), true);
+                    if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
+                        meter.setAmountMeasur(meter.getAmountImn() + 1);
 
-                        //Если количество импульсов не хватает тест идёт дальше провален
+                        if (meter.getAmountImn() >= pulseValue) {
+                            addTestTimePass(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
+                            startCommandResult.put(mapResult.getKey(), true);
+                        } else {
+                            stendDLLCommands.searchMark(mapResult.getKey());
+                            errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                        }
+
                     } else {
-                        errorCommand = meter.returnResultCommand(index, channelFlag);
                         errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
                     }
                 }
@@ -150,9 +155,9 @@ public class StartCommand implements Commands, Serializable {
         }
 
         //Выставляю результат теста счётчиков, которые прошли тест
-        for(Map.Entry<Integer, Boolean> mapResultPass : startCommandResult.entrySet()) {
-            if (!mapResultPass.getValue()) {
-                addTestTimeFail(meterList.get(mapResultPass.getKey()), channelFlag, getTime(timeForTest), channelFlag);
+        for(Map.Entry<Integer, Boolean> mapResultFail : startCommandResult.entrySet()) {
+            if (!mapResultFail.getValue()) {
+                addTestTimeFail(meterList.get(mapResultFail.getKey() - 1), channelFlag, getTime(timeForTest), channelFlag);
             }
         }
 
@@ -183,8 +188,8 @@ public class StartCommand implements Commands, Serializable {
         while (!interrupt) {
 
             //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-            for (Meter meter1 : meterList) {
-                setDefTestrResults(meter1, channelFlag, index);
+            for (Meter meterForReset : meterList) {
+                setDefTestrResults(meterForReset, channelFlag, index);
             }
 
             currTime = System.currentTimeMillis();
@@ -193,19 +198,24 @@ public class StartCommand implements Commands, Serializable {
             while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
                 if (interrupt) throw  new InterruptedTestException();
 
-                for (Map.Entry<Integer, Boolean> mapForTest : startCommandResult.entrySet()) {
-                    if (!mapForTest.getValue()) {
-                        meter = meterList.get(mapForTest.getKey() - 1);
+                for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
+                    if (!mapResult.getValue()) {
 
-                        //Если на данный момен времени счётчик получил свои импульсы
-                        if (meter.run(pulseValue, stendDLLCommands)) {
+                        meter = meterList.get(mapResult.getKey() - 1);
+                        errorCommand = meter.returnResultCommand(index, channelFlag);
 
-                            addTestTimePass(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
-                            startCommandResult.put(meter.getId(), true);
+                        if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
+                            meter.setAmountMeasur(meter.getAmountImn() + 1);
 
-                            //Если количество импульсов не хватает тест идёт дальше провален
+                            if (meter.getAmountImn() >= pulseValue) {
+                                addTestTimePass(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
+                                startCommandResult.put(mapResult.getKey(), true);
+                            } else {
+                                stendDLLCommands.searchMark(mapResult.getKey());
+                                errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                            }
+
                         } else {
-                            errorCommand = meter.returnResultCommand(index, channelFlag);
                             errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
                     }
@@ -214,9 +224,9 @@ public class StartCommand implements Commands, Serializable {
             }
 
             //Выставляю результат теста счётчиков, которые прошли тест
-            for(Map.Entry<Integer, Boolean> mapResultPass : startCommandResult.entrySet()) {
-                if (!mapResultPass.getValue()) {
-                    addTestTimeFail(meterList.get(mapResultPass.getKey()), channelFlag, getTime(timeForTest), channelFlag);
+            for(Map.Entry<Integer, Boolean> mapResultFail : startCommandResult.entrySet()) {
+                if (!mapResultFail.getValue()) {
+                    addTestTimeFail(meterList.get(mapResultFail.getKey() - 1), channelFlag, getTime(timeForTest), channelFlag);
                 }
             }
 
@@ -338,8 +348,7 @@ public class StartCommand implements Commands, Serializable {
         startResult.setLastResult(null);
         startResult.setPassTest(false);
         meter.setAmountImn(0);
-        meter.setSearchMark(false);
-
+        stendDLLCommands.searchMark(meter.getId());
     }
 
 }

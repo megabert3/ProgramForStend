@@ -45,9 +45,6 @@ public abstract class StendDLLCommands {
     //Константа счётчика
     private double constant;
 
-    //Константы счётчиков
-    //public static double[] constantsForMetersOnPlaces = initializationConstantsForMetersOnPlaces();
-
     //Необходимо для быстрого обхода в цикле
     private HashMap<Integer, Meter> amountActivePlacesForTest; // = initAmountActivePlacesForTest();
 
