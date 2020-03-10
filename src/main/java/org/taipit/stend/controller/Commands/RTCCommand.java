@@ -1,6 +1,5 @@
 package org.taipit.stend.controller.Commands;
 
-import javafx.scene.control.TableColumn;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
@@ -92,7 +91,7 @@ public class RTCCommand implements Commands, Serializable {
 
             for (Meter meter : meterList) {
                 try {
-                    meter = meterList.get(mapResult.getKey() - 1);
+                    //meter = meterList.get(mapResult.getKey() - 1);
                     errorCommand = meter.returnResultCommand(index, channelFlag);
 
                     double result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId())) - 1.000000;

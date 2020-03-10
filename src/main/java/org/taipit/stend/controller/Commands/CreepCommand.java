@@ -123,7 +123,7 @@ public class CreepCommand implements Commands, Serializable {
                     errorCommand = meter.returnResultCommand(index, channelFlag);
 
                     if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
-                        meter.setAmountMeasur(meter.getAmountImn() + 1);
+                        meter.setAmountImn(meter.getAmountImn() + 1);
 
                         if (meter.getAmountImn() > pulseValue) {
                             addTestTimeFail(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
@@ -190,7 +190,7 @@ public class CreepCommand implements Commands, Serializable {
                         errorCommand = meter.returnResultCommand(index, channelFlag);
 
                         if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
-                            meter.setAmountMeasur(meter.getAmountImn() + 1);
+                            meter.setAmountImn(meter.getAmountImn() + 1);
 
                             if (meter.getAmountImn() >= pulseValue) {
                                 addTestTimeFail(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);

@@ -297,12 +297,12 @@ public abstract class StendDLLCommands {
     public String clockErrorRead (double freq, int errType, int meterNo) {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.Clock_Error_Read(pointer, freq, errType, meterNo, port);
-        return pointer.getValue().getString(0, "UTF-8");
+        return pointer.getValue().getString(0, "ASCII");
     }
 
     // Закрыть порт
     public String dllPortClose() {
-        PointerByReference pointer = new PointerByReference(new Memory(1024));
+        PointerByReference pointer = new PointerByReference(new Memory(2048));
         stend.Dll_Port_Close(pointer);
         return pointer.getValue().getString(0, "ASCII");
     }
