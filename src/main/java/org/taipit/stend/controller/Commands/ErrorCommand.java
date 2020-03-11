@@ -1,6 +1,5 @@
 package org.taipit.stend.controller.Commands;
 
-import javafx.scene.control.TableColumn;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;

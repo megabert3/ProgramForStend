@@ -57,12 +57,6 @@ public class TestErrorTableFrameController {
     private List<TableView<Meter.CommandResult>> tabViewListAPMns = new ArrayList<>();
     private List<TableView<Meter.CommandResult>> tabViewListRPPls = new ArrayList<>();
     private List<TableView<Meter.CommandResult>> tabViewListRPMns = new ArrayList<>();
-//
-//    //Список TableColumn для испытываемых счётчиков в разных направлениях
-//    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPPls = new ArrayList<>();
-//    private List<TableColumn<Meter.CommandResult, String>> tabColumnListAPMns = new ArrayList<>();
-//    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPPls = new ArrayList<>();
-//    private List<TableColumn<Meter.CommandResult, String>> tabColumnListRPMns = new ArrayList<>();
 
     private double Imax;
 
@@ -104,38 +98,9 @@ public class TestErrorTableFrameController {
 
     private String witness;
 
-    //Настройка для отдельного поля счётчика изменения цвета погрешности после окончания теста
-    private transient Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>> cellFactoryEndTest =
-            new Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>>() {
-                public TableCell call(TableColumn p) {
-                    return new TableCell<Meter.CommandResult, String>() {
-                        @Override
-                        public void updateItem(String item, boolean empty) {
-                            super.updateItem(item, empty);
-
-                            char firstSymbol;
-
-                            if (item == null || empty) {
-                                setText("");
-                            } else {
-                                firstSymbol = item.charAt(0);
-
-                                if (firstSymbol == 'N') {
-                                    setText(item.substring(1));
-
-                                } else if (firstSymbol == 'P') {
-                                    setText(item.substring(1));
-                                    setTextFill(Color.BLUE);
-
-                                } else if (firstSymbol == 'F') {
-                                    setText(item.substring(1));
-                                    setTextFill(Color.RED);
-                                }
-                            }
-                        }
-                    };
-                }
-            };
+    private Thread automaticThread;
+    private Thread manualTread;
+    private Thread UnThread;
 
     @FXML
     private Button btnSave;
@@ -272,65 +237,419 @@ public class TestErrorTableFrameController {
     @FXML
     private Label txtLabDate;
 
-    public void setListMetersForTest(List<Meter> listMetersForTest) {
-        this.listMetersForTest = listMetersForTest;
-    }
-
-    public void setImax(double imax) {
-        Imax = imax;
-    }
-
-    public void setIb(double ib) {
-        Ib = ib;
-    }
-
-    public void setUn(double un) {
-        Un = un;
-    }
-
-    public void setFn(double fn) {
-        Fn = fn;
-    }
-
-    public void setMethodic(Methodic methodic) {
-        this.methodic = methodic;
-    }
-
-    public void setTypeOfMeasuringElementShunt(boolean typeOfMeasuringElementShunt) {
-        this.typeOfMeasuringElementShunt = typeOfMeasuringElementShunt;
-    }
-
-    public void setTypeCircuit(boolean typeCircuitThreePhase) {
-        this.typeCircuitThreePhase = typeCircuitThreePhase;
-    }
-
-    public void setAccuracyClassAP(double accuracyClassAP) {
-        this.accuracyClassAP = accuracyClassAP;
-    }
-
-    public void setAccuracyClassRP(double accuracyClassRP) {
-        this.accuracyClassRP = accuracyClassRP;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
-    }
-
-    public void setController(String controller) {
-        this.controller = controller;
-    }
-
-    public void setWitness(String witness) {
-        this.witness = witness;
-    }
-
-    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
-        this.stendDLLCommands = stendDLLCommands;
-    }
-
     @FXML
     void actionEventSaveExit(ActionEvent event) {
 
+    }
+
+    @FXML
+    void actionEventTestControl(ActionEvent event) {
+        try {
+            try {
+                //------------------------------------------------------------------------------------------------
+                //Логика работы автоматического режима работы
+                if (automaticThread.isAlive()) {
+                    return;
+                }
+
+                if (manualTread.isAlive()) {
+                    manualTread.interrupt();
+                }
+
+                if (UnThread.isAlive()) {
+                    UnThread.interrupt();
+                }
+
+                if (event.getSource() == tglBtnAuto) {
+                    automaticThread = new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                startAutomaticTest();
+                            } catch (InterruptedTestException | InterruptedException e) {
+                                e.printStackTrace();
+                                interrupException();
+
+                            } catch (ConnectForStendExeption connectForStendExeption) {
+                                connectForStendExeption.printStackTrace();
+                                conectionException();
+                            }
+                        }
+                    };
+
+                    automaticThread.start();
+                }
+
+                //------------------------------------------------------------------------------------------------
+                //Логика работы ручного режима работы
+                if (event.getSource() == tglBtnManualMode) {
+                    if (manualTread.isAlive()) {
+                        return;
+                    }
+
+                    if (automaticThread.isAlive()) {
+                        automaticThread.interrupt();
+                    }
+
+                    if (UnThread.isAlive()) {
+                        UnThread.interrupt();
+                    }
+
+                    manualTread = new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                startManualTest();
+                            } catch (InterruptedTestException | InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ConnectForStendExeption connectForStendExeption) {
+                                connectForStendExeption.printStackTrace();
+                                interrupException();
+                            }
+                        }
+                    };
+
+                    manualTread.start();
+                }
+
+                //------------------------------------------------------------------------------------------------
+                //Логика работы подачи напряжения
+                if (event.getSource() == tglBtnUnom) {
+                    if (UnThread.isAlive()) {
+                        return;
+                    }
+
+                    if (automaticThread.isAlive()) {
+                        automaticThread.interrupt();
+                    }
+
+                    if (manualTread.isAlive()) {
+                        manualTread.interrupt();
+                    }
+
+                    UnThread = new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                startUn();
+                            } catch (ConnectForStendExeption connectForStendExeption) {
+                                connectForStendExeption.printStackTrace();
+                            }
+                        }
+                    };
+
+                    UnThread.start();
+                }
+
+                //------------------------------------------------------------------------------------------------
+                //Логика работы остановки теста
+                if (event.getSource() == btnStop) {
+
+                    tglBtnAuto.setDisable(false);
+                    tglBtnAuto.setSelected(false);
+                    tglBtnManualMode.setDisable(false);
+                    tglBtnManualMode.setSelected(false);
+                    tglBtnUnom.setDisable(false);
+                    tglBtnUnom.setSelected(false);
+
+                    automaticThread.interrupt();
+                    manualTread.interrupt();
+                    UnThread.interrupt();
+                }
+
+            //Если остановка потока или пользователь нажал кнопку стоп или сменил режим работы
+            }catch (InterruptedTestException e) {
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+            }
+        //Если разорвана связь со стендом
+        }catch (ConnectForStendExeption e){
+
+        }
+    }
+
+    //Блок команд для старта автоматического теста
+    private void startAutomaticTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+        int phase;
+
+        tglBtnAuto.setSelected(true);
+        tglBtnAuto.setDisable(true);
+
+        tglBtnManualMode.setDisable(false);
+        tglBtnManualMode.setSelected(false);
+        tglBtnUnom.setDisable(false);
+        tglBtnUnom.setSelected(false);
+
+        //Если выбрана панель AP+
+        if (tglBtnAPPls.isSelected()) {
+            if (typeCircuitThreePhase) {
+                phase = 1;
+            } else phase = 0;
+
+            startTestOnSelectPane(tabViewTestPointsAPPls, commandsAPPls, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+
+            //Если выбрана панель AP-
+        } else if(tglBtnAPMns.isSelected()) {
+            if (typeCircuitThreePhase) {
+                phase = 1;
+            } else phase = 0;
+
+            startTestOnSelectPane(tabViewTestPointsAPMns, commandsAPMns, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+
+            //Если выбрана панель RP+
+        } else if(tglBtnRPPls.isSelected()) {
+            if (typeCircuitThreePhase) {
+                phase = 5;
+            } else phase = 7;
+
+            startTestOnSelectPane(tabViewTestPointsRPPls, commandsRPPls, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+
+            //Если выбрана панель RP-
+        } else if(tglBtnRPMns.isSelected()) {
+
+            if (typeCircuitThreePhase) {
+                phase = 5;
+            } else phase = 7;
+
+            startTestOnSelectPane(tabViewTestPointsRPMns, commandsRPMns, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+        }
+    }
+
+    //Общая команда для старта ручного теста
+    private void startManualTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+        int phase;
+        interrupt = true;
+
+        try {
+            command.setInterrupt(true);
+        }catch (NullPointerException ignored){
+        }
+
+        tglBtnAuto.setDisable(false);
+        tglBtnAuto.setSelected(false);
+
+        tglBtnManualMode.setSelected(true);
+        tglBtnManualMode.setDisable(true);
+
+        tglBtnUnom.setDisable(false);
+        tglBtnUnom.setSelected(false);
+
+
+        //Если выбрана панель AP+
+        if (tglBtnAPPls.isSelected()) {
+            if (typeCircuitThreePhase) {
+                phase = 1;
+            } else phase = 0;
+
+            startContinuousTestOnSelectPane(tabViewTestPointsAPPls, commandsAPPls, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+
+            //Если выбрана панель AP-
+        } else if(tglBtnAPMns.isSelected()) {
+            if (typeCircuitThreePhase) {
+                phase = 1;
+            } else phase = 0;
+
+            startContinuousTestOnSelectPane(tabViewTestPointsAPMns, commandsAPMns, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+
+            //Если выбрана панель RP+
+        } else if(tglBtnRPPls.isSelected()) {
+            if (typeCircuitThreePhase) {
+                phase = 5;
+            } else phase = 7;
+
+            startContinuousTestOnSelectPane(tabViewTestPointsRPPls, commandsRPPls, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+
+            //Если выбрана панель RP-
+        } else if(tglBtnRPMns.isSelected()) {
+
+            if (typeCircuitThreePhase) {
+                phase = 5;
+            } else phase = 7;
+
+            startContinuousTestOnSelectPane(tabViewTestPointsRPMns, commandsRPMns, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+        }
+    }
+
+    //Общая команда для старта напряжения
+    private void startUn () throws ConnectForStendExeption {
+
+        int phase;
+        interrupt = true;
+
+        try {
+            command.setInterrupt(true);
+        }catch (NullPointerException ignored){
+        }
+
+        tglBtnAuto.setDisable(false);
+        tglBtnAuto.setSelected(false);
+
+        tglBtnManualMode.setDisable(false);
+        tglBtnManualMode.setSelected(false);
+
+        tglBtnUnom.setSelected(true);
+        tglBtnUnom.setDisable(true);
+
+        interrupt = false;
+
+        if (typeCircuitThreePhase) {
+            phase = 1;
+        } else {
+            phase = 0;
+        }
+
+        if (!stendDLLCommands.getUI(phase, Un, 0, Fn, 0, 0, 100.0, 0, "H", "1.0")) throw new ConnectForStendExeption();
+    }
+
+    //Старт автоматического теста в зависимости от выбранной панели (направления и типа энергии)
+    private void startTestOnSelectPane(TableView<Commands> tabViewTestPoints,
+                                       ObservableList<Commands> commands, int phase, long timeCRPForGOST, long timeSTAForGOST)
+            throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+
+        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
+
+        while (i < commands.size()) {
+            command = commands.get(i);
+
+            //Если тестовая точка активна
+            if (command.isActive()) {
+
+                if (command instanceof ErrorCommand) {
+
+
+                    initAllParamForErrorCommand((ErrorCommand) command, i);
+
+                    command.setInterrupt(false);
+
+                    if (i != commands.size() - 1) {
+                        if (commands.get(i + 1) instanceof ErrorCommand) {
+                            ((ErrorCommand) command).setNextCommandError(true);
+                        }
+                    }
+                    command.execute();
+                }
+
+                if (command instanceof CreepCommand) {
+
+                    initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
+
+                    command.setInterrupt(false);
+                    command.execute();
+                }
+
+                if (command instanceof StartCommand) {
+
+                    initAllParamForStartCommand((StartCommand) command, phase, i, timeSTAForGOST);
+
+                    command.setInterrupt(false);
+                    command.execute();
+                }
+
+                if (command instanceof RTCCommand) {
+
+                    initAllParamForRTCCommand((RTCCommand) command, phase, i);
+
+                    command.setInterrupt(false);
+                    command.execute();
+                }
+            }
+
+            i++;
+            tabViewTestPoints.getSelectionModel().select(i);
+        }
+        tglBtnAuto.setSelected(false);
+    }
+
+    //Старт ручного теста в зависимости от выбранной панели (направления и типа энергии)
+    private void startContinuousTestOnSelectPane(TableView<Commands> tabViewTestPoints,
+                                                 ObservableList<Commands> commands, int phase, long timeCRPForGOST, long timeSTAForGOST)
+            throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+
+        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
+
+        command = commands.get(i);
+
+
+        if (command instanceof ErrorCommand) {
+
+
+            initAllParamForErrorCommand((ErrorCommand) command, i);
+
+            command.setInterrupt(false);
+            command.executeForContinuousTest();
+        }
+
+        if (command instanceof CreepCommand) {
+
+            initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
+
+            command.setInterrupt(false);
+            command.executeForContinuousTest();
+        }
+
+        if (command instanceof StartCommand) {
+
+            initAllParamForStartCommand((StartCommand) command,phase, i, timeSTAForGOST);
+
+            command.setInterrupt(false);
+            command.executeForContinuousTest();
+        }
+
+        if (command instanceof RTCCommand) {
+
+            initAllParamForRTCCommand((RTCCommand) command, phase, i);
+
+            command.setInterrupt(false);
+            command.executeForContinuousTest();
+        }
+    }
+
+    //Инициализирует параметры необходимые для снятия погрешности в точке
+    private void initAllParamForErrorCommand(ErrorCommand errorCommand, int index){
+        errorCommand.setStendDLLCommands(stendDLLCommands);
+        errorCommand.setRatedVolt(Un);
+        errorCommand.setIb(Ib);
+        errorCommand.setImax(Imax);
+        errorCommand.setRatedFreq(Fn);
+        errorCommand.setIndex(index);
+        errorCommand.setMeterForTestList(listMetersForTest);
+    }
+
+    //Инициализирует параметры необходимые для команды самохода
+    private void initAllParamForCreepCommand(CreepCommand creepCommand, int phase, int index, long timeForGOSTtest){
+        creepCommand.setStendDLLCommands(stendDLLCommands);
+        creepCommand.setPhase(phase);
+        creepCommand.setRatedVolt(Un);
+        creepCommand.setRatedFreq(Fn);
+        creepCommand.setIndex(index);
+        creepCommand.setMeterList(listMetersForTest);
+
+        if (creepCommand.isGostTest()) {
+            creepCommand.setTimeForTest(timeForGOSTtest);
+        }
+    }
+
+    //Инициализирует параметры необходимые для команды чувствительность
+    private void initAllParamForStartCommand(StartCommand startCommand, int phase, int index, long timeForGOSTtest) {
+        startCommand.setStendDLLCommands(stendDLLCommands);
+        startCommand.setPhase(phase);
+        startCommand.setRatedFreq(Fn);
+        startCommand.setRatedVolt(Un);
+        startCommand.setIndex(index);
+        startCommand.setMeterList(listMetersForTest);
+
+        if (startCommand.isGostTest()) {
+            startCommand.setTimeForTest(timeForGOSTtest);
+        }
+    }
+
+    //Инициализирует параметры необходимые для команды чувстви
+    private void initAllParamForRTCCommand(RTCCommand rTCCommand, int phase, int index) {
+        rTCCommand.setStendDLLCommands(stendDLLCommands);
+        rTCCommand.setPhase(phase);
+        rTCCommand.setRatedVolt(Un);
+        rTCCommand.setIndex(index);
+        rTCCommand.setMeterList(listMetersForTest);
     }
 
     @FXML
@@ -437,363 +756,6 @@ public class TestErrorTableFrameController {
     }
 
     @FXML
-    void actionEventTestControl(ActionEvent event) {
-        try {
-            try {
-                int phase;
-
-                //------------------------------------------------------------------------------------------------
-                //Логика работы автоматического режима работы
-                if (event.getSource() == tglBtnAuto) {
-                interrupt = true;
-
-                try {
-                    command.setInterrupt(true);
-                }catch (NullPointerException ignored){
-                }
-
-                tglBtnAuto.setSelected(true);
-                tglBtnAuto.setDisable(true);
-
-                tglBtnManualMode.setDisable(false);
-                tglBtnManualMode.setSelected(false);
-                tglBtnUnom.setDisable(false);
-                tglBtnUnom.setSelected(false);
-
-                    //Если выбрана панель AP+
-                    if (tglBtnAPPls.isSelected()) {
-                        if (typeCircuitThreePhase) {
-                            phase = 1;
-                        } else phase = 0;
-
-                        startTestOnSelectPane(tabViewTestPointsAPPls, commandsAPPls, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
-
-                    //Если выбрана панель AP-
-                    } else if(tglBtnAPMns.isSelected()) {
-                        if (typeCircuitThreePhase) {
-                            phase = 1;
-                        } else phase = 0;
-
-                        startTestOnSelectPane(tabViewTestPointsAPMns, commandsAPMns, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
-
-                    //Если выбрана панель RP+
-                    } else if(tglBtnRPPls.isSelected()) {
-                        if (typeCircuitThreePhase) {
-                            phase = 5;
-                        } else phase = 7;
-
-                        startTestOnSelectPane(tabViewTestPointsRPPls, commandsRPPls, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
-
-                    //Если выбрана панель RP-
-                    } else if(tglBtnRPMns.isSelected()) {
-
-                        if (typeCircuitThreePhase) {
-                            phase = 5;
-                        } else phase = 7;
-
-                        startTestOnSelectPane(tabViewTestPointsRPMns, commandsRPMns, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
-                    }
-                }
-
-                //------------------------------------------------------------------------------------------------
-                //Логика работы ручного режима работы
-                if (event.getSource() == tglBtnManualMode) {
-                    interrupt = true;
-                    try {
-                        command.setInterrupt(true);
-                    }catch (NullPointerException ignored){
-                    }
-
-                    tglBtnAuto.setDisable(false);
-                    tglBtnAuto.setSelected(false);
-
-                    tglBtnManualMode.setSelected(true);
-                    tglBtnManualMode.setDisable(true);
-
-                    tglBtnUnom.setDisable(false);
-                    tglBtnUnom.setSelected(false);
-
-
-                    //Если выбрана панель AP+
-                    if (tglBtnAPPls.isSelected()) {
-                        if (typeCircuitThreePhase) {
-                            phase = 1;
-                        } else phase = 0;
-
-                        startContinuousTestOnSelectPane(tabViewTestPointsAPPls, commandsAPPls, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
-
-                        //Если выбрана панель AP-
-                    } else if(tglBtnAPMns.isSelected()) {
-                        if (typeCircuitThreePhase) {
-                            phase = 1;
-                        } else phase = 0;
-
-                        startContinuousTestOnSelectPane(tabViewTestPointsAPMns, commandsAPMns, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
-
-                        //Если выбрана панель RP+
-                    } else if(tglBtnRPPls.isSelected()) {
-                        if (typeCircuitThreePhase) {
-                            phase = 5;
-                        } else phase = 7;
-
-                        startContinuousTestOnSelectPane(tabViewTestPointsRPPls, commandsRPPls, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
-
-                        //Если выбрана панель RP-
-                    } else if(tglBtnRPMns.isSelected()) {
-
-                        if (typeCircuitThreePhase) {
-                            phase = 5;
-                        } else phase = 7;
-
-                        startContinuousTestOnSelectPane(tabViewTestPointsRPMns, commandsRPMns, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
-                    }
-                }
-
-                //------------------------------------------------------------------------------------------------
-                //Логика работы подачи напряжения
-                if (event.getSource() == tglBtnUnom) {
-                    interrupt = true;
-                    try {
-                        command.setInterrupt(true);
-                    }catch (NullPointerException ignored){
-                    }
-
-                    tglBtnAuto.setDisable(false);
-                    tglBtnAuto.setSelected(false);
-
-                    tglBtnManualMode.setDisable(false);
-                    tglBtnManualMode.setSelected(false);
-
-                    tglBtnUnom.setSelected(true);
-                    tglBtnUnom.setDisable(true);
-
-                    interrupt = false;
-
-                    if (typeCircuitThreePhase) {
-                        phase = 1;
-                    } else {
-                        phase = 0;
-                    }
-
-                    if (!stendDLLCommands.getUI(phase, Un, 0, Fn, 0, 0, 100.0, 0, "H", "1.0")) throw new ConnectForStendExeption();
-
-                }
-
-                //------------------------------------------------------------------------------------------------
-                //Логика работы остановки теста
-                if (event.getSource() == btnStop) {
-
-                    tglBtnAuto.setDisable(false);
-                    tglBtnAuto.setSelected(false);
-                    tglBtnManualMode.setDisable(false);
-                    tglBtnManualMode.setSelected(false);
-                    tglBtnUnom.setDisable(false);
-                    tglBtnUnom.setSelected(false);
-
-//                    interrupt = true;
-//                    try {
-//                        command.setInterrupt(true);
-//                    }catch (NullPointerException ignored){
-//                    }
-
-                    throw new InterruptedTestException();
-                }
-
-            //Если остановка потока или пользователь нажал кнопку стоп или сменил режим работы
-            }catch (InterruptedTestException | InterruptedException e) {
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-            }
-        //Если разорвана связь со стендом
-        }catch (ConnectForStendExeption e){
-
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/viewFXML/exceptionFrame.fxml/"));
-            try {
-                fxmlLoader.load();
-            } catch (IOException er) {
-                e.printStackTrace();
-            }
-
-            ExceptionFrameController exceptionFrameController = fxmlLoader.getController();
-            exceptionFrameController.getExceptionLabel().setText("Потеряна связь с установной,\nпроверьте подключение");
-
-            Parent root = fxmlLoader.getRoot();
-            Stage stage = new Stage();
-            stage.setTitle("Ошибка");
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
-            tglBtnAuto.setSelected(false);
-            tglBtnManualMode.setSelected(false);
-            tglBtnUnom.setSelected(false);
-        }
-    }
-
-    //Старт автоматического теста
-    private void startTestOnSelectPane(TableView<Commands> tabViewTestPoints,
-                                       ObservableList<Commands> commands, int phase, long timeCRPForGOST, long timeSTAForGOST)
-            throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
-
-        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
-
-        while (i < commands.size()) {
-            command = commands.get(i);
-
-            //Если тестовая точка активна
-            if (command.isActive()) {
-
-                if (command instanceof ErrorCommand) {
-
-
-                    initAllParamForErrorCommand((ErrorCommand) command, i);
-
-                    command.setInterrupt(false);
-
-                    if (i != commands.size() - 1) {
-                        if (commands.get(i + 1) instanceof ErrorCommand) {
-                            ((ErrorCommand) command).setNextCommandError(true);
-                        }
-                    }
-                    command.execute();
-                }
-
-                if (command instanceof CreepCommand) {
-
-                    initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
-
-                    command.setInterrupt(false);
-                    command.execute();
-                }
-
-                if (command instanceof StartCommand) {
-
-                    initAllParamForStartCommand((StartCommand) command, phase, i, timeSTAForGOST);
-
-                    command.setInterrupt(false);
-                    command.execute();
-                }
-
-                if (command instanceof RTCCommand) {
-
-                    initAllParamForRTCCommand((RTCCommand) command, phase, i);
-
-                    command.setInterrupt(false);
-                    command.execute();
-                }
-            }
-
-            i++;
-            tabViewTestPoints.getSelectionModel().select(i);
-        }
-        tglBtnAuto.setSelected(false);
-    }
-
-    //Метод для того чтобы узнать выбран ли какой-то режим работы уже
-
-    //Старт автоматического теста
-    private void startContinuousTestOnSelectPane(TableView<Commands> tabViewTestPoints,
-                                                 ObservableList<Commands> commands, int phase, long timeCRPForGOST, long timeSTAForGOST)
-            throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
-
-        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
-
-        command = commands.get(i);
-
-
-        if (command instanceof ErrorCommand) {
-
-
-            initAllParamForErrorCommand((ErrorCommand) command, i);
-
-            command.setInterrupt(false);
-            command.executeForContinuousTest();
-        }
-
-        if (command instanceof CreepCommand) {
-
-            initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
-
-            command.setInterrupt(false);
-            command.executeForContinuousTest();
-        }
-
-        if (command instanceof StartCommand) {
-            /**
-             * Подумать над отображением времени теста
-             */
-            initAllParamForStartCommand((StartCommand) command,phase, i, timeSTAForGOST);
-
-            command.setInterrupt(false);
-            command.executeForContinuousTest();
-        }
-
-        if (command instanceof RTCCommand) {
-
-            initAllParamForRTCCommand((RTCCommand) command, phase, i);
-
-            command.setInterrupt(false);
-            command.executeForContinuousTest();
-        }
-    }
-
-    /**Костанту нужно определять для кажого метода одинаково
-     */
-
-    //Инициализирует параметры необходимые для снятия погрешности в точке
-    private void initAllParamForErrorCommand(ErrorCommand errorCommand, int index){
-        errorCommand.setStendDLLCommands(stendDLLCommands);
-        errorCommand.setRatedVolt(Un);
-        errorCommand.setIb(Ib);
-        errorCommand.setImax(Imax);
-        errorCommand.setRatedFreq(Fn);
-        errorCommand.setIndex(index);
-        errorCommand.setMeterForTestList(listMetersForTest);
-    }
-
-    //Инициализирует параметры необходимые для команды самохода
-    private void initAllParamForCreepCommand(CreepCommand creepCommand, int phase, int index, long timeForGOSTtest){
-        creepCommand.setStendDLLCommands(stendDLLCommands);
-        creepCommand.setPhase(phase);
-        creepCommand.setRatedVolt(Un);
-        creepCommand.setRatedFreq(Fn);
-        creepCommand.setIndex(index);
-        creepCommand.setMeterList(listMetersForTest);
-
-        if (creepCommand.isGostTest()) {
-            creepCommand.setTimeForTest(timeForGOSTtest);
-        }
-    }
-
-    //Инициализирует параметры необходимые для команды чувствительность
-    private void initAllParamForStartCommand(StartCommand startCommand, int phase, int index, long timeForGOSTtest) {
-        startCommand.setStendDLLCommands(stendDLLCommands);
-        startCommand.setPhase(phase);
-        startCommand.setRatedFreq(Fn);
-        startCommand.setRatedVolt(Un);
-        startCommand.setIndex(index);
-        startCommand.setMeterList(listMetersForTest);
-
-        if (startCommand.isGostTest()) {
-            startCommand.setTimeForTest(timeForGOSTtest);
-        }
-    }
-
-    //Инициализирует параметры необходимые для команды чувстви
-    private void initAllParamForRTCCommand(RTCCommand rTCCommand, int phase, int index) {
-        rTCCommand.setStendDLLCommands(stendDLLCommands);
-        rTCCommand.setPhase(phase);
-        rTCCommand.setRatedVolt(Un);
-        rTCCommand.setIndex(index);
-        rTCCommand.setMeterList(listMetersForTest);
-    }
-
-    /**
-     * Для кнопки начать тест сделать цикл из листа точек
-     * начиная с выбранного индекса пользователем  до конца с проверкой на дисайбл
-     */
-    @FXML
     void initialize() {
         tglBtnAPPls.setSelected(true);
         splPaneAPPls.toFront();
@@ -807,6 +769,34 @@ public class TestErrorTableFrameController {
     }
 
     public void myInitTestErrorTableFrame() {
+        Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>> tabColCellData =
+                new Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Commands, Boolean> param) {
+                Commands command = param.getValue();
+                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(command.isActive());
+
+                simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        command.setActive(newValue);
+                    }
+                });
+
+                return simpleBooleanProperty;
+            }
+        };
+
+        Callback<TableColumn<Commands, Boolean>, TableCell<Commands, Boolean>> tabColCell =
+                new Callback<TableColumn<Commands, Boolean>, TableCell<Commands, Boolean>>() {
+            @Override
+            public TableCell<Commands, Boolean> call(TableColumn<Commands, Boolean> p) {
+                CheckBoxTableCell<Commands, Boolean> cell = new CheckBoxTableCell<Commands, Boolean>();
+                cell.setAlignment(Pos.CENTER);
+                return cell;
+            }
+        };
+
         initErrorsForMeters();
 
         //Инициирую колонку с точками для испытаний AP+
@@ -837,138 +827,65 @@ public class TestErrorTableFrameController {
         //Установка чек боксов для отключения или включения точки
         //AP+
         tabViewTestPointsAPPls.setEditable(true);
-
-        tabColTestPointsDisAPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>>() {
-            @Override
-            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Commands, Boolean> param) {
-                Commands command = param.getValue();
-                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(command.isActive());
-
-                simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        command.setActive(newValue);
-                    }
-                });
-
-                return simpleBooleanProperty;
-            }
-        });
-
-        tabColTestPointsDisAPPls.setCellFactory(new Callback<TableColumn<Commands, Boolean>, //
-                TableCell<Commands, Boolean>>() {
-            @Override
-            public TableCell<Commands, Boolean> call(TableColumn<Commands, Boolean> p) {
-                CheckBoxTableCell<Commands, Boolean> cell = new CheckBoxTableCell<Commands, Boolean>();
-                cell.setAlignment(Pos.CENTER);
-                return cell;
-            }
-        });
-
+        tabColTestPointsDisAPPls.setCellValueFactory(tabColCellData);
+        tabColTestPointsDisAPPls.setCellFactory(tabColCell);
         tabColTestPointsDisAPPls.setSortable(false);
 
         //AP-
         tabViewTestPointsAPMns.setEditable(true);
-
-        tabColTestPointsDisAPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>>() {
-            @Override
-            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Commands, Boolean> param) {
-                Commands command = param.getValue();
-                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(command.isActive());
-
-                simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        command.setActive(newValue);
-                    }
-                });
-
-                return simpleBooleanProperty;
-            }
-        });
-
-        tabColTestPointsDisAPMns.setCellFactory(new Callback<TableColumn<Commands, Boolean>, //
-                TableCell<Commands, Boolean>>() {
-            @Override
-            public TableCell<Commands, Boolean> call(TableColumn<Commands, Boolean> p) {
-                CheckBoxTableCell<Commands, Boolean> cell = new CheckBoxTableCell<Commands, Boolean>();
-                cell.setAlignment(Pos.CENTER);
-                return cell;
-            }
-        });
-
+        tabColTestPointsDisAPMns.setCellValueFactory(tabColCellData);
+        tabColTestPointsDisAPMns.setCellFactory(tabColCell);
         tabColTestPointsDisAPMns.setSortable(false);
 
         //RP+
-
         tabViewTestPointsRPPls.setEditable(true);
-
-        tabColTestPointsDisRPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>>() {
-            @Override
-            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Commands, Boolean> param) {
-                Commands command = param.getValue();
-                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(command.isActive());
-
-                simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        command.setActive(newValue);
-                    }
-                });
-
-                return simpleBooleanProperty;
-            }
-        });
-
-        tabColTestPointsDisRPPls.setCellFactory(new Callback<TableColumn<Commands, Boolean>, //
-                TableCell<Commands, Boolean>>() {
-            @Override
-            public TableCell<Commands, Boolean> call(TableColumn<Commands, Boolean> p) {
-                CheckBoxTableCell<Commands, Boolean> cell = new CheckBoxTableCell<Commands, Boolean>();
-                cell.setAlignment(Pos.CENTER);
-                return cell;
-            }
-        });
-
+        tabColTestPointsDisRPPls.setCellValueFactory(tabColCellData);
+        tabColTestPointsDisRPPls.setCellFactory(tabColCell);
         tabColTestPointsDisRPPls.setSortable(false);
 
         //RP-
         tabViewTestPointsRPMns.setEditable(true);
-
-        tabColTestPointsDisRPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>>() {
-            @Override
-            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Commands, Boolean> param) {
-                Commands command = param.getValue();
-                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(command.isActive());
-
-                simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        command.setActive(newValue);
-                    }
-                });
-
-                return simpleBooleanProperty;
-            }
-        });
-
-        tabColTestPointsDisRPMns.setCellFactory(new Callback<TableColumn<Commands, Boolean>, //
-                TableCell<Commands, Boolean>>() {
-            @Override
-            public TableCell<Commands, Boolean> call(TableColumn<Commands, Boolean> p) {
-                CheckBoxTableCell<Commands, Boolean> cell = new CheckBoxTableCell<Commands, Boolean>();
-                cell.setAlignment(Pos.CENTER);
-                return cell;
-            }
-        });
-
+        tabColTestPointsDisRPMns.setCellValueFactory(tabColCellData);
+        tabColTestPointsDisRPMns.setCellFactory(tabColCell);
         tabColTestPointsDisRPMns.setSortable(false);
 
         //-----------------------------------------------------------
+        //Настройка для отдельного поля счётчика изменения цвета погрешности после окончания теста
+        Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>> cellFactoryEndTest =
+                new Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>>() {
+                    public TableCell call(TableColumn p) {
+                        return new TableCell<Meter.CommandResult, String>() {
+                            @Override
+                            public void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
+
+                                char firstSymbol;
+
+                                if (item == null || empty) {
+                                    setText("");
+                                } else {
+                                    firstSymbol = item.charAt(0);
+
+                                    if (firstSymbol == 'N') {
+                                        setText(item.substring(1));
+
+                                    } else if (firstSymbol == 'P') {
+                                        setText(item.substring(1));
+                                        setTextFill(Color.BLUE);
+
+                                    } else if (firstSymbol == 'F') {
+                                        setText(item.substring(1));
+                                        setTextFill(Color.RED);
+                                    }
+                                }
+                            }
+                        };
+                    }
+                };
+
         //В зависимости от количества счётчиков инициализирую поля для отображения погрешности
         TableView<Meter.CommandResult> tableView;
         TableColumn<Meter.CommandResult, String> column;
-
 
         for (int i = 0; i < listMetersForTest.size(); i++) {
 
@@ -1038,7 +955,7 @@ public class TestErrorTableFrameController {
         }
 
         //--------------------------------------------------------------------
-        //Устанавливаю фокусировку на окне ошибок такуюже как и в окне точек
+        //Устанавливаю фокусировку на окне ошибок такую же как и в окне точек
         //AP+
         //Значение при инициализации
         tabViewTestPointsAPPls.getSelectionModel().select(0);
@@ -1064,7 +981,6 @@ public class TestErrorTableFrameController {
             }
         });
 
-
         //Устанавливаю общий селект для таблиц с погрешностью
         for (int i = 0; i < tabViewListAPPls.size(); i++) {
 
@@ -1085,7 +1001,6 @@ public class TestErrorTableFrameController {
                 }
             });
         }
-
 
         //AP-
         tabViewTestPointsAPMns.getSelectionModel().select(0);
@@ -1287,7 +1202,7 @@ public class TestErrorTableFrameController {
     }
 
     //Формула для расчёта времени теста на самоход по ГОСТУ
-    public long initTimeForCreepTestGOST(int constMeterForTest) {
+    private long initTimeForCreepTestGOST(int constMeterForTest) {
         int amountMeasElem;
 
         if (typeCircuitThreePhase) {
@@ -1308,7 +1223,7 @@ public class TestErrorTableFrameController {
     }
 
     //Расчётная формула времени теста на чувствительность по ГОСТ
-    public long initTimeForStartGOSTTest(double accuracyClass, int constMeterForTest) {
+    private long initTimeForStartGOSTTest(double accuracyClass, int constMeterForTest) {
         int amountMeasElem;
         double ratedCurr;
 
@@ -1349,6 +1264,40 @@ public class TestErrorTableFrameController {
 
         timeToStartTestGOSTRP = initTimeForStartGOSTTest(accuracyClassRP, constantMeterRP);
     }
+
+    //Если возникает ошибка связи с установкой
+    private void conectionException() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/viewFXML/exceptionFrame.fxml/"));
+        try {
+            fxmlLoader.load();
+        } catch (IOException er) {
+            er.printStackTrace();
+        }
+
+        ExceptionFrameController exceptionFrameController = fxmlLoader.getController();
+        exceptionFrameController.getExceptionLabel().setText("Потеряна связь с установной,\nпроверьте подключение");
+
+        Parent root = fxmlLoader.getRoot();
+        Stage stage = new Stage();
+        stage.setTitle("Ошибка");
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+
+        tglBtnAuto.setSelected(false);
+        tglBtnManualMode.setSelected(false);
+        tglBtnUnom.setSelected(false);
+    }
+
+    //Если срабарывает
+    private void interrupException() {
+        tglBtnAuto.setSelected(false);
+        tglBtnManualMode.setSelected(false);
+        tglBtnUnom.setSelected(false);
+    }
+    //=====================================================================================
+    //get sets
 
     Label getTxtLabUn() {
         return txtLabUn;
@@ -1392,5 +1341,61 @@ public class TestErrorTableFrameController {
 
     public long getTimeToStartTestGOSTRP() {
         return timeToStartTestGOSTRP;
+    }
+
+    public void setListMetersForTest(List<Meter> listMetersForTest) {
+        this.listMetersForTest = listMetersForTest;
+    }
+
+    public void setImax(double imax) {
+        Imax = imax;
+    }
+
+    public void setIb(double ib) {
+        Ib = ib;
+    }
+
+    public void setUn(double un) {
+        Un = un;
+    }
+
+    public void setFn(double fn) {
+        Fn = fn;
+    }
+
+    public void setMethodic(Methodic methodic) {
+        this.methodic = methodic;
+    }
+
+    public void setTypeOfMeasuringElementShunt(boolean typeOfMeasuringElementShunt) {
+        this.typeOfMeasuringElementShunt = typeOfMeasuringElementShunt;
+    }
+
+    public void setTypeCircuit(boolean typeCircuitThreePhase) {
+        this.typeCircuitThreePhase = typeCircuitThreePhase;
+    }
+
+    public void setAccuracyClassAP(double accuracyClassAP) {
+        this.accuracyClassAP = accuracyClassAP;
+    }
+
+    public void setAccuracyClassRP(double accuracyClassRP) {
+        this.accuracyClassRP = accuracyClassRP;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public void setController(String controller) {
+        this.controller = controller;
+    }
+
+    public void setWitness(String witness) {
+        this.witness = witness;
+    }
+
+    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
+        this.stendDLLCommands = stendDLLCommands;
     }
 }
