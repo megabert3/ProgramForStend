@@ -19,9 +19,6 @@ public class StartCommand implements Commands, Serializable {
 
     private List<Meter> meterList;
 
-    //Команда для прерывания метода
-    private boolean interrupt;
-
     //Выставлять в зависимости от выбранного параметра перед тестом
     private int phase;
 
@@ -93,99 +90,26 @@ public class StartCommand implements Commands, Serializable {
         this.gostTest = gostTest;
     }
 
-    @Override
-    public void setInterrupt(boolean interrupt) {
-        this.interrupt = interrupt;
-    }
 
     @Override
-    public void execute() throws InterruptedException, InterruptedTestException, ConnectForStendExeption {
+    public void execute() throws InterruptedTestException, ConnectForStendExeption {
+        try {
+            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
 
-        if (interrupt) throw  new InterruptedTestException();
-        startCommandResult = initCreepCommandResult();
+            startCommandResult = initCreepCommandResult();
 
-        if (interrupt) throw  new InterruptedTestException();
-        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
-                100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
+                    100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
-        if (interrupt) throw  new InterruptedTestException();
-        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-        Thread.sleep(stendDLLCommands.getPauseForStabization());
+            Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-        //Номер измерения
-        int countResult = 1;
-        Meter meter;
-        Meter.CommandResult errorCommand;
-
-        //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-        for (Meter meterForReset : meterList) {
-            setDefTestrResults(meterForReset, channelFlag, index);
-        }
-
-        currTime = System.currentTimeMillis();
-        timeEnd = currTime + timeForTest;
-
-        while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-            if (interrupt) throw  new InterruptedTestException();
-
-            for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
-                if (!mapResult.getValue()) {
-
-                    meter = meterList.get(mapResult.getKey() - 1);
-                    errorCommand = meter.returnResultCommand(index, channelFlag);
-
-                    if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
-                        meter.setAmountImn(meter.getAmountImn() + 1);
-
-                        if (meter.getAmountImn() > pulseValue) {
-                            addTestTimePass(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
-                            startCommandResult.put(mapResult.getKey(), true);
-                        } else {
-                            stendDLLCommands.searchMark(mapResult.getKey());
-                            errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
-                        }
-
-                    } else {
-                        errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
-                    }
-                }
-            }
-            Thread.sleep(500);
-        }
-
-        //Выставляю результат теста счётчиков, которые прошли тест
-        for(Map.Entry<Integer, Boolean> mapResultFail : startCommandResult.entrySet()) {
-            if (!mapResultFail.getValue()) {
-                addTestTimeFail(meterList.get(mapResultFail.getKey() - 1), channelFlag, getTime(timeForTest), channelFlag);
-            }
-        }
-
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-    }
-
-    @Override
-    public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
-        if (interrupt) throw  new InterruptedTestException();
-        startCommandResult = initCreepCommandResult();
-
-        if (interrupt) throw  new InterruptedTestException();
-        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
-                100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
-
-        if (interrupt) throw  new InterruptedTestException();
-        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-
-        if (interrupt) throw  new InterruptedTestException();
-        Thread.sleep(stendDLLCommands.getPauseForStabization());
-
-        //Номер измерения
-        int countResult = 1;
-        Meter meter;
-        Meter.CommandResult errorCommand;
-
-        while (!interrupt) {
+            //Номер измерения
+            int countResult = 1;
+            Meter meter;
+            Meter.CommandResult errorCommand;
 
             //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
             for (Meter meterForReset : meterList) {
@@ -196,18 +120,18 @@ public class StartCommand implements Commands, Serializable {
             timeEnd = currTime + timeForTest;
 
             while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-                if (interrupt) throw  new InterruptedTestException();
 
                 for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
-                    if (!mapResult.getValue()) {
+                    if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
 
+                    if (!mapResult.getValue()) {
                         meter = meterList.get(mapResult.getKey() - 1);
                         errorCommand = meter.returnResultCommand(index, channelFlag);
 
                         if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
                             meter.setAmountImn(meter.getAmountImn() + 1);
 
-                            if (meter.getAmountImn() >= pulseValue) {
+                            if (meter.getAmountImn() > pulseValue) {
                                 addTestTimePass(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
                                 startCommandResult.put(mapResult.getKey(), true);
                             } else {
@@ -224,17 +148,91 @@ public class StartCommand implements Commands, Serializable {
             }
 
             //Выставляю результат теста счётчиков, которые прошли тест
-            for(Map.Entry<Integer, Boolean> mapResultFail : startCommandResult.entrySet()) {
+            for (Map.Entry<Integer, Boolean> mapResultFail : startCommandResult.entrySet()) {
                 if (!mapResultFail.getValue()) {
                     addTestTimeFail(meterList.get(mapResultFail.getKey() - 1), channelFlag, getTime(timeForTest), channelFlag);
                 }
             }
 
-            countResult++;
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        }catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
+    }
 
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+    @Override
+    public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption {
+        try {
+            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            startCommandResult = initCreepCommandResult();
+
+            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
+                    100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
+
+            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+
+            Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+            //Номер измерения
+            int countResult = 1;
+            Meter meter;
+            Meter.CommandResult errorCommand;
+
+            while (!Thread.currentThread().isInterrupted()) {
+
+                //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
+                for (Meter meterForReset : meterList) {
+                    setDefTestrResults(meterForReset, channelFlag, index);
+                }
+
+                currTime = System.currentTimeMillis();
+                timeEnd = currTime + timeForTest;
+
+                while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+
+                    for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
+                        if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+
+                        if (!mapResult.getValue()) {
+                            meter = meterList.get(mapResult.getKey() - 1);
+                            errorCommand = meter.returnResultCommand(index, channelFlag);
+
+                            if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
+                                meter.setAmountImn(meter.getAmountImn() + 1);
+
+                                if (meter.getAmountImn() >= pulseValue) {
+                                    addTestTimePass(meter, channelFlag, getTime(System.currentTimeMillis() - currTime), countResult);
+                                    startCommandResult.put(mapResult.getKey(), true);
+                                } else {
+                                    stendDLLCommands.searchMark(mapResult.getKey());
+                                    errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                                }
+
+                            } else {
+                                errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                            }
+                        }
+                    }
+                    Thread.sleep(500);
+                }
+
+                //Выставляю результат теста счётчиков, которые прошли тест
+                for (Map.Entry<Integer, Boolean> mapResultFail : startCommandResult.entrySet()) {
+                    if (!mapResultFail.getValue()) {
+                        addTestTimeFail(meterList.get(mapResultFail.getKey() - 1), channelFlag, getTime(timeForTest), channelFlag);
+                    }
+                }
+
+                countResult++;
+            }
+
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        }catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     private HashMap<Integer, Boolean> initCreepCommandResult() {

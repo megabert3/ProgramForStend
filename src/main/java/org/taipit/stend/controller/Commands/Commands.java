@@ -9,13 +9,11 @@ import org.taipit.stend.helper.exeptions.InterruptedTestException;
 import java.util.List;
 
 public interface Commands{
-    //Прерывает работу метода
-    void setInterrupt(boolean interrupt);
 
     //Выполнение команды
-    void execute() throws InterruptedTestException, ConnectForStendExeption, InterruptedException;
+    void execute() throws InterruptedTestException, ConnectForStendExeption;
 
-    void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException;
+    void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption;
 
     //Имя команды
     String getName();

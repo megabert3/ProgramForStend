@@ -89,10 +89,10 @@ public class Meter implements Serializable{
 
                     //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult(getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
+                        creepResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
                     } else {
 
-                        creepResult.setLastResult(getTime(((CreepCommand) command).getTimeForTest()));
+                        creepResult.setLastResult("N" + getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
                     errorListAPPls.add(creepResult);
@@ -103,9 +103,9 @@ public class Meter implements Serializable{
 
                     //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult(getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
+                        startResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
                     }else {
-                        startResult.setLastResult(getTime(((StartCommand) command).getTimeForTest()));
+                        startResult.setLastResult("N" + getTime(((StartCommand) command).getTimeForTest()));
                     }
 
                     errorListAPPls.add(startResult);
@@ -123,9 +123,9 @@ public class Meter implements Serializable{
 
                     //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult(getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
+                        creepResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
                     } else {
-                        creepResult.setLastResult(getTime(((CreepCommand) command).getTimeForTest()));
+                        creepResult.setLastResult("N" + getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
                     errorListAPMns.add(creepResult);
@@ -136,9 +136,9 @@ public class Meter implements Serializable{
 
                     //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult(getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
+                        startResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
                     }else {
-                        startResult.setLastResult(getTime(((StartCommand) command).getTimeForTest()));
+                        startResult.setLastResult("N" + getTime(((StartCommand) command).getTimeForTest()));
                     }
 
                     errorListAPMns.add(startResult);
@@ -157,9 +157,9 @@ public class Meter implements Serializable{
 
                     //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult(getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
+                        creepResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
                     } else {
-                        creepResult.setLastResult(getTime(((CreepCommand) command).getTimeForTest()));
+                        creepResult.setLastResult("N" + getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
                     errorListRPPls.add(creepResult);
@@ -170,9 +170,9 @@ public class Meter implements Serializable{
 
                     //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult(getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
+                        startResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
                     }else {
-                        startResult.setLastResult(getTime(((StartCommand) command).getTimeForTest()));
+                        startResult.setLastResult("N" + getTime(((StartCommand) command).getTimeForTest()));
                     }
 
                     errorListRPPls.add(startResult);
@@ -191,9 +191,9 @@ public class Meter implements Serializable{
 
                     //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult(getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
+                        creepResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
                     } else {
-                        creepResult.setLastResult(getTime(((CreepCommand) command).getTimeForTest()));
+                        creepResult.setLastResult("N" + getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
                     errorListRPMns.add(creepResult);
@@ -204,9 +204,9 @@ public class Meter implements Serializable{
 
                     //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult(getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
+                        startResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
                     }else {
-                        startResult.setLastResult(getTime(((StartCommand) command).getTimeForTest()));
+                        startResult.setLastResult("N" + getTime(((StartCommand) command).getTimeForTest()));
                     }
 
                     errorListRPMns.add(startResult);

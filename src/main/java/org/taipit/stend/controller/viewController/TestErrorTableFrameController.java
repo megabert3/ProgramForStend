@@ -244,132 +244,156 @@ public class TestErrorTableFrameController {
 
     @FXML
     void actionEventTestControl(ActionEvent event) {
+
         try {
-            try {
-                //------------------------------------------------------------------------------------------------
-                //Логика работы автоматического режима работы
+            //------------------------------------------------------------------------------------------------
+            //Логика работы автоматического режима работы
+            if (event.getSource() == tglBtnAuto) {
+
                 if (automaticThread.isAlive()) {
                     return;
                 }
 
                 if (manualTread.isAlive()) {
                     manualTread.interrupt();
+                    manualTread.join();
                 }
 
                 if (UnThread.isAlive()) {
                     UnThread.interrupt();
+                    UnThread.join();
                 }
 
-                if (event.getSource() == tglBtnAuto) {
-                    automaticThread = new Thread() {
-                        @Override
-                        public void run() {
+                automaticThread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
                             try {
                                 startAutomaticTest();
-                            } catch (InterruptedTestException | InterruptedException e) {
-                                e.printStackTrace();
-                                interrupException();
 
-                            } catch (ConnectForStendExeption connectForStendExeption) {
-                                connectForStendExeption.printStackTrace();
-                                conectionException();
+                            }catch (InterruptedTestException e) {
+                                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
                             }
+                        }catch (ConnectForStendExeption e) {
+                            conectionException();
                         }
-                    };
+                    }
+                };
 
-                    automaticThread.start();
-                }
+                automaticThread.start();
+            }
 
                 //------------------------------------------------------------------------------------------------
                 //Логика работы ручного режима работы
-                if (event.getSource() == tglBtnManualMode) {
-                    if (manualTread.isAlive()) {
-                        return;
-                    }
+            if (event.getSource() == tglBtnManualMode) {
+                if (manualTread.isAlive()) {
+                    return;
+                }
 
-                    if (automaticThread.isAlive()) {
-                        automaticThread.interrupt();
-                    }
+                if (automaticThread.isAlive()) {
+                    automaticThread.interrupt();
+                    automaticThread.join();
+                }
 
-                    if (UnThread.isAlive()) {
-                        UnThread.interrupt();
-                    }
+                if (UnThread.isAlive()) {
+                    UnThread.interrupt();
+                    UnThread.join();
+                }
 
-                    manualTread = new Thread() {
-                        @Override
-                        public void run() {
+                manualTread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
                             try {
                                 startManualTest();
-                            } catch (InterruptedTestException | InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (ConnectForStendExeption connectForStendExeption) {
-                                connectForStendExeption.printStackTrace();
-                                interrupException();
-                            }
-                        }
-                    };
 
-                    manualTread.start();
+                            } catch (InterruptedTestException e) {
+                                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                            }
+                        }catch (ConnectForStendExeption e) {
+                            conectionException();
+                        }
+                    }
+                };
+
+                manualTread.start();
+            }
+
+            //------------------------------------------------------------------------------------------------
+            //Логика работы подачи напряжения
+            if (event.getSource() == tglBtnUnom) {
+                if (UnThread.isAlive()) {
+                    return;
                 }
 
-                //------------------------------------------------------------------------------------------------
-                //Логика работы подачи напряжения
-                if (event.getSource() == tglBtnUnom) {
-                    if (UnThread.isAlive()) {
-                        return;
-                    }
-
-                    if (automaticThread.isAlive()) {
-                        automaticThread.interrupt();
-                    }
-
-                    if (manualTread.isAlive()) {
-                        manualTread.interrupt();
-                    }
-
-                    UnThread = new Thread() {
-                        @Override
-                        public void run() {
-                            try {
-                                startUn();
-                            } catch (ConnectForStendExeption connectForStendExeption) {
-                                connectForStendExeption.printStackTrace();
-                            }
-                        }
-                    };
-
-                    UnThread.start();
-                }
-
-                //------------------------------------------------------------------------------------------------
-                //Логика работы остановки теста
-                if (event.getSource() == btnStop) {
-
-                    tglBtnAuto.setDisable(false);
-                    tglBtnAuto.setSelected(false);
-                    tglBtnManualMode.setDisable(false);
-                    tglBtnManualMode.setSelected(false);
-                    tglBtnUnom.setDisable(false);
-                    tglBtnUnom.setSelected(false);
-
+                if (automaticThread.isAlive()) {
                     automaticThread.interrupt();
-                    manualTread.interrupt();
-                    UnThread.interrupt();
+                    automaticThread.join();
                 }
+
+                if (manualTread.isAlive()) {
+                    manualTread.interrupt();
+                    manualTread.join();
+                }
+
+                UnThread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            startUn();
+
+                        }catch (ConnectForStendExeption e) {
+                            conectionException();
+                        }
+                    }
+                };
+
+                UnThread.start();
+            }
+
+            //------------------------------------------------------------------------------------------------
+            //Логика работы остановки теста
+            if (event.getSource() == btnStop) {
+
+                if (automaticThread.isAlive()) {
+                    automaticThread.interrupt();
+                    automaticThread.join();
+                }
+
+                if (manualTread.isAlive()) {
+                    manualTread.interrupt();
+                    manualTread.join();
+                }
+
+                if (UnThread.isAlive()) {
+                    UnThread.interrupt();
+                    UnThread.join();
+                }
+
+                tglBtnAuto.setDisable(false);
+                tglBtnAuto.setSelected(false);
+                tglBtnManualMode.setDisable(false);
+                tglBtnManualMode.setSelected(false);
+                tglBtnUnom.setDisable(false);
+                tglBtnUnom.setSelected(false);
+            }
 
             //Если остановка потока или пользователь нажал кнопку стоп или сменил режим работы
-            }catch (InterruptedTestException e) {
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        }catch (InterruptedException e) {
+            if (automaticThread.isAlive()) {
+                automaticThread.interrupt();
+            } else if (manualTread.isAlive()) {
+                manualTread.interrupt();
+            } else if (UnThread.isAlive()) {
+                UnThread.interrupt();
             }
-        //Если разорвана связь со стендом
-        }catch (ConnectForStendExeption e){
-
         }
     }
 
     //Блок команд для старта автоматического теста
-    private void startAutomaticTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+    private void startAutomaticTest() throws InterruptedTestException, ConnectForStendExeption {
         int phase;
 
         tglBtnAuto.setSelected(true);
@@ -416,14 +440,8 @@ public class TestErrorTableFrameController {
     }
 
     //Общая команда для старта ручного теста
-    private void startManualTest() throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+    private void startManualTest() throws InterruptedTestException, ConnectForStendExeption {
         int phase;
-        interrupt = true;
-
-        try {
-            command.setInterrupt(true);
-        }catch (NullPointerException ignored){
-        }
 
         tglBtnAuto.setDisable(false);
         tglBtnAuto.setSelected(false);
@@ -474,12 +492,6 @@ public class TestErrorTableFrameController {
     private void startUn () throws ConnectForStendExeption {
 
         int phase;
-        interrupt = true;
-
-        try {
-            command.setInterrupt(true);
-        }catch (NullPointerException ignored){
-        }
 
         tglBtnAuto.setDisable(false);
         tglBtnAuto.setSelected(false);
@@ -489,8 +501,6 @@ public class TestErrorTableFrameController {
 
         tglBtnUnom.setSelected(true);
         tglBtnUnom.setDisable(true);
-
-        interrupt = false;
 
         if (typeCircuitThreePhase) {
             phase = 1;
@@ -504,7 +514,7 @@ public class TestErrorTableFrameController {
     //Старт автоматического теста в зависимости от выбранной панели (направления и типа энергии)
     private void startTestOnSelectPane(TableView<Commands> tabViewTestPoints,
                                        ObservableList<Commands> commands, int phase, long timeCRPForGOST, long timeSTAForGOST)
-            throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+            throws InterruptedTestException, ConnectForStendExeption {
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 
@@ -516,10 +526,7 @@ public class TestErrorTableFrameController {
 
                 if (command instanceof ErrorCommand) {
 
-
                     initAllParamForErrorCommand((ErrorCommand) command, i);
-
-                    command.setInterrupt(false);
 
                     if (i != commands.size() - 1) {
                         if (commands.get(i + 1) instanceof ErrorCommand) {
@@ -533,7 +540,6 @@ public class TestErrorTableFrameController {
 
                     initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
 
-                    command.setInterrupt(false);
                     command.execute();
                 }
 
@@ -541,7 +547,6 @@ public class TestErrorTableFrameController {
 
                     initAllParamForStartCommand((StartCommand) command, phase, i, timeSTAForGOST);
 
-                    command.setInterrupt(false);
                     command.execute();
                 }
 
@@ -549,7 +554,6 @@ public class TestErrorTableFrameController {
 
                     initAllParamForRTCCommand((RTCCommand) command, phase, i);
 
-                    command.setInterrupt(false);
                     command.execute();
                 }
             }
@@ -563,7 +567,7 @@ public class TestErrorTableFrameController {
     //Старт ручного теста в зависимости от выбранной панели (направления и типа энергии)
     private void startContinuousTestOnSelectPane(TableView<Commands> tabViewTestPoints,
                                                  ObservableList<Commands> commands, int phase, long timeCRPForGOST, long timeSTAForGOST)
-            throws InterruptedTestException, ConnectForStendExeption, InterruptedException {
+            throws InterruptedTestException, ConnectForStendExeption {
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 
@@ -575,7 +579,6 @@ public class TestErrorTableFrameController {
 
             initAllParamForErrorCommand((ErrorCommand) command, i);
 
-            command.setInterrupt(false);
             command.executeForContinuousTest();
         }
 
@@ -583,7 +586,6 @@ public class TestErrorTableFrameController {
 
             initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
 
-            command.setInterrupt(false);
             command.executeForContinuousTest();
         }
 
@@ -591,7 +593,6 @@ public class TestErrorTableFrameController {
 
             initAllParamForStartCommand((StartCommand) command,phase, i, timeSTAForGOST);
 
-            command.setInterrupt(false);
             command.executeForContinuousTest();
         }
 
@@ -599,7 +600,6 @@ public class TestErrorTableFrameController {
 
             initAllParamForRTCCommand((RTCCommand) command, phase, i);
 
-            command.setInterrupt(false);
             command.executeForContinuousTest();
         }
     }
@@ -1285,17 +1285,14 @@ public class TestErrorTableFrameController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
 
+        tglBtnAuto.setDisable(false);
         tglBtnAuto.setSelected(false);
+        tglBtnManualMode.setDisable(false);
         tglBtnManualMode.setSelected(false);
+        tglBtnUnom.setDisable(false);
         tglBtnUnom.setSelected(false);
     }
-
-    //Если срабарывает
-    private void interrupException() {
-        tglBtnAuto.setSelected(false);
-        tglBtnManualMode.setSelected(false);
-        tglBtnUnom.setSelected(false);
-    }
+    
     //=====================================================================================
     //get sets
 
