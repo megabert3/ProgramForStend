@@ -69,13 +69,11 @@ public class Meter implements Serializable{
     //Серийный номер счётчика
     private String modelMeter;
 
-
     //Лист с ошибками
     private List<CommandResult> errorListAPPls = new ArrayList<>();
     private List<CommandResult> errorListAPMns = new ArrayList<>();
     private List<CommandResult> errorListRPPls = new ArrayList<>();
     private List<CommandResult> errorListRPMns = new ArrayList<>();
-
 
     public void createError(Commands command, int numberArrayList , String name, TestErrorTableFrameController testErrorTableFrameController) {
         switch (numberArrayList) {

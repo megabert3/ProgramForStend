@@ -7,6 +7,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,9 +42,6 @@ public class TestErrorTableFrameController {
 
     //Исполняемая команда
     Commands command;
-
-    //Завершает выполнение команды подачи напряжения
-    private static boolean interrupt;
 
     private List<Meter> listMetersForTest;
 
@@ -99,9 +99,74 @@ public class TestErrorTableFrameController {
 
     private String witness;
 
-    private Thread automaticThread;
-    private Thread manualTread;
-    private Thread UnThread;
+    private Service<Void> automaticThread = new Service<Void>() {
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() {
+                    try {
+                        try {
+                            startAutomaticTest();
+
+                        } catch (Exception e) {
+                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                        }
+                    }catch (ConnectForStendExeption e) {
+                        conectionException();
+                    }
+                    return null;
+                }
+            };
+        }
+    };
+
+    private Service<Void> manualTread = new Service<Void>() {
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() {
+                    try {
+                        try {
+                            startManualTest();
+                            return null;
+                        } catch (Exception e) {
+                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                        }
+                    }catch (ConnectForStendExeption e) {
+                        conectionException();
+                    }
+                    return null;
+                }
+            };
+        }
+    };
+
+    private Service<Void> UnThread = new Service<Void>() {
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() {
+                    try {
+                        try {
+                            startUn();
+                            return null;
+                        } catch (Exception e) {
+                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                        }
+                    }catch (ConnectForStendExeption e){
+                        conectionException();
+                    }
+                    return null;
+                }
+            };
+        }
+    };
 
     @FXML
     private Button btnSave;
@@ -246,163 +311,81 @@ public class TestErrorTableFrameController {
     @FXML
     void actionEventTestControl(ActionEvent event) {
 
-        try {
-            //------------------------------------------------------------------------------------------------
-            //Логика работы автоматического режима работы
-            if (event.getSource() == tglBtnAuto) {
-                try {
-                    if (automaticThread.isAlive()) {
-                        return;
-                    }
-
-                    if (manualTread.isAlive()) {
-                        manualTread.interrupt();
-                        manualTread.join();
-                    }
-
-                    if (UnThread.isAlive()) {
-                        UnThread.interrupt();
-                        UnThread.join();
-                    }
-                }catch (NullPointerException ignored) {
-                }
-
-                automaticThread = new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            try {
-                                startAutomaticTest();
-
-                            }catch (InterruptedTestException e) {
-                                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                            }
-                        }catch (ConnectForStendExeption e) {
-                            conectionException();
-                        }
-                    }
-                };
-
-                automaticThread.start();
+        //------------------------------------------------------------------------------------------------
+        //Логика работы автоматического режима работы
+        if (event.getSource() == tglBtnAuto) {
+            if (automaticThread.isRunning()) {
+                return;
             }
 
-                //------------------------------------------------------------------------------------------------
-                //Логика работы ручного режима работы
-            if (event.getSource() == tglBtnManualMode) {
-                try {
-                    if (manualTread.isAlive()) {
-                        return;
-                    }
-
-                    if (automaticThread.isAlive()) {
-                        automaticThread.interrupt();
-                        automaticThread.join();
-                    }
-
-                    if (UnThread.isAlive()) {
-                        UnThread.interrupt();
-                        UnThread.join();
-                    }
-                }catch (NullPointerException ignored) {
-                }
-
-                manualTread = new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            try {
-                                startManualTest();
-
-                            } catch (InterruptedTestException e) {
-                                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                            }
-                        }catch (ConnectForStendExeption e) {
-                            conectionException();
-                        }
-                    }
-                };
-
-                manualTread.start();
+            if (manualTread.isRunning()) {
+                manualTread.cancel();
             }
 
-            //------------------------------------------------------------------------------------------------
-            //Логика работы подачи напряжения
-            if (event.getSource() == tglBtnUnom) {
-                try {
-                    if (UnThread.isAlive()) {
-                        return;
-                    }
-
-                    if (automaticThread.isAlive()) {
-                        automaticThread.interrupt();
-                        automaticThread.join();
-                    }
-
-                    if (manualTread.isAlive()) {
-                        manualTread.interrupt();
-                        manualTread.join();
-                    }
-                }catch (NullPointerException ignored) {
-                }
-
-                UnThread = new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            startUn();
-
-                        }catch (ConnectForStendExeption e) {
-                            conectionException();
-                        }
-                    }
-                };
-
-                Platform.runLater(UnThread);
-
-                UnThread.start();
+            if (UnThread.isRunning()) {
+                UnThread.cancel();
             }
 
-            //------------------------------------------------------------------------------------------------
-            //Логика работы остановки теста
-            if (event.getSource() == btnStop) {
+            automaticThread.start();
+        }
 
-                try {
-                    if (automaticThread.isAlive()) {
-                        automaticThread.interrupt();
-                        automaticThread.join();
-                    }
-
-                    if (manualTread.isAlive()) {
-                        manualTread.interrupt();
-                        manualTread.join();
-                    }
-
-                    if (UnThread.isAlive()) {
-                        UnThread.interrupt();
-                        UnThread.join();
-                    }
-                }catch (NullPointerException ignored) {
-                }
-
-                tglBtnAuto.setDisable(false);
-                tglBtnAuto.setSelected(false);
-                tglBtnManualMode.setDisable(false);
-                tglBtnManualMode.setSelected(false);
-                tglBtnUnom.setDisable(false);
-                tglBtnUnom.setSelected(false);
+        //------------------------------------------------------------------------------------------------
+        //Логика работы ручного режима работы
+        if (event.getSource() == tglBtnManualMode) {
+            if (manualTread.isRunning()) {
+                return;
             }
 
-            //Если остановка потока или пользователь нажал кнопку стоп или сменил режим работы
-        }catch (InterruptedException e) {
-            if (automaticThread.isAlive()) {
-                automaticThread.interrupt();
-            } else if (manualTread.isAlive()) {
-                manualTread.interrupt();
-            } else if (UnThread.isAlive()) {
-                UnThread.interrupt();
+            if (automaticThread.isRunning()) {
+                automaticThread.cancel();
             }
+
+            if (UnThread.isRunning()) {
+                UnThread.cancel();
+            }
+
+            manualTread.start();
+        }
+
+        //------------------------------------------------------------------------------------------------
+        //Логика работы подачи напряжения
+        if (event.getSource() == tglBtnUnom) {
+            if (UnThread.isRunning()) {
+                return;
+            }
+
+            if (automaticThread.isRunning()) {
+                automaticThread.cancel();
+            }
+
+            if (manualTread.isRunning()) {
+                    manualTread.cancel();
+            }
+
+            UnThread.start();
+        }
+
+        //------------------------------------------------------------------------------------------------
+        //Логика работы остановки теста
+        if (event.getSource() == btnStop) {
+            if (automaticThread.isRunning()) {
+                automaticThread.cancel();
+            }
+
+            if (manualTread.isRunning()) {
+                manualTread.cancel();
+            }
+
+            if (UnThread.isRunning()) {
+                UnThread.cancel();
+            }
+
+            tglBtnAuto.setDisable(false);
+            tglBtnAuto.setSelected(false);
+            tglBtnManualMode.setDisable(false);
+            tglBtnManualMode.setSelected(false);
+            tglBtnUnom.setDisable(false);
+            tglBtnUnom.setSelected(false);
         }
     }
 
@@ -529,6 +512,61 @@ public class TestErrorTableFrameController {
     private void startTestOnSelectPane(TableView<Commands> tabViewTestPoints,
                                        ObservableList<Commands> commands, int phase, long timeCRPForGOST, long timeSTAForGOST)
             throws InterruptedTestException, ConnectForStendExeption {
+
+//        ObservableList<Commands> comandsList = tabViewTestPoints.getSelectionModel().getSelectedItems();
+//
+//        comandsList.addListener(new ListChangeListener<Methodic>() {
+//            @Override
+//            public void onChanged(Change<? extends Methodic> c) {
+//
+//                int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
+//
+//                while (i < commands.size()) {
+//                    command = commands.get(i);
+//
+//                    //Если тестовая точка активна
+//                    if (command.isActive()) {
+//
+//                        if (command instanceof ErrorCommand) {
+//
+//                            initAllParamForErrorCommand((ErrorCommand) command, i);
+//
+//                            if (i != commands.size() - 1) {
+//                                if (commands.get(i + 1) instanceof ErrorCommand) {
+//                                    ((ErrorCommand) command).setNextCommandError(true);
+//                                }
+//                            }
+//                            command.execute();
+//                        }
+//
+//                        if (command instanceof CreepCommand) {
+//
+//                            initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
+//
+//                            command.execute();
+//                        }
+//
+//                        if (command instanceof StartCommand) {
+//
+//                            initAllParamForStartCommand((StartCommand) command, phase, i, timeSTAForGOST);
+//
+//                            command.execute();
+//                        }
+//
+//                        if (command instanceof RTCCommand) {
+//
+//                            initAllParamForRTCCommand((RTCCommand) command, phase, i);
+//
+//                            command.execute();
+//                        }
+//                    }
+//
+//                    i++;
+//                    tabViewTestPoints.getSelectionModel().select(i);
+//                }
+//                tglBtnAuto.setSelected(false);
+//            }
+//        });
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 
