@@ -1,5 +1,6 @@
 package org.taipit.stend.controller.viewController;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -249,19 +250,21 @@ public class TestErrorTableFrameController {
             //------------------------------------------------------------------------------------------------
             //Логика работы автоматического режима работы
             if (event.getSource() == tglBtnAuto) {
+                try {
+                    if (automaticThread.isAlive()) {
+                        return;
+                    }
 
-                if (automaticThread.isAlive()) {
-                    return;
-                }
+                    if (manualTread.isAlive()) {
+                        manualTread.interrupt();
+                        manualTread.join();
+                    }
 
-                if (manualTread.isAlive()) {
-                    manualTread.interrupt();
-                    manualTread.join();
-                }
-
-                if (UnThread.isAlive()) {
-                    UnThread.interrupt();
-                    UnThread.join();
+                    if (UnThread.isAlive()) {
+                        UnThread.interrupt();
+                        UnThread.join();
+                    }
+                }catch (NullPointerException ignored) {
                 }
 
                 automaticThread = new Thread() {
@@ -287,18 +290,21 @@ public class TestErrorTableFrameController {
                 //------------------------------------------------------------------------------------------------
                 //Логика работы ручного режима работы
             if (event.getSource() == tglBtnManualMode) {
-                if (manualTread.isAlive()) {
-                    return;
-                }
+                try {
+                    if (manualTread.isAlive()) {
+                        return;
+                    }
 
-                if (automaticThread.isAlive()) {
-                    automaticThread.interrupt();
-                    automaticThread.join();
-                }
+                    if (automaticThread.isAlive()) {
+                        automaticThread.interrupt();
+                        automaticThread.join();
+                    }
 
-                if (UnThread.isAlive()) {
-                    UnThread.interrupt();
-                    UnThread.join();
+                    if (UnThread.isAlive()) {
+                        UnThread.interrupt();
+                        UnThread.join();
+                    }
+                }catch (NullPointerException ignored) {
                 }
 
                 manualTread = new Thread() {
@@ -324,18 +330,21 @@ public class TestErrorTableFrameController {
             //------------------------------------------------------------------------------------------------
             //Логика работы подачи напряжения
             if (event.getSource() == tglBtnUnom) {
-                if (UnThread.isAlive()) {
-                    return;
-                }
+                try {
+                    if (UnThread.isAlive()) {
+                        return;
+                    }
 
-                if (automaticThread.isAlive()) {
-                    automaticThread.interrupt();
-                    automaticThread.join();
-                }
+                    if (automaticThread.isAlive()) {
+                        automaticThread.interrupt();
+                        automaticThread.join();
+                    }
 
-                if (manualTread.isAlive()) {
-                    manualTread.interrupt();
-                    manualTread.join();
+                    if (manualTread.isAlive()) {
+                        manualTread.interrupt();
+                        manualTread.join();
+                    }
+                }catch (NullPointerException ignored) {
                 }
 
                 UnThread = new Thread() {
@@ -350,6 +359,8 @@ public class TestErrorTableFrameController {
                     }
                 };
 
+                Platform.runLater(UnThread);
+
                 UnThread.start();
             }
 
@@ -357,19 +368,22 @@ public class TestErrorTableFrameController {
             //Логика работы остановки теста
             if (event.getSource() == btnStop) {
 
-                if (automaticThread.isAlive()) {
-                    automaticThread.interrupt();
-                    automaticThread.join();
-                }
+                try {
+                    if (automaticThread.isAlive()) {
+                        automaticThread.interrupt();
+                        automaticThread.join();
+                    }
 
-                if (manualTread.isAlive()) {
-                    manualTread.interrupt();
-                    manualTread.join();
-                }
+                    if (manualTread.isAlive()) {
+                        manualTread.interrupt();
+                        manualTread.join();
+                    }
 
-                if (UnThread.isAlive()) {
-                    UnThread.interrupt();
-                    UnThread.join();
+                    if (UnThread.isAlive()) {
+                        UnThread.interrupt();
+                        UnThread.join();
+                    }
+                }catch (NullPointerException ignored) {
                 }
 
                 tglBtnAuto.setDisable(false);
