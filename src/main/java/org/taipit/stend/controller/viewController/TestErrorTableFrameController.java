@@ -99,74 +99,7 @@ public class TestErrorTableFrameController {
 
     private String witness;
 
-    private Service<Void> automaticThread = new Service<Void>() {
-        @Override
-        protected Task<Void> createTask() {
-            return new Task<Void>() {
-                @Override
-                protected Void call() {
-                    try {
-                        try {
-                            startAutomaticTest();
-
-                        } catch (Exception e) {
-                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                        }
-                    }catch (ConnectForStendExeption e) {
-                        conectionException();
-                    }
-                    return null;
-                }
-            };
-        }
-    };
-
-    private Service<Void> manualTread = new Service<Void>() {
-        @Override
-        protected Task<Void> createTask() {
-            return new Task<Void>() {
-                @Override
-                protected Void call() {
-                    try {
-                        try {
-                            startManualTest();
-                            return null;
-                        } catch (Exception e) {
-                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                        }
-                    }catch (ConnectForStendExeption e) {
-                        conectionException();
-                    }
-                    return null;
-                }
-            };
-        }
-    };
-
-    private Service<Void> UnThread = new Service<Void>() {
-        @Override
-        protected Task<Void> createTask() {
-            return new Task<Void>() {
-                @Override
-                protected Void call() {
-                    try {
-                        try {
-                            startUn();
-                            return null;
-                        } catch (Exception e) {
-                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                        }
-                    }catch (ConnectForStendExeption e){
-                        conectionException();
-                    }
-                    return null;
-                }
-            };
-        }
-    };
+    private Service<Void> thread;
 
     @FXML
     private Button btnSave;
@@ -314,70 +247,132 @@ public class TestErrorTableFrameController {
         //------------------------------------------------------------------------------------------------
         //Логика работы автоматического режима работы
         if (event.getSource() == tglBtnAuto) {
-            if (automaticThread.isRunning()) {
-                return;
+            try {
+                if (thread.isRunning()) {
+                    thread.cancel();
+                }
+            }catch (NullPointerException ignored) {
             }
 
-            if (manualTread.isRunning()) {
-                manualTread.cancel();
-            }
+            thread = new Service<Void>() {
+                @Override
+                protected Task<Void> createTask() {
+                    return new Task<Void>() {
+                        @Override
+                        protected Void call() {
+                            try {
+                                try {
+                                    startAutomaticTest();
 
-            if (UnThread.isRunning()) {
-                UnThread.cancel();
-            }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                                }
+                            }catch (ConnectForStendExeption e) {
+                                e.printStackTrace();
+                                conectionException();
+                            }
+                            return null;
+                        }
+                    };
+                }
+            };
 
-            automaticThread.start();
+            thread.start();
         }
 
         //------------------------------------------------------------------------------------------------
         //Логика работы ручного режима работы
         if (event.getSource() == tglBtnManualMode) {
-            if (manualTread.isRunning()) {
-                return;
+            try {
+                if (thread.isRunning()) {
+                    thread.cancel();
+                }
+
+            }catch (NullPointerException ignored) {
             }
 
-            if (automaticThread.isRunning()) {
-                automaticThread.cancel();
-            }
+             thread = new Service<Void>() {
+                @Override
+                protected Task<Void> createTask() {
+                    return new Task<Void>() {
+                        @Override
+                        protected Void call() {
+                            try {
+                                try {
+                                    startManualTest();
+                                    return null;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                                }
+                            }catch (ConnectForStendExeption e) {
+                                e.printStackTrace();
+                                conectionException();
+                            }
+                            return null;
+                        }
+                    };
+                }
+            };
 
-            if (UnThread.isRunning()) {
-                UnThread.cancel();
-            }
+                thread.start();
 
-            manualTread.start();
+
         }
 
         //------------------------------------------------------------------------------------------------
         //Логика работы подачи напряжения
         if (event.getSource() == tglBtnUnom) {
-            if (UnThread.isRunning()) {
-                return;
+            try {
+                if (thread.isRunning()) {
+                    thread.cancel();
+                }
+
+            }catch (NullPointerException ignored){
+                ignored.getStackTrace();
             }
 
-            if (automaticThread.isRunning()) {
-                automaticThread.cancel();
-            }
+            thread = new Service<Void>() {
+                @Override
+                protected Task<Void> createTask() {
+                    return new Task<Void>() {
+                        @Override
+                        protected Void call() {
+                            try {
+                                try {
+                                    startUn();
+                                    return null;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                                }
+                            }catch (ConnectForStendExeption e){
+                                e.printStackTrace();
+                                conectionException();
+                            }
+                            return null;
+                        }
+                    };
+                }
+            };
 
-            if (manualTread.isRunning()) {
-                    manualTread.cancel();
-            }
-
-            UnThread.start();
+            thread.start();
         }
 
         //------------------------------------------------------------------------------------------------
         //Логика работы остановки теста
         if (event.getSource() == btnStop) {
-            if (automaticThread.isRunning()) {
-                automaticThread.cancel();
-            }
+            try {
+                if (thread.isRunning()) {
+                    thread.cancel();
 
-            if (manualTread.isRunning()) {
-                manualTread.cancel();
-            }
+                }
 
-            if (UnThread.isRunning()) {
-                UnThread.cancel();
+            }catch (NullPointerException ignored) {
             }
 
             tglBtnAuto.setDisable(false);
@@ -1318,7 +1313,7 @@ public class TestErrorTableFrameController {
     }
 
     //Если возникает ошибка связи с установкой
-    private void conectionException() {
+    void conectionException() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/viewFXML/exceptionFrame.fxml/"));
         try {

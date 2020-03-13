@@ -143,7 +143,9 @@ public class CreepCommand implements Commands, Serializable {
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
         }catch (InterruptedException e) {
+            e.printStackTrace();
             Thread.currentThread().interrupt();
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
         }
     }
 
@@ -217,7 +219,9 @@ public class CreepCommand implements Commands, Serializable {
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
         }catch (InterruptedException e) {
+            e.printStackTrace();
             Thread.currentThread().interrupt();
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
         }
     }
 

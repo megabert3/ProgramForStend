@@ -201,6 +201,10 @@ public class ErrorCommand implements Commands, Serializable {
 
                     strError = stendDLLCommands.meterErrorRead(meter.getId());
                     strMass = strError.split(",");
+
+                    if (strMass.length != 2) {
+                        continue;
+                    }
                     resultNo = Integer.parseInt(strMass[0]);
                     error = strMass[1];
 
@@ -233,7 +237,9 @@ public class ErrorCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
         }catch (InterruptedException e) {
+            e.printStackTrace();
             Thread.currentThread().interrupt();
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
         }
     }
 
@@ -284,6 +290,11 @@ public class ErrorCommand implements Commands, Serializable {
                 for (Meter meter : meterForTestList) {
                     strError = stendDLLCommands.meterErrorRead(meter.getId());
                     strMass = strError.split(",");
+
+                    if (strMass.length != 2) {
+                        continue;
+                    }
+
                     resultNo = Integer.parseInt(strMass[0]);
                     error = strMass[1];
 
@@ -307,7 +318,9 @@ public class ErrorCommand implements Commands, Serializable {
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
         }catch (InterruptedException e) {
+            e.printStackTrace();
             Thread.currentThread().interrupt();
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
         }
     }
 

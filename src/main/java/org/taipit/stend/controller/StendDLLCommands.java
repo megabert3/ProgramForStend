@@ -200,9 +200,9 @@ public abstract class StendDLLCommands {
     }
 
     // Получить ошибку навешенного счетчика
-    public String meterErrorRead(int meterNo) throws ConnectForStendExeption {
+    public String meterErrorRead(int meterNo) {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
-        if (!stend.Error_Read(pointer, meterNo, port)) throw new ConnectForStendExeption();
+        stend.Error_Read(pointer, meterNo, port);
         return pointer.getValue().getString(0, "ASCII");
     }
 
