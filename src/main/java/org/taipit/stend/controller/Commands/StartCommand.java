@@ -92,7 +92,7 @@ public class StartCommand implements Commands, Serializable {
 
 
     @Override
-    public void execute() throws InterruptedTestException, ConnectForStendExeption {
+    public void execute() throws ConnectForStendExeption {
         try {
             if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
 
@@ -156,13 +156,21 @@ public class StartCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+
         }catch (InterruptedException e) {
+            e.printStackTrace();
             Thread.currentThread().interrupt();
+        }catch (InterruptedTestException e) {
+            e.printStackTrace();
+            //Переход сразу к финалу
+        }finally {
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
         }
     }
 
     @Override
-    public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption {
+    public void executeForContinuousTest() throws ConnectForStendExeption {
         try {
             if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
             startCommandResult = initCreepCommandResult();
@@ -230,8 +238,16 @@ public class StartCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+
         }catch (InterruptedException e) {
+            e.printStackTrace();
             Thread.currentThread().interrupt();
+        }catch (InterruptedTestException e) {
+            e.printStackTrace();
+            //Переход сразу к финалу
+        }finally {
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
         }
     }
 
@@ -254,6 +270,20 @@ public class StartCommand implements Commands, Serializable {
 
     //Переносит время провала теста в нужную строку
     private void addTestTimeFail(Meter meter, int channelFlag, String timeFail, int countResult) {
+        switch (channelFlag) {
+            case 0: {
+                meter.setStartTestAPPls(false);
+            }break;
+            case 1: {
+                meter.setStartTestAPMns(false);
+            }break;
+            case 2: {
+                meter.setStartTestRPPls(false);
+            }break;
+            case 3: {
+                meter.setStartTestRPMns(false);
+            }
+        }
         Meter.StartResult commandResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(false);
         commandResult.setLastResult("F" + timeFail + " " + "-");
@@ -262,6 +292,20 @@ public class StartCommand implements Commands, Serializable {
 
     //Переносит время провала теста в нужную строку
     private void addTestTimePass(Meter meter, int channelFlag, String timePass, int countResult) {
+        switch (channelFlag) {
+            case 0: {
+                meter.setStartTestAPPls(true);
+            }break;
+            case 1: {
+                meter.setStartTestAPMns(true);
+            }break;
+            case 2: {
+                meter.setStartTestRPPls(true);
+            }break;
+            case 3: {
+                meter.setStartTestRPMns(true);
+            }
+        }
         Meter.StartResult commandResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(true);
         commandResult.setLastResult("P" + timePass + " " + "+");

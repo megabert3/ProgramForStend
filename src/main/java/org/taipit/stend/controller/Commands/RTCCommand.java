@@ -56,7 +56,7 @@ public class RTCCommand implements Commands, Serializable {
     }
 
     @Override
-    public void execute() throws InterruptedTestException, ConnectForStendExeption {
+    public void execute() throws ConnectForStendExeption {
         try {
             if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
             int count = 0;
@@ -111,13 +111,21 @@ public class RTCCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+
         }catch (InterruptedException e) {
+            e.printStackTrace();
             Thread.currentThread().interrupt();
+        }catch (InterruptedTestException e) {
+            e.printStackTrace();
+            //Переход сразу к финалу
+        }finally {
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
         }
     }
 
     @Override
-    public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption {
+    public void executeForContinuousTest() throws ConnectForStendExeption {
         try {
             if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
             int count = 0;
@@ -168,8 +176,16 @@ public class RTCCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+
         }catch (InterruptedException e) {
+            e.printStackTrace();
             Thread.currentThread().interrupt();
+        }catch (InterruptedTestException e) {
+            e.printStackTrace();
+            //Переход сразу к финалу
+        }finally {
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
         }
     }
 
@@ -179,6 +195,7 @@ public class RTCCommand implements Commands, Serializable {
 
     private void addRTCTestResult(Meter meter, double RTCError, boolean passOrNot, int channelFlagForSave) {
         Meter.CommandResult commandResult;
+        meter.setRTCTest(passOrNot);
 
         switch (channelFlagForSave) {
             case 0: {

@@ -1,7 +1,6 @@
 package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
-import org.taipit.stend.helper.exeptions.InterruptedTestException;
 
 import java.io.Serializable;
 
@@ -11,7 +10,7 @@ public class ConstantCommand implements Commands, Serializable {
     private boolean active = true;
 
     @Override
-    public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption {
+    public void executeForContinuousTest() throws ConnectForStendExeption {
 
     }
 

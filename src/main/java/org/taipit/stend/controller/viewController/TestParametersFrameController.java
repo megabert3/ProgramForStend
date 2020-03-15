@@ -187,7 +187,7 @@ public class TestParametersFrameController {
 
                 //Оставляем только выделенные счётчики
                 for (int i = 0; i < metersList.size(); i++) {
-                    if (!metersList.get(i).isActive()) {
+                    if (!metersList.get(i).isActiveSeat()) {
                         metersList.remove(i);
                         i--;
                     }
@@ -302,7 +302,7 @@ public class TestParametersFrameController {
                 }
 
                 ExceptionFrameController exceptionFrameController = fxmlLoader.getController();
-                exceptionFrameController.getExceptionLabel().setText("Должен быть выбран хотябы\n один счётчик");
+                exceptionFrameController.getExceptionLabel().setText("Должен быть выбран хотябы\nодин счётчик.");
 
                 Parent root = fxmlLoader.getRoot();
                 Stage stage = new Stage();
@@ -413,12 +413,12 @@ public class TestParametersFrameController {
             @Override
             public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Meter, Boolean> param) {
                 Meter meter = param.getValue();
-                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(meter.isActive());
+                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(meter.isActiveSeat());
 
                 simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
                     @Override
                     public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        meter.setActive(newValue);
+                        meter.setActiveSeat(newValue);
                     }
                 });
 
@@ -426,7 +426,7 @@ public class TestParametersFrameController {
             }
         });
 
-        tabColMeterDis.setCellFactory(new Callback<TableColumn<Meter, Boolean>, //
+        tabColMeterDis.setCellFactory(new Callback<TableColumn<Meter, Boolean>,
                 TableCell<Meter, Boolean>>() {
             @Override
             public TableCell<Meter, Boolean> call(TableColumn<Meter, Boolean> p) {
@@ -526,4 +526,5 @@ public class TestParametersFrameController {
 
         tabVParamMeters.setPlaceholder(new Label("Укажите количество мест в настрйках"));
     }
+
 }

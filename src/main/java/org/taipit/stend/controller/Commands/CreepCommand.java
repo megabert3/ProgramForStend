@@ -79,7 +79,7 @@ public class CreepCommand implements Commands, Serializable {
     }
 
     @Override
-    public void execute() throws InterruptedTestException, ConnectForStendExeption {
+    public void execute() throws ConnectForStendExeption {
         try {
             if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
             creepCommandResult = initCreepCommandResult();
@@ -142,15 +142,21 @@ public class CreepCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+
         }catch (InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        }catch (InterruptedTestException e) {
+            e.printStackTrace();
+            //Переход сразу к финалу
+        }finally {
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
         }
     }
 
     @Override
-    public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption {
+    public void executeForContinuousTest() throws ConnectForStendExeption {
         try {
             if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
             creepCommandResult = initCreepCommandResult();
@@ -218,10 +224,16 @@ public class CreepCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+
         }catch (InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        }catch (InterruptedTestException e) {
+            e.printStackTrace();
+            //Переход сразу к финалу
+        }finally {
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
         }
     }
 
@@ -244,17 +256,19 @@ public class CreepCommand implements Commands, Serializable {
 
     //Переносит время провала теста в нужную строку
     private void addTestTimeFail(Meter meter, int channelFlag, String timeFail, int countResult) {
+        meter.setCreepTest(false);
         Meter.CreepResult commandResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(false);
-        commandResult.setLastResult("F" + timeFail + " " + "-");
+        commandResult.setLastResult("F" + timeFail + " " + "П");
         commandResult.getResults()[countResult] = commandResult.getLastResult().substring(1, commandResult.getLastResult().length() - 2);
     }
 
     //Переносит время провала теста в нужную строку
     private void addTestTimePass(Meter meter, int channelFlag, String timeFail, int countResult) {
+        meter.setCreepTest(true);
         Meter.CreepResult commandResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(true);
-        commandResult.setLastResult("P" + timeFail + " " + "+");
+        commandResult.setLastResult("P" + timeFail + " " + "Г");
         commandResult.getResults()[countResult] = commandResult.getLastResult().substring(1, commandResult.getLastResult().length() - 2);
     }
 

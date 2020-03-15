@@ -11,9 +11,9 @@ import java.util.List;
 public interface Commands{
 
     //Выполнение команды
-    void execute() throws InterruptedTestException, ConnectForStendExeption;
+    void execute() throws ConnectForStendExeption;
 
-    void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption;
+    void executeForContinuousTest() throws ConnectForStendExeption;
 
     //Имя команды
     String getName();

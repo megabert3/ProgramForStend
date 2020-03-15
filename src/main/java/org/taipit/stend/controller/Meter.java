@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Meter implements Serializable{
+    /**
+     * Для восстановления результатов прошлого теста, при создании
+     * новых объектов CommandResult сравнивать хэш код со старыми результатами и если что возвращать старый результат
+     */
 
     private int id;
 
@@ -36,17 +40,25 @@ public class Meter implements Serializable{
     //Класс точночти реактивной энергии
     private double accuracyClassRP;
 
+    private String temperature;
+
+    private String humidity;
+
     private String operator;
 
     private String controller;
 
     private String witness;
 
-    //Локальный массив ошибок нужен для быстрого теста
-    private String[] localErrors = new String[10];
+    private String verificationDate;
+
+    private String factoryManufacturer;
 
     //Установлен ли счётчик на посадочное место
-    private boolean active = true;
+    private boolean activeSeat = true;
+
+    //Записать результаты в базу
+    private boolean saveResults = true;
 
     //Количество измерений погрешности
     private int amountMeasur;
@@ -68,6 +80,35 @@ public class Meter implements Serializable{
 
     //Серийный номер счётчика
     private String modelMeter;
+
+    //Результаты тестов
+    //-----------------------------------------------------------------------
+
+    //Общий результат
+    private Boolean finalAllTestResult;
+    //Самоход
+    private Boolean creepTest = true;
+
+    //Чувствительность
+    private Boolean startTestAPPls = true;
+    private Boolean startTestAPMns = false;
+    private Boolean startTestRPPls = null;
+    private Boolean startTestRPMns = null;
+
+    //Точность хода часов
+    private Boolean RTCTest = null;
+
+    //Изоляция
+    private Boolean insulationTest = true;
+
+    //Внешний вид
+    private Boolean appearensTest = true;
+
+    //Проверка счётного механизма
+    private Boolean constantTestAPPls = true;
+    private Boolean constantTestAPMns = null;
+    private Boolean constantTestRPPls = null;
+    private Boolean constantTestRPMns = null;
 
     //Лист с ошибками
     private List<CommandResult> errorListAPPls = new ArrayList<>();
@@ -240,7 +281,7 @@ public class Meter implements Serializable{
 
     //Установка результата теста
     public Meter.CommandResult setResultsInErrorList(int index, int resultNo, String error, int energyPulseChanel) {
-        CommandResult commandResult = returnResultCommand(index, energyPulseChanel);
+        CommandResult commandResult;
         switch (energyPulseChanel) {
             case 0: {
                 commandResult = errorListAPPls.get(index);
@@ -269,17 +310,67 @@ public class Meter implements Serializable{
         return null;
     }
 
+    //окончательный вердикт
+    public Boolean meterPassOrNotAlltests() {
+        Boolean yesOrNo = null;
+
+        if (!errorListAPPls.isEmpty()) {
+            for (CommandResult commandResult : errorListAPPls) {
+                if (commandResult.isPassTest() != null) {
+                    if (!commandResult.isPassTest()) {
+                        return false;
+                    } else {
+                        yesOrNo = true;
+                    }
+                }
+            }
+        }
+
+        if (!errorListAPMns.isEmpty()) {
+            for (CommandResult commandResult : errorListAPMns) {
+                if (commandResult.isPassTest() != null) {
+                    if (!commandResult.isPassTest()) {
+                        return false;
+                    } else {
+                        yesOrNo = true;
+                    }
+                }
+            }
+        }
+
+        if (!errorListRPPls.isEmpty()) {
+            for (CommandResult commandResult : errorListRPPls) {
+                if (commandResult.isPassTest() != null) {
+                    if (!commandResult.isPassTest()) {
+                        return false;
+                    } else {
+                        yesOrNo = true;
+                    }
+                }
+            }
+        }
+
+        if (!errorListRPMns.isEmpty()) {
+            for (CommandResult commandResult : errorListRPMns) {
+                if (commandResult.isPassTest() != null) {
+                    if (!commandResult.isPassTest()) {
+                        return false;
+                    } else {
+                        yesOrNo = true;
+                    }
+                }
+            }
+        }
+        return yesOrNo;
+    }
+
+    //Переводит миллисекунды в формат hh:mm:ss
     private String getTime(long mlS){
         long s = mlS / 1000;
         long hours = s / 3600;
         long minutes = (s % 3600) / 60;
         long seconds = s % 60;
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-    }
-
-
-    public String[] getLocalErrors() {
-        return localErrors;
     }
 
     public String getConstantMeterAP() {
@@ -322,12 +413,12 @@ public class Meter implements Serializable{
         return id;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setActiveSeat(boolean activeSeat) {
+        this.activeSeat = activeSeat;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isActiveSeat() {
+        return activeSeat;
     }
 
     public List<CommandResult> getErrorListAPPls() {
@@ -458,6 +549,150 @@ public class Meter implements Serializable{
         return amountImn;
     }
 
+    public Boolean getCreepTest() {
+        return creepTest;
+    }
+
+    public void setCreepTest(Boolean creepTest) {
+        this.creepTest = creepTest;
+    }
+
+    public Boolean getStartTestAPPls() {
+        return startTestAPPls;
+    }
+
+    public void setStartTestAPPls(Boolean startTestAPPls) {
+        this.startTestAPPls = startTestAPPls;
+    }
+
+    public Boolean getStartTestAPMns() {
+        return startTestAPMns;
+    }
+
+    public void setStartTestAPMns(Boolean startTestAPMns) {
+        this.startTestAPMns = startTestAPMns;
+    }
+
+    public Boolean getStartTestRPPls() {
+        return startTestRPPls;
+    }
+
+    public void setStartTestRPPls(Boolean startTestRPPls) {
+        this.startTestRPPls = startTestRPPls;
+    }
+
+    public Boolean getStartTestRPMns() {
+        return startTestRPMns;
+    }
+
+    public void setStartTestRPMns(Boolean startTestRPMns) {
+        this.startTestRPMns = startTestRPMns;
+    }
+
+    public Boolean getRTCTest() {
+        return RTCTest;
+    }
+
+    public void setRTCTest(Boolean RTCTest) {
+        this.RTCTest = RTCTest;
+    }
+
+    public Boolean getInsulationTest() {
+        return insulationTest;
+    }
+
+    public void setInsulationTest(Boolean insulationTest) {
+        this.insulationTest = insulationTest;
+    }
+
+    public Boolean getAppearensTest() {
+        return appearensTest;
+    }
+
+    public void setAppearensTest(Boolean appearensTest) {
+        this.appearensTest = appearensTest;
+    }
+
+    public boolean isSaveResults() {
+        return saveResults;
+    }
+
+    public void setSaveResults(boolean saveResults) {
+        this.saveResults = saveResults;
+    }
+
+    public Boolean getConstantTestAPPls() {
+        return constantTestAPPls;
+    }
+
+    public void setConstantTestAPPls(Boolean constantTestAPPls) {
+        this.constantTestAPPls = constantTestAPPls;
+    }
+
+    public Boolean getConstantTestAPMns() {
+        return constantTestAPMns;
+    }
+
+    public void setConstantTestAPMns(Boolean constantTestAPMns) {
+        this.constantTestAPMns = constantTestAPMns;
+    }
+
+    public Boolean getConstantTestRPPls() {
+        return constantTestRPPls;
+    }
+
+    public void setConstantTestRPPls(Boolean constantTestRPPls) {
+        this.constantTestRPPls = constantTestRPPls;
+    }
+
+    public Boolean getConstantTestRPMns() {
+        return constantTestRPMns;
+    }
+
+    public void setConstantTestRPMns(Boolean constantTestRPMns) {
+        this.constantTestRPMns = constantTestRPMns;
+    }
+
+    public String getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
+    }
+
+    public String getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(String humidity) {
+        this.humidity = humidity;
+    }
+
+    public String getVerificationDate() {
+        return verificationDate;
+    }
+
+    public void setVerificationDate(String verificationDate) {
+        this.verificationDate = verificationDate;
+    }
+
+    public String getFactoryManufacturer() {
+        return factoryManufacturer;
+    }
+
+    public void setFactoryManufacturer(String factoryManufacturer) {
+        this.factoryManufacturer = factoryManufacturer;
+    }
+
+    public Boolean getFinalAllTestResult() {
+        return finalAllTestResult;
+    }
+
+    public void setFinalAllTestResult(Boolean finalAllTestResult) {
+        this.finalAllTestResult = finalAllTestResult;
+    }
+
     //Абстрактный класс для записи результата каждой точки
     public abstract class CommandResult implements Serializable{
 
@@ -465,7 +700,7 @@ public class Meter implements Serializable{
         String nameCommand;
 
         //Последний результат теста
-        SimpleStringProperty lastResult = new SimpleStringProperty();
+        SimpleStringProperty lastResult;
 
         //Верхняя граница погрешности
         String maxError;
@@ -473,15 +708,15 @@ public class Meter implements Serializable{
         //Нижняя граница погрешности
         String minError;
 
+        //Погрешность в диапазоне (прошла тест или нет)
+        Boolean passTest = null;
+
         //10-ть последних результатов
         String[] results = new String[10];
 
-        public CommandResult() {
+        CommandResult() {
             this.lastResult = new SimpleStringProperty();
         }
-
-        //Погрешность в диапазоне (прошла тест или нет)
-        boolean passTest;
 
         public String getLastResult() {
             return lastResult.get();
@@ -503,7 +738,7 @@ public class Meter implements Serializable{
             return results;
         }
 
-        public void setNameCommand(String nameCommand) {
+        void setNameCommand(String nameCommand) {
             this.nameCommand = nameCommand;
         }
 
@@ -527,7 +762,7 @@ public class Meter implements Serializable{
             return minError;
         }
 
-        public boolean isPassTest() {
+        Boolean isPassTest() {
             return passTest;
         }
 
@@ -591,6 +826,13 @@ public class Meter implements Serializable{
     private class RTCResult extends CommandResult implements Serializable{
 
         RTCResult(String name) {
+            super.setNameCommand(name);
+        }
+    }
+
+    private class Constant extends CommandResult implements Serializable{
+
+        Constant(String name) {
             super.setNameCommand(name);
         }
     }

@@ -144,7 +144,7 @@ public class ErrorCommand implements Commands, Serializable {
     //===================================================================================================
     //Команда выполнения для последовательного теста
     @Override
-    public void execute() throws InterruptedTestException, ConnectForStendExeption {
+    public void execute() throws ConnectForStendExeption {
         try {
             if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
 
@@ -195,6 +195,7 @@ public class ErrorCommand implements Commands, Serializable {
             double doubleErr;
 
             while (flagInStop.containsValue(false)) {
+                if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
 
                 for (Meter meter : meterForTestList) {
                     if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
@@ -205,6 +206,7 @@ public class ErrorCommand implements Commands, Serializable {
                     if (strMass.length != 2) {
                         continue;
                     }
+
                     resultNo = Integer.parseInt(strMass[0]);
                     error = strMass[1];
 
@@ -239,13 +241,18 @@ public class ErrorCommand implements Commands, Serializable {
         }catch (InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        }catch (InterruptedTestException e) {
+            e.printStackTrace();
+            //Переход сразу к финалу
+        }finally {
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
         }
     }
 
     //Метод для цикличной поверки счётчиков
     @Override
-    public void executeForContinuousTest() throws InterruptedTestException, ConnectForStendExeption {
+    public void executeForContinuousTest() throws ConnectForStendExeption {
         try {
             if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
 
@@ -317,10 +324,16 @@ public class ErrorCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
         }catch (InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        }catch (InterruptedTestException e) {
+            e.printStackTrace();
+            //Переход сразу к финалу
+        }finally {
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
         }
     }
 
