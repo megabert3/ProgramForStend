@@ -19,7 +19,6 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.*;
@@ -39,8 +38,7 @@ public class TestErrorTableFrameController {
 
     //Исполняемая команда
     Commands command;
-
-    private List<Meter> listMetersForTest;
+   private List<Meter> listMetersForTest;
 
     private Methodic methodic;
 

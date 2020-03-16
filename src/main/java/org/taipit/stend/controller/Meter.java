@@ -87,11 +87,11 @@ public class Meter implements Serializable{
     //Общий результат
     private Boolean finalAllTestResult;
     //Самоход
-    private Boolean creepTest = true;
+    private Boolean creepTest = null;
 
     //Чувствительность
-    private Boolean startTestAPPls = true;
-    private Boolean startTestAPMns = false;
+    private Boolean startTestAPPls = null;
+    private Boolean startTestAPMns = null;
     private Boolean startTestRPPls = null;
     private Boolean startTestRPMns = null;
 
@@ -99,13 +99,13 @@ public class Meter implements Serializable{
     private Boolean RTCTest = null;
 
     //Изоляция
-    private Boolean insulationTest = true;
+    private Boolean insulationTest = null;
 
     //Внешний вид
-    private Boolean appearensTest = true;
+    private Boolean appearensTest = null;
 
     //Проверка счётного механизма
-    private Boolean constantTestAPPls = true;
+    private Boolean constantTestAPPls = null;
     private Boolean constantTestAPMns = null;
     private Boolean constantTestRPPls = null;
     private Boolean constantTestRPMns = null;

@@ -2,7 +2,6 @@ package org.taipit.stend.controller.viewController;
 
 import java.util.*;
 
-import com.sun.istack.internal.Nullable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,6 +16,8 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.helper.ConsoleHelper;
@@ -26,6 +27,23 @@ public class SaveResultsTestFrame {
     private TestErrorTableFrameController testErrorTableFrameController;
 
     private Properties properties = ConsoleHelper.properties;
+
+    private String[] resultMass = properties.getProperty("restMeterResults").split(", ");
+
+    private String[] meterModel = properties.getProperty("meterModel").split(", ");
+
+    private String controller = properties.getProperty("lastController");
+    private String operator = properties.getProperty("lastOperator");
+    private String witnes = properties.getProperty("lastWitness");
+
+    private String[] controllers = properties.getProperty("Controller").split(", ");
+    private String[] operators = properties.getProperty("Operators").split(", ");
+    private String[] witneses = properties.getProperty("Witness").split(", ");
+
+    private String temperature = properties.getProperty("lastTemperature");
+    private String humidity = properties.getProperty("lastHumidity");
+
+    private String batchNumb = properties.getProperty("lastBatchNumb");
 
     private List<Meter> meterList;
 
@@ -67,6 +85,9 @@ public class SaveResultsTestFrame {
 
     @FXML
     private Button btnCancel;
+
+    @FXML
+    private Pane paneForTabView;
 
     @FXML
     private TableView<Meter> tabViewResults;
@@ -113,6 +134,38 @@ public class SaveResultsTestFrame {
     }
 
     public void initAllColums() {
+        Callback<TableColumn<Meter, String>, TableCell<Meter, String>> cellFactoryEndTest =
+                new Callback<TableColumn<Meter, String>, TableCell<Meter, String>>() {
+                    public TableCell call(TableColumn p) {
+                        return new TableCell<Meter, String>() {
+                            @Override
+                            public void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
+
+                                char firstSymbol;
+
+                                if (item == null || empty) {
+                                    setText("");
+                                } else {
+                                    firstSymbol = item.charAt(0);
+
+                                    if (firstSymbol == 'Н') {
+                                        setText(item);
+
+                                    } else if (firstSymbol == 'Г') {
+                                        setText(item);
+                                        setTextFill(Color.BLUE);
+
+                                    } else if (firstSymbol == 'П') {
+                                        setText(item);
+                                        setTextFill(Color.RED);
+                                    }
+                                }
+                            }
+                        };
+                    }
+                };
+
         //Получаю счётчики с окна тестирования
         meterList = testErrorTableFrameController.getListMetersForTest();
 
@@ -181,7 +234,7 @@ public class SaveResultsTestFrame {
 
         //Выбор модели счётчика из списка
         tabColMeterModel.setStyle( "-fx-alignment: CENTER;");
-        ObservableList<String> meterModelList = FXCollections.observableArrayList(properties.getProperty("meterModel").split(", "));
+        ObservableList<String> meterModelList = FXCollections.observableArrayList(meterModel);
         tabColMeterModel.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
 
             @Override
@@ -218,21 +271,22 @@ public class SaveResultsTestFrame {
                 SimpleStringProperty result = null;
 
                 if (meter.getFinalAllTestResult() == null) {
-                    result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                    result = new SimpleStringProperty(resultMass[0]);
                 } else if (meter.getFinalAllTestResult()) {
-                    result = new SimpleStringProperty("ГОДЕН");
+                    result = new SimpleStringProperty(resultMass[1]);
                 } else if (!meter.getFinalAllTestResult()) {
-                    result = new SimpleStringProperty("ПРОВАЛИЛ");
+                    result = new SimpleStringProperty(resultMass[2]);
                 }
-                System.out.println(result);
                 return result;
 
             }
         });
 
-        ObservableList<String> finalResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+        ObservableList<String> finalResult = FXCollections.observableArrayList(resultMass);
 
         tabColResultVerification.setCellFactory(ComboBoxTableCell.forTableColumn(finalResult));
+
+        //tabColResultVerification.setCellFactory(cellFactoryEndTest);
 
         tabColResultVerification.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
             TablePosition<Meter, String> pos = event.getTablePosition();
@@ -242,16 +296,12 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
-            switch (result) {
-                case "НЕ ПРОВОДИЛОСЬ":
-                    meter.setFinalAllTestResult(null);
-                    break;
-                case "ГОДЕН":
-                    meter.setFinalAllTestResult(true);
-                    break;
-                case "ПРОВАЛИЛ":
-                    meter.setFinalAllTestResult(false);
-                    break;
+            if (result.equals(resultMass[0])) {
+                meter.setFinalAllTestResult(null);
+            } else if (result.equals(resultMass[1])) {
+                meter.setFinalAllTestResult(true);
+            } else if (result.equals(resultMass[2])) {
+                meter.setFinalAllTestResult(false);
             }
         });
 
@@ -267,18 +317,18 @@ public class SaveResultsTestFrame {
                     SimpleStringProperty result = null;
 
                     if (meter.getCreepTest() == null) {
-                        result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                        result = new SimpleStringProperty(resultMass[0]);
                     } else if (meter.getCreepTest()) {
-                        result = new SimpleStringProperty("ГОДЕН");
+                        result = new SimpleStringProperty(resultMass[1]);
                     } else if (!meter.getCreepTest()) {
-                        result = new SimpleStringProperty("ПРОВАЛИЛ");
+                        result = new SimpleStringProperty(resultMass[2]);
                     }
 
                     return result;
                 }
             });
 
-            ObservableList<String> creepResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+            ObservableList<String> creepResult = FXCollections.observableArrayList(resultMass);
 
             tabColCRPResult.setCellFactory(ComboBoxTableCell.forTableColumn(creepResult));
 
@@ -290,16 +340,12 @@ public class SaveResultsTestFrame {
                 int row = pos.getRow();
                 Meter meter = event.getTableView().getItems().get(row);
 
-                switch (result) {
-                    case "НЕ ПРОВОДИЛОСЬ":
-                        meter.setCreepTest(null);
-                        break;
-                    case "ГОДЕН":
-                        meter.setCreepTest(true);
-                        break;
-                    case "ПРОВАЛИЛ":
-                        meter.setCreepTest(false);
-                        break;
+                if (result.equals(resultMass[0])) {
+                    meter.setCreepTest(null);
+                } else if (result.equals(resultMass[1])) {
+                    meter.setCreepTest(true);
+                } else if (result.equals(resultMass[2])) {
+                    meter.setCreepTest(false);
                 }
             });
         } else {
@@ -312,6 +358,7 @@ public class SaveResultsTestFrame {
             //Если есть результаты теста на самоход активной энергии в прямом напралении
             if (spendStartTest().get(0)) {
                 tabColStartAPPls = new TableColumn<>("А.Э.+");
+                tabColStartAPPls.setPrefWidth(120);
 
                 tabColStartAPPls.setStyle( "-fx-alignment: CENTER;");
                 tabColStartAPPls.setEditable(true);
@@ -324,17 +371,17 @@ public class SaveResultsTestFrame {
                         SimpleStringProperty result = null;
 
                         if (meter.getStartTestAPPls() == null) {
-                            result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                            result = new SimpleStringProperty(resultMass[0]);
                         } else if (meter.getStartTestAPPls()) {
-                            result = new SimpleStringProperty("ГОДЕН");
+                            result = new SimpleStringProperty(resultMass[1]);
                         } else if (!meter.getStartTestAPPls()) {
-                            result = new SimpleStringProperty("ПРОВАЛИЛ");
+                            result = new SimpleStringProperty(resultMass[2]);
                         }
                         return result;
                     }
                 });
 
-                ObservableList<String> startResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+                ObservableList<String> startResult = FXCollections.observableArrayList(resultMass);
 
                 tabColStartAPPls.setCellFactory(ComboBoxTableCell.forTableColumn(startResult));
 
@@ -346,16 +393,12 @@ public class SaveResultsTestFrame {
                     int row = pos.getRow();
                     Meter meter = event.getTableView().getItems().get(row);
 
-                    switch (result) {
-                        case "НЕ ПРОВОДИЛОСЬ":
-                            meter.setStartTestAPPls(null);
-                            break;
-                        case "ГОДЕН":
-                            meter.setStartTestAPPls(true);
-                            break;
-                        case "ПРОВАЛИЛ":
-                            meter.setStartTestAPPls(false);
-                            break;
+                    if (result.equals(resultMass[0])) {
+                        meter.setStartTestAPPls(null);
+                    } else if (result.equals(resultMass[1])) {
+                        meter.setStartTestAPPls(true);
+                    } else if (result.equals(resultMass[2])) {
+                        meter.setStartTestAPPls(false);
                     }
                 });
 
@@ -365,6 +408,7 @@ public class SaveResultsTestFrame {
             //Если есть результаты теста на самоход активной энергии в обратном напралении
             if (spendStartTest().get(1)) {
                 tabColStartAPMns = new TableColumn<>("А.Э.-");
+                tabColStartAPMns.setPrefWidth(120);
 
                 tabColStartAPMns.setStyle( "-fx-alignment: CENTER;");
                 tabColStartAPMns.setEditable(true);
@@ -378,17 +422,17 @@ public class SaveResultsTestFrame {
                         SimpleStringProperty result = null;
 
                         if (meter.getStartTestAPMns() == null) {
-                            result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                            result = new SimpleStringProperty(resultMass[0]);
                         } else if (meter.getStartTestAPMns()) {
-                            result = new SimpleStringProperty("ГОДЕН");
+                            result = new SimpleStringProperty(resultMass[1]);
                         } else if (!meter.getStartTestAPMns()) {
-                            result = new SimpleStringProperty("ПРОВАЛИЛ");
+                            result = new SimpleStringProperty(resultMass[2]);
                         }
                         return result;
                     }
                 });
 
-                ObservableList<String> startResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+                ObservableList<String> startResult = FXCollections.observableArrayList(resultMass);
 
                 tabColStartAPMns.setCellFactory(ComboBoxTableCell.forTableColumn(startResult));
 
@@ -400,16 +444,12 @@ public class SaveResultsTestFrame {
                     int row = pos.getRow();
                     Meter meter = event.getTableView().getItems().get(row);
 
-                    switch (result) {
-                        case "НЕ ПРОВОДИЛОСЬ":
-                            meter.setStartTestAPMns(null);
-                            break;
-                        case "ГОДЕН":
-                            meter.setStartTestAPMns(true);
-                            break;
-                        case "ПРОВАЛИЛ":
-                            meter.setStartTestAPMns(false);
-                            break;
+                    if (result.equals(resultMass[0])) {
+                        meter.setStartTestAPMns(null);
+                    } else if (result.equals(resultMass[1])) {
+                        meter.setStartTestAPMns(true);
+                    } else if (result.equals(resultMass[2])) {
+                        meter.setStartTestAPMns(false);
                     }
                 });
                 tabColStartResult.getColumns().add(tabColStartAPMns);
@@ -418,6 +458,7 @@ public class SaveResultsTestFrame {
             //Если есть результаты теста на самоход реактивной энергии в прямом напралении
             if (spendStartTest().get(2)) {
                 tabColStartRPPls = new TableColumn<>("Р.Э.+");
+                tabColStartRPPls.setPrefWidth(120);
 
                 tabColStartRPPls.setStyle( "-fx-alignment: CENTER;");
                 tabColStartRPPls.setEditable(true);
@@ -431,17 +472,17 @@ public class SaveResultsTestFrame {
                         SimpleStringProperty result = null;
 
                         if (meter.getStartTestRPPls() == null) {
-                            result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                            result = new SimpleStringProperty(resultMass[0]);
                         } else if (meter.getStartTestRPPls()) {
-                            result = new SimpleStringProperty("ГОДЕН");
+                            result = new SimpleStringProperty(resultMass[1]);
                         } else if (!meter.getStartTestRPPls()) {
-                            result = new SimpleStringProperty("ПРОВАЛИЛ");
+                            result = new SimpleStringProperty(resultMass[2]);
                         }
                         return result;
                     }
                 });
 
-                ObservableList<String> startResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+                ObservableList<String> startResult = FXCollections.observableArrayList(resultMass);
 
                 tabColStartRPPls.setCellFactory(ComboBoxTableCell.forTableColumn(startResult));
 
@@ -453,16 +494,12 @@ public class SaveResultsTestFrame {
                     int row = pos.getRow();
                     Meter meter = event.getTableView().getItems().get(row);
 
-                    switch (result) {
-                        case "НЕ ПРОВОДИЛОСЬ":
-                            meter.setStartTestRPPls(null);
-                            break;
-                        case "ГОДЕН":
-                            meter.setStartTestRPPls(true);
-                            break;
-                        case "ПРОВАЛИЛ":
-                            meter.setStartTestRPPls(false);
-                            break;
+                    if (result.equals(resultMass[0])) {
+                        meter.setStartTestRPPls(null);
+                    } else if (result.equals(resultMass[1])) {
+                        meter.setStartTestRPPls(true);
+                    } else if (result.equals(resultMass[2])) {
+                        meter.setStartTestRPPls(false);
                     }
                 });
                 tabColStartResult.getColumns().add(tabColStartRPPls);
@@ -471,6 +508,7 @@ public class SaveResultsTestFrame {
             //Если есть результаты теста на самоход реактивной энергии в прямом напралении
             if (spendStartTest().get(3)) {
                 tabColStartRPMns = new TableColumn<>("Р.Э.-");
+                tabColStartRPMns.setPrefWidth(120);
 
                 tabColStartRPMns.setStyle( "-fx-alignment: CENTER;");
                 tabColStartRPMns.setEditable(true);
@@ -484,17 +522,17 @@ public class SaveResultsTestFrame {
                         SimpleStringProperty result = null;
 
                         if (meter.getStartTestRPMns() == null) {
-                            result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                            result = new SimpleStringProperty(resultMass[0]);
                         } else if (meter.getStartTestRPMns()) {
-                            result = new SimpleStringProperty("ГОДЕН");
+                            result = new SimpleStringProperty(resultMass[1]);
                         } else if (!meter.getStartTestRPMns()) {
-                            result = new SimpleStringProperty("ПРОВАЛИЛ");
+                            result = new SimpleStringProperty(resultMass[2]);
                         }
                         return result;
                     }
                 });
 
-                ObservableList<String> startResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+                ObservableList<String> startResult = FXCollections.observableArrayList(resultMass);
 
                 tabColStartRPMns.setCellFactory(ComboBoxTableCell.forTableColumn(startResult));
 
@@ -506,16 +544,12 @@ public class SaveResultsTestFrame {
                     int row = pos.getRow();
                     Meter meter = event.getTableView().getItems().get(row);
 
-                    switch (result) {
-                        case "НЕ ПРОВОДИЛОСЬ":
-                            meter.setStartTestRPMns(null);
-                            break;
-                        case "ГОДЕН":
-                            meter.setStartTestRPMns(true);
-                            break;
-                        case "ПРОВАЛИЛ":
-                            meter.setStartTestRPMns(false);
-                            break;
+                    if (result.equals(resultMass[0])) {
+                        meter.setStartTestRPMns(null);
+                    } else if (result.equals(resultMass[1])) {
+                        meter.setStartTestRPMns(true);
+                    } else if (result.equals(resultMass[2])) {
+                        meter.setStartTestRPMns(false);
                     }
                 });
                 tabColStartResult.getColumns().add(tabColStartRPMns);
@@ -536,17 +570,17 @@ public class SaveResultsTestFrame {
                     SimpleStringProperty result = null;
 
                     if (meter.getRTCTest() == null) {
-                        result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                        result = new SimpleStringProperty(resultMass[0]);
                     } else if (meter.getRTCTest()) {
-                        result = new SimpleStringProperty("ГОДЕН");
+                        result = new SimpleStringProperty(resultMass[1]);
                     } else if (!meter.getRTCTest()) {
-                        result = new SimpleStringProperty("ПРОВАЛИЛ");
+                        result = new SimpleStringProperty(resultMass[2]);
                     }
                     return result;
                 }
             });
 
-            ObservableList<String> RTCResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+            ObservableList<String> RTCResult = FXCollections.observableArrayList(resultMass);
 
             tabColRTCResult.setCellFactory(ComboBoxTableCell.forTableColumn(RTCResult));
 
@@ -558,16 +592,12 @@ public class SaveResultsTestFrame {
                 int row = pos.getRow();
                 Meter meter = event.getTableView().getItems().get(row);
 
-                switch (result) {
-                    case "НЕ ПРОВОДИЛОСЬ":
-                        meter.setRTCTest(null);
-                        break;
-                    case "ГОДЕН":
-                        meter.setRTCTest(true);
-                        break;
-                    case "ПРОВАЛИЛ":
-                        meter.setRTCTest(false);
-                        break;
+                if (result.equals(resultMass[0])) {
+                    meter.setRTCTest(null);
+                } else if (result.equals(resultMass[1])) {
+                    meter.setRTCTest(true);
+                } else if (result.equals(resultMass[2])) {
+                    meter.setRTCTest(false);
                 }
             });
         } else {
@@ -580,6 +610,7 @@ public class SaveResultsTestFrame {
             //Если есть результаты теста на самоход активной энергии в прямом напралении
             if (spendConstantTest().get(0)) {
                 tabColConstantAPPls = new TableColumn<>("А.Э.+");
+                tabColConstantAPPls.setPrefWidth(120);
 
                 tabColConstantAPPls.setStyle( "-fx-alignment: CENTER;");
                 tabColConstantAPPls.setEditable(true);
@@ -593,17 +624,17 @@ public class SaveResultsTestFrame {
                         SimpleStringProperty result = null;
 
                         if (meter.getConstantTestAPPls() == null) {
-                            result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                            result = new SimpleStringProperty(resultMass[0]);
                         } else if (meter.getConstantTestAPPls()) {
-                            result = new SimpleStringProperty("ГОДЕН");
+                            result = new SimpleStringProperty(resultMass[1]);
                         } else if (!meter.getConstantTestAPPls()) {
-                            result = new SimpleStringProperty("ПРОВАЛИЛ");
+                            result = new SimpleStringProperty(resultMass[2]);
                         }
                         return result;
                     }
                 });
 
-                ObservableList<String> constantResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+                ObservableList<String> constantResult = FXCollections.observableArrayList(resultMass);
 
                 tabColConstantAPPls.setCellFactory(ComboBoxTableCell.forTableColumn(constantResult));
 
@@ -615,16 +646,12 @@ public class SaveResultsTestFrame {
                     int row = pos.getRow();
                     Meter meter = event.getTableView().getItems().get(row);
 
-                    switch (result) {
-                        case "НЕ ПРОВОДИЛОСЬ":
-                            meter.setConstantTestAPPls(null);
-                            break;
-                        case "ГОДЕН":
-                            meter.setConstantTestAPPls(true);
-                            break;
-                        case "ПРОВАЛИЛ":
-                            meter.setConstantTestAPPls(false);
-                            break;
+                    if (result.equals(resultMass[0])) {
+                        meter.setConstantTestAPPls(null);
+                    } else if (result.equals(resultMass[1])) {
+                        meter.setConstantTestAPPls(true);
+                    } else if (result.equals(resultMass[2])) {
+                        meter.setConstantTestAPPls(false);
                     }
                 });
 
@@ -634,6 +661,7 @@ public class SaveResultsTestFrame {
             //Если есть результаты теста на самоход активной энергии в обратном напралении
             if (spendConstantTest().get(1)) {
                 tabColConstantAPMns = new TableColumn<>("А.Э.-");
+                tabColConstantAPMns.setPrefWidth(120);
 
                 tabColConstantAPMns.setStyle( "-fx-alignment: CENTER;");
                 tabColConstantAPMns.setEditable(true);
@@ -647,17 +675,17 @@ public class SaveResultsTestFrame {
                         SimpleStringProperty result = null;
 
                         if (meter.getConstantTestAPMns() == null) {
-                            result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                            result = new SimpleStringProperty(resultMass[0]);
                         } else if (meter.getConstantTestAPMns()) {
-                            result = new SimpleStringProperty("ГОДЕН");
+                            result = new SimpleStringProperty(resultMass[1]);
                         } else if (!meter.getConstantTestAPMns()) {
-                            result = new SimpleStringProperty("ПРОВАЛИЛ");
+                            result = new SimpleStringProperty(resultMass[2]);
                         }
                         return result;
                     }
                 });
 
-                ObservableList<String> constantResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+                ObservableList<String> constantResult = FXCollections.observableArrayList(resultMass);
 
                 tabColConstantAPMns.setCellFactory(ComboBoxTableCell.forTableColumn(constantResult));
 
@@ -669,16 +697,12 @@ public class SaveResultsTestFrame {
                     int row = pos.getRow();
                     Meter meter = event.getTableView().getItems().get(row);
 
-                    switch (result) {
-                        case "НЕ ПРОВОДИЛОСЬ":
-                            meter.setConstantTestAPMns(null);
-                            break;
-                        case "ГОДЕН":
-                            meter.setConstantTestAPMns(true);
-                            break;
-                        case "ПРОВАЛИЛ":
-                            meter.setConstantTestAPMns(false);
-                            break;
+                    if (result.equals(resultMass[0])) {
+                        meter.setConstantTestAPMns(null);
+                    } else if (result.equals(resultMass[1])) {
+                        meter.setConstantTestAPMns(true);
+                    } else if (result.equals(resultMass[2])) {
+                        meter.setConstantTestAPMns(false);
                     }
                 });
                 tabColConstantResult.getColumns().add(tabColConstantAPMns);
@@ -687,6 +711,7 @@ public class SaveResultsTestFrame {
             //Если есть результаты теста на самоход реактивной энергии в прямом напралении
             if (spendConstantTest().get(2)) {
                 tabColConstantRPPls = new TableColumn<>("Р.Э.+");
+                tabColConstantRPPls.setPrefWidth(120);
 
                 tabColConstantRPPls.setStyle( "-fx-alignment: CENTER;");
                 tabColConstantRPPls.setEditable(true);
@@ -700,17 +725,17 @@ public class SaveResultsTestFrame {
                         SimpleStringProperty result = null;
 
                         if (meter.getConstantTestRPPls() == null) {
-                            result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                            result = new SimpleStringProperty(resultMass[0]);
                         } else if (meter.getConstantTestRPPls()) {
-                            result = new SimpleStringProperty("ГОДЕН");
+                            result = new SimpleStringProperty(resultMass[1]);
                         } else if (!meter.getConstantTestRPPls()) {
-                            result = new SimpleStringProperty("ПРОВАЛИЛ");
+                            result = new SimpleStringProperty(resultMass[2]);
                         }
                         return result;
                     }
                 });
 
-                ObservableList<String> constantResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+                ObservableList<String> constantResult = FXCollections.observableArrayList(resultMass);
 
                 tabColConstantRPPls.setCellFactory(ComboBoxTableCell.forTableColumn(constantResult));
 
@@ -722,16 +747,12 @@ public class SaveResultsTestFrame {
                     int row = pos.getRow();
                     Meter meter = event.getTableView().getItems().get(row);
 
-                    switch (result) {
-                        case "НЕ ПРОВОДИЛОСЬ":
-                            meter.setConstantTestRPPls(null);
-                            break;
-                        case "ГОДЕН":
-                            meter.setConstantTestRPPls(true);
-                            break;
-                        case "ПРОВАЛИЛ":
-                            meter.setConstantTestRPPls(false);
-                            break;
+                    if (result.equals(resultMass[0])) {
+                        meter.setConstantTestRPPls(null);
+                    } else if (result.equals(resultMass[1])) {
+                        meter.setConstantTestRPPls(true);
+                    } else if (result.equals(resultMass[2])) {
+                        meter.setConstantTestRPPls(false);
                     }
                 });
                 tabColConstantResult.getColumns().add(tabColConstantRPPls);
@@ -740,6 +761,7 @@ public class SaveResultsTestFrame {
             //Если есть результаты теста на самоход реактивной энергии в прямом напралении
             if (spendConstantTest().get(3)) {
                 tabColConstantRPMns = new TableColumn<>("Р.Э.-");
+                tabColConstantRPMns.setPrefWidth(120);
 
                 tabColConstantRPMns.setStyle( "-fx-alignment: CENTER;");
                 tabColConstantRPMns.setEditable(true);
@@ -753,17 +775,17 @@ public class SaveResultsTestFrame {
                         SimpleStringProperty result = null;
 
                         if (meter.getConstantTestRPMns() == null) {
-                            result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                            result = new SimpleStringProperty(resultMass[0]);
                         } else if (meter.getConstantTestRPMns()) {
-                            result = new SimpleStringProperty("ГОДЕН");
+                            result = new SimpleStringProperty(resultMass[1]);
                         } else if (!meter.getConstantTestRPMns()) {
-                            result = new SimpleStringProperty("ПРОВАЛИЛ");
+                            result = new SimpleStringProperty(resultMass[2]);
                         }
                         return result;
                     }
                 });
 
-                ObservableList<String> constantResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+                ObservableList<String> constantResult = FXCollections.observableArrayList(resultMass);
 
                 tabColConstantRPMns.setCellFactory(ComboBoxTableCell.forTableColumn(constantResult));
 
@@ -775,16 +797,12 @@ public class SaveResultsTestFrame {
                     int row = pos.getRow();
                     Meter meter = event.getTableView().getItems().get(row);
 
-                    switch (result) {
-                        case "НЕ ПРОВОДИЛОСЬ":
-                            meter.setConstantTestRPMns(null);
-                            break;
-                        case "ГОДЕН":
-                            meter.setConstantTestRPMns(true);
-                            break;
-                        case "ПРОВАЛИЛ":
-                            meter.setConstantTestRPMns(false);
-                            break;
+                    if (result.equals(resultMass[0])) {
+                        meter.setConstantTestRPMns(null);
+                    } else if (result.equals(resultMass[1])) {
+                        meter.setConstantTestRPMns(true);
+                    } else if (result.equals(resultMass[2])) {
+                        meter.setConstantTestRPMns(false);
                     }
                 });
                 tabColConstantResult.getColumns().add(tabColConstantRPMns);
@@ -805,17 +823,17 @@ public class SaveResultsTestFrame {
                     SimpleStringProperty result = null;
 
                     if (meter.getInsulationTest() == null) {
-                        result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                        result = new SimpleStringProperty(resultMass[0]);
                     } else if (meter.getInsulationTest()) {
-                        result = new SimpleStringProperty("ГОДЕН");
+                        result = new SimpleStringProperty(resultMass[1]);
                     } else if (!meter.getInsulationTest()) {
-                        result = new SimpleStringProperty("ПРОВАЛИЛ");
+                        result = new SimpleStringProperty(resultMass[2]);
                     }
                     return result;
                 }
             });
 
-            ObservableList<String> insulationResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+            ObservableList<String> insulationResult = FXCollections.observableArrayList(resultMass);
 
             tabColInsulationResult.setCellFactory(ComboBoxTableCell.forTableColumn(insulationResult));
 
@@ -827,16 +845,12 @@ public class SaveResultsTestFrame {
                 int row = pos.getRow();
                 Meter meter = event.getTableView().getItems().get(row);
 
-                switch (result) {
-                    case "НЕ ПРОВОДИЛОСЬ":
-                        meter.setInsulationTest(null);
-                        break;
-                    case "ГОДЕН":
-                        meter.setInsulationTest(true);
-                        break;
-                    case "ПРОВАЛИЛ":
-                        meter.setInsulationTest(false);
-                        break;
+                if (result.equals(resultMass[0])) {
+                    meter.setInsulationTest(null);
+                } else if (result.equals(resultMass[1])) {
+                    meter.setInsulationTest(true);
+                } else if (result.equals(resultMass[2])) {
+                    meter.setInsulationTest(false);
                 }
             });
         } else {
@@ -855,11 +869,11 @@ public class SaveResultsTestFrame {
                     SimpleStringProperty result = null;
 
                     if (meter.getAppearensTest() == null) {
-                        result = new SimpleStringProperty("НЕ ПРОВОДИЛОСЬ");
+                        result = new SimpleStringProperty(resultMass[0]);
                     } else if (meter.getAppearensTest()) {
-                        result = new SimpleStringProperty("ГОДЕН");
+                        result = new SimpleStringProperty(resultMass[1]);
                     } else if (!meter.getAppearensTest()) {
-                        result = new SimpleStringProperty("ПРОВАЛИЛ");
+                        result = new SimpleStringProperty(resultMass[2]);
                     }
                     return result;
                 }
@@ -877,61 +891,43 @@ public class SaveResultsTestFrame {
                 int row = pos.getRow();
                 Meter meter = event.getTableView().getItems().get(row);
 
-                switch (result) {
-                    case "НЕ ПРОВОДИЛОСЬ":
-                        meter.setAppearensTest(null);
-                        break;
-                    case "ГОДЕН":
-                        meter.setAppearensTest(true);
-                        break;
-                    case "ПРОВАЛИЛ":
-                        meter.setAppearensTest(false);
-                        break;
+                if (result.equals(resultMass[0])) {
+                    meter.setAppearensTest(null);
+                } else if (result.equals(resultMass[1])) {
+                    meter.setAppearensTest(true);
+                } else if (result.equals(resultMass[2])) {
+                    meter.setAppearensTest(false);
                 }
             });
         } else {
             tabViewResults.getColumns().remove(tabColApperianceResult);
         }
 
-        //tabColResultVerification.setCellValueFactory(new PropertyValueFactory<>("finalAllTestResult"));
-
-//        if (tabColStartAPPls != null) {
-//            tabColStartAPPls.setCellValueFactory(new PropertyValueFactory<>("startTestAPPls"));
-//        }
-//
-//        if (tabColStartAPMns != null) {
-//            tabColStartAPMns.setCellValueFactory(new PropertyValueFactory<>("startTestAPMns"));
-//        }
-//
-//        if (tabColStartRPPls != null) {
-//            tabColStartRPPls.setCellValueFactory(new PropertyValueFactory<>("startTestRPPls"));
-//        }
-//
-//        if (tabColStartRPMns != null) {
-//            tabColStartRPMns.setCellValueFactory(new PropertyValueFactory<>("startTestRPMns"));
-//        }
-
-//        tabColRTCResult.setCellValueFactory(new PropertyValueFactory<>("RTCTest"));
-//        tabColInsulationResult.setCellValueFactory(new PropertyValueFactory<>("insulationTest"));
-//        tabColApperianceResult.setCellValueFactory(new PropertyValueFactory<>("appearensTest"));
-
-//        if (tabColConstantAPPls != null) {
-//            tabColConstantAPPls.setCellValueFactory(new PropertyValueFactory<>("constantTestAPPls"));
-//        }
-//
-//        if (tabColConstantAPMns != null) {
-//            tabColConstantAPMns.setCellValueFactory(new PropertyValueFactory<>("constantTestAPMns"));
-//        }
-//
-//        if (tabColConstantRPPls != null) {
-//            tabColConstantRPPls.setCellValueFactory(new PropertyValueFactory<>("constantTestRPPls"));
-//        }
-//
-//        if (tabColConstantRPMns != null) {
-//            tabColConstantRPMns.setCellValueFactory(new PropertyValueFactory<>("constantTestRPMns"));
-//        }
-
+        tabViewResults.setPrefWidth(paneForTabView.getPrefWidth());
         tabViewResults.setItems(FXCollections.observableArrayList(meterList));
+
+        chosBxOperator.getItems().addAll(operators);
+        chosBxController.getItems().addAll(controllers);
+        chosBxWitness.getItems().addAll(witneses);
+
+        txtFldOperator.setText(operator);
+        txtFldController.setText(controller);
+        txtFldWitness.setText(witnes);
+
+        txtFldTemperature.setText(temperature);
+        txtFldHumidity.setText(humidity);
+        txtFldBatchNumb.setText(batchNumb);
+
+
+        chosBxOperator.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            txtFldOperator.setText(newValue);
+        });
+        chosBxController.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            txtFldController.setText(newValue);
+        });
+        chosBxWitness.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            txtFldWitness.setText(newValue);
+        });
     }
 
     //Проводился ли тест на самоход?
@@ -984,7 +980,6 @@ public class SaveResultsTestFrame {
                 break;
             }
         }
-
         return mapResultStart;
     }
 
@@ -1050,7 +1045,7 @@ public class SaveResultsTestFrame {
                 return true;
             }
         }
-//        return false;
+        //return false;
         return true;
     }
 
