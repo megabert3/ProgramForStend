@@ -2,8 +2,8 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
+import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
-import org.taipit.stend.helper.exeptions.InterruptedTestException;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,6 +12,10 @@ public class RTCCommand implements Commands, Serializable {
 
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
+
+    private boolean interrupt;
+
+    private boolean nextCommand;
 
     private List<Meter> meterList;
 
@@ -56,37 +60,52 @@ public class RTCCommand implements Commands, Serializable {
     }
 
     @Override
-    public void execute() throws ConnectForStendExeption {
+    public boolean execute() throws ConnectForStendExeption {
         try {
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+
             int count = 0;
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
                     100.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
-            stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return false;
+            }
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return false;
+            }
 
             for (Meter meter : meterList) {
                 if (!stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC))
                     throw new ConnectForStendExeption();
             }
+
             Meter.CommandResult errorCommand;
 
             while (count < countResult) {
+                if (TestErrorTableFrameController.interrupt) {
+                    break;
+                }
 
                 Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
 
-                if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+                if (TestErrorTableFrameController.interrupt) {
+                    break;
+                }
 
                 for (Meter meter : meterList) {
-                    if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+                    if (TestErrorTableFrameController.interrupt) {
+                        break;
+                    }
 
                     try {
                         //meter = meterList.get(mapResult.getKey() - 1);
@@ -109,48 +128,64 @@ public class RTCCommand implements Commands, Serializable {
                 count++;
             }
 
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+
+            if (!TestErrorTableFrameController.interrupt && nextCommand) {
+                return true;
+            }
+
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
             e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }catch (InterruptedTestException e) {
-            e.printStackTrace();
-            //Переход сразу к финалу
-        }finally {
-            stendDLLCommands.errorClear();
-            stendDLLCommands.powerOf();
+            TestErrorTableFrameController.interrupt = true;
         }
+        return !TestErrorTableFrameController.interrupt;
     }
 
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption {
         try {
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+
             int count = 0;
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
                     0.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return;
+            }
+
             stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return;
+            }
 
             for (Meter meter : meterList) {
                 if (!stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC))
                     throw new ConnectForStendExeption();
             }
 
-            while (!Thread.currentThread().isInterrupted()) {
+            while (!TestErrorTableFrameController.interrupt) {
 
                 Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
 
+                if (TestErrorTableFrameController.interrupt) {
+                    break;
+                }
+
                 for (Meter meter : meterList) {
                     try {
+                        if (TestErrorTableFrameController.interrupt) {
+                            break;
+                        }
                         /**
                          * Проверить на тру или фолс в корневом методе
                          */
@@ -179,13 +214,7 @@ public class RTCCommand implements Commands, Serializable {
 
         }catch (InterruptedException e) {
             e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }catch (InterruptedTestException e) {
-            e.printStackTrace();
-            //Переход сразу к финалу
-        }finally {
-            stendDLLCommands.errorClear();
-            stendDLLCommands.powerOf();
+            TestErrorTableFrameController.interrupt = true;
         }
     }
 
@@ -222,6 +251,16 @@ public class RTCCommand implements Commands, Serializable {
                 commandResult.setPassTest(passOrNot);
             }break;
         }
+    }
+
+    @Override
+    public void setInterrupt(boolean interrupt) {
+        this.interrupt = interrupt;
+    }
+
+    @Override
+    public void setNextCommand(boolean nextCommand) {
+        this.nextCommand = nextCommand;
     }
 
     public void setIndex(int index) {

@@ -2,8 +2,8 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
+import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
-import org.taipit.stend.helper.exeptions.InterruptedTestException;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -14,6 +14,10 @@ public class StartCommand implements Commands, Serializable {
 
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
+
+    private boolean interrupt;
+
+    private boolean nextCommand;
 
     private StendDLLCommands stendDLLCommands;
 
@@ -92,19 +96,29 @@ public class StartCommand implements Commands, Serializable {
 
 
     @Override
-    public void execute() throws ConnectForStendExeption {
+    public boolean execute() throws ConnectForStendExeption {
         try {
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
 
             startCommandResult = initCreepCommandResult();
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
                     100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return false;
+            }
+
             stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return false;
+            }
 
             //Номер измерения
             int countResult = 1;
@@ -121,8 +135,14 @@ public class StartCommand implements Commands, Serializable {
 
             while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
 
+                if (TestErrorTableFrameController.interrupt) {
+                    break;
+                }
+
                 for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
-                    if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+                    if (TestErrorTableFrameController.interrupt) {
+                        break;
+                    }
 
                     if (!mapResult.getValue()) {
                         meter = meterList.get(mapResult.getKey() - 1);
@@ -154,41 +174,52 @@ public class StartCommand implements Commands, Serializable {
                 }
             }
 
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+
+            if (!TestErrorTableFrameController.interrupt && nextCommand) {
+                return true;
+            }
+
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
             e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }catch (InterruptedTestException e) {
-            e.printStackTrace();
-            //Переход сразу к финалу
-        }finally {
-            stendDLLCommands.errorClear();
-            stendDLLCommands.powerOf();
+            TestErrorTableFrameController.interrupt = true;
         }
+        return !TestErrorTableFrameController.interrupt;
     }
+
 
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption {
         try {
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
             startCommandResult = initCreepCommandResult();
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
                     100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return;
+            }
+
             stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return;
+            }
 
             //Номер измерения
             int countResult = 1;
             Meter meter;
             Meter.CommandResult errorCommand;
 
-            while (!Thread.currentThread().isInterrupted()) {
+            while (!TestErrorTableFrameController.interrupt) {
 
                 //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
                 for (Meter meterForReset : meterList) {
@@ -200,8 +231,15 @@ public class StartCommand implements Commands, Serializable {
 
                 while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
 
+                    if (TestErrorTableFrameController.interrupt) {
+                        break;
+                    }
+
                     for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
-                        if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+
+                        if (TestErrorTableFrameController.interrupt) {
+                            break;
+                        }
 
                         if (!mapResult.getValue()) {
                             meter = meterList.get(mapResult.getKey() - 1);
@@ -236,18 +274,12 @@ public class StartCommand implements Commands, Serializable {
                 countResult++;
             }
 
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
             e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }catch (InterruptedTestException e) {
-            e.printStackTrace();
-            //Переход сразу к финалу
-        }finally {
-            stendDLLCommands.errorClear();
-            stendDLLCommands.powerOf();
+            TestErrorTableFrameController.interrupt = true;
         }
     }
 
@@ -382,6 +414,15 @@ public class StartCommand implements Commands, Serializable {
 
     public void setTimeForTest(long timeForTest) {
         this.timeForTest = timeForTest;
+    }
+
+    @Override
+    public void setInterrupt(boolean interrupt) {
+        this.interrupt = interrupt;
+    }
+    @Override
+    public void setNextCommand(boolean nextCommand) {
+        this.nextCommand = nextCommand;
     }
 
     //reset

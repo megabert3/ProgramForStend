@@ -36,6 +36,10 @@ public class TestErrorTableFrameController {
 
     StendDLLCommands stendDLLCommands;
 
+    public static boolean interrupt;
+
+    public static boolean isFinish;
+
     //Исполняемая команда
     Commands command;
    private List<Meter> listMetersForTest;
@@ -265,7 +269,11 @@ public class TestErrorTableFrameController {
         if (event.getSource() == tglBtnAuto) {
             try {
                 if (thread.isRunning()) {
-                    thread.cancel();
+                    interrupt = true;
+
+                    while (!isFinish) {
+                    }
+                    interrupt = false;
                 }
             }catch (NullPointerException ignored) {
             }
@@ -278,7 +286,10 @@ public class TestErrorTableFrameController {
                         protected Void call() {
                             try {
                                 try {
+                                    isFinish = false;
                                     startAutomaticTest();
+                                    isFinish = true;
+                                    interrupt = false;
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -303,13 +314,17 @@ public class TestErrorTableFrameController {
         if (event.getSource() == tglBtnManualMode) {
             try {
                 if (thread.isRunning()) {
-                    thread.cancel();
+                    interrupt = true;
+
+                    while (!isFinish) {
+                    }
+                    interrupt = false;
                 }
 
             }catch (NullPointerException ignored) {
             }
 
-             thread = new Service<Void>() {
+            thread = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
                     return new Task<Void>() {
@@ -317,9 +332,11 @@ public class TestErrorTableFrameController {
                         protected Void call() {
                             try {
                                 try {
+                                    isFinish = false;
                                     startManualTest();
+                                    isFinish = true;
+                                    interrupt = false;
 
-                                    return null;
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
@@ -345,7 +362,10 @@ public class TestErrorTableFrameController {
         if (event.getSource() == tglBtnUnom) {
             try {
                 if (thread.isRunning()) {
-                    thread.cancel();
+                    interrupt = true;
+                    while (!isFinish) {
+                    }
+                    interrupt = false;
                 }
 
             }catch (NullPointerException ignored){
@@ -360,8 +380,11 @@ public class TestErrorTableFrameController {
                         protected Void call() {
                             try {
                                 try {
+                                    isFinish = false;
                                     startUn();
-                                    return null;
+                                    isFinish = true;
+                                    interrupt = false;
+
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
@@ -385,7 +408,7 @@ public class TestErrorTableFrameController {
         if (event.getSource() == btnStop) {
             try {
                 if (thread.isRunning()) {
-                    thread.cancel();
+                    interrupt = true;
 
                 }
 
@@ -530,7 +553,7 @@ public class TestErrorTableFrameController {
 //        comandsList.addListener(new ListChangeListener<Commands>() {
 //            @Override
 //            public void onChanged(Change<? extends Commands> c) {
-//
+
 //                int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 //
 //                while (i < commands.size()) {
@@ -538,7 +561,7 @@ public class TestErrorTableFrameController {
 //                        command = commands.get(i);
 //
 //                        //Если тестовая точка активна
-//                        if (command.isActiveSeat()) {
+//                        if (command.isActive()) {
 //
 //                            if (command instanceof ErrorCommand) {
 //
@@ -546,7 +569,7 @@ public class TestErrorTableFrameController {
 //
 //                                if (i != commands.size() - 1) {
 //                                    if (commands.get(i + 1) instanceof ErrorCommand) {
-//                                        ((ErrorCommand) command).setNextCommandError(true);
+//                                        ((ErrorCommand) command).setNextCommand(true);
 //                                    }
 //                                }
 //                                command.execute();
@@ -597,37 +620,46 @@ public class TestErrorTableFrameController {
             //Если тестовая точка активна
             if (command.isActive()) {
 
+                if (i != commands.size() - 1) {
+                    command.setNextCommand(true);
+                } else {
+                    command.setNextCommand(false);
+                }
+
                 if (command instanceof ErrorCommand) {
 
                     initAllParamForErrorCommand((ErrorCommand) command, i);
 
-                    if (i != commands.size() - 1) {
-                        if (commands.get(i + 1) instanceof ErrorCommand) {
-                            ((ErrorCommand) command).setNextCommandError(true);
-                        }
+                    if (!command.execute()) {
+                        break;
                     }
-                    command.execute();
                 }
 
                 if (command instanceof CreepCommand) {
 
                     initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
 
-                    command.execute();
+                    if (!command.execute()) {
+                        break;
+                    }
                 }
 
                 if (command instanceof StartCommand) {
 
                     initAllParamForStartCommand((StartCommand) command, phase, i, timeSTAForGOST);
 
-                    command.execute();
+                    if (!command.execute()) {
+                        break;
+                    }
                 }
 
                 if (command instanceof RTCCommand) {
 
                     initAllParamForRTCCommand((RTCCommand) command, phase, i);
 
-                    command.execute();
+                    if (!command.execute()) {
+                        break;
+                    }
                 }
             }
 

@@ -84,7 +84,16 @@ public abstract class StendDLLCommands {
     //Устанавливает значение импульсного выхода у установки для каждого метса
     public void setEnergyPulse (List<Meter> meterList, int channelFlag) throws ConnectForStendExeption {
         for (Meter meter : meterList) {
-            if (!setPulseChannel(meter.getId(), channelFlag)) throw new ConnectForStendExeption();
+            boolean setEnergy = setPulseChannel(meter.getId(), channelFlag);
+
+            if (!setEnergy) {
+
+                while (true) {
+                    if (setPulseChannel(meter.getId(), channelFlag)) {
+                        break;
+                    }
+                }
+            }
         }
     }
 

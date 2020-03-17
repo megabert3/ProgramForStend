@@ -2,8 +2,8 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
+import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
-import org.taipit.stend.helper.exeptions.InterruptedTestException;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -12,15 +12,13 @@ import java.util.List;
 
 public class ErrorCommand implements Commands, Serializable {
 
-
-
     private StendDLLCommands stendDLLCommands;
 
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
 
     //Следующая команда ErrorCommand?
-    private boolean nextCommandError;
+    private boolean nextCommand;
 
     //Команда для прерывания метода
     private boolean interrupt;
@@ -144,10 +142,8 @@ public class ErrorCommand implements Commands, Serializable {
     //===================================================================================================
     //Команда выполнения для последовательного теста
     @Override
-    public void execute() throws ConnectForStendExeption {
+    public boolean execute() throws ConnectForStendExeption {
         try {
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
-
             //Выбор константы в зависимости от энергии
             if (channelFlag == 0 || channelFlag == 1) {
                 constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
@@ -168,18 +164,30 @@ public class ErrorCommand implements Commands, Serializable {
                 meter.setErrorResultChange(0);
             }
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            if (TestErrorTableFrameController.interrupt) {
+                return false;
+            }
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return false;
+            }
+
             //Устанавливаем местам импульсный выход
             stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return false;
+            }
+
             //Сказать константу счётчика стенду для кажого места
             stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
 
@@ -195,10 +203,16 @@ public class ErrorCommand implements Commands, Serializable {
             double doubleErr;
 
             while (flagInStop.containsValue(false)) {
-                if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+
+                if (TestErrorTableFrameController.interrupt) {
+                    break;
+                }
 
                 for (Meter meter : meterForTestList) {
-                    if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+
+                    if (TestErrorTableFrameController.interrupt) {
+                        break;
+                    }
 
                     strError = stendDLLCommands.meterErrorRead(meter.getId());
                     strMass = strError.split(",");
@@ -235,27 +249,22 @@ public class ErrorCommand implements Commands, Serializable {
             }
 
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-            if (nextCommandError) return;
+
+            if (!TestErrorTableFrameController.interrupt && nextCommand) return true;
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
         }catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }catch (InterruptedTestException e) {
-            e.printStackTrace();
-            //Переход сразу к финалу
-        }finally {
-            stendDLLCommands.errorClear();
-            stendDLLCommands.powerOf();
+            TestErrorTableFrameController.interrupt = true;
         }
+
+        return !TestErrorTableFrameController.interrupt;
     }
 
     //Метод для цикличной поверки счётчиков
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption {
         try {
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
-
             //Выбор константы в зависимости от энергии
             if (channelFlag == 0 || channelFlag == 1) {
                 constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
@@ -269,16 +278,29 @@ public class ErrorCommand implements Commands, Serializable {
                 ratedCurr = Imax;
             }
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            if (TestErrorTableFrameController.interrupt) {
+                return;
+            }
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
 
-            if (Thread.currentThread().isInterrupted()) throw new InterruptedTestException();
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return;
+            }
+
             //Устанавливаем местам импульсный выход
             stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+            if (TestErrorTableFrameController.interrupt) {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                return;
+            }
 
             //Сказать константу счётчика стенду для кажого места
             stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
@@ -292,9 +314,14 @@ public class ErrorCommand implements Commands, Serializable {
             String error;
             double doubleErr;
 
-            while (!Thread.currentThread().isInterrupted()) {
+            while (!TestErrorTableFrameController.interrupt) {
 
                 for (Meter meter : meterForTestList) {
+
+                    if (TestErrorTableFrameController.interrupt) {
+                        break;
+                    }
+
                     strError = stendDLLCommands.meterErrorRead(meter.getId());
                     strMass = strError.split(",");
 
@@ -326,14 +353,7 @@ public class ErrorCommand implements Commands, Serializable {
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }catch (InterruptedTestException e) {
-            e.printStackTrace();
-            //Переход сразу к финалу
-        }finally {
-            stendDLLCommands.errorClear();
-            stendDLLCommands.powerOf();
+            TestErrorTableFrameController.interrupt = true;
         }
     }
 
@@ -423,8 +443,12 @@ public class ErrorCommand implements Commands, Serializable {
         return String.valueOf(countResult);
     }
 
-    public void setNextCommandError(boolean nextCommandError) {
-        this.nextCommandError = nextCommandError;
+    public void setNextCommand(boolean nextCommand) {
+        this.nextCommand = nextCommand;
+    }
+
+    public void setInterrupt(boolean interrupt) {
+        this.interrupt = interrupt;
     }
 
     @Override

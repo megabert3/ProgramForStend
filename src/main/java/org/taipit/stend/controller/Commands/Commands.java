@@ -11,9 +11,15 @@ import java.util.List;
 public interface Commands{
 
     //Выполнение команды
-    void execute() throws ConnectForStendExeption;
+    boolean execute() throws ConnectForStendExeption;
 
     void executeForContinuousTest() throws ConnectForStendExeption;
+
+    void setInterrupt(boolean interrupt);
+
+    void setNextCommand(boolean nextCommand);
+
+
 
     //Имя команды
     String getName();

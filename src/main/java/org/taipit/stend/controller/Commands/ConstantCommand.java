@@ -15,8 +15,18 @@ public class ConstantCommand implements Commands, Serializable {
     }
 
     @Override
-    public void execute() {
+    public void setInterrupt(boolean interrupt) {
 
+    }
+
+    @Override
+    public void setNextCommand(boolean nextCommand) {
+
+    }
+
+    @Override
+    public boolean execute() {
+        return Boolean.parseBoolean(null);
     }
 
     @Override
