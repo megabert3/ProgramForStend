@@ -62,15 +62,21 @@ public class RTCCommand implements Commands, Serializable {
     @Override
     public boolean execute() throws ConnectForStendExeption {
         try {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
+                return false;
+            }
 
             int count = 0;
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
                     100.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return false;
             }
 
@@ -78,9 +84,11 @@ public class RTCCommand implements Commands, Serializable {
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return false;
             }
 
@@ -92,19 +100,32 @@ public class RTCCommand implements Commands, Serializable {
             Meter.CommandResult errorCommand;
 
             while (count < countResult) {
-                if (TestErrorTableFrameController.interrupt) {
-                    break;
+
+                if (Thread.currentThread().isInterrupted()) {
+                    System.out.println("Получил сигнал о завершении потока из команды StartCommand из внешнего цикла");
+                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                    return false;
                 }
 
                 Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
 
-                if (TestErrorTableFrameController.interrupt) {
-                    break;
+                if (Thread.currentThread().isInterrupted()) {
+                    System.out.println("Получил сигнал о завершении потока из команды StartCommand из внешнего цикла");
+                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                    return false;
                 }
 
                 for (Meter meter : meterList) {
-                    if (TestErrorTableFrameController.interrupt) {
-                        break;
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.println("Получил сигнал о завершении потока из команды StartCommand из внешнего цикла");
+                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                        System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                        return false;
                     }
 
                     try {
@@ -123,38 +144,49 @@ public class RTCCommand implements Commands, Serializable {
                         System.out.println("Пустая строчка");
                     }
                 }
-
-
                 count++;
             }
 
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
-            if (!TestErrorTableFrameController.interrupt && nextCommand) {
+            if (!Thread.currentThread().isInterrupted() && nextCommand) {
                 return true;
             }
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
-            e.printStackTrace();
-            TestErrorTableFrameController.interrupt = true;
+            System.out.println("Поймал ошибку Interrupted в команде StartCommand");
+            System.out.println("Состояние нити до команты interrupt в команде StartCommand " + Thread.currentThread().getState());
+            Thread.currentThread().interrupt();
+            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
+            return false;
         }
-        return !TestErrorTableFrameController.interrupt;
+        return !Thread.currentThread().isInterrupted();
     }
 
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption {
         try {
 
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
+                return;
+            }
+
             int count = 0;
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
                     0.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return;
             }
 
@@ -162,9 +194,11 @@ public class RTCCommand implements Commands, Serializable {
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return;
             }
 
@@ -177,14 +211,22 @@ public class RTCCommand implements Commands, Serializable {
 
                 Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
 
-                if (TestErrorTableFrameController.interrupt) {
-                    break;
+                if (Thread.currentThread().isInterrupted()) {
+                    System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
+                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                    return;
                 }
 
                 for (Meter meter : meterList) {
                     try {
-                        if (TestErrorTableFrameController.interrupt) {
-                            break;
+                        if (Thread.currentThread().isInterrupted()) {
+                            System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
+                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                            System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                            return;
                         }
                         /**
                          * Проверить на тру или фолс в корневом методе
@@ -213,8 +255,14 @@ public class RTCCommand implements Commands, Serializable {
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
-            e.printStackTrace();
-            TestErrorTableFrameController.interrupt = true;
+            System.out.println("Поймал ошибку Interrupted в команде StartCommand");
+            System.out.println("Состояние нити до команты interrupt в команде StartCommand " + Thread.currentThread().getState());
+            Thread.currentThread().interrupt();
+            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
+            return;
         }
     }
 

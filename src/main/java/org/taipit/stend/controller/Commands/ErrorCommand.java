@@ -144,6 +144,10 @@ public class ErrorCommand implements Commands, Serializable {
     @Override
     public boolean execute() throws ConnectForStendExeption {
         try {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
+                return false;
+            }
             //Выбор константы в зависимости от энергии
             if (channelFlag == 0 || channelFlag == 1) {
                 constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
@@ -162,18 +166,22 @@ public class ErrorCommand implements Commands, Serializable {
             for (Meter meter : meterForTestList) {
                 meter.setAmountMeasur(0);
                 meter.setErrorResultChange(0);
+                meter.returnResultCommand(index, channelFlag).setLastResult("N");
             }
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
                 return false;
             }
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return false;
             }
 
@@ -182,9 +190,11 @@ public class ErrorCommand implements Commands, Serializable {
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода ErrorCommand");
                 return false;
             }
 
@@ -204,14 +214,22 @@ public class ErrorCommand implements Commands, Serializable {
 
             while (flagInStop.containsValue(false)) {
 
-                if (TestErrorTableFrameController.interrupt) {
-                    break;
+                if (Thread.currentThread().isInterrupted()) {
+                    System.out.println("Получил сигнал о завершении потока из команды ErrorCommand из внешнего цикла перед опросом счётчиков");
+                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода ErrorCommand");
+                    return false;
                 }
 
                 for (Meter meter : meterForTestList) {
 
-                    if (TestErrorTableFrameController.interrupt) {
-                        break;
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.println("Получил сигнал о завершении потока из команды ErrorCommand из внутреннего цикла перед опросом счётчикА");
+                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                        System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода ErrorCommand");
+                        return false;
                     }
 
                     strError = stendDLLCommands.meterErrorRead(meter.getId());
@@ -250,26 +268,42 @@ public class ErrorCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
-            if (!TestErrorTableFrameController.interrupt && nextCommand) return true;
+            if (!Thread.currentThread().isInterrupted() && nextCommand) return true;
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
-            TestErrorTableFrameController.interrupt = true;
+            System.out.println("Поймал ошибку Interrupted в команде ErrorCommand");
+            System.out.println("Состояние нити до команты interrupt в команде ErrorCommand " + Thread.currentThread().getState());
+            Thread.currentThread().interrupt();
+            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
+            return false;
         }
 
-        return !TestErrorTableFrameController.interrupt;
+        return !Thread.currentThread().isInterrupted();
     }
 
     //Метод для цикличной поверки счётчиков
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption {
         try {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
+                return;
+            }
+
             //Выбор константы в зависимости от энергии
             if (channelFlag == 0 || channelFlag == 1) {
                 constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
             } else {
                 constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
+            }
+
+            for (Meter meter : meterForTestList) {
+                meter.returnResultCommand(index, channelFlag).setLastResult("N");
             }
 
             if (current.equals("Ib")) {
@@ -278,16 +312,14 @@ public class ErrorCommand implements Commands, Serializable {
                 ratedCurr = Imax;
             }
 
-            if (TestErrorTableFrameController.interrupt) {
-                return;
-            }
-
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return;
             }
 
@@ -296,9 +328,11 @@ public class ErrorCommand implements Commands, Serializable {
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return;
             }
 
@@ -314,12 +348,17 @@ public class ErrorCommand implements Commands, Serializable {
             String error;
             double doubleErr;
 
-            while (!TestErrorTableFrameController.interrupt) {
+            while (!Thread.currentThread().isInterrupted()) {
+
 
                 for (Meter meter : meterForTestList) {
 
-                    if (TestErrorTableFrameController.interrupt) {
-                        break;
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.println("Получил сигнал о завершении потока из команды ErrorCommand из внутреннего цикла перед опросом счётчикА");
+                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                        System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода ErrorCommand");
+                        return;
                     }
 
                     strError = stendDLLCommands.meterErrorRead(meter.getId());
@@ -345,7 +384,6 @@ public class ErrorCommand implements Commands, Serializable {
                         }
                     }
                 }
-
                 Thread.sleep(300);
             }
 
@@ -353,7 +391,13 @@ public class ErrorCommand implements Commands, Serializable {
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
-            TestErrorTableFrameController.interrupt = true;
+            System.out.println("Поймал ошибку Interrupted в команде ErrorCommand");
+            System.out.println("Состояние нити до команты interrupt в команде ErrorCommand " + Thread.currentThread().getState());
+            Thread.currentThread().interrupt();
+            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
         }
     }
 

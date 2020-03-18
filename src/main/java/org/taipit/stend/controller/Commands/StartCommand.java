@@ -98,15 +98,20 @@ public class StartCommand implements Commands, Serializable {
     @Override
     public boolean execute() throws ConnectForStendExeption {
         try {
-
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды StartCommand");
+                return false;
+            }
             startCommandResult = initCreepCommandResult();
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
                     100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды StartCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return false;
             }
 
@@ -114,9 +119,11 @@ public class StartCommand implements Commands, Serializable {
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды StartCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return false;
             }
 
@@ -135,13 +142,22 @@ public class StartCommand implements Commands, Serializable {
 
             while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
 
-                if (TestErrorTableFrameController.interrupt) {
-                    break;
+                if (Thread.currentThread().isInterrupted()) {
+                    System.out.println("Получил сигнал о завершении потока из команды StartCommand из внешнего цикла");
+                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                    return false;
                 }
 
                 for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
-                    if (TestErrorTableFrameController.interrupt) {
-                        break;
+
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.println("Получил сигнал о завершении потока из команды CreepCommand из внутреннего цикла");
+                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                        System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                        return false;
                     }
 
                     if (!mapResult.getValue()) {
@@ -176,31 +192,43 @@ public class StartCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
-            if (!TestErrorTableFrameController.interrupt && nextCommand) {
+            if (!Thread.currentThread().isInterrupted() && nextCommand) {
                 return true;
             }
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
-            e.printStackTrace();
-            TestErrorTableFrameController.interrupt = true;
+            System.out.println("Поймал ошибку Interrupted в команде StartCommand");
+            System.out.println("Состояние нити до команты interrupt в команде StartCommand " + Thread.currentThread().getState());
+            Thread.currentThread().interrupt();
+            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
+            return false;
         }
-        return !TestErrorTableFrameController.interrupt;
+        return !Thread.currentThread().isInterrupted();
     }
-
 
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption {
         try {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды StartCommand");
+                return;
+            }
+
             startCommandResult = initCreepCommandResult();
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
                     100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды StartCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return;
             }
 
@@ -208,18 +236,12 @@ public class StartCommand implements Commands, Serializable {
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-            if (TestErrorTableFrameController.interrupt) {
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                return;
-            }
-
             //Номер измерения
             int countResult = 1;
             Meter meter;
             Meter.CommandResult errorCommand;
 
-            while (!TestErrorTableFrameController.interrupt) {
+            while (!Thread.currentThread().isInterrupted()) {
 
                 //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
                 for (Meter meterForReset : meterList) {
@@ -231,14 +253,22 @@ public class StartCommand implements Commands, Serializable {
 
                 while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
 
-                    if (TestErrorTableFrameController.interrupt) {
-                        break;
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.println("Получил сигнал о завершении потока из команды StartCommand из внешнего цикла");
+                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                        System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                        return;
                     }
 
                     for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
 
-                        if (TestErrorTableFrameController.interrupt) {
-                            break;
+                        if (Thread.currentThread().isInterrupted()) {
+                            System.out.println("Получил сигнал о завершении потока из команды StartCommand из внутреннего цикла");
+                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                            System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                            return;
                         }
 
                         if (!mapResult.getValue()) {
@@ -264,6 +294,14 @@ public class StartCommand implements Commands, Serializable {
                     Thread.sleep(500);
                 }
 
+                if (Thread.currentThread().isInterrupted()) {
+                    System.out.println("Получил сигнал о завершении потока из команды StartCommand");
+                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                    return;
+                }
+
                 //Выставляю результат теста счётчиков, которые прошли тест
                 for (Map.Entry<Integer, Boolean> mapResultFail : startCommandResult.entrySet()) {
                     if (!mapResultFail.getValue()) {
@@ -278,8 +316,13 @@ public class StartCommand implements Commands, Serializable {
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
-            e.printStackTrace();
-            TestErrorTableFrameController.interrupt = true;
+            System.out.println("Поймал ошибку Interrupted в команде StartCommand");
+            System.out.println("Состояние нити до команты interrupt в команде StartCommand " + Thread.currentThread().getState());
+            Thread.currentThread().interrupt();
+            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
         }
     }
 

@@ -2,7 +2,6 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
-import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
@@ -73,7 +72,6 @@ public class CreepCommand implements Commands, Serializable {
                 e.printStackTrace();
                 System.out.println("Неверные данные для теста");
             }
-
         }
     }
 
@@ -85,16 +83,21 @@ public class CreepCommand implements Commands, Serializable {
     @Override
     public boolean execute() throws ConnectForStendExeption {
         try {
-            TestErrorTableFrameController.interrupt = false;
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды CreepCommand");
+                return false;
+            }
 
             creepCommandResult = initCreepCommandResult();
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
                     voltPer, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды CreepCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return false;
             }
 
@@ -102,9 +105,11 @@ public class CreepCommand implements Commands, Serializable {
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды CreepCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
                 return false;
             }
 
@@ -118,25 +123,27 @@ public class CreepCommand implements Commands, Serializable {
                 setDefTestrResults(meterForReset, channelFlag, index);
             }
 
-            if (TestErrorTableFrameController.interrupt) {
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                return false;
-            }
-
             currTime = System.currentTimeMillis();
             timeEnd = currTime + timeForTest;
 
             while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
-                if (TestErrorTableFrameController.interrupt) {
-                    break;
+                if (Thread.currentThread().isInterrupted()) {
+                    System.out.println("Получил сигнал о завершении потока из команды CreepCommand из внешнего цикла");
+                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                    return false;
                 }
 
                 for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
 
-                    if (TestErrorTableFrameController.interrupt) {
-                        break;
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.println("Получил сигнал о завершении потока из команды CreepCommand из внутреннего цикла");
+                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                        System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                        return false;
                     }
 
                     if (mapResult.getValue()) {
@@ -171,40 +178,60 @@ public class CreepCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
-            if (!TestErrorTableFrameController.interrupt && nextCommand) return true;
+            if (!Thread.currentThread().isInterrupted() && nextCommand) return true;
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
-            e.printStackTrace();
-            TestErrorTableFrameController.interrupt = true;
+            System.out.println("Состояние нити до команты interrupt в команде CreepCommand " + Thread.currentThread().getState());
+            Thread.currentThread().interrupt();
+            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
+            return false;
         }
-        return !TestErrorTableFrameController.interrupt;
+        return !Thread.currentThread().isInterrupted();
     }
 
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption {
         try {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды CreepCommand");
+                return;
+            }
             creepCommandResult = initCreepCommandResult();
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
                     voltPer, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
-            if (TestErrorTableFrameController.interrupt) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды CreepCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                return;
             }
 
             stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
             Thread.sleep(stendDLLCommands.getPauseForStabization());
 
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("Получил сигнал о завершении потока из команды CreepCommand");
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                return;
+            }
+
             //Номер измерения
             int countResult = 1;
             Meter.CommandResult errorCommand;
             Meter meter;
 
-            while (!TestErrorTableFrameController.interrupt) {
+            while (!Thread.currentThread().isInterrupted()) {
 
                 //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
                 for (Meter meterForReset : meterList) {
@@ -216,14 +243,22 @@ public class CreepCommand implements Commands, Serializable {
 
                 while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
-                    if (TestErrorTableFrameController.interrupt) {
-                        break;
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.println("Получил сигнал о завершении потока из команды CreepCommand из внешнего цикла");
+                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                        System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                        return;
                     }
 
                     for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
 
-                        if (TestErrorTableFrameController.interrupt) {
-                            break;
+                        if (Thread.currentThread().isInterrupted()) {
+                            System.out.println("Получил сигнал о завершении потока из команды CreepCommand из внутреннего цикла");
+                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                            System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                            return;
                         }
 
                         if (mapResult.getValue()) {
@@ -249,6 +284,14 @@ public class CreepCommand implements Commands, Serializable {
                     Thread.sleep(500);
                 }
 
+                if (Thread.currentThread().isInterrupted()) {
+                    System.out.println("Получил сигнал о завершении потока из команды CreepCommand из внешнего цикла");
+                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
+                    return;
+                }
+
                 //Выставляю результат теста счётчиков, которые прошли тест
                 for (Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
                     if (mapResultPass.getValue()) {
@@ -263,7 +306,14 @@ public class CreepCommand implements Commands, Serializable {
             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
         }catch (InterruptedException e) {
-            TestErrorTableFrameController.interrupt = true;
+            System.out.println("Поймал ошибку Interrupted в команде CreepCommand");
+            System.out.println("Состояние нити до команты interrupt в команде CreepCommand " + Thread.currentThread().getState());
+            Thread.currentThread().interrupt();
+            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
+            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
+            return;
         }
     }
 
