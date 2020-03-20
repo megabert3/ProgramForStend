@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -20,6 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.Meter;
@@ -343,8 +345,6 @@ public class TestErrorTableFrameController {
                 e.printStackTrace();
             }
 
-            //txtLabFn.getScene().getWindow().hide();
-
             SaveResultsTestFrame saveResultsTestFrame = fxmlLoader.getController();
             saveResultsTestFrame.setTestErrorTableFrameController(this);
             saveResultsTestFrame.initAllColums();
@@ -354,6 +354,36 @@ public class TestErrorTableFrameController {
             stage.setTitle("Сохранение результата");
             stage.setScene(new Scene(root));
             stage.show();
+
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    event.consume();
+
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/yesOrNoFrame.fxml"));
+                    try {
+                        fxmlLoader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
+                    yesOrNoFrameController.setExitSaveResultFrameWithoutSaving(true);
+                    yesOrNoFrameController.setStageSaveResultTest(stage);
+                    yesOrNoFrameController.getQuestionTxt().setText("Вы уверены, что хотите выйти \nбез сохранения результатов теста?");
+                    yesOrNoFrameController.getQuestionTxt().setLayoutX(165);
+                    yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
+
+                    Parent root = fxmlLoader.getRoot();
+                    Stage stage = new Stage();
+                    stage.setTitle("Сохранение результата");
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                }
+            });
+
+            txtLabFn.getScene().getWindow().hide();
         }
     }
 

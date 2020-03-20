@@ -206,6 +206,7 @@ public class TestParametersFrameController {
                     meter.setOperator(operator);
                     meter.setController(controller);
                     meter.setWitness(witness);
+                    meter.setInomImax(txtFldCurrent.getText());
                 }
 
                 /**

@@ -253,8 +253,10 @@ public class MethodicsAddEditDeleteFrameController {
             YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
             yesOrNoFrameController.setDeliteMethodic(true);
             yesOrNoFrameController.setMethodic(focusedMetodic);
-            yesOrNoFrameController.getQuestionTxt().setText("Вы действительно жедаете удалить методику:\n" +
+            yesOrNoFrameController.getQuestionTxt().setText("Вы действительно желаете удалить\nметодику: " +
                     focusedMetodic.getMethodicName() + "?");
+            yesOrNoFrameController.getQuestionTxt().setLayoutX(150);
+            yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
             yesOrNoFrameController.setMethodicsAddEditDeleteFrameController(this);
 
             stage.show();

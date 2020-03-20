@@ -48,7 +48,7 @@
                <children>
                   <TableView fx:id="viewPointTable" prefHeight="500.0" prefWidth="270.0">
                      <columns>
-                        <TableColumn fx:id="tabClMethodics" prefWidth="269.0" text="Хуйтодики" />
+                        <TableColumn fx:id="tabClMethodics" prefWidth="269.0" text="Методики" />
                      </columns></TableView>
                </children>
             </AnchorPane>

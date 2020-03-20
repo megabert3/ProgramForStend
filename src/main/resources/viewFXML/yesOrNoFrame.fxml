@@ -17,7 +17,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Label fx:id="questionTxt" layoutX="184.0" layoutY="46.0" text="Сохранить параметры?" />
+      <Label fx:id="questionTxt" layoutX="184.0" layoutY="46.0" text="Сохранить параметры?" textFill="WHITE" />
       <Button fx:id="noBtn" layoutX="248.0" layoutY="96.0" mnemonicParsing="false" onAction="#yesOrNoAction" prefHeight="38.0" prefWidth="114.0" stylesheets="@../styleCSS/buttonStyle.css" text="Нет">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
@@ -27,6 +27,6 @@
             </ImageView>
          </graphic>
       </Button>
-      <ImageView fitHeight="84.0" fitWidth="92.0" layoutX="53.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="84.0" fitWidth="92.0" layoutX="42.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>

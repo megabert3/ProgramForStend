@@ -340,16 +340,18 @@ public class CreepCommand implements Commands, Serializable {
         Meter.CreepResult commandResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(false);
         commandResult.setLastResult("F" + timeFail + " " + "П");
-        commandResult.getResults()[countResult] = commandResult.getLastResult().substring(1, commandResult.getLastResult().length() - 2);
+        commandResult.setLastResulString(timeFail);
+        commandResult.getResults()[countResult] = timeFail + " П";
     }
 
     //Переносит время провала теста в нужную строку
-    private void addTestTimePass(Meter meter, int channelFlag, String timeFail, int countResult) {
+    private void addTestTimePass(Meter meter, int channelFlag, String timePass, int countResult) {
         meter.setCreepTest(true);
         Meter.CreepResult commandResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(true);
-        commandResult.setLastResult("P" + timeFail + " " + "Г");
-        commandResult.getResults()[countResult] = commandResult.getLastResult().substring(1, commandResult.getLastResult().length() - 2);
+        commandResult.setLastResult("P" + timePass + " " + "Г");
+        commandResult.setLastResulString(timePass);
+        commandResult.getResults()[countResult] = timePass + " Г";
     }
 
     //Переводит милисикунды в нужный формат

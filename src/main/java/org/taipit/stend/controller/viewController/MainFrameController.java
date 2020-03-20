@@ -38,6 +38,10 @@ public class MainFrameController {
         if (event.getSource() == mainFrameParamTestBtn) {
             loadStage("/viewFXML/testParametersFrame.fxml", "Параметры теста");
         }
+
+        if (event.getSource() == mainFrameResultsBtn) {
+            loadStage("/viewFXML/resultsMetersFrame.fxml", "Результаты");
+        }
     }
 
     private void loadStage(String fxml, String stageName) {

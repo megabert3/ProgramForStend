@@ -15,9 +15,13 @@ public class YesOrNoFrameController {
 
     private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
 
+    private Stage stageSaveResultTest;
+
     private Methodic methodic;
 
     private boolean deliteMethodic;
+
+    private boolean exitSaveResultFrameWithoutSaving;
 
     @FXML
     private Button noBtn;
@@ -34,24 +38,30 @@ public class YesOrNoFrameController {
 
     @FXML
     void yesOrNoAction(ActionEvent event) {
-        Stage stage = (Stage) questionTxt.getScene().getWindow();
+
+        Stage stageYesOrNo = (Stage) questionTxt.getScene().getWindow();
         //если вызвано с окна удаления методики "Удалить методику"
         if (event.getSource() == yesBtn) {
             if (deliteMethodic) {
 
                 methodicsForTest.deleteMethodic(methodic.getMethodicName());
-                methodicsForTest.getMethodics().size();
 
                 methodicsAddEditDeleteFrameController.refreshAfterDelete();
 
-                stage.close();
+                stageYesOrNo.close();
 
                 deliteMethodic = false;
+            }
+
+            if (exitSaveResultFrameWithoutSaving) {
+                stageYesOrNo.close();
+                stageSaveResultTest.close();
+                exitSaveResultFrameWithoutSaving = false;
             }
         }
 
         if (event.getSource() == noBtn) {
-            stage.close();
+            stageYesOrNo.close();
         }
     }
 
@@ -69,5 +79,13 @@ public class YesOrNoFrameController {
 
     public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {
         this.methodicsAddEditDeleteFrameController = methodicsAddEditDeleteFrameController;
+    }
+
+    public void setExitSaveResultFrameWithoutSaving(boolean exitSaveResultFrameWithoutSaving) {
+        this.exitSaveResultFrameWithoutSaving = exitSaveResultFrameWithoutSaving;
+    }
+
+    public void setStageSaveResultTest(Stage stageSaveResultTest) {
+        this.stageSaveResultTest = stageSaveResultTest;
     }
 }

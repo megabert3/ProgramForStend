@@ -14,6 +14,7 @@ public class Methodic implements Cloneable, Serializable {
     private boolean threePhaseStendMethodic;
 
     private String methodicName;
+
     private Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
 
     //Объект для сохранения точек связанных с влиянием

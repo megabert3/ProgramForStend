@@ -16,6 +16,8 @@ public class Meter implements Serializable{
 
     private int id;
 
+    private String unicalID;
+
     //Максимальный ток
     private double Imax;
 
@@ -27,6 +29,8 @@ public class Meter implements Serializable{
 
     //Номиальная частота
     private double Fn;
+
+    private String InomImax;
 
     //Тип измерительного элемента счётчика шунт/трансформатор
     private boolean typeOfMeasuringElementShunt;
@@ -53,6 +57,13 @@ public class Meter implements Serializable{
     private String verificationDate;
 
     private String factoryManufacturer;
+
+    private String batchNo;
+
+    private String lastModifiedDate;
+
+    //Пример: Однотарифный однофазный
+    private String typeMeter;
 
     //Установлен ли счётчик на посадочное место
     private boolean activeSeat = true;
@@ -285,24 +296,28 @@ public class Meter implements Serializable{
         switch (energyPulseChanel) {
             case 0: {
                 commandResult = errorListAPPls.get(index);
+                commandResult.setLastResulString(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
 
             case 1: {
                 commandResult = errorListAPMns.get(index);
+                commandResult.setLastResulString(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
 
             case 2: {
                 commandResult = errorListRPPls.get(index);
+                commandResult.setLastResulString(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
 
             case 3: {
                 commandResult = errorListRPMns.get(index);
+                commandResult.setLastResulString(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
@@ -693,6 +708,38 @@ public class Meter implements Serializable{
         this.finalAllTestResult = finalAllTestResult;
     }
 
+    public String getUnicalID() {
+        return unicalID;
+    }
+
+    public void setUnicalID(String unicalID) {
+        this.unicalID = unicalID;
+    }
+
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
+    }
+
+    public String getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(String lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getInomImax() {
+        return InomImax;
+    }
+
+    public void setInomImax(String inomImax) {
+        InomImax = inomImax;
+    }
+
     //Абстрактный класс для записи результата каждой точки
     public abstract class CommandResult implements Serializable{
 
@@ -700,7 +747,9 @@ public class Meter implements Serializable{
         String nameCommand;
 
         //Последний результат теста
-        SimpleStringProperty lastResult;
+        transient SimpleStringProperty lastResult;
+
+        String lastResulString;
 
         //Верхняя граница погрешности
         String maxError;
@@ -768,6 +817,14 @@ public class Meter implements Serializable{
 
         public void setPassTest(boolean passTest) {
             this.passTest = passTest;
+        }
+
+        public String getLastResulString() {
+            return lastResulString;
+        }
+
+        public void setLastResulString(String lastResulString) {
+            this.lastResulString = lastResulString;
         }
 
     }

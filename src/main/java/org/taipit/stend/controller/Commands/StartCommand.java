@@ -361,8 +361,9 @@ public class StartCommand implements Commands, Serializable {
         }
         Meter.StartResult commandResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(false);
-        commandResult.setLastResult("F" + timeFail + " " + "-");
-        commandResult.getResults()[countResult] = commandResult.getLastResult().substring(1, commandResult.getLastResult().length() - 2);
+        commandResult.setLastResult("F" + timeFail + " П");
+        commandResult.setLastResulString(timeFail);
+        commandResult.getResults()[countResult] = timeFail + " П";
     }
 
     //Переносит время провала теста в нужную строку
@@ -379,12 +380,13 @@ public class StartCommand implements Commands, Serializable {
             }break;
             case 3: {
                 meter.setStartTestRPMns(true);
-            }
+            }break;
         }
         Meter.StartResult commandResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(true);
-        commandResult.setLastResult("P" + timePass + " " + "+");
-        commandResult.getResults()[countResult] = commandResult.getLastResult().substring(1, commandResult.getLastResult().length() - 2);
+        commandResult.setLastResult("P" + timePass + " +");
+        commandResult.setLastResulString(timePass);
+        commandResult.getResults()[countResult] = timePass + " Г";
     }
 
     public void setIndex(int index) {

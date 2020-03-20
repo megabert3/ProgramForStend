@@ -377,9 +377,11 @@ public class ErrorCommand implements Commands, Serializable {
 
                         if (doubleErr > emax || doubleErr < emin) {
                             resultMeter.setLastResult("F" + error);
+                            resultMeter.setLastResulString(error);
                             resultMeter.setPassTest(false);
                         } else {
                             resultMeter.setLastResult("P" + error);
+                            resultMeter.setLastResulString(error);
                             resultMeter.setPassTest(true);
                         }
                     }

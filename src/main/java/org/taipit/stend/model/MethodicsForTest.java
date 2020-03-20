@@ -83,12 +83,11 @@ public class MethodicsForTest implements Serializable {
             return (MethodicsForTest) objectInputStream.readObject();
 
         } catch (FileNotFoundException e) {
-            System.out.println("Файл ненайден");
+            System.out.println("Файл не найден");
             e.printStackTrace();
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-
         }
         return null;
     }
