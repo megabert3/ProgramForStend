@@ -740,6 +740,14 @@ public class Meter implements Serializable{
         InomImax = inomImax;
     }
 
+    public String getTypeMeter() {
+        return typeMeter;
+    }
+
+    public void setTypeMeter(String typeMeter) {
+        this.typeMeter = typeMeter;
+    }
+
     //Абстрактный класс для записи результата каждой точки
     public abstract class CommandResult implements Serializable{
 

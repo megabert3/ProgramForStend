@@ -1147,74 +1147,136 @@ public class TestErrorTableFrameController {
                 };
 
         //В зависимости от количества счётчиков инициализирую поля для отображения погрешности
-        TableView<Meter.CommandResult> tableView;
-        TableColumn<Meter.CommandResult, String> column;
+        if (listMetersForTest.size() <= 12) {
 
-        for (int i = 0; i < listMetersForTest.size(); i++) {
+            for (int i = 0; i < listMetersForTest.size(); i++) {
+                //Создаю колонки AP+
+                addTableViewAndCollumnInErrorPane(i, paneErrorsAPPls.getPrefWidth() / listMetersForTest.size(), paneErrorsAPPls.getPrefHeight(),
+                        i * (paneErrorsAPPls.getPrefWidth() / listMetersForTest.size()), 0, listMetersForTest.get(i).getErrorListAPPls(), paneErrorsAPPls,
+                        tabViewListAPPls, cellFactoryEndTest);
 
-            //Создаю колонки счётчиков для splitPane AP+
-            tableView = new TableView<>();
-            column = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
-            column.setStyle( "-fx-alignment: CENTER;");
-            column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
-            column.setSortable(false);
-            column.setPrefWidth(paneErrorsAPPls.getPrefWidth() / listMetersForTest.size());
-            column.setCellFactory(cellFactoryEndTest);
-            tableView.setPrefSize(paneErrorsAPPls.getPrefWidth() / listMetersForTest.size(), paneErrorsAPPls.getPrefHeight());
-            tableView.setLayoutX(i * column.getPrefWidth());
-            tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
-            tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPPls()));
-            tableView.getColumns().add(column);
-            paneErrorsAPPls.getChildren().add(tableView);
-            tabViewListAPPls.add(tableView);
+                //Создаю колонки AP-
+                addTableViewAndCollumnInErrorPane(i, paneErrorsAPMns.getPrefWidth() / listMetersForTest.size(), paneErrorsAPMns.getPrefHeight(),
+                        i * (paneErrorsAPMns.getPrefWidth() / listMetersForTest.size()), 0, listMetersForTest.get(i).getErrorListAPMns(), paneErrorsAPMns,
+                        tabViewListAPMns, cellFactoryEndTest);
 
-            //Создаю колонки счётчиков для splitPane AP-
-            tableView = new TableView<>();
-            column = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
-            column.setStyle( "-fx-alignment: CENTER;");
-            column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
-            column.setSortable(false);
-            column.setPrefWidth(paneErrorsAPMns.getPrefWidth() / listMetersForTest.size());
-            column.setCellFactory(cellFactoryEndTest);
-            tableView.setPrefSize(paneErrorsAPMns.getPrefWidth() / listMetersForTest.size(), paneErrorsAPMns.getPrefHeight());
-            tableView.setLayoutX(i * column.getPrefWidth());
-            tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
-            tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPMns()));
-            tableView.getColumns().add(column);
-            paneErrorsAPMns.getChildren().add(tableView);
-            tabViewListAPMns.add(tableView);
+                //Создаю колонки RP+
+                addTableViewAndCollumnInErrorPane(i, paneErrorsRPPls.getPrefWidth() / listMetersForTest.size(), paneErrorsRPPls.getPrefHeight(),
+                        i * (paneErrorsRPPls.getPrefWidth() / listMetersForTest.size()), 0, listMetersForTest.get(i).getErrorListRPPls(), paneErrorsRPPls,
+                        tabViewListRPPls, cellFactoryEndTest);
 
-            //Создаю колонки счётчиков для splitPane RP+
-            tableView = new TableView<>();
-            column = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
-            column.setStyle( "-fx-alignment: CENTER;");
-            column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
-            column.setSortable(false);
-            column.setPrefWidth(paneErrorsRPPls.getPrefWidth() / listMetersForTest.size());
-            column.setCellFactory(cellFactoryEndTest);
-            tableView.setPrefSize(paneErrorsRPPls.getPrefWidth() / listMetersForTest.size(), paneErrorsRPPls.getPrefHeight());
-            tableView.setLayoutX(i * column.getPrefWidth());
-            tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
-            tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPPls()));
-            tableView.getColumns().add(column);
-            paneErrorsRPPls.getChildren().add(tableView);
-            tabViewListRPPls.add(tableView);
+                //Создаю колонки RP-
+                addTableViewAndCollumnInErrorPane(i, paneErrorsRPMns.getPrefWidth() / listMetersForTest.size(), paneErrorsRPMns.getPrefHeight(),
+                        i * (paneErrorsRPMns.getPrefWidth() / listMetersForTest.size()), 0, listMetersForTest.get(i).getErrorListRPMns(), paneErrorsRPMns,
+                        tabViewListRPMns, cellFactoryEndTest);
+            }
+        } else if (listMetersForTest.size() <= 24) {
+            if (listMetersForTest.size() % 2 == 0) {
+                /**
+                 * Значения других панелей напрямую зависят от размеров первой.
+                 */
 
-            //Создаю колонки счётчиков для splitPane RP-
-            tableView = new TableView<>();
-            column = new TableColumn<>("Место " + listMetersForTest.get(i).getId());
-            column.setStyle( "-fx-alignment: CENTER;");
-            column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
-            column.setSortable(false);
-            column.setPrefWidth(paneErrorsRPMns.getPrefWidth() / listMetersForTest.size());
-            column.setCellFactory(cellFactoryEndTest);
-            tableView.setPrefSize(paneErrorsRPMns.getPrefWidth() / listMetersForTest.size(), paneErrorsRPMns.getPrefHeight());
-            tableView.setLayoutX(i * column.getPrefWidth());
-            tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
-            tableView.setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns()));
-            tableView.getColumns().add(column);
-            paneErrorsRPMns.getChildren().add(tableView);
-            tabViewListRPMns.add(tableView);
+                double widthColumn = paneErrorsAPPls.getPrefWidth() / (listMetersForTest.size() / 2);
+                double heightColumn = paneErrorsAPPls.getPrefHeight() / 2;
+
+                for (int j = 0; j < 2; j++) {
+                    if (j == 0) {
+
+                        for (int i = 0; i < listMetersForTest.size() / 2; i++) {
+                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
+                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListAPPls(), paneErrorsAPPls,
+                                    tabViewListAPPls, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
+                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListAPMns(), paneErrorsAPMns,
+                                    tabViewListAPMns, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
+                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListRPPls(), paneErrorsRPPls,
+                                    tabViewListRPPls, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
+                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListRPMns(), paneErrorsRPMns,
+                                    tabViewListRPMns, cellFactoryEndTest);
+                        }
+                    } else {
+
+                        for (int i = 0; i < listMetersForTest.size() / 2; i++) {
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2, widthColumn, heightColumn,
+                                    i * widthColumn, paneErrorsAPPls.getPrefHeight() / 2,
+                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListAPPls(), paneErrorsAPPls,
+                                    tabViewListAPPls, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2, widthColumn, heightColumn,
+                                    i * widthColumn, paneErrorsAPMns.getPrefHeight() / 2,
+                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListAPMns(), paneErrorsAPMns,
+                                    tabViewListAPMns, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2, widthColumn, heightColumn,
+                                    i * widthColumn, paneErrorsRPPls.getPrefHeight() / 2,
+                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListRPPls(), paneErrorsRPPls,
+                                    tabViewListRPPls, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2, widthColumn, heightColumn,
+                                    i * widthColumn, paneErrorsRPMns.getPrefHeight() / 2,
+                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListRPMns(), paneErrorsRPMns,
+                                    tabViewListRPMns, cellFactoryEndTest);
+                        }
+                    }
+                }
+
+            } else {
+                double widthColumn; // = paneErrorsAPPls.getPrefWidth() / (listMetersForTest.size() / 2);
+                double heightColumn = paneErrorsAPPls.getPrefHeight() / 2;
+
+                for (int j = 0; j < 2; j++) {
+                    if (j == 0) {
+                        widthColumn = paneErrorsAPPls.getPrefWidth() / (listMetersForTest.size() / 2 + 1);
+
+                        for (int i = 0; i < (listMetersForTest.size() / 2) + 1; i++) {
+                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
+                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListAPPls(), paneErrorsAPPls,
+                                    tabViewListAPPls, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
+                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListAPMns(), paneErrorsAPMns,
+                                    tabViewListAPMns, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
+                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListRPPls(), paneErrorsRPPls,
+                                    tabViewListRPPls, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
+                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListRPMns(), paneErrorsRPMns,
+                                    tabViewListRPMns, cellFactoryEndTest);
+                        }
+                    } else {
+                        widthColumn = paneErrorsAPPls.getPrefWidth() / (listMetersForTest.size() / 2);
+
+                        for (int i = 0; i < listMetersForTest.size() / 2; i++) {
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1, widthColumn, heightColumn,
+                                    i * widthColumn, paneErrorsAPPls.getPrefHeight() / 2,
+                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListAPPls(), paneErrorsAPPls,
+                                    tabViewListAPPls, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1, widthColumn, heightColumn,
+                                    i * widthColumn, paneErrorsAPMns.getPrefHeight() / 2,
+                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListAPMns(), paneErrorsAPMns,
+                                    tabViewListAPMns, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1, widthColumn, heightColumn,
+                                    i * widthColumn, paneErrorsRPPls.getPrefHeight() / 2,
+                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListRPPls(), paneErrorsRPPls,
+                                    tabViewListRPPls, cellFactoryEndTest);
+
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1, widthColumn, heightColumn,
+                                    i * widthColumn, paneErrorsRPMns.getPrefHeight() / 2,
+                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListRPMns(), paneErrorsRPMns,
+                                    tabViewListRPMns, cellFactoryEndTest);
+                        }
+                    }
+                }
+            }
         }
 
         //--------------------------------------------------------------------
@@ -1236,6 +1298,7 @@ public class TestErrorTableFrameController {
                 int i = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
 
                 for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
+
                     if (!tableViewError.getSelectionModel().isSelected(i)) {
                         tableViewError.getFocusModel().focus(i);
                         tableViewError.getSelectionModel().select(i);
@@ -1256,6 +1319,7 @@ public class TestErrorTableFrameController {
                     int index = tabViewTestPointsAPPls.getSelectionModel().getSelectedIndex();
 
                     for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
+                        tableViewError.scrollTo(index);
                         if (!tableViewError.getSelectionModel().isSelected(index)) {
                             tableViewError.getFocusModel().focus(index);
                             tableViewError.getSelectionModel().select(index);
@@ -1411,6 +1475,26 @@ public class TestErrorTableFrameController {
                 }
             }
         }
+    }
+
+    private void addTableViewAndCollumnInErrorPane(int index, double prefWidth, double prefHeight, double layoutX, double layoutY, List<Meter.CommandResult> errorList,
+                                                   Pane errorPane, List<TableView<Meter.CommandResult>> tableViewList, Callback callback) {
+
+        TableView<Meter.CommandResult> tableView = new TableView<>();
+        TableColumn<Meter.CommandResult, String> column = new TableColumn<>("Место " + listMetersForTest.get(index).getId());
+        column.setStyle("-fx-alignment: CENTER;");
+        column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
+        column.setSortable(false);
+        column.setCellFactory(callback);
+        tableView.setPrefSize(prefWidth, prefHeight);
+        column.setPrefWidth(tableView.getPrefWidth());
+        tableView.setLayoutX(layoutX);
+        tableView.setLayoutY(layoutY);
+        tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
+        tableView.setItems(FXCollections.observableArrayList(errorList));
+        tableView.getColumns().add(column);
+        errorPane.getChildren().add(tableView);
+        tableViewList.add(tableView);
     }
 
     //Находит все скрол бары

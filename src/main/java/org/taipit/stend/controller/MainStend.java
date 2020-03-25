@@ -59,7 +59,8 @@ public class MainStend {
 //            }
 //            Thread.sleep(1000);
 //        }
-
+        int i = (13 / 2) + 1;
+        System.out.println(i);
     }
 
 }

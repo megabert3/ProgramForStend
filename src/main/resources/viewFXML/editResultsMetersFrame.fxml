@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="718.0" prefWidth="1239.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.ResultsMetersController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="718.0" prefWidth="1239.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.EditResultsMetersController">
    <children>
       <Pane prefHeight="140.0" prefWidth="1239.0" style="-fx-background-color: #393939;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <Button fx:id="btnEdit" layoutX="1074.0" layoutY="659.0" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="150.0" text="Редактировать" />
+      <Button fx:id="btnCancel" layoutX="1074.0" layoutY="659.0" mnemonicParsing="false" onAction="#saveCancelAction" prefHeight="42.0" prefWidth="150.0" text="Отмена" />
       <Pane fx:id="paneForTabView" layoutX="14.0" layoutY="47.0" prefHeight="600.0" prefWidth="1210.0">
          <children>
             <TableView fx:id="tabViewResults" editable="true" prefHeight="600.0" prefWidth="3806.0">
@@ -63,7 +62,6 @@
             </TableView>
          </children>
       </Pane>
-      <ComboBox layoutX="900.0" layoutY="659.0" prefHeight="42.0" prefWidth="150.0" promptText="Отчёт" />
-      <Button fx:id="btnDelete" layoutX="723.0" layoutY="659.0" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="150.0" text="Удалить" />
+      <Button fx:id="btnSave" layoutX="884.0" layoutY="659.0" mnemonicParsing="false" onAction="#saveCancelAction" prefHeight="42.0" prefWidth="150.0" text="Сохранить" />
    </children>
 </AnchorPane>

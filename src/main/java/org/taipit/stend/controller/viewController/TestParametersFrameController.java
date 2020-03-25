@@ -47,6 +47,9 @@ public class TestParametersFrameController {
     private ObservableList<Meter> meterObservableList;
 
     @FXML
+    private ComboBox<String> chosBxTypeMeter;
+
+    @FXML
     private ComboBox<String> chosBxMetodics;
 
     @FXML
@@ -71,16 +74,10 @@ public class TestParametersFrameController {
     private TableColumn<Meter, String> tabColModelMeter;
 
     @FXML
+    private TableColumn<Meter, String> tabColManufacturer;
+
+    @FXML
     private Button btnNumbersMe;
-
-    @FXML
-    private TextField txtFldOperator;
-
-    @FXML
-    private TextField txtFldController;
-
-    @FXML
-    private TextField txtFldWitness;
 
     @FXML
     private TextField txtFldUnom;
@@ -113,7 +110,7 @@ public class TestParametersFrameController {
     private ComboBox<String> chosBxCurrent;
 
     @FXML
-    private ComboBox<String> chosBxTypeMeter;
+    private ComboBox<String> chosBxtypeOfMeasuringElement;
 
     @FXML
     private ComboBox<String> chosBxPowerType;
@@ -122,19 +119,11 @@ public class TestParametersFrameController {
     private ComboBox<String> chosBxFrg;
 
     @FXML
-    private ComboBox<String> chosBxOperator;
-
-    @FXML
-    private ComboBox<String> chosBxController;
-
-    @FXML
-    private ComboBox<String> chosBxWitness;
-
-
-    @FXML
     void buttonActionTestFrame(ActionEvent event) {
         if (event.getSource() == btnStartTest) {
             try {
+                if (chosBxMetodics.getValue() == null) throw new InfoExсeption();
+
                 //Номинальное напряжение
                 double Un = Double.parseDouble(txtFldUnom.getText());
 
@@ -166,7 +155,7 @@ public class TestParametersFrameController {
                 //Тип измерительного элемета
                 boolean typeOfMeasuringElementShunt = false;
 
-                if (chosBxTypeMeter.getValue().equals("Шунт")) {
+                if (chosBxtypeOfMeasuringElement.getValue().equals("Шунт")) {
                     typeOfMeasuringElementShunt = true;
                 }
 
@@ -175,15 +164,6 @@ public class TestParametersFrameController {
                 if (chosBxPowerType.getValue().equals("3P4W")) {
                     typeCircuitThreePhase = true;
                 }
-
-                //Оператор
-                String operator = txtFldOperator.getText();
-
-                //Контролер
-                String controller = txtFldController.getText();
-
-                //Поверитель
-                String witness = txtFldWitness.getText();
 
                 //Оставляем только выделенные счётчики
                 for (int i = 0; i < metersList.size(); i++) {
@@ -203,10 +183,8 @@ public class TestParametersFrameController {
                     meter.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
                     meter.setAccuracyClassAP(accuracyClassAP);
                     meter.setAccuracyClassRP(accuracyClassRP);
-                    meter.setOperator(operator);
-                    meter.setController(controller);
-                    meter.setWitness(witness);
                     meter.setInomImax(txtFldCurrent.getText());
+                    meter.setTypeMeter(chosBxTypeMeter.getValue());
                 }
 
                 /**
@@ -220,18 +198,17 @@ public class TestParametersFrameController {
                 properties.setProperty("lastUnom", txtFldUnom.getText());
                 properties.setProperty("lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
                 properties.setProperty("lastAccuracyClassMeterRP", txtFldAccuracyRP.getText());
-                properties.setProperty("InomAndImax", txtFldCurrent.getText());
-                properties.setProperty("lastTypeOfMeasuringElement", chosBxTypeMeter.getValue());
+                properties.setProperty("lastInomAndImax", txtFldCurrent.getText());
+                properties.setProperty("lastTypeOfMeasuringElement", chosBxtypeOfMeasuringElement.getValue());
                 properties.setProperty("lastTypeCircuit", chosBxPowerType.getValue());
                 properties.setProperty("lastFnom", txtFldFrg.getText());
-                properties.setProperty("lastOperator", operator);
-                properties.setProperty("lastController", controller);
-                properties.setProperty("lastWitness", witness);
+                properties.setProperty("lastMeterManufacturer", metersList.get(0).getFactoryManufacturer());
+                properties.setProperty("lastMeterConstantAP", metersList.get(0).getConstantMeterAP());
+                properties.setProperty("lastMeterConstantRP", metersList.get(0).getConstantMeterRP());
+                properties.setProperty("lastMethodicName", chosBxMetodics.getValue());
+                properties.setProperty("lastMeterTypeOnePhaseMultiTarif", chosBxTypeMeter.getValue());
 
-                //Подумать над этим должна быть ошибка при нулевой методике
-                if (chosBxMetodics.getValue() != null) {
-                    properties.setProperty("lastMethodicName", chosBxMetodics.getValue());
-                }
+                ConsoleHelper.saveProperties();
 
                 //Загрузка окна испытания
                 FXMLLoader fxmlLoader = new FXMLLoader();
@@ -246,10 +223,6 @@ public class TestParametersFrameController {
 
                 TestErrorTableFrameController testErrorTableFrameController = fxmlLoader.getController();
 
-                properties.setProperty("lastOperator", txtFldOperator.getText());
-                properties.setProperty("lastController", txtFldController.getText());
-                properties.setProperty("lastWitness", txtFldWitness.getText());
-
                 //Учтановка и передача параметров
                 testErrorTableFrameController.setStendDLLCommands(stendDLLCommands);
                 testErrorTableFrameController.setMethodic(methodic);
@@ -261,10 +234,6 @@ public class TestParametersFrameController {
                 testErrorTableFrameController.setImax(Imax);
                 testErrorTableFrameController.setTypeCircuit(typeCircuitThreePhase);
                 testErrorTableFrameController.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
-
-                testErrorTableFrameController.setController(txtFldController.getText());
-                testErrorTableFrameController.setOperator(txtFldOperator.getText());
-                testErrorTableFrameController.setWitness(txtFldWitness.getText());
 
                 //Установка информации в окне теста
                 testErrorTableFrameController.getTxtLabUn().setText("Uн = " + Un + " В");
@@ -284,7 +253,7 @@ public class TestParametersFrameController {
 
                 testErrorTableFrameController.initScrolBars();
 
-                Stage stage1 = (Stage) txtFldController.getScene().getWindow();
+                Stage stage1 = (Stage) btnStartTest.getScene().getWindow();
                 stage1.close();
 
             }catch (NumberFormatException e) {
@@ -316,7 +285,6 @@ public class TestParametersFrameController {
 
     @FXML
     void initialize() {
-
         if (properties.getProperty("stendType").equals("ThreePhaseStend")) {
             stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
         } else stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
@@ -334,9 +302,7 @@ public class TestParametersFrameController {
         String[] accuracyClassMeterRPComBox = properties.getProperty("accuracyClassMeterRP").split(", ");
         String[] typeCircuitComBox = properties.getProperty("typeCircuit").split(", ");
         String[] typeOfMeasuringElementComBox = properties.getProperty("typeOfMeasuringElement").split(", ");
-        String[] operatorsComBox = properties.getProperty("Operators").split(", ");
-        String[] WitnessComBox = properties.getProperty("Witness").split(", ");
-        String[] controllerComBox = properties.getProperty("Controller").split(", ");
+        String[] typeMeter = properties.getProperty("meterTypeOnePhaseMultiTarif").split(", ");
 
         //Кладём элементы в КомбоБокс
         chosBxUnom.getItems().addAll(UnomComBox);
@@ -345,13 +311,11 @@ public class TestParametersFrameController {
         chosBxAccuracyAP.getItems().addAll(accuracyClassMeterAPComBox);
         chosBxAccuracyRP.getItems().addAll(accuracyClassMeterRPComBox);
         chosBxPowerType.getItems().addAll(typeCircuitComBox);
-        chosBxTypeMeter.getItems().addAll(typeOfMeasuringElementComBox);
-        chosBxOperator.getItems().addAll(operatorsComBox);
-        chosBxWitness.getItems().addAll(WitnessComBox);
-        chosBxController.getItems().addAll(controllerComBox);
+        chosBxtypeOfMeasuringElement.getItems().addAll(typeOfMeasuringElementComBox);
+        chosBxTypeMeter.getItems().addAll(typeMeter);
 
         for (Methodic methodic : methodicsForTest.getMethodics()) {
-            chosBxMetodics.getItems().addAll(methodic.getMethodicName());
+            chosBxMetodics.getItems().add(methodic.getMethodicName());
         }
 
         //Задаём текстовым полям последнее сохранённое значение
@@ -361,10 +325,9 @@ public class TestParametersFrameController {
         txtFldAccuracyAP.setText(properties.getProperty("lastAccuracyClassMeterAP"));
         txtFldAccuracyRP.setText(properties.getProperty("lastAccuracyClassMeterRP"));
         chosBxPowerType.setValue(properties.getProperty("lastTypeCircuit"));
-        chosBxTypeMeter.setValue(properties.getProperty("lastTypeOfMeasuringElement"));
-        txtFldOperator.setText(properties.getProperty("lastOperator"));
-        txtFldController.setText(properties.getProperty("lastController"));
-        txtFldWitness.setText(properties.getProperty("lastWitness"));
+        chosBxtypeOfMeasuringElement.setValue(properties.getProperty("lastTypeOfMeasuringElement"));
+        chosBxTypeMeter.setValue(properties.getProperty("lastMeterTypeOnePhaseMultiTarif"));
+        chosBxMetodics.setValue(properties.getProperty("lastMethodicName"));
 
         //Устанавливаем слушателей
         chosBxUnom.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
@@ -382,15 +345,6 @@ public class TestParametersFrameController {
         chosBxAccuracyRP.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             txtFldAccuracyRP.setText(newValue);
         });
-        chosBxOperator.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            txtFldOperator.setText(newValue);
-        });
-        chosBxController.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            txtFldController.setText(newValue);
-        });
-        chosBxWitness.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            txtFldWitness.setText(newValue);
-        });
 
         initTableView();
     }
@@ -399,9 +353,10 @@ public class TestParametersFrameController {
         for (int i = 1; i <= Integer.parseInt(properties.getProperty("stendAmountPlaces")); i++) {
             Meter me = new Meter();
             me.setId(i);
-            me.setConstantMeterAP(properties.getProperty("meterLastConstantAP"));
-            me.setConstantMeterRP(properties.getProperty("meterLastConstantRP"));
+            me.setConstantMeterAP(properties.getProperty("lastMeterConstantAP"));
+            me.setConstantMeterRP(properties.getProperty("lastMeterConstantRP"));
             me.setModelMeter(properties.getProperty("lastMeterModel"));
+            me.setFactoryManufacturer(properties.getProperty("lastMeterManufacturer"));
             metersList.add(me);
         }
 
@@ -439,6 +394,7 @@ public class TestParametersFrameController {
 
         //Отображение айди счётчика
         tabColIdMeter.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tabColIdMeter.setStyle("-fx-alignment: CENTER;");
 
         //Отображение серийного номера счётчика
         tabColSerNoMeter.setCellValueFactory(new PropertyValueFactory<>("serNoMeter"));
@@ -455,6 +411,7 @@ public class TestParametersFrameController {
 
             meter.setSerNoMeter(newSerNo);
         });
+        tabColSerNoMeter.setStyle("-fx-alignment: CENTER;");
 
         //Отображение константы активной энергии
         tabColConstAPMeter.setCellValueFactory(new PropertyValueFactory<>("constantMeterAP"));
@@ -471,6 +428,7 @@ public class TestParametersFrameController {
             }
             tabVParamMeters.refresh();
         });
+        tabColConstAPMeter.setStyle("-fx-alignment: CENTER;");
 
         //Отображение константы реактивной энергии
         tabColConstRPMeter.setCellValueFactory(new PropertyValueFactory<>("constantMeterRP"));
@@ -487,6 +445,7 @@ public class TestParametersFrameController {
             }
             tabVParamMeters.refresh();
         });
+        tabColConstRPMeter.setStyle("-fx-alignment: CENTER;");
 
         //Выбор модели счётчика из списка
         ObservableList<String> meterModelList = FXCollections.observableArrayList(properties.getProperty("meterModel").split(", "));
@@ -514,6 +473,23 @@ public class TestParametersFrameController {
 
             meter.setModelMeter(newSerNo);
         });
+        tabColModelMeter.setStyle("-fx-alignment: CENTER;");
+
+        tabColManufacturer.setCellValueFactory(new PropertyValueFactory<>("factoryManufacturer"));
+
+        tabColManufacturer.setCellFactory(ComboBoxTableCell.forTableColumn(properties.getProperty("meterManufacturer").split(", ")));
+
+        tabColManufacturer.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String param = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setFactoryManufacturer(param);
+        });
+        tabColManufacturer.setStyle("-fx-alignment: CENTER;");
 
         meterObservableList = FXCollections.observableArrayList(metersList);
         tabVParamMeters.setItems(meterObservableList);
@@ -525,7 +501,7 @@ public class TestParametersFrameController {
         tabColConstRPMeter.setSortable(false);
         tabColModelMeter.setSortable(false);
 
-        tabVParamMeters.setPlaceholder(new Label("Укажите количество мест в настрйках"));
+        tabVParamMeters.setPlaceholder(new Label("Укажите количество мест в настройках"));
     }
 
 }

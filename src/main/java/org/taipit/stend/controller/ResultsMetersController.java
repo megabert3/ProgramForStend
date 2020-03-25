@@ -1,30 +1,39 @@
 package org.taipit.stend.controller;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.ResultsTest;
 
-public class resultsMetersController {
+public class ResultsMetersController {
 
-    ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
+    private ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
 
     private Properties properties = ConsoleHelper.properties;
 
     private String[] resultMass = properties.getProperty("restMeterResults").split(", ");
+
+    private ObservableList<Meter> observableList = FXCollections.observableArrayList(resultsTest.getListAllResults());
 
     @FXML
     private ResourceBundle resources;
@@ -34,6 +43,9 @@ public class resultsMetersController {
 
     @FXML
     private Button btnEdit;
+
+    @FXML
+    private Button btnDelete;
 
     @FXML
     private Pane paneForTabView;
@@ -144,8 +156,63 @@ public class resultsMetersController {
     private TableColumn<Meter, String> tabColBatсhNo;
 
     @FXML
-    void editAction(ActionEvent event) {
+    void editDeleteAction(ActionEvent event) {
+        if (event.getSource() == btnEdit) {
+            List<Meter> listSelectedMeters = new ArrayList<>();
 
+            for (Integer index : tabViewResults.getSelectionModel().getSelectedIndices()) {
+                listSelectedMeters.add(ResultsTest.getResultsTestInstance().getListAllResults().get(index));
+            }
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/editResultsMetersFrame.fxml"));
+            try {
+                fxmlLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            EditResultsMetersController editResultsMetersController = fxmlLoader.getController();
+            editResultsMetersController.setResultsMetersController(this);
+            editResultsMetersController.setSelectedMetersForEdit(listSelectedMeters);
+            editResultsMetersController.setIndexcesList(tabViewResults.getSelectionModel().getSelectedIndices());
+            editResultsMetersController.initColumsEditFrame();
+
+            Parent root = fxmlLoader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Редактирование результатов");
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
+
+        if (event.getSource() == btnDelete) {
+            if (ResultsTest.getResultsTestInstance().getListAllResults().isEmpty()) {
+                System.out.println("Нет результата.");
+                return;
+            }
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/yesOrNoFrame.fxml"));
+            try {
+                fxmlLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
+            yesOrNoFrameController.setResultsMeters(true);
+            yesOrNoFrameController.setListIndexces(tabViewResults.getSelectionModel().getSelectedIndices());
+            yesOrNoFrameController.getQuestionTxt().setText("Вы уверены, что хотите удалить выбранные записи?");
+            yesOrNoFrameController.getQuestionTxt().setLayoutX(165);
+            yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
+
+            Parent root = fxmlLoader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Удаление результатов");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+            tabViewResults.getItems().setAll(FXCollections.observableArrayList(resultsTest.getListAllResults()));
+        }
     }
 
     @FXML
@@ -465,8 +532,14 @@ public class resultsMetersController {
         tabColBatсhNo.setCellValueFactory(new PropertyValueFactory<>("batchNo"));
         tabColBatсhNo.setStyle( "-fx-alignment: CENTER;");
 
-        tabViewResults.setItems(FXCollections.observableArrayList(resultsTest.getListAllResults()));
+        tabViewResults.setItems(FXCollections.observableArrayList(observableList));
 
         tabViewResults.setPrefWidth(paneForTabView.getPrefWidth());
+        tabViewResults.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+    }
+
+    public TableView<Meter> getTabViewResults() {
+        return tabViewResults;
     }
 }

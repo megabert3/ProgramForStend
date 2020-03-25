@@ -1,37 +1,30 @@
-package org.taipit.stend.controller.viewController;
+package org.taipit.stend.controller;
 
-import java.io.IOException;
-import java.util.*;
-
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import org.taipit.stend.controller.Meter;
 import org.taipit.stend.helper.ConsoleHelper;
-import org.taipit.stend.helper.exeptions.InfoExсeption;
 import org.taipit.stend.model.ResultsTest;
 
-public class SaveResultsTestFrame {
+import java.net.URL;
+import java.util.List;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
-    private TestErrorTableFrameController testErrorTableFrameController;
+public class EditResultsMetersController {
+
+    private ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
 
     private Properties properties = ConsoleHelper.properties;
 
@@ -39,50 +32,29 @@ public class SaveResultsTestFrame {
 
     private String[] meterModel = properties.getProperty("meterModel").split(", ");
 
-    private String controller = properties.getProperty("lastController");
-    private String operator = properties.getProperty("lastOperator");
-    private String witnes = properties.getProperty("lastWitness");
-
     private String[] controllers = properties.getProperty("Controller").split(", ");
     private String[] operators = properties.getProperty("Operators").split(", ");
     private String[] witneses = properties.getProperty("Witness").split(", ");
+    private String[] UnMass = properties.getProperty("Unom").split(", ");
+    private String[] InomAndImax = properties.getProperty("InomAndImax").split(", ");
+    private String[] FnMass = properties.getProperty("Fnom").split(", ");
+    private String[] meterManufacturers = properties.getProperty("meterManufacturer").split(", ");
+    private String[] typeMeter = properties.getProperty("meterTypeOnePhaseMultiTarif").split(", ");
+    private String[] typeOfMeasuringElement = properties.getProperty("typeOfMeasuringElement").split(", ");
 
-    private String temperature = properties.getProperty("lastTemperature");
-    private String humidity = properties.getProperty("lastHumidity");
+    private ResultsMetersController resultsMetersController;
 
-    private String batchNumb = properties.getProperty("lastBatchNumb");
+    private ObservableList<Meter> resultList = FXCollections.observableArrayList(resultsTest.getListAllResults());
 
-    private List<Meter> meterList;
+    private List<Meter> selectedMetersForEdit;
 
-    @FXML
-    private ComboBox<String> chosBxOperator;
-
-    @FXML
-    private ComboBox<String> chosBxController;
-
-    @FXML
-    private ComboBox<String> chosBxWitness;
+    private ObservableList<Integer> indexcesList;
 
     @FXML
-    private TextField txtFldBatchNumb;
+    private ResourceBundle resources;
 
     @FXML
-    private TextField txtFldТMusterDate;
-
-    @FXML
-    private TextField txtFldTemperature;
-
-    @FXML
-    private TextField txtFldHumidity;
-
-    @FXML
-    private TextField txtFldOperator;
-
-    @FXML
-    private TextField txtFldController;
-
-    @FXML
-    private TextField txtFldWitness;
+    private URL location;
 
     @FXML
     private Button btnSave;
@@ -91,16 +63,10 @@ public class SaveResultsTestFrame {
     private Button btnCancel;
 
     @FXML
-    private Button btnBack;
-
-    @FXML
     private Pane paneForTabView;
 
     @FXML
     private TableView<Meter> tabViewResults;
-
-    @FXML
-    private TableColumn<Meter, Boolean> tabColChBxSelectOrNot;
 
     @FXML
     private TableColumn<Meter, Integer> tabColPosition;
@@ -115,13 +81,43 @@ public class SaveResultsTestFrame {
     private TableColumn<Meter, String> tabColResultVerification;
 
     @FXML
+    private TableColumn<Meter, String> tabColDate;
+
+    @FXML
     private TableColumn<Meter, String> tabColCRPResult;
 
     @FXML
     private TableColumn<Meter, String> tabColStartResult;
 
     @FXML
+    private TableColumn<Meter, String> tabColStartAPPls;
+
+    @FXML
+    private TableColumn<Meter, String> tabColStartAPMns;
+
+    @FXML
+    private TableColumn<Meter, String> tabColStartRPPls;
+
+    @FXML
+    private TableColumn<Meter, String> tabColStartRPMns;
+
+    @FXML
     private TableColumn<Meter, String> tabColRTCResult;
+
+    @FXML
+    private TableColumn<Meter, String> tabColConstantResult;
+
+    @FXML
+    private TableColumn<Meter, String> tabColConstantAPPls;
+
+    @FXML
+    private TableColumn<Meter, String> tabColConstantAPMns;
+
+    @FXML
+    private TableColumn<Meter, String> tabColConstantRPPls;
+
+    @FXML
+    private TableColumn<Meter, String> tabColConstantRPMns;
 
     @FXML
     private TableColumn<Meter, String> tabColInsulationResult;
@@ -130,163 +126,100 @@ public class SaveResultsTestFrame {
     private TableColumn<Meter, String> tabColApperianceResult;
 
     @FXML
-    private TableColumn<Meter, String> tabColConstantResult;
+    private TableColumn<Meter, String> tabColTemperature;
 
     @FXML
-    private TableColumn<Meter, String> tabColStartAPPls;
-    @FXML
-    private TableColumn<Meter, String> tabColStartAPMns;
-    @FXML
-    private TableColumn<Meter, String> tabColStartRPPls;
-    @FXML
-    private TableColumn<Meter, String> tabColStartRPMns;
+    private TableColumn<Meter, String> tabColHumidity;
 
     @FXML
-    private TableColumn<Meter, String> tabColConstantAPPls;
-    @FXML
-    private TableColumn<Meter, String> tabColConstantAPMns;
-    @FXML
-    private TableColumn<Meter, String> tabColConstantRPPls;
-    @FXML
-    private TableColumn<Meter, String> tabColConstantRPMns;
+    private TableColumn<Meter, String> tabColOperator;
 
     @FXML
-    private TextField txtFldManufacturer;
+    private TableColumn<Meter, String> tabColController;
+
+    @FXML
+    private TableColumn<Meter, String> tabColWitnes;
+
+    @FXML
+    private TableColumn<Meter, String> tabColUn;
+
+    @FXML
+    private TableColumn<Meter, String> tabColInomImax;
+
+    @FXML
+    private TableColumn<Meter, String> tabColFn;
+
+    @FXML
+    private TableColumn<Meter, String> tabColConstants;
+
+    @FXML
+    private TableColumn<Meter, String> tabColConstantMeterAPPls;
+
+    @FXML
+    private TableColumn<Meter, String> tabColConstantMeterRPMns;
+
+    @FXML
+    private TableColumn<Meter, String> tabColTypeMeter;
+
+    @FXML
+    private TableColumn<Meter, String> tabColTypeCurrentDetector;
+
+    @FXML
+    private TableColumn<Meter, String> tabColfactoryManufacturer;
+
+    @FXML
+    private TableColumn<Meter, String> tabColBatсhNo;
+
+    @FXML
+    void saveCancelAction(ActionEvent event) {
+        if (event.getSource() == btnSave) {
+
+            for (int i = 0; i < indexcesList.size(); i++) {
+                resultList.set(indexcesList.get(i), selectedMetersForEdit.get(i));
+            }
+
+            resultsMetersController.getTabViewResults().getItems().setAll(FXCollections.observableArrayList(resultList));
+
+            ResultsTest.getResultsTestInstance().serializationResults();
+
+            Stage stage = (Stage) btnSave.getScene().getWindow();
+            stage.close();
+        }
+
+        if (event.getSource() == btnCancel) {
+            Stage stage = (Stage) btnCancel.getScene().getWindow();
+            stage.close();
+        }
+
+    }
 
     @FXML
     void initialize() {
 
     }
 
-    @FXML
-    void backSaveCancelActions(ActionEvent event) {
-        if (event.getSource() == btnBack) {
-            Stage stageTestErrorTable = (Stage) testErrorTableFrameController.getTxtLabDate().getScene().getWindow();
-            stageTestErrorTable.show();
-
-            Stage stageSaveResultTest = (Stage) txtFldWitness.getScene().getWindow();
-            stageSaveResultTest.close();
-        }
-
-        if (event.getSource() == btnCancel) {
-
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/viewFXML/yesOrNoFrame.fxml"));
-            try {
-                fxmlLoader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
-            yesOrNoFrameController.setExitSaveResultFrameWithoutSaving(true);
-            yesOrNoFrameController.setStageSaveResultTest((Stage) txtFldWitness.getScene().getWindow());
-            yesOrNoFrameController.getQuestionTxt().setText("Вы уверены, что хотите выйти \nбез сохранения результатов теста?");
-            yesOrNoFrameController.getQuestionTxt().setLayoutX(165);
-            yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
-
-            Parent root = fxmlLoader.getRoot();
-            Stage stage = new Stage();
-            stage.setTitle("Сохранение результата");
-            stage.setScene(new Scene(root));
-            stage.show();
-
-        }
-
-        if (event.getSource() == btnSave) {
-            ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
-
-            for (Meter meter : meterList) {
-                meter.setOperator(txtFldOperator.getText());
-                meter.setController(txtFldController.getText());
-                meter.setWitness(txtFldWitness.getText());
-                meter.setTemperature(txtFldTemperature.getText());
-                meter.setHumidity(txtFldHumidity.getText());
-                meter.setFactoryManufacturer(txtFldManufacturer.getText());
-                meter.setBatchNo(txtFldBatchNumb.getText());
-                meter.setVerificationDate(txtFldТMusterDate.getText());
-                meter.setLastModifiedDate(new Date().toString());
-                meter.setUnicalID(String.valueOf(System.currentTimeMillis()) + meter.getId());
-            }
-
-            try {
-                resultsTest.addMeterRusults(meterList);
-            } catch (InfoExсeption infoExсeption) {
-                infoExсeption.printStackTrace();
-            }
-
-            resultsTest.serializationResults();
-
-            Stage stageTestErrorTable = (Stage) testErrorTableFrameController.getTxtLabDate().getScene().getWindow();
-            stageTestErrorTable.close();
-
-            Stage stageSaveResultTest = (Stage) txtFldWitness.getScene().getWindow();
-            stageSaveResultTest.close();
-        }
-    }
-
-    public void initAllColums() {
-        //Получаю счётчики с окна тестирования
-        meterList = testErrorTableFrameController.getListMetersForTest();
-
-        //Устанавливаю значения общего результата теста
-        for (Meter meter : meterList) {
-            meter.setFinalAllTestResult(meter.meterPassOrNotAlltests());
-        }
-
-        //Установка чек боксов и добавление к ним слушателя
-        tabColChBxSelectOrNot.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, Boolean>, ObservableValue<Boolean>>() {
-            @Override
-            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Meter, Boolean> param) {
-                Meter meter = param.getValue();
-                SimpleBooleanProperty simpleBooleanProperty = new SimpleBooleanProperty(meter.isSaveResults());
-
-                simpleBooleanProperty.addListener(new ChangeListener<Boolean>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        meter.setSaveResults(newValue);
-                    }
-                });
-
-                return simpleBooleanProperty;
-            }
-        });
-
-        tabColChBxSelectOrNot.setCellFactory(new Callback<TableColumn<Meter, Boolean>,
-                TableCell<Meter, Boolean>>() {
-            @Override
-            public TableCell<Meter, Boolean> call(TableColumn<Meter, Boolean> p) {
-                CheckBoxTableCell<Meter, Boolean> cell = new CheckBoxTableCell<Meter, Boolean>();
-                cell.setAlignment(Pos.CENTER);
-                return cell;
-            }
-        });
-
+    public void initColumsEditFrame() {
         tabColPosition.setCellValueFactory(new PropertyValueFactory<>("id"));
         tabColPosition.setStyle( "-fx-alignment: CENTER;");
 
-        //Отображение серийного номера счётчика
+        //Серийный номер
         tabColSerNo.setCellValueFactory(new PropertyValueFactory<>("serNoMeter"));
-        tabColSerNo.setStyle( "-fx-alignment: CENTER;");
-        tabColSerNo.setCellFactory(TextFieldTableCell.<Meter>forTableColumn());
+        tabColSerNo.setCellFactory(TextFieldTableCell.forTableColumn());
         tabColSerNo.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
-
             TablePosition<Meter, String> pos = event.getTablePosition();
 
-            String newSerNo = event.getNewValue();
+            String newImpulseValue = event.getNewValue();
 
             int row = pos.getRow();
-
             Meter meter = event.getTableView().getItems().get(row);
 
-            meter.setSerNoMeter(newSerNo);
+            meter.setSerNoMeter(newImpulseValue);
+
         });
+        tabColSerNo.setStyle( "-fx-alignment: CENTER;");
 
-        //Выбор модели счётчика из списка
-        tabColMeterModel.setStyle( "-fx-alignment: CENTER;");
-        ObservableList<String> meterModelList = FXCollections.observableArrayList(meterModel);
+        //Модель счётчика
         tabColMeterModel.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
-
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
                 Meter meter = param.getValue();
@@ -296,9 +229,8 @@ public class SaveResultsTestFrame {
             }
 
         });
-
+        ObservableList<String> meterModelList = FXCollections.observableArrayList(meterModel);
         tabColMeterModel.setCellFactory(ComboBoxTableCell.forTableColumn(meterModelList));
-
         tabColMeterModel.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
             TablePosition<Meter, String> pos = event.getTablePosition();
 
@@ -309,10 +241,9 @@ public class SaveResultsTestFrame {
 
             meter.setModelMeter(newModel);
         });
+        tabColMeterModel.setStyle( "-fx-alignment: CENTER;");
 
-        //============================= Установка заключающего результата ==========================================================
-        tabColResultVerification.setStyle( "-fx-alignment: CENTER;");
-
+        //Заключающий результат
         tabColResultVerification.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -352,11 +283,24 @@ public class SaveResultsTestFrame {
                 meter.setFinalAllTestResult(false);
             }
         });
+        tabColResultVerification.setStyle( "-fx-alignment: CENTER;");
 
-        //============================ Установка результатов теста Самоход ============================================
+        //Дата поверки
+        tabColDate.setCellValueFactory(new PropertyValueFactory<>("verificationDate"));
+        tabColDate.setCellFactory(TextFieldTableCell.forTableColumn());
+        tabColDate.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
 
-        tabColCRPResult.setStyle( "-fx-alignment: CENTER;");
+            String newModel = event.getNewValue();
 
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setVerificationDate(newModel);
+        });
+        tabColDate.setStyle( "-fx-alignment: CENTER;");
+
+        //Самоход
         tabColCRPResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -371,7 +315,6 @@ public class SaveResultsTestFrame {
                 } else if (!meter.getCreepTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
-
                 return result;
             }
         });
@@ -396,12 +339,9 @@ public class SaveResultsTestFrame {
                 meter.setCreepTest(false);
             }
         });
+        tabColCRPResult.setStyle( "-fx-alignment: CENTER;");
 
-        //========================== Установка результатов теста Чувствительность ==============================================
-        //Результаты теста на самоход активной энергии в прямом напралении
-        tabColStartAPPls.setStyle( "-fx-alignment: CENTER;");
-        tabColStartAPPls.setEditable(true);
-        tabColStartAPPls.setSortable(false);
+        //Чувствительность AP+
         tabColStartAPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -441,12 +381,7 @@ public class SaveResultsTestFrame {
             }
         });
 
-
-        //Если есть результаты теста на самоход активной энергии в обратном напралении
-        tabColStartAPMns.setStyle( "-fx-alignment: CENTER;");
-        tabColStartAPMns.setEditable(true);
-        tabColStartAPMns.setSortable(false);
-
+        //Чувствительность AP-
         tabColStartAPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -485,12 +420,9 @@ public class SaveResultsTestFrame {
                 meter.setStartTestAPMns(false);
             }
         });
+        tabColStartAPMns.setStyle( "-fx-alignment: CENTER;");
 
-        //Если есть результаты теста на самоход реактивной энергии в прямом напралении
-        tabColStartRPPls.setStyle( "-fx-alignment: CENTER;");
-        tabColStartRPPls.setEditable(true);
-        tabColStartRPPls.setSortable(false);
-
+        //Чувствительность RP+
         tabColStartRPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -510,9 +442,7 @@ public class SaveResultsTestFrame {
         });
 
         ObservableList<String> startResultRPPls = FXCollections.observableArrayList(resultMass);
-
         tabColStartRPPls.setCellFactory(ComboBoxTableCell.forTableColumn(startResultRPPls));
-
         tabColStartRPPls.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
             TablePosition<Meter, String> pos = event.getTablePosition();
 
@@ -529,11 +459,9 @@ public class SaveResultsTestFrame {
                 meter.setStartTestRPPls(false);
             }
         });
+        tabColStartRPPls.setStyle( "-fx-alignment: CENTER;");
 
-        tabColStartRPMns.setStyle( "-fx-alignment: CENTER;");
-        tabColStartRPMns.setEditable(true);
-        tabColStartRPMns.setSortable(false);
-
+        //Чувствительно RP-
         tabColStartRPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -572,10 +500,9 @@ public class SaveResultsTestFrame {
                 meter.setStartTestRPMns(false);
             }
         });
+        tabColStartRPMns.setStyle( "-fx-alignment: CENTER;");
 
-        //================================ Точность хода часов ===============================
-        tabColRTCResult.setStyle( "-fx-alignment: CENTER;");
-
+        //Точность хода часов
         tabColRTCResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -614,14 +541,9 @@ public class SaveResultsTestFrame {
                 meter.setRTCTest(false);
             }
         });
+        tabColRTCResult.setStyle( "-fx-alignment: CENTER;");
 
-        //================================ Счётный механизм ===============================
-        //Если есть результаты теста на самоход активной энергии в прямом напралении
-
-        tabColConstantAPPls.setStyle( "-fx-alignment: CENTER;");
-        tabColConstantAPPls.setEditable(true);
-        tabColConstantAPPls.setSortable(false);
-
+        //Проверка константы AP+
         tabColConstantAPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -660,13 +582,9 @@ public class SaveResultsTestFrame {
                 meter.setConstantTestAPPls(false);
             }
         });
+        tabColConstantAPPls.setStyle( "-fx-alignment: CENTER;");
 
-        //Если есть результаты теста на самоход активной энергии в обратном напралении
-
-        tabColConstantAPMns.setStyle( "-fx-alignment: CENTER;");
-        tabColConstantAPMns.setEditable(true);
-        tabColConstantAPMns.setSortable(false);
-
+        //Проверка константы AP-
         tabColConstantAPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -705,12 +623,9 @@ public class SaveResultsTestFrame {
                 meter.setConstantTestAPMns(false);
             }
         });
+        tabColConstantAPMns.setStyle( "-fx-alignment: CENTER;");
 
-        //Если есть результаты теста на самоход реактивной энергии в прямом напралении
-        tabColConstantRPPls.setStyle( "-fx-alignment: CENTER;");
-        tabColConstantRPPls.setEditable(true);
-        tabColConstantRPPls.setSortable(false);
-
+        //Проверка константы RP+
         tabColConstantRPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -749,12 +664,9 @@ public class SaveResultsTestFrame {
                 meter.setConstantTestRPPls(false);
             }
         });
+        tabColConstantRPPls.setStyle( "-fx-alignment: CENTER;");
 
-        //Если есть результаты теста на самоход реактивной энергии в прямом напралении
-        tabColConstantRPMns.setStyle( "-fx-alignment: CENTER;");
-        tabColConstantRPMns.setEditable(true);
-        tabColConstantRPMns.setSortable(false);
-
+        //Проверка константы RP-
         tabColConstantRPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -793,10 +705,9 @@ public class SaveResultsTestFrame {
                 meter.setConstantTestRPMns(false);
             }
         });
+        tabColConstantRPMns.setStyle( "-fx-alignment: CENTER;");
 
-        //======================== Проверка изоляции ===========================
-        tabColInsulationResult.setStyle( "-fx-alignment: CENTER;");
-
+        //Изоляция
         tabColInsulationResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -835,10 +746,9 @@ public class SaveResultsTestFrame {
                 meter.setInsulationTest(false);
             }
         });
+        tabColInsulationResult.setStyle( "-fx-alignment: CENTER;");
 
-        //======================== Внешний вид ===========================
-        tabColApperianceResult.setStyle( "-fx-alignment: CENTER;");
-
+        //Внешний вид
         tabColApperianceResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -857,7 +767,7 @@ public class SaveResultsTestFrame {
             }
         });
 
-        ObservableList<String> appearenseResult = FXCollections.observableArrayList(properties.getProperty("restMeterResults").split(", "));
+        ObservableList<String> appearenseResult = FXCollections.observableArrayList(resultMass);
 
         tabColApperianceResult.setCellFactory(ComboBoxTableCell.forTableColumn(appearenseResult));
 
@@ -877,167 +787,339 @@ public class SaveResultsTestFrame {
                 meter.setAppearensTest(false);
             }
         });
+        tabColApperianceResult.setStyle( "-fx-alignment: CENTER;");
+
+        //Температура
+        tabColTemperature.setCellValueFactory(new PropertyValueFactory<>("temperature"));
+
+        tabColTemperature.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        tabColTemperature.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String result = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setTemperature(result);
+        });
+        tabColTemperature.setStyle( "-fx-alignment: CENTER;");
+
+        //Влажность
+        tabColHumidity.setCellValueFactory(new PropertyValueFactory<>("humidity"));
+
+        tabColHumidity.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        tabColHumidity.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String result = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setHumidity(result);
+        });
+        tabColHumidity.setStyle( "-fx-alignment: CENTER;");
+
+        //Оператор
+        tabColOperator.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
+                Meter meter = param.getValue();
+                return new SimpleObjectProperty<>(meter.getOperator());
+            }
+        });
+
+        ObservableList<String> meterOperatorsList = FXCollections.observableArrayList(operators);
+
+        tabColOperator.setCellFactory(ComboBoxTableCell.forTableColumn(meterOperatorsList));
+
+        tabColOperator.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String newOperator = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setOperator(newOperator);
+        });
+        tabColOperator.setStyle( "-fx-alignment: CENTER;");
+
+        //Контроллёр
+        tabColController.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
+                return new SimpleObjectProperty<>(param.getValue().getController());
+            }
+        });
+
+        ObservableList<String> meterControllersList = FXCollections.observableArrayList(controllers);
+
+        tabColController.setCellFactory(ComboBoxTableCell.forTableColumn(meterControllersList));
+        tabColController.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String newController = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setController(newController);
+        });
+        tabColController.setStyle( "-fx-alignment: CENTER;");
+
+        tabColWitnes.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
+                Meter meter = param.getValue();
+
+                String modelWitness = meter.getWitness();
+                return new SimpleObjectProperty<>(modelWitness);
+            }
+        });
+
+        ObservableList<String> meterWitnessList = FXCollections.observableArrayList(witneses);
+
+        tabColWitnes.setCellFactory(ComboBoxTableCell.forTableColumn(meterWitnessList));
+
+        tabColWitnes.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String newWitness = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setWitness(newWitness);
+        });
+        tabColWitnes.setStyle( "-fx-alignment: CENTER;");
+
+        //Напряжение
+        tabColUn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
+                Meter meter = param.getValue();
+
+                String Unom = String.valueOf(meter.getUn());
+                return new SimpleObjectProperty<>(Unom);
+            }
+        });
+
+        ObservableList<String> meterUnList = FXCollections.observableArrayList(UnMass);
+
+        tabColUn.setCellFactory(ComboBoxTableCell.forTableColumn(meterUnList));
+
+        tabColUn.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String newUnom = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setUn(Double.parseDouble(newUnom));
+        });
+        tabColUn.setStyle( "-fx-alignment: CENTER;");
+
+        //Ток
+        tabColInomImax.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
+                Meter meter = param.getValue();
+
+                String I = meter.getInomImax();
+                return new SimpleObjectProperty<>(I);
+            }
+        });
+
+        ObservableList<String> meterImaxInomList = FXCollections.observableArrayList(InomAndImax);
+
+        tabColInomImax.setCellFactory(ComboBoxTableCell.forTableColumn(meterImaxInomList));
+
+        tabColInomImax.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String newUnom = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setInomImax(newUnom);
+        });
+        tabColInomImax.setStyle( "-fx-alignment: CENTER;");
+
+        //Частота
+        tabColFn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
+                Meter meter = param.getValue();
+
+                String I = String.valueOf(meter.getFn());
+                return new SimpleObjectProperty<>(I);
+            }
+        });
+
+        ObservableList<String> FnomList = FXCollections.observableArrayList(FnMass);
+
+        tabColFn.setCellFactory(ComboBoxTableCell.forTableColumn(FnomList));
+
+        tabColFn.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String newFnom = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setFn(Double.parseDouble(newFnom));
+        });
+        tabColFn.setStyle( "-fx-alignment: CENTER;");
+
+        //Константа AP
+        tabColConstantMeterAPPls.setCellValueFactory(new PropertyValueFactory<>("constantMeterAP"));
+
+        tabColConstantMeterAPPls.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        tabColConstantMeterAPPls.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String newImpulseValue = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setConstantMeterAP(newImpulseValue);
+
+        });
+        tabColConstantMeterAPPls.setStyle( "-fx-alignment: CENTER;");
+
+        //Константа RP
+        tabColConstantMeterRPMns.setCellValueFactory(new PropertyValueFactory<>("constantMeterRP"));
+
+        tabColConstantMeterRPMns.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        tabColConstantMeterRPMns.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String newImpulseValue = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setConstantMeterRP(newImpulseValue);
+
+        });
+        tabColConstantMeterRPMns.setStyle( "-fx-alignment: CENTER;");
+
+        tabColTypeMeter.setCellValueFactory(new PropertyValueFactory<>("typeMeter"));
+
+        tabColTypeMeter.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(typeMeter)));
+
+        tabColTypeMeter.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String newImpulseValue = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setTypeMeter(newImpulseValue);
+
+        });
+        tabColTypeMeter.setStyle( "-fx-alignment: CENTER;");
+
+        //Датчик тока
+        tabColTypeCurrentDetector.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
+                Meter meter = param.getValue();
+
+                SimpleStringProperty result;
+
+                if (meter.isTypeOfMeasuringElementShunt()) {
+                    result = new SimpleStringProperty(typeOfMeasuringElement[1]);
+                } else {
+                    result = new SimpleStringProperty(typeOfMeasuringElement[0]);
+                }
+                return result;
+            }
+        });
+
+        tabColTypeCurrentDetector.setCellFactory(ComboBoxTableCell.forTableColumn(typeOfMeasuringElement));
+
+        tabColTypeCurrentDetector.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String result = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            if (result.equals(typeOfMeasuringElement[1])) {
+                meter.setTypeOfMeasuringElementShunt(true);
+            } else {
+                meter.setTypeOfMeasuringElementShunt(false);
+            }
+        });
+        tabColTypeCurrentDetector.setStyle( "-fx-alignment: CENTER;");
+
+        //Производитель
+        tabColfactoryManufacturer.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
+                Meter meter = param.getValue();
+
+                return new SimpleStringProperty(meter.getFactoryManufacturer());
+            }
+        });
+
+        tabColfactoryManufacturer.setCellFactory(ComboBoxTableCell.forTableColumn(meterManufacturers));
+
+        tabColfactoryManufacturer.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String result = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+
+            meter.setFactoryManufacturer(result);
+        });
+        tabColfactoryManufacturer.setStyle( "-fx-alignment: CENTER;");
+
+        //Номер партии
+        tabColBatсhNo.setCellValueFactory(new PropertyValueFactory<>("batchNo"));
+
+        tabColBatсhNo.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        tabColBatсhNo.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String result = event.getNewValue();
+
+            int row = pos.getRow();
+            Meter meter = event.getTableView().getItems().get(row);
+            meter.setBatchNo(result);
+        });
+        tabColBatсhNo.setStyle( "-fx-alignment: CENTER;");
+
+        tabViewResults.setItems(FXCollections.observableArrayList(selectedMetersForEdit));
 
         tabViewResults.setPrefWidth(paneForTabView.getPrefWidth());
-        tabViewResults.setItems(FXCollections.observableArrayList(meterList));
-
-        chosBxOperator.getItems().addAll(operators);
-        chosBxController.getItems().addAll(controllers);
-        chosBxWitness.getItems().addAll(witneses);
-
-        txtFldOperator.setText(operator);
-        txtFldController.setText(controller);
-        txtFldWitness.setText(witnes);
-
-        txtFldTemperature.setText(temperature);
-        txtFldHumidity.setText(humidity);
-        txtFldBatchNumb.setText(batchNumb);
-
-        chosBxOperator.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            txtFldOperator.setText(newValue);
-        });
-        chosBxController.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            txtFldController.setText(newValue);
-        });
-        chosBxWitness.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            txtFldWitness.setText(newValue);
-        });
     }
 
-//    //Проводился ли тест на самоход?
-//    private boolean spendCreepTest() {
-//        for (Meter meter : meterList) {
-//            if (meter.getCreepTest() != null) {
-//                return true;
-//            }
-//        }
-//        //return false;
-//        return true;
-//    }
-//
-//    //Проводился ли тест на Чувствительность
-//    private Map<Integer, Boolean> spendStartTest() {
-//        Map<Integer, Boolean> mapResultStart = new HashMap<>(4);
-////        mapResultStart.put(0, false);
-////        mapResultStart.put(1, false);
-////        mapResultStart.put(2, false);
-////        mapResultStart.put(3, false);
-//        mapResultStart.put(0, true);
-//        mapResultStart.put(1, true);
-//        mapResultStart.put(2, true);
-//        mapResultStart.put(3, true);
-//
-//        for (Meter meter : meterList) {
-//            if (meter.getStartTestAPPls() != null) {
-//                mapResultStart.put(0, true);
-//                break;
-//            }
-//        }
-//
-//        for (Meter meter : meterList) {
-//            if (meter.getStartTestAPMns() != null) {
-//                mapResultStart.put(1, true);
-//                break;
-//            }
-//        }
-//
-//        for (Meter meter : meterList) {
-//            if (meter.getStartTestRPPls() != null) {
-//                mapResultStart.put(2, true);
-//                break;
-//            }
-//        }
-//
-//        for (Meter meter : meterList) {
-//            if (meter.getStartTestRPMns() != null) {
-//                mapResultStart.put(3, true);
-//                break;
-//            }
-//        }
-//        return mapResultStart;
-//    }
-//
-//    //Проводился ли тест Точность хода часов
-//    private boolean spendRTCTest() {
-//        for (Meter meter : meterList) {
-//            if (meter.getRTCTest() != null) {
-//                return true;
-//            }
-//        }
-//        //return false;
-//        return true;
-//    }
-//
-//    //Проводился ли тест Проверка счётного механизма
-//    private Map<Integer, Boolean> spendConstantTest() {
-//        Map<Integer, Boolean> mapResultStart = new HashMap<>(4);
-////        mapResultStart.put(0, false);
-////        mapResultStart.put(1, false);
-////        mapResultStart.put(2, false);
-////        mapResultStart.put(3, false);
-//
-//        mapResultStart.put(0, true);
-//        mapResultStart.put(1, true);
-//        mapResultStart.put(2, true);
-//        mapResultStart.put(3, true);
-//
-//        for (Meter meter : meterList) {
-//            if (meter.getConstantTestAPPls() != null) {
-//                mapResultStart.put(0, true);
-//                break;
-//            }
-//        }
-//
-//        for (Meter meter : meterList) {
-//            if (meter.getConstantTestAPMns() != null) {
-//                mapResultStart.put(1, true);
-//                break;
-//            }
-//        }
-//
-//        for (Meter meter : meterList) {
-//            if (meter.getConstantTestRPPls() != null) {
-//                mapResultStart.put(2, true);
-//                break;
-//            }
-//        }
-//
-//        for (Meter meter : meterList) {
-//            if (meter.getConstantTestRPMns() != null) {
-//                mapResultStart.put(3, true);
-//                break;
-//            }
-//        }
-//
-//        return mapResultStart;
-//    }
-//
-//    //Проводился ли тест проверка изоляции
-//    private boolean spendInsulationTest() {
-//        for (Meter meter : meterList) {
-//            if (meter.getInsulationTest() != null) {
-//                return true;
-//            }
-//        }
-//        //return false;
-//        return true;
-//    }
-//
-//    //Проводился ли тест проверка внешнего вида
-//    private boolean spendAppearensTest() {
-//        for (Meter meter : meterList) {
-//            if (meter.getAppearensTest() != null) {
-//                return true;
-//            }
-//        }
-//        //return false;
-//        return true;
-//    }
-    public void setMeterList(List<Meter> meterList) {
-        this.meterList = meterList;
+    public void setSelectedMetersForEdit(List<Meter> selectedMetersForEdit) {
+        this.selectedMetersForEdit = selectedMetersForEdit;
     }
 
-    public void setTestErrorTableFrameController(TestErrorTableFrameController testErrorTableFrameController) {
-        this.testErrorTableFrameController = testErrorTableFrameController;
+    public void setIndexcesList(ObservableList<Integer> indexcesList) {
+        this.indexcesList = indexcesList;
+    }
+
+    public void setResultsMetersController(ResultsMetersController resultsMetersController) {
+        this.resultsMetersController = resultsMetersController;
     }
 }
