@@ -2,10 +2,11 @@ package org.taipit.stend.controller;
 
 import org.taipit.stend.helper.ConsoleHelper;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class ThreePhaseStend extends StendDLLCommands{
+public class ThreePhaseStend extends StendDLLCommands implements Serializable {
     /**
      * Трехфазный стенд
      */

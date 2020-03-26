@@ -3,6 +3,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -30,7 +34,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="stendBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/buttonStyle.css" text="Установка">
+                  <Button fx:id="stendBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/buttonStyle.css" text="Параметры установки">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -39,7 +43,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="demoBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/buttonStyle.css" text="Дэмо">
+                  <Button fx:id="demoBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/buttonStyle.css" text="Параметры счётчиков">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -56,25 +60,6 @@
          <children>
             <StackPane prefHeight="418.0" prefWidth="536.0">
                <children>
-                  <AnchorPane fx:id="demoPane" style="-fx-background-color: #6A6A6A;">
-                     <children>
-                        <GridPane alignment="CENTER" prefHeight="418.0" prefWidth="536.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Label contentDisplay="CENTER" text="Дэмо" GridPane.halignment="CENTER">
-                                 <font>
-                                    <Font size="54.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </GridPane>
-                     </children>
-                  </AnchorPane>
                   <AnchorPane fx:id="passwordPane" style="-fx-background-color: #6A6A6A;">
                      <children>
                         <GridPane prefHeight="418.0" prefWidth="536.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -190,6 +175,31 @@
                               </ImageView>
                            </graphic>
                         </Button>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="parametersPane" style="-fx-background-color: #6A6A6A;">
+                     <children>
+                        <SplitPane dividerPositions="0.4851694915254237" layoutX="31.0" layoutY="29.0" prefHeight="301.0" prefWidth="474.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <TableView fx:id="tabViewParameters" layoutX="-3.0" layoutY="61.0" prefHeight="315.0" prefWidth="226.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                        <TableColumn fx:id="tabColParameters" prefWidth="225.0" text="Параметры" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <ListView fx:id="listViewParameters" layoutX="11.0" layoutY="60.0" prefHeight="315.0" prefWidth="240.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                        <TextField fx:id="txtFldParameters" layoutX="181.0" layoutY="344.0" prefHeight="25.0" prefWidth="226.0" />
+                        <Button fx:id="btnAddParameter" layoutX="417.0" layoutY="344.0" mnemonicParsing="false" onAction="#parameterPaneActionEvent" prefHeight="25.0" prefWidth="84.0" text="Добавить" />
+                        <Button fx:id="btnDeleteParameter" layoutX="417.0" layoutY="379.0" mnemonicParsing="false" onAction="#parameterPaneActionEvent" prefHeight="25.0" prefWidth="84.0" text="Удалить" />
                      </children>
                   </AnchorPane>
                </children>

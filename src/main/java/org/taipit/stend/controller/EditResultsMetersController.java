@@ -30,11 +30,11 @@ public class EditResultsMetersController {
 
     private String[] resultMass = properties.getProperty("restMeterResults").split(", ");
 
-    private String[] meterModel = properties.getProperty("meterModel").split(", ");
+    private String[] meterModel = properties.getProperty("meterModels").split(", ");
 
-    private String[] controllers = properties.getProperty("Controller").split(", ");
+    private String[] controllers = properties.getProperty("Controllers").split(", ");
     private String[] operators = properties.getProperty("Operators").split(", ");
-    private String[] witneses = properties.getProperty("Witness").split(", ");
+    private String[] witneses = properties.getProperty("Witneses").split(", ");
     private String[] UnMass = properties.getProperty("Unom").split(", ");
     private String[] InomAndImax = properties.getProperty("InomAndImax").split(", ");
     private String[] FnMass = properties.getProperty("Fnom").split(", ");

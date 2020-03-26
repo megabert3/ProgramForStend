@@ -2,6 +2,7 @@ package org.taipit.stend.controller;
 
 import javafx.scene.control.TableColumn;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class MainStend {
@@ -59,8 +60,6 @@ public class MainStend {
 //            }
 //            Thread.sleep(1000);
 //        }
-        int i = (13 / 2) + 1;
-        System.out.println(i);
     }
 
 }

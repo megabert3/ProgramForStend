@@ -448,7 +448,7 @@ public class TestParametersFrameController {
         tabColConstRPMeter.setStyle("-fx-alignment: CENTER;");
 
         //Выбор модели счётчика из списка
-        ObservableList<String> meterModelList = FXCollections.observableArrayList(properties.getProperty("meterModel").split(", "));
+        ObservableList<String> meterModelList = FXCollections.observableArrayList(properties.getProperty("meterModels").split(", "));
         tabColModelMeter.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
 
             @Override

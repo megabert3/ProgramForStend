@@ -37,15 +37,15 @@ public class SaveResultsTestFrame {
 
     private String[] resultMass = properties.getProperty("restMeterResults").split(", ");
 
-    private String[] meterModel = properties.getProperty("meterModel").split(", ");
+    private String[] meterModel = properties.getProperty("meterModels").split(", ");
 
     private String controller = properties.getProperty("lastController");
     private String operator = properties.getProperty("lastOperator");
     private String witnes = properties.getProperty("lastWitness");
 
-    private String[] controllers = properties.getProperty("Controller").split(", ");
+    private String[] controllers = properties.getProperty("Controllers").split(", ");
     private String[] operators = properties.getProperty("Operators").split(", ");
-    private String[] witneses = properties.getProperty("Witness").split(", ");
+    private String[] witneses = properties.getProperty("Witneses").split(", ");
 
     private String temperature = properties.getProperty("lastTemperature");
     private String humidity = properties.getProperty("lastHumidity");

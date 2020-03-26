@@ -2,21 +2,22 @@ package org.taipit.stend.controller.viewController;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import org.taipit.stend.controller.OnePhaseStend;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.model.MeterParamepersForProperty;
+import org.taipit.stend.model.MeterParameter;
 
 import java.net.URL;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class PropertiesController implements Initializable {
 
@@ -80,16 +81,35 @@ public class PropertiesController implements Initializable {
     @FXML
     private AnchorPane passwordPane;
 
-//----------------------------------------------------------- demoPane
+//----------------------------------------------------------- ParametersPane
     @FXML
-    private AnchorPane demoPane;
+    private AnchorPane parametersPane;
+
+    @FXML
+    private TableView<MeterParameter> tabViewParameters;
+
+    @FXML
+    private TableColumn<MeterParameter, String> tabColParameters;
+
+    @FXML
+    private ListView<String> listViewParameters;
+
+    @FXML
+    private TextField txtFldParameters;
+
+    @FXML
+    private Button btnDeleteParameter;
+
+    @FXML
+    private Button btnAddParameter;
 
     private Properties properties = ConsoleHelper.properties;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setParamWithPropFile();
-
+        initMeterParameterPane();
     }
 
     @FXML
@@ -110,6 +130,35 @@ public class PropertiesController implements Initializable {
             ConsoleHelper.saveProperties();
         }
     }
+    @FXML
+    private void parameterPaneActionEvent(ActionEvent event) {
+        if (event.getSource() == btnAddParameter) {
+
+            if (txtFldParameters.getText().isEmpty()) {
+                System.out.println("Введите название параметра, который хотите добавить.");
+            } else {
+                MeterParameter meterParameter = tabViewParameters.getSelectionModel().getSelectedItem();
+                String parameter = ConsoleHelper.properties.getProperty(meterParameter.getId());
+                ConsoleHelper.properties.setProperty(meterParameter.getId(), parameter + ", " + txtFldParameters.getText());
+                meterParameter.setParameterValues(new ArrayList<>(Arrays.asList(ConsoleHelper.properties.getProperty(meterParameter.getId()).split(", "))));
+                listViewParameters.setItems(FXCollections.observableArrayList(meterParameter.getParameterValues()));
+                txtFldParameters.clear();
+                ConsoleHelper.saveProperties();
+            }
+        }
+
+        if (event.getSource() == btnDeleteParameter) {
+            MeterParameter meterParameter = tabViewParameters.getSelectionModel().getSelectedItem();
+            String deleteItem = listViewParameters.getSelectionModel().getSelectedItems().get(0);
+            List<String> listParam = new ArrayList<>(meterParameter.getParameterValues());
+            listParam.remove(deleteItem);
+            String newItems = listParam.toString();
+            ConsoleHelper.properties.setProperty(meterParameter.getId(), newItems.substring(1, newItems.length() - 1));
+            meterParameter.setParameterValues(listParam);
+            listViewParameters.setItems(FXCollections.observableArrayList(meterParameter.getParameterValues()));
+            ConsoleHelper.saveProperties();
+        }
+    }
 
     @FXML
     void handleClicks(ActionEvent event) {
@@ -126,7 +175,7 @@ public class PropertiesController implements Initializable {
 
         //Переключение на вкладку Демо
         if (event.getSource() == demoBtn) {
-            demoPane.toFront();
+            parametersPane.toFront();
         }
     }
 
@@ -210,5 +259,20 @@ public class PropertiesController implements Initializable {
                     txtFidRefMetModel.setText(newValue);
 
                 });
+    }
+
+    private void initMeterParameterPane() {
+        MeterParamepersForProperty meterParamepersForProperty = MeterParamepersForProperty.getInstance();
+
+        tabColParameters.setCellValueFactory(new PropertyValueFactory<>("nameParam"));
+
+        tabViewParameters.setItems(FXCollections.observableArrayList(meterParamepersForProperty.getMeterParameterList()));
+
+        tabViewParameters.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<MeterParameter>() {
+            @Override
+            public void onChanged(Change<? extends MeterParameter> c) {
+                listViewParameters.setItems(FXCollections.observableArrayList(c.getList().get(0).getParameterValues()));
+            }
+        });
     }
 }

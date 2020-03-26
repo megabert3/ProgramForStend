@@ -1302,6 +1302,7 @@ public class TestErrorTableFrameController {
                     if (!tableViewError.getSelectionModel().isSelected(i)) {
                         tableViewError.getFocusModel().focus(i);
                         tableViewError.getSelectionModel().select(i);
+                        tableViewError.scrollTo(i - 5);
                     }
                 }
             }
@@ -1319,7 +1320,6 @@ public class TestErrorTableFrameController {
                     int index = tabViewTestPointsAPPls.getSelectionModel().getSelectedIndex();
 
                     for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
-                        tableViewError.scrollTo(index);
                         if (!tableViewError.getSelectionModel().isSelected(index)) {
                             tableViewError.getFocusModel().focus(index);
                             tableViewError.getSelectionModel().select(index);
@@ -1346,6 +1346,7 @@ public class TestErrorTableFrameController {
                     if (!tableViewError.getSelectionModel().isSelected(i)) {
                         tableViewError.getFocusModel().focus(i);
                         tableViewError.getSelectionModel().select(i);
+                        tableViewError.scrollTo(i - 5);
                     }
                 }
             }
@@ -1388,6 +1389,7 @@ public class TestErrorTableFrameController {
                     if (!tableViewError.getSelectionModel().isSelected(i)) {
                         tableViewError.getFocusModel().focus(i);
                         tableViewError.getSelectionModel().select(i);
+                        tableViewError.scrollTo(i - 5);
                     }
                 }
             }
@@ -1431,6 +1433,7 @@ public class TestErrorTableFrameController {
                     if (!tableViewError.getSelectionModel().isSelected(i)) {
                         tableViewError.getFocusModel().focus(i);
                         tableViewError.getSelectionModel().select(i);
+                        tableViewError.scrollTo(i - 5);
                     }
                 }
             }
@@ -1500,51 +1503,88 @@ public class TestErrorTableFrameController {
     //Находит все скрол бары
     void initScrolBars() {
         ScrollBar verticalBarCommands;
-        ScrollBar verticalBarErrors;
+        ScrollBar verticalBarErrorsFirst;
+        ScrollBar verticalBarErrorsSecond;
 
         //Получаю скрол бары определённого окна
         //AP+
         verticalBarCommands = (ScrollBar) tabViewTestPointsAPPls.lookup(".scroll-bar:vertical");
 
-        for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
-            verticalBarErrors = (ScrollBar) tableViewError.lookup(".scroll-bar:vertical");
+        for (int i = tabViewListAPPls.size() - 1; i > 0; i--) {
+            verticalBarErrorsFirst = (ScrollBar) tabViewListAPPls.get(i).lookup(".scroll-bar:vertical");
+            verticalBarErrorsSecond = (ScrollBar) tabViewListAPPls.get(i - 1).lookup(".scroll-bar:vertical");
 
-            bindScrolls(verticalBarCommands, verticalBarErrors);
+            bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
+
+            ScrollBar finalVerticalBarErrors1 = verticalBarErrorsFirst;
+            verticalBarCommands.valueProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    finalVerticalBarErrors1.valueProperty().setValue(newValue);
+                }
+            });
         }
 
         //AP-
         verticalBarCommands = (ScrollBar) tabViewTestPointsAPMns.lookup(".scroll-bar:vertical");
 
-        for (TableView<Meter.CommandResult> tableViewError : tabViewListAPMns) {
-            verticalBarErrors = (ScrollBar) tableViewError.lookup(".scroll-bar:vertical");
+        for (int i = tabViewListAPMns.size() - 1; i > 0; i--) {
+            verticalBarErrorsFirst = (ScrollBar) tabViewListAPMns.get(i).lookup(".scroll-bar:vertical");
+            verticalBarErrorsSecond = (ScrollBar) tabViewListAPMns.get(i - 1).lookup(".scroll-bar:vertical");
 
-            bindScrolls(verticalBarCommands, verticalBarErrors);
+            bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
+
+            ScrollBar finalVerticalBarErrors1 = verticalBarErrorsFirst;
+            verticalBarCommands.valueProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    finalVerticalBarErrors1.valueProperty().setValue(newValue);
+                }
+            });
         }
 
 
         //RP+
         verticalBarCommands = (ScrollBar) tabViewTestPointsRPPls.lookup(".scroll-bar:vertical");
 
-        for (TableView<Meter.CommandResult> tableViewError : tabViewListRPPls) {
-            verticalBarErrors = (ScrollBar) tableViewError.lookup(".scrol-bar:vertical");
+        for (int i = tabViewListRPPls.size() - 1; i > 0; i--) {
+            verticalBarErrorsFirst = (ScrollBar) tabViewListRPPls.get(i).lookup(".scroll-bar:vertical");
+            verticalBarErrorsSecond = (ScrollBar) tabViewListRPPls.get(i - 1).lookup(".scroll-bar:vertical");
 
-            bindScrolls(verticalBarCommands, verticalBarErrors);
+            bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
+
+            ScrollBar finalVerticalBarErrors1 = verticalBarErrorsFirst;
+            verticalBarCommands.valueProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    finalVerticalBarErrors1.valueProperty().setValue(newValue);
+                }
+            });
         }
 
         //RP-
         verticalBarCommands = (ScrollBar) tabViewTestPointsRPMns.lookup(".scroll-bar:vertical");
 
-        for (TableView<Meter.CommandResult> tableViewError : tabViewListRPMns) {
-            verticalBarErrors = (ScrollBar) tableViewError.lookup(".scroll-bar:vertical");
+        for (int i = tabViewListRPMns.size() - 1; i > 0; i--) {
+            verticalBarErrorsFirst = (ScrollBar) tabViewListRPMns.get(i).lookup(".scroll-bar:vertical");
+            verticalBarErrorsSecond = (ScrollBar) tabViewListRPMns.get(i - 1).lookup(".scroll-bar:vertical");
 
-            bindScrolls(verticalBarCommands, verticalBarErrors);
+            bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
+
+            ScrollBar finalVerticalBarErrors1 = verticalBarErrorsFirst;
+            verticalBarCommands.valueProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    finalVerticalBarErrors1.valueProperty().setValue(newValue);
+                }
+            });
         }
     }
 
     //Делает проверку и привязывает скроллы друг к другу
-    private void bindScrolls(ScrollBar verticalBarCommands, ScrollBar verticalBarErrors) {
-        if (verticalBarCommands != null && verticalBarErrors != null) {
-            verticalBarCommands.valueProperty().bindBidirectional(verticalBarErrors.valueProperty());
+    private void bindScrolls(ScrollBar verticalBarErrorFirst, ScrollBar verticalBarErrorsSecond) {
+        if (verticalBarErrorFirst != null && verticalBarErrorsSecond != null) {
+            verticalBarErrorFirst.valueProperty().bindBidirectional(verticalBarErrorsSecond.valueProperty());
         }
     }
 
