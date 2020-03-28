@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,13 +12,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.geometry.Orientation;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.taipit.stend.controller.Commands.*;
@@ -58,6 +62,12 @@ public class AddEditFrameController {
 
     //Это трёхфазный стенд?
     private boolean isThrePhaseStend;
+
+    /**
+     * Удалить
+     */
+    ScrollPane scrollPaneForCurrent = new ScrollPane();
+    ScrollPane scrollPaneForPowerFactor = new ScrollPane();
 
     //Листы с checkBox'ами.
     //AP+
@@ -131,6 +141,12 @@ public class AddEditFrameController {
 
     @FXML
     private URL location;
+
+    @FXML
+    private AnchorPane mainAnchorPane;
+
+    @FXML
+    private ScrollPane mainScrollPane;
 
     //Отвечают за окно отображения выбранных точек тестирования
     //-------------------------------------------------------
@@ -662,98 +678,6 @@ public class AddEditFrameController {
     @FXML
     private Button influenceBtn;
 
-    public void setMethodicNameController(MethodicNameController methodicNameController) {
-        this.methodicNameController = methodicNameController;
-    }
-
-    void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
-        this.saveInfluenceUprocAPPls = saveInfluenceUprocAPPls;
-    }
-
-    void setSaveInfluenceFprocAPPls(double[] saveInfluenceFprocAPPls) {
-        this.saveInfluenceFprocAPPls = saveInfluenceFprocAPPls;
-    }
-
-    void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
-        this.saveInfluenceInbUAPPls = saveInfluenceInbUAPPls;
-    }
-
-    void setSaveInfluenceUprocAPMns(double[] saveInfluenceUprocAPMns) {
-        this.saveInfluenceUprocAPMns = saveInfluenceUprocAPMns;
-    }
-
-    void setSaveInfluenceFprocAPMns(double[] saveInfluenceFprocAPMns) {
-        this.saveInfluenceFprocAPMns = saveInfluenceFprocAPMns;
-    }
-
-    void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
-        this.saveInfluenceInbUAPMns = saveInfluenceInbUAPMns;
-    }
-
-    void setSaveInfluenceUprocRPPls(double[] saveInfluenceUprocRPPls) {
-        this.saveInfluenceUprocRPPls = saveInfluenceUprocRPPls;
-    }
-
-    void setSaveInfluenceFprocRPPls(double[] saveInfluenceFprocRPPls) {
-        this.saveInfluenceFprocRPPls = saveInfluenceFprocRPPls;
-    }
-
-    void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
-        this.saveInfluenceInbURPPls = saveInfluenceInbURPPls;
-    }
-
-    void setSaveInfluenceUprocRPMns(double[] saveInfluenceUprocRPMns) {
-        this.saveInfluenceUprocRPMns = saveInfluenceUprocRPMns;
-    }
-
-    void setSaveInfluenceFprocRPMns(double[] saveInfluenceFprocRPMns) {
-        this.saveInfluenceFprocRPMns = saveInfluenceFprocRPMns;
-    }
-
-    void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
-        this.saveInfluenceInbURPMns = saveInfluenceInbURPMns;
-    }
-
-    void setSaveInflListForCollumAPPls(ArrayList<Commands> saveInflListForCollumAPPls) {
-        this.saveInflListForCollumAPPls = saveInflListForCollumAPPls;
-    }
-
-    void setSaveInflListForCollumAPMns(ArrayList<Commands> saveInflListForCollumAPMns) {
-        this.saveInflListForCollumAPMns = saveInflListForCollumAPMns;
-    }
-
-    void setSaveInflListForCollumRPPls(ArrayList<Commands> saveInflListForCollumRPPls) {
-        this.saveInflListForCollumRPPls = saveInflListForCollumRPPls;
-    }
-
-    void setSaveInflListForCollumRPMns(ArrayList<Commands> saveInflListForCollumRPMns) {
-        this.saveInflListForCollumRPMns = saveInflListForCollumRPMns;
-    }
-
-    public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {
-        this.methodicsAddEditDeleteFrameController = methodicsAddEditDeleteFrameController;
-    }
-
-    ObservableList<Commands> getTestListForCollumAPPls() {
-        return testListForCollumAPPls;
-    }
-
-    ObservableList<Commands> getTestListForCollumAPMns() {
-        return testListForCollumAPMns;
-    }
-
-    ObservableList<Commands> getTestListForCollumRPPls() {
-        return testListForCollumRPPls;
-    }
-
-    ObservableList<Commands> getTestListForCollumRPMns() {
-        return testListForCollumRPMns;
-    }
-
-    public void setEdit(boolean edit) {
-        this.edit = edit;
-    }
-
     //Устанавливает имя методики полученное с другого окна
     public void setTextFielMethodicName() {
         if (methodic == null) {
@@ -762,17 +686,51 @@ public class AddEditFrameController {
         metodicNameTxtFld.setEditable(false);
     }
 
-    public void setMethodic(Methodic methodic) {
-        this.methodic = methodic;
-    }
-
     @FXML
     void initialize() {
         if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
             isThrePhaseStend = true;
         }
-
         initGridPane();
+        //Curr
+        scrollPaneForCurrent.setMinHeight(0);
+        scrollPaneForCurrent.setPrefHeight(24);
+        scrollPaneForCurrent.setStyle("-fx-background: #FFC107;" +
+                "-fx-background-insets: 0, 0 1 1 0;" +
+                "-fx-background-color: #FFC107;");
+
+        scrollPaneForCurrent.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForCurrent.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForCurrent.setLayoutX(135);
+        scrollPaneForCurrent.setLayoutY(175);
+
+        scrollPaneForCurrent.setPrefWidth(mainScrollPane.getPrefWidth() - 13);
+        mainAnchorPane.getChildren().add(scrollPaneForCurrent);
+
+        //PF
+        scrollPaneForPowerFactor.setMinWidth(0);
+        scrollPaneForPowerFactor.setPrefWidth(50);
+        scrollPaneForPowerFactor.setStyle("-fx-background: #FFC107;" +
+                "-fx-background-insets: 0, 0 1 1 0;" +
+                "-fx-background-color: #FFC107;");
+
+        scrollPaneForPowerFactor.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setLayoutX(135);
+        scrollPaneForPowerFactor.setLayoutY(175);
+
+        scrollPaneForPowerFactor.setPrefHeight(mainScrollPane.getPrefHeight() - 13);
+        mainAnchorPane.getChildren().add(scrollPaneForPowerFactor);
+
+        //Закрывающий квадрат
+        Pane blackPane = new Pane();
+        blackPane.setStyle("-fx-background-color: #FFC107;");
+        blackPane.setPrefHeight(23);
+        blackPane.setPrefWidth(50);
+        blackPane.setLayoutX(135);
+        blackPane.setLayoutY(175);
+        mainAnchorPane.getChildren().add(blackPane);
+
         APPlus.setSelected(true);
         allPhaseBtn.setSelected(true);
         APPlusCRPSTA.setSelected(true);
@@ -1670,6 +1628,87 @@ public class AddEditFrameController {
                 pane.getChildren().add(checkBox);
             }
         }
+    }
+
+    public void initAndBindUpperScrollPane(){
+        GridPane gridPaneForCurrent = new GridPane();
+        gridPaneForCurrent.setGridLinesVisible(true);
+        gridPaneForCurrent.setStyle("#6A6A6A");
+        gridPaneForCurrent.getRowConstraints().add(new RowConstraints(23));
+        gridPaneForCurrent.getColumnConstraints().add(new ColumnConstraints(50));
+        Label labelCurr;
+
+        for (int i = 0; i < current.size(); i++) {
+            gridPaneForCurrent.getColumnConstraints().add(new ColumnConstraints(50));
+            labelCurr = new Label(current.get(i));
+            labelCurr.setTextFill(Color.BLACK);
+            GridPane.setColumnIndex(labelCurr, i + 1);
+            GridPane.setHalignment(labelCurr, HPos.CENTER);
+            GridPane.setValignment(labelCurr, VPos.CENTER);
+            gridPaneForCurrent.getChildren().add(labelCurr);
+        }
+
+        gridPaneForCurrent.setPrefWidth(gridPaneAllPhaseAPPlus.getWidth());
+        scrollPaneForCurrent.setContent(gridPaneForCurrent);
+
+        GridPane gridPaneForPowerFactor = new GridPane();
+        gridPaneForPowerFactor.setGridLinesVisible(true);
+        gridPaneForPowerFactor.setStyle("#6A6A6A");
+        gridPaneForPowerFactor.getRowConstraints().add(new RowConstraints(23));
+        gridPaneForPowerFactor.getColumnConstraints().add(new ColumnConstraints(50));
+        Label labelPowerFactor;
+
+        for (int i = 0; i < powerFactor.size(); i++) {
+            gridPaneForPowerFactor.getRowConstraints().add(new RowConstraints(23));
+            labelPowerFactor = new Label(powerFactor.get(i));
+            labelPowerFactor.setTextFill(Color.BLACK);
+            GridPane.setRowIndex(labelPowerFactor, i + 1);
+            GridPane.setHalignment(labelPowerFactor, HPos.CENTER);
+            GridPane.setValignment(labelPowerFactor, VPos.CENTER);
+            gridPaneForPowerFactor.getChildren().add(labelPowerFactor);
+        }
+
+        gridPaneForPowerFactor.setPrefHeight(gridPaneAllPhaseAPPlus.getHeight());
+        scrollPaneForPowerFactor.setContent(gridPaneForPowerFactor);
+
+        ScrollBar currentHorizontalScroll = null;
+        ScrollBar mainHorizontalScroll = null;
+
+        ScrollBar powerFactorVerticalScroll = null;
+        ScrollBar mainVerticalScroll = null;
+
+        Set<Node> mainScrollBars = mainScrollPane.lookupAll(".scroll-bar");
+
+        ScrollBar nodeScroll;
+
+        for( Node node : mainScrollBars) {
+            nodeScroll = (ScrollBar) node;
+
+            if (nodeScroll.getOrientation() == Orientation.HORIZONTAL) {
+                mainHorizontalScroll = nodeScroll;
+            } else {
+                mainVerticalScroll = nodeScroll;
+            }
+        }
+
+        Set<Node> currentScrollBars = scrollPaneForCurrent.lookupAll(".scroll-bar");
+        for (Node node : currentScrollBars) {
+            currentHorizontalScroll = (ScrollBar) node;
+            if (currentHorizontalScroll.getOrientation() == Orientation.HORIZONTAL) {
+                break;
+            }
+        }
+
+        Set<Node> powerFactorScrollBars = scrollPaneForPowerFactor.lookupAll(".scroll-bar");
+        for (Node node : powerFactorScrollBars) {
+            powerFactorVerticalScroll = (ScrollBar) node;
+            if (powerFactorVerticalScroll.getOrientation() == Orientation.VERTICAL) {
+                break;
+            }
+        }
+
+        currentHorizontalScroll.valueProperty().bindBidirectional(mainHorizontalScroll.valueProperty());
+        powerFactorVerticalScroll.valueProperty().bindBidirectional(mainVerticalScroll.valueProperty());
     }
 
     //Добавляет CheckBox в нужний лист CB
@@ -2767,5 +2806,101 @@ public class AddEditFrameController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setMethodicNameController(MethodicNameController methodicNameController) {
+        this.methodicNameController = methodicNameController;
+    }
+
+    void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
+        this.saveInfluenceUprocAPPls = saveInfluenceUprocAPPls;
+    }
+
+    void setSaveInfluenceFprocAPPls(double[] saveInfluenceFprocAPPls) {
+        this.saveInfluenceFprocAPPls = saveInfluenceFprocAPPls;
+    }
+
+    void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
+        this.saveInfluenceInbUAPPls = saveInfluenceInbUAPPls;
+    }
+
+    void setSaveInfluenceUprocAPMns(double[] saveInfluenceUprocAPMns) {
+        this.saveInfluenceUprocAPMns = saveInfluenceUprocAPMns;
+    }
+
+    void setSaveInfluenceFprocAPMns(double[] saveInfluenceFprocAPMns) {
+        this.saveInfluenceFprocAPMns = saveInfluenceFprocAPMns;
+    }
+
+    void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
+        this.saveInfluenceInbUAPMns = saveInfluenceInbUAPMns;
+    }
+
+    void setSaveInfluenceUprocRPPls(double[] saveInfluenceUprocRPPls) {
+        this.saveInfluenceUprocRPPls = saveInfluenceUprocRPPls;
+    }
+
+    void setSaveInfluenceFprocRPPls(double[] saveInfluenceFprocRPPls) {
+        this.saveInfluenceFprocRPPls = saveInfluenceFprocRPPls;
+    }
+
+    void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
+        this.saveInfluenceInbURPPls = saveInfluenceInbURPPls;
+    }
+
+    void setSaveInfluenceUprocRPMns(double[] saveInfluenceUprocRPMns) {
+        this.saveInfluenceUprocRPMns = saveInfluenceUprocRPMns;
+    }
+
+    void setSaveInfluenceFprocRPMns(double[] saveInfluenceFprocRPMns) {
+        this.saveInfluenceFprocRPMns = saveInfluenceFprocRPMns;
+    }
+
+    void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
+        this.saveInfluenceInbURPMns = saveInfluenceInbURPMns;
+    }
+
+    void setSaveInflListForCollumAPPls(ArrayList<Commands> saveInflListForCollumAPPls) {
+        this.saveInflListForCollumAPPls = saveInflListForCollumAPPls;
+    }
+
+    void setSaveInflListForCollumAPMns(ArrayList<Commands> saveInflListForCollumAPMns) {
+        this.saveInflListForCollumAPMns = saveInflListForCollumAPMns;
+    }
+
+    void setSaveInflListForCollumRPPls(ArrayList<Commands> saveInflListForCollumRPPls) {
+        this.saveInflListForCollumRPPls = saveInflListForCollumRPPls;
+    }
+
+    void setSaveInflListForCollumRPMns(ArrayList<Commands> saveInflListForCollumRPMns) {
+        this.saveInflListForCollumRPMns = saveInflListForCollumRPMns;
+    }
+
+    public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {
+        this.methodicsAddEditDeleteFrameController = methodicsAddEditDeleteFrameController;
+    }
+
+    ObservableList<Commands> getTestListForCollumAPPls() {
+        return testListForCollumAPPls;
+    }
+
+    ObservableList<Commands> getTestListForCollumAPMns() {
+        return testListForCollumAPMns;
+    }
+
+    ObservableList<Commands> getTestListForCollumRPPls() {
+        return testListForCollumRPPls;
+    }
+
+    ObservableList<Commands> getTestListForCollumRPMns() {
+        return testListForCollumRPMns;
+    }
+
+    public void setMethodic(Methodic methodic) {
+        this.methodic = methodic;
+    }
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
     }
 }

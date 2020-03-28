@@ -208,7 +208,10 @@ public class MethodicsAddEditDeleteFrameController {
             addEditFrameController.setTextFielMethodicName();
 
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
+            stage.show();
+
+            addEditFrameController.initAndBindUpperScrollPane();
+
         }
 
         //Если нажата кнопка копирования методики
