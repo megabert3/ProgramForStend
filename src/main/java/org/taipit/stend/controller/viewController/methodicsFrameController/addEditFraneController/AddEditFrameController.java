@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,22 +51,16 @@ public class AddEditFrameController {
     private boolean edit;
 
     //Значения коэффициента мощности
-    private List<String> powerFactor = methodicsForTest.getPowerFactor();
+    private List<String> powerFactor;
 
     //Значения выставленного тока
-    private List<String> current = methodicsForTest.getCurrent();
-
-    //Список GridPane для выставления точек поверки
-    private List<GridPane> gridPanesEnergyAndPhase;
+    private List<String> current;
 
     //Это трёхфазный стенд?
     private boolean isThrePhaseStend;
 
-    /**
-     * Удалить
-     */
-    ScrollPane scrollPaneForCurrent = new ScrollPane();
-    ScrollPane scrollPaneForPowerFactor = new ScrollPane();
+    private ScrollPane scrollPaneForCurrent = new ScrollPane();
+    private ScrollPane scrollPaneForPowerFactor = new ScrollPane();
 
     //Листы с checkBox'ами.
     //AP+
@@ -691,6 +684,10 @@ public class AddEditFrameController {
         if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
             isThrePhaseStend = true;
         }
+
+        current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
+        powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
+
         initGridPane();
         //Curr
         scrollPaneForCurrent.setMinHeight(0);
@@ -742,6 +739,203 @@ public class AddEditFrameController {
         viewPointTableAPPls.toFront();
 
         initTableView();
+    }
+
+    private void initGridPane() {
+        // Phase - Режим:
+// 		0 - Однофазный
+//		1 - Трех-фазный четырех-проводной
+//		2 - Трех-фазный трех-проводной
+// 		3 - Трех-фазный трех-проводной реактив 90 градусов
+// 		4 - Трех-фазный трех-проводной реактив 60 градусов
+//		5 - Трех-фазный четырех-проводной (реактив)
+//		6 - Трех-фазный трех-проводной (реактив)
+//		7 - Однофазный реактив
+//Режим;
+        if (isThrePhaseStend) {
+            gridPaneAllPhaseAPPlus.setId("1;H;A;P");
+            gridPanePhaseAAPPlus.setId("1;A;A;P");
+            gridPanePhaseBAPPlus.setId("1;B;A;P");
+            gridPanePhaseCAPPlus.setId("1;C;A;P");
+            gridPaneAllPhaseAPMinus.setId("1;H;A;N");
+            gridPanePhaseAAPMinus.setId("1;A;A;N");
+            gridPanePhaseBAPMinus.setId("1;B;A;N");
+            gridPanePhaseCAPMinus.setId("1;C;A;N");
+            gridPaneAllPhaseRPPlus.setId("5;H;R;P");
+            gridPanePhaseARPPlus.setId("5;A;R;P");
+            gridPanePhaseBRPPlus.setId("5;B;R;P");
+            gridPanePhaseCRPPlus.setId("5;C;R;P");
+            gridPaneAllPhaseRPMinus.setId("5;H;R;N");
+            gridPanePhaseARPMinus.setId("5;A;R;N");
+            gridPanePhaseBRPMinus.setId("5;B;R;N");
+            gridPanePhaseCRPMinus.setId("5;C;R;N");
+        } else {
+            gridPaneAllPhaseAPPlus.setId("0;H;A;P");
+            gridPanePhaseAAPPlus.setId("0;A;A;P");
+            gridPanePhaseBAPPlus.setId("0;B;A;P");
+            gridPanePhaseCAPPlus.setId("0;C;A;P");
+            gridPaneAllPhaseAPMinus.setId("0;H;A;N");
+            gridPanePhaseAAPMinus.setId("0;A;A;N");
+            gridPanePhaseBAPMinus.setId("0;B;A;N");
+            gridPanePhaseCAPMinus.setId("0;C;A;N");
+            gridPaneAllPhaseRPPlus.setId("7;H;R;P");
+            gridPanePhaseARPPlus.setId("7;A;R;P");
+            gridPanePhaseBRPPlus.setId("7;B;R;P");
+            gridPanePhaseCRPPlus.setId("7;C;R;P");
+            gridPaneAllPhaseRPMinus.setId("7;H;R;N");
+            gridPanePhaseARPMinus.setId("7;A;R;N");
+            gridPanePhaseBRPMinus.setId("7;B;R;N");
+            gridPanePhaseCRPMinus.setId("7;C;R;N");
+        }
+
+        List<GridPane> gridPanesEnergyAndPhase = Arrays.asList(
+                gridPaneAllPhaseAPPlus,
+                gridPanePhaseAAPPlus,
+                gridPanePhaseBAPPlus,
+                gridPanePhaseCAPPlus,
+                gridPaneAllPhaseAPMinus,
+                gridPanePhaseAAPMinus,
+                gridPanePhaseBAPMinus,
+                gridPanePhaseCAPMinus,
+                gridPaneAllPhaseRPPlus,
+                gridPanePhaseARPPlus,
+                gridPanePhaseBRPPlus,
+                gridPanePhaseCRPPlus,
+                gridPaneAllPhaseRPMinus,
+                gridPanePhaseARPMinus,
+                gridPanePhaseBRPMinus,
+                gridPanePhaseCRPMinus
+        );
+
+        for (GridPane pane : gridPanesEnergyAndPhase) {
+            setBoxAndLabelGridPane(pane);
+        }
+    }
+
+    //Заполняет поля нужными значениями GridPane
+    private void setBoxAndLabelGridPane(GridPane pane) {
+        creadteGridPanel(pane);
+
+        pane.setGridLinesVisible(true);
+
+        CheckBox checkBox;
+
+        for (int x = 0; x < current.size(); x++) {
+            for (int y = 0; y < powerFactor.size(); y++) {
+                //Устанавливаю CheckBox в нужную и соответствующую ячейку
+                checkBox = new CheckBox();
+                checkBox.setId(pane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
+                CheckBox finalCheckBox = checkBox;
+                String[] idCheckBox = finalCheckBox.getId().split(";");
+
+                addCheckBoxInList(idCheckBox, checkBox);
+
+                checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+                    if (newVal) {
+                        addTestPointInMethodic(idCheckBox, finalCheckBox.getId());
+                    } else {
+                        deleteTestPointInMethodic(idCheckBox);
+                    }
+                });
+
+                GridPane.setColumnIndex(checkBox, x + 1);
+                GridPane.setRowIndex(checkBox, y + 1);
+                GridPane.setHalignment(checkBox, HPos.CENTER);
+                GridPane.setValignment(checkBox, VPos.CENTER);
+
+                pane.getChildren().add(checkBox);
+            }
+        }
+    }
+
+    private void createScrollPaneToDisplayPowAndCurr() {
+
+    }
+
+    public void initAndBindUpperScrollPane(){
+        GridPane gridPaneForCurrent = new GridPane();
+        gridPaneForCurrent.setGridLinesVisible(true);
+        gridPaneForCurrent.setStyle("#6A6A6A");
+        gridPaneForCurrent.getRowConstraints().add(new RowConstraints(23));
+        gridPaneForCurrent.getColumnConstraints().add(new ColumnConstraints(50));
+        Label labelCurr;
+
+        for (int i = 0; i < current.size(); i++) {
+            gridPaneForCurrent.getColumnConstraints().add(new ColumnConstraints(50));
+            labelCurr = new Label(current.get(i));
+            labelCurr.setTextFill(Color.BLACK);
+            GridPane.setColumnIndex(labelCurr, i + 1);
+            GridPane.setHalignment(labelCurr, HPos.CENTER);
+            GridPane.setValignment(labelCurr, VPos.CENTER);
+            gridPaneForCurrent.getChildren().add(labelCurr);
+        }
+
+        gridPaneForCurrent.setPrefWidth(gridPaneAllPhaseAPPlus.getWidth());
+        scrollPaneForCurrent.setContent(gridPaneForCurrent);
+
+        GridPane gridPaneForPowerFactor = new GridPane();
+        gridPaneForPowerFactor.setGridLinesVisible(true);
+        gridPaneForPowerFactor.setStyle("#6A6A6A");
+        gridPaneForPowerFactor.getRowConstraints().add(new RowConstraints(23));
+        gridPaneForPowerFactor.getColumnConstraints().add(new ColumnConstraints(50));
+        Label labelPowerFactor;
+
+        for (int i = 0; i < powerFactor.size(); i++) {
+            gridPaneForPowerFactor.getRowConstraints().add(new RowConstraints(23));
+            labelPowerFactor = new Label(powerFactor.get(i));
+            labelPowerFactor.setTextFill(Color.BLACK);
+            GridPane.setRowIndex(labelPowerFactor, i + 1);
+            GridPane.setHalignment(labelPowerFactor, HPos.CENTER);
+            GridPane.setValignment(labelPowerFactor, VPos.CENTER);
+            gridPaneForPowerFactor.getChildren().add(labelPowerFactor);
+        }
+
+        gridPaneForPowerFactor.setPrefHeight(gridPaneAllPhaseAPPlus.getHeight());
+        scrollPaneForPowerFactor.setContent(gridPaneForPowerFactor);
+
+        ScrollBar currentHorizontalScroll = null;
+        ScrollBar mainHorizontalScroll = null;
+
+        ScrollBar powerFactorVerticalScroll = null;
+        ScrollBar mainVerticalScroll = null;
+
+        Set<Node> mainScrollBars = mainScrollPane.lookupAll(".scroll-bar");
+
+        ScrollBar nodeScroll;
+
+        for( Node node : mainScrollBars) {
+            nodeScroll = (ScrollBar) node;
+
+            if (nodeScroll.getOrientation() == Orientation.HORIZONTAL) {
+                mainHorizontalScroll = nodeScroll;
+            } else {
+                mainVerticalScroll = nodeScroll;
+            }
+        }
+
+        Set<Node> currentScrollBars = scrollPaneForCurrent.lookupAll(".scroll-bar");
+        for (Node node : currentScrollBars) {
+            currentHorizontalScroll = (ScrollBar) node;
+            if (currentHorizontalScroll.getOrientation() == Orientation.HORIZONTAL) {
+                break;
+            }
+        }
+
+        Set<Node> powerFactorScrollBars = scrollPaneForPowerFactor.lookupAll(".scroll-bar");
+        for (Node node : powerFactorScrollBars) {
+            powerFactorVerticalScroll = (ScrollBar) node;
+            if (powerFactorVerticalScroll.getOrientation() == Orientation.VERTICAL) {
+                break;
+            }
+        }
+
+        if (currentHorizontalScroll != null && mainHorizontalScroll != null) {
+            currentHorizontalScroll.valueProperty().bindBidirectional(mainHorizontalScroll.valueProperty());
+        }
+
+        if (powerFactorVerticalScroll != null && mainVerticalScroll != null) {
+            powerFactorVerticalScroll.valueProperty().bindBidirectional(mainVerticalScroll.valueProperty());
+        }
     }
 
     @FXML
@@ -1499,221 +1693,6 @@ public class AddEditFrameController {
 
         ChcBxRTCErrRPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
         ChcBxRTCErrRPMns.getSelectionModel().select(0);
-    }
-
-    private void initGridPane() {
-        initGridPanesEnergyAndPhase();
-
-        // Phase - Режим:
-// 		0 - Однофазный
-//		1 - Трех-фазный четырех-проводной
-//		2 - Трех-фазный трех-проводной
-// 		3 - Трех-фазный трех-проводной реактив 90 градусов
-// 		4 - Трех-фазный трех-проводной реактив 60 градусов
-//		5 - Трех-фазный четырех-проводной (реактив)
-//		6 - Трех-фазный трех-проводной (реактив)
-//		7 - Однофазный реактив
-//Режим;
-        if (isThrePhaseStend) {
-            gridPaneAllPhaseAPPlus.setId("1;H;A;P");
-            gridPanePhaseAAPPlus.setId("1;A;A;P");
-            gridPanePhaseBAPPlus.setId("1;B;A;P");
-            gridPanePhaseCAPPlus.setId("1;C;A;P");
-            gridPaneAllPhaseAPMinus.setId("1;H;A;N");
-            gridPanePhaseAAPMinus.setId("1;A;A;N");
-            gridPanePhaseBAPMinus.setId("1;B;A;N");
-            gridPanePhaseCAPMinus.setId("1;C;A;N");
-            gridPaneAllPhaseRPPlus.setId("5;H;R;P");
-            gridPanePhaseARPPlus.setId("5;A;R;P");
-            gridPanePhaseBRPPlus.setId("5;B;R;P");
-            gridPanePhaseCRPPlus.setId("5;C;R;P");
-            gridPaneAllPhaseRPMinus.setId("5;H;R;N");
-            gridPanePhaseARPMinus.setId("5;A;R;N");
-            gridPanePhaseBRPMinus.setId("5;B;R;N");
-            gridPanePhaseCRPMinus.setId("5;C;R;N");
-        } else {
-            gridPaneAllPhaseAPPlus.setId("0;H;A;P");
-            gridPanePhaseAAPPlus.setId("0;A;A;P");
-            gridPanePhaseBAPPlus.setId("0;B;A;P");
-            gridPanePhaseCAPPlus.setId("0;C;A;P");
-            gridPaneAllPhaseAPMinus.setId("0;H;A;N");
-            gridPanePhaseAAPMinus.setId("0;A;A;N");
-            gridPanePhaseBAPMinus.setId("0;B;A;N");
-            gridPanePhaseCAPMinus.setId("0;C;A;N");
-            gridPaneAllPhaseRPPlus.setId("7;H;R;P");
-            gridPanePhaseARPPlus.setId("7;A;R;P");
-            gridPanePhaseBRPPlus.setId("7;B;R;P");
-            gridPanePhaseCRPPlus.setId("7;C;R;P");
-            gridPaneAllPhaseRPMinus.setId("7;H;R;N");
-            gridPanePhaseARPMinus.setId("7;A;R;N");
-            gridPanePhaseBRPMinus.setId("7;B;R;N");
-            gridPanePhaseCRPMinus.setId("7;C;R;N");
-        }
-        for (GridPane pane : gridPanesEnergyAndPhase) {
-            setBoxAndLabelGridPane(pane);
-        }
-    }
-
-
-    private void initGridPanesEnergyAndPhase() {
-        gridPanesEnergyAndPhase = Arrays.asList(gridPaneAllPhaseAPPlus,
-                gridPanePhaseAAPPlus,
-                gridPanePhaseBAPPlus,
-                gridPanePhaseCAPPlus,
-                gridPaneAllPhaseAPMinus,
-                gridPanePhaseAAPMinus,
-                gridPanePhaseBAPMinus,
-                gridPanePhaseCAPMinus,
-                gridPaneAllPhaseRPPlus,
-                gridPanePhaseARPPlus,
-                gridPanePhaseBRPPlus,
-                gridPanePhaseCRPPlus,
-                gridPaneAllPhaseRPMinus,
-                gridPanePhaseARPMinus,
-                gridPanePhaseBRPMinus,
-                gridPanePhaseCRPMinus);
-    }
-
-    //Заполняет поля нужными значениями GridPane
-    private void setBoxAndLabelGridPane(GridPane pane) {
-        creadteGridPanel(pane);
-        pane.setGridLinesVisible(true);
-        Label label;
-        CheckBox checkBox;
-
-        for (int x = 0; x < current.size(); x++) {
-            for (int y = 0; y < powerFactor.size(); y++) {
-
-                //Устанавливаю значения строки тока
-                if (y == 0) {
-                    label = new Label(current.get(x));
-                    GridPane.setColumnIndex(label, x + 1);
-                    GridPane.setRowIndex(label, y);
-                    GridPane.setHalignment(label, HPos.CENTER);
-                    GridPane.setValignment(label, VPos.CENTER);
-                    pane.getChildren().add(label);
-                }
-
-                //Устанавливаю значения столба PowerFactor
-                if (x == 0) {
-                    label = new Label(powerFactor.get(y));
-                    GridPane.setRowIndex(label, y + 1);
-                    GridPane.setColumnIndex(label, x);
-                    GridPane.setHalignment(label, HPos.CENTER);
-                    GridPane.setValignment(label, VPos.CENTER);
-                    pane.getChildren().add(label);
-                }
-
-                //Устанавливаю CheckBox
-                checkBox = new CheckBox();
-                checkBox.setId(pane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
-                CheckBox finalCheckBox = checkBox;
-                String[] idCheckBox = finalCheckBox.getId().split(";");
-
-                addCheckBoxInList(idCheckBox, checkBox);
-
-                checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
-                    if (newVal) {
-                        addTestPointInMethodic(idCheckBox, finalCheckBox.getId());
-                    } else {
-                        deleteTestPointInMethodic(idCheckBox);
-                    }
-                });
-
-                GridPane.setColumnIndex(checkBox, x + 1);
-                GridPane.setRowIndex(checkBox, y + 1);
-                GridPane.setHalignment(checkBox, HPos.CENTER);
-                GridPane.setValignment(checkBox, VPos.CENTER);
-
-                pane.getChildren().add(checkBox);
-            }
-        }
-    }
-
-    public void initAndBindUpperScrollPane(){
-        GridPane gridPaneForCurrent = new GridPane();
-        gridPaneForCurrent.setGridLinesVisible(true);
-        gridPaneForCurrent.setStyle("#6A6A6A");
-        gridPaneForCurrent.getRowConstraints().add(new RowConstraints(23));
-        gridPaneForCurrent.getColumnConstraints().add(new ColumnConstraints(50));
-        Label labelCurr;
-
-        for (int i = 0; i < current.size(); i++) {
-            gridPaneForCurrent.getColumnConstraints().add(new ColumnConstraints(50));
-            labelCurr = new Label(current.get(i));
-            labelCurr.setTextFill(Color.BLACK);
-            GridPane.setColumnIndex(labelCurr, i + 1);
-            GridPane.setHalignment(labelCurr, HPos.CENTER);
-            GridPane.setValignment(labelCurr, VPos.CENTER);
-            gridPaneForCurrent.getChildren().add(labelCurr);
-        }
-
-        gridPaneForCurrent.setPrefWidth(gridPaneAllPhaseAPPlus.getWidth());
-        scrollPaneForCurrent.setContent(gridPaneForCurrent);
-
-        GridPane gridPaneForPowerFactor = new GridPane();
-        gridPaneForPowerFactor.setGridLinesVisible(true);
-        gridPaneForPowerFactor.setStyle("#6A6A6A");
-        gridPaneForPowerFactor.getRowConstraints().add(new RowConstraints(23));
-        gridPaneForPowerFactor.getColumnConstraints().add(new ColumnConstraints(50));
-        Label labelPowerFactor;
-
-        for (int i = 0; i < powerFactor.size(); i++) {
-            gridPaneForPowerFactor.getRowConstraints().add(new RowConstraints(23));
-            labelPowerFactor = new Label(powerFactor.get(i));
-            labelPowerFactor.setTextFill(Color.BLACK);
-            GridPane.setRowIndex(labelPowerFactor, i + 1);
-            GridPane.setHalignment(labelPowerFactor, HPos.CENTER);
-            GridPane.setValignment(labelPowerFactor, VPos.CENTER);
-            gridPaneForPowerFactor.getChildren().add(labelPowerFactor);
-        }
-
-        gridPaneForPowerFactor.setPrefHeight(gridPaneAllPhaseAPPlus.getHeight());
-        scrollPaneForPowerFactor.setContent(gridPaneForPowerFactor);
-
-        ScrollBar currentHorizontalScroll = null;
-        ScrollBar mainHorizontalScroll = null;
-
-        ScrollBar powerFactorVerticalScroll = null;
-        ScrollBar mainVerticalScroll = null;
-
-        Set<Node> mainScrollBars = mainScrollPane.lookupAll(".scroll-bar");
-
-        ScrollBar nodeScroll;
-
-        for( Node node : mainScrollBars) {
-            nodeScroll = (ScrollBar) node;
-
-            if (nodeScroll.getOrientation() == Orientation.HORIZONTAL) {
-                mainHorizontalScroll = nodeScroll;
-            } else {
-                mainVerticalScroll = nodeScroll;
-            }
-        }
-
-        Set<Node> currentScrollBars = scrollPaneForCurrent.lookupAll(".scroll-bar");
-        for (Node node : currentScrollBars) {
-            currentHorizontalScroll = (ScrollBar) node;
-            if (currentHorizontalScroll.getOrientation() == Orientation.HORIZONTAL) {
-                break;
-            }
-        }
-
-        Set<Node> powerFactorScrollBars = scrollPaneForPowerFactor.lookupAll(".scroll-bar");
-        for (Node node : powerFactorScrollBars) {
-            powerFactorVerticalScroll = (ScrollBar) node;
-            if (powerFactorVerticalScroll.getOrientation() == Orientation.VERTICAL) {
-                break;
-            }
-        }
-
-        if (currentHorizontalScroll != null && mainHorizontalScroll != null) {
-            currentHorizontalScroll.valueProperty().bindBidirectional(mainHorizontalScroll.valueProperty());
-        }
-
-        if (powerFactorVerticalScroll != null && mainVerticalScroll != null) {
-            powerFactorVerticalScroll.valueProperty().bindBidirectional(mainVerticalScroll.valueProperty());
-        }
     }
 
     //Добавляет CheckBox в нужний лист CB
