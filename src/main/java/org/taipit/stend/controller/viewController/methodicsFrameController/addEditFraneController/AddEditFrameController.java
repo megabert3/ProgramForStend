@@ -1707,8 +1707,13 @@ public class AddEditFrameController {
             }
         }
 
-        currentHorizontalScroll.valueProperty().bindBidirectional(mainHorizontalScroll.valueProperty());
-        powerFactorVerticalScroll.valueProperty().bindBidirectional(mainVerticalScroll.valueProperty());
+        if (currentHorizontalScroll != null && mainHorizontalScroll != null) {
+            currentHorizontalScroll.valueProperty().bindBidirectional(mainHorizontalScroll.valueProperty());
+        }
+
+        if (powerFactorVerticalScroll != null && mainVerticalScroll != null) {
+            powerFactorVerticalScroll.valueProperty().bindBidirectional(mainVerticalScroll.valueProperty());
+        }
     }
 
     //Добавляет CheckBox в нужний лист CB

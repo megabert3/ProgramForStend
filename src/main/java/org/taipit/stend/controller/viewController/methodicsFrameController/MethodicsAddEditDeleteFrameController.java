@@ -173,6 +173,7 @@ public class MethodicsAddEditDeleteFrameController {
                 methodicNameController.setMethodicsAddEditDeleteFrameController(this);
                 methodicNameController.setAdd(true);
 
+
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
 

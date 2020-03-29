@@ -115,6 +115,8 @@ public class MethodicNameController {
 
                     stage.show();
 
+                    addEditFrameController.initAndBindUpperScrollPane();
+
                     Stage stageMetodicName = (Stage) nameField.getScene().getWindow();
                     stageMetodicName.close();
                 } catch (InfoExсeption e) {
