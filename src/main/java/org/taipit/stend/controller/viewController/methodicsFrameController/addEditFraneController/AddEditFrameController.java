@@ -1,13 +1,13 @@
 package org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.*;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -62,37 +62,36 @@ public class AddEditFrameController {
     private ScrollPane scrollPaneForCurrent = new ScrollPane();
     private ScrollPane scrollPaneForPowerFactor = new ScrollPane();
 
-    //Листы с checkBox'ами.
-    //AP+
-    private ArrayList<CheckBox> checkBoxesAllPhaseAPPlus = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseAAPPlus = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseBAPPlus = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseCAPPlus = new ArrayList<>();
-
-    //AP-
-    private ArrayList<CheckBox> checkBoxesAllPhaseAPMns = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseAAPMns = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseBAPMns = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseCAPMns = new ArrayList<>();
-
-    //RP+
-    private ArrayList<CheckBox> checkBoxesAllPhaseRPPlus = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseARPPlus = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseBRPPlus = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseCRPPlus = new ArrayList<>();
-
-    //RP-
-    private ArrayList<CheckBox> checkBoxesAllPhaseRPMns = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseARPMns = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseBRPMns = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesPhaseCRPMns = new ArrayList<>();
-
+//    //Листы с checkBox'ами.
+//    //AP+
+//    private List<CheckBox> checkBoxesAllPhaseAPPlus = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseAAPPlus = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseBAPPlus = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseCAPPlus = new ArrayList<>();
+//
+//    //AP-
+//    private List<CheckBox> checkBoxesAllPhaseAPMns = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseAAPMns = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseBAPMns = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseCAPMns = new ArrayList<>();
+//
+//    //RP+
+//    private List<CheckBox> checkBoxesAllPhaseRPPlus = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseARPPlus = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseBRPPlus = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseCRPPlus = new ArrayList<>();
+//
+//    //RP-
+//    private List<CheckBox> checkBoxesAllPhaseRPMns = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseARPMns = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseBRPMns = new ArrayList<>();
+//    private List<CheckBox> checkBoxesPhaseCRPMns = new ArrayList<>();
 
     //Сохранённые листы с точками
-    private ArrayList<Commands> saveListForCollumAPPls = new ArrayList<>();
-    private ArrayList<Commands> saveListForCollumAPMns = new ArrayList<>();
-    private ArrayList<Commands> saveListForCollumRPPls = new ArrayList<>();
-    private ArrayList<Commands> saveListForCollumRPMns = new ArrayList<>();
+    private List<Commands> saveListForCollumAPPls = new ArrayList<>();
+    private List<Commands> saveListForCollumAPMns = new ArrayList<>();
+    private List<Commands> saveListForCollumRPPls = new ArrayList<>();
+    private List<Commands> saveListForCollumRPMns = new ArrayList<>();
 
     //Лист с точками общая методика
     private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
@@ -128,18 +127,13 @@ public class AddEditFrameController {
     private List<Commands> saveInflListForCollumRPPls = new ArrayList<>();
     private List<Commands> saveInflListForCollumRPMns = new ArrayList<>();
 
-
-    @FXML
-    private ResourceBundle resources = ResourceBundle.getBundle("stendProperties");
-
-    @FXML
-    private URL location;
-
     @FXML
     private AnchorPane mainAnchorPane;
 
     @FXML
     private ScrollPane mainScrollPane;
+
+    private Button btnAddDeleteTestPoints = new Button();
 
     //Отвечают за окно отображения выбранных точек тестирования
     //-------------------------------------------------------
@@ -685,48 +679,36 @@ public class AddEditFrameController {
             isThrePhaseStend = true;
         }
 
+        btnAddDeleteTestPoints.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addDeleteTestPointInGridPaneFrame.fxml"));
+                    fxmlLoader.load();
+                    Parent root = fxmlLoader.getRoot();
+                    Stage stage = new Stage();
+                    stage.setTitle("Добавление точек испытаний");
+                    stage.setScene(new Scene(root));
+                    stage.initModality(Modality.APPLICATION_MODAL);
+
+                    //AddDeleteTestPointInGridPaneController controller = fxmlLoader.getController();
+                    //controller.myInit();
+
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
         powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
 
         initGridPane();
-        //Curr
-        scrollPaneForCurrent.setMinHeight(0);
-        scrollPaneForCurrent.setPrefHeight(24);
-        scrollPaneForCurrent.setStyle("-fx-background: #FFC107;" +
-                "-fx-background-insets: 0, 0 1 1 0;" +
-                "-fx-background-color: #FFC107;");
 
-        scrollPaneForCurrent.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPaneForCurrent.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPaneForCurrent.setLayoutX(135);
-        scrollPaneForCurrent.setLayoutY(175);
-
-        scrollPaneForCurrent.setPrefWidth(mainScrollPane.getPrefWidth() - 13);
-        mainAnchorPane.getChildren().add(scrollPaneForCurrent);
-
-        //PF
-        scrollPaneForPowerFactor.setMinWidth(0);
-        scrollPaneForPowerFactor.setPrefWidth(50);
-        scrollPaneForPowerFactor.setStyle("-fx-background: #FFC107;" +
-                "-fx-background-insets: 0, 0 1 1 0;" +
-                "-fx-background-color: #FFC107;");
-
-        scrollPaneForPowerFactor.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPaneForPowerFactor.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPaneForPowerFactor.setLayoutX(135);
-        scrollPaneForPowerFactor.setLayoutY(175);
-
-        scrollPaneForPowerFactor.setPrefHeight(mainScrollPane.getPrefHeight() - 13);
-        mainAnchorPane.getChildren().add(scrollPaneForPowerFactor);
-
-        //Закрывающий квадрат
-        Pane blackPane = new Pane();
-        blackPane.setStyle("-fx-background-color: #FFC107;");
-        blackPane.setPrefHeight(23);
-        blackPane.setPrefWidth(50);
-        blackPane.setLayoutX(135);
-        blackPane.setLayoutY(175);
-        mainAnchorPane.getChildren().add(blackPane);
+        initTableView();
 
         APPlus.setSelected(true);
         allPhaseBtn.setSelected(true);
@@ -737,10 +719,9 @@ public class AddEditFrameController {
         initCoiseBoxParamForRTC();
         gridPaneAllPhaseAPPlus.toFront();
         viewPointTableAPPls.toFront();
-
-        initTableView();
     }
 
+//============= Всё что касается инициализации GridPane для добавления точек испытаня ================
     private void initGridPane() {
         // Phase - Режим:
 // 		0 - Однофазный
@@ -810,6 +791,8 @@ public class AddEditFrameController {
         for (GridPane pane : gridPanesEnergyAndPhase) {
             setBoxAndLabelGridPane(pane);
         }
+
+        createAndInitAdditionalScrollPanesForPowFacAndCurr();
     }
 
     //Заполняет поля нужными значениями GridPane
@@ -828,7 +811,7 @@ public class AddEditFrameController {
                 CheckBox finalCheckBox = checkBox;
                 String[] idCheckBox = finalCheckBox.getId().split(";");
 
-                addCheckBoxInList(idCheckBox, checkBox);
+                //addCheckBoxInList(idCheckBox, checkBox);
 
                 checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
                     if (newVal) {
@@ -848,11 +831,67 @@ public class AddEditFrameController {
         }
     }
 
-    private void createScrollPaneToDisplayPowAndCurr() {
-
+    //Создаёт поле нужной величины
+    private void creadteGridPanel(GridPane pane) {
+        for (int i = 0; i < current.size() + 1; i++) {
+            pane.getColumnConstraints().add(new ColumnConstraints(50));
+        }
+        for (int j = 0; j < powerFactor.size() + 1; j++) {
+            pane.getRowConstraints().add(new RowConstraints(23));
+        }
     }
 
-    public void initAndBindUpperScrollPane(){
+    private void createAndInitAdditionalScrollPanesForPowFacAndCurr() {
+        //Curr
+        scrollPaneForCurrent.setMinHeight(0);
+        scrollPaneForCurrent.setPrefHeight(24);
+        scrollPaneForCurrent.setStyle("-fx-background: #FFC107;" +
+                "-fx-background-insets: 0, 0 1 1 0;" +
+                "-fx-background-color: #FFC107;");
+
+        scrollPaneForCurrent.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForCurrent.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForCurrent.setLayoutX(135);
+        scrollPaneForCurrent.setLayoutY(175);
+
+        scrollPaneForCurrent.setPrefWidth(mainScrollPane.getPrefWidth() - 13);
+        mainAnchorPane.getChildren().add(scrollPaneForCurrent);
+
+        //PF
+        scrollPaneForPowerFactor.setMinWidth(0);
+        scrollPaneForPowerFactor.setPrefWidth(50);
+        scrollPaneForPowerFactor.setStyle("-fx-background: #FFC107;" +
+                "-fx-background-insets: 0, 0 1 1 0;" +
+                "-fx-background-color: #FFC107;");
+
+        scrollPaneForPowerFactor.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setLayoutX(135);
+        scrollPaneForPowerFactor.setLayoutY(175);
+
+        scrollPaneForPowerFactor.setPrefHeight(mainScrollPane.getPrefHeight() - 13);
+        mainAnchorPane.getChildren().add(scrollPaneForPowerFactor);
+
+        //Закрывающий квадрат
+        Pane fillSquare = new Pane();
+        fillSquare.setStyle("-fx-background-color: #FFC107;");
+        fillSquare.setPrefHeight(23);
+        fillSquare.setPrefWidth(50);
+        fillSquare.setLayoutX(135);
+        fillSquare.setLayoutY(175);
+        mainAnchorPane.getChildren().add(fillSquare);
+
+        btnAddDeleteTestPoints.setText("Точки");
+        btnAddDeleteTestPoints.setMinHeight(0);
+        btnAddDeleteTestPoints.setPrefSize(fillSquare.getPrefWidth() - 1, fillSquare.getPrefHeight() - 1);
+        btnAddDeleteTestPoints.setStyle("-fx-background-color: #743A4F;" +
+                "-fx-background-insets: 0, 0 1 1 0;");
+
+        fillSquare.getChildren().add(btnAddDeleteTestPoints);
+    }
+
+
+    public void initAndBindUpperScrollPane() {
         GridPane gridPaneForCurrent = new GridPane();
         gridPaneForCurrent.setGridLinesVisible(true);
         gridPaneForCurrent.setStyle("#6A6A6A");
@@ -938,10 +977,604 @@ public class AddEditFrameController {
         }
     }
 
+    //======================= Всё что связано с отображением выбранных точек в TableView ================================
+    //Инициализирует таблицу для отображения выбранных точек
+    private void initTableView() {
+        List<TableColumn<Commands, String>> collumnListAPPls = Arrays.asList(
+                loadCurrTabColAPPls,
+                eMaxTabColAPPls,
+                eMinTabColAPPls,
+                amountImplTabColAPPls,
+                amountMeasTabColAPPls
+        );
+
+        List<TableColumn<Commands, String>> collumnListAPMns = Arrays.asList(
+                loadCurrTabColAPMns,
+                eMaxTabColAPMns,
+                eMinTabColAPMns,
+                amountImplTabColAPMns,
+                amountMeasTabColAPMns
+        );
+
+        List<TableColumn<Commands, String>> collumnListRPPls = Arrays.asList(
+                loadCurrTabColRPPls,
+                eMaxTabColRPPls,
+                eMinTabColRPPls,
+                amountImplTabColRPPls,
+                amountMeasTabColRPPls
+        );
+
+        List<TableColumn<Commands, String>> collumnListRPMns = Arrays.asList(
+                loadCurrTabColRPMns,
+                eMaxTabColRPMns,
+                eMinTabColRPMns,
+                amountImplTabColRPMns,
+                amountMeasTabColRPMns
+        );
+
+        Map<Integer, List<TableColumn<Commands, String>>> mapTableColumn = new HashMap<>();
+        mapTableColumn.put(0, collumnListAPPls);
+        mapTableColumn.put(1, collumnListAPMns);
+        mapTableColumn.put(2, collumnListRPPls);
+        mapTableColumn.put(3, collumnListRPMns);
+
+
+        for (int i = 0; i < mapTableColumn.size(); i++) {
+            //Устанавливаем данные для колонок (AP+, AP-, RP+, RP-)
+            mapTableColumn.get(i).get(0).setCellValueFactory(new PropertyValueFactory<>("name"));
+            mapTableColumn.get(i).get(1).setCellValueFactory(new PropertyValueFactory<>("emax"));
+            mapTableColumn.get(i).get(2).setCellValueFactory(new PropertyValueFactory<>("emin"));
+            mapTableColumn.get(i).get(3).setCellValueFactory(new PropertyValueFactory<>("pulse"));
+            mapTableColumn.get(i).get(4).setCellValueFactory(new PropertyValueFactory<>("countResult"));
+
+            //Выставляем отображение информации в колонке "по центру"
+            mapTableColumn.get(i).get(1).setStyle( "-fx-alignment: CENTER;");
+            mapTableColumn.get(i).get(2).setStyle( "-fx-alignment: CENTER;");
+            mapTableColumn.get(i).get(3).setStyle( "-fx-alignment: CENTER;");
+            mapTableColumn.get(i).get(4).setStyle( "-fx-alignment: CENTER;");
+
+            //Устанавливаем возможность редактирования информации в колонке
+            mapTableColumn.get(i).get(1).setCellFactory(TextFieldTableCell.forTableColumn());
+            mapTableColumn.get(i).get(2).setCellFactory(TextFieldTableCell.forTableColumn());
+            mapTableColumn.get(i).get(3).setCellFactory(TextFieldTableCell.forTableColumn());
+            mapTableColumn.get(i).get(4).setCellFactory(TextFieldTableCell.forTableColumn());
+
+            //Действие при изменении информации в колонке
+            mapTableColumn.get(i).get(1).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+                TablePosition<Commands, String> pos = event.getTablePosition();
+
+                String newImpulseValue = event.getNewValue();
+
+                int row = pos.getRow();
+                Commands command = event.getTableView().getItems().get(row);
+
+                ((ErrorCommand) command).setEmax(newImpulseValue);
+            });
+
+            mapTableColumn.get(i).get(2).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+                TablePosition<Commands, String> pos = event.getTablePosition();
+
+                String newImpulseValue = event.getNewValue();
+
+                int row = pos.getRow();
+                Commands command = event.getTableView().getItems().get(row);
+
+                ((ErrorCommand) command).setEmin(newImpulseValue);
+            });
+
+            mapTableColumn.get(i).get(3).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+                TablePosition<Commands, String> pos = event.getTablePosition();
+
+                String newImpulseValue = event.getNewValue();
+
+                int row = pos.getRow();
+                Commands command = event.getTableView().getItems().get(row);
+
+                ((ErrorCommand) command).setPulse(newImpulseValue);
+            });
+
+            mapTableColumn.get(i).get(4).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+                TablePosition<Commands, String> pos = event.getTablePosition();
+
+                String newImpulseValue = event.getNewValue();
+
+                int row = pos.getRow();
+                Commands command = event.getTableView().getItems().get(row);
+
+                ((ErrorCommand) command).setCountResult(newImpulseValue);
+            });
+        }
+
+        viewPointTableAPPls.setEditable(true);
+        viewPointTableAPMns.setEditable(true);
+        viewPointTableRPPls.setEditable(true);
+        viewPointTableRPMns.setEditable(true);
+
+        viewPointTableAPPls.setItems(testListForCollumAPPls);
+        viewPointTableAPMns.setItems(testListForCollumAPMns);
+        viewPointTableRPPls.setItems(testListForCollumRPPls);
+        viewPointTableRPMns.setItems(testListForCollumRPMns);
+    }
+
+    //========== Всё для инициализации уже созданной методики (нажата кнопка редактирование) ============
+
+    //Проверияет нет ли данных с полученной методики и если у неё есть данные, то выгружает её в это окно
+    //Необходимо для команды Редактирования методики
+    public void initEditsMetodic() {
+        saveListForCollumAPPls = new ArrayList<>(methodic.getCommandsMap().get(0));
+        saveListForCollumAPMns = new ArrayList<>(methodic.getCommandsMap().get(1));
+        saveListForCollumRPPls = new ArrayList<>(methodic.getCommandsMap().get(2));
+        saveListForCollumRPMns = new ArrayList<>(methodic.getCommandsMap().get(3));
+
+        saveInflListForCollumAPPls = new ArrayList<>(methodic.getSaveInflListForCollumAPPls());
+        saveInflListForCollumAPMns = new ArrayList<>(methodic.getSaveInflListForCollumAPMns());
+        saveInflListForCollumRPPls = new ArrayList<>(methodic.getSaveInflListForCollumRPPls());
+        saveInflListForCollumRPMns = new ArrayList<>(methodic.getSaveInflListForCollumRPMns());
+
+        saveInfluenceUprocAPPls = methodic.getSaveInfluenceUprocAPPls();
+        saveInfluenceUprocAPMns = methodic.getSaveInfluenceUprocAPMns();
+        saveInfluenceUprocRPPls = methodic.getSaveInfluenceUprocRPPls();
+        saveInfluenceUprocRPMns = methodic.getSaveInfluenceUprocRPMns();
+
+        saveInfluenceFprocAPPls = methodic.getSaveInfluenceFprocAPPls();
+        saveInfluenceFprocAPMns = methodic.getSaveInfluenceFprocAPMns();
+        saveInfluenceFprocRPPls = methodic.getSaveInfluenceFprocRPPls();
+        saveInfluenceFprocRPMns = methodic.getSaveInfluenceFprocRPMns();
+
+        saveInfluenceInbUAPPls = methodic.getSaveInfluenceInbUAPPls();
+        saveInfluenceInbUAPMns = methodic.getSaveInfluenceInbUAPMns();
+        saveInfluenceInbURPPls = methodic.getSaveInfluenceInbURPPls();
+        saveInfluenceInbURPMns = methodic.getSaveInfluenceInbURPMns();
+
+        addTestPointsOnGreedPane();
+    }
+
+    //Задаёт параметр true или false нужному checkBox'у
+    private void addTestPointsOnGreedPane() {
+        char[] testPointIdArr;
+
+        if (!saveListForCollumAPPls.isEmpty()) {
+
+            for (Commands command : saveListForCollumAPPls) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+
+                } else if (command instanceof CreepCommand) {
+                    if (!((CreepCommand) command).isGostTest()) {
+
+                        txtFieldCRPUProcAPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
+                        txtFieldTimeCRPAPPls.setText(((CreepCommand) command).getUserTimeTest());
+                        txtFieldCRPAmtImpAPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+
+                        addTglBtnCRPAPPls.setSelected(true);
+
+                        txtFieldCRPUProcAPPls.setDisable(true);
+                        txtFieldTimeCRPAPPls.setDisable(true);
+                        txtFieldCRPAmtImpAPPls.setDisable(true);
+                    } else {
+                        addTglBtnCRPAPPlsGOST.setSelected(true);
+                    }
+                    CRPTogBtnAPPls.setSelected(true);
+
+                } else if (command instanceof StartCommand) {
+                    if (!((StartCommand) command).isGostTest()) {
+                        txtFieldSTAIProcAPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
+                        txtFieldTimeSRAAPPls.setText(((StartCommand) command).getUserTimeTest());
+                        txtFieldSTAAmtImpAPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+
+                        addTglBtnSTAAPPls.setSelected(true);
+
+                        txtFieldSTAIProcAPPls.setDisable(true);
+                        txtFieldTimeSRAAPPls.setDisable(true);
+                        txtFieldSTAAmtImpAPPls.setDisable(true);
+                    }else {
+                        addTglBtnSTAAPPlsGOST.setSelected(true);
+                    }
+                    STATogBtnAPPls.setSelected(true);
+
+                } else if (command instanceof RTCCommand) {
+                    if (((RTCCommand)command).getErrorType() == 0) {
+                        ChcBxRTCErrAPPls.setValue("В ед. частоты");
+                    } else {
+                        ChcBxRTCErrAPPls.setValue("Сутч. погрешность");
+                    }
+
+                    txtFieldRngEAPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
+                    txtFldRTCAmtMshAPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+                    txtFldRTCTimeMshAPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+
+                    ChcBxRTCErrAPPls.setDisable(true);
+
+                    txtFieldRngEAPPls.setDisable(true);
+                    txtFldRTCAmtMshAPPls.setDisable(true);
+                    txtFldRTCTimeMshAPPls.setDisable(true);
+                    addTglBtnRTCAPPls.setSelected(true);
+
+                    RTCTogBtnAPPls.setSelected(true);
+                }
+            }
+        }
+
+        if (!saveListForCollumAPMns.isEmpty()) {
+
+            for (Commands command : saveListForCollumAPMns) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+                } else if (command instanceof CreepCommand) {
+
+                    if (!((CreepCommand) command).isGostTest()) {
+
+                        txtFieldCRPUProcAPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
+                        txtFieldTimeCRPAPMns.setText(((CreepCommand) command).getUserTimeTest());
+                        txtFieldCRPAmtImpAPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+
+                        addTglBtnCRPAPMns.setSelected(true);
+
+                        txtFieldCRPUProcAPMns.setDisable(true);
+                        txtFieldTimeCRPAPMns.setDisable(true);
+                        txtFieldCRPAmtImpAPMns.setDisable(true);
+                    } else {
+                        addTglBtnCRPAPMnsGOST.setSelected(true);
+                    }
+                    CRPTogBtnAPMns.setSelected(true);
+
+                } else if (command instanceof StartCommand) {
+                    if (!((StartCommand) command).isGostTest()) {
+                        txtFieldSTAIProcAPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
+                        txtFieldTimeSRAAPMns.setText(((StartCommand) command).getUserTimeTest());
+                        txtFieldSTAAmtImpAPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+
+                        addTglBtnSTAAPMns.setSelected(true);
+
+                        txtFieldSTAIProcAPMns.setDisable(true);
+                        txtFieldTimeSRAAPMns.setDisable(true);
+                        txtFieldSTAAmtImpAPMns.setDisable(true);
+                    }else {
+                        addTglBtnSTAAPMnsGOST.setSelected(true);
+                    }
+                    STATogBtnAPMns.setSelected(true);
+
+                } else if (command instanceof RTCCommand) {
+                    if (((RTCCommand)command).getErrorType() == 0) {
+                        ChcBxRTCErrAPMns.setValue("В ед. частоты");
+                    } else {
+                        ChcBxRTCErrAPMns.setValue("Сутч. погрешность");
+                    }
+
+                    txtFieldRngEAPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
+                    txtFldRTCAmtMshAPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+                    txtFldRTCTimeMshAPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+
+                    ChcBxRTCErrAPMns.setDisable(true);
+
+                    txtFieldRngEAPMns.setDisable(true);
+                    txtFldRTCAmtMshAPMns.setDisable(true);
+                    txtFldRTCTimeMshAPMns.setDisable(true);
+                    addTglBtnRTCAPMns.setSelected(true);
+
+                    RTCTogBtnAPMns.setSelected(true);
+                }
+            }
+        }
+
+        if (!saveListForCollumRPPls.isEmpty()) {
+
+            for (Commands command : saveListForCollumRPPls) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+
+                } else if (command instanceof CreepCommand) {
+                    if (!((CreepCommand) command).isGostTest()) {
+
+                        txtFieldCRPUProcRPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
+                        txtFieldTimeCRPRPPls.setText(((CreepCommand) command).getUserTimeTest());
+                        txtFieldCRPAmtImpRPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+
+                        addTglBtnCRPRPPls.setSelected(true);
+
+                        txtFieldCRPUProcRPPls.setDisable(true);
+                        txtFieldTimeCRPRPPls.setDisable(true);
+                        txtFieldCRPAmtImpRPPls.setDisable(true);
+                    } else {
+                        addTglBtnCRPRPPlsGOST.setSelected(true);
+                    }
+                    CRPTogBtnRPPls.setSelected(true);
+                } else if (command instanceof StartCommand) {
+                    if (!((StartCommand) command).isGostTest()) {
+                        txtFieldSTAIProcRPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
+                        txtFieldTimeSRARPPls.setText(((StartCommand) command).getUserTimeTest());
+                        txtFieldSTAAmtImpRPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+
+                        addTglBtnSTARPPls.setSelected(true);
+
+                        txtFieldSTAIProcRPPls.setDisable(true);
+                        txtFieldTimeSRARPPls.setDisable(true);
+                        txtFieldSTAAmtImpRPPls.setDisable(true);
+                    }else {
+                        addTglBtnSTARPPlsGOST.setSelected(true);
+                    }
+                    STATogBtnRPPls.setSelected(true);
+
+                } else if (command instanceof RTCCommand) {
+                    if (((RTCCommand)command).getErrorType() == 0) {
+                        ChcBxRTCErrRPPls.setValue("В ед. частоты");
+                    } else {
+                        ChcBxRTCErrRPPls.setValue("Сутч. погрешность");
+                    }
+
+                    txtFieldRngERPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
+                    txtFldRTCAmtMshRPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+                    txtFldRTCTimeMshRPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+
+                    ChcBxRTCErrRPPls.setDisable(true);
+
+                    txtFieldRngERPPls.setDisable(true);
+                    txtFldRTCAmtMshRPPls.setDisable(true);
+                    txtFldRTCTimeMshRPPls.setDisable(true);
+                    addTglBtnRTCRPPls.setSelected(true);
+
+                    RTCTogBtnRPPls.setSelected(true);
+                }
+            }
+        }
+
+        if (!saveListForCollumRPMns.isEmpty()) {
+
+            for (Commands command : saveListForCollumRPMns) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+
+                } else if (command instanceof CreepCommand) {
+                    if (!((CreepCommand) command).isGostTest()) {
+
+                        txtFieldCRPUProcRPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
+                        txtFieldTimeCRPRPMns.setText(((CreepCommand) command).getUserTimeTest());
+                        txtFieldCRPAmtImpRPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+
+                        addTglBtnCRPRPMns.setSelected(true);
+
+                        txtFieldCRPUProcRPMns.setDisable(true);
+                        txtFieldTimeCRPRPMns.setDisable(true);
+                        txtFieldCRPAmtImpRPMns.setDisable(true);
+                    } else {
+                        addTglBtnCRPRPMnsGOST.setSelected(true);
+                    }
+                    CRPTogBtnRPMns.setSelected(true);
+
+                } else if (command instanceof StartCommand) {
+                    if (!((StartCommand) command).isGostTest()) {
+                        txtFieldSTAIProcRPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
+                        txtFieldTimeSRARPMns.setText(((StartCommand) command).getUserTimeTest());
+                        txtFieldSTAAmtImpRPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+
+                        addTglBtnSTARPMns.setSelected(true);
+
+                        txtFieldSTAIProcRPMns.setDisable(true);
+                        txtFieldTimeSRARPMns.setDisable(true);
+                        txtFieldSTAAmtImpRPMns.setDisable(true);
+                    }else {
+                        addTglBtnSTARPMnsGOST.setSelected(true);
+                    }
+                    STATogBtnRPMns.setSelected(true);
+
+                } else if (command instanceof RTCCommand) {
+                    if (((RTCCommand)command).getErrorType() == 0) {
+                        ChcBxRTCErrRPMns.setValue("В ед. частоты");
+                    } else {
+                        ChcBxRTCErrRPMns.setValue("Сутч. погрешность");
+                    }
+
+                    txtFieldRngERPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
+                    txtFldRTCAmtMshRPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+                    txtFldRTCTimeMshRPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+
+                    ChcBxRTCErrRPMns.setDisable(true);
+
+                    txtFieldRngERPMns.setDisable(true);
+                    txtFldRTCAmtMshRPMns.setDisable(true);
+                    txtFldRTCTimeMshRPMns.setDisable(true);
+                    addTglBtnRTCRPMns.setSelected(true);
+
+                    RTCTogBtnRPMns.setSelected(true);
+                }
+            }
+        }
+
+        /**
+         *Необходимо убрать
+         */
+
+        testListForCollumAPPls.clear();
+        testListForCollumAPMns.clear();
+        testListForCollumRPPls.clear();
+        testListForCollumRPMns.clear();
+
+        testListForCollumAPPls.addAll(saveListForCollumAPPls);
+        testListForCollumAPMns.addAll(saveListForCollumAPMns);
+        testListForCollumRPPls.addAll(saveListForCollumRPPls);
+        testListForCollumRPMns.addAll(saveListForCollumRPMns);
+    }
+
+    //Находит нужный CheckBox и задаёт значение
+    private void setTrueOrFalseOnCheckBox(char[] testPointIdArr, Commands commands) {
+        //AP+
+        if (testPointIdArr[4] == 'A' && testPointIdArr[6] == 'P') {
+
+            if (testPointIdArr[2] == 'H') {
+
+                for (Node checkBox : gridPaneAllPhaseAPPlus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            } else if (testPointIdArr[2] == 'A') {
+
+                for (Node checkBox : gridPanePhaseAAPPlus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+
+            } else if (testPointIdArr[2] == 'B') {
+
+                for (Node checkBox : gridPanePhaseBAPPlus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            } else if (testPointIdArr[2] == 'C') {
+
+                for (Node checkBox : gridPanePhaseCAPPlus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }
+        //AP-
+        } else if (testPointIdArr[4] == 'A' && testPointIdArr[6] == 'N') {
+
+            if (testPointIdArr[2] == 'H') {
+
+                for (Node checkBox : gridPaneAllPhaseAPMinus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'A') {
+
+                for (Node checkBox : gridPanePhaseAAPMinus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'B') {
+
+                for (Node checkBox : gridPanePhaseBAPMinus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }
+
+            if (testPointIdArr[2] == 'C') {
+
+                for (Node checkBox : gridPanePhaseCAPMinus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }
+        //RP+
+        } else if (testPointIdArr[4] == 'R' && testPointIdArr[6] == 'P') {
+
+            if (testPointIdArr[2] == 'H') {
+
+                for (Node checkBox : gridPaneAllPhaseAPPlus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }else if (testPointIdArr[2] == 'A') {
+
+                for (Node checkBox : gridPanePhaseAAPMinus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }else if (testPointIdArr[2] == 'B') {
+
+                for (Node checkBox : gridPanePhaseBAPMinus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }else if (testPointIdArr[2] == 'C') {
+
+                for (Node checkBox : gridPanePhaseCAPMinus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }
+        //RP-
+        } else if (testPointIdArr[4] == 'R' && testPointIdArr[6] == 'N') {
+
+            if (testPointIdArr[2] == 'H') {
+
+                for (Node checkBox : gridPaneAllPhaseRPMinus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }else if (testPointIdArr[2] == 'A') {
+
+                for (Node checkBox : gridPanePhaseARPMinus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }else if (testPointIdArr[2] == 'B') {
+
+                for (Node checkBox : gridPanePhaseBRPMinus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }else if (testPointIdArr[2] == 'C') {
+
+                for (Node checkBox : gridPanePhaseCRPMinus.getChildren()) {
+                    if (checkBox != null) {
+                        if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
+                            ((CheckBox) checkBox).setSelected(true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @FXML
     void influenceAction(ActionEvent event) {
         if (event.getSource() == influenceBtn) {
-            loadStage("/viewFXML/influenceFrame.fxml", "Настройки теста влияния");
+            loadStage("/viewFXML/methodics/influenceFrame.fxml", "Настройки теста влияния");
         }
     }
 
@@ -1695,541 +2328,88 @@ public class AddEditFrameController {
         ChcBxRTCErrRPMns.getSelectionModel().select(0);
     }
 
-    //Добавляет CheckBox в нужний лист CB
-    private void addCheckBoxInList(String[] idCheck, CheckBox checkBox) {
-
-        //AP+
-        if (idCheck[2].equals("A") && idCheck[3].equals("P")) {
-            if (idCheck[1].equals("H")) {
-                checkBoxesAllPhaseAPPlus.add(checkBox);
-            }
-
-            if (idCheck[1].equals("A")) {
-                checkBoxesPhaseAAPPlus.add(checkBox);
-            }
-
-            if (idCheck[1].equals("B")) {
-                checkBoxesPhaseBAPPlus.add(checkBox);
-            }
-
-            if (idCheck[1].equals("C")) {
-                checkBoxesPhaseCAPPlus.add(checkBox);
-            }
-        }
-
-        //AP-
-        if (idCheck[2].equals("A") && idCheck[3].equals("N")) {
-
-            if (idCheck[1].equals("H")) {
-                checkBoxesAllPhaseAPMns.add(checkBox);
-            }
-
-            if (idCheck[1].equals("A")) {
-                checkBoxesPhaseAAPMns.add(checkBox);
-            }
-
-            if (idCheck[1].equals("B")) {
-                checkBoxesPhaseBAPMns.add(checkBox);
-            }
-
-            if (idCheck[1].equals("C")) {
-                checkBoxesPhaseCAPMns.add(checkBox);
-            }
-        }
-
-        //RP+
-        if (idCheck[2].equals("R") && idCheck[3].equals("P")) {
-
-            if (idCheck[1].equals("H")) {
-                checkBoxesAllPhaseRPPlus.add(checkBox);
-            }
-
-            if (idCheck[1].equals("A")) {
-                checkBoxesPhaseARPPlus.add(checkBox);
-            }
-
-            if (idCheck[1].equals("B")) {
-                checkBoxesPhaseBRPPlus.add(checkBox);
-            }
-
-            if (idCheck[1].equals("C")) {
-                checkBoxesPhaseCRPPlus.add(checkBox);
-            }
-        }
-
-        //RP-
-        if (idCheck[2].equals("R") && idCheck[3].equals("N")) {
-
-            if (idCheck[1].equals("H")) {
-                checkBoxesAllPhaseRPMns.add(checkBox);
-            }
-
-            if (idCheck[1].equals("A")) {
-                checkBoxesPhaseARPMns.add(checkBox);
-            }
-
-            if (idCheck[1].equals("B")) {
-                checkBoxesPhaseBRPMns.add(checkBox);
-            }
-
-            if (idCheck[1].equals("C")) {
-                checkBoxesPhaseCRPMns.add(checkBox);
-            }
-        }
-    }
-
-    //Задаёт параметр true или false нужной точке
-    public void addTestPointsOnGreedPane() {
-        char[] testPointIdArr;
-
-        if (!saveListForCollumAPPls.isEmpty()) {
-
-            for (Commands command : saveListForCollumAPPls) {
-                if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-                }
-
-                if (command instanceof CreepCommand) {
-                    if (!((CreepCommand) command).isGostTest()) {
-
-                        txtFieldCRPUProcAPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPAPPls.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpAPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-
-                        addTglBtnCRPAPPls.setSelected(true);
-
-                        txtFieldCRPUProcAPPls.setDisable(true);
-                        txtFieldTimeCRPAPPls.setDisable(true);
-                        txtFieldCRPAmtImpAPPls.setDisable(true);
-                    } else {
-                        addTglBtnCRPAPPlsGOST.setSelected(true);
-                    }
-                    CRPTogBtnAPPls.setSelected(true);
-                }
-
-                if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcAPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRAAPPls.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpAPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-
-                        addTglBtnSTAAPPls.setSelected(true);
-
-                        txtFieldSTAIProcAPPls.setDisable(true);
-                        txtFieldTimeSRAAPPls.setDisable(true);
-                        txtFieldSTAAmtImpAPPls.setDisable(true);
-                    }else {
-                        addTglBtnSTAAPPlsGOST.setSelected(true);
-                    }
-                    STATogBtnAPPls.setSelected(true);
-                }
-
-                if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
-                        ChcBxRTCErrAPPls.setValue("В ед. частоты");
-                    } else {
-                        ChcBxRTCErrAPPls.setValue("Сутч. погрешность");
-                    }
-
-                    txtFieldRngEAPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshAPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshAPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-
-                    ChcBxRTCErrAPPls.setDisable(true);
-
-                    txtFieldRngEAPPls.setDisable(true);
-                    txtFldRTCAmtMshAPPls.setDisable(true);
-                    txtFldRTCTimeMshAPPls.setDisable(true);
-                    addTglBtnRTCAPPls.setSelected(true);
-
-                    RTCTogBtnAPPls.setSelected(true);
-                }
-            }
-        }
-
-        if (!saveListForCollumAPMns.isEmpty()) {
-
-            for (Commands command : saveListForCollumAPMns) {
-                if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-                }
-
-                if (command instanceof CreepCommand) {
-                    if (!((CreepCommand) command).isGostTest()) {
-
-                        txtFieldCRPUProcAPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPAPMns.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpAPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-
-                        addTglBtnCRPAPMns.setSelected(true);
-
-                        txtFieldCRPUProcAPMns.setDisable(true);
-                        txtFieldTimeCRPAPMns.setDisable(true);
-                        txtFieldCRPAmtImpAPMns.setDisable(true);
-                    } else {
-                        addTglBtnCRPAPMnsGOST.setSelected(true);
-                    }
-                    CRPTogBtnAPMns.setSelected(true);
-                }
-
-                if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcAPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRAAPMns.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpAPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-
-                        addTglBtnSTAAPMns.setSelected(true);
-
-                        txtFieldSTAIProcAPMns.setDisable(true);
-                        txtFieldTimeSRAAPMns.setDisable(true);
-                        txtFieldSTAAmtImpAPMns.setDisable(true);
-                    }else {
-                        addTglBtnSTAAPMnsGOST.setSelected(true);
-                    }
-                    STATogBtnAPMns.setSelected(true);
-                }
-
-                if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
-                        ChcBxRTCErrAPMns.setValue("В ед. частоты");
-                    } else {
-                        ChcBxRTCErrAPMns.setValue("Сутч. погрешность");
-                    }
-
-                    txtFieldRngEAPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshAPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshAPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-
-                    ChcBxRTCErrAPMns.setDisable(true);
-
-                    txtFieldRngEAPMns.setDisable(true);
-                    txtFldRTCAmtMshAPMns.setDisable(true);
-                    txtFldRTCTimeMshAPMns.setDisable(true);
-                    addTglBtnRTCAPMns.setSelected(true);
-
-                    RTCTogBtnAPMns.setSelected(true);
-                }
-            }
-        }
-
-        if (!saveListForCollumRPPls.isEmpty()) {
-
-            for (Commands command : saveListForCollumRPPls) {
-                if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-                }
-
-                if (command instanceof CreepCommand) {
-                    if (!((CreepCommand) command).isGostTest()) {
-
-                        txtFieldCRPUProcRPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPRPPls.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpRPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-
-                        addTglBtnCRPRPPls.setSelected(true);
-
-                        txtFieldCRPUProcRPPls.setDisable(true);
-                        txtFieldTimeCRPRPPls.setDisable(true);
-                        txtFieldCRPAmtImpRPPls.setDisable(true);
-                    } else {
-                        addTglBtnCRPRPPlsGOST.setSelected(true);
-                    }
-                    CRPTogBtnRPPls.setSelected(true);
-                }
-
-                if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcRPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRARPPls.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpRPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-
-                        addTglBtnSTARPPls.setSelected(true);
-
-                        txtFieldSTAIProcRPPls.setDisable(true);
-                        txtFieldTimeSRARPPls.setDisable(true);
-                        txtFieldSTAAmtImpRPPls.setDisable(true);
-                    }else {
-                        addTglBtnSTARPPlsGOST.setSelected(true);
-                    }
-                    STATogBtnRPPls.setSelected(true);
-                }
-
-                if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
-                        ChcBxRTCErrRPPls.setValue("В ед. частоты");
-                    } else {
-                        ChcBxRTCErrRPPls.setValue("Сутч. погрешность");
-                    }
-
-                    txtFieldRngERPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshRPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshRPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-
-                    ChcBxRTCErrRPPls.setDisable(true);
-
-                    txtFieldRngERPPls.setDisable(true);
-                    txtFldRTCAmtMshRPPls.setDisable(true);
-                    txtFldRTCTimeMshRPPls.setDisable(true);
-                    addTglBtnRTCRPPls.setSelected(true);
-
-                    RTCTogBtnRPPls.setSelected(true);
-                }
-            }
-        }
-
-        if (!saveListForCollumRPMns.isEmpty()) {
-
-            for (Commands command : saveListForCollumRPMns) {
-                if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-                }
-
-                if (command instanceof CreepCommand) {
-                    if (!((CreepCommand) command).isGostTest()) {
-
-                        txtFieldCRPUProcRPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPRPMns.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpRPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-
-                        addTglBtnCRPRPMns.setSelected(true);
-
-                        txtFieldCRPUProcRPMns.setDisable(true);
-                        txtFieldTimeCRPRPMns.setDisable(true);
-                        txtFieldCRPAmtImpRPMns.setDisable(true);
-                    } else {
-                        addTglBtnCRPRPMnsGOST.setSelected(true);
-                    }
-                    CRPTogBtnRPMns.setSelected(true);
-                }
-
-                if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcRPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRARPMns.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpRPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-
-                        addTglBtnSTARPMns.setSelected(true);
-
-                        txtFieldSTAIProcRPMns.setDisable(true);
-                        txtFieldTimeSRARPMns.setDisable(true);
-                        txtFieldSTAAmtImpRPMns.setDisable(true);
-                    }else {
-                        addTglBtnSTARPMnsGOST.setSelected(true);
-                    }
-                    STATogBtnRPMns.setSelected(true);
-                }
-
-                if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
-                        ChcBxRTCErrRPMns.setValue("В ед. частоты");
-                    } else {
-                        ChcBxRTCErrRPMns.setValue("Сутч. погрешность");
-                    }
-
-                    txtFieldRngERPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshRPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshRPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-
-                    ChcBxRTCErrRPMns.setDisable(true);
-
-                    txtFieldRngERPMns.setDisable(true);
-                    txtFldRTCAmtMshRPMns.setDisable(true);
-                    txtFldRTCTimeMshRPMns.setDisable(true);
-                    addTglBtnRTCRPMns.setSelected(true);
-
-                    RTCTogBtnRPMns.setSelected(true);
-                }
-            }
-        }
-        testListForCollumAPPls.clear();
-        testListForCollumAPMns.clear();
-        testListForCollumRPPls.clear();
-        testListForCollumRPMns.clear();
-
-        testListForCollumAPPls.addAll(saveListForCollumAPPls);
-        testListForCollumAPMns.addAll(saveListForCollumAPMns);
-        testListForCollumRPPls.addAll(saveListForCollumRPPls);
-        testListForCollumRPMns.addAll(saveListForCollumRPMns);
-
-    }
-
-    //Находит нужный CheckBox и задаёт значение
-    private void setTrueOrFalseOnCheckBox(char[] testPointIdArr, Commands commands) {
-        //AP+
-        if (testPointIdArr[4] == 'A' && testPointIdArr[6] == 'P') {
-
-            if (testPointIdArr[2] == 'H') {
-
-                for (CheckBox checkBox : checkBoxesAllPhaseAPPlus) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'A') {
-
-                for (CheckBox checkBox : checkBoxesPhaseAAPPlus) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'B') {
-
-                for (CheckBox checkBox : checkBoxesPhaseBAPPlus) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'C') {
-
-                for (CheckBox checkBox : checkBoxesPhaseCAPPlus) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-        }
-
-        //AP-
-        if (testPointIdArr[4] == 'A' && testPointIdArr[6] == 'N') {
-
-            if (testPointIdArr[2] == 'H') {
-
-                for (CheckBox checkBox : checkBoxesAllPhaseAPMns) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'A') {
-
-                for (CheckBox checkBox : checkBoxesPhaseAAPMns) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'B') {
-
-                for (CheckBox checkBox : checkBoxesPhaseBAPMns) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'C') {
-
-                for (CheckBox checkBox : checkBoxesPhaseCAPMns) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-        }
-
-        //RP+
-        if (testPointIdArr[4] == 'R' && testPointIdArr[6] == 'P') {
-
-            if (testPointIdArr[2] == 'H') {
-
-                for (CheckBox checkBox : checkBoxesAllPhaseRPPlus) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'A') {
-
-                for (CheckBox checkBox : checkBoxesPhaseARPPlus) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'B') {
-
-                for (CheckBox checkBox : checkBoxesPhaseBRPPlus) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'C') {
-
-                for (CheckBox checkBox : checkBoxesPhaseCRPPlus) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-        }
-
-
-        //RP-
-        if (testPointIdArr[4] == 'R' && testPointIdArr[6] == 'N') {
-
-            if (testPointIdArr[2] == 'H') {
-
-                for (CheckBox checkBox : checkBoxesAllPhaseRPMns) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'A') {
-
-                for (CheckBox checkBox : checkBoxesPhaseARPMns) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'B') {
-
-                for (CheckBox checkBox : checkBoxesPhaseBRPMns) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-
-            if (testPointIdArr[2] == 'C') {
-
-                for (CheckBox checkBox : checkBoxesPhaseCRPMns) {
-                    if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
-                        checkBox.setSelected(true);
-                    }
-                }
-            }
-        }
-    }
-
-    //Создаёт поле нужной величины
-    private void creadteGridPanel(GridPane pane) {
-        for (int i = 0; i < current.size() + 1; i++) {
-            pane.getColumnConstraints().add(new ColumnConstraints(50));
-        }
-        for (int j = 0; j < powerFactor.size() + 1; j++) {
-            pane.getRowConstraints().add(new RowConstraints(23));
-        }
-    }
+//    //Добавляет CheckBox в нужний лист CB
+//    private void addCheckBoxInList(String[] idCheck, CheckBox checkBox) {
+//
+//        //AP+
+//        if (idCheck[2].equals("A") && idCheck[3].equals("P")) {
+//            if (idCheck[1].equals("H")) {
+//                checkBoxesAllPhaseAPPlus.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("A")) {
+//                checkBoxesPhaseAAPPlus.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("B")) {
+//                checkBoxesPhaseBAPPlus.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("C")) {
+//                checkBoxesPhaseCAPPlus.add(checkBox);
+//            }
+//        }
+//
+//        //AP-
+//        if (idCheck[2].equals("A") && idCheck[3].equals("N")) {
+//
+//            if (idCheck[1].equals("H")) {
+//                checkBoxesAllPhaseAPMns.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("A")) {
+//                checkBoxesPhaseAAPMns.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("B")) {
+//                checkBoxesPhaseBAPMns.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("C")) {
+//                checkBoxesPhaseCAPMns.add(checkBox);
+//            }
+//        }
+//
+//        //RP+
+//        if (idCheck[2].equals("R") && idCheck[3].equals("P")) {
+//
+//            if (idCheck[1].equals("H")) {
+//                checkBoxesAllPhaseRPPlus.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("A")) {
+//                checkBoxesPhaseARPPlus.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("B")) {
+//                checkBoxesPhaseBRPPlus.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("C")) {
+//                checkBoxesPhaseCRPPlus.add(checkBox);
+//            }
+//        }
+//
+//        //RP-
+//        if (idCheck[2].equals("R") && idCheck[3].equals("N")) {
+//
+//            if (idCheck[1].equals("H")) {
+//                checkBoxesAllPhaseRPMns.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("A")) {
+//                checkBoxesPhaseARPMns.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("B")) {
+//                checkBoxesPhaseBRPMns.add(checkBox);
+//            }
+//
+//            if (idCheck[1].equals("C")) {
+//                checkBoxesPhaseCRPMns.add(checkBox);
+//            }
+//        }
+//    }
 
     //Имитация ToggleGroup
     private void setGropToggleButton(ActionEvent event) {
@@ -2463,128 +2643,6 @@ public class AddEditFrameController {
         return null;
     }
 
-    //Инициализирует таблицу для отображения выбранных точек
-    private void initTableView() {
-        List<TableColumn<Commands, String>> collumnListAPPls = Arrays.asList(
-                loadCurrTabColAPPls,
-                eMaxTabColAPPls,
-                eMinTabColAPPls,
-                amountImplTabColAPPls,
-                amountMeasTabColAPPls
-        );
-
-        List<TableColumn<Commands, String>> collumnListAPMns = Arrays.asList(
-                loadCurrTabColAPMns,
-                eMaxTabColAPMns,
-                eMinTabColAPMns,
-                amountImplTabColAPMns,
-                amountMeasTabColAPMns
-        );
-
-        List<TableColumn<Commands, String>> collumnListRPPls = Arrays.asList(
-                loadCurrTabColRPPls,
-                eMaxTabColRPPls,
-                eMinTabColRPPls,
-                amountImplTabColRPPls,
-                amountMeasTabColRPPls
-        );
-
-        List<TableColumn<Commands, String>> collumnListRPMns = Arrays.asList(
-                loadCurrTabColRPMns,
-                eMaxTabColRPMns,
-                eMinTabColRPMns,
-                amountImplTabColRPMns,
-                amountMeasTabColRPMns
-        );
-
-        Map<Integer, List<TableColumn<Commands, String>>> mapTableColumn = new HashMap<>();
-        mapTableColumn.put(0, collumnListAPPls);
-        mapTableColumn.put(1, collumnListAPMns);
-        mapTableColumn.put(2, collumnListRPPls);
-        mapTableColumn.put(3, collumnListRPMns);
-
-
-        for (int i = 0; i < mapTableColumn.size(); i++) {
-            //Устанавливаем данные для колонок (AP+, AP-, RP+, RP-)
-            mapTableColumn.get(i).get(0).setCellValueFactory(new PropertyValueFactory<>("name"));
-            mapTableColumn.get(i).get(1).setCellValueFactory(new PropertyValueFactory<>("emax"));
-            mapTableColumn.get(i).get(2).setCellValueFactory(new PropertyValueFactory<>("emin"));
-            mapTableColumn.get(i).get(3).setCellValueFactory(new PropertyValueFactory<>("pulse"));
-            mapTableColumn.get(i).get(4).setCellValueFactory(new PropertyValueFactory<>("countResult"));
-
-            //Выставляем отображение информации в колонке "по центру"
-            mapTableColumn.get(i).get(1).setStyle( "-fx-alignment: CENTER;");
-            mapTableColumn.get(i).get(2).setStyle( "-fx-alignment: CENTER;");
-            mapTableColumn.get(i).get(3).setStyle( "-fx-alignment: CENTER;");
-            mapTableColumn.get(i).get(4).setStyle( "-fx-alignment: CENTER;");
-
-            //Устанавливаем возможность редактирования информации в колонке
-            mapTableColumn.get(i).get(1).setCellFactory(TextFieldTableCell.forTableColumn());
-            mapTableColumn.get(i).get(2).setCellFactory(TextFieldTableCell.forTableColumn());
-            mapTableColumn.get(i).get(3).setCellFactory(TextFieldTableCell.forTableColumn());
-            mapTableColumn.get(i).get(4).setCellFactory(TextFieldTableCell.forTableColumn());
-
-            //Действие при изменении информации в колонке
-            mapTableColumn.get(i).get(1).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
-                TablePosition<Commands, String> pos = event.getTablePosition();
-
-                String newImpulseValue = event.getNewValue();
-
-                int row = pos.getRow();
-                Commands command = event.getTableView().getItems().get(row);
-
-                ((ErrorCommand) command).setEmax(newImpulseValue);
-
-            });
-
-            mapTableColumn.get(i).get(2).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
-                TablePosition<Commands, String> pos = event.getTablePosition();
-
-                String newImpulseValue = event.getNewValue();
-
-                int row = pos.getRow();
-                Commands command = event.getTableView().getItems().get(row);
-
-                ((ErrorCommand) command).setEmin(newImpulseValue);
-
-            });
-
-            mapTableColumn.get(i).get(3).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
-                TablePosition<Commands, String> pos = event.getTablePosition();
-
-                String newImpulseValue = event.getNewValue();
-
-                int row = pos.getRow();
-                Commands command = event.getTableView().getItems().get(row);
-
-                ((ErrorCommand) command).setPulse(newImpulseValue);
-
-            });
-
-            mapTableColumn.get(i).get(4).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
-                TablePosition<Commands, String> pos = event.getTablePosition();
-
-                String newImpulseValue = event.getNewValue();
-
-                int row = pos.getRow();
-                Commands command = event.getTableView().getItems().get(row);
-
-                ((ErrorCommand) command).setCountResult(newImpulseValue);
-
-            });
-        }
-
-        viewPointTableAPPls.setEditable(true);
-        viewPointTableAPMns.setEditable(true);
-        viewPointTableRPPls.setEditable(true);
-        viewPointTableRPMns.setEditable(true);
-
-        viewPointTableAPPls.setItems(testListForCollumAPPls);
-        viewPointTableAPMns.setItems(testListForCollumAPMns);
-        viewPointTableRPPls.setItems(testListForCollumRPPls);
-        viewPointTableRPMns.setItems(testListForCollumRPMns);
-    }
-
     //Добавляет тестовую точку в методику
     private void addTestPointInMethodic(String[] dirCurFactor, String testPoint) {
         if (isThrePhaseStend) {
@@ -2628,7 +2686,6 @@ public class AddEditFrameController {
         if (energyType.equals("A") && currentDirection.equals("P")) {
             testListForCollumAPPls.add(new ErrorCommand(testPoint, phase, current, 0, percent, iABC, powerFactor, 0));
         }
-
         if (energyType.equals("A") && currentDirection.equals("N")) {
             testListForCollumAPMns.add(new ErrorCommand(testPoint, phase, current, 1, percent, iABC, powerFactor, 1));
         }
@@ -2740,36 +2797,6 @@ public class AddEditFrameController {
         influenceFrame.initOfAdeedTestPoints();
     }
 
-
-    //Проверияет нет ли данных с полученной методики и если у неё есть данные, то выгружает её в это окно
-    //Необходимо для команды Редактирования методики
-    public void initEditsMetodic() {
-        saveListForCollumAPPls.addAll(methodic.getCommandsMap().get(0));
-        saveListForCollumAPMns.addAll(methodic.getCommandsMap().get(1));
-        saveListForCollumRPPls.addAll(methodic.getCommandsMap().get(2));
-        saveListForCollumRPMns.addAll(methodic.getCommandsMap().get(3));
-
-        saveInflListForCollumAPPls.addAll(methodic.getSaveInflListForCollumAPPls());
-        saveInflListForCollumAPMns.addAll(methodic.getSaveInflListForCollumAPMns());
-        saveInflListForCollumRPPls.addAll(methodic.getSaveInflListForCollumRPPls());
-        saveInflListForCollumRPMns.addAll(methodic.getSaveInflListForCollumRPMns());
-
-        saveInfluenceUprocAPPls = methodic.getSaveInfluenceUprocAPPls();
-        saveInfluenceUprocAPMns = methodic.getSaveInfluenceUprocAPMns();
-        saveInfluenceUprocRPPls = methodic.getSaveInfluenceUprocRPPls();
-        saveInfluenceUprocRPMns = methodic.getSaveInfluenceUprocRPMns();
-
-        saveInfluenceFprocAPPls = methodic.getSaveInfluenceFprocAPPls();
-        saveInfluenceFprocAPMns = methodic.getSaveInfluenceFprocAPMns();
-        saveInfluenceFprocRPPls = methodic.getSaveInfluenceFprocRPPls();
-        saveInfluenceFprocRPMns = methodic.getSaveInfluenceFprocRPMns();
-
-        saveInfluenceInbUAPPls = methodic.getSaveInfluenceInbUAPPls();
-        saveInfluenceInbUAPMns = methodic.getSaveInfluenceInbUAPMns();
-        saveInfluenceInbURPPls = methodic.getSaveInfluenceInbURPPls();
-        saveInfluenceInbURPMns = methodic.getSaveInfluenceInbURPMns();
-    }
-
     private void loadStage(String fxml, String stageName) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -2791,6 +2818,7 @@ public class AddEditFrameController {
             e.printStackTrace();
         }
     }
+
 
     public void setMethodicNameController(MethodicNameController methodicNameController) {
         this.methodicNameController = methodicNameController;

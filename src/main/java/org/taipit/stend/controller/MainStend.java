@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class MainStend {
 
     public static void main(String[] args) throws InterruptedException {
-
+        System.out.println("12345".compareTo("123"));
 ////        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
 ////
 ////        stendDLLCommands.getUI(1, 230, 0.0, 50.0, 0, 0,
