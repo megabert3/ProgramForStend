@@ -204,7 +204,6 @@ public class MethodicsAddEditDeleteFrameController {
             addEditFrameController.setMethodic(focusedMetodic);
             addEditFrameController.setEdit(true);
             addEditFrameController.initEditsMetodic();
-            //addEditFrameController.addTestPointsOnGreedPane();
             addEditFrameController.setMethodicsAddEditDeleteFrameController(this);
             addEditFrameController.setTextFielMethodicName();
 

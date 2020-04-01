@@ -1,7 +1,13 @@
 package org.taipit.stend.controller.viewController.methodicsFrameController;
 import java.io.IOException;
+import java.util.TreeSet;
 
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -64,6 +70,12 @@ public class MethodicNameController {
 
     @FXML
     void initialize() {
+        nameField.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                acceptNameBtn.fire();
+            }
+        });
     }
 
     public String getName() {
@@ -108,12 +120,31 @@ public class MethodicNameController {
                     stage.setScene(new Scene(root));
 
                     addEditFrameController = fxmlLoader.getController();
+                    addEditFrameController.initGridPane();
+
+//                    Platform.runLater(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            addEditFrameController.initGridPane();
+//
+//                            addEditFrameController.initAndBindUpperScrollPane();
+//                        }
+//                    });
+
+                    //addEditFrameController.initGridPane();
+
                     addEditFrameController.setMethodicNameController(this);
                     addEditFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
                     addEditFrameController.setMethodic(methodicsForTest.getMethodic(name));
                     addEditFrameController.setTextFielMethodicName();
 
                     stage.show();
+//                    Platform.runLater(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            addEditFrameController.initAndBindUpperScrollPane();
+//                        }
+//                    });
 
                     addEditFrameController.initAndBindUpperScrollPane();
 

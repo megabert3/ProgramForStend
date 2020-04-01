@@ -35,6 +35,8 @@ import org.taipit.stend.model.MethodicsForTest;
 
 public class AddEditFrameController {
 
+    AddEditFrameController addEditFrameController = this;
+
     private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
     private InfluenceFrame influenceFrame;
@@ -687,16 +689,17 @@ public class AddEditFrameController {
                     FXMLLoader fxmlLoader = new FXMLLoader();
                     fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addDeleteTestPointInGridPaneFrame.fxml"));
                     fxmlLoader.load();
+
+                    AddDeleteTestPointInGridPaneController addDeleteTestPointInGridPaneController = fxmlLoader.getController();
+                    addDeleteTestPointInGridPaneController.setAddEditFrameController(addEditFrameController);
+
                     Parent root = fxmlLoader.getRoot();
                     Stage stage = new Stage();
                     stage.setTitle("Добавление точек испытаний");
                     stage.setScene(new Scene(root));
                     stage.initModality(Modality.APPLICATION_MODAL);
-
-                    //AddDeleteTestPointInGridPaneController controller = fxmlLoader.getController();
-                    //controller.myInit();
-
                     stage.show();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -706,7 +709,7 @@ public class AddEditFrameController {
         current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
         powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
 
-        initGridPane();
+        //initGridPane();
 
         initTableView();
 
@@ -722,7 +725,7 @@ public class AddEditFrameController {
     }
 
 //============= Всё что касается инициализации GridPane для добавления точек испытаня ================
-    private void initGridPane() {
+    public void initGridPane() {
         // Phase - Режим:
 // 		0 - Однофазный
 //		1 - Трех-фазный четырех-проводной
@@ -841,7 +844,7 @@ public class AddEditFrameController {
         }
     }
 
-    private void createAndInitAdditionalScrollPanesForPowFacAndCurr() {
+    public void createAndInitAdditionalScrollPanesForPowFacAndCurr() {
         //Curr
         scrollPaneForCurrent.setMinHeight(0);
         scrollPaneForCurrent.setPrefHeight(24);
@@ -932,6 +935,7 @@ public class AddEditFrameController {
         gridPaneForPowerFactor.setPrefHeight(gridPaneAllPhaseAPPlus.getHeight());
         scrollPaneForPowerFactor.setContent(gridPaneForPowerFactor);
 
+
         ScrollBar currentHorizontalScroll = null;
         ScrollBar mainHorizontalScroll = null;
 
@@ -942,7 +946,7 @@ public class AddEditFrameController {
 
         ScrollBar nodeScroll;
 
-        for( Node node : mainScrollBars) {
+        for (Node node : mainScrollBars) {
             nodeScroll = (ScrollBar) node;
 
             if (nodeScroll.getOrientation() == Orientation.HORIZONTAL) {
@@ -967,6 +971,11 @@ public class AddEditFrameController {
                 break;
             }
         }
+
+        System.out.println("currentHorizontalScroll " + currentHorizontalScroll + "\n" +
+                "mainHorizontalScroll " + mainHorizontalScroll + "\n" +
+                "powerFactorVerticalScroll " + powerFactorVerticalScroll + "\n" +
+                "mainVerticalScroll " + mainVerticalScroll);
 
         if (currentHorizontalScroll != null && mainHorizontalScroll != null) {
             currentHorizontalScroll.valueProperty().bindBidirectional(mainHorizontalScroll.valueProperty());

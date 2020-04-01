@@ -1,5 +1,6 @@
 package org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +19,8 @@ import java.util.Comparator;
 
 
 public class AddDeleteTestPointInGridPaneController {
+
+    private AddEditFrameController addEditFrameController;
 
     private ObservableList<String> powerFactor = FXCollections.observableArrayList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
     private ObservableList<String> current = FXCollections.observableArrayList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
@@ -123,6 +126,15 @@ public class AddDeleteTestPointInGridPaneController {
                  */
 
                 stage.close();
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        addEditFrameController.initGridPane();
+                        addEditFrameController.initAndBindUpperScrollPane();
+                    }
+                });
+
             }
         });
     }
@@ -193,5 +205,9 @@ public class AddDeleteTestPointInGridPaneController {
         if (event.getSource() == btnDeleteCurrent) {
             tabListCurrent.getItems().remove(tabListCurrent.getSelectionModel().getSelectedItem());
         }
+    }
+
+    public void setAddEditFrameController(AddEditFrameController addEditFrameController) {
+        this.addEditFrameController = addEditFrameController;
     }
 }
