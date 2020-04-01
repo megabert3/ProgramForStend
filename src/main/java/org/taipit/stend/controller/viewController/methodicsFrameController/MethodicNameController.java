@@ -120,18 +120,8 @@ public class MethodicNameController {
                     stage.setScene(new Scene(root));
 
                     addEditFrameController = fxmlLoader.getController();
-                    addEditFrameController.initGridPane();
 
-//                    Platform.runLater(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            addEditFrameController.initGridPane();
-//
-//                            addEditFrameController.initAndBindUpperScrollPane();
-//                        }
-//                    });
-
-                    //addEditFrameController.initGridPane();
+                    //addEditFrameController.initMainScrollPane();
 
                     addEditFrameController.setMethodicNameController(this);
                     addEditFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
@@ -139,15 +129,10 @@ public class MethodicNameController {
                     addEditFrameController.setTextFielMethodicName();
 
                     stage.show();
-//                    Platform.runLater(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            addEditFrameController.initAndBindUpperScrollPane();
-//                        }
-//                    });
 
-                    addEditFrameController.initAndBindUpperScrollPane();
+                    addEditFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
 
+                    add = false;
                     Stage stageMetodicName = (Stage) nameField.getScene().getWindow();
                     stageMetodicName.close();
                 } catch (InfoExсeption e) {

@@ -3,6 +3,7 @@ package org.taipit.stend.controller.viewController.methodicsFrameController;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -203,14 +204,23 @@ public class MethodicsAddEditDeleteFrameController {
             addEditFrameController = fxmlLoader.getController();
             addEditFrameController.setMethodic(focusedMetodic);
             addEditFrameController.setEdit(true);
+
             addEditFrameController.initEditsMetodic();
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    addEditFrameController.addTestPointsOnGreedPane();
+                }
+            });
+
             addEditFrameController.setMethodicsAddEditDeleteFrameController(this);
             addEditFrameController.setTextFielMethodicName();
 
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
 
-            addEditFrameController.initAndBindUpperScrollPane();
+            addEditFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
 
         }
 

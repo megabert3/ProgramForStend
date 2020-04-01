@@ -119,21 +119,11 @@ public class AddDeleteTestPointInGridPaneController {
 
                 ConsoleHelper.saveProperties();
 
+
+
                 Stage stage = (Stage) btnSave.getScene().getWindow();
 
-                /**
-                 * Дописать реализацию перерисовки GridPane
-                 */
-
                 stage.close();
-
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        addEditFrameController.initGridPane();
-                        addEditFrameController.initAndBindUpperScrollPane();
-                    }
-                });
 
             }
         });

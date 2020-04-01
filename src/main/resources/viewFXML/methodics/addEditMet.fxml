@@ -3,14 +3,12 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -112,46 +110,6 @@
                   </ToggleButton>
                </children>
             </HBox>
-            <ScrollPane fx:id="mainScrollPane" layoutX="108.0" layoutY="34.0" prefHeight="230.0" prefWidth="643.0" stylesheets="@../../styleCSS/scrolPaneStyleBlack.css">
-               <content>
-                  <StackPane prefHeight="230.0" prefWidth="643.0">
-                     <children>
-                        <GridPane fx:id="gridPaneAllPhaseAPPlus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseAAPPlus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseBAPPlus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseCAPPlus" prefHeight="230.0" prefWidth="636.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPaneAllPhaseAPMinus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseAAPMinus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseBAPMinus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseCAPMinus" prefHeight="230.0" prefWidth="636.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPaneAllPhaseRPPlus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseARPPlus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseBRPPlus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseCRPPlus" prefHeight="230.0" prefWidth="636.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPaneAllPhaseRPMinus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseARPMinus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseBRPMinus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                        </GridPane>
-                        <GridPane fx:id="gridPanePhaseCRPMinus" prefHeight="230.0" prefWidth="637.0">
-                        </GridPane>
-                     </children>
-                  </StackPane>
-               </content>
-            </ScrollPane>
          </children>
       </AnchorPane>
       <Button fx:id="CancelBtn" layoutX="1047.0" layoutY="794.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="40.0" prefWidth="150.0" text="Отменить">

@@ -61,33 +61,7 @@ public class AddEditFrameController {
     //Это трёхфазный стенд?
     private boolean isThrePhaseStend;
 
-    private ScrollPane scrollPaneForCurrent = new ScrollPane();
-    private ScrollPane scrollPaneForPowerFactor = new ScrollPane();
-
-//    //Листы с checkBox'ами.
-//    //AP+
-//    private List<CheckBox> checkBoxesAllPhaseAPPlus = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseAAPPlus = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseBAPPlus = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseCAPPlus = new ArrayList<>();
-//
-//    //AP-
-//    private List<CheckBox> checkBoxesAllPhaseAPMns = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseAAPMns = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseBAPMns = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseCAPMns = new ArrayList<>();
-//
-//    //RP+
-//    private List<CheckBox> checkBoxesAllPhaseRPPlus = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseARPPlus = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseBRPPlus = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseCRPPlus = new ArrayList<>();
-//
-//    //RP-
-//    private List<CheckBox> checkBoxesAllPhaseRPMns = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseARPMns = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseBRPMns = new ArrayList<>();
-//    private List<CheckBox> checkBoxesPhaseCRPMns = new ArrayList<>();
+    private List<GridPane> gridPanesEnergyAndPhase;
 
     //Сохранённые листы с точками
     private List<Commands> saveListForCollumAPPls = new ArrayList<>();
@@ -133,7 +107,13 @@ public class AddEditFrameController {
     private AnchorPane mainAnchorPane;
 
     @FXML
-    private ScrollPane mainScrollPane;
+    private ScrollPane mainScrollPane = new ScrollPane();
+
+    @FXML
+    private StackPane stackPaneForGridPane = new StackPane();
+
+    private ScrollPane scrollPaneForCurrent = new ScrollPane();
+    private ScrollPane scrollPaneForPowerFactor = new ScrollPane();
 
     private Button btnAddDeleteTestPoints = new Button();
 
@@ -220,56 +200,28 @@ public class AddEditFrameController {
     //-------------------------------------------------------
     //Данный блок отвечает за сетку выбора точки.
     //Активная энергия в прямом направлении, Все фазы и отдельно А В С
-    @FXML
-    private GridPane gridPaneAllPhaseAPPlus;
-
-    @FXML
-    private GridPane gridPanePhaseAAPPlus;
-
-    @FXML
-    private GridPane gridPanePhaseBAPPlus;
-
-    @FXML
-    private GridPane gridPanePhaseCAPPlus;
+    private GridPane gridPaneAllPhaseAPPlus = new GridPane();
+    private GridPane gridPanePhaseAAPPlus = new GridPane();
+    private GridPane gridPanePhaseBAPPlus = new GridPane();
+    private GridPane gridPanePhaseCAPPlus = new GridPane();
 
     //Активная энергия в обратном направлении, Все фазы и отдельно А В С
-    @FXML
-    private GridPane gridPaneAllPhaseAPMinus;
-
-    @FXML
-    private GridPane gridPanePhaseAAPMinus;
-
-    @FXML
-    private GridPane gridPanePhaseBAPMinus;
-
-    @FXML
-    private GridPane gridPanePhaseCAPMinus;
+    private GridPane gridPaneAllPhaseAPMinus = new GridPane();
+    private GridPane gridPanePhaseAAPMinus = new GridPane();
+    private GridPane gridPanePhaseBAPMinus = new GridPane();
+    private GridPane gridPanePhaseCAPMinus = new GridPane();
 
     //Реактивная энергия в прямом направлении, Все фазы и отдельно А В С
-    @FXML
-    private GridPane gridPaneAllPhaseRPPlus;
-
-    @FXML
-    private GridPane gridPanePhaseARPPlus;
-
-    @FXML
-    private GridPane gridPanePhaseBRPPlus;
-
-    @FXML
-    private GridPane gridPanePhaseCRPPlus;
+    private GridPane gridPaneAllPhaseRPPlus = new GridPane();
+    private GridPane gridPanePhaseARPPlus = new GridPane();
+    private GridPane gridPanePhaseBRPPlus = new GridPane();
+    private GridPane gridPanePhaseCRPPlus = new GridPane();
 
     //Реактивная энергия в обратном направлении, Все фазы и отдельно А В С
-    @FXML
-    private GridPane gridPaneAllPhaseRPMinus;
-
-    @FXML
-    private GridPane gridPanePhaseARPMinus;
-
-    @FXML
-    private GridPane gridPanePhaseBRPMinus;
-
-    @FXML
-    private GridPane gridPanePhaseCRPMinus;
+    private GridPane gridPaneAllPhaseRPMinus = new GridPane();
+    private GridPane gridPanePhaseARPMinus = new GridPane();
+    private GridPane gridPanePhaseBRPMinus = new GridPane();
+    private GridPane gridPanePhaseCRPMinus = new GridPane();
 
     //-------------------------------------------------------
 
@@ -681,6 +633,15 @@ public class AddEditFrameController {
             isThrePhaseStend = true;
         }
 
+        current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
+        powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
+
+        setIdGridPanes();
+
+        initMainScrollPane();
+
+        createAndInitScrollPanesForGridPane();
+
         btnAddDeleteTestPoints.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -706,11 +667,6 @@ public class AddEditFrameController {
             }
         });
 
-        current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
-        powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
-
-        //initGridPane();
-
         initTableView();
 
         APPlus.setSelected(true);
@@ -724,18 +680,30 @@ public class AddEditFrameController {
         viewPointTableAPPls.toFront();
     }
 
-//============= Всё что касается инициализации GridPane для добавления точек испытаня ================
-    public void initGridPane() {
-        // Phase - Режим:
-// 		0 - Однофазный
-//		1 - Трех-фазный четырех-проводной
-//		2 - Трех-фазный трех-проводной
-// 		3 - Трех-фазный трех-проводной реактив 90 градусов
-// 		4 - Трех-фазный трех-проводной реактив 60 градусов
-//		5 - Трех-фазный четырех-проводной (реактив)
-//		6 - Трех-фазный трех-проводной (реактив)
-//		7 - Однофазный реактив
-//Режим;
+//================Всё чтоё связанно с инициализацией грид пайн ======================
+    private void initMainScrollPane() {
+        mainScrollPane.setPrefHeight(230);
+        mainScrollPane.setPrefWidth(643);
+        mainScrollPane.setLayoutX(135);
+        mainScrollPane.setLayoutY(175);
+
+        mainScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        mainScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+
+        mainScrollPane.setStyle("-fx-background: #6A6A6A;");
+
+        mainScrollPane.setContent(stackPaneForGridPane);
+
+        mainAnchorPane.getChildren().add(mainScrollPane);
+
+        createRowAndColumnForGridPane();
+
+        initGridCheckBosing();
+
+        stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
+    }
+
+    private void setIdGridPanes() {
         if (isThrePhaseStend) {
             gridPaneAllPhaseAPPlus.setId("1;H;A;P");
             gridPanePhaseAAPPlus.setId("1;A;A;P");
@@ -772,7 +740,7 @@ public class AddEditFrameController {
             gridPanePhaseCRPMinus.setId("7;C;R;N");
         }
 
-        List<GridPane> gridPanesEnergyAndPhase = Arrays.asList(
+        gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneAllPhaseAPPlus,
                 gridPanePhaseAAPPlus,
                 gridPanePhaseBAPPlus,
@@ -790,19 +758,29 @@ public class AddEditFrameController {
                 gridPanePhaseBRPMinus,
                 gridPanePhaseCRPMinus
         );
-
-        for (GridPane pane : gridPanesEnergyAndPhase) {
-            setBoxAndLabelGridPane(pane);
-        }
-
-        createAndInitAdditionalScrollPanesForPowFacAndCurr();
     }
 
-    //Заполняет поля нужными значениями GridPane
-    private void setBoxAndLabelGridPane(GridPane pane) {
-        creadteGridPanel(pane);
+    private void createRowAndColumnForGridPane() {
+        for (GridPane gridPane : gridPanesEnergyAndPhase) {
+            for (int i = 0; i < current.size() + 1; i++) {
+                gridPane.getColumnConstraints().add(new ColumnConstraints(50));
+            }
 
-        pane.setGridLinesVisible(true);
+            for (int j = 0; j < powerFactor.size() + 1; j++) {
+                gridPane.getRowConstraints().add(new RowConstraints(23));
+            }
+        }
+    }
+
+    private void initGridCheckBosing() {
+        for (GridPane gridPaneane : gridPanesEnergyAndPhase) {
+            setCheckBoxAndLabelInGridPane(gridPaneane);
+        }
+    }
+
+    private void setCheckBoxAndLabelInGridPane(GridPane grigPane) {
+        grigPane.setGridLinesVisible(true);
+        grigPane.setStyle("-fx-background: #6A6A6A;");
 
         CheckBox checkBox;
 
@@ -810,11 +788,9 @@ public class AddEditFrameController {
             for (int y = 0; y < powerFactor.size(); y++) {
                 //Устанавливаю CheckBox в нужную и соответствующую ячейку
                 checkBox = new CheckBox();
-                checkBox.setId(pane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
+                checkBox.setId(grigPane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
                 CheckBox finalCheckBox = checkBox;
                 String[] idCheckBox = finalCheckBox.getId().split(";");
-
-                //addCheckBoxInList(idCheckBox, checkBox);
 
                 checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
                     if (newVal) {
@@ -829,22 +805,15 @@ public class AddEditFrameController {
                 GridPane.setHalignment(checkBox, HPos.CENTER);
                 GridPane.setValignment(checkBox, VPos.CENTER);
 
-                pane.getChildren().add(checkBox);
+                grigPane.getChildren().add(checkBox);
             }
         }
     }
 
-    //Создаёт поле нужной величины
-    private void creadteGridPanel(GridPane pane) {
-        for (int i = 0; i < current.size() + 1; i++) {
-            pane.getColumnConstraints().add(new ColumnConstraints(50));
-        }
-        for (int j = 0; j < powerFactor.size() + 1; j++) {
-            pane.getRowConstraints().add(new RowConstraints(23));
-        }
-    }
+    private void createAndInitScrollPanesForGridPane() {
+        current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
+        powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
 
-    public void createAndInitAdditionalScrollPanesForPowFacAndCurr() {
         //Curr
         scrollPaneForCurrent.setMinHeight(0);
         scrollPaneForCurrent.setPrefHeight(24);
@@ -860,42 +829,10 @@ public class AddEditFrameController {
         scrollPaneForCurrent.setPrefWidth(mainScrollPane.getPrefWidth() - 13);
         mainAnchorPane.getChildren().add(scrollPaneForCurrent);
 
-        //PF
-        scrollPaneForPowerFactor.setMinWidth(0);
-        scrollPaneForPowerFactor.setPrefWidth(50);
-        scrollPaneForPowerFactor.setStyle("-fx-background: #FFC107;" +
-                "-fx-background-insets: 0, 0 1 1 0;" +
-                "-fx-background-color: #FFC107;");
-
-        scrollPaneForPowerFactor.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPaneForPowerFactor.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPaneForPowerFactor.setLayoutX(135);
-        scrollPaneForPowerFactor.setLayoutY(175);
-
-        scrollPaneForPowerFactor.setPrefHeight(mainScrollPane.getPrefHeight() - 13);
-        mainAnchorPane.getChildren().add(scrollPaneForPowerFactor);
-
-        //Закрывающий квадрат
-        Pane fillSquare = new Pane();
-        fillSquare.setStyle("-fx-background-color: #FFC107;");
-        fillSquare.setPrefHeight(23);
-        fillSquare.setPrefWidth(50);
-        fillSquare.setLayoutX(135);
-        fillSquare.setLayoutY(175);
-        mainAnchorPane.getChildren().add(fillSquare);
-
-        btnAddDeleteTestPoints.setText("Точки");
-        btnAddDeleteTestPoints.setMinHeight(0);
-        btnAddDeleteTestPoints.setPrefSize(fillSquare.getPrefWidth() - 1, fillSquare.getPrefHeight() - 1);
-        btnAddDeleteTestPoints.setStyle("-fx-background-color: #743A4F;" +
-                "-fx-background-insets: 0, 0 1 1 0;");
-
-        fillSquare.getChildren().add(btnAddDeleteTestPoints);
-    }
-
-
-    public void initAndBindUpperScrollPane() {
         GridPane gridPaneForCurrent = new GridPane();
+        gridPaneForCurrent.setPrefWidth(gridPaneAllPhaseAPPlus.getWidth());
+        scrollPaneForCurrent.setContent(gridPaneForCurrent);
+
         gridPaneForCurrent.setGridLinesVisible(true);
         gridPaneForCurrent.setStyle("#6A6A6A");
         gridPaneForCurrent.getRowConstraints().add(new RowConstraints(23));
@@ -912,8 +849,20 @@ public class AddEditFrameController {
             gridPaneForCurrent.getChildren().add(labelCurr);
         }
 
-        gridPaneForCurrent.setPrefWidth(gridPaneAllPhaseAPPlus.getWidth());
-        scrollPaneForCurrent.setContent(gridPaneForCurrent);
+        //PF
+        scrollPaneForPowerFactor.setMinWidth(0);
+        scrollPaneForPowerFactor.setPrefWidth(50);
+        scrollPaneForPowerFactor.setStyle("-fx-background: #FFC107;" +
+                "-fx-background-insets: 0, 0 1 1 0;" +
+                "-fx-background-color: #FFC107;");
+
+        scrollPaneForPowerFactor.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setLayoutX(135);
+        scrollPaneForPowerFactor.setLayoutY(175);
+
+        scrollPaneForPowerFactor.setPrefHeight(mainScrollPane.getPrefHeight() - 13);
+        mainAnchorPane.getChildren().add(scrollPaneForPowerFactor);
 
         GridPane gridPaneForPowerFactor = new GridPane();
         gridPaneForPowerFactor.setGridLinesVisible(true);
@@ -935,7 +884,25 @@ public class AddEditFrameController {
         gridPaneForPowerFactor.setPrefHeight(gridPaneAllPhaseAPPlus.getHeight());
         scrollPaneForPowerFactor.setContent(gridPaneForPowerFactor);
 
+        //Закрывающий квадрат
+        Pane fillSquare = new Pane();
+        fillSquare.setStyle("-fx-background-color: #FFC107;");
+        fillSquare.setPrefHeight(23);
+        fillSquare.setPrefWidth(50);
+        fillSquare.setLayoutX(135);
+        fillSquare.setLayoutY(175);
+        mainAnchorPane.getChildren().add(fillSquare);
 
+        btnAddDeleteTestPoints.setText("Точки");
+        btnAddDeleteTestPoints.setMinHeight(0);
+        btnAddDeleteTestPoints.setPrefSize(fillSquare.getPrefWidth(), fillSquare.getPrefHeight());
+        btnAddDeleteTestPoints.setStyle("-fx-background-color: #FFC107;" +
+                "-fx-background-insets: 0, 0 0 0 0;");
+
+        fillSquare.getChildren().add(btnAddDeleteTestPoints);
+    }
+
+    public void bindScrollPanesCurrentAndPowerFactorToMainScrollPane() {
         ScrollBar currentHorizontalScroll = null;
         ScrollBar mainHorizontalScroll = null;
 
@@ -1134,12 +1101,10 @@ public class AddEditFrameController {
         saveInfluenceInbUAPMns = methodic.getSaveInfluenceInbUAPMns();
         saveInfluenceInbURPPls = methodic.getSaveInfluenceInbURPPls();
         saveInfluenceInbURPMns = methodic.getSaveInfluenceInbURPMns();
-
-        addTestPointsOnGreedPane();
     }
 
     //Задаёт параметр true или false нужному checkBox'у
-    private void addTestPointsOnGreedPane() {
+    public void addTestPointsOnGreedPane() {
         char[] testPointIdArr;
 
         if (!saveListForCollumAPPls.isEmpty()) {
@@ -1393,19 +1358,24 @@ public class AddEditFrameController {
             }
         }
 
-        /**
-         *Необходимо убрать
-         */
-
+        //Т.к. при инициализации устанавливается слушатель для CheckBox'ов
+        //Во избежание дублирования приходитс отчищать список и заново инициализировать
         testListForCollumAPPls.clear();
         testListForCollumAPMns.clear();
         testListForCollumRPPls.clear();
         testListForCollumRPMns.clear();
 
-        testListForCollumAPPls.addAll(saveListForCollumAPPls);
-        testListForCollumAPMns.addAll(saveListForCollumAPMns);
-        testListForCollumRPPls.addAll(saveListForCollumRPPls);
-        testListForCollumRPMns.addAll(saveListForCollumRPMns);
+        testListForCollumAPPls.setAll(saveListForCollumAPPls);
+        testListForCollumAPPls.addAll(saveInflListForCollumAPPls);
+
+        testListForCollumAPMns.setAll(saveListForCollumAPMns);
+        testListForCollumAPMns.addAll(saveInflListForCollumAPMns);
+
+        testListForCollumRPPls.setAll(saveListForCollumRPPls);
+        testListForCollumRPPls.addAll(saveInflListForCollumRPPls);
+
+        testListForCollumRPMns.setAll(saveListForCollumRPMns);
+        testListForCollumRPMns.addAll(saveInflListForCollumRPMns);
     }
 
     //Находит нужный CheckBox и задаёт значение
@@ -1578,6 +1548,12 @@ public class AddEditFrameController {
                 }
             }
         }
+    }
+//===================================================================================================
+
+    //Метод для перерисовки GridPane после добавления новых параметров для точек
+    public void refreshGridPaneAndScrolPane() {
+
     }
 
     @FXML
@@ -2336,89 +2312,6 @@ public class AddEditFrameController {
         ChcBxRTCErrRPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
         ChcBxRTCErrRPMns.getSelectionModel().select(0);
     }
-
-//    //Добавляет CheckBox в нужний лист CB
-//    private void addCheckBoxInList(String[] idCheck, CheckBox checkBox) {
-//
-//        //AP+
-//        if (idCheck[2].equals("A") && idCheck[3].equals("P")) {
-//            if (idCheck[1].equals("H")) {
-//                checkBoxesAllPhaseAPPlus.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("A")) {
-//                checkBoxesPhaseAAPPlus.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("B")) {
-//                checkBoxesPhaseBAPPlus.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("C")) {
-//                checkBoxesPhaseCAPPlus.add(checkBox);
-//            }
-//        }
-//
-//        //AP-
-//        if (idCheck[2].equals("A") && idCheck[3].equals("N")) {
-//
-//            if (idCheck[1].equals("H")) {
-//                checkBoxesAllPhaseAPMns.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("A")) {
-//                checkBoxesPhaseAAPMns.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("B")) {
-//                checkBoxesPhaseBAPMns.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("C")) {
-//                checkBoxesPhaseCAPMns.add(checkBox);
-//            }
-//        }
-//
-//        //RP+
-//        if (idCheck[2].equals("R") && idCheck[3].equals("P")) {
-//
-//            if (idCheck[1].equals("H")) {
-//                checkBoxesAllPhaseRPPlus.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("A")) {
-//                checkBoxesPhaseARPPlus.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("B")) {
-//                checkBoxesPhaseBRPPlus.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("C")) {
-//                checkBoxesPhaseCRPPlus.add(checkBox);
-//            }
-//        }
-//
-//        //RP-
-//        if (idCheck[2].equals("R") && idCheck[3].equals("N")) {
-//
-//            if (idCheck[1].equals("H")) {
-//                checkBoxesAllPhaseRPMns.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("A")) {
-//                checkBoxesPhaseARPMns.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("B")) {
-//                checkBoxesPhaseBRPMns.add(checkBox);
-//            }
-//
-//            if (idCheck[1].equals("C")) {
-//                checkBoxesPhaseCRPMns.add(checkBox);
-//            }
-//        }
-//    }
 
     //Имитация ToggleGroup
     private void setGropToggleButton(ActionEvent event) {
