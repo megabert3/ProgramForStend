@@ -3,6 +3,8 @@ package org.taipit.stend.controller.viewController.methodicsFrameController.addE
 import java.io.IOException;
 import java.util.*;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +37,7 @@ import org.taipit.stend.model.MethodicsForTest;
 
 public class AddEditFrameController {
 
-    AddEditFrameController addEditFrameController = this;
+    private AddEditFrameController addEditFrameController = this;
 
     private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
@@ -61,7 +63,13 @@ public class AddEditFrameController {
     //Это трёхфазный стенд?
     private boolean isThrePhaseStend;
 
-    private List<GridPane> gridPanesEnergyAndPhase;
+    private List<GridPane> gridPanesEnergyAndPhase = new ArrayList<>();
+
+    //Необходим для инициализации тестовых точек после добаления новых точек к сетке
+    private List<Commands> addDeleteTestPointGridPaneAPPls;
+    private List<Commands> addDeleteTestPointGridPaneAPMns;
+    private List<Commands> addDeleteTestPointGridPaneRPPls;
+    private List<Commands> addDeleteTestPointGridPaneRPMns;
 
     //Сохранённые листы с точками
     private List<Commands> saveListForCollumAPPls = new ArrayList<>();
@@ -106,15 +114,16 @@ public class AddEditFrameController {
     @FXML
     private AnchorPane mainAnchorPane;
 
-    @FXML
     private ScrollPane mainScrollPane = new ScrollPane();
 
-    @FXML
     private StackPane stackPaneForGridPane = new StackPane();
 
     private ScrollPane scrollPaneForCurrent = new ScrollPane();
     private ScrollPane scrollPaneForPowerFactor = new ScrollPane();
+    private GridPane gridPaneForCurrent = new GridPane();
+    private GridPane gridPaneForPowerFactor = new GridPane();
 
+    private Pane fillSquare;
     private Button btnAddDeleteTestPoints = new Button();
 
     //Отвечают за окно отображения выбранных точек тестирования
@@ -629,6 +638,7 @@ public class AddEditFrameController {
 
     @FXML
     void initialize() {
+
         if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
             isThrePhaseStend = true;
         }
@@ -640,7 +650,9 @@ public class AddEditFrameController {
 
         initMainScrollPane();
 
-        createAndInitScrollPanesForGridPane();
+        initScrolPaneForCurrentAndPowerFactor();
+
+        createScrollPanesForGridPane();
 
         btnAddDeleteTestPoints.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -740,24 +752,24 @@ public class AddEditFrameController {
             gridPanePhaseCRPMinus.setId("7;C;R;N");
         }
 
-        gridPanesEnergyAndPhase = Arrays.asList(
-                gridPaneAllPhaseAPPlus,
-                gridPanePhaseAAPPlus,
-                gridPanePhaseBAPPlus,
-                gridPanePhaseCAPPlus,
-                gridPaneAllPhaseAPMinus,
-                gridPanePhaseAAPMinus,
-                gridPanePhaseBAPMinus,
-                gridPanePhaseCAPMinus,
-                gridPaneAllPhaseRPPlus,
-                gridPanePhaseARPPlus,
-                gridPanePhaseBRPPlus,
-                gridPanePhaseCRPPlus,
-                gridPaneAllPhaseRPMinus,
-                gridPanePhaseARPMinus,
-                gridPanePhaseBRPMinus,
-                gridPanePhaseCRPMinus
-        );
+        gridPanesEnergyAndPhase.clear();
+
+        gridPanesEnergyAndPhase.add(gridPaneAllPhaseAPPlus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseAAPPlus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseBAPPlus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseCAPPlus);
+        gridPanesEnergyAndPhase.add(gridPaneAllPhaseAPMinus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseAAPMinus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseBAPMinus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseCAPMinus);
+        gridPanesEnergyAndPhase.add(gridPaneAllPhaseRPPlus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseARPPlus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseBRPPlus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseCRPPlus);
+        gridPanesEnergyAndPhase.add(gridPaneAllPhaseRPMinus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseARPMinus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseBRPMinus);
+        gridPanesEnergyAndPhase.add(gridPanePhaseCRPMinus);
     }
 
     private void createRowAndColumnForGridPane() {
@@ -810,10 +822,7 @@ public class AddEditFrameController {
         }
     }
 
-    private void createAndInitScrollPanesForGridPane() {
-        current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
-        powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
-
+    private void createScrollPanesForGridPane() {
         //Curr
         scrollPaneForCurrent.setMinHeight(0);
         scrollPaneForCurrent.setPrefHeight(24);
@@ -829,7 +838,43 @@ public class AddEditFrameController {
         scrollPaneForCurrent.setPrefWidth(mainScrollPane.getPrefWidth() - 13);
         mainAnchorPane.getChildren().add(scrollPaneForCurrent);
 
-        GridPane gridPaneForCurrent = new GridPane();
+        //PF
+        scrollPaneForPowerFactor.setMinWidth(0);
+        scrollPaneForPowerFactor.setPrefWidth(50);
+        scrollPaneForPowerFactor.setStyle("-fx-background: #FFC107;" +
+                "-fx-background-insets: 0, 0 1 1 0;" +
+                "-fx-background-color: #FFC107;");
+
+        scrollPaneForPowerFactor.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setLayoutX(135);
+        scrollPaneForPowerFactor.setLayoutY(175);
+
+        scrollPaneForPowerFactor.setPrefHeight(mainScrollPane.getPrefHeight() - 13);
+        mainAnchorPane.getChildren().add(scrollPaneForPowerFactor);
+
+        gridPaneForPowerFactor.setPrefHeight(gridPaneAllPhaseAPPlus.getHeight());
+        scrollPaneForPowerFactor.setContent(gridPaneForPowerFactor);
+
+        //Закрывающий квадрат
+        fillSquare = new Pane();
+        fillSquare.setStyle("-fx-background-color: #FFC107;");
+        fillSquare.setPrefHeight(23);
+        fillSquare.setPrefWidth(50);
+        fillSquare.setLayoutX(135);
+        fillSquare.setLayoutY(175);
+        mainAnchorPane.getChildren().add(fillSquare);
+
+        btnAddDeleteTestPoints.setText("Точки");
+        btnAddDeleteTestPoints.setMinHeight(0);
+        btnAddDeleteTestPoints.setPrefSize(fillSquare.getPrefWidth(), fillSquare.getPrefHeight());
+        btnAddDeleteTestPoints.setStyle("-fx-background-color: #FFC107;" +
+                "-fx-background-insets: 0, 0 0 0 0;");
+
+        fillSquare.getChildren().add(btnAddDeleteTestPoints);
+    }
+
+    private void initScrolPaneForCurrentAndPowerFactor() {
         gridPaneForCurrent.setPrefWidth(gridPaneAllPhaseAPPlus.getWidth());
         scrollPaneForCurrent.setContent(gridPaneForCurrent);
 
@@ -849,22 +894,6 @@ public class AddEditFrameController {
             gridPaneForCurrent.getChildren().add(labelCurr);
         }
 
-        //PF
-        scrollPaneForPowerFactor.setMinWidth(0);
-        scrollPaneForPowerFactor.setPrefWidth(50);
-        scrollPaneForPowerFactor.setStyle("-fx-background: #FFC107;" +
-                "-fx-background-insets: 0, 0 1 1 0;" +
-                "-fx-background-color: #FFC107;");
-
-        scrollPaneForPowerFactor.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPaneForPowerFactor.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPaneForPowerFactor.setLayoutX(135);
-        scrollPaneForPowerFactor.setLayoutY(175);
-
-        scrollPaneForPowerFactor.setPrefHeight(mainScrollPane.getPrefHeight() - 13);
-        mainAnchorPane.getChildren().add(scrollPaneForPowerFactor);
-
-        GridPane gridPaneForPowerFactor = new GridPane();
         gridPaneForPowerFactor.setGridLinesVisible(true);
         gridPaneForPowerFactor.setStyle("#6A6A6A");
         gridPaneForPowerFactor.getRowConstraints().add(new RowConstraints(23));
@@ -880,26 +909,43 @@ public class AddEditFrameController {
             GridPane.setValignment(labelPowerFactor, VPos.CENTER);
             gridPaneForPowerFactor.getChildren().add(labelPowerFactor);
         }
+    }
+
+    private void createScrollPanesForGridPaneWithoutSquare() {
+        //Curr
+        scrollPaneForCurrent.setMinHeight(0);
+        scrollPaneForCurrent.setPrefHeight(24);
+        scrollPaneForCurrent.setStyle("-fx-background: #FFC107;" +
+                "-fx-background-insets: 0, 0 1 1 0;" +
+                "-fx-background-color: #FFC107;");
+
+        scrollPaneForCurrent.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForCurrent.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForCurrent.setLayoutX(135);
+        scrollPaneForCurrent.setLayoutY(175);
+
+        scrollPaneForCurrent.setPrefWidth(mainScrollPane.getPrefWidth() - 13);
+        mainAnchorPane.getChildren().add(scrollPaneForCurrent);
+
+        //PF
+        scrollPaneForPowerFactor.setMinWidth(0);
+        scrollPaneForPowerFactor.setPrefWidth(50);
+        scrollPaneForPowerFactor.setStyle("-fx-background: #FFC107;" +
+                "-fx-background-insets: 0, 0 1 1 0;" +
+                "-fx-background-color: #FFC107;");
+
+        scrollPaneForPowerFactor.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setLayoutX(135);
+        scrollPaneForPowerFactor.setLayoutY(175);
+
+        scrollPaneForPowerFactor.setPrefHeight(mainScrollPane.getPrefHeight() - 13);
+        mainAnchorPane.getChildren().add(scrollPaneForPowerFactor);
 
         gridPaneForPowerFactor.setPrefHeight(gridPaneAllPhaseAPPlus.getHeight());
         scrollPaneForPowerFactor.setContent(gridPaneForPowerFactor);
 
-        //Закрывающий квадрат
-        Pane fillSquare = new Pane();
-        fillSquare.setStyle("-fx-background-color: #FFC107;");
-        fillSquare.setPrefHeight(23);
-        fillSquare.setPrefWidth(50);
-        fillSquare.setLayoutX(135);
-        fillSquare.setLayoutY(175);
-        mainAnchorPane.getChildren().add(fillSquare);
-
-        btnAddDeleteTestPoints.setText("Точки");
-        btnAddDeleteTestPoints.setMinHeight(0);
-        btnAddDeleteTestPoints.setPrefSize(fillSquare.getPrefWidth(), fillSquare.getPrefHeight());
-        btnAddDeleteTestPoints.setStyle("-fx-background-color: #FFC107;" +
-                "-fx-background-insets: 0, 0 0 0 0;");
-
-        fillSquare.getChildren().add(btnAddDeleteTestPoints);
+        fillSquare.toFront();
     }
 
     public void bindScrollPanesCurrentAndPowerFactorToMainScrollPane() {
@@ -939,18 +985,12 @@ public class AddEditFrameController {
             }
         }
 
-        System.out.println("currentHorizontalScroll " + currentHorizontalScroll + "\n" +
-                "mainHorizontalScroll " + mainHorizontalScroll + "\n" +
-                "powerFactorVerticalScroll " + powerFactorVerticalScroll + "\n" +
-                "mainVerticalScroll " + mainVerticalScroll);
-
-        if (currentHorizontalScroll != null && mainHorizontalScroll != null) {
-            currentHorizontalScroll.valueProperty().bindBidirectional(mainHorizontalScroll.valueProperty());
+        if (currentHorizontalScroll == null || mainHorizontalScroll == null || powerFactorVerticalScroll == null || mainVerticalScroll == null) {
+            return;
         }
 
-        if (powerFactorVerticalScroll != null && mainVerticalScroll != null) {
-            powerFactorVerticalScroll.valueProperty().bindBidirectional(mainVerticalScroll.valueProperty());
-        }
+        currentHorizontalScroll.valueProperty().bindBidirectional(mainHorizontalScroll.valueProperty());
+        powerFactorVerticalScroll.valueProperty().bindBidirectional(mainVerticalScroll.valueProperty());
     }
 
     //======================= Всё что связано с отображением выбранных точек в TableView ================================
@@ -1104,12 +1144,12 @@ public class AddEditFrameController {
     }
 
     //Задаёт параметр true или false нужному checkBox'у
-    public void addTestPointsOnGreedPane() {
+    public void addTestPointsOnGreedPane(List<Commands> APPls, List<Commands> APMns, List<Commands> RPPls, List<Commands> RPMns) {
         char[] testPointIdArr;
 
-        if (!saveListForCollumAPPls.isEmpty()) {
+        if (!APPls.isEmpty()) {
 
-            for (Commands command : saveListForCollumAPPls) {
+            for (Commands command : APPls) {
                 if (command instanceof ErrorCommand) {
                     testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
@@ -1170,9 +1210,9 @@ public class AddEditFrameController {
             }
         }
 
-        if (!saveListForCollumAPMns.isEmpty()) {
+        if (!APMns.isEmpty()) {
 
-            for (Commands command : saveListForCollumAPMns) {
+            for (Commands command : APMns) {
                 if (command instanceof ErrorCommand) {
                     testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
@@ -1233,9 +1273,9 @@ public class AddEditFrameController {
             }
         }
 
-        if (!saveListForCollumRPPls.isEmpty()) {
+        if (!RPPls.isEmpty()) {
 
-            for (Commands command : saveListForCollumRPPls) {
+            for (Commands command : RPPls) {
                 if (command instanceof ErrorCommand) {
                     testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
@@ -1295,9 +1335,9 @@ public class AddEditFrameController {
             }
         }
 
-        if (!saveListForCollumRPMns.isEmpty()) {
+        if (!RPMns.isEmpty()) {
 
-            for (Commands command : saveListForCollumRPMns) {
+            for (Commands command : RPMns) {
                 if (command instanceof ErrorCommand) {
                     testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
@@ -1357,25 +1397,49 @@ public class AddEditFrameController {
                 }
             }
         }
+    }
 
-        //Т.к. при инициализации устанавливается слушатель для CheckBox'ов
-        //Во избежание дублирования приходитс отчищать список и заново инициализировать
+    //Т.к. при инициализации устанавливается слушатель для CheckBox'ов
+    //Во избежание дублирования приходится отчищать список и заново инициализировать
+    public void refreshAfterEditMethodicBtn() {
         testListForCollumAPPls.clear();
         testListForCollumAPMns.clear();
         testListForCollumRPPls.clear();
         testListForCollumRPMns.clear();
 
         testListForCollumAPPls.setAll(saveListForCollumAPPls);
-        testListForCollumAPPls.addAll(saveInflListForCollumAPPls);
+        //testListForCollumAPPls.addAll(saveInflListForCollumAPPls);
 
         testListForCollumAPMns.setAll(saveListForCollumAPMns);
-        testListForCollumAPMns.addAll(saveInflListForCollumAPMns);
+        //testListForCollumAPMns.addAll(saveInflListForCollumAPMns);
 
         testListForCollumRPPls.setAll(saveListForCollumRPPls);
-        testListForCollumRPPls.addAll(saveInflListForCollumRPPls);
+        //testListForCollumRPPls.addAll(saveInflListForCollumRPPls);
 
         testListForCollumRPMns.setAll(saveListForCollumRPMns);
-        testListForCollumRPMns.addAll(saveInflListForCollumRPMns);
+        //testListForCollumRPMns.addAll(saveInflListForCollumRPMns);
+    }
+
+    public void refreshAfterAddPointFrame(List<Commands> APPls, List<Commands> APMns, List<Commands> RPPls, List<Commands> RPMns) {
+        testListForCollumAPPls.clear();
+        testListForCollumAPMns.clear();
+        testListForCollumRPPls.clear();
+        testListForCollumRPMns.clear();
+
+        testListForCollumAPPls.setAll(APPls);
+        testListForCollumAPMns.setAll(APMns);
+        testListForCollumRPPls.setAll(RPPls);
+        testListForCollumRPMns.setAll(RPMns);
+    }
+
+    public Map<Integer, List<Commands>> saveTestPointBeforeAddDeleteTestPoint() {
+        Map<Integer, List<Commands>> map = new HashMap<>(4);
+        map.put(0, new ArrayList<>(testListForCollumAPPls));
+        map.put(1, new ArrayList<>(testListForCollumAPMns));
+        map.put(2, new ArrayList<>(testListForCollumRPPls));
+        map.put(3, new ArrayList<>(testListForCollumRPMns));
+
+        return map;
     }
 
     //Находит нужный CheckBox и задаёт значение
@@ -1389,6 +1453,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1398,6 +1463,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1408,6 +1474,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1417,6 +1484,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1430,6 +1498,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1441,6 +1510,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1452,6 +1522,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1463,6 +1534,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1472,37 +1544,41 @@ public class AddEditFrameController {
 
             if (testPointIdArr[2] == 'H') {
 
-                for (Node checkBox : gridPaneAllPhaseAPPlus.getChildren()) {
+                for (Node checkBox : gridPaneAllPhaseRPPlus.getChildren()) {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
             }else if (testPointIdArr[2] == 'A') {
 
-                for (Node checkBox : gridPanePhaseAAPMinus.getChildren()) {
+                for (Node checkBox : gridPanePhaseARPPlus.getChildren()) {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
             }else if (testPointIdArr[2] == 'B') {
 
-                for (Node checkBox : gridPanePhaseBAPMinus.getChildren()) {
+                for (Node checkBox : gridPanePhaseBRPPlus.getChildren()) {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
             }else if (testPointIdArr[2] == 'C') {
 
-                for (Node checkBox : gridPanePhaseCAPMinus.getChildren()) {
+                for (Node checkBox : gridPanePhaseCRPPlus.getChildren()) {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1516,6 +1592,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1525,6 +1602,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1534,6 +1612,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1543,6 +1622,7 @@ public class AddEditFrameController {
                     if (checkBox != null) {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
+                            break;
                         }
                     }
                 }
@@ -1550,51 +1630,148 @@ public class AddEditFrameController {
         }
     }
 //===================================================================================================
-
     //Метод для перерисовки GridPane после добавления новых параметров для точек
     public void refreshGridPaneAndScrolPane() {
+        current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
+        powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
 
+        mainAnchorPane.getChildren().removeAll(mainScrollPane, scrollPaneForCurrent, scrollPaneForPowerFactor, stackPaneForGridPane);
+
+        stackPaneForGridPane = new StackPane();
+        mainScrollPane = new ScrollPane();
+        scrollPaneForCurrent = new ScrollPane();
+        scrollPaneForPowerFactor = new ScrollPane();
+        gridPaneForCurrent = new GridPane();
+        gridPaneForPowerFactor = new GridPane();
+
+        gridPaneAllPhaseAPPlus = new GridPane();
+        gridPanePhaseAAPPlus = new GridPane();
+        gridPanePhaseBAPPlus = new GridPane();
+        gridPanePhaseCAPPlus = new GridPane();
+        gridPaneAllPhaseAPMinus = new GridPane();
+        gridPanePhaseAAPMinus = new GridPane();
+        gridPanePhaseBAPMinus = new GridPane();
+        gridPanePhaseCAPMinus = new GridPane();
+        gridPaneAllPhaseRPPlus = new GridPane();
+        gridPanePhaseARPPlus = new GridPane();
+        gridPanePhaseBRPPlus = new GridPane();
+        gridPanePhaseCRPPlus = new GridPane();
+        gridPaneAllPhaseRPMinus = new GridPane();
+        gridPanePhaseARPMinus = new GridPane();
+        gridPanePhaseBRPMinus = new GridPane();
+        gridPanePhaseCRPMinus = new GridPane();
+
+        setIdGridPanes();
+
+        initMainScrollPane();
+
+        initScrolPaneForCurrentAndPowerFactor();
+
+        createScrollPanesForGridPaneWithoutSquare();
+
+        gridPaneAllPhaseAPPlus.toFront();
+
+        if (mainScrollPane.getSkin() == null || scrollPaneForPowerFactor.getSkin() == null || scrollPaneForCurrent.getSkin() == null) {
+            mainScrollPane.skinProperty().addListener(new ChangeListener<Skin<?>>() {
+                @Override
+                public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
+                    mainScrollPane.skinProperty().removeListener(this);
+                    bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+                }
+            });
+            scrollPaneForPowerFactor.skinProperty().addListener(new ChangeListener<Skin<?>>() {
+                @Override
+                public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
+                    scrollPaneForPowerFactor.skinProperty().removeListener(this);
+                    bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+                }
+            });
+
+            scrollPaneForCurrent.skinProperty().addListener(new ChangeListener<Skin<?>>() {
+                @Override
+                public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
+                    scrollPaneForCurrent.skinProperty().removeListener(this);
+                    bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+                }
+            });
+        } else {
+            bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+        }
     }
 
     @FXML
     void influenceAction(ActionEvent event) {
         if (event.getSource() == influenceBtn) {
-            loadStage("/viewFXML/methodics/influenceFrame.fxml", "Настройки теста влияния");
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/influenceFrame.fxml"));
+            try {
+                fxmlLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Parent root = fxmlLoader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Настройки теста влияния");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            influenceFrame = fxmlLoader.getController();
+            influenceFrame.setMethodic(methodic);
+            influenceFrame.setAddEditFrameController(this);
+
+            initInfluenceFrame();
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    influenceFrame.initOfAdeedTestPoints();
+                    influenceFrame.refreshTabViewAfterInitCheckBoxes();
+                }
+            });
+
+            stage.show();
+            influenceFrame.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
         }
     }
 
     @FXML
     void saveOrCancelAction(ActionEvent event) {
         if (event.getSource() == SaveBtn) {
-            ArrayList<Commands> APPls = new ArrayList<>(testListForCollumAPPls);
-            ArrayList<Commands> APMns = new ArrayList<>(testListForCollumAPMns);
-            ArrayList<Commands> RPPls = new ArrayList<>(testListForCollumRPPls);
-            ArrayList<Commands> RPMns = new ArrayList<>(testListForCollumRPMns);
+            methodic.addCommandToList(0, new ArrayList<>(testListForCollumAPPls));
+            methodic.addCommandToList(1, new ArrayList<>(testListForCollumAPMns));
+            methodic.addCommandToList(2, new ArrayList<>(testListForCollumRPPls));
+            methodic.addCommandToList(3, new ArrayList<>(testListForCollumRPMns));
 
-            methodic.addCommandToList(0, APPls);
-            methodic.addCommandToList(1, APMns);
-            methodic.addCommandToList(2, RPPls);
-            methodic.addCommandToList(3, RPMns);
+            saveListForCollumAPPls.clear();
+            saveListForCollumAPPls.clear();
+            saveListForCollumAPPls.clear();
+            saveListForCollumAPPls.clear();
 
-            methodic.setSaveInflListForCollumAPPls(saveInflListForCollumAPPls);
-            methodic.setSaveInflListForCollumAPMns(saveInflListForCollumAPMns);
-            methodic.setSaveInflListForCollumRPPls(saveInflListForCollumRPPls);
-            methodic.setSaveInflListForCollumRPMns(saveInflListForCollumRPMns);
+            saveListForCollumAPPls.addAll(testListForCollumAPPls);
+            saveListForCollumAPMns.addAll(testListForCollumAPMns);
+            saveListForCollumRPPls.addAll(testListForCollumRPPls);
+            saveListForCollumRPMns.addAll(testListForCollumRPMns);
 
-            methodic.setSaveInfluenceUprocAPPls(saveInfluenceUprocAPPls);
-            methodic.setSaveInfluenceUprocAPMns(saveInfluenceUprocAPMns);
-            methodic.setSaveInfluenceUprocRPPls(saveInfluenceUprocRPPls);
-            methodic.setSaveInfluenceUprocRPMns(saveInfluenceUprocRPMns);
 
-            methodic.setSaveInfluenceFprocAPPls(saveInfluenceFprocAPPls);
-            methodic.setSaveInfluenceFprocAPMns(saveInfluenceFprocAPMns);
-            methodic.setSaveInfluenceFprocRPPls(saveInfluenceFprocRPPls);
-            methodic.setSaveInfluenceFprocRPMns(saveInfluenceFprocRPMns);
-
-            methodic.setSaveInfluenceInbUAPPls(saveInfluenceInbUAPPls);
-            methodic.setSaveInfluenceInbUAPMns(saveInfluenceInbUAPMns);
-            methodic.setSaveInfluenceInbURPPls(saveInfluenceInbURPPls);
-            methodic.setSaveInfluenceInbURPMns(saveInfluenceInbURPMns);
+//            methodic.setSaveInflListForCollumAPPls(saveInflListForCollumAPPls);
+//            methodic.setSaveInflListForCollumAPMns(saveInflListForCollumAPMns);
+//            methodic.setSaveInflListForCollumRPPls(saveInflListForCollumRPPls);
+//            methodic.setSaveInflListForCollumRPMns(saveInflListForCollumRPMns);
+//
+//            methodic.setSaveInfluenceUprocAPPls(saveInfluenceUprocAPPls);
+//            methodic.setSaveInfluenceUprocAPMns(saveInfluenceUprocAPMns);
+//            methodic.setSaveInfluenceUprocRPPls(saveInfluenceUprocRPPls);
+//            methodic.setSaveInfluenceUprocRPMns(saveInfluenceUprocRPMns);
+//
+//            methodic.setSaveInfluenceFprocAPPls(saveInfluenceFprocAPPls);
+//            methodic.setSaveInfluenceFprocAPMns(saveInfluenceFprocAPMns);
+//            methodic.setSaveInfluenceFprocRPPls(saveInfluenceFprocRPPls);
+//            methodic.setSaveInfluenceFprocRPMns(saveInfluenceFprocRPMns);
+//
+//            methodic.setSaveInfluenceInbUAPPls(saveInfluenceInbUAPPls);
+//            methodic.setSaveInfluenceInbUAPMns(saveInfluenceInbUAPMns);
+//            methodic.setSaveInfluenceInbURPPls(saveInfluenceInbURPPls);
+//            methodic.setSaveInfluenceInbURPMns(saveInfluenceInbURPMns);
 
             if (edit) {
                 methodicsAddEditDeleteFrameController.setListsView(methodic);
@@ -2695,32 +2872,7 @@ public class AddEditFrameController {
         influenceFrame.setSaveInfluenceUprocRPMns(saveInfluenceUprocRPMns);
         influenceFrame.setSaveInfluenceFprocRPMns(saveInfluenceFprocRPMns);
         influenceFrame.setSaveInfluenceInbURPMns(saveInfluenceInbURPMns);
-
-        influenceFrame.initOfAdeedTestPoints();
     }
-
-    private void loadStage(String fxml, String stageName) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource(fxml));
-            fxmlLoader.load();
-            Parent root = fxmlLoader.getRoot();
-            Stage stage = new Stage();
-            stage.setTitle(stageName);
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-
-            influenceFrame = fxmlLoader.getController();
-            influenceFrame.setAddEditFrameController(this);
-            initInfluenceFrame();
-
-            stage.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     public void setMethodicNameController(MethodicNameController methodicNameController) {
         this.methodicNameController = methodicNameController;
@@ -2816,5 +2968,21 @@ public class AddEditFrameController {
 
     public void setEdit(boolean edit) {
         this.edit = edit;
+    }
+
+    public List<Commands> getSaveInflListForCollumAPPls() {
+        return saveInflListForCollumAPPls;
+    }
+
+    public List<Commands> getSaveInflListForCollumAPMns() {
+        return saveInflListForCollumAPMns;
+    }
+
+    public List<Commands> getSaveInflListForCollumRPPls() {
+        return saveInflListForCollumRPPls;
+    }
+
+    public List<Commands> getSaveInflListForCollumRPMns() {
+        return saveInflListForCollumRPMns;
     }
 }

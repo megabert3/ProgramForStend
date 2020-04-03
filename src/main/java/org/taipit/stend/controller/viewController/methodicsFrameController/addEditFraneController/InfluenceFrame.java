@@ -6,45 +6,54 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.geometry.Orientation;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.controller.Commands.ErrorCommand;
 import org.taipit.stend.controller.OnePhaseStend;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.helper.ConsoleHelper;
-import org.taipit.stend.model.MethodicsForTest;
+import org.taipit.stend.model.Methodic;
 
-
-import java.net.URL;
 import java.util.*;
 
 public class InfluenceFrame {
 
     private AddEditFrameController addEditFrameController;
 
-    private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
+    private Methodic methodic;
 
     private StendDLLCommands stendDLLCommands;
 
-    //Имя методики поверки
-    private String metodicName = "default";
-
     //Значения коэффициента мощности
-    private List<String> powerFactor = methodicsForTest.getPowerFactor();
+    private List<String> powerFactor;
 
     //Значения выставленного тока
-    private List<String> current = methodicsForTest.getCurrent();
+    private List<String> current;
 
     //Список GridPane для выставления точек поверки
     private List<GridPane> gridPanesEnergyAndPhase;
+
+    @FXML
+    private AnchorPane mainAnchorPane;
+
+    private ScrollPane mainScrollPane = new ScrollPane();
+
+    private StackPane stackPaneForGridPane = new StackPane();
+
+    private ScrollPane scrollPaneForCurrent = new ScrollPane();
+    private ScrollPane scrollPaneForPowerFactor = new ScrollPane();
+    private GridPane gridPaneForCurrent = new GridPane();
+    private GridPane gridPaneForPowerFactor = new GridPane();
+
+    private Pane fillSquare = new Pane();
 
     //Это трёхфазный стенд?
     private boolean isThrePhaseStend;
@@ -60,17 +69,6 @@ public class InfluenceFrame {
     private List<Commands> saveInflListForCollumAPMns = new ArrayList<>();
     private List<Commands> saveInflListForCollumRPPls = new ArrayList<>();
     private List<Commands> saveInflListForCollumRPMns = new ArrayList<>();
-
-    //Листы с checkBox'ами. Для быстрой очистки листа
-    private ArrayList<CheckBox> checkBoxesListUAPPls = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesListUAPMns = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesListURPPls = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesListURPMns = new ArrayList<>();
-
-    private ArrayList<CheckBox> checkBoxesListFAPPls = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesListFAPMns = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesListFRPPls = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxesListFRPMns = new ArrayList<>();
 
     //Поля необходимые для добавления точек испытания на влияние
     //До сохранения
@@ -115,11 +113,6 @@ public class InfluenceFrame {
     private double[] saveInfluenceFprocRPMns = new double[0];
     private String[] saveInfluenceInbURPMns = new String[0];
 
-    @FXML
-    private ResourceBundle resources = ResourceBundle.getBundle("stendProperties");
-
-    @FXML
-    private URL location;
 
     //Отвечают за окно отображения выбранных точек тестирования
     //-------------------------------------------------------
@@ -204,31 +197,16 @@ public class InfluenceFrame {
     //-------------------------------------------------------
     //Данный блок отвечает за сетку выбора точки.
     //Влияние напряжения
-
-    @FXML
-    private GridPane gridPaneUAPPlus;
-
-    @FXML
-    private GridPane gridPaneUAPMns;
-
-    @FXML
-    private GridPane gridPaneURPPls;
-
-    @FXML
-    private GridPane gridPaneURPMns;
+    private GridPane gridPaneUAPPlus = new GridPane();
+    private GridPane gridPaneUAPMns = new GridPane();
+    private GridPane gridPaneURPPls = new GridPane();
+    private GridPane gridPaneURPMns = new GridPane();
 
     //Влияние частоты
-    @FXML
-    private GridPane gridPaneFAPPlus;
-
-    @FXML
-    private GridPane gridPaneFAPMns;
-
-    @FXML
-    private GridPane gridPaneFRPPls;
-
-    @FXML
-    private GridPane gridPaneFRPMns;
+    private GridPane gridPaneFAPPlus = new GridPane();
+    private GridPane gridPaneFAPMns = new GridPane();
+    private GridPane gridPaneFRPPls = new GridPane();
+    private GridPane gridPaneFRPMns = new GridPane();
 
     //-------------------------------------------------------
     @FXML
@@ -430,80 +408,21 @@ public class InfluenceFrame {
     @FXML
     private TextField txtFieldInfUnblRPPls;
 
-    void setAddEditFrameController(AddEditFrameController addEditFrameController) {
-        this.addEditFrameController = addEditFrameController;
-    }
-
-    public void setSaveInflListForCollumAPPls(List<Commands> saveInflListForCollumAPPls) {
-        this.saveInflListForCollumAPPls = saveInflListForCollumAPPls;
-    }
-
-    public void setSaveInflListForCollumAPMns(List<Commands> saveInflListForCollumAPMns) {
-        this.saveInflListForCollumAPMns = saveInflListForCollumAPMns;
-    }
-
-    public void setSaveInflListForCollumRPPls(List<Commands> saveInflListForCollumRPPls) {
-        this.saveInflListForCollumRPPls = saveInflListForCollumRPPls;
-    }
-
-    public void setSaveInflListForCollumRPMns(List<Commands> saveInflListForCollumRPMns) {
-        this.saveInflListForCollumRPMns = saveInflListForCollumRPMns;
-    }
-
-    public void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
-        this.saveInfluenceUprocAPPls = saveInfluenceUprocAPPls;
-    }
-
-    public void setSaveInfluenceFprocAPPls(double[] saveInfluenceFprocAPPls) {
-        this.saveInfluenceFprocAPPls = saveInfluenceFprocAPPls;
-    }
-
-    public void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
-        this.saveInfluenceInbUAPPls = saveInfluenceInbUAPPls;
-    }
-
-    public void setSaveInfluenceUprocAPMns(double[] saveInfluenceUprocAPMns) {
-        this.saveInfluenceUprocAPMns = saveInfluenceUprocAPMns;
-    }
-
-    public void setSaveInfluenceFprocAPMns(double[] saveInfluenceFprocAPMns) {
-        this.saveInfluenceFprocAPMns = saveInfluenceFprocAPMns;
-    }
-
-    public void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
-        this.saveInfluenceInbUAPMns = saveInfluenceInbUAPMns;
-    }
-
-    public void setSaveInfluenceUprocRPPls(double[] saveInfluenceUprocRPPls) {
-        this.saveInfluenceUprocRPPls = saveInfluenceUprocRPPls;
-    }
-
-    public void setSaveInfluenceFprocRPPls(double[] saveInfluenceFprocRPPls) {
-        this.saveInfluenceFprocRPPls = saveInfluenceFprocRPPls;
-    }
-
-    public void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
-        this.saveInfluenceInbURPPls = saveInfluenceInbURPPls;
-    }
-
-    public void setSaveInfluenceUprocRPMns(double[] saveInfluenceUprocRPMns) {
-        this.saveInfluenceUprocRPMns = saveInfluenceUprocRPMns;
-    }
-
-    public void setSaveInfluenceFprocRPMns(double[] saveInfluenceFprocRPMns) {
-        this.saveInfluenceFprocRPMns = saveInfluenceFprocRPMns;
-    }
-
-    public void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
-        this.saveInfluenceInbURPMns = saveInfluenceInbURPMns;
-    }
-
     @FXML
     void initialize() {
         if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
             isThrePhaseStend = true;
         }
-        initGridPane();
+        current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
+        powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
+
+        setIDForGridPane();
+        creadteGridPanel();
+        setBoxAndLabelGridPane();
+
+        initMainScrollPane();
+        initScrolPaneForCurrentAndPowerFactor();
+        createScrollPanesForGridPane();
 
         APPlsPane.toFront();
         viewPointTableAPPls.toFront();
@@ -521,481 +440,7 @@ public class InfluenceFrame {
         initTableView();
     }
 
-    //Отвечает за отображение нужного окна настроек влияния
-    @FXML
-    void addInfluenceTests(ActionEvent event) {
-        //AP+
-        if (event.getSource() == InfluenceTglBtnUAPPls) {
-            InfluenceTglBtnUAPPls.setSelected(addTglBtnInfUAPPls.isSelected());
-            gridPaneUAPPlus.toFront();
-            InflUpaneAPPls.toFront();
-        }
-
-        if (event.getSource() == InfluenceTglBtnFAPPls) {
-            InfluenceTglBtnFAPPls.setSelected(addTglBtnInfFAPPls.isSelected());
-            gridPaneFAPPlus.toFront();
-            InflFpaneAPPls.toFront();
-        }
-
-        if (event.getSource() == InfluenceTglBtnUnbAPPls) {
-            InfluenceTglBtnUnbAPPls.setSelected(addTglBtnInfUnblAPPls.isSelected());
-            InflUInbPaneAPPls.toFront();
-        }
-
-        //AP-
-        if (event.getSource() == InfluenceTglBtnUAPMns) {
-            InfluenceTglBtnUAPMns.setSelected(addTglBtnInfUAPMns.isSelected());
-            gridPaneUAPMns.toFront();
-            InflUpaneAPMns.toFront();
-        }
-
-        if (event.getSource() == InfluenceTglBtnFAPMns) {
-            InfluenceTglBtnFAPMns.setSelected(addTglBtnInfFAPMns.isSelected());
-            gridPaneFAPMns.toFront();
-            InflFpaneAPMns.toFront();
-        }
-
-        if (event.getSource() == InfluenceTglBtnUnbAPMns) {
-            InfluenceTglBtnUnbAPMns.setSelected(addTglBtnInfUnblAPMns.isSelected());
-            InflUInbPaneAPMns.toFront();
-        }
-
-        //RP+
-        if (event.getSource() == InfluenceTglBtnURPPls) {
-            InfluenceTglBtnURPPls.setSelected(addTglBtnInfURPPls.isSelected());
-            gridPaneURPPls.toFront();
-            InflUpaneRPPls.toFront();
-        }
-
-        if (event.getSource() == InfluenceTglBtnFRPPls) {
-            InfluenceTglBtnFRPPls.setSelected(addTglBtnInfFRPPls.isSelected());
-            gridPaneFRPPls.toFront();
-            InflFpaneRPPls.toFront();
-        }
-
-        if (event.getSource() == InfluenceTglBtnUnbRPPls) {
-            InfluenceTglBtnUnbRPPls.setSelected(addTglBtnInfUnblRPPls.isSelected());
-            InflUInbPaneRPPls.toFront();
-        }
-
-        //RP-
-        if (event.getSource() == InfluenceTglBtnURPMns) {
-            InfluenceTglBtnURPMns.setSelected(addTglBtnInfURPMns.isSelected());
-            gridPaneURPMns.toFront();
-            InflUpaneRPMns.toFront();
-        }
-
-        if (event.getSource() == InfluenceTglBtnFRPMns) {
-            InfluenceTglBtnFRPMns.setSelected(addTglBtnInfFRPMns.isSelected());
-            gridPaneFRPMns.toFront();
-            InflFpaneRPMns.toFront();
-        }
-
-        if (event.getSource() == InfluenceTglBtnUnbRPMns) {
-            InfluenceTglBtnUnbRPMns.setSelected(addTglBtnInfUnblRPMns.isSelected());
-            InflUnblnsPaneRPMns.toFront();
-        }
-
-        //Добавление параметров для добавления точек испытания
-        String[] procentArr;
-
-        //AP+ Uproc
-        if (event.getSource() == addTglBtnInfUAPPls) {
-            if (addTglBtnInfUAPPls.isSelected()) {
-                procentArr = txtFieldInfUAPPls.getText().split(",");
-                influenceUprocAPPls = new double[procentArr.length];
-
-                for (int i = 0; i < procentArr.length; i++) {
-                    influenceUprocAPPls[i] = Double.parseDouble(procentArr[i].trim());
-                }
-
-                InfluenceTglBtnUAPPls.setSelected(true);
-                txtFieldInfUAPPls.setDisable(true);
-
-                gridPaneUAPPlus.setDisable(false);
-
-            } else {
-                txtFieldInfUAPPls.setDisable(false);
-                gridPaneUAPPlus.setDisable(true);
-                InfluenceTglBtnUAPPls.setSelected(false);
-
-                for (CheckBox checkBox : checkBoxesListUAPPls) {
-                    checkBox.setSelected(false);
-                }
-            }
-        }
-
-        //AP+ Fproc
-        if (event.getSource() == addTglBtnInfFAPPls) {
-            if (addTglBtnInfFAPPls.isSelected()) {
-                procentArr = txtFieldInfFAPPls.getText().split(",");
-                influenceFprocAPPls = new double[procentArr.length];
-
-                for (int i = 0; i < procentArr.length; i++) {
-                    influenceFprocAPPls[i] = Double.parseDouble(procentArr[i].trim());
-                }
-
-                InfluenceTglBtnFAPPls.setSelected(true);
-                txtFieldInfFAPPls.setDisable(true);
-
-                gridPaneFAPPlus.setDisable(false);
-            } else {
-                txtFieldInfFAPPls.setDisable(false);
-                gridPaneFAPPlus.setDisable(true);
-                InfluenceTglBtnFAPPls.setSelected(false);
-
-                for (CheckBox checkBox :checkBoxesListFAPPls) {
-                    checkBox.setSelected(false);
-                }
-            }
-        }
-
-        //AP+ Uinbl
-        if (event.getSource() == addTglBtnInfUnblAPPls) {
-            if (addTglBtnInfUnblAPPls.isSelected()) {
-                influenceInbUAPPls = txtFieldInfUnblAPPls.getText().split(",");
-
-                InfluenceTglBtnUnbAPPls.setSelected(true);
-                txtFieldInfUnblAPPls.setDisable(true);
-            } else {
-                InfluenceTglBtnUnbAPPls.setSelected(false);
-                txtFieldInfUnblAPPls.setDisable(false);
-            }
-        }
-
-
-        //AP- Uproc
-        if (event.getSource() == addTglBtnInfUAPMns) {
-            if (addTglBtnInfUAPMns.isSelected()) {
-                procentArr = txtFieldInfUAPMns.getText().split(",");
-                influenceUprocAPMns = new double[procentArr.length];
-
-                for (int i = 0; i < procentArr.length; i++) {
-                    influenceUprocAPMns[i] = Double.parseDouble(procentArr[i].trim());
-                }
-
-                InfluenceTglBtnUAPMns.setSelected(true);
-                txtFieldInfUAPMns.setDisable(true);
-
-                gridPaneUAPMns.setDisable(false);
-            } else {
-                txtFieldInfUAPMns.setDisable(false);
-                gridPaneUAPMns.setDisable(true);
-                InfluenceTglBtnUAPMns.setSelected(false);
-
-                for (CheckBox checkBox : checkBoxesListUAPMns) {
-                    checkBox.setSelected(false);
-                }
-            }
-        }
-
-        //AP- Fproc
-        if (event.getSource() == addTglBtnInfFAPMns) {
-            if (addTglBtnInfFAPMns.isSelected()) {
-                procentArr = txtFieldInfFAPMns.getText().split(",");
-                influenceFprocAPMns = new double[procentArr.length];
-
-                for (int i = 0; i < procentArr.length; i++) {
-                    influenceFprocAPMns[i] = Double.parseDouble(procentArr[i].trim());
-                }
-
-                InfluenceTglBtnFAPMns.setSelected(true);
-                txtFieldInfFAPMns.setDisable(true);
-
-                gridPaneFAPMns.setDisable(false);
-            } else {
-                txtFieldInfFAPMns.setDisable(false);
-                gridPaneFAPMns.setDisable(true);
-                InfluenceTglBtnFAPMns.setSelected(false);
-
-                for (CheckBox checkBox : checkBoxesListFAPMns) {
-                    checkBox.setSelected(false);
-                }
-            }
-        }
-
-        //AP- Uinbl
-        if (event.getSource() == addTglBtnInfUnblAPMns) {
-            if (addTglBtnInfUnblAPMns.isSelected()) {
-                influenceInbUAPMns = txtFieldInfUnblAPMns.getText().split(",");
-
-                InfluenceTglBtnUnbAPMns.setSelected(true);
-                txtFieldInfUnblAPMns.setDisable(true);
-            } else {
-                InfluenceTglBtnUnbAPMns.setSelected(false);
-                txtFieldInfUnblAPMns.setDisable(false);
-            }
-        }
-
-
-        //RP+ Uproc
-        if (event.getSource() == addTglBtnInfURPPls) {
-            if (addTglBtnInfURPPls.isSelected()) {
-                procentArr = txtFieldInfURPPls.getText().split(",");
-                influenceUprocRPPls = new double[procentArr.length];
-
-                for (int i = 0; i < procentArr.length; i++) {
-                    influenceUprocRPPls[i] = Double.parseDouble(procentArr[i].trim());
-                }
-
-                InfluenceTglBtnURPPls.setSelected(true);
-                txtFieldInfURPPls.setDisable(true);
-
-                gridPaneURPPls.setDisable(false);
-            } else {
-                txtFieldInfURPPls.setDisable(false);
-                gridPaneURPPls.setDisable(true);
-                InfluenceTglBtnURPPls.setSelected(false);
-
-                for (CheckBox checkBox : checkBoxesListURPPls) {
-                    checkBox.setSelected(false);
-                }
-            }
-        }
-
-        //RP+ Fproc
-        if (event.getSource() == addTglBtnInfFRPPls) {
-            if (addTglBtnInfFRPPls.isSelected()) {
-                procentArr = txtFieldInfFRPPls.getText().split(",");
-                influenceFprocRPPls = new double[procentArr.length];
-
-                for (int i = 0; i < procentArr.length; i++) {
-                    influenceFprocRPPls[i] = Double.parseDouble(procentArr[i].trim());
-                }
-
-                InfluenceTglBtnFRPPls.setSelected(true);
-                txtFieldInfFRPPls.setDisable(true);
-
-                gridPaneFRPPls.setDisable(false);
-            } else {
-                txtFieldInfFRPPls.setDisable(false);
-                gridPaneFRPPls.setDisable(true);
-                InfluenceTglBtnFRPPls.setSelected(false);
-
-                for (CheckBox checkBox : checkBoxesListFRPPls) {
-                    checkBox.setSelected(false);
-                }
-            }
-        }
-
-        //RP+ Uinbl
-        if (event.getSource() == addTglBtnInfUnblRPPls) {
-            if (addTglBtnInfUnblRPPls.isSelected()) {
-                influenceInbURPPls= txtFieldInfUnblRPPls.getText().split(",");
-
-                InfluenceTglBtnUnbRPPls.setSelected(true);
-                txtFieldInfUnblRPPls.setDisable(true);
-            } else {
-                InfluenceTglBtnUnbRPPls.setSelected(false);
-                txtFieldInfUnblRPPls.setDisable(false);
-            }
-        }
-
-
-        //RP- Uproc
-        if (event.getSource() == addTglBtnInfURPMns) {
-            if (addTglBtnInfURPMns.isSelected()) {
-                procentArr = txtFieldInfURPMns.getText().split(",");
-                influenceUprocRPMns = new double[procentArr.length];
-
-                for (int i = 0; i < procentArr.length; i++) {
-                    influenceUprocRPMns[i] = Double.parseDouble(procentArr[i].trim());
-                }
-
-                InfluenceTglBtnURPMns.setSelected(true);
-                txtFieldInfURPMns.setDisable(true);
-
-                gridPaneURPMns.setDisable(false);
-            } else {
-                txtFieldInfURPMns.setDisable(false);
-                gridPaneURPMns.setDisable(true);
-                InfluenceTglBtnURPMns.setSelected(false);
-
-                for (CheckBox checkBox : checkBoxesListURPMns) {
-                    checkBox.setSelected(false);
-                }
-            }
-        }
-
-        //RP- Fproc
-        if (event.getSource() == addTglBtnInfFRPMns) {
-            if (addTglBtnInfFRPMns.isSelected()) {
-                procentArr = txtFieldInfFRPMns.getText().split(",");
-                influenceFprocRPMns = new double[procentArr.length];
-
-                for (int i = 0; i < procentArr.length; i++) {
-                    influenceFprocRPMns[i] = Double.parseDouble(procentArr[i].trim());
-                }
-
-                InfluenceTglBtnFRPMns.setSelected(true);
-                txtFieldInfFRPMns.setDisable(true);
-
-                gridPaneFRPMns.setDisable(false);
-            } else {
-                txtFieldInfFRPMns.setDisable(false);
-                gridPaneFRPMns.setDisable(true);
-                InfluenceTglBtnFRPMns.setSelected(false);
-
-                for (CheckBox checkBox : checkBoxesListFRPMns) {
-                    checkBox.setSelected(false);
-                }
-            }
-        }
-
-        //RP- Uinbl
-        if (event.getSource() == addTglBtnInfUnblRPMns) {
-            if (addTglBtnInfUnblRPMns.isSelected()) {
-                influenceInbURPMns = txtFieldInfUnblRPMns.getText().split(",");
-
-                InfluenceTglBtnUnbRPMns.setSelected(true);
-                txtFieldInfUnblRPMns.setDisable(true);
-            } else {
-                InfluenceTglBtnUnbRPMns.setSelected(false);
-                txtFieldInfUnblRPMns.setDisable(false);
-            }
-        }
-    }
-
-    @FXML
-    void saveOrCancelAction(ActionEvent event) {
-        if (event.getSource() == SaveBtn) {
-
-            addEditFrameController.getTestListForCollumAPPls().removeAll(saveInflListForCollumAPPls);
-            addEditFrameController.getTestListForCollumAPMns().removeAll(saveInflListForCollumAPMns);
-            addEditFrameController.getTestListForCollumRPPls().removeAll(saveInflListForCollumRPPls);
-            addEditFrameController.getTestListForCollumRPMns().removeAll(saveInflListForCollumRPMns);
-
-            saveInflListForCollumAPPls.clear();
-            saveInflListForCollumAPMns.clear();
-            saveInflListForCollumRPPls.clear();
-            saveInflListForCollumRPMns.clear();
-
-            saveInflListForCollumAPPls.addAll(inflListForCollumAPPls);
-            saveInflListForCollumAPMns.addAll(inflListForCollumAPMns);
-            saveInflListForCollumRPPls.addAll(inflListForCollumRPPls);
-            saveInflListForCollumRPMns.addAll(inflListForCollumRPMns);
-
-            addEditFrameController.getTestListForCollumAPPls().addAll(saveInflListForCollumAPPls);
-            addEditFrameController.getTestListForCollumAPMns().addAll(saveInflListForCollumAPMns);
-            addEditFrameController.getTestListForCollumRPPls().addAll(saveInflListForCollumRPPls);
-            addEditFrameController.getTestListForCollumRPMns().addAll(saveInflListForCollumRPMns);
-
-            addEditFrameController.setSaveInfluenceUprocAPPls(influenceUprocAPPls);
-            addEditFrameController.setSaveInfluenceFprocAPPls(influenceFprocAPPls);
-            addEditFrameController.setSaveInfluenceInbUAPPls(influenceInbUAPPls);
-
-            addEditFrameController.setSaveInfluenceUprocAPMns(influenceUprocAPMns);
-            addEditFrameController.setSaveInfluenceFprocAPMns(influenceFprocAPMns);
-            addEditFrameController.setSaveInfluenceInbUAPMns(influenceInbUAPMns);
-
-            addEditFrameController.setSaveInfluenceUprocRPPls(influenceUprocRPPls);
-            addEditFrameController.setSaveInfluenceFprocRPPls(influenceFprocRPPls);
-            addEditFrameController.setSaveInfluenceInbURPPls(influenceInbURPPls);
-
-            addEditFrameController.setSaveInfluenceUprocRPMns(influenceUprocRPMns);
-            addEditFrameController.setSaveInfluenceFprocRPMns(influenceFprocRPMns);
-            addEditFrameController.setSaveInfluenceInbURPMns(influenceInbURPMns);
-
-            addEditFrameController.setSaveInflListForCollumAPPls((ArrayList<Commands>) saveInflListForCollumAPPls);
-            addEditFrameController.setSaveInflListForCollumAPMns((ArrayList<Commands>) saveInflListForCollumAPMns);
-            addEditFrameController.setSaveInflListForCollumRPPls((ArrayList<Commands>) saveInflListForCollumRPPls);
-            addEditFrameController.setSaveInflListForCollumRPMns((ArrayList<Commands>) saveInflListForCollumRPMns);
-        }
-    }
-
-    //Устанавливает значение TgBtn в соответствующие значения
-    @FXML
-    void setPointFrameAction(ActionEvent event) {
-        //Кнопки выбора необходимой сетки
-        if (event.getSource() == APPlus || event.getSource() == APPlusCRPSTA) {
-            setAPPlsTglBtn();
-        }
-
-        if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
-            setAPMnsTglBtn();
-        }
-
-        if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
-            setRPPlsTglBtn();
-        }
-
-        if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
-            setRPMnsTglBtn();
-        }
-
-    }
-
-    //Устанавливает значение TglBtn если выбрана вкладка AP+
-    private void setAPPlsTglBtn() {
-        gridPaneUAPPlus.toFront();
-        viewPointTableAPPls.toFront();
-        InflUpaneAPPls.toFront();
-        APPlsPane.toFront();
-        APPlus.setSelected(true);
-        APMinus.setSelected(false);
-        RPPlus.setSelected(false);
-        RPMinus.setSelected(false);
-
-        APPlusCRPSTA.setSelected(true);
-        APMinusCRPSTA.setSelected(false);
-        RPPlusCRPSTA.setSelected(false);
-        RPMinusCRPSTA.setSelected(false);
-    }
-
-    //Устанавливает значение TglBtn если выбрана вкладка AP-
-    private void setAPMnsTglBtn() {
-        gridPaneUAPMns.toFront();
-        viewPointTableAPMns.toFront();
-        APMnsPane.toFront();
-        InflUpaneAPMns.toFront();
-        APPlus.setSelected(false);
-        APMinus.setSelected(true);
-        RPPlus.setSelected(false);
-        RPMinus.setSelected(false);
-
-        APPlusCRPSTA.setSelected(false);
-        APMinusCRPSTA.setSelected(true);
-        RPPlusCRPSTA.setSelected(false);
-        RPMinusCRPSTA.setSelected(false);
-    }
-
-    //Устанавливает значение TglBtn если выбрана вкладка RP+
-    private void setRPPlsTglBtn() {
-        gridPaneURPPls.toFront();
-        viewPointTableRPPls.toFront();
-        RPPlsPane.toFront();
-        InflUpaneRPPls.toFront();
-        APPlus.setSelected(false);
-        APMinus.setSelected(false);
-        RPPlus.setSelected(true);
-        RPMinus.setSelected(false);
-
-        APPlusCRPSTA.setSelected(false);
-        APMinusCRPSTA.setSelected(false);
-        RPPlusCRPSTA.setSelected(true);
-        RPMinusCRPSTA.setSelected(false);
-    }
-
-    //Устанавливает значение TglBtn если выбрана вкладка RP-
-    private void setRPMnsTglBtn() {
-        gridPaneURPMns.toFront();
-        viewPointTableRPMns.toFront();
-        RPMnsPane.toFront();
-        InflUpaneRPMns.toFront();
-        APPlus.setSelected(false);
-        APMinus.setSelected(false);
-        RPPlus.setSelected(false);
-        RPMinus.setSelected(true);
-
-        APPlusCRPSTA.setSelected(false);
-        APMinusCRPSTA.setSelected(false);
-        RPPlusCRPSTA.setSelected(false);
-        RPMinusCRPSTA.setSelected(true);
-    }
-
-    private void initGridPane() {
-        initGridPanesEnergyAndPhase();
-
+    private void setIDForGridPane() {
         // Phase - Режим:
 // 		0 - Однофазный
 //		1 - Трех-фазный четырех-проводной
@@ -1017,6 +462,7 @@ public class InfluenceFrame {
             gridPaneFRPPls.setId("F;5;H;R;P");
             gridPaneFRPMns.setId("F;5;H;R;N");
         } else {
+            //Влияние напряжения
             gridPaneUAPPlus.setId("U;0;H;A;P");
             gridPaneUAPMns.setId("U;0;H;A;N");
             gridPaneURPPls.setId("U;7;H;R;P");
@@ -1028,13 +474,6 @@ public class InfluenceFrame {
             gridPaneFRPMns.setId("F;7;H;R;N");
         }
 
-        for (GridPane pane : gridPanesEnergyAndPhase) {
-            setBoxAndLabelGridPane(pane);
-        }
-    }
-
-
-    private void initGridPanesEnergyAndPhase() {
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAPPlus,
                 gridPaneUAPMns,
@@ -1046,110 +485,196 @@ public class InfluenceFrame {
                 gridPaneFRPMns);
     }
 
+
     //Заполняет поля нужными значениями GridPane
-    private void setBoxAndLabelGridPane(GridPane pane) {
-        creadteGridPanel(pane);
-        pane.setGridLinesVisible(true);
-        Label label;
+    private void setBoxAndLabelGridPane() {
         CheckBox checkBox;
+        for (GridPane gridPane : gridPanesEnergyAndPhase) {
+            gridPane.setGridLinesVisible(true);
 
-        for (int x = 0; x < current.size(); x++) {
-            for (int y = 0; y < powerFactor.size(); y++) {
+            for (int x = 0; x < current.size(); x++) {
+                for (int y = 0; y < powerFactor.size(); y++) {
+                    //Устанавливаю CheckBox
+                    checkBox = new CheckBox();
+                    checkBox.setId(gridPane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
+                    CheckBox finalCheckBox = checkBox;
+                    String[] idCheckBox = finalCheckBox.getId().split(";");
 
-                //Устанавливаю значения строки тока
-                if (y == 0) {
-                    label = new Label(current.get(x));
-                    GridPane.setColumnIndex(label, x + 1);
-                    GridPane.setRowIndex(label, y);
-                    GridPane.setHalignment(label, HPos.CENTER);
-                    GridPane.setValignment(label, VPos.CENTER);
-                    pane.getChildren().add(label);
+                    //Действие при нажатии на чек бокс
+                    checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+                        if (newVal) {
+                            addTestPointInMethodic(finalCheckBox.getId());
+
+                        } else {
+                            deleteTestPointInMethodic(idCheckBox);
+                        }
+                    });
+
+                    GridPane.setColumnIndex(checkBox, x + 1);
+                    GridPane.setRowIndex(checkBox, y + 1);
+                    GridPane.setHalignment(checkBox, HPos.CENTER);
+                    GridPane.setValignment(checkBox, VPos.CENTER);
+
+                    gridPane.getChildren().add(checkBox);
                 }
-
-                //Устанавливаю значения столба PowerFactor
-                if (x == 0) {
-                    label = new Label(powerFactor.get(y));
-                    GridPane.setRowIndex(label, y + 1);
-                    GridPane.setColumnIndex(label, x);
-                    GridPane.setHalignment(label, HPos.CENTER);
-                    GridPane.setValignment(label, VPos.CENTER);
-                    pane.getChildren().add(label);
-                }
-
-                //Устанавливаю CheckBox
-                checkBox = new CheckBox();
-                checkBox.setId(pane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
-                CheckBox finalCheckBox = checkBox;
-                String[] idCheckBox = finalCheckBox.getId().split(";");
-
-                if (idCheckBox[0].equals("U") && idCheckBox[3].equals("A")) {
-                    if (idCheckBox[4].equals("P")) {
-                        checkBoxesListUAPPls.add(checkBox);
-                    }
-
-                    if (idCheckBox[4].equals("N")) {
-                        checkBoxesListUAPMns.add(checkBox);
-                    }
-                }
-
-                if (idCheckBox[0].equals("U") && idCheckBox[3].equals("R")) {
-                    if (idCheckBox[4].equals("P")) {
-                        checkBoxesListURPPls.add(checkBox);
-                    }
-
-                    if (idCheckBox[4].equals("N")) {
-                        checkBoxesListURPMns.add(checkBox);
-                    }
-                }
-
-                if (idCheckBox[0].equals("F") && idCheckBox[3].equals("A")) {
-                    if (idCheckBox[4].equals("P")) {
-                        checkBoxesListFAPPls.add(checkBox);
-                    }
-
-                    if (idCheckBox[4].equals("N")) {
-                        checkBoxesListFAPMns.add(checkBox);
-                    }
-                }
-
-                if (idCheckBox[0].equals("F") && idCheckBox[3].equals("R")) {
-                    if (idCheckBox[4].equals("P")) {
-                        checkBoxesListFRPPls.add(checkBox);
-                    }
-
-                    if (idCheckBox[4].equals("N")) {
-                        checkBoxesListFRPMns.add(checkBox);
-                    }
-                }
-
-                //Действие при нажатии на чек бокс
-                checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
-                    if (newVal) {
-                        addTestPointInMethodic(finalCheckBox.getId());
-
-                    } else {
-                        deleteTestPointInMethodic(idCheckBox);
-                    }
-                });
-
-                GridPane.setColumnIndex(checkBox, x + 1);
-                GridPane.setRowIndex(checkBox, y + 1);
-                GridPane.setHalignment(checkBox, HPos.CENTER);
-                GridPane.setValignment(checkBox, VPos.CENTER);
-
-                pane.getChildren().add(checkBox);
             }
         }
     }
 
     //Создаёт поле нужной величины
-    private void creadteGridPanel(GridPane pane) {
-        for (int i = 0; i < current.size() + 1; i++) {
-            pane.getColumnConstraints().add(new ColumnConstraints(50));
+    private void creadteGridPanel() {
+        for (GridPane gridPane : gridPanesEnergyAndPhase) {
+            for (int i = 0; i < current.size() + 1; i++) {
+                gridPane.getColumnConstraints().add(new ColumnConstraints(50));
+            }
+            for (int j = 0; j < powerFactor.size() + 1; j++) {
+                gridPane.getRowConstraints().add(new RowConstraints(23));
+            }
         }
-        for (int j = 0; j < powerFactor.size() + 1; j++) {
-            pane.getRowConstraints().add(new RowConstraints(23));
+    }
+
+    private void initMainScrollPane() {
+        mainScrollPane.setPrefHeight(230);
+        mainScrollPane.setPrefWidth(643);
+        mainScrollPane.setLayoutX(136);
+        mainScrollPane.setLayoutY(116);
+        mainScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        mainScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        mainScrollPane.setStyle("-fx-background: #6A6A6A;");
+        mainScrollPane.setContent(stackPaneForGridPane);
+
+        mainAnchorPane.getChildren().add(mainScrollPane);
+
+        stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
+
+        mainScrollPane.setContent(stackPaneForGridPane);
+    }
+
+    private void initScrolPaneForCurrentAndPowerFactor() {
+        gridPaneForCurrent.setPrefWidth(gridPaneUAPPlus.getWidth());
+        scrollPaneForCurrent.setContent(gridPaneForCurrent);
+
+        gridPaneForCurrent.setGridLinesVisible(true);
+        gridPaneForCurrent.setStyle("#6A6A6A");
+        gridPaneForCurrent.getRowConstraints().add(new RowConstraints(23));
+        gridPaneForCurrent.getColumnConstraints().add(new ColumnConstraints(50));
+        Label labelCurr;
+
+        for (int i = 0; i < current.size(); i++) {
+            gridPaneForCurrent.getColumnConstraints().add(new ColumnConstraints(50));
+            labelCurr = new Label(current.get(i));
+            labelCurr.setTextFill(Color.BLACK);
+            GridPane.setColumnIndex(labelCurr, i + 1);
+            GridPane.setHalignment(labelCurr, HPos.CENTER);
+            GridPane.setValignment(labelCurr, VPos.CENTER);
+            gridPaneForCurrent.getChildren().add(labelCurr);
         }
+
+        gridPaneForPowerFactor.setGridLinesVisible(true);
+        gridPaneForPowerFactor.setStyle("#6A6A6A");
+        gridPaneForPowerFactor.getRowConstraints().add(new RowConstraints(23));
+        gridPaneForPowerFactor.getColumnConstraints().add(new ColumnConstraints(50));
+        Label labelPowerFactor;
+
+        for (int i = 0; i < powerFactor.size(); i++) {
+            gridPaneForPowerFactor.getRowConstraints().add(new RowConstraints(23));
+            labelPowerFactor = new Label(powerFactor.get(i));
+            labelPowerFactor.setTextFill(Color.BLACK);
+            GridPane.setRowIndex(labelPowerFactor, i + 1);
+            GridPane.setHalignment(labelPowerFactor, HPos.CENTER);
+            GridPane.setValignment(labelPowerFactor, VPos.CENTER);
+            gridPaneForPowerFactor.getChildren().add(labelPowerFactor);
+        }
+    }
+
+    private void createScrollPanesForGridPane() {
+        //Curr
+        scrollPaneForCurrent.setMinHeight(0);
+        scrollPaneForCurrent.setPrefHeight(24);
+        scrollPaneForCurrent.setStyle("-fx-background: #FFC107;" +
+                "-fx-background-insets: 0, 0 1 1 0;" +
+                "-fx-background-color: #FFC107;");
+
+        scrollPaneForCurrent.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForCurrent.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForCurrent.setLayoutX(136);
+        scrollPaneForCurrent.setLayoutY(116);
+
+        scrollPaneForCurrent.setPrefWidth(mainScrollPane.getPrefWidth() - 13);
+        mainAnchorPane.getChildren().add(scrollPaneForCurrent);
+
+        //PF
+        scrollPaneForPowerFactor.setMinWidth(0);
+        scrollPaneForPowerFactor.setPrefWidth(50);
+        scrollPaneForPowerFactor.setStyle("-fx-background: #FFC107;" +
+                "-fx-background-insets: 0, 0 1 1 0;" +
+                "-fx-background-color: #FFC107;");
+
+        scrollPaneForPowerFactor.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPaneForPowerFactor.setLayoutX(136);
+        scrollPaneForPowerFactor.setLayoutY(116);
+
+        scrollPaneForPowerFactor.setPrefHeight(mainScrollPane.getPrefHeight() - 13);
+        mainAnchorPane.getChildren().add(scrollPaneForPowerFactor);
+
+        gridPaneForPowerFactor.setPrefHeight(gridPaneUAPPlus.getHeight());
+        scrollPaneForPowerFactor.setContent(gridPaneForPowerFactor);
+
+
+        //Закрывающий квадрат
+        fillSquare.toFront();
+        fillSquare.setStyle("-fx-background-color: #FFC107;");
+        fillSquare.setPrefHeight(23);
+        fillSquare.setPrefWidth(50);
+        fillSquare.setLayoutX(136);
+        fillSquare.setLayoutY(116);
+        mainAnchorPane.getChildren().add(fillSquare);
+    }
+
+    public void bindScrollPanesCurrentAndPowerFactorToMainScrollPane() {
+        ScrollBar currentHorizontalScroll = null;
+        ScrollBar mainHorizontalScroll = null;
+
+        ScrollBar powerFactorVerticalScroll = null;
+        ScrollBar mainVerticalScroll = null;
+
+        Set<Node> mainScrollBars = mainScrollPane.lookupAll(".scroll-bar");
+
+        ScrollBar nodeScroll;
+
+        for (Node node : mainScrollBars) {
+            nodeScroll = (ScrollBar) node;
+
+            if (nodeScroll.getOrientation() == Orientation.HORIZONTAL) {
+                mainHorizontalScroll = nodeScroll;
+            } else {
+                mainVerticalScroll = nodeScroll;
+            }
+        }
+
+        Set<Node> currentScrollBars = scrollPaneForCurrent.lookupAll(".scroll-bar");
+        for (Node node : currentScrollBars) {
+            currentHorizontalScroll = (ScrollBar) node;
+            if (currentHorizontalScroll.getOrientation() == Orientation.HORIZONTAL) {
+                break;
+            }
+        }
+
+        Set<Node> powerFactorScrollBars = scrollPaneForPowerFactor.lookupAll(".scroll-bar");
+        for (Node node : powerFactorScrollBars) {
+            powerFactorVerticalScroll = (ScrollBar) node;
+            if (powerFactorVerticalScroll.getOrientation() == Orientation.VERTICAL) {
+                break;
+            }
+        }
+
+        if (currentHorizontalScroll == null || mainHorizontalScroll == null || powerFactorVerticalScroll == null || mainVerticalScroll == null) {
+            return;
+        }
+
+        currentHorizontalScroll.valueProperty().bindBidirectional(mainHorizontalScroll.valueProperty());
+        powerFactorVerticalScroll.valueProperty().bindBidirectional(mainVerticalScroll.valueProperty());
     }
 
     //Инициализирует таблицу для отображения выбранных точек
@@ -1272,6 +797,564 @@ public class InfluenceFrame {
         viewPointTableAPMns.setItems(inflListForCollumAPMns);
         viewPointTableRPPls.setItems(inflListForCollumRPPls);
         viewPointTableRPMns.setItems(inflListForCollumRPMns);
+    }
+
+    public void refreshTabViewAfterInitCheckBoxes() {
+        inflListForCollumAPPls.setAll(new ArrayList<>(addEditFrameController.getSaveInflListForCollumAPPls()));
+        inflListForCollumAPMns.setAll(new ArrayList<>(addEditFrameController.getSaveInflListForCollumAPMns()));
+        inflListForCollumRPPls.setAll(new ArrayList<>(addEditFrameController.getSaveInflListForCollumRPPls()));
+        inflListForCollumRPMns.setAll(new ArrayList<>(addEditFrameController.getSaveInflListForCollumRPMns()));
+
+    }
+
+    //Отвечает за отображение нужного окна настроек влияния
+    @FXML
+    void addInfluenceTests(ActionEvent event) {
+        //AP+
+        if (event.getSource() == InfluenceTglBtnUAPPls) {
+            InfluenceTglBtnUAPPls.setSelected(addTglBtnInfUAPPls.isSelected());
+            gridPaneUAPPlus.toFront();
+            InflUpaneAPPls.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnFAPPls) {
+            InfluenceTglBtnFAPPls.setSelected(addTglBtnInfFAPPls.isSelected());
+            gridPaneFAPPlus.toFront();
+            InflFpaneAPPls.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnUnbAPPls) {
+            InfluenceTglBtnUnbAPPls.setSelected(addTglBtnInfUnblAPPls.isSelected());
+            InflUInbPaneAPPls.toFront();
+        }
+
+        //AP-
+        if (event.getSource() == InfluenceTglBtnUAPMns) {
+            InfluenceTglBtnUAPMns.setSelected(addTglBtnInfUAPMns.isSelected());
+            gridPaneUAPMns.toFront();
+            InflUpaneAPMns.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnFAPMns) {
+            InfluenceTglBtnFAPMns.setSelected(addTglBtnInfFAPMns.isSelected());
+            gridPaneFAPMns.toFront();
+            InflFpaneAPMns.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnUnbAPMns) {
+            InfluenceTglBtnUnbAPMns.setSelected(addTglBtnInfUnblAPMns.isSelected());
+            InflUInbPaneAPMns.toFront();
+        }
+
+        //RP+
+        if (event.getSource() == InfluenceTglBtnURPPls) {
+            InfluenceTglBtnURPPls.setSelected(addTglBtnInfURPPls.isSelected());
+            gridPaneURPPls.toFront();
+            InflUpaneRPPls.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnFRPPls) {
+            InfluenceTglBtnFRPPls.setSelected(addTglBtnInfFRPPls.isSelected());
+            gridPaneFRPPls.toFront();
+            InflFpaneRPPls.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnUnbRPPls) {
+            InfluenceTglBtnUnbRPPls.setSelected(addTglBtnInfUnblRPPls.isSelected());
+            InflUInbPaneRPPls.toFront();
+        }
+
+        //RP-
+        if (event.getSource() == InfluenceTglBtnURPMns) {
+            InfluenceTglBtnURPMns.setSelected(addTglBtnInfURPMns.isSelected());
+            gridPaneURPMns.toFront();
+            InflUpaneRPMns.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnFRPMns) {
+            InfluenceTglBtnFRPMns.setSelected(addTglBtnInfFRPMns.isSelected());
+            gridPaneFRPMns.toFront();
+            InflFpaneRPMns.toFront();
+        }
+
+        if (event.getSource() == InfluenceTglBtnUnbRPMns) {
+            InfluenceTglBtnUnbRPMns.setSelected(addTglBtnInfUnblRPMns.isSelected());
+            InflUnblnsPaneRPMns.toFront();
+        }
+
+        //Добавление параметров для добавления точек испытания
+        String[] procentArr;
+
+        //AP+ Uproc
+        if (event.getSource() == addTglBtnInfUAPPls) {
+            if (addTglBtnInfUAPPls.isSelected()) {
+                procentArr = txtFieldInfUAPPls.getText().split(",");
+                influenceUprocAPPls = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceUprocAPPls[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnUAPPls.setSelected(true);
+                txtFieldInfUAPPls.setDisable(true);
+
+                gridPaneUAPPlus.setDisable(false);
+
+            } else {
+                txtFieldInfUAPPls.setDisable(false);
+                gridPaneUAPPlus.setDisable(true);
+                InfluenceTglBtnUAPPls.setSelected(false);
+
+                for (Node node : gridPaneUAPPlus.getChildren()) {
+                    if (node != null) {
+                        try {
+                            ((CheckBox) node).setSelected(false);
+                        }catch (ClassCastException ignore){}
+                    }
+                }
+            }
+        }
+
+        //AP+ Fproc
+        if (event.getSource() == addTglBtnInfFAPPls) {
+            if (addTglBtnInfFAPPls.isSelected()) {
+                procentArr = txtFieldInfFAPPls.getText().split(",");
+                influenceFprocAPPls = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceFprocAPPls[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnFAPPls.setSelected(true);
+                txtFieldInfFAPPls.setDisable(true);
+
+                gridPaneFAPPlus.setDisable(false);
+            } else {
+                txtFieldInfFAPPls.setDisable(false);
+                gridPaneFAPPlus.setDisable(true);
+                InfluenceTglBtnFAPPls.setSelected(false);
+
+                for (Node node : gridPaneFAPPlus.getChildren()) {
+                    if (node != null) {
+                        try {
+                            ((CheckBox) node).setSelected(false);
+                        }catch (ClassCastException ignore){}
+                    }
+                }
+            }
+        }
+
+        //AP+ Uinbl
+        if (event.getSource() == addTglBtnInfUnblAPPls) {
+            if (addTglBtnInfUnblAPPls.isSelected()) {
+                influenceInbUAPPls = txtFieldInfUnblAPPls.getText().split(",");
+
+                InfluenceTglBtnUnbAPPls.setSelected(true);
+                txtFieldInfUnblAPPls.setDisable(true);
+            } else {
+                InfluenceTglBtnUnbAPPls.setSelected(false);
+                txtFieldInfUnblAPPls.setDisable(false);
+            }
+        }
+
+
+        //AP- Uproc
+        if (event.getSource() == addTglBtnInfUAPMns) {
+            if (addTglBtnInfUAPMns.isSelected()) {
+                procentArr = txtFieldInfUAPMns.getText().split(",");
+                influenceUprocAPMns = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceUprocAPMns[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnUAPMns.setSelected(true);
+                txtFieldInfUAPMns.setDisable(true);
+
+                gridPaneUAPMns.setDisable(false);
+            } else {
+                txtFieldInfUAPMns.setDisable(false);
+                gridPaneUAPMns.setDisable(true);
+                InfluenceTglBtnUAPMns.setSelected(false);
+
+                for (Node node : gridPaneUAPMns.getChildren()) {
+                    if (node != null) {
+                        try {
+                            ((CheckBox) node).setSelected(false);
+                        }catch (ClassCastException ignore) {}
+                    }
+                }
+            }
+        }
+
+        //AP- Fproc
+        if (event.getSource() == addTglBtnInfFAPMns) {
+            if (addTglBtnInfFAPMns.isSelected()) {
+                procentArr = txtFieldInfFAPMns.getText().split(",");
+                influenceFprocAPMns = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceFprocAPMns[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnFAPMns.setSelected(true);
+                txtFieldInfFAPMns.setDisable(true);
+
+                gridPaneFAPMns.setDisable(false);
+            } else {
+                txtFieldInfFAPMns.setDisable(false);
+                gridPaneFAPMns.setDisable(true);
+                InfluenceTglBtnFAPMns.setSelected(false);
+
+                for (Node node : gridPaneFAPMns.getChildren()) {
+                    if (node != null) {
+                        try {
+                            ((CheckBox) node).setSelected(false);
+                        }catch (ClassCastException ignore) {}
+                    }
+                }
+            }
+        }
+
+        //AP- Uinbl
+        if (event.getSource() == addTglBtnInfUnblAPMns) {
+            if (addTglBtnInfUnblAPMns.isSelected()) {
+                influenceInbUAPMns = txtFieldInfUnblAPMns.getText().split(",");
+
+                InfluenceTglBtnUnbAPMns.setSelected(true);
+                txtFieldInfUnblAPMns.setDisable(true);
+            } else {
+                InfluenceTglBtnUnbAPMns.setSelected(false);
+                txtFieldInfUnblAPMns.setDisable(false);
+            }
+        }
+
+
+        //RP+ Uproc
+        if (event.getSource() == addTglBtnInfURPPls) {
+            if (addTglBtnInfURPPls.isSelected()) {
+                procentArr = txtFieldInfURPPls.getText().split(",");
+                influenceUprocRPPls = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceUprocRPPls[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnURPPls.setSelected(true);
+                txtFieldInfURPPls.setDisable(true);
+
+                gridPaneURPPls.setDisable(false);
+            } else {
+                txtFieldInfURPPls.setDisable(false);
+                gridPaneURPPls.setDisable(true);
+                InfluenceTglBtnURPPls.setSelected(false);
+
+                for (Node node : gridPaneURPPls.getChildren()) {
+                    if (node != null) {
+                        try {
+                            ((CheckBox) node).setSelected(false);
+                        }catch (ClassCastException ignore){}
+                    }
+                }
+            }
+        }
+
+        //RP+ Fproc
+        if (event.getSource() == addTglBtnInfFRPPls) {
+            if (addTglBtnInfFRPPls.isSelected()) {
+                procentArr = txtFieldInfFRPPls.getText().split(",");
+                influenceFprocRPPls = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceFprocRPPls[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnFRPPls.setSelected(true);
+                txtFieldInfFRPPls.setDisable(true);
+
+                gridPaneFRPPls.setDisable(false);
+            } else {
+                txtFieldInfFRPPls.setDisable(false);
+                gridPaneFRPPls.setDisable(true);
+                InfluenceTglBtnFRPPls.setSelected(false);
+
+                for (Node node :  gridPaneFRPPls.getChildren()) {
+                    if (node != null) {
+                        try {
+                            ((CheckBox) node).setSelected(false);
+                        }catch (ClassCastException ignore) {}
+                    }
+                }
+            }
+        }
+
+        //RP+ Uinbl
+        if (event.getSource() == addTglBtnInfUnblRPPls) {
+            if (addTglBtnInfUnblRPPls.isSelected()) {
+                influenceInbURPPls= txtFieldInfUnblRPPls.getText().split(",");
+
+                InfluenceTglBtnUnbRPPls.setSelected(true);
+                txtFieldInfUnblRPPls.setDisable(true);
+            } else {
+                InfluenceTglBtnUnbRPPls.setSelected(false);
+                txtFieldInfUnblRPPls.setDisable(false);
+            }
+        }
+
+
+        //RP- Uproc
+        if (event.getSource() == addTglBtnInfURPMns) {
+            if (addTglBtnInfURPMns.isSelected()) {
+                procentArr = txtFieldInfURPMns.getText().split(",");
+                influenceUprocRPMns = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceUprocRPMns[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnURPMns.setSelected(true);
+                txtFieldInfURPMns.setDisable(true);
+
+                gridPaneURPMns.setDisable(false);
+            } else {
+                txtFieldInfURPMns.setDisable(false);
+                gridPaneURPMns.setDisable(true);
+                InfluenceTglBtnURPMns.setSelected(false);
+
+                for (Node node : gridPaneURPMns.getChildren()) {
+                    if (node != null) {
+                        try {
+                            ((CheckBox) node).setSelected(false);
+                        }catch (ClassCastException ignore) {}
+                    }
+                }
+            }
+        }
+
+        //RP- Fproc
+        if (event.getSource() == addTglBtnInfFRPMns) {
+            if (addTglBtnInfFRPMns.isSelected()) {
+                procentArr = txtFieldInfFRPMns.getText().split(",");
+                influenceFprocRPMns = new double[procentArr.length];
+
+                for (int i = 0; i < procentArr.length; i++) {
+                    influenceFprocRPMns[i] = Double.parseDouble(procentArr[i].trim());
+                }
+
+                InfluenceTglBtnFRPMns.setSelected(true);
+                txtFieldInfFRPMns.setDisable(true);
+
+                gridPaneFRPMns.setDisable(false);
+            } else {
+                txtFieldInfFRPMns.setDisable(false);
+                gridPaneFRPMns.setDisable(true);
+                InfluenceTglBtnFRPMns.setSelected(false);
+
+                for (Node node : gridPaneFRPMns.getChildren()) {
+                    if (node != null) {
+                        try {
+                            ((CheckBox) node).setSelected(false);
+                        }catch (ClassCastException ignore) {}
+                    }
+                }
+            }
+        }
+
+        //RP- Uinbl
+        if (event.getSource() == addTglBtnInfUnblRPMns) {
+            if (addTglBtnInfUnblRPMns.isSelected()) {
+                influenceInbURPMns = txtFieldInfUnblRPMns.getText().split(",");
+
+                InfluenceTglBtnUnbRPMns.setSelected(true);
+                txtFieldInfUnblRPMns.setDisable(true);
+            } else {
+                InfluenceTglBtnUnbRPMns.setSelected(false);
+                txtFieldInfUnblRPMns.setDisable(false);
+            }
+        }
+    }
+
+    @FXML
+    void saveOrCancelAction(ActionEvent event) {
+        if (event.getSource() == SaveBtn) {
+            saveInflListForCollumAPPls.clear();
+            saveInflListForCollumAPMns.clear();
+            saveInflListForCollumRPPls.clear();
+            saveInflListForCollumRPMns.clear();
+
+            saveInflListForCollumAPPls.addAll(new ArrayList<>(inflListForCollumAPPls));
+            saveInflListForCollumAPMns.addAll(new ArrayList<>(inflListForCollumAPMns));
+            saveInflListForCollumRPPls.addAll(new ArrayList<>(inflListForCollumRPPls));
+            saveInflListForCollumRPMns.addAll(new ArrayList<>(inflListForCollumRPMns));
+
+            addEditFrameController.setSaveInfluenceUprocAPPls(influenceUprocAPPls);
+            addEditFrameController.setSaveInfluenceFprocAPPls(influenceFprocAPPls);
+            addEditFrameController.setSaveInfluenceInbUAPPls(influenceInbUAPPls);
+
+            addEditFrameController.setSaveInfluenceUprocAPMns(influenceUprocAPMns);
+            addEditFrameController.setSaveInfluenceFprocAPMns(influenceFprocAPMns);
+            addEditFrameController.setSaveInfluenceInbUAPMns(influenceInbUAPMns);
+
+            addEditFrameController.setSaveInfluenceUprocRPPls(influenceUprocRPPls);
+            addEditFrameController.setSaveInfluenceFprocRPPls(influenceFprocRPPls);
+            addEditFrameController.setSaveInfluenceInbURPPls(influenceInbURPPls);
+
+            addEditFrameController.setSaveInfluenceUprocRPMns(influenceUprocRPMns);
+            addEditFrameController.setSaveInfluenceFprocRPMns(influenceFprocRPMns);
+            addEditFrameController.setSaveInfluenceInbURPMns(influenceInbURPMns);
+
+            methodic.setSaveInflListForCollumAPPls(saveInflListForCollumAPPls);
+            methodic.setSaveInflListForCollumAPMns(saveInflListForCollumAPMns);
+            methodic.setSaveInflListForCollumRPPls(saveInflListForCollumRPPls);
+            methodic.setSaveInflListForCollumRPMns(saveInflListForCollumRPMns);
+
+            methodic.setSaveInfluenceUprocAPPls(influenceUprocAPPls);
+            methodic.setSaveInfluenceFprocAPPls(influenceFprocAPPls);
+            methodic.setSaveInfluenceInbUAPPls(influenceInbUAPPls);
+
+            methodic.setSaveInfluenceUprocAPMns(influenceUprocAPMns);
+            methodic.setSaveInfluenceFprocAPMns(influenceFprocAPMns);
+            methodic.setSaveInfluenceInbUAPMns(influenceInbUAPMns);
+
+            methodic.setSaveInfluenceUprocRPPls(influenceUprocRPPls);
+            methodic.setSaveInfluenceFprocRPPls(influenceFprocRPPls);
+            methodic.setSaveInfluenceInbURPPls(influenceInbURPPls);
+
+            methodic.setSaveInfluenceUprocRPMns(influenceUprocRPMns);
+            methodic.setSaveInfluenceFprocRPMns(influenceFprocRPMns);
+            methodic.setSaveInfluenceInbURPMns(influenceInbURPMns);
+
+//            addEditFrameController.getTestListForCollumAPPls().removeAll(saveInflListForCollumAPPls);
+//            addEditFrameController.getTestListForCollumAPMns().removeAll(saveInflListForCollumAPMns);
+//            addEditFrameController.getTestListForCollumRPPls().removeAll(saveInflListForCollumRPPls);
+//            addEditFrameController.getTestListForCollumRPMns().removeAll(saveInflListForCollumRPMns);
+//
+////            saveInflListForCollumAPPls.clear();
+////            saveInflListForCollumAPMns.clear();
+////            saveInflListForCollumRPPls.clear();
+////            saveInflListForCollumRPMns.clear();
+////
+////            saveInflListForCollumAPPls.addAll(inflListForCollumAPPls);
+////            saveInflListForCollumAPMns.addAll(inflListForCollumAPMns);
+////            saveInflListForCollumRPPls.addAll(inflListForCollumRPPls);
+////            saveInflListForCollumRPMns.addAll(inflListForCollumRPMns);
+//
+//            addEditFrameController.getTestListForCollumAPPls().addAll(saveInflListForCollumAPPls);
+//            addEditFrameController.getTestListForCollumAPMns().addAll(saveInflListForCollumAPMns);
+//            addEditFrameController.getTestListForCollumRPPls().addAll(saveInflListForCollumRPPls);
+//            addEditFrameController.getTestListForCollumRPMns().addAll(saveInflListForCollumRPMns);
+//
+//            addEditFrameController.setSaveInfluenceUprocAPPls(influenceUprocAPPls);
+//            addEditFrameController.setSaveInfluenceFprocAPPls(influenceFprocAPPls);
+//            addEditFrameController.setSaveInfluenceInbUAPPls(influenceInbUAPPls);
+//
+//            addEditFrameController.setSaveInfluenceUprocAPMns(influenceUprocAPMns);
+//            addEditFrameController.setSaveInfluenceFprocAPMns(influenceFprocAPMns);
+//            addEditFrameController.setSaveInfluenceInbUAPMns(influenceInbUAPMns);
+//
+//            addEditFrameController.setSaveInfluenceUprocRPPls(influenceUprocRPPls);
+//            addEditFrameController.setSaveInfluenceFprocRPPls(influenceFprocRPPls);
+//            addEditFrameController.setSaveInfluenceInbURPPls(influenceInbURPPls);
+//
+//            addEditFrameController.setSaveInfluenceUprocRPMns(influenceUprocRPMns);
+//            addEditFrameController.setSaveInfluenceFprocRPMns(influenceFprocRPMns);
+//            addEditFrameController.setSaveInfluenceInbURPMns(influenceInbURPMns);
+//
+//            addEditFrameController.setSaveInflListForCollumAPPls((ArrayList<Commands>) saveInflListForCollumAPPls);
+//            addEditFrameController.setSaveInflListForCollumAPMns((ArrayList<Commands>) saveInflListForCollumAPMns);
+//            addEditFrameController.setSaveInflListForCollumRPPls((ArrayList<Commands>) saveInflListForCollumRPPls);
+//            addEditFrameController.setSaveInflListForCollumRPMns((ArrayList<Commands>) saveInflListForCollumRPMns);
+        }
+    }
+
+    //Устанавливает значение TgBtn в соответствующие значения
+    @FXML
+    void setPointFrameAction(ActionEvent event) {
+        //Кнопки выбора необходимой сетки
+        if (event.getSource() == APPlus || event.getSource() == APPlusCRPSTA) {
+            setAPPlsTglBtn();
+        }
+
+        if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
+            setAPMnsTglBtn();
+        }
+
+        if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
+            setRPPlsTglBtn();
+        }
+
+        if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
+            setRPMnsTglBtn();
+        }
+
+    }
+
+    //Устанавливает значение TglBtn если выбрана вкладка AP+
+    private void setAPPlsTglBtn() {
+        gridPaneUAPPlus.toFront();
+        viewPointTableAPPls.toFront();
+        InflUpaneAPPls.toFront();
+        APPlsPane.toFront();
+        APPlus.setSelected(true);
+        APMinus.setSelected(false);
+        RPPlus.setSelected(false);
+        RPMinus.setSelected(false);
+
+        APPlusCRPSTA.setSelected(true);
+        APMinusCRPSTA.setSelected(false);
+        RPPlusCRPSTA.setSelected(false);
+        RPMinusCRPSTA.setSelected(false);
+    }
+
+    //Устанавливает значение TglBtn если выбрана вкладка AP-
+    private void setAPMnsTglBtn() {
+        gridPaneUAPMns.toFront();
+        viewPointTableAPMns.toFront();
+        APMnsPane.toFront();
+        InflUpaneAPMns.toFront();
+        APPlus.setSelected(false);
+        APMinus.setSelected(true);
+        RPPlus.setSelected(false);
+        RPMinus.setSelected(false);
+
+        APPlusCRPSTA.setSelected(false);
+        APMinusCRPSTA.setSelected(true);
+        RPPlusCRPSTA.setSelected(false);
+        RPMinusCRPSTA.setSelected(false);
+    }
+
+    //Устанавливает значение TglBtn если выбрана вкладка RP+
+    private void setRPPlsTglBtn() {
+        gridPaneURPPls.toFront();
+        viewPointTableRPPls.toFront();
+        RPPlsPane.toFront();
+        InflUpaneRPPls.toFront();
+        APPlus.setSelected(false);
+        APMinus.setSelected(false);
+        RPPlus.setSelected(true);
+        RPMinus.setSelected(false);
+
+        APPlusCRPSTA.setSelected(false);
+        APMinusCRPSTA.setSelected(false);
+        RPPlusCRPSTA.setSelected(true);
+        RPMinusCRPSTA.setSelected(false);
+    }
+
+    //Устанавливает значение TglBtn если выбрана вкладка RP-
+    private void setRPMnsTglBtn() {
+        gridPaneURPMns.toFront();
+        viewPointTableRPMns.toFront();
+        RPMnsPane.toFront();
+        InflUpaneRPMns.toFront();
+        APPlus.setSelected(false);
+        APMinus.setSelected(false);
+        RPPlus.setSelected(false);
+        RPMinus.setSelected(true);
+
+        APPlusCRPSTA.setSelected(false);
+        APMinusCRPSTA.setSelected(false);
+        RPPlusCRPSTA.setSelected(false);
+        RPMinusCRPSTA.setSelected(true);
     }
 
     //Добавляет тестовую точку в методику
@@ -1668,18 +1751,24 @@ public class InfluenceFrame {
 
             if (charIdTestPoint[0] == 'U') {
 
-                for (CheckBox ch : checkBoxesListUAPPls) {
-                    if (ch.getId().equals(command.getId())) {
-                        ch.setSelected(true);
+                for (Node node : gridPaneUAPPlus.getChildren()) {
+                    if (node != null) {
+                        if (command.getId().equals(node.getId())) {
+                            ((CheckBox) node).setSelected(true);
+                            break;
+                        }
                     }
                 }
             }
 
             if (charIdTestPoint[0] == 'F') {
 
-                for (CheckBox ch : checkBoxesListFAPPls) {
-                    if (ch.getId().equals(command.getId())) {
-                        ch.setSelected(true);
+                for (Node node : gridPaneFAPPlus.getChildren()) {
+                    if (node != null) {
+                        if (command.getId().equals(node.getId())) {
+                            ((CheckBox) node).setSelected(true);
+                            break;
+                        }
                     }
                 }
             }
@@ -1690,18 +1779,24 @@ public class InfluenceFrame {
 
             if (charIdTestPoint[0] == 'U') {
 
-                for (CheckBox ch : checkBoxesListUAPMns) {
-                    if (ch.getId().equals(command.getId())) {
-                        ch.setSelected(true);
+                for (Node node : gridPaneUAPMns.getChildren()) {
+                    if (node != null) {
+                        if (command.getId().equals(node.getId())) {
+                            ((CheckBox) node).setSelected(true);
+                            break;
+                        }
                     }
                 }
             }
 
             if (charIdTestPoint[0] == 'F') {
 
-                for (CheckBox ch : checkBoxesListFAPMns) {
-                    if (ch.getId().equals(command.getId())) {
-                        ch.setSelected(true);
+                for (Node node : gridPaneFAPMns.getChildren()) {
+                    if (node != null) {
+                        if (command.getId().equals(node.getId())) {
+                            ((CheckBox) node).setSelected(true);
+                            break;
+                        }
                     }
                 }
             }
@@ -1712,18 +1807,24 @@ public class InfluenceFrame {
 
             if (charIdTestPoint[0] == 'U') {
 
-                for (CheckBox ch : checkBoxesListURPPls) {
-                    if (ch.getId().equals(command.getId())) {
-                        ch.setSelected(true);
+                for (Node node : gridPaneURPPls.getChildren()) {
+                    if (node != null) {
+                        if (command.getId().equals(node.getId())) {
+                            ((CheckBox) node).setSelected(true);
+                            break;
+                        }
                     }
                 }
             }
 
             if (charIdTestPoint[0] == 'F') {
 
-                for (CheckBox ch : checkBoxesListFRPPls) {
-                    if (ch.getId().equals(command.getId())) {
-                        ch.setSelected(true);
+                for (Node node :  gridPaneFRPPls.getChildren()) {
+                    if (node != null) {
+                        if (command.getId().equals(node.getId())) {
+                            ((CheckBox) node).setSelected(true);
+                            break;
+                        }
                     }
                 }
             }
@@ -1734,21 +1835,99 @@ public class InfluenceFrame {
 
             if (charIdTestPoint[0] == 'U') {
 
-                for (CheckBox ch : checkBoxesListURPMns) {
-                    if (ch.getId().equals(command.getId())) {
-                        ch.setSelected(true);
+                for (Node node : gridPaneURPMns.getChildren()) {
+                    if (node != null) {
+                        if (command.getId().equals(node.getId())) {
+                            ((CheckBox) node).setSelected(true);
+                            break;
+                        }
                     }
                 }
             }
 
             if (charIdTestPoint[0] == 'F') {
 
-                for (CheckBox ch : checkBoxesListFRPMns) {
-                    if (ch.getId().equals(command.getId())) {
-                        ch.setSelected(true);
+                for (Node node : gridPaneFRPMns.getChildren()) {
+                    if (node != null) {
+                        if (command.getId().equals(node.getId())) {
+                            ((CheckBox) node).setSelected(true);
+                            break;
+                        }
                     }
                 }
             }
         }
+    }
+
+    void setAddEditFrameController(AddEditFrameController addEditFrameController) {
+        this.addEditFrameController = addEditFrameController;
+    }
+
+    public void setSaveInflListForCollumAPPls(List<Commands> saveInflListForCollumAPPls) {
+        this.saveInflListForCollumAPPls = saveInflListForCollumAPPls;
+    }
+
+    public void setSaveInflListForCollumAPMns(List<Commands> saveInflListForCollumAPMns) {
+        this.saveInflListForCollumAPMns = saveInflListForCollumAPMns;
+    }
+
+    public void setSaveInflListForCollumRPPls(List<Commands> saveInflListForCollumRPPls) {
+        this.saveInflListForCollumRPPls = saveInflListForCollumRPPls;
+    }
+
+    public void setSaveInflListForCollumRPMns(List<Commands> saveInflListForCollumRPMns) {
+        this.saveInflListForCollumRPMns = saveInflListForCollumRPMns;
+    }
+
+    public void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
+        this.saveInfluenceUprocAPPls = saveInfluenceUprocAPPls;
+    }
+
+    public void setSaveInfluenceFprocAPPls(double[] saveInfluenceFprocAPPls) {
+        this.saveInfluenceFprocAPPls = saveInfluenceFprocAPPls;
+    }
+
+    public void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
+        this.saveInfluenceInbUAPPls = saveInfluenceInbUAPPls;
+    }
+
+    public void setSaveInfluenceUprocAPMns(double[] saveInfluenceUprocAPMns) {
+        this.saveInfluenceUprocAPMns = saveInfluenceUprocAPMns;
+    }
+
+    public void setSaveInfluenceFprocAPMns(double[] saveInfluenceFprocAPMns) {
+        this.saveInfluenceFprocAPMns = saveInfluenceFprocAPMns;
+    }
+
+    public void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
+        this.saveInfluenceInbUAPMns = saveInfluenceInbUAPMns;
+    }
+
+    public void setSaveInfluenceUprocRPPls(double[] saveInfluenceUprocRPPls) {
+        this.saveInfluenceUprocRPPls = saveInfluenceUprocRPPls;
+    }
+
+    public void setSaveInfluenceFprocRPPls(double[] saveInfluenceFprocRPPls) {
+        this.saveInfluenceFprocRPPls = saveInfluenceFprocRPPls;
+    }
+
+    public void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
+        this.saveInfluenceInbURPPls = saveInfluenceInbURPPls;
+    }
+
+    public void setSaveInfluenceUprocRPMns(double[] saveInfluenceUprocRPMns) {
+        this.saveInfluenceUprocRPMns = saveInfluenceUprocRPMns;
+    }
+
+    public void setSaveInfluenceFprocRPMns(double[] saveInfluenceFprocRPMns) {
+        this.saveInfluenceFprocRPMns = saveInfluenceFprocRPMns;
+    }
+
+    public void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
+        this.saveInfluenceInbURPMns = saveInfluenceInbURPMns;
+    }
+
+    public void setMethodic(Methodic methodic) {
+        this.methodic = methodic;
     }
 }

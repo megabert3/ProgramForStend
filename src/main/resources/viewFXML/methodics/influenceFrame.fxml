@@ -2,20 +2,18 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1226.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.InfluenceFrame">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1226.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.InfluenceFrame">
     <children>
         <Button fx:id="SaveBtn" layoutX="1054.0" layoutY="661.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="41.0" prefWidth="150.0" text="Сохранить">
             <graphic>
@@ -246,24 +244,6 @@
                         </ToggleButton>
                     </children>
                 </HBox>
-                <ScrollPane layoutX="108.0" layoutY="34.0" prefHeight="230.0" prefWidth="643.0" stylesheets="@../../styleCSS/scrolPaneStyleBlack.css">
-                    <content>
-                        <StackPane prefHeight="230.0" prefWidth="643.0">
-                            <children>
-                                <GridPane fx:id="gridPaneUAPPlus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                                </GridPane>
-                                <GridPane fx:id="gridPaneFAPPlus" prefHeight="230.0" style="-fx-background-color: #797979;">
-                                </GridPane>
-                                <GridPane fx:id="gridPaneUAPMns" prefHeight="230.0" style="-fx-background-color: #797979;" />
-                                <GridPane fx:id="gridPaneFAPMns" prefHeight="230.0" style="-fx-background-color: #797979;" />
-                                <GridPane fx:id="gridPaneURPPls" prefHeight="230.0" style="-fx-background-color: #797979;" />
-                                <GridPane fx:id="gridPaneFRPPls" prefHeight="230.0" style="-fx-background-color: #797979;" />
-                                <GridPane fx:id="gridPaneURPMns" prefHeight="230.0" style="-fx-background-color: #797979;" />
-                                <GridPane fx:id="gridPaneFRPMns" prefHeight="230.0" style="-fx-background-color: #797979;" />
-                            </children>
-                        </StackPane>
-                    </content>
-                </ScrollPane>
             </children>
         </AnchorPane>
         <AnchorPane layoutX="799.0" layoutY="77.0" prefHeight="534.0" prefWidth="405.0">

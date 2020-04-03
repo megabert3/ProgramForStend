@@ -60,6 +60,8 @@ public class YesOrNoFrameController {
 
                 methodicsAddEditDeleteFrameController.refreshAfterDelete();
 
+                methodicsForTest.serializationMetodics();
+
                 stageYesOrNo.close();
 
                 deliteMethodic = false;

@@ -2,6 +2,7 @@ package org.taipit.stend.controller.viewController.methodicsFrameController;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -35,10 +36,10 @@ public class MethodicsAddEditDeleteFrameController {
     private Methodic focusedMetodic;
 
     //Листы для точек из методики
-    private ArrayList<String> comandListAPPls = new ArrayList<>();
-    private ArrayList<String> comandListAPMns = new ArrayList<>();
-    private ArrayList<String> comandListRPPls = new ArrayList<>();
-    private ArrayList<String> comandListRPMns = new ArrayList<>();
+    private List<String> comandListAPPls = new ArrayList<>();
+    private List<String> comandListAPMns = new ArrayList<>();
+    private List<String> comandListRPPls = new ArrayList<>();
+    private List<String> comandListRPMns = new ArrayList<>();
 
     private MethodicNameController methodicNameController;
 
@@ -210,7 +211,9 @@ public class MethodicsAddEditDeleteFrameController {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    addEditFrameController.addTestPointsOnGreedPane();
+                    addEditFrameController.addTestPointsOnGreedPane(focusedMetodic.getCommandsMap().get(0), focusedMetodic.getCommandsMap().get(1),
+                            focusedMetodic.getCommandsMap().get(2), focusedMetodic.getCommandsMap().get(3));
+                    addEditFrameController.refreshAfterEditMethodicBtn();
                 }
             });
 
@@ -312,17 +315,29 @@ public class MethodicsAddEditDeleteFrameController {
         for (Commands commandsAPPls : focusedMetodic.getCommandsMap().get(0)) {
             comandListAPPls.add(commandsAPPls.getName());
         }
+        for (Commands inflAPPls : focusedMetodic.getSaveInflListForCollumAPPls()) {
+            comandListAPPls.add(inflAPPls.getName());
+        }
 
         for (Commands commandsAPMns : focusedMetodic.getCommandsMap().get(1)) {
             comandListAPMns.add(commandsAPMns.getName());
+        }
+        for (Commands inflAPMns : focusedMetodic.getSaveInflListForCollumAPMns()) {
+            comandListAPMns.add(inflAPMns.getName());
         }
 
         for (Commands commandsRPPls : focusedMetodic.getCommandsMap().get(2)) {
             comandListRPPls.add(commandsRPPls.getName());
         }
+        for (Commands inflRPPls : focusedMetodic.getSaveInflListForCollumRPPls()) {
+            comandListRPPls.add(inflRPPls.getName());
+        }
 
         for (Commands commandsRPMns : focusedMetodic.getCommandsMap().get(3)) {
             comandListRPMns.add(commandsRPMns.getName());
+        }
+        for (Commands inflRPMns : focusedMetodic.getSaveInflListForCollumRPMns()) {
+            comandListRPMns.add(inflRPMns.getName());
         }
 
         ListViewAPPls.setItems(FXCollections.observableArrayList(comandListAPPls));
@@ -342,17 +357,29 @@ public class MethodicsAddEditDeleteFrameController {
         for (Commands commandsAPPls : focusedMetodic.getCommandsMap().get(0)) {
             comandListAPPls.add(commandsAPPls.getName());
         }
+        for (Commands inflAPPls : focusedMetodic.getSaveInflListForCollumAPPls()) {
+            comandListAPPls.add(inflAPPls.getName());
+        }
 
         for (Commands commandsAPMns : focusedMetodic.getCommandsMap().get(1)) {
             comandListAPMns.add(commandsAPMns.getName());
+        }
+        for (Commands inflAPMns : focusedMetodic.getSaveInflListForCollumAPMns()) {
+            comandListAPMns.add(inflAPMns.getName());
         }
 
         for (Commands commandsRPPls : focusedMetodic.getCommandsMap().get(2)) {
             comandListRPPls.add(commandsRPPls.getName());
         }
+        for (Commands inflRPPls : focusedMetodic.getSaveInflListForCollumRPPls()) {
+            comandListRPPls.add(inflRPPls.getName());
+        }
 
         for (Commands commandsRPMns : focusedMetodic.getCommandsMap().get(3)) {
             comandListRPMns.add(commandsRPMns.getName());
+        }
+        for (Commands inflRPMns : focusedMetodic.getSaveInflListForCollumRPMns()) {
+            comandListRPMns.add(inflRPMns.getName());
         }
 
         ListViewAPPls.setItems(FXCollections.observableArrayList(comandListAPPls));

@@ -20,6 +20,38 @@ public class Methodic implements Cloneable, Serializable {
     //Объект для сохранения точек связанных с влиянием
     private InfluenceMetodic influenceMetodic = new InfluenceMetodic();
 
+    public Methodic() {
+        commandsMap.put(0, new ArrayList<Commands>());
+        commandsMap.put(1, new ArrayList<Commands>());
+        commandsMap.put(2, new ArrayList<Commands>());
+        commandsMap.put(3, new ArrayList<Commands>());
+    }
+
+    public boolean addCommandToList(Integer numb, ArrayList<Commands> list) {
+        if (numb > 4 || numb < 0) return false;
+        else {
+            commandsMap.get(numb).clear();
+            commandsMap.get(numb).addAll(list);
+        }
+        return true;
+    }
+
+    public Map<Integer, List<Commands>> getCommandsMap() {
+        return commandsMap;
+    }
+
+    public String getMethodicName() {
+        return methodicName;
+    }
+
+    void setMethodicName(String methodicName) {
+        this.methodicName = methodicName;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     public void setSaveInflListForCollumAPPls(List<Commands> saveInflListForCollumAPPls) {
         influenceMetodic.influenceCommandsMap.put(0, saveInflListForCollumAPPls);
@@ -157,42 +189,8 @@ public class Methodic implements Cloneable, Serializable {
         this.threePhaseStendMethodic = threePhaseStendMethodic;
     }
 
-    public Methodic() {
-        commandsMap.put(0, new ArrayList<Commands>());
-        commandsMap.put(1, new ArrayList<Commands>());
-        commandsMap.put(2, new ArrayList<Commands>());
-        commandsMap.put(3, new ArrayList<Commands>());
-    }
-
-    public boolean addCommandToList(Integer numb, ArrayList<Commands> list) {
-        if (numb > 4 || numb < 0) return false;
-        else {
-            commandsMap.get(numb).clear();
-            commandsMap.get(numb).addAll(list);
-        }
-        return true;
-    }
-
-    public Map<Integer, List<Commands>> getCommandsMap() {
-        return commandsMap;
-    }
-
-    public String getMethodicName() {
-        return methodicName;
-    }
-
-    void setMethodicName(String methodicName) {
-        this.methodicName = methodicName;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
     //Внутренний класс отвечающий за точки влияния
     class InfluenceMetodic implements Cloneable, Serializable{
-
         InfluenceMetodic() {
             influenceCommandsMap.put(0, new ArrayList<>());
             influenceCommandsMap.put(1, new ArrayList<>());

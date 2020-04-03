@@ -11,11 +11,15 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import oracle.jrockit.jfr.jdkevents.ThrowableTracer;
+import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 
 public class AddDeleteTestPointInGridPaneController {
@@ -111,6 +115,7 @@ public class AddDeleteTestPointInGridPaneController {
         btnSave.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+
                 String powerFactor = Arrays.toString(tabListPowerFactor.getItems().toArray());
                 String current = Arrays.toString(tabListCurrent.getItems().toArray());
 
@@ -119,12 +124,19 @@ public class AddDeleteTestPointInGridPaneController {
 
                 ConsoleHelper.saveProperties();
 
-
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Map<Integer, List<Commands>> map = addEditFrameController.saveTestPointBeforeAddDeleteTestPoint();
+                        addEditFrameController.refreshGridPaneAndScrolPane();
+                        addEditFrameController.addTestPointsOnGreedPane(map.get(0), map.get(1), map.get(2), map.get(3));
+                        addEditFrameController.refreshAfterAddPointFrame(map.get(0), map.get(1), map.get(2), map.get(3));
+                    }
+                });
 
                 Stage stage = (Stage) btnSave.getScene().getWindow();
 
                 stage.close();
-
             }
         });
     }
