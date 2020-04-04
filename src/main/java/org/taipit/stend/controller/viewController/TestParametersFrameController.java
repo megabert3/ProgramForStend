@@ -40,6 +40,8 @@ public class TestParametersFrameController {
 
     private StendDLLCommands stendDLLCommands;
 
+    private Methodic methodic;
+
     private Properties properties = ConsoleHelper.properties;
 
     private List<Meter> metersList = new ArrayList<>(Integer.parseInt(properties.getProperty("stendAmountPlaces")));
@@ -346,6 +348,81 @@ public class TestParametersFrameController {
             txtFldAccuracyRP.setText(newValue);
         });
 
+        chosBxMetodics.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                methodic = MethodicsForTest.getMethodicsForTestInstance().getMethodic(chosBxMetodics.getValue());
+                if (methodic.isBindsParameters()) {
+                    txtFldUnom.setText(methodic.getUnom());
+                    txtFldUnom.setDisable(true);
+                    chosBxUnom.setDisable(true);
+
+                    txtFldCurrent.setText(methodic.getImaxAndInom());
+                    txtFldCurrent.setDisable(true);
+                    chosBxCurrent.setDisable(true);
+
+                    txtFldFrg.setText(methodic.getFnom());
+                    txtFldFrg.setDisable(true);
+                    chosBxFrg.setDisable(true);
+
+                    txtFldAccuracyAP.setText(methodic.getAccuracyClassMeterAP());
+                    txtFldAccuracyAP.setDisable(true);
+                    chosBxAccuracyAP.setDisable(true);
+
+                    txtFldAccuracyRP.setText(methodic.getAccuracyClassMeterRP());
+                    txtFldAccuracyRP.setDisable(true);
+                    chosBxAccuracyRP.setDisable(true);
+
+                    chosBxTypeMeter.setValue(methodic.getTypeMeter());
+                    chosBxTypeMeter.setDisable(true);
+
+                    chosBxtypeOfMeasuringElement.setValue(methodic.getTypeOfMeasuringElementShunt());
+                    chosBxtypeOfMeasuringElement.setDisable(true);
+
+                    for (Meter meter : metersList) {
+                        meter.setConstantMeterAP(methodic.getConstantAP());
+                        meter.setConstantMeterRP(methodic.getConstantRP());
+                        meter.setModelMeter(meter.getModelMeter());
+                        meter.setFactoryManufacturer(methodic.getFactoryManufactuter());
+                    }
+
+                    tabVParamMeters.refresh();
+                    tabVParamMeters.setEditable(false);
+                } else {
+                    txtFldUnom.setText(properties.getProperty("lastUnom"));
+                    txtFldFrg.setText(properties.getProperty("lastFnom"));
+                    txtFldCurrent.setText(properties.getProperty("lastInomAndImax"));
+                    txtFldAccuracyAP.setText(properties.getProperty("lastAccuracyClassMeterAP"));
+                    txtFldAccuracyRP.setText(properties.getProperty("lastAccuracyClassMeterRP"));
+                    chosBxPowerType.setValue(properties.getProperty("lastTypeCircuit"));
+                    chosBxtypeOfMeasuringElement.setValue(properties.getProperty("lastTypeOfMeasuringElement"));
+                    chosBxTypeMeter.setValue(properties.getProperty("lastMeterTypeOnePhaseMultiTarif"));
+
+                    txtFldUnom.setDisable(false);
+                    chosBxUnom.setDisable(false);
+
+                    txtFldCurrent.setDisable(false);
+                    chosBxCurrent.setDisable(false);
+
+                    txtFldFrg.setDisable(false);
+                    chosBxFrg.setDisable(false);
+
+                    txtFldAccuracyAP.setDisable(false);
+                    chosBxAccuracyAP.setDisable(false);
+
+                    txtFldAccuracyRP.setDisable(false);
+                    chosBxAccuracyRP.setDisable(false);
+
+                    chosBxTypeMeter.setDisable(false);
+
+                    chosBxtypeOfMeasuringElement.setDisable(false);
+
+                    tabVParamMeters.setEditable(true);
+                }
+            }
+        });
+
+
         initTableView();
     }
 
@@ -466,12 +543,15 @@ public class TestParametersFrameController {
         tabColModelMeter.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
             TablePosition<Meter, String> pos = event.getTablePosition();
 
-            String newSerNo = event.getNewValue();
+            String value = event.getNewValue();
 
-            int row = pos.getRow();
-            Meter meter = event.getTableView().getItems().get(row);
+            //int row = pos.getRow();
+            //Meter meter = event.getTableView().getItems().get(row);
 
-            meter.setModelMeter(newSerNo);
+            for (Meter meter : metersList) {
+                meter.setModelMeter(value);
+            }
+            tabVParamMeters.refresh();
         });
         tabColModelMeter.setStyle("-fx-alignment: CENTER;");
 
@@ -484,10 +564,14 @@ public class TestParametersFrameController {
 
             String param = event.getNewValue();
 
-            int row = pos.getRow();
-            Meter meter = event.getTableView().getItems().get(row);
-
-            meter.setFactoryManufacturer(param);
+//            int row = pos.getRow();
+//            Meter meter = event.getTableView().getItems().get(row);
+//
+//            meter.setFactoryManufacturer(param);
+            for (Meter meter : metersList) {
+                meter.setFactoryManufacturer(param);
+            }
+            tabVParamMeters.refresh();
         });
         tabColManufacturer.setStyle("-fx-alignment: CENTER;");
 

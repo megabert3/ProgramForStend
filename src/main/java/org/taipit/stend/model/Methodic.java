@@ -15,6 +15,21 @@ public class Methodic implements Cloneable, Serializable {
 
     private String methodicName;
 
+    private boolean bindsParameters;
+
+    private String Unom;
+    private String ImaxAndInom;
+    private String Fnom;
+    private String accuracyClassMeterAP;
+    private String accuracyClassMeterRP;
+    private String typeOfMeasuringElementShunt;
+    private String typeMeter;
+    private String constantAP;
+    private String constantRP;
+    private String factoryManufactuter;
+    private String meterModel;
+
+
     private Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
 
     //Объект для сохранения точек связанных с влиянием
@@ -187,6 +202,106 @@ public class Methodic implements Cloneable, Serializable {
 
     public void setThreePhaseStendMethodic(boolean threePhaseStendMethodic) {
         this.threePhaseStendMethodic = threePhaseStendMethodic;
+    }
+
+    public boolean isBindsParameters() {
+        return bindsParameters;
+    }
+
+    public void setBindsParameters(boolean bindsParameters) {
+        this.bindsParameters = bindsParameters;
+    }
+
+    public String getUnom() {
+        return Unom;
+    }
+
+    public void setUnom(String unom) {
+        Unom = unom;
+    }
+
+    public String getImaxAndInom() {
+        return ImaxAndInom;
+    }
+
+    public void setImaxAndInom(String imaxAndInom) {
+        ImaxAndInom = imaxAndInom;
+    }
+
+    public String getFnom() {
+        return Fnom;
+    }
+
+    public void setFnom(String fnom) {
+        Fnom = fnom;
+    }
+
+    public String getAccuracyClassMeterAP() {
+        return accuracyClassMeterAP;
+    }
+
+    public void setAccuracyClassMeterAP(String accuracyClassMeterAP) {
+        this.accuracyClassMeterAP = accuracyClassMeterAP;
+    }
+
+    public String getAccuracyClassMeterRP() {
+        return accuracyClassMeterRP;
+    }
+
+    public void setAccuracyClassMeterRP(String accuracyClassMeterRP) {
+        this.accuracyClassMeterRP = accuracyClassMeterRP;
+    }
+
+    public String isTypeOfMeasuringElementShunt() {
+        return typeOfMeasuringElementShunt;
+    }
+
+    public void setTypeOfMeasuringElementShunt(String typeOfMeasuringElementShunt) {
+        this.typeOfMeasuringElementShunt = typeOfMeasuringElementShunt;
+    }
+
+    public String getTypeMeter() {
+        return typeMeter;
+    }
+
+    public void setTypeMeter(String typeMeter) {
+        this.typeMeter = typeMeter;
+    }
+
+    public String getConstantAP() {
+        return constantAP;
+    }
+
+    public void setConstantAP(String constantAP) {
+        this.constantAP = constantAP;
+    }
+
+    public String getConstantRP() {
+        return constantRP;
+    }
+
+    public void setConstantRP(String constantRP) {
+        this.constantRP = constantRP;
+    }
+
+    public String getFactoryManufactuter() {
+        return factoryManufactuter;
+    }
+
+    public void setFactoryManufactuter(String factoryManufactuter) {
+        this.factoryManufactuter = factoryManufactuter;
+    }
+
+    public String getMeterModel() {
+        return meterModel;
+    }
+
+    public void setMeterModel(String meterModel) {
+        this.meterModel = meterModel;
+    }
+
+    public String getTypeOfMeasuringElementShunt() {
+        return typeOfMeasuringElementShunt;
     }
 
     //Внутренний класс отвечающий за точки влияния

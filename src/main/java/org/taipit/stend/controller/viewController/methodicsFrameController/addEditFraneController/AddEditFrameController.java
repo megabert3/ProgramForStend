@@ -51,6 +51,8 @@ public class AddEditFrameController {
 
     private StendDLLCommands stendDLLCommands;
 
+    private boolean bindParameters;
+
     //Это окно вызвано кнопкой редактировать?
     private boolean edit;
 
@@ -64,12 +66,6 @@ public class AddEditFrameController {
     private boolean isThrePhaseStend;
 
     private List<GridPane> gridPanesEnergyAndPhase = new ArrayList<>();
-
-    //Необходим для инициализации тестовых точек после добаления новых точек к сетке
-    private List<Commands> addDeleteTestPointGridPaneAPPls;
-    private List<Commands> addDeleteTestPointGridPaneAPMns;
-    private List<Commands> addDeleteTestPointGridPaneRPPls;
-    private List<Commands> addDeleteTestPointGridPaneRPMns;
 
     //Сохранённые листы с точками
     private List<Commands> saveListForCollumAPPls = new ArrayList<>();
@@ -125,6 +121,9 @@ public class AddEditFrameController {
 
     private Pane fillSquare;
     private Button btnAddDeleteTestPoints = new Button();
+
+    @FXML
+    private ToggleButton parametersBtn;
 
     //Отвечают за окно отображения выбранных точек тестирования
     //-------------------------------------------------------
@@ -638,7 +637,6 @@ public class AddEditFrameController {
 
     @FXML
     void initialize() {
-
         if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
             isThrePhaseStend = true;
         }
@@ -1408,16 +1406,12 @@ public class AddEditFrameController {
         testListForCollumRPMns.clear();
 
         testListForCollumAPPls.setAll(saveListForCollumAPPls);
-        //testListForCollumAPPls.addAll(saveInflListForCollumAPPls);
 
         testListForCollumAPMns.setAll(saveListForCollumAPMns);
-        //testListForCollumAPMns.addAll(saveInflListForCollumAPMns);
 
         testListForCollumRPPls.setAll(saveListForCollumRPPls);
-        //testListForCollumRPPls.addAll(saveInflListForCollumRPPls);
 
         testListForCollumRPMns.setAll(saveListForCollumRPMns);
-        //testListForCollumRPMns.addAll(saveInflListForCollumRPMns);
     }
 
     public void refreshAfterAddPointFrame(List<Commands> APPls, List<Commands> APMns, List<Commands> RPPls, List<Commands> RPMns) {
@@ -1735,6 +1729,37 @@ public class AddEditFrameController {
     }
 
     @FXML
+    void parametersAction(ActionEvent event) {
+        if (event.getSource() == parametersBtn) {
+            parametersBtn.setSelected(bindParameters);
+
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/parametersMethodicFrame.fxml"));
+                fxmlLoader.load();
+
+                ParametersMethodicController parametersMethodicController = fxmlLoader.getController();
+                parametersMethodicController.setMethodic(methodic);
+                parametersMethodicController.setAddEditFrameController(this);
+
+                if (bindParameters) {
+                    parametersMethodicController.setDisableAllParam();
+                }
+
+                Parent root = fxmlLoader.getRoot();
+                Stage stage = new Stage();
+                stage.setTitle("Параметры испытаний");
+                stage.setScene(new Scene(root));
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
     void saveOrCancelAction(ActionEvent event) {
         if (event.getSource() == SaveBtn) {
             methodic.addCommandToList(0, new ArrayList<>(testListForCollumAPPls));
@@ -1751,27 +1776,6 @@ public class AddEditFrameController {
             saveListForCollumAPMns.addAll(testListForCollumAPMns);
             saveListForCollumRPPls.addAll(testListForCollumRPPls);
             saveListForCollumRPMns.addAll(testListForCollumRPMns);
-
-
-//            methodic.setSaveInflListForCollumAPPls(saveInflListForCollumAPPls);
-//            methodic.setSaveInflListForCollumAPMns(saveInflListForCollumAPMns);
-//            methodic.setSaveInflListForCollumRPPls(saveInflListForCollumRPPls);
-//            methodic.setSaveInflListForCollumRPMns(saveInflListForCollumRPMns);
-//
-//            methodic.setSaveInfluenceUprocAPPls(saveInfluenceUprocAPPls);
-//            methodic.setSaveInfluenceUprocAPMns(saveInfluenceUprocAPMns);
-//            methodic.setSaveInfluenceUprocRPPls(saveInfluenceUprocRPPls);
-//            methodic.setSaveInfluenceUprocRPMns(saveInfluenceUprocRPMns);
-//
-//            methodic.setSaveInfluenceFprocAPPls(saveInfluenceFprocAPPls);
-//            methodic.setSaveInfluenceFprocAPMns(saveInfluenceFprocAPMns);
-//            methodic.setSaveInfluenceFprocRPPls(saveInfluenceFprocRPPls);
-//            methodic.setSaveInfluenceFprocRPMns(saveInfluenceFprocRPMns);
-//
-//            methodic.setSaveInfluenceInbUAPPls(saveInfluenceInbUAPPls);
-//            methodic.setSaveInfluenceInbUAPMns(saveInfluenceInbUAPMns);
-//            methodic.setSaveInfluenceInbURPPls(saveInfluenceInbURPPls);
-//            methodic.setSaveInfluenceInbURPMns(saveInfluenceInbURPMns);
 
             if (edit) {
                 methodicsAddEditDeleteFrameController.setListsView(methodic);
@@ -2984,5 +2988,13 @@ public class AddEditFrameController {
 
     public List<Commands> getSaveInflListForCollumRPMns() {
         return saveInflListForCollumRPMns;
+    }
+
+    public void setBindParameters(boolean bindParameters) {
+        this.bindParameters = bindParameters;
+    }
+
+    public ToggleButton getParametersBtn() {
+        return parametersBtn;
     }
 }

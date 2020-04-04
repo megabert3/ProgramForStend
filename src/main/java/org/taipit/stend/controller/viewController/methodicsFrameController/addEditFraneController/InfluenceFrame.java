@@ -1223,47 +1223,6 @@ public class InfluenceFrame {
             methodic.setSaveInfluenceUprocRPMns(influenceUprocRPMns);
             methodic.setSaveInfluenceFprocRPMns(influenceFprocRPMns);
             methodic.setSaveInfluenceInbURPMns(influenceInbURPMns);
-
-//            addEditFrameController.getTestListForCollumAPPls().removeAll(saveInflListForCollumAPPls);
-//            addEditFrameController.getTestListForCollumAPMns().removeAll(saveInflListForCollumAPMns);
-//            addEditFrameController.getTestListForCollumRPPls().removeAll(saveInflListForCollumRPPls);
-//            addEditFrameController.getTestListForCollumRPMns().removeAll(saveInflListForCollumRPMns);
-//
-////            saveInflListForCollumAPPls.clear();
-////            saveInflListForCollumAPMns.clear();
-////            saveInflListForCollumRPPls.clear();
-////            saveInflListForCollumRPMns.clear();
-////
-////            saveInflListForCollumAPPls.addAll(inflListForCollumAPPls);
-////            saveInflListForCollumAPMns.addAll(inflListForCollumAPMns);
-////            saveInflListForCollumRPPls.addAll(inflListForCollumRPPls);
-////            saveInflListForCollumRPMns.addAll(inflListForCollumRPMns);
-//
-//            addEditFrameController.getTestListForCollumAPPls().addAll(saveInflListForCollumAPPls);
-//            addEditFrameController.getTestListForCollumAPMns().addAll(saveInflListForCollumAPMns);
-//            addEditFrameController.getTestListForCollumRPPls().addAll(saveInflListForCollumRPPls);
-//            addEditFrameController.getTestListForCollumRPMns().addAll(saveInflListForCollumRPMns);
-//
-//            addEditFrameController.setSaveInfluenceUprocAPPls(influenceUprocAPPls);
-//            addEditFrameController.setSaveInfluenceFprocAPPls(influenceFprocAPPls);
-//            addEditFrameController.setSaveInfluenceInbUAPPls(influenceInbUAPPls);
-//
-//            addEditFrameController.setSaveInfluenceUprocAPMns(influenceUprocAPMns);
-//            addEditFrameController.setSaveInfluenceFprocAPMns(influenceFprocAPMns);
-//            addEditFrameController.setSaveInfluenceInbUAPMns(influenceInbUAPMns);
-//
-//            addEditFrameController.setSaveInfluenceUprocRPPls(influenceUprocRPPls);
-//            addEditFrameController.setSaveInfluenceFprocRPPls(influenceFprocRPPls);
-//            addEditFrameController.setSaveInfluenceInbURPPls(influenceInbURPPls);
-//
-//            addEditFrameController.setSaveInfluenceUprocRPMns(influenceUprocRPMns);
-//            addEditFrameController.setSaveInfluenceFprocRPMns(influenceFprocRPMns);
-//            addEditFrameController.setSaveInfluenceInbURPMns(influenceInbURPMns);
-//
-//            addEditFrameController.setSaveInflListForCollumAPPls((ArrayList<Commands>) saveInflListForCollumAPPls);
-//            addEditFrameController.setSaveInflListForCollumAPMns((ArrayList<Commands>) saveInflListForCollumAPMns);
-//            addEditFrameController.setSaveInflListForCollumRPPls((ArrayList<Commands>) saveInflListForCollumRPPls);
-//            addEditFrameController.setSaveInflListForCollumRPMns((ArrayList<Commands>) saveInflListForCollumRPMns);
         }
     }
 

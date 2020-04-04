@@ -205,6 +205,10 @@ public class MethodicsAddEditDeleteFrameController {
             addEditFrameController = fxmlLoader.getController();
             addEditFrameController.setMethodic(focusedMetodic);
             addEditFrameController.setEdit(true);
+            if (focusedMetodic.isBindsParameters()) {
+                addEditFrameController.setBindParameters(true);
+                addEditFrameController.getParametersBtn().setSelected(true);
+            }
 
             addEditFrameController.initEditsMetodic();
 
