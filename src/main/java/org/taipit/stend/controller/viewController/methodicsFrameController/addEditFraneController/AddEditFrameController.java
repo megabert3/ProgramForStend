@@ -21,11 +21,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.*;
+import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.OnePhaseStend;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
@@ -1097,12 +1103,78 @@ public class AddEditFrameController {
 
                 ((ErrorCommand) command).setCountResult(newImpulseValue);
             });
+
+
         }
+
+        Callback<TableView<Commands>, TableRow<Commands>> dragAndRow = new Callback<TableView<Commands>, TableRow<Commands>>() {
+            @Override
+            public TableRow<Commands> call(TableView<Commands> param) {
+                TableRow<Commands> row = new TableRow<>();
+
+                row.setOnDragDetected(event -> {
+                    if (! row.isEmpty()) {
+                        Integer index = row.getIndex();
+                        Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
+                        db.setDragView(row.snapshot(null, null));
+                        ClipboardContent cc = new ClipboardContent();
+                        cc.put(DataFormat.PLAIN_TEXT, index);
+                        db.setContent(cc);
+                        event.consume();
+                    }
+                });
+
+                row.setOnDragOver(event -> {
+                    Dragboard db = event.getDragboard();
+                    if (db.hasContent(DataFormat.PLAIN_TEXT)) {
+                        if (row.getIndex() != (Integer) db.getContent(DataFormat.PLAIN_TEXT)) {
+                            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                            event.consume();
+                        }
+                    }
+
+                });
+
+                row.setOnDragDropped(event -> {
+                    Dragboard db = event.getDragboard();
+                    if (db.hasContent(DataFormat.PLAIN_TEXT)) {
+                        int draggedIndex = (Integer) db.getContent(DataFormat.PLAIN_TEXT);
+                        Commands draggedPerson = param.getItems().remove(draggedIndex);
+
+                        int dropIndex ;
+
+                        if (row.isEmpty()) {
+                            dropIndex = param.getItems().size() ;
+                        } else {
+                            dropIndex = row.getIndex();
+                        }
+
+                        param.getItems().add(dropIndex, draggedPerson);
+
+                        event.setDropCompleted(true);
+                        param.getSelectionModel().select(dropIndex);
+                        event.consume();
+                    }
+                });
+                return row;
+            }
+        };
+
+        //Перенос строк
+        viewPointTableAPPls.setRowFactory(dragAndRow);
+        viewPointTableAPMns.setRowFactory(dragAndRow);
+        viewPointTableRPPls.setRowFactory(dragAndRow);
+        viewPointTableRPMns.setRowFactory(dragAndRow);
 
         viewPointTableAPPls.setEditable(true);
         viewPointTableAPMns.setEditable(true);
         viewPointTableRPPls.setEditable(true);
         viewPointTableRPMns.setEditable(true);
+
+        viewPointTableAPPls.setPlaceholder(new Label("Не выбрано ни одной точки"));
+        viewPointTableAPMns.setPlaceholder(new Label("Не выбрано ни одной точки"));
+        viewPointTableRPPls.setPlaceholder(new Label("Не выбрано ни одной точки"));
+        viewPointTableRPMns.setPlaceholder(new Label("Не выбрано ни одной точки"));
 
         viewPointTableAPPls.setItems(testListForCollumAPPls);
         viewPointTableAPMns.setItems(testListForCollumAPMns);

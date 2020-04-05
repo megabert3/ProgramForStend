@@ -32,14 +32,14 @@ public class AddDeleteTestPointInGridPaneController {
     private String[] powerFactorCoef = {"","L","C"};
     private String[] currentImaxIb = {"Imax", "Ib"};
 
-    Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
+    private Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
         @Override
         public int compare(String o1, String o2) {
             return o2.compareTo(o1);
         }
     };
 
-    Comparator<String> comparatorForIbImax = new Comparator<String>() {
+    private Comparator<String> comparatorForIbImax = new Comparator<String>() {
         @Override
         public int compare(String o1, String o2) {
             String[] first = o1.split(" ");
@@ -111,6 +111,20 @@ public class AddDeleteTestPointInGridPaneController {
             tabListCurrent.getItems().addAll(current);
             tabListCurrent.getSelectionModel().select(0);
         }
+
+        txtFldCurrent.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                btnAddCurrent.fire();
+            }
+        });
+
+        txtFldPowerFactor.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                btnAddPowerFactor.fire();
+            }
+        });
 
         btnSave.setOnAction(new EventHandler<ActionEvent>() {
             @Override

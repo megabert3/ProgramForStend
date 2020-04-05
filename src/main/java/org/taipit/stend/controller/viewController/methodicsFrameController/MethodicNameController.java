@@ -39,10 +39,6 @@ public class MethodicNameController {
     //Это окно вызвано из окна "Добавить"
     private boolean add;
 
-    public void setMethodic(Methodic methodic) {
-        this.methodic = methodic;
-    }
-
     @FXML
     private TextField nameField;
 
@@ -51,22 +47,6 @@ public class MethodicNameController {
 
     @FXML
     private Label labelInfo;
-
-    public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {
-        this.methodicsAddEditDeleteFrameController = methodicsAddEditDeleteFrameController;
-    }
-
-    public void setClone(boolean clone) {
-        this.clone = clone;
-    }
-
-    public void setAdd(boolean add) {
-        this.add = add;
-    }
-
-    public MethodicNameController getMethodicNameController() {
-        return this;
-    }
 
     @FXML
     void initialize() {
@@ -121,8 +101,6 @@ public class MethodicNameController {
 
                     addEditFrameController = fxmlLoader.getController();
 
-                    //addEditFrameController.initMainScrollPane();
-
                     addEditFrameController.setMethodicNameController(this);
                     addEditFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
                     addEditFrameController.setMethodic(methodicsForTest.getMethodic(name));
@@ -142,5 +120,25 @@ public class MethodicNameController {
                 }
             }
         }
+    }
+
+    public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {
+        this.methodicsAddEditDeleteFrameController = methodicsAddEditDeleteFrameController;
+    }
+
+    public void setClone(boolean clone) {
+        this.clone = clone;
+    }
+
+    public void setAdd(boolean add) {
+        this.add = add;
+    }
+
+    public MethodicNameController getMethodicNameController() {
+        return this;
+    }
+
+    public void setMethodic(Methodic methodic) {
+        this.methodic = methodic;
     }
 }
