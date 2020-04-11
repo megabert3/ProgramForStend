@@ -1636,6 +1636,8 @@ public class AddEditFrameController {
 
         setIdGridPanes();
 
+        createGridPaneAndsetCheckBoxes();
+
         initMainScrollPane();
 
         initScrolPaneForCurrentAndPowerFactor();
