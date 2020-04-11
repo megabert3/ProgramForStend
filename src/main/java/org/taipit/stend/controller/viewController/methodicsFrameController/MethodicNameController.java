@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditFrameController;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 import org.taipit.stend.model.Methodic;
@@ -109,10 +110,23 @@ public class MethodicNameController {
                     stage.show();
 
                     addEditFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+                    Stage methodicsAddEditDeleteFrameControllerStage = (Stage) methodicsAddEditDeleteFrameController.getEditMetBtn().getScene().getWindow();
+                    methodicsAddEditDeleteFrameControllerStage.hide();
+
+                    stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                        @Override
+                        public void handle(WindowEvent event) {
+                            event.consume();
+                            stage.close();
+                            methodicsAddEditDeleteFrameController.refreshMethodicList();
+                            methodicsAddEditDeleteFrameControllerStage.show();
+                        }
+                    });
 
                     add = false;
                     Stage stageMetodicName = (Stage) nameField.getScene().getWindow();
                     stageMetodicName.close();
+
                 } catch (InfoExсeption e) {
                     labelInfo.setText("Методика с таким именем уже существует");
                 } catch (IOException e) {

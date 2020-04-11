@@ -2002,10 +2002,10 @@ public class InfluenceFrame {
     }
 
     private void saveInflInMetodic() {
-        methodic.setSaveInflListForCollumAPPls(inflListForCollumAPPls);
-        methodic.setSaveInflListForCollumAPMns(inflListForCollumAPMns);
-        methodic.setSaveInflListForCollumRPPls(inflListForCollumRPPls);
-        methodic.setSaveInflListForCollumRPMns(inflListForCollumRPMns);
+        methodic.setSaveInflListForCollumAPPls(new ArrayList<>(inflListForCollumAPPls));
+        methodic.setSaveInflListForCollumAPMns(new ArrayList<>(inflListForCollumAPMns));
+        methodic.setSaveInflListForCollumRPPls(new ArrayList<>(inflListForCollumRPPls));
+        methodic.setSaveInflListForCollumRPMns(new ArrayList<>(inflListForCollumRPMns));
 
         methodic.setSaveInfluenceUprocAllPhaseAPPls(influenceUprocAllPhaseAPPls);
         methodic.setSaveInfluenceUprocPhaseAAPPls(influenceUprocPhaseAAPPls);

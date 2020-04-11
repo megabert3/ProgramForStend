@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javafx.stage.WindowEvent;
 import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditFrameController;
@@ -205,6 +207,7 @@ public class MethodicsAddEditDeleteFrameController {
             addEditFrameController = fxmlLoader.getController();
             addEditFrameController.setMethodic(focusedMetodic);
             addEditFrameController.setEdit(true);
+
             if (focusedMetodic.isBindsParameters()) {
                 addEditFrameController.setBindParameters(true);
                 addEditFrameController.getParametersBtn().setSelected(true);
@@ -215,17 +218,30 @@ public class MethodicsAddEditDeleteFrameController {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    addEditFrameController.addTestPointsOnGreedPane(focusedMetodic.getCommandsMap().get(0), focusedMetodic.getCommandsMap().get(1),
-                            focusedMetodic.getCommandsMap().get(2), focusedMetodic.getCommandsMap().get(3));
-                    addEditFrameController.refreshAfterEditMethodicBtn();
+                    addEditFrameController.addTestPointsOnGreedPane();
+                    addEditFrameController.addListenerToCheckBoxes();
                 }
             });
+
 
             addEditFrameController.setMethodicsAddEditDeleteFrameController(this);
             addEditFrameController.setTextFielMethodicName();
 
+            Stage stage1 = (Stage) editMetBtn.getScene().getWindow();
+
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    event.consume();
+                    stage1.show();
+                    stage.close();
+                }
+            });
+
             stage.show();
+
+            stage1.hide();
 
             addEditFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
 
@@ -423,11 +439,6 @@ public class MethodicsAddEditDeleteFrameController {
         ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
     }
 
-
-    private void loadStageWithController(String fxml, String stageName) {
-
-    }
-
     private void loadStage(String fxml, String stageName) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -443,5 +454,9 @@ public class MethodicsAddEditDeleteFrameController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Button getEditMetBtn() {
+        return editMetBtn;
     }
 }

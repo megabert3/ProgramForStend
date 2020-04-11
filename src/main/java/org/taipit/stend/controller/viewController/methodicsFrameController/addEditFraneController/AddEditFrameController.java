@@ -31,7 +31,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.*;
-import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.OnePhaseStend;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
@@ -73,45 +72,11 @@ public class AddEditFrameController {
 
     private List<GridPane> gridPanesEnergyAndPhase = new ArrayList<>();
 
-    //Сохранённые листы с точками
-    private List<Commands> saveListForCollumAPPls = new ArrayList<>();
-    private List<Commands> saveListForCollumAPMns = new ArrayList<>();
-    private List<Commands> saveListForCollumRPPls = new ArrayList<>();
-    private List<Commands> saveListForCollumRPMns = new ArrayList<>();
-
     //Лист с точками общая методика
     private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
-
-    //------------------------------------------------------------------------------------------------------------
-    //Данные полученные с окна "влияния".
-    //Значения в % от номинального напрряжения U, частоты F и т.д.
-    private double[] saveInfluenceUprocAPPls = new double[0];
-    private double[] saveInfluenceFprocAPPls = new double[0];
-    private String[] saveInfluenceInbUAPPls = new String[0];
-
-    //AP-
-    private double[] saveInfluenceUprocAPMns = new double[0];
-    private double[] saveInfluenceFprocAPMns = new double[0];
-    private String[] saveInfluenceInbUAPMns = new String[0];
-
-    //RP+
-    private double[] saveInfluenceUprocRPPls = new double[0];
-    private double[] saveInfluenceFprocRPPls = new double[0];
-    private String[] saveInfluenceInbURPPls = new String[0];
-
-    //RP-
-    private double[] saveInfluenceUprocRPMns = new double[0];
-    private double[] saveInfluenceFprocRPMns = new double[0];
-    private String[] saveInfluenceInbURPMns = new String[0];
-
-    //Лист с точками влияния
-    private List<Commands> saveInflListForCollumAPPls = new ArrayList<>();
-    private List<Commands> saveInflListForCollumAPMns = new ArrayList<>();
-    private List<Commands> saveInflListForCollumRPPls = new ArrayList<>();
-    private List<Commands> saveInflListForCollumRPMns = new ArrayList<>();
 
     @FXML
     private AnchorPane mainAnchorPane;
@@ -262,9 +227,6 @@ public class AddEditFrameController {
 
     @FXML
     private ToggleButton RPMinus;
-
-    @FXML
-    private Button CancelBtn;
 
     @FXML
     private Button SaveBtn;
@@ -635,10 +597,7 @@ public class AddEditFrameController {
 
     //Устанавливает имя методики полученное с другого окна
     public void setTextFielMethodicName() {
-        if (methodic == null) {
-            metodicNameTxtFld.setText(methodicNameController.getName());
-        } else metodicNameTxtFld.setText(methodic.getMethodicName());
-        metodicNameTxtFld.setEditable(false);
+        metodicNameTxtFld.setText(methodic.getMethodicName());
     }
 
     @FXML
@@ -651,6 +610,8 @@ public class AddEditFrameController {
         powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
 
         setIdGridPanes();
+
+        createGridPaneAndsetCheckBoxes();
 
         initMainScrollPane();
 
@@ -712,10 +673,6 @@ public class AddEditFrameController {
 
         mainAnchorPane.getChildren().add(mainScrollPane);
 
-        createRowAndColumnForGridPane();
-
-        initGridCheckBosing();
-
         stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
     }
 
@@ -756,24 +713,29 @@ public class AddEditFrameController {
             gridPanePhaseCRPMinus.setId("7;C;R;N");
         }
 
-        gridPanesEnergyAndPhase.clear();
+        gridPanesEnergyAndPhase= Arrays.asList(
+                gridPaneAllPhaseAPPlus,
+                gridPanePhaseAAPPlus,
+                gridPanePhaseBAPPlus,
+                gridPanePhaseCAPPlus,
+                gridPaneAllPhaseAPMinus,
+                gridPanePhaseAAPMinus,
+                gridPanePhaseBAPMinus,
+                gridPanePhaseCAPMinus,
+                gridPaneAllPhaseRPPlus,
+                gridPanePhaseARPPlus,
+                gridPanePhaseBRPPlus,
+                gridPanePhaseCRPPlus,
+                gridPaneAllPhaseRPMinus,
+                gridPanePhaseARPMinus,
+                gridPanePhaseBRPMinus,
+                gridPanePhaseCRPMinus
+        );
+    }
 
-        gridPanesEnergyAndPhase.add(gridPaneAllPhaseAPPlus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseAAPPlus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseBAPPlus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseCAPPlus);
-        gridPanesEnergyAndPhase.add(gridPaneAllPhaseAPMinus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseAAPMinus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseBAPMinus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseCAPMinus);
-        gridPanesEnergyAndPhase.add(gridPaneAllPhaseRPPlus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseARPPlus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseBRPPlus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseCRPPlus);
-        gridPanesEnergyAndPhase.add(gridPaneAllPhaseRPMinus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseARPMinus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseBRPMinus);
-        gridPanesEnergyAndPhase.add(gridPanePhaseCRPMinus);
+    private void createGridPaneAndsetCheckBoxes() {
+        createRowAndColumnForGridPane();
+        setCheckBoxAndLabelInGridPane();
     }
 
     private void createRowAndColumnForGridPane() {
@@ -788,40 +750,45 @@ public class AddEditFrameController {
         }
     }
 
-    private void initGridCheckBosing() {
-        for (GridPane gridPaneane : gridPanesEnergyAndPhase) {
-            setCheckBoxAndLabelInGridPane(gridPaneane);
+    private void setCheckBoxAndLabelInGridPane() {
+        for (GridPane gridPane : gridPanesEnergyAndPhase) {
+
+            gridPane.setGridLinesVisible(true);
+            gridPane.setStyle("-fx-background: #6A6A6A;");
+
+            CheckBox checkBox;
+
+            for (int x = 0; x < current.size(); x++) {
+                for (int y = 0; y < powerFactor.size(); y++) {
+                    //Устанавливаю CheckBox в нужную и соответствующую ячейку
+                    checkBox = new CheckBox();
+                    checkBox.setId(gridPane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
+
+                    GridPane.setColumnIndex(checkBox, x + 1);
+                    GridPane.setRowIndex(checkBox, y + 1);
+                    GridPane.setHalignment(checkBox, HPos.CENTER);
+                    GridPane.setValignment(checkBox, VPos.CENTER);
+
+                    gridPane.getChildren().add(checkBox);
+                }
+            }
         }
     }
 
-    private void setCheckBoxAndLabelInGridPane(GridPane grigPane) {
-        grigPane.setGridLinesVisible(true);
-        grigPane.setStyle("-fx-background: #6A6A6A;");
+    public void addListenerToCheckBoxes() {
+        for (GridPane gridPane : gridPanesEnergyAndPhase) {
+            for (Node node : gridPane.getChildren()) {
+                try {
+                    CheckBox checkBox = (CheckBox) node;
 
-        CheckBox checkBox;
-
-        for (int x = 0; x < current.size(); x++) {
-            for (int y = 0; y < powerFactor.size(); y++) {
-                //Устанавливаю CheckBox в нужную и соответствующую ячейку
-                checkBox = new CheckBox();
-                checkBox.setId(grigPane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
-                CheckBox finalCheckBox = checkBox;
-                String[] idCheckBox = finalCheckBox.getId().split(";");
-
-                checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
-                    if (newVal) {
-                        addTestPointInMethodic(idCheckBox, finalCheckBox.getId());
-                    } else {
-                        deleteTestPointInMethodic(idCheckBox);
-                    }
-                });
-
-                GridPane.setColumnIndex(checkBox, x + 1);
-                GridPane.setRowIndex(checkBox, y + 1);
-                GridPane.setHalignment(checkBox, HPos.CENTER);
-                GridPane.setValignment(checkBox, VPos.CENTER);
-
-                grigPane.getChildren().add(checkBox);
+                    checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+                        if (newVal) {
+                            addTestPointInMethodic(checkBox.getId());
+                        } else {
+                            deleteTestPointInMethodic(checkBox.getId());
+                        }
+                    });
+                }catch (ClassCastException | NullPointerException ignore) {}
             }
         }
     }
@@ -999,7 +966,7 @@ public class AddEditFrameController {
 
     //======================= Всё что связано с отображением выбранных точек в TableView ================================
     //Инициализирует таблицу для отображения выбранных точек
-    private void initTableView() {
+    public void initTableView() {
         List<TableColumn<Commands, String>> collumnListAPPls = Arrays.asList(
                 loadCurrTabColAPPls,
                 eMaxTabColAPPls,
@@ -1103,8 +1070,6 @@ public class AddEditFrameController {
 
                 ((ErrorCommand) command).setCountResult(newImpulseValue);
             });
-
-
         }
 
         Callback<TableView<Commands>, TableRow<Commands>> dragAndRow = new Callback<TableView<Commands>, TableRow<Commands>>() {
@@ -1187,29 +1152,19 @@ public class AddEditFrameController {
     //Проверияет нет ли данных с полученной методики и если у неё есть данные, то выгружает её в это окно
     //Необходимо для команды Редактирования методики
     public void initEditsMetodic() {
-        saveListForCollumAPPls = new ArrayList<>(methodic.getCommandsMap().get(0));
-        saveListForCollumAPMns = new ArrayList<>(methodic.getCommandsMap().get(1));
-        saveListForCollumRPPls = new ArrayList<>(methodic.getCommandsMap().get(2));
-        saveListForCollumRPMns = new ArrayList<>(methodic.getCommandsMap().get(3));
-
-        saveInflListForCollumAPPls = new ArrayList<>(methodic.getSaveInflListForCollumAPPls());
-        saveInflListForCollumAPMns = new ArrayList<>(methodic.getSaveInflListForCollumAPMns());
-        saveInflListForCollumRPPls = new ArrayList<>(methodic.getSaveInflListForCollumRPPls());
-        saveInflListForCollumRPMns = new ArrayList<>(methodic.getSaveInflListForCollumRPMns());
-
-        saveInfluenceInbUAPPls = methodic.getSaveInfluenceInbUAPPls();
-        saveInfluenceInbUAPMns = methodic.getSaveInfluenceInbUAPMns();
-        saveInfluenceInbURPPls = methodic.getSaveInfluenceInbURPPls();
-        saveInfluenceInbURPMns = methodic.getSaveInfluenceInbURPMns();
+        testListForCollumAPPls.addAll(methodic.getCommandsMap().get(0));
+        testListForCollumAPMns.addAll(methodic.getCommandsMap().get(1));
+        testListForCollumRPPls.addAll(methodic.getCommandsMap().get(2));
+        testListForCollumRPMns.addAll(methodic.getCommandsMap().get(3));
     }
 
     //Задаёт параметр true или false нужному checkBox'у
-    public void addTestPointsOnGreedPane(List<Commands> APPls, List<Commands> APMns, List<Commands> RPPls, List<Commands> RPMns) {
+    public void addTestPointsOnGreedPane() {
         char[] testPointIdArr;
 
-        if (!APPls.isEmpty()) {
+        if (!testListForCollumAPPls.isEmpty()) {
 
-            for (Commands command : APPls) {
+            for (Commands command :testListForCollumAPPls) {
                 if (command instanceof ErrorCommand) {
                     testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
@@ -1270,9 +1225,9 @@ public class AddEditFrameController {
             }
         }
 
-        if (!APMns.isEmpty()) {
+        if (!testListForCollumAPMns.isEmpty()) {
 
-            for (Commands command : APMns) {
+            for (Commands command : testListForCollumAPMns) {
                 if (command instanceof ErrorCommand) {
                     testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
@@ -1333,9 +1288,9 @@ public class AddEditFrameController {
             }
         }
 
-        if (!RPPls.isEmpty()) {
+        if (!testListForCollumRPPls.isEmpty()) {
 
-            for (Commands command : RPPls) {
+            for (Commands command : testListForCollumRPPls) {
                 if (command instanceof ErrorCommand) {
                     testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
@@ -1395,9 +1350,9 @@ public class AddEditFrameController {
             }
         }
 
-        if (!RPMns.isEmpty()) {
+        if (!testListForCollumRPMns.isEmpty()) {
 
-            for (Commands command : RPMns) {
+            for (Commands command : testListForCollumRPMns) {
                 if (command instanceof ErrorCommand) {
                     testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
@@ -1459,45 +1414,6 @@ public class AddEditFrameController {
         }
     }
 
-    //Т.к. при инициализации устанавливается слушатель для CheckBox'ов
-    //Во избежание дублирования приходится отчищать список и заново инициализировать
-    public void refreshAfterEditMethodicBtn() {
-        testListForCollumAPPls.clear();
-        testListForCollumAPMns.clear();
-        testListForCollumRPPls.clear();
-        testListForCollumRPMns.clear();
-
-        testListForCollumAPPls.setAll(saveListForCollumAPPls);
-
-        testListForCollumAPMns.setAll(saveListForCollumAPMns);
-
-        testListForCollumRPPls.setAll(saveListForCollumRPPls);
-
-        testListForCollumRPMns.setAll(saveListForCollumRPMns);
-    }
-
-    public void refreshAfterAddPointFrame(List<Commands> APPls, List<Commands> APMns, List<Commands> RPPls, List<Commands> RPMns) {
-        testListForCollumAPPls.clear();
-        testListForCollumAPMns.clear();
-        testListForCollumRPPls.clear();
-        testListForCollumRPMns.clear();
-
-        testListForCollumAPPls.setAll(APPls);
-        testListForCollumAPMns.setAll(APMns);
-        testListForCollumRPPls.setAll(RPPls);
-        testListForCollumRPMns.setAll(RPMns);
-    }
-
-    public Map<Integer, List<Commands>> saveTestPointBeforeAddDeleteTestPoint() {
-        Map<Integer, List<Commands>> map = new HashMap<>(4);
-        map.put(0, new ArrayList<>(testListForCollumAPPls));
-        map.put(1, new ArrayList<>(testListForCollumAPMns));
-        map.put(2, new ArrayList<>(testListForCollumRPPls));
-        map.put(3, new ArrayList<>(testListForCollumRPMns));
-
-        return map;
-    }
-
     //Находит нужный CheckBox и задаёт значение
     private void setTrueOrFalseOnCheckBox(char[] testPointIdArr, Commands commands) {
         //AP+
@@ -1506,43 +1422,43 @@ public class AddEditFrameController {
             if (testPointIdArr[2] == 'H') {
 
                 for (Node checkBox : gridPaneAllPhaseAPPlus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             } else if (testPointIdArr[2] == 'A') {
 
                 for (Node checkBox : gridPanePhaseAAPPlus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
 
             } else if (testPointIdArr[2] == 'B') {
 
                 for (Node checkBox : gridPanePhaseBAPPlus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             } else if (testPointIdArr[2] == 'C') {
 
                 for (Node checkBox : gridPanePhaseCAPPlus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             }
         //AP-
@@ -1551,48 +1467,48 @@ public class AddEditFrameController {
             if (testPointIdArr[2] == 'H') {
 
                 for (Node checkBox : gridPaneAllPhaseAPMinus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    } catch (NullPointerException ignore) {}
                 }
             }
 
             if (testPointIdArr[2] == 'A') {
 
                 for (Node checkBox : gridPanePhaseAAPMinus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    } catch (NullPointerException ignore) {}
                 }
             }
 
             if (testPointIdArr[2] == 'B') {
 
                 for (Node checkBox : gridPanePhaseBAPMinus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             }
 
             if (testPointIdArr[2] == 'C') {
 
                 for (Node checkBox : gridPanePhaseCAPMinus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             }
         //RP+
@@ -1601,42 +1517,42 @@ public class AddEditFrameController {
             if (testPointIdArr[2] == 'H') {
 
                 for (Node checkBox : gridPaneAllPhaseRPPlus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             }else if (testPointIdArr[2] == 'A') {
 
                 for (Node checkBox : gridPanePhaseARPPlus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             }else if (testPointIdArr[2] == 'B') {
 
                 for (Node checkBox : gridPanePhaseBRPPlus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             }else if (testPointIdArr[2] == 'C') {
 
                 for (Node checkBox : gridPanePhaseCRPPlus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             }
         //RP-
@@ -1645,46 +1561,47 @@ public class AddEditFrameController {
             if (testPointIdArr[2] == 'H') {
 
                 for (Node checkBox : gridPaneAllPhaseRPMinus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             }else if (testPointIdArr[2] == 'A') {
 
                 for (Node checkBox : gridPanePhaseARPMinus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             }else if (testPointIdArr[2] == 'B') {
 
                 for (Node checkBox : gridPanePhaseBRPMinus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             }else if (testPointIdArr[2] == 'C') {
 
                 for (Node checkBox : gridPanePhaseCRPMinus.getChildren()) {
-                    if (checkBox != null) {
+                    try {
                         if (((ErrorCommand) commands).getId().equals(checkBox.getId())) {
                             ((CheckBox) checkBox).setSelected(true);
                             break;
                         }
-                    }
+                    }catch (NullPointerException ignore) {}
                 }
             }
         }
     }
+
 //===================================================================================================
     //Метод для перерисовки GridPane после добавления новых параметров для точек
     public void refreshGridPaneAndScrolPane() {
@@ -1825,16 +1742,6 @@ public class AddEditFrameController {
             methodic.addCommandToList(2, new ArrayList<>(testListForCollumRPPls));
             methodic.addCommandToList(3, new ArrayList<>(testListForCollumRPMns));
 
-            saveListForCollumAPPls.clear();
-            saveListForCollumAPPls.clear();
-            saveListForCollumAPPls.clear();
-            saveListForCollumAPPls.clear();
-
-            saveListForCollumAPPls.addAll(testListForCollumAPPls);
-            saveListForCollumAPMns.addAll(testListForCollumAPMns);
-            saveListForCollumRPPls.addAll(testListForCollumRPPls);
-            saveListForCollumRPMns.addAll(testListForCollumRPMns);
-
             if (edit) {
                 methodicsAddEditDeleteFrameController.setListsView(methodic);
             }else {
@@ -1842,11 +1749,11 @@ public class AddEditFrameController {
             }
 
             methodicsForTest.serializationMetodics();
-        }
+            Stage stage1 = (Stage) methodicsAddEditDeleteFrameController.getEditMetBtn().getScene().getWindow();
+            stage1.show();
 
-        if (event.getSource() == CancelBtn) {
-            Stage thisScene = (Stage) CancelBtn.getScene().getWindow();
-            thisScene.close();
+            Stage stage = (Stage) SaveBtn.getScene().getWindow();
+            stage.close();
         }
     }
 
@@ -2785,12 +2692,14 @@ public class AddEditFrameController {
     }
 
     //Добавляет тестовую точку в методику
-    private void addTestPointInMethodic(String[] dirCurFactor, String testPoint) {
+    private void addTestPointInMethodic(String testPoint) {
         if (isThrePhaseStend) {
             stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
         } else {
             stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
         }
+
+        String[] dirCurFactor = testPoint.split(";");
 
         /** 1;H;A;P;0.2 Ib;0.5C
          *  режим;
@@ -2840,54 +2749,40 @@ public class AddEditFrameController {
         }
     }
 
-    private void deleteTestPointInMethodic(String [] point) {
+    private void deleteTestPointInMethodic(String idCheckBox) {
         ErrorCommand errorCommand;
-        String str;
+        String[] point = idCheckBox.split(";");
 
         if (point[2].equals("A") && point[3].equals("P")) {
-
-            if (point[1].equals("H")) {
-                str = point[5] + "; " + point[4];
-            }else str = point[1] + ": " + point[5] + "; " + point[4];
 
             for (Commands current : testListForCollumAPPls) {
                 if (current instanceof ErrorCommand) {
                     errorCommand = (ErrorCommand) current;
-                    if (errorCommand.getName().equals(str)) {
+                    if (errorCommand.getId().equals(idCheckBox)) {
                         testListForCollumAPPls.remove(current);
                         break;
                     }
                 }
             }
-        }
 
-        if (point[2].equals("A") && point[3].equals("N")) {
-
-            if (point[1].equals("H")) {
-                str = point[5] + "; " + point[4];
-            }else str = point[1] + ": " + point[5] + "; " + point[4];
+        } else if (point[2].equals("A") && point[3].equals("N")) {
 
             for (Commands current : testListForCollumAPMns) {
                 if (current instanceof ErrorCommand) {
                     errorCommand = (ErrorCommand) current;
-                    if (errorCommand.getName().equals(str)) {
+                    if (errorCommand.getId().equals(idCheckBox)) {
                         testListForCollumAPMns.remove(current);
                         break;
                     }
                 }
             }
-        }
 
-        if (point[2].equals("R") && point[3].equals("P")) {
-
-            if (point[1].equals("H")) {
-                str = point[5] + "; " + point[4];
-            }else str = point[1] + ": " + point[5] + "; " + point[4];
+        } else if (point[2].equals("R") && point[3].equals("P")) {
 
             for (Commands current : testListForCollumRPPls) {
                 if (current instanceof ErrorCommand) {
                     errorCommand = (ErrorCommand) current;
-                    if (errorCommand.getName().equals(str)) {
+                    if (errorCommand.getId().equals(idCheckBox)) {
                         testListForCollumRPPls.remove(current);
                         break;
                     }
@@ -2897,14 +2792,10 @@ public class AddEditFrameController {
 
         if (point[2].equals("R") && point[3].equals("N")) {
 
-            if (point[1].equals("H")) {
-                str = point[5] + "; " + point[4];
-            }else str = point[1] + ": " + point[5] + "; " + point[4];
-
             for (Commands current : testListForCollumRPMns) {
                 if (current instanceof ErrorCommand) {
                     errorCommand = (ErrorCommand) current;
-                    if (errorCommand.getName().equals(str)) {
+                    if (errorCommand.getId().equals(idCheckBox)) {
                         testListForCollumRPMns.remove(current);
                         break;
                     }
@@ -2913,95 +2804,8 @@ public class AddEditFrameController {
         }
     }
 
-//    private void initInfluenceFrame() {
-//        influenceFrame.setSaveInflListForCollumAPPls(saveInflListForCollumAPPls);
-//        influenceFrame.setSaveInflListForCollumAPMns(saveInflListForCollumAPMns);
-//        influenceFrame.setSaveInflListForCollumRPPls(saveInflListForCollumRPPls);
-//        influenceFrame.setSaveInflListForCollumRPMns(saveInflListForCollumRPMns);
-//
-//        influenceFrame.setSaveInfluenceUprocAPPls(saveInfluenceUprocAPPls);
-//        influenceFrame.setSaveInfluenceFprocAPPls(saveInfluenceFprocAPPls);
-//        influenceFrame.setSaveInfluenceInbUAPPls(saveInfluenceInbUAPPls);
-//
-//        influenceFrame.setSaveInfluenceUprocAPMns(saveInfluenceUprocAPMns);
-//        influenceFrame.setSaveInfluenceFprocAPMns(saveInfluenceFprocAPMns);
-//        influenceFrame.setSaveInfluenceInbUAPMns(saveInfluenceInbUAPMns);
-//
-//        influenceFrame.setSaveInfluenceUprocRPPls(saveInfluenceUprocRPPls);
-//        influenceFrame.setSaveInfluenceFprocRPPls(saveInfluenceFprocRPPls);
-//        influenceFrame.setSaveInfluenceInbURPPls(saveInfluenceInbURPPls);
-//
-//        influenceFrame.setSaveInfluenceUprocRPMns(saveInfluenceUprocRPMns);
-//        influenceFrame.setSaveInfluenceFprocRPMns(saveInfluenceFprocRPMns);
-//        influenceFrame.setSaveInfluenceInbURPMns(saveInfluenceInbURPMns);
-//    }
-
     public void setMethodicNameController(MethodicNameController methodicNameController) {
         this.methodicNameController = methodicNameController;
-    }
-
-    void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
-        this.saveInfluenceUprocAPPls = saveInfluenceUprocAPPls;
-    }
-
-    void setSaveInfluenceFprocAPPls(double[] saveInfluenceFprocAPPls) {
-        this.saveInfluenceFprocAPPls = saveInfluenceFprocAPPls;
-    }
-
-    void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
-        this.saveInfluenceInbUAPPls = saveInfluenceInbUAPPls;
-    }
-
-    void setSaveInfluenceUprocAPMns(double[] saveInfluenceUprocAPMns) {
-        this.saveInfluenceUprocAPMns = saveInfluenceUprocAPMns;
-    }
-
-    void setSaveInfluenceFprocAPMns(double[] saveInfluenceFprocAPMns) {
-        this.saveInfluenceFprocAPMns = saveInfluenceFprocAPMns;
-    }
-
-    void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
-        this.saveInfluenceInbUAPMns = saveInfluenceInbUAPMns;
-    }
-
-    void setSaveInfluenceUprocRPPls(double[] saveInfluenceUprocRPPls) {
-        this.saveInfluenceUprocRPPls = saveInfluenceUprocRPPls;
-    }
-
-    void setSaveInfluenceFprocRPPls(double[] saveInfluenceFprocRPPls) {
-        this.saveInfluenceFprocRPPls = saveInfluenceFprocRPPls;
-    }
-
-    void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
-        this.saveInfluenceInbURPPls = saveInfluenceInbURPPls;
-    }
-
-    void setSaveInfluenceUprocRPMns(double[] saveInfluenceUprocRPMns) {
-        this.saveInfluenceUprocRPMns = saveInfluenceUprocRPMns;
-    }
-
-    void setSaveInfluenceFprocRPMns(double[] saveInfluenceFprocRPMns) {
-        this.saveInfluenceFprocRPMns = saveInfluenceFprocRPMns;
-    }
-
-    void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
-        this.saveInfluenceInbURPMns = saveInfluenceInbURPMns;
-    }
-
-    void setSaveInflListForCollumAPPls(ArrayList<Commands> saveInflListForCollumAPPls) {
-        this.saveInflListForCollumAPPls = saveInflListForCollumAPPls;
-    }
-
-    void setSaveInflListForCollumAPMns(ArrayList<Commands> saveInflListForCollumAPMns) {
-        this.saveInflListForCollumAPMns = saveInflListForCollumAPMns;
-    }
-
-    void setSaveInflListForCollumRPPls(ArrayList<Commands> saveInflListForCollumRPPls) {
-        this.saveInflListForCollumRPPls = saveInflListForCollumRPPls;
-    }
-
-    void setSaveInflListForCollumRPMns(ArrayList<Commands> saveInflListForCollumRPMns) {
-        this.saveInflListForCollumRPMns = saveInflListForCollumRPMns;
     }
 
     public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {
@@ -3030,22 +2834,6 @@ public class AddEditFrameController {
 
     public void setEdit(boolean edit) {
         this.edit = edit;
-    }
-
-    public List<Commands> getSaveInflListForCollumAPPls() {
-        return saveInflListForCollumAPPls;
-    }
-
-    public List<Commands> getSaveInflListForCollumAPMns() {
-        return saveInflListForCollumAPMns;
-    }
-
-    public List<Commands> getSaveInflListForCollumRPPls() {
-        return saveInflListForCollumRPPls;
-    }
-
-    public List<Commands> getSaveInflListForCollumRPMns() {
-        return saveInflListForCollumRPMns;
     }
 
     public void setBindParameters(boolean bindParameters) {

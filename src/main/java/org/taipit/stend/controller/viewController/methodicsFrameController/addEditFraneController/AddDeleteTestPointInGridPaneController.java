@@ -141,10 +141,10 @@ public class AddDeleteTestPointInGridPaneController {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        Map<Integer, List<Commands>> map = addEditFrameController.saveTestPointBeforeAddDeleteTestPoint();
+                        //Map<Integer, List<Commands>> map = addEditFrameController.saveTestPointBeforeAddDeleteTestPoint();
                         addEditFrameController.refreshGridPaneAndScrolPane();
-                        addEditFrameController.addTestPointsOnGreedPane(map.get(0), map.get(1), map.get(2), map.get(3));
-                        addEditFrameController.refreshAfterAddPointFrame(map.get(0), map.get(1), map.get(2), map.get(3));
+                        addEditFrameController.addTestPointsOnGreedPane();
+                        //addEditFrameController.refreshAfterAddPointFrame(map.get(0), map.get(1), map.get(2), map.get(3));
                     }
                 });
 
