@@ -68,6 +68,7 @@ public class Methodic implements Cloneable, Serializable {
         return super.clone();
     }
 
+    //Точки влияния
     public void setSaveInflListForCollumAPPls(List<Commands> saveInflListForCollumAPPls) {
         influenceMetodic.influenceCommandsMap.put(0, saveInflListForCollumAPPls);
     }
@@ -82,54 +83,6 @@ public class Methodic implements Cloneable, Serializable {
 
     public void setSaveInflListForCollumRPMns(List<Commands> saveInflListForCollumRPMns) {
         influenceMetodic.influenceCommandsMap.put(3, saveInflListForCollumRPMns);
-    }
-
-    public void setSaveInfluenceUprocAPPls(double[] saveInfluenceUprocAPPls) {
-        influenceMetodic.saveInfluenceUprocAPPls = saveInfluenceUprocAPPls;
-    }
-
-    public void setSaveInfluenceFprocAPPls(double[] saveInfluenceFprocAPPls) {
-        influenceMetodic.saveInfluenceFprocAPPls = saveInfluenceFprocAPPls;
-    }
-
-    public void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
-        influenceMetodic.saveInfluenceInbUAPPls = saveInfluenceInbUAPPls;
-    }
-
-    public void setSaveInfluenceUprocAPMns(double[] saveInfluenceUprocAPMns) {
-        influenceMetodic.saveInfluenceUprocAPMns = saveInfluenceUprocAPMns;
-    }
-
-    public void setSaveInfluenceFprocAPMns(double[] saveInfluenceFprocAPMns) {
-        influenceMetodic.saveInfluenceFprocAPMns = saveInfluenceFprocAPMns;
-    }
-
-    public void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
-        influenceMetodic.saveInfluenceInbUAPMns = saveInfluenceInbUAPMns;
-    }
-
-    public void setSaveInfluenceUprocRPPls(double[] saveInfluenceUprocRPPls) {
-        influenceMetodic.saveInfluenceUprocRPPls = saveInfluenceUprocRPPls;
-    }
-
-    public void setSaveInfluenceFprocRPPls(double[] saveInfluenceFprocRPPls) {
-        influenceMetodic.saveInfluenceFprocRPPls = saveInfluenceFprocRPPls;
-    }
-
-    public void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
-        influenceMetodic.saveInfluenceInbURPPls = saveInfluenceInbURPPls;
-    }
-
-    public void setSaveInfluenceUprocRPMns(double[] saveInfluenceUprocRPMns) {
-        influenceMetodic.saveInfluenceUprocRPMns = saveInfluenceUprocRPMns;
-    }
-
-    public void setSaveInfluenceFprocRPMns(double[] saveInfluenceFprocRPMns) {
-        influenceMetodic.saveInfluenceFprocRPMns = saveInfluenceFprocRPMns;
-    }
-
-    public void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
-        influenceMetodic.saveInfluenceInbURPMns = saveInfluenceInbURPMns;
     }
 
     public List<Commands> getSaveInflListForCollumAPPls() {
@@ -148,54 +101,300 @@ public class Methodic implements Cloneable, Serializable {
         return influenceMetodic.influenceCommandsMap.get(3);
     }
 
-    public double[] getSaveInfluenceUprocAPPls() {
-        return influenceMetodic.saveInfluenceUprocAPPls;
+    //Инбаланс
+    public void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
+        influenceMetodic.saveInfluenceInbUAPPls = saveInfluenceInbUAPPls;
     }
 
-    public double[] getSaveInfluenceFprocAPPls() {
-        return influenceMetodic.saveInfluenceFprocAPPls;
+    public void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
+        influenceMetodic.saveInfluenceInbUAPMns = saveInfluenceInbUAPMns;
+    }
+
+    public void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
+        influenceMetodic.saveInfluenceInbURPPls = saveInfluenceInbURPPls;
+    }
+
+    public void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
+        influenceMetodic.saveInfluenceInbURPMns = saveInfluenceInbURPMns;
     }
 
     public String[] getSaveInfluenceInbUAPPls() {
         return influenceMetodic.saveInfluenceInbUAPPls;
     }
 
-    public double[] getSaveInfluenceUprocAPMns() {
-        return influenceMetodic.saveInfluenceUprocAPMns;
-    }
-
-    public double[] getSaveInfluenceFprocAPMns() {
-        return influenceMetodic.saveInfluenceFprocAPMns;
-    }
-
     public String[] getSaveInfluenceInbUAPMns() {
         return influenceMetodic.saveInfluenceInbUAPMns;
-    }
-
-    public double[] getSaveInfluenceUprocRPPls() {
-        return influenceMetodic.saveInfluenceUprocRPPls;
-    }
-
-    public double[] getSaveInfluenceFprocRPPls() {
-        return influenceMetodic.saveInfluenceFprocRPPls;
     }
 
     public String[] getSaveInfluenceInbURPPls() {
         return influenceMetodic.saveInfluenceInbURPPls;
     }
 
-    public double[] getSaveInfluenceUprocRPMns() {
-        return influenceMetodic.saveInfluenceUprocRPMns;
-    }
-
-    public double[] getSaveInfluenceFprocRPMns() {
-        return influenceMetodic.saveInfluenceFprocRPMns;
-    }
-
     public String[] getSaveInfluenceInbURPMns() {
         return influenceMetodic.saveInfluenceInbURPMns;
     }
 
+    //Влияние AP+
+    public float[] getSaveInfluenceUprocAllPhaseAPPls() {
+        return influenceMetodic.saveInfluenceUprocAllPhaseAPPls;
+    }
+
+    public void setSaveInfluenceUprocAllPhaseAPPls(float[] saveInfluenceUprocAllPhaseAPPls) {
+        this.influenceMetodic.saveInfluenceUprocAllPhaseAPPls = saveInfluenceUprocAllPhaseAPPls;
+    }
+
+    public float[] getSaveInfluenceUprocPhaseAAPPls() {
+        return influenceMetodic.saveInfluenceUprocPhaseAAPPls;
+    }
+
+    public void setSaveInfluenceUprocPhaseAAPPls(float[] saveInfluenceUprocPhaseAAPPls) {
+        this.influenceMetodic.saveInfluenceUprocPhaseAAPPls = saveInfluenceUprocPhaseAAPPls;
+    }
+
+    public float[] getSaveInfluenceUprocPhaseBAPPls() {
+        return influenceMetodic.saveInfluenceUprocPhaseBAPPls;
+    }
+
+    public void setSaveInfluenceUprocPhaseBAPPls(float[] saveInfluenceUprocPhaseBAPPls) {
+        this.influenceMetodic.saveInfluenceUprocPhaseBAPPls = saveInfluenceUprocPhaseBAPPls;
+    }
+
+    public float[] getSaveInfluenceUprocPhaseCAPPls() {
+        return influenceMetodic.saveInfluenceUprocPhaseCAPPls;
+    }
+
+    public void setSaveInfluenceUprocPhaseCAPPls(float[] saveInfluenceUprocPhaseCAPPls) {
+        this.influenceMetodic.saveInfluenceUprocPhaseCAPPls = saveInfluenceUprocPhaseCAPPls;
+    }
+
+    public float[] getSaveInfluenceFprocAllPhaseAPPls() {
+        return influenceMetodic.saveInfluenceFprocAllPhaseAPPls;
+    }
+
+    public void setSaveInfluenceFprocAllPhaseAPPls(float[] saveInfluenceFprocAllPhaseAPPls) {
+        this.influenceMetodic.saveInfluenceFprocAllPhaseAPPls = saveInfluenceFprocAllPhaseAPPls;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseAAPPls() {
+        return influenceMetodic.saveInfluenceFprocPhaseAAPPls;
+    }
+
+    public void setSaveInfluenceFprocPhaseAAPPls(float[] saveInfluenceFprocPhaseAAPPls) {
+        this.influenceMetodic.saveInfluenceFprocPhaseAAPPls = saveInfluenceFprocPhaseAAPPls;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseBAPPls() {
+        return influenceMetodic.saveInfluenceFprocPhaseBAPPls;
+    }
+
+    public void setSaveInfluenceFprocPhaseBAPPls(float[] saveInfluenceFprocPhaseBAPPls) {
+        this.influenceMetodic.saveInfluenceFprocPhaseBAPPls = saveInfluenceFprocPhaseBAPPls;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseCAPPls() {
+        return influenceMetodic.saveInfluenceFprocPhaseCAPPls;
+    }
+
+    public void setSaveInfluenceFprocPhaseCAPPls(float[] saveInfluenceFprocPhaseCAPPls) {
+        this.influenceMetodic.saveInfluenceFprocPhaseCAPPls = saveInfluenceFprocPhaseCAPPls;
+    }
+
+    //Влияние AP-
+    public float[] getSaveInfluenceUprocAllPhaseAPMns() {
+        return influenceMetodic.saveInfluenceUprocAllPhaseAPMns;
+    }
+
+    public void setSaveInfluenceUprocAllPhaseAPMns(float[] saveInfluenceUprocAllPhaseAPMns) {
+        this.influenceMetodic.saveInfluenceUprocAllPhaseAPMns = saveInfluenceUprocAllPhaseAPMns;
+    }
+
+    public float[] getSaveInfluenceUprocPhaseAAPMns() {
+        return influenceMetodic.saveInfluenceUprocPhaseAAPMns;
+    }
+
+    public void setSaveInfluenceUprocPhaseAAPMns(float[] saveInfluenceUprocPhaseAAPMns) {
+        this.influenceMetodic.saveInfluenceUprocPhaseAAPMns = saveInfluenceUprocPhaseAAPMns;
+    }
+
+    public float[] getSaveInfluenceUprocPhaseBAPMns() {
+        return influenceMetodic.saveInfluenceUprocPhaseBAPMns;
+    }
+
+    public void setSaveInfluenceUprocPhaseBAPMns(float[] saveInfluenceUprocPhaseBAPMns) {
+        this.influenceMetodic.saveInfluenceUprocPhaseBAPMns = saveInfluenceUprocPhaseBAPMns;
+    }
+
+    public float[] getSaveInfluenceUprocPhaseCAPMns() {
+        return influenceMetodic.saveInfluenceUprocPhaseCAPMns;
+    }
+
+    public void setSaveInfluenceUprocPhaseCAPMns(float[] saveInfluenceUprocPhaseCAPMns) {
+        this.influenceMetodic.saveInfluenceUprocPhaseCAPMns = saveInfluenceUprocPhaseCAPMns;
+    }
+
+    public float[] getSaveInfluenceFprocAllPhaseAPMns() {
+        return influenceMetodic.saveInfluenceFprocAllPhaseAPMns;
+    }
+
+    public void setSaveInfluenceFprocAllPhaseAPMns(float[] saveInfluenceFprocAllPhaseAPMns) {
+        this.influenceMetodic.saveInfluenceFprocAllPhaseAPMns = saveInfluenceFprocAllPhaseAPMns;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseAAPMns() {
+        return influenceMetodic.saveInfluenceFprocPhaseAAPMns;
+    }
+
+    public void setSaveInfluenceFprocPhaseAAPMns(float[] saveInfluenceFprocPhaseAAPMns) {
+        this.influenceMetodic.saveInfluenceFprocPhaseAAPMns = saveInfluenceFprocPhaseAAPMns;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseBAPMns() {
+        return influenceMetodic.saveInfluenceFprocPhaseBAPMns;
+    }
+
+    public void setSaveInfluenceFprocPhaseBAPMns(float[] saveInfluenceFprocPhaseBAPMns) {
+        this.influenceMetodic.saveInfluenceFprocPhaseBAPMns = saveInfluenceFprocPhaseBAPMns;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseCAPMns() {
+        return influenceMetodic.saveInfluenceFprocPhaseCAPMns;
+    }
+
+    public void setSaveInfluenceFprocPhaseCAPMns(float[] saveInfluenceFprocPhaseCAPMns) {
+        this.influenceMetodic.saveInfluenceFprocPhaseCAPMns = saveInfluenceFprocPhaseCAPMns;
+    }
+
+    public float[] getSaveInfluenceUprocAllPhaseRPPls() {
+        return influenceMetodic.saveInfluenceUprocAllPhaseRPPls;
+    }
+
+    public void setSaveInfluenceUprocAllPhaseRPPls(float[] saveInfluenceUprocAllPhaseRPPls) {
+        this.influenceMetodic.saveInfluenceUprocAllPhaseRPPls = saveInfluenceUprocAllPhaseRPPls;
+    }
+
+    public float[] getSaveInfluenceUprocPhaseARPPls() {
+        return influenceMetodic.saveInfluenceUprocPhaseARPPls;
+    }
+
+    public void setSaveInfluenceUprocPhaseARPPls(float[] saveInfluenceUprocPhaseARPPls) {
+        this.influenceMetodic.saveInfluenceUprocPhaseARPPls = saveInfluenceUprocPhaseARPPls;
+    }
+
+    //Влияние RP+
+    public float[] getSaveInfluenceUprocPhaseBRPPls() {
+        return influenceMetodic.saveInfluenceUprocPhaseBRPPls;
+    }
+
+    public void setSaveInfluenceUprocPhaseBRPPls(float[] saveInfluenceUprocPhaseBRPPls) {
+        this.influenceMetodic.saveInfluenceUprocPhaseBRPPls = saveInfluenceUprocPhaseBRPPls;
+    }
+
+    public float[] getSaveInfluenceUprocPhaseCRPPls() {
+        return influenceMetodic.saveInfluenceUprocPhaseCRPPls;
+    }
+
+    public void setSaveInfluenceUprocPhaseCRPPls(float[] saveInfluenceUprocPhaseCRPPls) {
+        this.influenceMetodic.saveInfluenceUprocPhaseCRPPls = saveInfluenceUprocPhaseCRPPls;
+    }
+
+    public float[] getSaveInfluenceFprocAllPhaseRPPls() {
+        return influenceMetodic.saveInfluenceFprocAllPhaseRPPls;
+    }
+
+    public void setSaveInfluenceFprocAllPhaseRPPls(float[] saveInfluenceFprocAllPhaseRPPls) {
+        this.influenceMetodic.saveInfluenceFprocAllPhaseRPPls = saveInfluenceFprocAllPhaseRPPls;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseARPPls() {
+        return influenceMetodic.saveInfluenceFprocPhaseARPPls;
+    }
+
+    public void setSaveInfluenceFprocPhaseARPPls(float[] saveInfluenceFprocPhaseARPPls) {
+        this.influenceMetodic.saveInfluenceFprocPhaseARPPls = saveInfluenceFprocPhaseARPPls;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseBRPPls() {
+        return influenceMetodic.saveInfluenceFprocPhaseBRPPls;
+    }
+
+    public void setSaveInfluenceFprocPhaseBRPPls(float[] saveInfluenceFprocPhaseBRPPls) {
+        this.influenceMetodic.saveInfluenceFprocPhaseBRPPls = saveInfluenceFprocPhaseBRPPls;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseCRPPls() {
+        return influenceMetodic.saveInfluenceFprocPhaseCRPPls;
+    }
+
+    public void setSaveInfluenceFprocPhaseCRPPls(float[] saveInfluenceFprocPhaseCRPPls) {
+        this.influenceMetodic.saveInfluenceFprocPhaseCRPPls = saveInfluenceFprocPhaseCRPPls;
+    }
+
+    //Влияние RP-
+    public float[] getSaveInfluenceUprocAllPhaseRPMns() {
+        return influenceMetodic.saveInfluenceUprocAllPhaseRPMns;
+    }
+
+    public void setSaveInfluenceUprocAllPhaseRPMns(float[] saveInfluenceUprocAllPhaseRPMns) {
+        this.influenceMetodic.saveInfluenceUprocAllPhaseRPMns = saveInfluenceUprocAllPhaseRPMns;
+    }
+
+    public float[] getSaveInfluenceUprocPhaseARPMns() {
+        return influenceMetodic.saveInfluenceUprocPhaseARPMns;
+    }
+
+    public void setSaveInfluenceUprocPhaseARPMns(float[] saveInfluenceUprocPhaseARPMns) {
+        this.influenceMetodic.saveInfluenceUprocPhaseARPMns = saveInfluenceUprocPhaseARPMns;
+    }
+
+    public float[] getSaveInfluenceUprocPhaseBRPMns() {
+        return influenceMetodic.saveInfluenceUprocPhaseBRPMns;
+    }
+
+    public void setSaveInfluenceUprocPhaseBRPMns(float[] saveInfluenceUprocPhaseBRPMns) {
+        this.influenceMetodic.saveInfluenceUprocPhaseBRPMns = saveInfluenceUprocPhaseBRPMns;
+    }
+
+    public float[] getSaveInfluenceUprocPhaseCRPMns() {
+        return influenceMetodic.saveInfluenceUprocPhaseCRPMns;
+    }
+
+    public void setSaveInfluenceUprocPhaseCRPMns(float[] saveInfluenceUprocPhaseCRPMns) {
+        this.influenceMetodic.saveInfluenceUprocPhaseCRPMns = saveInfluenceUprocPhaseCRPMns;
+    }
+
+    public float[] getSaveInfluenceFprocAllPhaseRPMns() {
+        return influenceMetodic.saveInfluenceFprocAllPhaseRPMns;
+    }
+
+    public void setSaveInfluenceFprocAllPhaseRPMns(float[] saveInfluenceFprocAllPhaseRPMns) {
+        this.influenceMetodic.saveInfluenceFprocAllPhaseRPMns = saveInfluenceFprocAllPhaseRPMns;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseARPMns() {
+        return influenceMetodic.saveInfluenceFprocPhaseARPMns;
+    }
+
+    public void setSaveInfluenceFprocPhaseARPMns(float[] saveInfluenceFprocPhaseARPMns) {
+        this.influenceMetodic.saveInfluenceFprocPhaseARPMns = saveInfluenceFprocPhaseARPMns;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseBRPMns() {
+        return influenceMetodic.saveInfluenceFprocPhaseBRPMns;
+    }
+
+    public void setSaveInfluenceFprocPhaseBRPMns(float[] saveInfluenceFprocPhaseBRPMns) {
+        this.influenceMetodic.saveInfluenceFprocPhaseBRPMns = saveInfluenceFprocPhaseBRPMns;
+    }
+
+    public float[] getSaveInfluenceFprocPhaseCRPMns() {
+        return influenceMetodic.saveInfluenceFprocPhaseCRPMns;
+    }
+
+    public void setSaveInfluenceFprocPhaseCRPMns(float[] saveInfluenceFprocPhaseCRPMns) {
+        this.influenceMetodic.saveInfluenceFprocPhaseCRPMns = saveInfluenceFprocPhaseCRPMns;
+    }
+
+   //======================================================================================
     public boolean isThreePhaseStendMethodic() {
         return threePhaseStendMethodic;
     }
@@ -315,25 +514,55 @@ public class Methodic implements Cloneable, Serializable {
 
         private Map<Integer, List<Commands>> influenceCommandsMap = new HashMap<>(4);
 
-        //Для теста влияния значения в в процентах
-        //AP-
-        double[] saveInfluenceUprocAPPls = new double[0];
-        double[] saveInfluenceFprocAPPls = new double[0];
-        String[] saveInfluenceInbUAPPls = new String[0];
+        private float[] saveInfluenceUprocAllPhaseAPPls = new float[0];
+        private float[] saveInfluenceUprocPhaseAAPPls = new float[0];
+        private float[] saveInfluenceUprocPhaseBAPPls = new float[0];
+        private float[] saveInfluenceUprocPhaseCAPPls = new float[0];
+
+        private float[] saveInfluenceFprocAllPhaseAPPls = new float[0];
+        private float[] saveInfluenceFprocPhaseAAPPls = new float[0];
+        private float[] saveInfluenceFprocPhaseBAPPls = new float[0];
+        private float[] saveInfluenceFprocPhaseCAPPls = new float[0];
+
+        private String[] saveInfluenceInbUAPPls = new String[0];
 
         //AP-
-        double[] saveInfluenceUprocAPMns = new double[0];
-        double[] saveInfluenceFprocAPMns = new double[0];
-        String[] saveInfluenceInbUAPMns = new String[0];
+        private float[] saveInfluenceUprocAllPhaseAPMns = new float[0];
+        private float[] saveInfluenceUprocPhaseAAPMns = new float[0];
+        private float[] saveInfluenceUprocPhaseBAPMns = new float[0];
+        private float[] saveInfluenceUprocPhaseCAPMns = new float[0];
+
+        private float[] saveInfluenceFprocAllPhaseAPMns = new float[0];
+        private float[] saveInfluenceFprocPhaseAAPMns = new float[0];
+        private float[] saveInfluenceFprocPhaseBAPMns = new float[0];
+        private float[] saveInfluenceFprocPhaseCAPMns = new float[0];
+
+        private String[] saveInfluenceInbUAPMns = new String[0];
 
         //RP+
-        double[] saveInfluenceUprocRPPls = new double[0];
-        double[] saveInfluenceFprocRPPls = new double[0];
+        private float[] saveInfluenceUprocAllPhaseRPPls = new float[0];
+        private float[] saveInfluenceUprocPhaseARPPls = new float[0];
+        private float[] saveInfluenceUprocPhaseBRPPls = new float[0];
+        private float[] saveInfluenceUprocPhaseCRPPls = new float[0];
+
+        private float[] saveInfluenceFprocAllPhaseRPPls = new float[0];
+        private float[] saveInfluenceFprocPhaseARPPls = new float[0];
+        private float[] saveInfluenceFprocPhaseBRPPls = new float[0];
+        private float[] saveInfluenceFprocPhaseCRPPls = new float[0];
+
         private String[] saveInfluenceInbURPPls = new String[0];
 
         //RP-
-        private double[] saveInfluenceUprocRPMns = new double[0];
-        private double[] saveInfluenceFprocRPMns = new double[0];
+        private float[] saveInfluenceUprocAllPhaseRPMns = new float[0];
+        private float[] saveInfluenceUprocPhaseARPMns = new float[0];
+        private float[] saveInfluenceUprocPhaseBRPMns = new float[0];
+        private float[] saveInfluenceUprocPhaseCRPMns = new float[0];
+
+        private float[] saveInfluenceFprocAllPhaseRPMns = new float[0];
+        private float[] saveInfluenceFprocPhaseARPMns = new float[0];
+        private float[] saveInfluenceFprocPhaseBRPMns = new float[0];
+        private float[] saveInfluenceFprocPhaseCRPMns = new float[0];
+
         private String[] saveInfluenceInbURPMns = new String[0];
 
         @Override

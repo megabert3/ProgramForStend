@@ -1197,16 +1197,6 @@ public class AddEditFrameController {
         saveInflListForCollumRPPls = new ArrayList<>(methodic.getSaveInflListForCollumRPPls());
         saveInflListForCollumRPMns = new ArrayList<>(methodic.getSaveInflListForCollumRPMns());
 
-        saveInfluenceUprocAPPls = methodic.getSaveInfluenceUprocAPPls();
-        saveInfluenceUprocAPMns = methodic.getSaveInfluenceUprocAPMns();
-        saveInfluenceUprocRPPls = methodic.getSaveInfluenceUprocRPPls();
-        saveInfluenceUprocRPMns = methodic.getSaveInfluenceUprocRPMns();
-
-        saveInfluenceFprocAPPls = methodic.getSaveInfluenceFprocAPPls();
-        saveInfluenceFprocAPMns = methodic.getSaveInfluenceFprocAPMns();
-        saveInfluenceFprocRPPls = methodic.getSaveInfluenceFprocRPPls();
-        saveInfluenceFprocRPMns = methodic.getSaveInfluenceFprocRPMns();
-
         saveInfluenceInbUAPPls = methodic.getSaveInfluenceInbUAPPls();
         saveInfluenceInbUAPMns = methodic.getSaveInfluenceInbUAPMns();
         saveInfluenceInbURPPls = methodic.getSaveInfluenceInbURPPls();
@@ -1775,28 +1765,24 @@ public class AddEditFrameController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            influenceFrame = fxmlLoader.getController();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    influenceFrame.myInitInflFrame(methodic);
+                    influenceFrame.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+                }
+            });
+
             Parent root = fxmlLoader.getRoot();
             Stage stage = new Stage();
             stage.setTitle("Настройки теста влияния");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
 
-            influenceFrame = fxmlLoader.getController();
-            influenceFrame.setMethodic(methodic);
-            influenceFrame.setAddEditFrameController(this);
-
-            initInfluenceFrame();
-
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    influenceFrame.initOfAdeedTestPoints();
-                    influenceFrame.refreshTabViewAfterInitCheckBoxes();
-                }
-            });
-
             stage.show();
-            influenceFrame.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+
         }
     }
 
@@ -2927,28 +2913,28 @@ public class AddEditFrameController {
         }
     }
 
-    private void initInfluenceFrame() {
-        influenceFrame.setSaveInflListForCollumAPPls(saveInflListForCollumAPPls);
-        influenceFrame.setSaveInflListForCollumAPMns(saveInflListForCollumAPMns);
-        influenceFrame.setSaveInflListForCollumRPPls(saveInflListForCollumRPPls);
-        influenceFrame.setSaveInflListForCollumRPMns(saveInflListForCollumRPMns);
-
-        influenceFrame.setSaveInfluenceUprocAPPls(saveInfluenceUprocAPPls);
-        influenceFrame.setSaveInfluenceFprocAPPls(saveInfluenceFprocAPPls);
-        influenceFrame.setSaveInfluenceInbUAPPls(saveInfluenceInbUAPPls);
-
-        influenceFrame.setSaveInfluenceUprocAPMns(saveInfluenceUprocAPMns);
-        influenceFrame.setSaveInfluenceFprocAPMns(saveInfluenceFprocAPMns);
-        influenceFrame.setSaveInfluenceInbUAPMns(saveInfluenceInbUAPMns);
-
-        influenceFrame.setSaveInfluenceUprocRPPls(saveInfluenceUprocRPPls);
-        influenceFrame.setSaveInfluenceFprocRPPls(saveInfluenceFprocRPPls);
-        influenceFrame.setSaveInfluenceInbURPPls(saveInfluenceInbURPPls);
-
-        influenceFrame.setSaveInfluenceUprocRPMns(saveInfluenceUprocRPMns);
-        influenceFrame.setSaveInfluenceFprocRPMns(saveInfluenceFprocRPMns);
-        influenceFrame.setSaveInfluenceInbURPMns(saveInfluenceInbURPMns);
-    }
+//    private void initInfluenceFrame() {
+//        influenceFrame.setSaveInflListForCollumAPPls(saveInflListForCollumAPPls);
+//        influenceFrame.setSaveInflListForCollumAPMns(saveInflListForCollumAPMns);
+//        influenceFrame.setSaveInflListForCollumRPPls(saveInflListForCollumRPPls);
+//        influenceFrame.setSaveInflListForCollumRPMns(saveInflListForCollumRPMns);
+//
+//        influenceFrame.setSaveInfluenceUprocAPPls(saveInfluenceUprocAPPls);
+//        influenceFrame.setSaveInfluenceFprocAPPls(saveInfluenceFprocAPPls);
+//        influenceFrame.setSaveInfluenceInbUAPPls(saveInfluenceInbUAPPls);
+//
+//        influenceFrame.setSaveInfluenceUprocAPMns(saveInfluenceUprocAPMns);
+//        influenceFrame.setSaveInfluenceFprocAPMns(saveInfluenceFprocAPMns);
+//        influenceFrame.setSaveInfluenceInbUAPMns(saveInfluenceInbUAPMns);
+//
+//        influenceFrame.setSaveInfluenceUprocRPPls(saveInfluenceUprocRPPls);
+//        influenceFrame.setSaveInfluenceFprocRPPls(saveInfluenceFprocRPPls);
+//        influenceFrame.setSaveInfluenceInbURPPls(saveInfluenceInbURPPls);
+//
+//        influenceFrame.setSaveInfluenceUprocRPMns(saveInfluenceUprocRPMns);
+//        influenceFrame.setSaveInfluenceFprocRPMns(saveInfluenceFprocRPMns);
+//        influenceFrame.setSaveInfluenceInbURPMns(saveInfluenceInbURPMns);
+//    }
 
     public void setMethodicNameController(MethodicNameController methodicNameController) {
         this.methodicNameController = methodicNameController;

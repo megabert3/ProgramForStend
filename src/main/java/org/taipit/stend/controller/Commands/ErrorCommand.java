@@ -120,7 +120,7 @@ public class ErrorCommand implements Commands, Serializable {
     }
 
     //Конструктор для создания объекта с вклатки "Влияние"
-    public ErrorCommand(String param, String id, int phase, String current,
+    public ErrorCommand(String strPhase, String param, String id, int phase, String current,
                         double voltPer, int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
         this.id = id;
         this.phase = phase;
@@ -133,7 +133,8 @@ public class ErrorCommand implements Commands, Serializable {
         this.voltPer = voltPer;
 
         //47.0%Un: 0.5L; 0.01 Ib
-        name = (voltPer + "%" + param + "n: " + cosP + "; " + currentPerсent + " " + current.trim());
+        //A: 47.0%Un: 0.5L; 0.01 Ib
+        name = (strPhase + voltPer + "%" + param + "n: " + cosP + "; " + currentPerсent + " " + current.trim());
 
         currPer = Double.parseDouble(currentPerсent) * 100;
         phaseSrequence = 0;
