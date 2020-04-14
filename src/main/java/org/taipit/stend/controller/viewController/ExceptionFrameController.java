@@ -9,15 +9,15 @@ import javafx.stage.Stage;
 public class ExceptionFrameController {
 
     @FXML
-    private Label exceptionLabel;
+    private Label label;
 
     @FXML
-    private Button exitBtn;
+    private Button okBtn;
 
     @FXML
-    void exitAction(ActionEvent event) {
-        if (event.getSource() == exitBtn) {
-            Stage stage = (Stage) exceptionLabel.getScene().getWindow();
+    void okAction(ActionEvent event) {
+        if (event.getSource() == okBtn) {
+            Stage stage = (Stage) okBtn.getScene().getWindow();
             stage.close();
         }
     }
@@ -27,7 +27,7 @@ public class ExceptionFrameController {
 
     }
 
-    public Label getExceptionLabel() {
-        return exceptionLabel;
+    public Label getLabel() {
+        return label;
     }
 }

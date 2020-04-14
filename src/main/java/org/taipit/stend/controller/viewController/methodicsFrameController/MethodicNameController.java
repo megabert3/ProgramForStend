@@ -106,6 +106,7 @@ public class MethodicNameController {
                     addEditFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
                     addEditFrameController.setMethodic(methodicsForTest.getMethodic(name));
                     addEditFrameController.setTextFielMethodicName();
+                    addEditFrameController.addListenerToCheckBoxes();
 
                     stage.show();
 

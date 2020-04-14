@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -123,20 +124,101 @@ public class TestParametersFrameController {
     @FXML
     void buttonActionTestFrame(ActionEvent event) {
         if (event.getSource() == btnStartTest) {
+            //Напряжение
+            float Un = 0;
+            //Базовый ток
+            float Ib = 0;
+            //Максимальный ток
+            float Imax = 0;
+            //Частота
+            float Fn = 0;
+            //Класс точности AP
+            float accuracyClassAP = 0;
+            //Класс точности RP
+            float accuracyClassRP = 0;
+
+            txtFldUnom.setStyle("");
+            txtFldFrg.setStyle("");
+            txtFldAccuracyAP.setStyle("");
+            txtFldAccuracyRP.setStyle("");
+            txtFldCurrent.setStyle("");
+
+
             try {
-                if (chosBxMetodics.getValue() == null) throw new InfoExсeption();
+                try {
+                    if (chosBxMetodics.getValue() == null) throw new InfoExсeption();
+                }catch (InfoExсeption e) {
+                    e.printStackTrace();
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            ConsoleHelper.infoException("Выберите методику");
+                        }
+                    });
+                    return;
+                }
 
                 //Номинальное напряжение
-                double Un = Double.parseDouble(txtFldUnom.getText());
+                try {
+                    Un = Float.parseFloat(txtFldUnom.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
 
-                //Частота
-                double Fn = Double.parseDouble(txtFldFrg.getText());
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            ConsoleHelper.infoException("Недопустимое значение параметра");
+                            txtFldUnom.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        }
+                    });
+                    return;
+                }
 
-                //Класс точности AP
-                double accuracyClassAP = Double.parseDouble(txtFldAccuracyAP.getText());
+                try {
+                    Fn = Float.parseFloat(txtFldFrg.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
 
-                //Класс точности RP
-                double accuracyClassRP = Double.parseDouble(txtFldAccuracyRP.getText());
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            ConsoleHelper.infoException("Недопустимое значение параметра");
+                            txtFldFrg.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        }
+                    });
+                    return;
+                }
+
+                try {
+                    accuracyClassAP = Float.parseFloat(txtFldAccuracyAP.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            ConsoleHelper.infoException("Недопустимое значение параметра");
+                            txtFldAccuracyAP.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        }
+                    });
+                    return;
+                }
+
+                try {
+                    accuracyClassRP = Float.parseFloat(txtFldAccuracyRP.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            ConsoleHelper.infoException("Недопустимое значение параметра");
+                            txtFldAccuracyRP.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        }
+                    });
+                    return;
+                }
 
                 StringBuilder stringBuilder = new StringBuilder();
                 Pattern pat = Pattern.compile("[0-9]+");
@@ -148,11 +230,21 @@ public class TestParametersFrameController {
 
                 String[] current = new String(stringBuilder).split(",");
 
-                //Базовый ток
-                double Ib = Double.parseDouble(current[0]);
+                try {
+                    Ib = Float.parseFloat(current[0]);
+                    Imax = Float.parseFloat(current[1]);
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
 
-                //Максимальный ток
-                double Imax = Double.parseDouble(current[1]);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            ConsoleHelper.infoException("Недопустимое значение параметра");
+                            txtFldCurrent.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        }
+                    });
+                    return;
+                }
 
                 //Тип измерительного элемета
                 boolean typeOfMeasuringElementShunt = false;
@@ -175,6 +267,20 @@ public class TestParametersFrameController {
                     }
                 }
 
+                if (metersList.isEmpty()) throw new InfoExсeption();
+
+                Methodic methodic = MethodicsForTest.getMethodicsForTestInstance().getMethodic(chosBxMetodics.getValue());
+
+                if (methodic == null) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            ConsoleHelper.infoException("Методики с указанным именем\nне существует");
+                        }
+                    });
+                    return;
+                }
+
                 //Передаю установленные параметры всем счётчикам
                 for (Meter meter : metersList) {
                     meter.setIb(Ib);
@@ -188,14 +294,6 @@ public class TestParametersFrameController {
                     meter.setInomImax(txtFldCurrent.getText());
                     meter.setTypeMeter(chosBxTypeMeter.getValue());
                 }
-
-                /**
-                *  Сделать проверки полей
-                */
-
-                if (metersList.isEmpty()) throw new InfoExсeption();
-
-                Methodic methodic = MethodicsForTest.getMethodicsForTestInstance().getMethodic(chosBxMetodics.getValue());
 
                 properties.setProperty("lastUnom", txtFldUnom.getText());
                 properties.setProperty("lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
@@ -273,14 +371,12 @@ public class TestParametersFrameController {
                     e.printStackTrace();
                 }
 
-                ExceptionFrameController exceptionFrameController = fxmlLoader.getController();
-                exceptionFrameController.getExceptionLabel().setText("Должен быть выбран хотябы\nодин счётчик.");
-
-                Parent root = fxmlLoader.getRoot();
-                Stage stage = new Stage();
-                stage.setTitle("Ошибка");
-                stage.setScene(new Scene(root));
-                stage.show();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ConsoleHelper.infoException("Должен быть выбран\n хотябы один счётчик");
+                    }
+                });
             }
         }
     }
@@ -352,6 +448,7 @@ public class TestParametersFrameController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 methodic = MethodicsForTest.getMethodicsForTestInstance().getMethodic(chosBxMetodics.getValue());
+
                 if (methodic.isBindsParameters()) {
                     txtFldUnom.setText(methodic.getUnom());
                     txtFldUnom.setDisable(true);
@@ -541,12 +638,8 @@ public class TestParametersFrameController {
         tabColModelMeter.setCellFactory(ComboBoxTableCell.forTableColumn(meterModelList));
 
         tabColModelMeter.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
-            TablePosition<Meter, String> pos = event.getTablePosition();
 
             String value = event.getNewValue();
-
-            //int row = pos.getRow();
-            //Meter meter = event.getTableView().getItems().get(row);
 
             for (Meter meter : metersList) {
                 meter.setModelMeter(value);
@@ -560,14 +653,9 @@ public class TestParametersFrameController {
         tabColManufacturer.setCellFactory(ComboBoxTableCell.forTableColumn(properties.getProperty("meterManufacturer").split(", ")));
 
         tabColManufacturer.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
-            TablePosition<Meter, String> pos = event.getTablePosition();
 
             String param = event.getNewValue();
 
-//            int row = pos.getRow();
-//            Meter meter = event.getTableView().getItems().get(row);
-//
-//            meter.setFactoryManufacturer(param);
             for (Meter meter : metersList) {
                 meter.setFactoryManufacturer(param);
             }

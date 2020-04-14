@@ -18,7 +18,7 @@
    <children>
       <AnchorPane layoutX="798.0" layoutY="141.0" prefHeight="623.0" prefWidth="405.0">
          <children>
-            <StackPane prefHeight="623.0" prefWidth="405.0">
+            <StackPane prefHeight="643.0" prefWidth="405.0">
                <children>
                   <TableView fx:id="viewPointTableAPPls" prefHeight="624.0" prefWidth="402.0">
                      <columns>
@@ -112,7 +112,7 @@
             </HBox>
          </children>
       </AnchorPane>
-      <Button fx:id="SaveBtn" layoutX="1053.0" layoutY="802.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="40.0" prefWidth="150.0" text="Сохранить">
+      <Button fx:id="SaveBtn" layoutX="1053.0" layoutY="812.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="40.0" prefWidth="150.0" text="Сохранить">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
@@ -155,68 +155,62 @@
                               <ToggleButton fx:id="ConstTogBtnAPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Константа" />
                            </children>
                         </VBox>
-                        <StackPane layoutX="150.0" layoutY="-1.0" prefHeight="220.0" prefWidth="600.0">
+                        <StackPane layoutX="150.0" prefHeight="220.0" prefWidth="600.0">
                            <children>
-                              <Pane fx:id="paneConstAPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="222.0" layoutY="14.0" text="Проверка счётного механизма" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в прямом направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Ошибка, %" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Энергия, kW * h" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldConsErAPPls" layoutX="106.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldEngConstAPPls" layoutX="122.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldConstAPPls" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="395.0" layoutY="166.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnConstAPPls" layoutX="465.0" layoutY="162.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                 </children>
-                              </Pane>
-                              <Pane fx:id="paneCRPAPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="277.0" layoutY="14.0" text="Самоход" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в прямом направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Напряжение, % Uном" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Время теста" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldCRPUProcAPPls" layoutX="150.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldTimeCRPAPPls" layoutX="114.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldCRPAmtImpAPPls" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="384.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnCRPAPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <Label layoutX="384.0" layoutY="154.0" text="Добавить ГОСТ" />
-                                    <ToggleButton fx:id="addTglBtnCRPAPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                 </children>
-                              </Pane>
                               <Pane fx:id="paneSTAAPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
                                  <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Чувствительность" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в прямом направлении тока" />
-                                    <Label layoutX="40.0" layoutY="88.0" text="Ток, А" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Время теста" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldSTAIProcAPPls" layoutX="106.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldTimeSRAAPPls" layoutX="106.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldSTAAmtImpAPPls" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="384.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnSTAAPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <ToggleButton fx:id="addTglBtnSTAAPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <Label layoutX="384.0" layoutY="154.0" text="Добавить ГОСТ" />
+                                    <Label layoutX="253.0" layoutY="14.0" text="Чувствительность" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
+                                    <Label layoutX="100.0" layoutY="87.0" text="Ток, А" textFill="WHITE" />
+                                    <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
+                                    <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldSTAIProcAPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldTimeSRAAPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldSTAAmtImpAPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnSTAAPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefHeight="25.0" prefWidth="105.0" text="Добавить" />
+                                    <ToggleButton fx:id="addTglBtnSTAAPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить ГОСТ" />
                                  </children>
                               </Pane>
                               <Pane fx:id="paneRTCAPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
                                  <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в прямом направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Тип ошибки" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Диапазон ошибки" />
-                                    <Label layoutX="310.0" layoutY="87.0" text="Количество вычислений" />
+                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
+                                    <Label layoutX="60.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
+                                    <Label layoutX="26.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
+                                    <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
                                     <TextField fx:id="txtFieldRngEAPPls" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
                                     <TextField fx:id="txtFldRTCAmtMshAPPls" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="419.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnRTCAPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
+                                    <ToggleButton fx:id="addTglBtnRTCAPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
                                     <ChoiceBox fx:id="ChcBxRTCErrAPPls" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <Label layoutX="310.0" layoutY="145.0" text="Время вычисления" />
+                                    <Label layoutX="356.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
                                     <TextField fx:id="txtFldRTCTimeMshAPPls" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneCRPAPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="277.0" layoutY="14.0" text="Самоход" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
+                                    <Label layoutX="14.0" layoutY="87.0" text="Напряжение, % Uном" textFill="WHITE" />
+                                    <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
+                                    <Label layoutX="283.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldCRPUProcAPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldTimeCRPAPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldCRPAmtImpAPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnCRPAPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить" />
+                                    <ToggleButton fx:id="addTglBtnCRPAPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить ГОСТ" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneConstAPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="222.0" layoutY="14.0" text="Проверка счётного механизма" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
+                                    <Label layoutX="58.0" layoutY="87.0" text="Ошибка, %" textFill="WHITE" />
+                                    <Label layoutX="31.0" layoutY="145.0" text="Энергия, kW * h" textFill="WHITE" />
+                                    <Label layoutX="299.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldConsErAPPls" layoutX="122.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldEngConstAPPls" layoutX="122.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldConstAPPls" layoutX="430.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnConstAPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
                                  </children>
                               </Pane>
                            </children>
@@ -225,6 +219,66 @@
                   </Pane>
                   <Pane fx:id="APMnsPane" prefHeight="200.0" prefWidth="200.0">
                      <children>
+                        <StackPane layoutX="150.0" prefHeight="220.0" prefWidth="600.0">
+                           <children>
+                              <Pane fx:id="paneRTCAPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в обратном направлении тока" textFill="WHITE" />
+                                    <Label layoutX="60.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
+                                    <Label layoutX="26.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
+                                    <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldRngEAPMns" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
+                                    <TextField fx:id="txtFldRTCAmtMshAPMns" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
+                                    <ToggleButton fx:id="addTglBtnRTCAPMns" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
+                                    <ChoiceBox fx:id="ChcBxRTCErrAPMns" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" />
+                                    <Label layoutX="356.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
+                                    <TextField fx:id="txtFldRTCTimeMshAPMns" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneConstAPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="222.0" layoutY="14.0" text="Проверка счётного механизма" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в обратном направлении тока" textFill="WHITE" />
+                                    <Label layoutX="58.0" layoutY="87.0" text="Ошибка, %" textFill="WHITE" />
+                                    <Label layoutX="31.0" layoutY="145.0" text="Энергия, kW * h" textFill="WHITE" />
+                                    <Label layoutX="299.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldConsErAPMns" layoutX="122.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldEngConstAPMns" layoutX="122.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldConstAPMns" layoutX="430.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnConstAPMns" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneSTAAPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="253.0" layoutY="14.0" text="Чувствительность" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в обратном направлении тока" textFill="WHITE" />
+                                    <Label layoutX="100.0" layoutY="87.0" text="Ток, A" textFill="WHITE" />
+                                    <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
+                                    <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldSTAIProcAPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldTimeSRAAPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldSTAAmtImpAPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnSTAAPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить" />
+                                    <ToggleButton fx:id="addTglBtnSTAAPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить ГОСТ" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneCRPAPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="277.0" layoutY="14.0" text="Самоход" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в обратном направлении тока" textFill="WHITE" />
+                                    <Label layoutX="13.0" layoutY="87.0" text="Напряжение, % Uном" textFill="WHITE" />
+                                    <Label layoutX="67.0" layoutY="146.0" text="Время теста" textFill="WHITE" />
+                                    <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldCRPUProcAPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldTimeCRPAPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldCRPAmtImpAPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnCRPAPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить" />
+                                    <ToggleButton fx:id="addTglBtnCRPAPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить ГОСТ" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </StackPane>
                         <VBox prefHeight="220.0" prefWidth="150.0" style="-fx-background-color: #303030;">
                            <children>
                               <ToggleButton fx:id="CRPTogBtnAPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Самоход" />
@@ -233,150 +287,6 @@
                               <ToggleButton fx:id="ConstTogBtnAPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Константа" />
                            </children>
                         </VBox>
-                        <StackPane layoutX="150.0" prefHeight="220.0" prefWidth="600.0">
-                           <children>
-                              <Pane fx:id="paneConstAPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="222.0" layoutY="14.0" text="Проверка счётного механизма" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в обратном направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Ошибка, %" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Энергия, kW * h" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldConsErAPMns" layoutX="106.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldEngConstAPMns" layoutX="122.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldConstAPMns" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="395.0" layoutY="166.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnConstAPMns" layoutX="465.0" layoutY="162.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                 </children>
-                              </Pane>
-                              <Pane fx:id="paneCRPAPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="277.0" layoutY="14.0" text="Самоход" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в обратном направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Напряжение, % Uном" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Время теста" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldCRPUProcAPMns" layoutX="150.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldTimeCRPAPMns" layoutX="114.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldCRPAmtImpAPMns" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="384.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnCRPAPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <ToggleButton fx:id="addTglBtnCRPAPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <Label layoutX="384.0" layoutY="154.0" text="Добавить ГОСТ" />
-                                 </children>
-                              </Pane>
-                              <Pane fx:id="paneSTAAPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Чувствительность" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в обратном направлении тока" />
-                                    <Label layoutX="40.0" layoutY="88.0" text="Ток, A" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Время теста" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldSTAIProcAPMns" layoutX="106.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldTimeSRAAPMns" layoutX="106.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldSTAAmtImpAPMns" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="384.0" layoutY="154.0" text="Добавить ГОСТ" />
-                                    <ToggleButton fx:id="addTglBtnSTAAPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <Label layoutX="384.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnSTAAPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                 </children>
-                              </Pane>
-                              <Pane fx:id="paneRTCAPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в обратном направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Тип ошибки" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Диапазон ошибки" />
-                                    <Label layoutX="310.0" layoutY="87.0" text="Количество вычислений" />
-                                    <TextField fx:id="txtFieldRngEAPMns" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFldRTCAmtMshAPMns" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="419.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnRTCAPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <ChoiceBox fx:id="ChcBxRTCErrAPMns" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <Label layoutX="310.0" layoutY="145.0" text="Время вычисления" />
-                                    <TextField fx:id="txtFldRTCTimeMshAPMns" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
-                                 </children>
-                              </Pane>
-                           </children>
-                        </StackPane>
-                     </children>
-                  </Pane>
-                  <Pane fx:id="RPPlsPane" prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <VBox prefHeight="220.0" prefWidth="150.0" style="-fx-background-color: #303030;">
-                           <children>
-                              <ToggleButton fx:id="CRPTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Самоход" />
-                              <ToggleButton fx:id="STATogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Чувствительность" />
-                              <ToggleButton fx:id="RTCTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Т.Х.Ч" />
-                              <ToggleButton fx:id="ConstTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Константа" />
-                           </children>
-                        </VBox>
-                        <StackPane layoutX="150.0" prefHeight="220.0" prefWidth="600.0">
-                           <children>
-                              <Pane fx:id="paneConstRPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="222.0" layoutY="14.0" text="Проверка счётного механизма" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в прямом направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Ошибка, %" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Энергия, kVar * h" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldConsErRPPls" layoutX="106.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldEngConstRPPls" layoutX="122.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldConstRPPls" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="395.0" layoutY="166.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnConstRPPls" layoutX="465.0" layoutY="162.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                 </children>
-                              </Pane>
-                              <Pane fx:id="paneCRPRPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="277.0" layoutY="14.0" text="Самоход" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в прямом направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Напряжение, % Uном" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Время теста" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldCRPUProcRPPls" layoutX="150.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldTimeCRPRPPls" layoutX="114.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldCRPAmtImpRPPls" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="384.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnCRPRPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <ToggleButton fx:id="addTglBtnCRPRPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <Label layoutX="384.0" layoutY="154.0" text="Добавить ГОСТ" />
-                                 </children>
-                              </Pane>
-                              <Pane fx:id="paneSTARPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Чувствительность" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в прямом направлении тока" />
-                                    <Label layoutX="40.0" layoutY="88.0" text="Ток, A" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Время теста" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldSTAIProcRPPls" layoutX="106.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldTimeSRARPPls" layoutX="106.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldSTAAmtImpRPPls" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="384.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnSTARPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <Label layoutX="384.0" layoutY="154.0" text="Добавить ГОСТ" />
-                                    <ToggleButton fx:id="addTglBtnSTARPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                 </children>
-                              </Pane>
-                              <Pane fx:id="paneRTCRPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в прямом направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Тип ошибки" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Диапазон ошибки" />
-                                    <Label layoutX="310.0" layoutY="87.0" text="Количество вычислений" />
-                                    <TextField fx:id="txtFieldRngERPPls" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFldRTCAmtMshRPPls" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="419.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnRTCRPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <ChoiceBox fx:id="ChcBxRTCErrRPPls" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFldRTCTimeMshRPPls" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="310.0" layoutY="145.0" text="Время вычисления" />
-                                 </children>
-                              </Pane>
-                           </children>
-                        </StackPane>
                      </children>
                   </Pane>
                   <Pane fx:id="RPMnsPane" prefHeight="200.0" prefWidth="200.0">
@@ -389,72 +299,138 @@
                               <ToggleButton fx:id="ConstTogBtnRPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Константа" />
                            </children>
                         </VBox>
-                        <StackPane layoutX="150.0" layoutY="-1.0" prefHeight="220.0" prefWidth="600.0">
+                        <StackPane layoutX="150.0" prefHeight="220.0" prefWidth="600.0">
                            <children>
                               <Pane fx:id="paneConstRPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
                                  <children>
-                                    <Label layoutX="222.0" layoutY="14.0" text="Проверка счётного механизма" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в обратном направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Ошибка, %" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Энергия, kVar * h" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldConsErRPMns" layoutX="106.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldEngConstRPMns" layoutX="122.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldConstRPMns" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="395.0" layoutY="166.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnConstRPMns" layoutX="465.0" layoutY="162.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                 </children>
-                              </Pane>
-                              <Pane fx:id="paneCRPRPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="277.0" layoutY="14.0" text="Самоход" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в обратном направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Напряжение, % Uном" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Время теста" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldCRPUProcRPMns" layoutX="150.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldTimeCRPRPMns" layoutX="114.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldCRPAmtImpRPMns" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="384.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnCRPRPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <ToggleButton fx:id="addTglBtnCRPRPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <Label layoutX="384.0" layoutY="154.0" text="Добавить ГОСТ" />
+                                    <Label layoutX="222.0" layoutY="14.0" text="Проверка счётного механизма" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в обратном направлении тока" textFill="WHITE" />
+                                    <Label layoutX="58.0" layoutY="87.0" text="Ошибка, %" textFill="WHITE" />
+                                    <Label layoutX="25.0" layoutY="145.0" text="Энергия, kVar * h" textFill="WHITE" />
+                                    <Label layoutX="300.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldConsErRPMns" layoutX="122.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldEngConstRPMns" layoutX="122.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldConstRPMns" layoutX="430.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnConstRPMns" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
                                  </children>
                               </Pane>
                               <Pane fx:id="paneSTARPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;" StackPane.alignment="CENTER">
                                  <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Чувствительность" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в обратном направлении тока" />
-                                    <Label layoutX="40.0" layoutY="88.0" text="Ток, А" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Время теста" />
-                                    <Label layoutX="268.0" layoutY="102.0" text="Количество импульсов" />
-                                    <TextField fx:id="txtFieldSTAIProcRPMns" layoutX="106.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <TextField fx:id="txtFieldTimeSRARPMns" layoutX="106.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFieldSTAAmtImpRPMns" layoutX="413.0" layoutY="96.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="384.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnSTARPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <ToggleButton fx:id="addTglBtnSTARPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
-                                    <Label layoutX="384.0" layoutY="154.0" text="Добавить ГОСТ" />
+                                    <Label layoutX="253.0" layoutY="14.0" text="Чувствительность" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в обратном направлении тока" textFill="WHITE" />
+                                    <Label layoutX="100.0" layoutY="87.0" text="Ток, А" textFill="WHITE" />
+                                    <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
+                                    <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldSTAIProcRPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldTimeSRARPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldSTAAmtImpRPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnSTARPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить" />
+                                    <ToggleButton fx:id="addTglBtnSTARPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добвить ГОСТ" />
                                  </children>
                               </Pane>
                               <Pane fx:id="paneRTCRPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
                                  <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в обратном направлении тока" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Тип ошибки" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Диапазон ошибки" />
-                                    <Label layoutX="310.0" layoutY="87.0" text="Количество вычислений" />
+                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в обратном направлении тока" textFill="WHITE" />
+                                    <Label layoutX="25.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
+                                    <Label layoutX="24.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
+                                    <Label layoutX="310.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
                                     <TextField fx:id="txtFieldRngERPMns" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
                                     <TextField fx:id="txtFldRTCAmtMshRPMns" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="419.0" layoutY="184.0" text="Добавить" />
-                                    <ToggleButton fx:id="addTglBtnRTCRPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" text="ToggleButton" />
+                                    <ToggleButton fx:id="addTglBtnRTCRPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
                                     <ChoiceBox fx:id="ChcBxRTCErrRPMns" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <Label layoutX="310.0" layoutY="145.0" text="Время вычисления" />
+                                    <Label layoutX="310.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
                                     <TextField fx:id="txtFldRTCTimeMshRPMns" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneCRPRPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="277.0" layoutY="14.0" text="Самоход" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в обратном направлении тока" textFill="WHITE" />
+                                    <Label layoutX="13.0" layoutY="87.0" text="Напряжение, % Uном" textFill="WHITE" />
+                                    <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
+                                    <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldCRPUProcRPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldTimeCRPRPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldCRPAmtImpRPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnCRPRPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить" />
+                                    <ToggleButton fx:id="addTglBtnCRPRPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить ГОСТ" />
                                  </children>
                               </Pane>
                            </children>
                         </StackPane>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="RPPlsPane" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <StackPane layoutX="150.0" prefHeight="220.0" prefWidth="600.0">
+                           <children>
+                              <Pane fx:id="paneSTARPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="253.0" layoutY="14.0" text="Чувствительность" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в прямом направлении тока" textFill="WHITE" />
+                                    <Label layoutX="101.0" layoutY="87.0" text="Ток, A" textFill="WHITE" />
+                                    <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
+                                    <Label layoutX="283.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldSTAIProcRPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldTimeSRARPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldSTAAmtImpRPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnSTARPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить" />
+                                    <ToggleButton fx:id="addTglBtnSTARPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить ГОСТ" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneConstRPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="222.0" layoutY="14.0" text="Проверка счётного механизма" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в прямом направлении тока" textFill="WHITE" />
+                                    <Label layoutX="58.0" layoutY="87.0" text="Ошибка, %" textFill="WHITE" />
+                                    <Label layoutX="25.0" layoutY="145.0" text="Энергия, kVar * h" textFill="WHITE" />
+                                    <Label layoutX="299.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldConsErRPPls" layoutX="122.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldEngConstRPPls" layoutX="122.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldConstRPPls" layoutX="430.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnConstRPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneRTCRPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в прямом направлении тока" textFill="WHITE" />
+                                    <Label layoutX="61.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
+                                    <Label layoutX="27.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
+                                    <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldRngERPPls" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
+                                    <TextField fx:id="txtFldRTCAmtMshRPPls" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
+                                    <ToggleButton fx:id="addTglBtnRTCRPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
+                                    <ChoiceBox fx:id="ChcBxRTCErrRPPls" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" />
+                                    <TextField fx:id="txtFldRTCTimeMshRPPls" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
+                                    <Label layoutX="357.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneCRPRPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="277.0" layoutY="14.0" text="Самоход" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в прямом направлении тока" textFill="WHITE" />
+                                    <Label layoutX="13.0" layoutY="87.0" text="Напряжение, % Uном" textFill="WHITE" />
+                                    <Label layoutX="68.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
+                                    <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldCRPUProcRPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldTimeCRPRPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="txtFieldCRPAmtImpRPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ToggleButton fx:id="addTglBtnCRPRPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить" />
+                                    <ToggleButton fx:id="addTglBtnCRPRPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить ГОСТ" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </StackPane>
+                        <VBox prefHeight="220.0" prefWidth="150.0" style="-fx-background-color: #303030;">
+                           <children>
+                              <ToggleButton fx:id="CRPTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Самоход" />
+                              <ToggleButton fx:id="STATogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Чувствительность" />
+                              <ToggleButton fx:id="RTCTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Т.Х.Ч" />
+                              <ToggleButton fx:id="ConstTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Константа" />
+                           </children>
+                        </VBox>
                      </children>
                   </Pane>
                </children>

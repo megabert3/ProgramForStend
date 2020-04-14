@@ -1,5 +1,6 @@
 package org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -464,7 +465,14 @@ public class InfluenceFrame {
                         gridPaneUAllPhase.setDisable(false);
                         txtFieldInfUAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                ConsoleHelper.infoException("Неверные данные");
+                            }
+                        });
+
                         addTglBtnInfUAllPhase.setSelected(false);
                     }
 

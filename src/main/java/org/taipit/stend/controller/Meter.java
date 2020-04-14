@@ -19,16 +19,16 @@ public class Meter implements Serializable{
     private String unicalID;
 
     //Максимальный ток
-    private double Imax;
+    private float Imax;
 
     //Базовый ток
-    private double Ib;
+    private float Ib;
 
     //Номинальное напряжение
-    private double Un;
+    private float Un;
 
     //Номиальная частота
-    private double Fn;
+    private float Fn;
 
     private String InomImax;
 
@@ -39,10 +39,10 @@ public class Meter implements Serializable{
     private boolean typeCircuitThreePhase;
 
     //Класс точности активной энергии
-    private double accuracyClassAP;
+    private float accuracyClassAP;
 
     //Класс точночти реактивной энергии
-    private double accuracyClassRP;
+    private float accuracyClassRP;
 
     private String temperature;
 
@@ -460,19 +460,19 @@ public class Meter implements Serializable{
         this.amountMeasur = amountMeasur;
     }
 
-    public void setImax(double imax) {
+    public void setImax(float imax) {
         Imax = imax;
     }
 
-    public void setIb(double ib) {
+    public void setIb(float ib) {
         Ib = ib;
     }
 
-    public void setUn(double un) {
+    public void setUn(float un) {
         Un = un;
     }
 
-    public void setFn(double fn) {
+    public void setFn(float fn) {
         Fn = fn;
     }
 
@@ -484,11 +484,11 @@ public class Meter implements Serializable{
         this.typeCircuitThreePhase = typeCircuitThreePhase;
     }
 
-    public void setAccuracyClassAP(double accuracyClassAP) {
+    public void setAccuracyClassAP(float accuracyClassAP) {
         this.accuracyClassAP = accuracyClassAP;
     }
 
-    public void setAccuracyClassRP(double accuracyClassRP) {
+    public void setAccuracyClassRP(float accuracyClassRP) {
         this.accuracyClassRP = accuracyClassRP;
     }
 
@@ -504,19 +504,19 @@ public class Meter implements Serializable{
         this.witness = witness;
     }
 
-    public double getImax() {
+    public float getImax() {
         return Imax;
     }
 
-    public double getIb() {
+    public float getIb() {
         return Ib;
     }
 
-    public double getUn() {
+    public float getUn() {
         return Un;
     }
 
-    public double getFn() {
+    public float getFn() {
         return Fn;
     }
 
@@ -528,11 +528,11 @@ public class Meter implements Serializable{
         return typeCircuitThreePhase;
     }
 
-    public double getAccuracyClassAP() {
+    public float getAccuracyClassAP() {
         return accuracyClassAP;
     }
 
-    public double getAccuracyClassRP() {
+    public float getAccuracyClassRP() {
         return accuracyClassRP;
     }
 

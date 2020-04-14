@@ -920,7 +920,7 @@ public class EditResultsMetersController {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
-            meter.setUn(Double.parseDouble(newUnom));
+            meter.setUn(Float.parseFloat(newUnom));
         });
         tabColUn.setStyle( "-fx-alignment: CENTER;");
 
@@ -974,7 +974,7 @@ public class EditResultsMetersController {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
-            meter.setFn(Double.parseDouble(newFnom));
+            meter.setFn(Float.parseFloat(newFnom));
         });
         tabColFn.setStyle( "-fx-alignment: CENTER;");
 

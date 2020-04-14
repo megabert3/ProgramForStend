@@ -1,5 +1,6 @@
 package org.taipit.stend.controller.viewController;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,6 +27,7 @@ import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
+import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.model.Methodic;
 
@@ -1662,15 +1664,12 @@ public class TestErrorTableFrameController {
             er.printStackTrace();
         }
 
-        ExceptionFrameController exceptionFrameController = fxmlLoader.getController();
-        exceptionFrameController.getExceptionLabel().setText("Потеряна связь с установной,\nпроверьте подключение");
-
-        Parent root = fxmlLoader.getRoot();
-        Stage stage = new Stage();
-        stage.setTitle("Ошибка");
-        stage.setScene(new Scene(root));
-        //stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                ConsoleHelper.infoException("Потеряна связь с установной,\nпроверьте подключение");
+            }
+        });
 
         tglBtnAuto.setDisable(false);
         tglBtnAuto.setSelected(false);

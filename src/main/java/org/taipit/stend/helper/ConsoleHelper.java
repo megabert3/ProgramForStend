@@ -1,13 +1,21 @@
 package org.taipit.stend.helper;
 
-        import java.io.*;
-        import java.net.URL;
-        import java.util.Properties;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import org.taipit.stend.controller.viewController.ExceptionFrameController;
+
+import java.io.*;
+import java.util.Properties;
 
 public class ConsoleHelper {
 
     //Директроия с файлом пропертиес
     private static final String dir = ".\\src\\main\\resources\\stendProperties.properties";
+
+    private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
     public static Properties properties = getProperties();
 
@@ -35,7 +43,27 @@ public class ConsoleHelper {
         }
     }
 
-    private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    public static void infoException(String mess) {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/exceptionFrame.fxml"));
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ExceptionFrameController exceptionFrameController = fxmlLoader.getController();
+        exceptionFrameController.getLabel().setText(mess);
+
+        Parent root = fxmlLoader.getRoot();
+        Stage stage = new Stage();
+        stage.setTitle("Ошибка");
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        stage.show();
+    }
+
 
     public static void getMessage(String mess) {
         System.out.println(mess);
