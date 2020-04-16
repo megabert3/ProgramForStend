@@ -93,8 +93,8 @@ public class SaveResultsTestFrame {
     @FXML
     private Button btnBack;
 
-    @FXML
-    private Pane paneForTabView;
+    //@FXML
+    //private Pane paneForTabView;
 
     @FXML
     private TableView<Meter> tabViewResults;
@@ -878,7 +878,7 @@ public class SaveResultsTestFrame {
             }
         });
 
-        tabViewResults.setPrefWidth(paneForTabView.getPrefWidth());
+        //tabViewResults.setPrefWidth(paneForTabView.getPrefWidth());
         tabViewResults.setItems(FXCollections.observableArrayList(meterList));
 
         chosBxOperator.getItems().addAll(operators);

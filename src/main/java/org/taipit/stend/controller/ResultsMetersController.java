@@ -18,7 +18,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.taipit.stend.controller.viewController.YesOrNoFrameController;
@@ -46,9 +45,6 @@ public class ResultsMetersController {
 
     @FXML
     private Button btnDelete;
-
-    @FXML
-    private Pane paneForTabView;
 
     @FXML
     private TableView<Meter> tabViewResults;
@@ -534,7 +530,6 @@ public class ResultsMetersController {
 
         tabViewResults.setItems(FXCollections.observableArrayList(observableList));
 
-        tabViewResults.setPrefWidth(paneForTabView.getPrefWidth());
         tabViewResults.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
     }

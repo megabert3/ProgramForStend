@@ -1,6 +1,6 @@
 package org.taipit.stend.controller.viewController;
 
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -24,6 +24,7 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Meter;
@@ -48,6 +49,8 @@ public class TestParametersFrameController {
     private List<Meter> metersList = new ArrayList<>(Integer.parseInt(properties.getProperty("stendAmountPlaces")));
 
     private ObservableList<Meter> meterObservableList;
+
+    private File fileMetersNo = new File(properties.getProperty("testParamFrame.fileForSerNo"));
 
     @FXML
     private ComboBox<String> chosBxTypeMeter;
@@ -379,6 +382,31 @@ public class TestParametersFrameController {
                 });
             }
         }
+
+        if (event.getSource() == btnNumbersMe) {
+
+            if (fileMetersNo == null || !fileMetersNo.exists()) {
+
+                FileChooser fileChooser = new FileChooser();
+
+                fileChooser.setTitle("Выбор файла");
+                fileChooser.getExtensionFilters().addAll(
+                        new FileChooser.ExtensionFilter("Все файлы", "*.*"),
+                        new FileChooser.ExtensionFilter("Текстовые файлы", "*.txt", "*.doc")
+                );
+
+                fileMetersNo = fileChooser.showOpenDialog(btnNumbersMe.getScene().getWindow());
+
+                if (fileMetersNo != null) {
+                    ConsoleHelper.properties.setProperty("testParamFrame.fileForSerNo", fileMetersNo.toString());
+                    ConsoleHelper.saveProperties();
+
+                    addSerNoMeters();
+                }
+            } else {
+                addSerNoMeters();
+            }
+        }
     }
 
     @FXML
@@ -518,7 +546,6 @@ public class TestParametersFrameController {
                 }
             }
         });
-
 
         initTableView();
     }
@@ -674,6 +701,32 @@ public class TestParametersFrameController {
         tabColModelMeter.setSortable(false);
 
         tabVParamMeters.setPlaceholder(new Label("Укажите количество мест в настройках"));
+    }
+
+    private void addSerNoMeters() {
+
+        List<String> listNo = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileMetersNo))) {
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                listNo.add(line);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            for (int i = 0; i < metersList.size(); i++) {
+                metersList.get(i).setSerNoMeter(listNo.get(i));
+            }
+        }catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+
+        tabVParamMeters.refresh();
     }
 
 }

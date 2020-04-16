@@ -11,8 +11,8 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="718.0" prefWidth="1239.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.SaveResultsTestFrame">
    <children>
-      <Pane prefHeight="140.0" prefWidth="1239.0" style="-fx-background-color: #393939;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <Pane layoutX="48.0" layoutY="597.0" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="0.0">
+      <Pane prefHeight="140.0" prefWidth="1239.0" style="-fx-background-color: #393939;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Pane layoutX="39.0" layoutY="597.0" AnchorPane.bottomAnchor="21.0" AnchorPane.rightAnchor="23.0">
          <children>
             <ComboBox fx:id="chosBxOperator" layoutX="80.0" prefWidth="150.0" />
             <ComboBox fx:id="chosBxController" layoutX="80.0" layoutY="37.0" prefWidth="150.0" />
@@ -33,47 +33,43 @@
             <TextField fx:id="txtFldWitness" layoutX="80.0" layoutY="75.0" prefHeight="25.0" prefWidth="125.0" />
             <TextField fx:id="txtFldManufacturer" layoutX="359.0" layoutY="75.0" prefHeight="25.0" prefWidth="125.0" />
             <Label layoutX="264.0" layoutY="79.0" text="Производитель" textFill="WHITE" />
+            <Pane layoutX="780.0" layoutY="13.0">
+               <children>
+                  <Button fx:id="btnBack" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Вернуться" />
+                  <Button fx:id="btnSave" layoutX="139.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Сохранить" />
+                  <Button fx:id="btnCancel" layoutX="278.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Отмена" />
+               </children>
+            </Pane>
          </children>
       </Pane>
-      <Pane layoutX="820.0" layoutY="609.0" AnchorPane.bottomAnchor="34.0" AnchorPane.rightAnchor="22.0">
-         <children>
-            <Button fx:id="btnBack" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Вернуться" />
-            <Button fx:id="btnSave" layoutX="139.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Сохранить" />
-            <Button fx:id="btnCancel" layoutX="278.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Отмена" />
-         </children>
-      </Pane>
-      <Pane fx:id="paneForTabView" layoutX="14.0" layoutY="47.0" prefHeight="510.0" prefWidth="1210.0" AnchorPane.bottomAnchor="161.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="47.0">
-         <children>
-            <TableView fx:id="tabViewResults" editable="true" prefHeight="510.0" prefWidth="3000.0">
-              <columns>
-                <TableColumn fx:id="tabColChBxSelectOrNot" prefWidth="30.0" sortable="false" />
-                  <TableColumn fx:id="tabColPosition" editable="false" prefWidth="56.0" sortable="false" text="Позиция" />
-                  <TableColumn fx:id="tabColSerNo" prefWidth="120.0" sortable="false" text="Серийный номер" />
-                  <TableColumn fx:id="tabColMeterModel" prefWidth="200.0" sortable="false" text="Модель счётчика" />
-                  <TableColumn fx:id="tabColResultVerification" prefWidth="120.0" sortable="false" text="Результат поверки" />
-                  <TableColumn fx:id="tabColCRPResult" prefWidth="120.0" sortable="false" text="Самоход" />
-                  <TableColumn fx:id="tabColStartResult" prefWidth="120.0" sortable="false" text="Чувствительность">
-                     <columns>
-                        <TableColumn fx:id="tabColStartAPPls" prefWidth="120.0" sortable="false" text="А.Э.+" />
-                        <TableColumn fx:id="tabColStartAPMns" prefWidth="120.0" sortable="false" text="А.Э.-" />
-                        <TableColumn fx:id="tabColStartRPPls" prefWidth="120.0" sortable="false" text="Р.Э.+" />
-                        <TableColumn fx:id="tabColStartRPMns" prefWidth="120.0" sortable="false" text="Р.Э.-" />
-                     </columns>
-                  </TableColumn>
-                  <TableColumn fx:id="tabColRTCResult" prefWidth="130.0" sortable="false" text="Точность хода часов" />
-                  <TableColumn fx:id="tabColConstantResult" prefWidth="130.0" sortable="false" text="Счётный механизм">
-                     <columns>
-                        <TableColumn fx:id="tabColConstantAPPls" prefWidth="120.0" sortable="false" text="А.Э.+" />
-                        <TableColumn fx:id="tabColConstantAPMns" prefWidth="120.0" sortable="false" text="А.Э.-" />
-                        <TableColumn fx:id="tabColConstantRPPls" prefWidth="120.0" sortable="false" text="Р.Э.+" />
-                        <TableColumn fx:id="tabColConstantRPMns" prefWidth="120.0" sortable="false" text="Р.Э.-" />
-                     </columns>
-                  </TableColumn>
-                  <TableColumn fx:id="tabColInsulationResult" prefWidth="130.0" sortable="false" text="Проверка изоляции" />
-                  <TableColumn fx:id="tabColApperianceResult" prefWidth="130.0" sortable="false" text="Внешний вид" />
-              </columns>
-            </TableView>
-         </children>
-      </Pane>
+      <TableView fx:id="tabViewResults" editable="true" layoutX="14.0" layoutY="47.0" prefHeight="510.0" prefWidth="1209.0" AnchorPane.bottomAnchor="161.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="47.0">
+        <columns>
+          <TableColumn fx:id="tabColChBxSelectOrNot" prefWidth="30.0" sortable="false" />
+            <TableColumn fx:id="tabColPosition" editable="false" prefWidth="56.0" sortable="false" text="Позиция" />
+            <TableColumn fx:id="tabColSerNo" prefWidth="120.0" sortable="false" text="Серийный номер" />
+            <TableColumn fx:id="tabColMeterModel" prefWidth="200.0" sortable="false" text="Модель счётчика" />
+            <TableColumn fx:id="tabColResultVerification" prefWidth="120.0" sortable="false" text="Результат поверки" />
+            <TableColumn fx:id="tabColCRPResult" prefWidth="120.0" sortable="false" text="Самоход" />
+            <TableColumn fx:id="tabColStartResult" prefWidth="120.0" sortable="false" text="Чувствительность">
+               <columns>
+                  <TableColumn fx:id="tabColStartAPPls" prefWidth="120.0" sortable="false" text="А.Э.+" />
+                  <TableColumn fx:id="tabColStartAPMns" prefWidth="120.0" sortable="false" text="А.Э.-" />
+                  <TableColumn fx:id="tabColStartRPPls" prefWidth="120.0" sortable="false" text="Р.Э.+" />
+                  <TableColumn fx:id="tabColStartRPMns" prefWidth="120.0" sortable="false" text="Р.Э.-" />
+               </columns>
+            </TableColumn>
+            <TableColumn fx:id="tabColRTCResult" prefWidth="130.0" sortable="false" text="Точность хода часов" />
+            <TableColumn fx:id="tabColConstantResult" prefWidth="130.0" sortable="false" text="Счётный механизм">
+               <columns>
+                  <TableColumn fx:id="tabColConstantAPPls" prefWidth="120.0" sortable="false" text="А.Э.+" />
+                  <TableColumn fx:id="tabColConstantAPMns" prefWidth="120.0" sortable="false" text="А.Э.-" />
+                  <TableColumn fx:id="tabColConstantRPPls" prefWidth="120.0" sortable="false" text="Р.Э.+" />
+                  <TableColumn fx:id="tabColConstantRPMns" prefWidth="120.0" sortable="false" text="Р.Э.-" />
+               </columns>
+            </TableColumn>
+            <TableColumn fx:id="tabColInsulationResult" prefWidth="130.0" sortable="false" text="Проверка изоляции" />
+            <TableColumn fx:id="tabColApperianceResult" prefWidth="130.0" sortable="false" text="Внешний вид" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

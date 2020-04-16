@@ -63,9 +63,6 @@ public class EditResultsMetersController {
     private Button btnCancel;
 
     @FXML
-    private Pane paneForTabView;
-
-    @FXML
     private TableView<Meter> tabViewResults;
 
     @FXML
@@ -1107,8 +1104,6 @@ public class EditResultsMetersController {
         tabColBatсhNo.setStyle( "-fx-alignment: CENTER;");
 
         tabViewResults.setItems(FXCollections.observableArrayList(selectedMetersForEdit));
-
-        tabViewResults.setPrefWidth(paneForTabView.getPrefWidth());
     }
 
     public void setSelectedMetersForEdit(List<Meter> selectedMetersForEdit) {
