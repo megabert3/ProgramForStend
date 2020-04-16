@@ -56,11 +56,8 @@ public class TestErrorTableFrameController {
     private ObservableList<Commands> commandsRPPls;
     private ObservableList<Commands> commandsRPMns;
 
-    //Список TableView для испытываемых счётчиков в разных направлениях
-    private List<TableView<Meter.CommandResult>> tabViewListAPPls = new ArrayList<>();
-    private List<TableView<Meter.CommandResult>> tabViewListAPMns = new ArrayList<>();
-    private List<TableView<Meter.CommandResult>> tabViewListRPPls = new ArrayList<>();
-    private List<TableView<Meter.CommandResult>> tabViewListRPMns = new ArrayList<>();
+    //Список TableView c погрешностями
+    private List<TableView<Meter.CommandResult>> tabViewErrorsList = new ArrayList<>();
 
     private double Imax;
 
@@ -204,88 +201,25 @@ public class TestErrorTableFrameController {
     private Button btnSave;
 
     @FXML
-    private SplitPane splPaneAPPls;
+    private SplitPane splPane;
 
     @FXML
-    private TableView<Commands> tabViewTestPointsAPPls;
+    private TableView<Commands> tabViewTestPoints;
 
     @FXML
-    private Pane checBoxePaneAPPls;
+    private Pane checBoxePane;
 
     @FXML
-    private CheckBox checkBoxDisableAllAPPls;
+    private CheckBox checkBoxDisableAll;
 
     @FXML
-    private TableColumn<Commands, String> tabColTestPointsAPPls;
+    private TableColumn<Commands, String> tabColTestPoints;
 
     @FXML
-    private TableColumn<Commands, Boolean> tabColTestPointsDisAPPls;
+    private TableColumn<Commands, Boolean> tabColTestPointsDis;
 
     @FXML
-    private Pane paneErrorsAPPls;
-
-    @FXML
-    private Pane paneErrorsAPMns;
-
-    @FXML
-    private Pane paneErrorsRPPls;
-
-    @FXML
-    private Pane paneErrorsRPMns;
-
-    @FXML
-    private SplitPane splPaneAPMns;
-
-    @FXML
-    private TableView<Commands> tabViewTestPointsAPMns;
-
-    @FXML
-    private Pane checBoxePaneAPMns;
-
-    @FXML
-    private CheckBox checkBoxDisableAllAPMns;
-
-    @FXML
-    private TableColumn<Commands, String> tabColTestPointsAPMns;
-
-    @FXML
-    private TableColumn<Commands, Boolean> tabColTestPointsDisAPMns;
-
-    @FXML
-    private SplitPane splPaneRPPls;
-
-    @FXML
-    private TableView<Commands> tabViewTestPointsRPPls;
-
-    @FXML
-    private Pane checBoxePaneRPPls;
-
-    @FXML
-    private CheckBox checkBoxDisableAllRPPls;
-
-    @FXML
-    private TableColumn<Commands, String> tabColTestPointsRPPls;
-
-    @FXML
-    private TableColumn<Commands, Boolean> tabColTestPointsDisRPPls;
-
-    @FXML
-    private SplitPane splPaneRPMns;
-
-    @FXML
-    private TableView<Commands> tabViewTestPointsRPMns;
-
-    @FXML
-    private Pane checBoxePaneRPMns;
-
-    @FXML
-    private CheckBox checkBoxDisableAllRPMns;
-
-    @FXML
-    private TableColumn<Commands, String> tabColTestPointsRPMns;
-
-    @FXML
-    private TableColumn<Commands, Boolean> tabColTestPointsDisRPMns;
+    private Pane paneErrors;
 
     @FXML
     private Button btnExit;
@@ -552,7 +486,7 @@ public class TestErrorTableFrameController {
                 phase = 1;
             } else phase = 0;
 
-            startTestOnSelectPane(tabViewTestPointsAPPls, tabViewListAPPls, commandsAPPls, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+            startTestOnSelectPane(phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
             //Если выбрана панель AP-
         } else if(tglBtnAPMns.isSelected()) {
@@ -560,7 +494,7 @@ public class TestErrorTableFrameController {
                 phase = 1;
             } else phase = 0;
 
-            startTestOnSelectPane(tabViewTestPointsAPMns, tabViewListAPMns, commandsAPMns, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+            startTestOnSelectPane(phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
             //Если выбрана панель RP+
         } else if(tglBtnRPPls.isSelected()) {
@@ -568,7 +502,7 @@ public class TestErrorTableFrameController {
                 phase = 5;
             } else phase = 7;
 
-            startTestOnSelectPane(tabViewTestPointsRPPls, tabViewListRPPls, commandsRPPls, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+           startTestOnSelectPane(phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
 
             //Если выбрана панель RP-
         } else if(tglBtnRPMns.isSelected()) {
@@ -577,7 +511,7 @@ public class TestErrorTableFrameController {
                 phase = 5;
             } else phase = 7;
 
-            startTestOnSelectPane(tabViewTestPointsRPMns, tabViewListRPMns, commandsRPMns, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+           startTestOnSelectPane(phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
         }
     }
 
@@ -601,7 +535,7 @@ public class TestErrorTableFrameController {
                 phase = 1;
             } else phase = 0;
 
-            startContinuousTestOnSelectPane(tabViewTestPointsAPPls, commandsAPPls, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+           startContinuousTestOnSelectPane(phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
             //Если выбрана панель AP-
         } else if(tglBtnAPMns.isSelected()) {
@@ -609,7 +543,7 @@ public class TestErrorTableFrameController {
                 phase = 1;
             } else phase = 0;
 
-            startContinuousTestOnSelectPane(tabViewTestPointsAPMns, commandsAPMns, phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+           startContinuousTestOnSelectPane(phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
             //Если выбрана панель RP+
         } else if(tglBtnRPPls.isSelected()) {
@@ -617,7 +551,7 @@ public class TestErrorTableFrameController {
                 phase = 5;
             } else phase = 7;
 
-            startContinuousTestOnSelectPane(tabViewTestPointsRPPls, commandsRPPls, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+            startContinuousTestOnSelectPane(phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
 
             //Если выбрана панель RP-
         } else if(tglBtnRPMns.isSelected()) {
@@ -626,7 +560,7 @@ public class TestErrorTableFrameController {
                 phase = 5;
             } else phase = 7;
 
-            startContinuousTestOnSelectPane(tabViewTestPointsRPMns, commandsRPMns, phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+            startContinuousTestOnSelectPane(phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
         }
     }
 
@@ -658,8 +592,7 @@ public class TestErrorTableFrameController {
     }
 
     //Старт автоматического теста в зависимости от выбранной панели (направления и типа энергии)
-    private void startTestOnSelectPane(TableView<Commands> tabViewTestPoints, List<TableView<Meter.CommandResult>> tableViewCommandResults,
-                                       ObservableList<Commands> commands, int phase, long timeCRPForGOST, long timeSTAForGOST)
+    private void startTestOnSelectPane(int phase, long timeCRPForGOST, long timeSTAForGOST)
             throws ConnectForStendExeption {
 
 //        ObservableList<Commands> comandsList = tabViewTestPoints.getSelectionModel().getSelectedItems();
@@ -728,7 +661,7 @@ public class TestErrorTableFrameController {
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 
-        while (i < commands.size()) {
+        while (i < tabViewTestPoints.getItems().size()) {
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Сработала команда interrupt в методе startTestOnSelectPane" +
@@ -736,12 +669,12 @@ public class TestErrorTableFrameController {
                 return;
             }
 
-            command = commands.get(i);
+            command = tabViewTestPoints.getSelectionModel().getSelectedItem();
 
             //Если тестовая точка активна
             if (command.isActive()) {
 
-                if (i != commands.size() - 1) {
+                if (i != tabViewTestPoints.getItems().size() - 1) {
                     command.setNextCommand(true);
                 } else {
                     command.setNextCommand(false);
@@ -776,7 +709,7 @@ public class TestErrorTableFrameController {
 
             tabViewTestPoints.getSelectionModel().select(i);
 
-            for (TableView<Meter.CommandResult> errorsView : tableViewCommandResults) {
+            for (TableView<Meter.CommandResult> errorsView : tabViewErrorsList) {
                 errorsView.getSelectionModel().select(i);
             }
         }
@@ -784,8 +717,7 @@ public class TestErrorTableFrameController {
     }
 
     //Старт ручного теста в зависимости от выбранной панели (направления и типа энергии)
-    private void startContinuousTestOnSelectPane(TableView<Commands> tabViewTestPoints, ObservableList<Commands> commands,
-                                                 int phase, long timeCRPForGOST, long timeSTAForGOST)
+    private void startContinuousTestOnSelectPane(int phase, long timeCRPForGOST, long timeSTAForGOST)
             throws ConnectForStendExeption {
 
 //        ObservableList<Commands> comandsList = tabViewTestPoints.getSelectionModel().getSelectedItems();
@@ -844,7 +776,7 @@ public class TestErrorTableFrameController {
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 
-        command = commands.get(i);
+        command = tabViewTestPoints.getSelectionModel().getSelectedItem();
 
         if (command instanceof ErrorCommand) {
 
@@ -921,62 +853,18 @@ public class TestErrorTableFrameController {
     void checBoxAllDisAction(ActionEvent event) {
         //Устанавливает значение для всех чек боксов сразу
         //AP+
-        if (event.getSource() == checkBoxDisableAllAPPls) {
-            if (checkBoxDisableAllAPPls.isSelected()) {
-                for (Commands commsnd : commandsAPPls) {
+        if (event.getSource() == checkBoxDisableAll) {
+            if (checkBoxDisableAll.isSelected()) {
+                for (Commands commsnd : tabViewTestPoints.getItems()) {
                     commsnd.setActive(true);
-                }
-                tabViewTestPointsAPPls.refresh();
-            } else {
-                for (Commands commsnd : commandsAPPls) {
-                    commsnd.setActive(false);
-                }
-                tabViewTestPointsAPPls.refresh();
-            }
-        }
 
-        //AP-
-        if (event.getSource() == checkBoxDisableAllAPMns) {
-            if (checkBoxDisableAllAPMns.isSelected()) {
-                for (Commands commsnd : commandsAPMns) {
-                    commsnd.setActive(true);
                 }
-                tabViewTestPointsAPMns.refresh();
+                tabViewTestPoints.refresh();
             } else {
-                for (Commands commsnd : commandsAPMns) {
+                for (Commands commsnd : tabViewTestPoints.getItems()) {
                     commsnd.setActive(false);
                 }
-                tabViewTestPointsAPMns.refresh();
-            }
-        }
-
-        //RP+
-        if (event.getSource() == checkBoxDisableAllRPPls) {
-            if (checkBoxDisableAllRPPls.isSelected()) {
-                for (Commands commsnd : commandsRPPls) {
-                    commsnd.setActive(true);
-                }
-                tabViewTestPointsRPPls.refresh();
-            } else {
-                for (Commands commsnd : commandsRPPls) {
-                    commsnd.setActive(false);
-                }
-                tabViewTestPointsRPPls.refresh();
-            }
-        }
-
-        //RP-
-        if (event.getSource() == checkBoxDisableAllRPMns) {
-            if (checkBoxDisableAllRPMns.isSelected()) {
-                for (Commands commsnd : commandsRPMns) {
-                    commsnd.setActive(true);
-                }
-                tabViewTestPointsRPMns.refresh();
-            } else {
-                for (Commands commsnd : commandsRPMns) {
-                    commsnd.setActive(false);
-                }
-                tabViewTestPointsRPMns.refresh();
+                tabViewTestPoints.refresh();
             }
         }
     }
@@ -984,54 +872,104 @@ public class TestErrorTableFrameController {
     @FXML
     void actionEventSwithEnergyPane(ActionEvent event) {
         if (event.getSource() == tglBtnAPPls) {
-            splPaneAPPls.toFront();
-            checBoxePaneAPPls.toFront();
             tglBtnAPPls.setSelected(true);
             tglBtnAPMns.setSelected(false);
             tglBtnRPPls.setSelected(false);
             tglBtnRPMns.setSelected(false);
-        }
 
-        if (event.getSource() == tglBtnAPMns) {
-            splPaneAPMns.toFront();
-            checBoxePaneAPMns.toFront();
+            initErrorPaneForAPPls();
+
+        } else if (event.getSource() == tglBtnAPMns) {
             tglBtnAPPls.setSelected(false);
             tglBtnAPMns.setSelected(true);
             tglBtnRPPls.setSelected(false);
             tglBtnRPMns.setSelected(false);
-        }
 
-        if (event.getSource() == tglBtnRPPls) {
-            splPaneRPPls.toFront();
-            checBoxePaneRPPls.toFront();
+            initErrorPaneForAPMns();
+
+        } else if (event.getSource() == tglBtnRPPls) {
             tglBtnAPPls.setSelected(false);
             tglBtnAPMns.setSelected(false);
             tglBtnRPPls.setSelected(true);
             tglBtnRPMns.setSelected(false);
-        }
 
-        if (event.getSource() == tglBtnRPMns) {
-            splPaneRPMns.toFront();
-            checBoxePaneRPMns.toFront();
+            initErrorPaneForRPPls();
+
+        } else if (event.getSource() == tglBtnRPMns) {
             tglBtnAPPls.setSelected(false);
             tglBtnAPMns.setSelected(false);
             tglBtnRPPls.setSelected(false);
             tglBtnRPMns.setSelected(true);
+
+            initErrorPaneForRPMns();
+        }
+    }
+
+    //Установка тзначений таблицы погрешности AP+
+    private void initErrorPaneForAPPls() {
+        setTabColTestPoints(methodic.getCommandsMap().get(0));
+        setErrorTablesAPPls();
+        checkBoxDisableAll.setSelected(true);
+    }
+
+    private void initErrorPaneForAPMns() {
+        setTabColTestPoints(methodic.getCommandsMap().get(1));
+        setErrorTablesAPMns();
+        checkBoxDisableAll.setSelected(true);
+    }
+
+    private void initErrorPaneForRPPls() {
+        setTabColTestPoints(methodic.getCommandsMap().get(2));
+        setErrorTablesRPPls();
+        checkBoxDisableAll.setSelected(true);
+    }
+
+    private void initErrorPaneForRPMns() {
+        setTabColTestPoints(methodic.getCommandsMap().get(3));
+        setErrorTablesRPMns();
+        checkBoxDisableAll.setSelected(true);
+    }
+
+    private void setTabColTestPoints(List<Commands> commandsList) {
+        tabColTestPoints.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabColTestPoints.setSortable(false);
+        tabViewTestPoints.setItems(FXCollections.observableArrayList(commandsList));
+        tabViewTestPoints.refresh();
+    }
+
+    private void setErrorTablesAPPls() {
+        for (int i = 0; i < tabViewErrorsList.size(); i++) {
+            tabViewErrorsList.get(i).setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPPls()));
+        }
+    }
+
+    private void setErrorTablesAPMns() {
+        for (int i = 0; i < tabViewErrorsList.size(); i++) {
+            tabViewErrorsList.get(i).setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListAPMns()));
+        }
+    }
+
+    private void setErrorTablesRPPls() {
+        for (int i = 0; i < tabViewErrorsList.size(); i++) {
+            tabViewErrorsList.get(i).setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPPls()));
+        }
+    }
+
+    private void setErrorTablesRPMns() {
+        for (int i = 0; i < tabViewErrorsList.size(); i++) {
+            tabViewErrorsList.get(i).setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns()));
         }
     }
 
     @FXML
     void initialize() {
         tglBtnAPPls.setSelected(true);
-        splPaneAPPls.toFront();
 
-        checBoxePaneAPPls.toFront();
+        checBoxePane.toFront();
 
-        checkBoxDisableAllAPPls.setSelected(true);
-        checkBoxDisableAllAPMns.setSelected(true);
-        checkBoxDisableAllRPPls.setSelected(true);
-        checkBoxDisableAllRPMns.setSelected(true);
+        checkBoxDisableAll.setSelected(true);
     }
+
 
     public void myInitTestErrorTableFrame() {
         Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>> tabColCellData =
@@ -1064,57 +1002,249 @@ public class TestErrorTableFrameController {
 
         initErrorsForMeters();
 
-        //Инициирую колонку с точками для испытаний AP+
-        tabColTestPointsAPPls.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tabColTestPointsAPPls.setSortable(false);
-        commandsAPPls = FXCollections.observableArrayList(methodic.getCommandsMap().get(0));
-        tabViewTestPointsAPPls.setItems(commandsAPPls);
-
-        //Инициирую колонку с точками для испытаний AP-
-        tabColTestPointsAPMns.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tabColTestPointsAPMns.setSortable(false);
-        commandsAPMns = FXCollections.observableArrayList(methodic.getCommandsMap().get(1));
-        tabViewTestPointsAPMns.setItems(commandsAPMns);
-
-        //Инициирую колонку с точками для испытаний RP+
-        tabColTestPointsRPPls.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tabColTestPointsRPPls.setSortable(false);
-        commandsRPPls = FXCollections.observableArrayList(methodic.getCommandsMap().get(2));
-        tabViewTestPointsRPPls.setItems(commandsRPPls);
-
-        //Инициирую колонку с точками для испытаний RP+
-        tabColTestPointsRPMns.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tabColTestPointsRPMns.setSortable(false);
-        commandsRPMns = FXCollections.observableArrayList(methodic.getCommandsMap().get(3));
-        tabViewTestPointsRPMns.setItems(commandsRPMns);
-
         //----------------------------------------------------------------------------------
         //Установка чек боксов для отключения или включения точки
         //AP+
-        tabViewTestPointsAPPls.setEditable(true);
-        tabColTestPointsDisAPPls.setCellValueFactory(tabColCellData);
-        tabColTestPointsDisAPPls.setCellFactory(tabColCell);
-        tabColTestPointsDisAPPls.setSortable(false);
+        tabViewTestPoints.setEditable(true);
+        tabColTestPointsDis.setCellValueFactory(tabColCellData);
+        tabColTestPointsDis.setCellFactory(tabColCell);
+        tabColTestPointsDis.setSortable(false);
 
-        //AP-
-        tabViewTestPointsAPMns.setEditable(true);
-        tabColTestPointsDisAPMns.setCellValueFactory(tabColCellData);
-        tabColTestPointsDisAPMns.setCellFactory(tabColCell);
-        tabColTestPointsDisAPMns.setSortable(false);
 
-        //RP+
-        tabViewTestPointsRPPls.setEditable(true);
-        tabColTestPointsDisRPPls.setCellValueFactory(tabColCellData);
-        tabColTestPointsDisRPPls.setCellFactory(tabColCell);
-        tabColTestPointsDisRPPls.setSortable(false);
+        //В зависимости от количества счётчиков инициализирую поля для отображения погрешности
+        if (listMetersForTest.size() <= 12) {
 
-        //RP-
-        tabViewTestPointsRPMns.setEditable(true);
-        tabColTestPointsDisRPMns.setCellValueFactory(tabColCellData);
-        tabColTestPointsDisRPMns.setCellFactory(tabColCell);
-        tabColTestPointsDisRPMns.setSortable(false);
+            for (int i = 0; i < listMetersForTest.size(); i++) {
+                //Создаю колонки
+                addTableViewAndCollumnInErrorPane(i, paneErrors.getPrefWidth() / listMetersForTest.size(), paneErrors.getPrefHeight(),
+                        i * (paneErrors.getPrefWidth() / listMetersForTest.size()), 0);
 
-        //-----------------------------------------------------------
+            }
+
+            paneErrors.widthProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    double widthColumn = ((Double) newValue) / tabViewErrorsList.size();
+
+                    for (int i = 0; i < listMetersForTest.size(); i++) {
+                        tabViewErrorsList.get(i).setPrefWidth(widthColumn);
+                        tabViewErrorsList.get(i).getColumns().get(0).setPrefWidth(widthColumn);
+                        tabViewErrorsList.get(i).setLayoutX(widthColumn * i);
+                    }
+                }
+            });
+
+            paneErrors.heightProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    for (TableView<Meter.CommandResult> tableViewError : tabViewErrorsList) {
+                        tableViewError.setPrefHeight((Double) newValue);
+                    }
+                }
+            });
+
+        } else if (listMetersForTest.size() <= 24) {
+
+            if (listMetersForTest.size() % 2 == 0) {
+                double widthColumn = paneErrors.getPrefWidth() / (listMetersForTest.size() / 2);
+                double heightColumn = paneErrors.getPrefHeight() / 2;
+
+                for (int j = 0; j < 2; j++) {
+                    if (j == 0) {
+
+                        for (int i = 0; i < listMetersForTest.size() / 2; i++) {
+                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
+                                    i * widthColumn, 0);
+                        }
+                    } else {
+
+                        for (int i = 0; i < listMetersForTest.size() / 2; i++) {
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2, widthColumn, heightColumn,
+                                    i * widthColumn, paneErrors.getPrefHeight() / 2);
+                        }
+                    }
+                }
+
+                paneErrors.widthProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        double widthColumn = ((Double) newValue) / (listMetersForTest.size() / 2);
+
+                        for (int i = 0; i < tabViewErrorsList.size() / 2; i++) {
+                            tabViewErrorsList.get(i).setPrefWidth(widthColumn);
+                            tabViewErrorsList.get(i).getColumns().get(0).setPrefWidth(widthColumn);
+
+                            tabViewErrorsList.get(i).setLayoutX(widthColumn * i);
+                        }
+
+                        for (int i = tabViewErrorsList.size() / 2; i < tabViewErrorsList.size(); i++) {
+                            tabViewErrorsList.get(i).setPrefWidth(widthColumn);
+                            tabViewErrorsList.get(i).getColumns().get(0).setPrefWidth(widthColumn);
+
+                            tabViewErrorsList.get(i).setLayoutX(widthColumn * (i - (tabViewErrorsList.size() / 2)));
+                        }
+
+                    }
+                });
+
+                paneErrors.heightProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        double height = ((Double) newValue) / 2;
+
+                        for (int i = 0; i < tabViewErrorsList.size() / 2; i++) {
+                            tabViewErrorsList.get(i).setPrefHeight(height);
+                        }
+
+                        for (int i = tabViewErrorsList.size() / 2; i < tabViewErrorsList.size(); i++) {
+                            tabViewErrorsList.get(i).setPrefHeight(height);
+
+                            tabViewErrorsList.get(i).setLayoutY(height);
+                        }
+                    }
+                });
+
+            } else {
+                double widthColumn;
+                double heightColumn = paneErrors.getPrefHeight() / 2;
+
+                for (int j = 0; j < 2; j++) {
+                    if (j == 0) {
+                        widthColumn = paneErrors.getPrefWidth() / (listMetersForTest.size() / 2 + 1);
+
+                        for (int i = 0; i < (listMetersForTest.size() / 2) + 1; i++) {
+                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
+                                    i * widthColumn, 0);
+
+                        }
+                    } else {
+                        widthColumn = paneErrors.getPrefWidth() / (listMetersForTest.size() / 2);
+
+                        for (int i = 0; i < listMetersForTest.size() / 2; i++) {
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1, widthColumn, heightColumn,
+                                    i * widthColumn, paneErrors.getPrefHeight() / 2);
+
+                        }
+                    }
+                }
+
+                paneErrors.widthProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        int meters = listMetersForTest.size();
+
+                        double widthColumn = ((Double) newValue) / (meters / 2) + 1;
+
+                        for (int i = 0; i < (meters / 2) + 1; i++) {
+                            tabViewErrorsList.get(i).setPrefWidth(widthColumn);
+                            tabViewErrorsList.get(i).getColumns().get(0).setPrefWidth(widthColumn);
+
+                            tabViewErrorsList.get(i).setLayoutX(widthColumn * i);
+                        }
+
+                        widthColumn = ((Double) newValue) / (meters / 2);
+
+                        for (int i = (meters / 2) + 1; i < tabViewErrorsList.size(); i++) {
+                            tabViewErrorsList.get(i).setPrefWidth(widthColumn);
+                            tabViewErrorsList.get(i).getColumns().get(0).setPrefWidth(widthColumn);
+
+                            tabViewErrorsList.get(i).setLayoutX(widthColumn * (i - ((meters / 2) + 1)));
+                        }
+
+                    }
+                });
+
+                paneErrors.heightProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        double height = ((Double) newValue) / 2;
+
+                        for (int i = 0; i < tabViewErrorsList.size(); i++) {
+                            tabViewErrorsList.get(i).setPrefHeight(height);
+                        }
+
+                        for (int i = tabViewErrorsList.size() / 2  + 1; i < tabViewErrorsList.size(); i++) {
+                            tabViewErrorsList.get(i).setLayoutY(height);
+                        }
+                    }
+                });
+            }
+        }
+
+        tglBtnAPPls.fire();
+
+        //--------------------------------------------------------------------
+        //Устанавливаю фокусировку на окне ошибок такую же как и в окне точек
+        //AP+
+        //Значение при инициализации
+        tabViewTestPoints.getSelectionModel().select(0);
+
+        for (TableView<Meter.CommandResult> tableViewError : tabViewErrorsList) {
+            tableViewError.getSelectionModel().select(0);
+        }
+
+        //Если выбираю точку испытания, то должна выставляться фокусировка и на панели с погрешностью
+        ObservableList<TablePosition> tablePositionsAPPls = tabViewTestPoints.getSelectionModel().getSelectedCells();
+
+        tablePositionsAPPls.addListener(new ListChangeListener<TablePosition>() {
+            @Override
+            public void onChanged(Change<? extends TablePosition> c) {
+                int i = tabViewTestPoints.getSelectionModel().getFocusedIndex();
+
+                for (TableView<Meter.CommandResult> tableViewError : tabViewErrorsList) {
+
+                    if (!tableViewError.getSelectionModel().isSelected(i)) {
+                        tableViewError.getFocusModel().focus(i);
+                        tableViewError.getSelectionModel().select(i);
+                        tableViewError.scrollTo(i - 5);
+                    }
+                }
+            }
+        });
+
+        //Устанавливаю общий селект для таблиц с погрешностью
+        for (int i = 0; i < tabViewErrorsList.size(); i++) {
+
+            ObservableList<TablePosition> tableErrorPositionsAPPls = tabViewErrorsList.get(i).getSelectionModel().getSelectedCells();
+
+            tableErrorPositionsAPPls.addListener(new ListChangeListener<TablePosition>() {
+                @Override
+                public void onChanged(Change<? extends TablePosition> c) {
+
+                    int index = tabViewTestPoints.getSelectionModel().getSelectedIndex();
+
+                    for (TableView<Meter.CommandResult> tableViewError : tabViewErrorsList) {
+                        if (!tableViewError.getSelectionModel().isSelected(index)) {
+                            tableViewError.getFocusModel().focus(index);
+                            tableViewError.getSelectionModel().select(index);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    //Добавляет объект error к каждому счётчику необходимому для теста
+    private void initErrorsForMeters() {
+
+        //Инициализицрую константы активной и реактивной энергии
+        constantMeterAP = Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP());
+        constantMeterRP = Integer.parseInt(listMetersForTest.get(0).getConstantMeterRP());
+
+        //Инициирую время теста для Самохода и чувствительности по ГОСТУ
+        intiTimeCRPSTATests();
+
+        for (Meter meter : listMetersForTest) {
+            for (int i = 0; i < 4; i++) {
+                for (Commands commandName : methodic.getCommandsMap().get(i)) {
+                    meter.createError(commandName, i, commandName.getName(), this);
+                }
+            }
+        }
+    }
+
+    private void addTableViewAndCollumnInErrorPane(int index, double prefWidth, double prefHeight, double layoutX, double layoutY) {
+
         //Настройка для отдельного поля счётчика изменения цвета погрешности после окончания теста
         Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>> cellFactoryEndTest =
                 new Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>>() {
@@ -1148,358 +1278,20 @@ public class TestErrorTableFrameController {
                     }
                 };
 
-        //В зависимости от количества счётчиков инициализирую поля для отображения погрешности
-        if (listMetersForTest.size() <= 12) {
-
-            for (int i = 0; i < listMetersForTest.size(); i++) {
-                //Создаю колонки AP+
-                addTableViewAndCollumnInErrorPane(i, paneErrorsAPPls.getPrefWidth() / listMetersForTest.size(), paneErrorsAPPls.getPrefHeight(),
-                        i * (paneErrorsAPPls.getPrefWidth() / listMetersForTest.size()), 0, listMetersForTest.get(i).getErrorListAPPls(), paneErrorsAPPls,
-                        tabViewListAPPls, cellFactoryEndTest);
-
-                //Создаю колонки AP-
-                addTableViewAndCollumnInErrorPane(i, paneErrorsAPMns.getPrefWidth() / listMetersForTest.size(), paneErrorsAPMns.getPrefHeight(),
-                        i * (paneErrorsAPMns.getPrefWidth() / listMetersForTest.size()), 0, listMetersForTest.get(i).getErrorListAPMns(), paneErrorsAPMns,
-                        tabViewListAPMns, cellFactoryEndTest);
-
-                //Создаю колонки RP+
-                addTableViewAndCollumnInErrorPane(i, paneErrorsRPPls.getPrefWidth() / listMetersForTest.size(), paneErrorsRPPls.getPrefHeight(),
-                        i * (paneErrorsRPPls.getPrefWidth() / listMetersForTest.size()), 0, listMetersForTest.get(i).getErrorListRPPls(), paneErrorsRPPls,
-                        tabViewListRPPls, cellFactoryEndTest);
-
-                //Создаю колонки RP-
-                addTableViewAndCollumnInErrorPane(i, paneErrorsRPMns.getPrefWidth() / listMetersForTest.size(), paneErrorsRPMns.getPrefHeight(),
-                        i * (paneErrorsRPMns.getPrefWidth() / listMetersForTest.size()), 0, listMetersForTest.get(i).getErrorListRPMns(), paneErrorsRPMns,
-                        tabViewListRPMns, cellFactoryEndTest);
-            }
-        } else if (listMetersForTest.size() <= 24) {
-            if (listMetersForTest.size() % 2 == 0) {
-                /**
-                 * Значения других панелей напрямую зависят от размеров первой.
-                 */
-
-                double widthColumn = paneErrorsAPPls.getPrefWidth() / (listMetersForTest.size() / 2);
-                double heightColumn = paneErrorsAPPls.getPrefHeight() / 2;
-
-                for (int j = 0; j < 2; j++) {
-                    if (j == 0) {
-
-                        for (int i = 0; i < listMetersForTest.size() / 2; i++) {
-                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
-                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListAPPls(), paneErrorsAPPls,
-                                    tabViewListAPPls, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
-                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListAPMns(), paneErrorsAPMns,
-                                    tabViewListAPMns, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
-                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListRPPls(), paneErrorsRPPls,
-                                    tabViewListRPPls, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
-                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListRPMns(), paneErrorsRPMns,
-                                    tabViewListRPMns, cellFactoryEndTest);
-                        }
-                    } else {
-
-                        for (int i = 0; i < listMetersForTest.size() / 2; i++) {
-                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2, widthColumn, heightColumn,
-                                    i * widthColumn, paneErrorsAPPls.getPrefHeight() / 2,
-                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListAPPls(), paneErrorsAPPls,
-                                    tabViewListAPPls, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2, widthColumn, heightColumn,
-                                    i * widthColumn, paneErrorsAPMns.getPrefHeight() / 2,
-                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListAPMns(), paneErrorsAPMns,
-                                    tabViewListAPMns, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2, widthColumn, heightColumn,
-                                    i * widthColumn, paneErrorsRPPls.getPrefHeight() / 2,
-                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListRPPls(), paneErrorsRPPls,
-                                    tabViewListRPPls, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2, widthColumn, heightColumn,
-                                    i * widthColumn, paneErrorsRPMns.getPrefHeight() / 2,
-                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListRPMns(), paneErrorsRPMns,
-                                    tabViewListRPMns, cellFactoryEndTest);
-                        }
-                    }
-                }
-
-            } else {
-                double widthColumn; // = paneErrorsAPPls.getPrefWidth() / (listMetersForTest.size() / 2);
-                double heightColumn = paneErrorsAPPls.getPrefHeight() / 2;
-
-                for (int j = 0; j < 2; j++) {
-                    if (j == 0) {
-                        widthColumn = paneErrorsAPPls.getPrefWidth() / (listMetersForTest.size() / 2 + 1);
-
-                        for (int i = 0; i < (listMetersForTest.size() / 2) + 1; i++) {
-                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
-                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListAPPls(), paneErrorsAPPls,
-                                    tabViewListAPPls, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
-                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListAPMns(), paneErrorsAPMns,
-                                    tabViewListAPMns, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
-                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListRPPls(), paneErrorsRPPls,
-                                    tabViewListRPPls, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
-                                    i * widthColumn, 0, listMetersForTest.get(i).getErrorListRPMns(), paneErrorsRPMns,
-                                    tabViewListRPMns, cellFactoryEndTest);
-                        }
-                    } else {
-                        widthColumn = paneErrorsAPPls.getPrefWidth() / (listMetersForTest.size() / 2);
-
-                        for (int i = 0; i < listMetersForTest.size() / 2; i++) {
-                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1, widthColumn, heightColumn,
-                                    i * widthColumn, paneErrorsAPPls.getPrefHeight() / 2,
-                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListAPPls(), paneErrorsAPPls,
-                                    tabViewListAPPls, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1, widthColumn, heightColumn,
-                                    i * widthColumn, paneErrorsAPMns.getPrefHeight() / 2,
-                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListAPMns(), paneErrorsAPMns,
-                                    tabViewListAPMns, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1, widthColumn, heightColumn,
-                                    i * widthColumn, paneErrorsRPPls.getPrefHeight() / 2,
-                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListRPPls(), paneErrorsRPPls,
-                                    tabViewListRPPls, cellFactoryEndTest);
-
-                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1, widthColumn, heightColumn,
-                                    i * widthColumn, paneErrorsRPMns.getPrefHeight() / 2,
-                                    listMetersForTest.get(i + listMetersForTest.size() / 2).getErrorListRPMns(), paneErrorsRPMns,
-                                    tabViewListRPMns, cellFactoryEndTest);
-                        }
-                    }
-                }
-            }
-        }
-
-        //--------------------------------------------------------------------
-        //Устанавливаю фокусировку на окне ошибок такую же как и в окне точек
-        //AP+
-        //Значение при инициализации
-        tabViewTestPointsAPPls.getSelectionModel().select(0);
-
-        for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
-            tableViewError.getSelectionModel().select(0);
-        }
-
-        //Если выбираю точку испытания, то должна выставляться фокусировка и на панели с погрешностью
-        ObservableList<TablePosition> tablePositionsAPPls = tabViewTestPointsAPPls.getSelectionModel().getSelectedCells();
-
-        tablePositionsAPPls.addListener(new ListChangeListener<TablePosition>() {
-            @Override
-            public void onChanged(Change<? extends TablePosition> c) {
-                int i = tabViewTestPointsAPPls.getSelectionModel().getFocusedIndex();
-
-                for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
-
-                    if (!tableViewError.getSelectionModel().isSelected(i)) {
-                        tableViewError.getFocusModel().focus(i);
-                        tableViewError.getSelectionModel().select(i);
-                        tableViewError.scrollTo(i - 5);
-                    }
-                }
-            }
-        });
-
-        //Устанавливаю общий селект для таблиц с погрешностью
-        for (int i = 0; i < tabViewListAPPls.size(); i++) {
-
-            ObservableList<TablePosition> tableErrorPositionsAPPls = tabViewListAPPls.get(i).getSelectionModel().getSelectedCells();
-
-            tableErrorPositionsAPPls.addListener(new ListChangeListener<TablePosition>() {
-                @Override
-                public void onChanged(Change<? extends TablePosition> c) {
-
-                    int index = tabViewTestPointsAPPls.getSelectionModel().getSelectedIndex();
-
-                    for (TableView<Meter.CommandResult> tableViewError : tabViewListAPPls) {
-                        if (!tableViewError.getSelectionModel().isSelected(index)) {
-                            tableViewError.getFocusModel().focus(index);
-                            tableViewError.getSelectionModel().select(index);
-                        }
-                    }
-                }
-            });
-        }
-
-        //AP-
-        tabViewTestPointsAPMns.getSelectionModel().select(0);
-        for (TableView<Meter.CommandResult> tableViewError : tabViewListAPMns) {
-            tableViewError.getSelectionModel().select(0);
-        }
-
-        ObservableList<TablePosition> tablePositionsAPMns = tabViewTestPointsAPMns.getSelectionModel().getSelectedCells();
-
-        tablePositionsAPMns.addListener(new ListChangeListener<TablePosition>() {
-            @Override
-            public void onChanged(Change<? extends TablePosition> c) {
-                int i = tabViewTestPointsAPMns.getSelectionModel().getFocusedIndex();
-
-                for (TableView<Meter.CommandResult> tableViewError : tabViewListAPMns) {
-                    if (!tableViewError.getSelectionModel().isSelected(i)) {
-                        tableViewError.getFocusModel().focus(i);
-                        tableViewError.getSelectionModel().select(i);
-                        tableViewError.scrollTo(i - 5);
-                    }
-                }
-            }
-        });
-
-        //Устанавливаю общий селект для таблиц с погрешностью
-        for (int i = 0; i < tabViewListAPMns.size(); i++) {
-
-            ObservableList<TablePosition> tableErrorPositionsAPMns = tabViewListAPMns.get(i).getSelectionModel().getSelectedCells();
-
-            tableErrorPositionsAPMns.addListener(new ListChangeListener<TablePosition>() {
-                @Override
-                public void onChanged(Change<? extends TablePosition> c) {
-                    int index = tabViewTestPointsAPMns.getSelectionModel().getSelectedIndex();
-
-                    for (TableView<Meter.CommandResult> tableViewError : tabViewListAPMns) {
-                        if (!tableViewError.getSelectionModel().isSelected(index)) {
-                            tableViewError.getFocusModel().focus(index);
-                            tableViewError.getSelectionModel().select(index);
-                        }
-                    }
-                }
-            });
-        }
-
-        //RP+
-        tabViewTestPointsRPPls.getSelectionModel().select(0);
-        for (TableView<Meter.CommandResult> tableViewError : tabViewListRPPls) {
-            tableViewError.getSelectionModel().select(0);
-        }
-
-        ObservableList<TablePosition> tablePositionsRPPls = tabViewTestPointsRPPls.getSelectionModel().getSelectedCells();
-
-        tablePositionsRPPls.addListener(new ListChangeListener<TablePosition>() {
-            @Override
-            public void onChanged(Change<? extends TablePosition> c) {
-                int i = tabViewTestPointsRPPls.getSelectionModel().getFocusedIndex();
-
-                for (TableView<Meter.CommandResult> tableViewError : tabViewListRPPls) {
-                    if (!tableViewError.getSelectionModel().isSelected(i)) {
-                        tableViewError.getFocusModel().focus(i);
-                        tableViewError.getSelectionModel().select(i);
-                        tableViewError.scrollTo(i - 5);
-                    }
-                }
-            }
-        });
-
-        //Устанавливаю общий селект для таблиц с погрешностью
-        for (int i = 0; i < tabViewListRPPls.size(); i++) {
-
-            ObservableList<TablePosition> tableErrorPositionsRPPls = tabViewListRPPls.get(i).getSelectionModel().getSelectedCells();
-
-            tableErrorPositionsRPPls.addListener(new ListChangeListener<TablePosition>() {
-                @Override
-                public void onChanged(Change<? extends TablePosition> c) {
-                    int index = tabViewTestPointsRPPls.getSelectionModel().getFocusedIndex();
-
-                    for (TableView<Meter.CommandResult> tableViewError : tabViewListRPPls) {
-                        if (!tableViewError.getSelectionModel().isSelected(index)) {
-                            tableViewError.getFocusModel().focus(index);
-                            tableViewError.getSelectionModel().select(index);
-                        }
-
-                    }
-                }
-            });
-        }
-
-        //RP-
-        tabViewTestPointsRPMns.getSelectionModel().select(0);
-        for (TableView<Meter.CommandResult> tableViewError : tabViewListRPMns) {
-            tableViewError.getSelectionModel().select(0);
-        }
-
-        ObservableList<TablePosition> tablePositionsRPMns = tabViewTestPointsRPMns.getSelectionModel().getSelectedCells();
-
-        tablePositionsRPMns.addListener(new ListChangeListener<TablePosition>() {
-            @Override
-            public void onChanged(Change<? extends TablePosition> c) {
-                int i = tabViewTestPointsRPMns.getSelectionModel().getFocusedIndex();
-
-                for (TableView<Meter.CommandResult> tableViewError : tabViewListRPMns) {
-                    if (!tableViewError.getSelectionModel().isSelected(i)) {
-                        tableViewError.getFocusModel().focus(i);
-                        tableViewError.getSelectionModel().select(i);
-                        tableViewError.scrollTo(i - 5);
-                    }
-                }
-            }
-        });
-
-        //Устанавливаю общий селект для таблиц с погрешностью
-        for (int i = 0; i < tabViewListRPMns.size(); i++) {
-
-            ObservableList<TablePosition> tableErrorPositionsRPMns = tabViewListRPMns.get(i).getSelectionModel().getSelectedCells();
-
-            tableErrorPositionsRPMns.addListener(new ListChangeListener<TablePosition>() {
-                @Override
-                public void onChanged(Change<? extends TablePosition> c) {
-
-                    int index = tabViewTestPointsRPMns.getSelectionModel().getFocusedIndex();
-
-                    for (TableView<Meter.CommandResult> tableViewError : tabViewListRPMns) {
-                        if (!tableViewError.getSelectionModel().isSelected(index)) {
-                            tableViewError.getFocusModel().focus(index);
-                            tableViewError.getSelectionModel().select(index);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    //Добавляет объект error к каждому счётчику необходимому для теста
-    private void initErrorsForMeters() {
-
-        //Инициализицрую константы активной и реактивной энергии
-        constantMeterAP = Integer.parseInt(listMetersForTest.get(0).getConstantMeterAP());
-        constantMeterRP = Integer.parseInt(listMetersForTest.get(0).getConstantMeterRP());
-
-        //Инициирую время теста для Самохода и чувствительности по ГОСТУ
-        intiTimeCRPSTATests();
-
-        for (Meter meter : listMetersForTest) {
-            for (int i = 0; i < 4; i++) {
-                for (Commands commandName : methodic.getCommandsMap().get(i)) {
-                    meter.createError(commandName, i, commandName.getName(), this);
-                }
-            }
-        }
-    }
-
-    private void addTableViewAndCollumnInErrorPane(int index, double prefWidth, double prefHeight, double layoutX, double layoutY, List<Meter.CommandResult> errorList,
-                                                   Pane errorPane, List<TableView<Meter.CommandResult>> tableViewList, Callback callback) {
-
         TableView<Meter.CommandResult> tableView = new TableView<>();
         TableColumn<Meter.CommandResult, String> column = new TableColumn<>("Место " + listMetersForTest.get(index).getId());
         column.setStyle("-fx-alignment: CENTER;");
         column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
         column.setSortable(false);
-        column.setCellFactory(callback);
+        column.setCellFactory(cellFactoryEndTest);
         tableView.setPrefSize(prefWidth, prefHeight);
         column.setPrefWidth(tableView.getPrefWidth());
         tableView.setLayoutX(layoutX);
         tableView.setLayoutY(layoutY);
         tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
-        tableView.setItems(FXCollections.observableArrayList(errorList));
         tableView.getColumns().add(column);
-        errorPane.getChildren().add(tableView);
-        tableViewList.add(tableView);
+        paneErrors.getChildren().add(tableView);
+        tabViewErrorsList.add(tableView);
     }
 
     //Находит все скрол бары
@@ -1510,66 +1302,11 @@ public class TestErrorTableFrameController {
 
         //Получаю скрол бары определённого окна
         //AP+
-        verticalBarCommands = (ScrollBar) tabViewTestPointsAPPls.lookup(".scroll-bar:vertical");
+        verticalBarCommands = (ScrollBar) tabViewTestPoints.lookup(".scroll-bar:vertical");
 
-        for (int i = tabViewListAPPls.size() - 1; i > 0; i--) {
-            verticalBarErrorsFirst = (ScrollBar) tabViewListAPPls.get(i).lookup(".scroll-bar:vertical");
-            verticalBarErrorsSecond = (ScrollBar) tabViewListAPPls.get(i - 1).lookup(".scroll-bar:vertical");
-
-            bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
-
-            ScrollBar finalVerticalBarErrors1 = verticalBarErrorsFirst;
-            verticalBarCommands.valueProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    finalVerticalBarErrors1.valueProperty().setValue(newValue);
-                }
-            });
-        }
-
-        //AP-
-        verticalBarCommands = (ScrollBar) tabViewTestPointsAPMns.lookup(".scroll-bar:vertical");
-
-        for (int i = tabViewListAPMns.size() - 1; i > 0; i--) {
-            verticalBarErrorsFirst = (ScrollBar) tabViewListAPMns.get(i).lookup(".scroll-bar:vertical");
-            verticalBarErrorsSecond = (ScrollBar) tabViewListAPMns.get(i - 1).lookup(".scroll-bar:vertical");
-
-            bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
-
-            ScrollBar finalVerticalBarErrors1 = verticalBarErrorsFirst;
-            verticalBarCommands.valueProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    finalVerticalBarErrors1.valueProperty().setValue(newValue);
-                }
-            });
-        }
-
-
-        //RP+
-        verticalBarCommands = (ScrollBar) tabViewTestPointsRPPls.lookup(".scroll-bar:vertical");
-
-        for (int i = tabViewListRPPls.size() - 1; i > 0; i--) {
-            verticalBarErrorsFirst = (ScrollBar) tabViewListRPPls.get(i).lookup(".scroll-bar:vertical");
-            verticalBarErrorsSecond = (ScrollBar) tabViewListRPPls.get(i - 1).lookup(".scroll-bar:vertical");
-
-            bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
-
-            ScrollBar finalVerticalBarErrors1 = verticalBarErrorsFirst;
-            verticalBarCommands.valueProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    finalVerticalBarErrors1.valueProperty().setValue(newValue);
-                }
-            });
-        }
-
-        //RP-
-        verticalBarCommands = (ScrollBar) tabViewTestPointsRPMns.lookup(".scroll-bar:vertical");
-
-        for (int i = tabViewListRPMns.size() - 1; i > 0; i--) {
-            verticalBarErrorsFirst = (ScrollBar) tabViewListRPMns.get(i).lookup(".scroll-bar:vertical");
-            verticalBarErrorsSecond = (ScrollBar) tabViewListRPMns.get(i - 1).lookup(".scroll-bar:vertical");
+        for (int i = tabViewErrorsList.size() - 1; i > 0; i--) {
+            verticalBarErrorsFirst = (ScrollBar) tabViewErrorsList.get(i).lookup(".scroll-bar:vertical");
+            verticalBarErrorsSecond = (ScrollBar) tabViewErrorsList.get(i - 1).lookup(".scroll-bar:vertical");
 
             bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
 

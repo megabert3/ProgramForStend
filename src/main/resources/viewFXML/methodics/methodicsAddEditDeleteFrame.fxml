@@ -10,66 +10,53 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane prefHeight="650.0" prefWidth="830.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController">
+
+<AnchorPane prefHeight="700.0" prefWidth="830.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController">
    <children>
-      <AnchorPane prefHeight="700.0" prefWidth="830.0" style="-fx-background-color: #6A6A6A;">
+      <AnchorPane prefHeight="125.0" prefWidth="830.0" style="-fx-background-color: #303030;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Button fx:id="copyMetBtn" layoutX="20.0" layoutY="173.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="29.0" prefWidth="120.0" text="Копировать">
+         <graphic>
+            <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
+         </graphic>
+      </Button>
+      <Button fx:id="deleteMetBtn" layoutX="20.0" layoutY="253.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="29.0" prefWidth="120.0" text="Удалить">
+         <graphic>
+            <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
+         </graphic>
+      </Button>
+      <Button fx:id="BtnGoToStartTest" layoutX="646.0" layoutY="640.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="40.0" prefWidth="150.0" text="Перейти к тесту">
+         <graphic>
+            <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
+         </graphic>
+      </Button>
+      <TableView fx:id="viewPointTable" layoutX="159.0" layoutY="83.0" prefHeight="500.0" prefWidth="270.0" AnchorPane.bottomAnchor="117.0" AnchorPane.topAnchor="83.0">
+         <columns>
+            <TableColumn fx:id="tabClMethodics" prefWidth="269.0" text="Методики" />
+         </columns>
+      </TableView>
+      <StackPane layoutX="461.0" layoutY="83.0" maxHeight="1.7976931348623157E308" prefHeight="500.0" prefWidth="335.0" AnchorPane.bottomAnchor="117.0" AnchorPane.topAnchor="83.0">
          <children>
-            <Button fx:id="copyMetBtn" layoutX="20.0" layoutY="190.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="29.0" prefWidth="120.0" text="Копировать">
-               <graphic>
-                  <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
-               </graphic>
-            </Button>
-            <Button fx:id="deleteMetBtn" layoutX="20.0" layoutY="270.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="29.0" prefWidth="120.0" text="Удалить">
-               <graphic>
-                  <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
-               </graphic>
-            </Button>
-            <AnchorPane prefHeight="125.0" prefWidth="830.0" style="-fx-background-color: #303030;">
-               <children>
-                  <Label layoutX="159.0" layoutY="36.0" text="Методики" textFill="WHITE" />
-                  <Label layoutX="461.0" layoutY="36.0" text="Точки испытания" textFill="WHITE" />
-                  <Button fx:id="addMetBtn" layoutX="20.0" layoutY="100.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="29.0" prefWidth="120.0" text="Добавить">
-                     <graphic>
-                        <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
-                     </graphic>
-                  </Button>
-                  <ToggleButton fx:id="tglBtnAPPls" layoutX="461.0" layoutY="67.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" text="A.P.+" />
-                  <ToggleButton fx:id="tglBtnAPMns" layoutX="541.0" layoutY="67.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" text="A.P.-" />
-                  <ToggleButton fx:id="tglBtnRPPls" layoutX="621.0" layoutY="67.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" text="R.P.+" />
-                  <ToggleButton fx:id="tglBtnRPMns" layoutX="701.0" layoutY="67.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" text="R.P.-" />
-               </children>
-            </AnchorPane>
-            <Button fx:id="BtnGoToStartTest" layoutX="646.0" layoutY="631.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="40.0" prefWidth="150.0" text="Перейти к тесту">
-               <graphic>
-                  <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
-               </graphic>
-            </Button>
-            <AnchorPane layoutX="159.0" layoutY="100.0" prefHeight="500.0" prefWidth="270.0">
-               <children>
-                  <TableView fx:id="viewPointTable" prefHeight="500.0" prefWidth="270.0">
-                     <columns>
-                        <TableColumn fx:id="tabClMethodics" prefWidth="269.0" text="Методики" />
-                     </columns></TableView>
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="461.0" layoutY="100.0" prefHeight="500.0" prefWidth="335.0">
-               <children>
-                  <StackPane prefHeight="500.0" prefWidth="335.0">
-                     <children>
-                        <ListView fx:id="ListViewAPMns" prefHeight="500.0" prefWidth="335.0" />
-                        <ListView fx:id="ListViewAPPls" prefHeight="500.0" prefWidth="335.0" />
-                        <ListView fx:id="ListViewRPPls" prefHeight="500.0" prefWidth="335.0" />
-                        <ListView fx:id="ListViewRPMns" prefHeight="500.0" prefWidth="335.0" />
-                     </children>
-                  </StackPane>
-               </children>
-            </AnchorPane>
-            <Button fx:id="editMetBtn" layoutX="20.0" layoutY="145.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="29.0" prefWidth="120.0" text="Редактировать">
-               <graphic>
-                  <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
-               </graphic>
-            </Button>
+            <ListView fx:id="ListViewAPMns" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="335.0" />
+            <ListView fx:id="ListViewAPPls" prefHeight="500.0" prefWidth="335.0" />
+            <ListView fx:id="ListViewRPPls" prefHeight="500.0" prefWidth="335.0" />
+            <ListView fx:id="ListViewRPMns" prefHeight="500.0" prefWidth="335.0" />
          </children>
-      </AnchorPane>
+      </StackPane>
+      <Button fx:id="editMetBtn" layoutX="20.0" layoutY="128.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="29.0" prefWidth="120.0" text="Редактировать">
+         <graphic>
+            <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
+         </graphic>
+      </Button>
+      <Button fx:id="addMetBtn" layoutX="20.0" layoutY="84.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="29.0" prefWidth="120.0" text="Добавить">
+         <graphic>
+            <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
+         </graphic>
+      </Button>
+      <ToggleButton fx:id="tglBtnAPPls" layoutX="461.0" layoutY="53.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" text="A.P.+" />
+      <ToggleButton fx:id="tglBtnAPMns" layoutX="541.0" layoutY="53.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" text="A.P.-" />
+      <ToggleButton fx:id="tglBtnRPPls" layoutX="621.0" layoutY="53.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" text="R.P.+" />
+      <ToggleButton fx:id="tglBtnRPMns" layoutX="701.0" layoutY="53.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" text="R.P.-" />
+      <Label layoutX="159.0" layoutY="20.0" text="Методики" textFill="WHITE" />
+      <Label layoutX="461.0" layoutY="20.0" text="Точки испытания" textFill="WHITE" />
    </children>
 </AnchorPane>
