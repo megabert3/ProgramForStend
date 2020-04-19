@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
 
 import java.io.IOException;
 
@@ -32,7 +33,24 @@ public class MainFrameController {
         }
 
         if(event.getSource() == mainFrameMethodicsBtn) {
-            loadStage("/viewFXML/methodics/methodicsAddEditDeleteFrame.fxml", "Методики");
+            //loadStage("/viewFXML/methodics/methodicsAddEditDeleteFrame.fxml", "Методики");
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/methodicsAddEditDeleteFrame.fxml"));
+                fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setTitle("Методики");
+                stage.setScene(new Scene(fxmlLoader.getRoot()));
+
+                MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController = fxmlLoader.getController();
+
+                stage.show();
+
+                methodicsAddEditDeleteFrameController.addListenerForResizeFrame();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         if (event.getSource() == mainFrameParamTestBtn) {

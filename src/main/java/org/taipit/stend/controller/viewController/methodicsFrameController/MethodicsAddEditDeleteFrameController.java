@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -16,13 +18,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javafx.stage.WindowEvent;
 import org.taipit.stend.controller.Commands.Commands;
+import org.taipit.stend.controller.Commands.ErrorCommand;
 import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditFrameController;
+import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 import org.taipit.stend.model.Methodic;
 import org.taipit.stend.model.MethodicsForTest;
@@ -46,6 +52,12 @@ public class MethodicsAddEditDeleteFrameController {
     private MethodicNameController methodicNameController;
 
     private AddEditFrameController addEditFrameController;
+
+    @FXML
+    private AnchorPane mainAnchorPane;
+
+    @FXML
+    private AnchorPane paneWithEdits;
 
     @FXML
     private Button copyMetBtn;
@@ -154,7 +166,7 @@ public class MethodicsAddEditDeleteFrameController {
 
 
     @FXML
-    void initialize() throws InfoExсeption {
+    void initialize() {
         tglBtnAPPls.setSelected(true);
 
         initMethodicListName();
@@ -303,6 +315,49 @@ public class MethodicsAddEditDeleteFrameController {
     private void initMethodicListName() {
         tabClMethodics.setCellValueFactory(new PropertyValueFactory<>("methodicName"));
 
+        tabClMethodics.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        tabClMethodics.setOnEditCommit((TableColumn.CellEditEvent<Methodic, String> event) -> {
+            TablePosition<Methodic, String> pos = event.getTablePosition();
+
+            String newImpulseValue = event.getNewValue();
+
+            if (newImpulseValue.trim().isEmpty()) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ConsoleHelper.infoException("Название не должно быть пустым");
+                    }
+                });
+
+                viewPointTable.refresh();
+                return;
+            }
+
+            int row = pos.getRow();
+
+            Methodic methodic = event.getTableView().getItems().get(row);
+            try {
+                for (Methodic methodicName : MethodicsForTest.getMethodicsForTestInstance().getMethodics()) {
+                    if (methodicName.getMethodicName().equals(newImpulseValue)) throw new InfoExсeption();
+                }
+
+                methodic.setMethodicName(newImpulseValue);
+
+            }catch (InfoExсeption e) {
+                e.printStackTrace();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ConsoleHelper.infoException("Методика с таким именем уже существует");
+                    }
+                });
+
+                viewPointTable.refresh();
+            }
+        });
+
+        viewPointTable.setEditable(true);
         viewPointTable.setItems(metodicsNameList);
 
         viewPointTable.setPlaceholder(new Label("У вас не создано ни одной методики"));
@@ -439,21 +494,14 @@ public class MethodicsAddEditDeleteFrameController {
         ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
     }
 
-    private void loadStage(String fxml, String stageName) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource(fxml));
-            fxmlLoader.load();
-            Parent root = fxmlLoader.getRoot();
-            Stage stage = new Stage();
-            stage.setTitle(stageName);
-            stage.setScene(new Scene(root));
-
-            stage.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void addListenerForResizeFrame() {
+        mainAnchorPane.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                double x = paneWithEdits.getLayoutX() + (((Double) newValue - (Double) oldValue) / 2);
+                paneWithEdits.setLayoutX(x);
+            }
+        });
     }
 
     public Button getEditMetBtn() {

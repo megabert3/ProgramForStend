@@ -59,7 +59,7 @@ public class Methodic implements Cloneable, Serializable {
         return methodicName;
     }
 
-    void setMethodicName(String methodicName) {
+    public void setMethodicName(String methodicName) {
         this.methodicName = methodicName;
     }
 

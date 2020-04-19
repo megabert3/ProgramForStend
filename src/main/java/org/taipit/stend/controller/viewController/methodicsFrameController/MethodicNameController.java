@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditFrameController;
+import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 import org.taipit.stend.model.Methodic;
 import org.taipit.stend.model.MethodicsForTest;
@@ -88,7 +89,18 @@ public class MethodicNameController {
             //Если нажата кнопка "Добавить"
             } else if (add){
                 try {
-                    name = nameField.getText();
+
+                    name = nameField.getText().trim();
+
+                    if (name.isEmpty()) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                ConsoleHelper.infoException("Поле \"Название методики\" не должно быть пустым");
+                            }
+                        });
+                        return;
+                    }
 
                     methodicsForTest.addMethodicToList(name, new Methodic());
 

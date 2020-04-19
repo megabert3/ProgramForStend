@@ -1,16 +1,50 @@
 package org.taipit.stend.controller;
 
-import javafx.scene.control.TableColumn;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
+import java.io.*;
 
 public class MainStend {
 
-    public static void main(String[] args) throws InterruptedException {
-        String[] srt = {"1", "2", "3"};
-        String str2 = Arrays.toString(srt);
-        System.out.println(str2.substring(1,str2.length() - 1));
+    public static void main(String[] args) {
+
+        File excelFile = new File("C:\\Users\\bert1\\Desktop\\test\\test.xlsx");
+        Workbook wb = new XSSFWorkbook();
+
+        CellStyle style = wb.createCellStyle();
+
+        Sheet testSheet = wb.createSheet("testSheet");
+        Row row = testSheet.createRow(0);
+        Cell cell = row.createCell(1);
+        XSSFFont font = ((XSSFWorkbook) wb).createFont();
+        font.setColor(XSSFFont.COLOR_RED);
+        style.setFont(font);
+        cell.setCellValue("dfsdf");
+        cell.setCellStyle(style);
+
+
+
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream(excelFile)) {
+            wb.write(fileOutputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private static void createCell(Workbook wb, Row row, int column, HorizontalAlignment halign, VerticalAlignment valign) {
+        Cell cell = row.createCell(column);
+        cell.setCellValue("Align It hjhbn;.jbh");
+        CellStyle cellStyle = wb.createCellStyle();
+        cellStyle.setAlignment(halign);
+        cellStyle.setVerticalAlignment(valign);
+        cell.setCellStyle(cellStyle);
     }
 
 }

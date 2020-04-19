@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.controller.Commands.ErrorCommand;
+import org.taipit.stend.controller.Commands.ImbalansUCommand;
 import org.taipit.stend.controller.OnePhaseStend;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
@@ -89,7 +90,7 @@ public class InfluenceFrame {
     private float[] influenceFprocPhaseBAPPls = new float[0];
     private float[] influenceFprocPhaseCAPPls = new float[0];
 
-    private String[] influenceInbUAPPls = new String[0];
+    private String[] influenceImbUAPPls = new String[0];
 
     //AP-
     private float[] influenceUprocAllPhaseAPMns = new float[0];
@@ -399,10 +400,10 @@ public class InfluenceFrame {
     private Label directLabInb;
 
     @FXML
-    private ToggleButton addTglBtnInb;
+    private ToggleButton addTglBtnImb;
 
     @FXML
-    private TextField txtFieldInfInb;
+    private TextField txtFieldInfImb;
 
     //Данный блок отвечает за сетку выбора точки.
     //Влияние напряжения
@@ -447,7 +448,7 @@ public class InfluenceFrame {
                 //Если выбрано AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUAllPhase.getText().split(";");
+                        String[] inf = txtFieldInfUAllPhase.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -479,7 +480,7 @@ public class InfluenceFrame {
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUAllPhase.getText().split(";");
+                        String[] inf = txtFieldInfUAllPhase.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -504,7 +505,7 @@ public class InfluenceFrame {
                     //Если выбрано RP+
                 } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUAllPhase.getText().split(";");
+                        String[] inf = txtFieldInfUAllPhase.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -529,7 +530,7 @@ public class InfluenceFrame {
                     //Если выбрано RP-
                 } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUAllPhase.getText().split(";");
+                        String[] inf = txtFieldInfUAllPhase.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -591,7 +592,7 @@ public class InfluenceFrame {
                 //Если выбрано AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseA.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseA.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -616,7 +617,7 @@ public class InfluenceFrame {
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseA.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseA.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -641,7 +642,7 @@ public class InfluenceFrame {
                     //Если выбрано RP+
                 } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseA.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseA.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -666,7 +667,7 @@ public class InfluenceFrame {
                     //Если выбрано RP-
                 } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseA.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseA.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -729,7 +730,7 @@ public class InfluenceFrame {
                 //Если выбрано AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseB.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseB.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -754,7 +755,7 @@ public class InfluenceFrame {
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseB.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseB.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -779,7 +780,7 @@ public class InfluenceFrame {
                     //Если выбрано RP+
                 } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseB.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseB.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -804,7 +805,7 @@ public class InfluenceFrame {
                     //Если выбрано RP-
                 } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseB.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseB.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -867,7 +868,7 @@ public class InfluenceFrame {
                 //Если выбрано AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseC.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseC.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -892,7 +893,7 @@ public class InfluenceFrame {
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseC.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseC.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -917,7 +918,7 @@ public class InfluenceFrame {
                     //Если выбрано RP+
                 } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseC.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseC.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -942,7 +943,7 @@ public class InfluenceFrame {
                     //Если выбрано RP-
                 } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfUPhaseC.getText().split(";");
+                        String[] inf = txtFieldInfUPhaseC.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1005,7 +1006,7 @@ public class InfluenceFrame {
                 //Если выбрано AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFAllPhase.getText().split(";");
+                        String[] inf = txtFieldInfFAllPhase.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1030,7 +1031,7 @@ public class InfluenceFrame {
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFAllPhase.getText().split(";");
+                        String[] inf = txtFieldInfFAllPhase.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1055,7 +1056,7 @@ public class InfluenceFrame {
                     //Если выбрано RP+
                 } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFAllPhase.getText().split(";");
+                        String[] inf = txtFieldInfFAllPhase.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1080,7 +1081,7 @@ public class InfluenceFrame {
                     //Если выбрано RP-
                 } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFAllPhase.getText().split(";");
+                        String[] inf = txtFieldInfFAllPhase.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1143,7 +1144,7 @@ public class InfluenceFrame {
                 //Если выбрано AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseA.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseA.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1168,7 +1169,7 @@ public class InfluenceFrame {
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseA.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseA.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1193,7 +1194,7 @@ public class InfluenceFrame {
                     //Если выбрано RP+
                 } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseA.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseA.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1218,7 +1219,7 @@ public class InfluenceFrame {
                     //Если выбрано RP-
                 } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseA.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseA.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1281,7 +1282,7 @@ public class InfluenceFrame {
                 //Если выбрано AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseB.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseB.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1306,7 +1307,7 @@ public class InfluenceFrame {
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseB.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseB.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1331,7 +1332,7 @@ public class InfluenceFrame {
                     //Если выбрано RP+
                 } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseB.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseB.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1356,7 +1357,7 @@ public class InfluenceFrame {
                     //Если выбрано RP-
                 } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseB.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseB.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1419,7 +1420,7 @@ public class InfluenceFrame {
                 //Если выбрано AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseC.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseC.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1444,7 +1445,7 @@ public class InfluenceFrame {
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseC.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseC.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1469,7 +1470,7 @@ public class InfluenceFrame {
                     //Если выбрано RP+
                 } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseC.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseC.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1494,7 +1495,7 @@ public class InfluenceFrame {
                     //Если выбрано RP-
                 } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfFPhaseC.getText().split(";");
+                        String[] inf = txtFieldInfFPhaseC.getText().split(",");
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -1550,14 +1551,14 @@ public class InfluenceFrame {
             }
         }
 
-        //Если нажата кнопка добавления теста влияния
-        if (event.getSource() == addTglBtnInb) {
-            if (addTglBtnInb.isSelected()) {
+        //Если нажата кнопка добавления теста влияния imb
+        if (event.getSource() == addTglBtnImb) {
+            if (addTglBtnImb.isSelected()) {
 
                 //Если выбрано AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfInb.getText().split(";");
+                        String[] inf = txtFieldInfImb.getText().split(",");
                         List<String> inbStr = new ArrayList<>();
                         String phase;
 
@@ -1574,26 +1575,71 @@ public class InfluenceFrame {
                             }
                         }
 
-                        influenceInbUAPPls = new String[inbStr.size()];
+                        influenceImbUAPPls = new String[inbStr.size()];
 
                         for (int i = 0; i < inbStr.size(); i++) {
-                            influenceInbUAPPls[i] = inbStr.get(i);
+                            influenceImbUAPPls[i] = inbStr.get(i);
                         }
-                        /**
-                         * Добавить UnbCommand
-                         */
 
-                        txtFieldInfInb.setDisable(true);
+                        for (String phases : inbStr) {
+
+                            switch (phases) {
+                                case "A": {
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("A;A;P", 0, "Ib", 0, "1.0", 0,
+                                            100.0, 0, 0));
+                                }break;
+                                case "B": {
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("B;A;P", 0, "Ib", 0, "1.0", 0,
+                                            0, 100.0, 0));
+                                }break;
+                                case "C": {
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("C;A;P", 0, "Ib", 0, "1.0", 0,
+                                            0, 0, 100.0));
+                                }break;
+                                case "AB": {
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("AB;A;P", 0, "Ib", 0, "1.0", 0,
+                                            100.0, 100.0, 0));
+                                }break;
+                                case "BA": {
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("BA;A;P", 0, "Ib", 0, "1.0", 0,
+                                            100.0, 100.0, 0));
+                                }break;
+                                case "AC": {
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("AC;A;P", 0, "Ib", 0, "1.0", 0,
+                                            100.0, 0, 100.0));
+                                }break;
+                                case "CA": {
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("CA;A;P", 0, "Ib", 0, "1.0", 0,
+                                            100.0, 0, 100.0));
+                                }break;
+                                case "CB": {
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("CB;A;P", 0, "Ib", 0, "1.0", 0,
+                                            0, 100.0, 100.0));
+                                }break;
+                                case "BC": {
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("BC;A;P", 0, "Ib", 0, "1.0", 0,
+                                            0, 100.0, 100.0));
+                                }break;
+                            }
+                        }
+
+                        txtFieldInfImb.setDisable(true);
 
                     } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInb.setSelected(false);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                ConsoleHelper.infoException("Невeрные данные");
+                            }
+                        });
+
+                        addTglBtnImb.setSelected(false);
                     }
 
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfInb.getText().split(";");
+                        String[] inf = txtFieldInfImb.getText().split(",");
                         List<String> inbStr = new ArrayList<>();
                         String phase;
 
@@ -1615,21 +1661,65 @@ public class InfluenceFrame {
                         for (int i = 0; i < inbStr.size(); i++) {
                             influenceInbUAPMns[i] = inbStr.get(i);
                         }
-                        /**
-                         * Добавить UnbCommand
-                         */
 
-                        txtFieldInfInb.setDisable(true);
+                        for (String phases : inbStr) {
+
+                            switch (phases) {
+                                case "A": {
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("A;A;N", 0, "Ib", 1, "1.0", 1,
+                                            100.0, 0, 0));
+                                }break;
+                                case "B": {
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("B;A;N", 0, "Ib", 1, "1.0", 1,
+                                            0, 100.0, 0));
+                                }break;
+                                case "C": {
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("C;A;N", 0, "Ib", 1, "1.0", 1,
+                                            0, 0, 100.0));
+                                }break;
+                                case "AB": {
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("AB;A;N", 0, "Ib", 1, "1.0", 1,
+                                            100.0, 100.0, 0));
+                                }break;
+                                case "BA": {
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("BA;A;N", 0, "Ib", 1, "1.0", 1,
+                                            100.0, 100.0, 0));
+                                }break;
+                                case "AC": {
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("AC;A;N", 0, "Ib", 1, "1.0", 1,
+                                            100.0, 0, 100.0));
+                                }break;
+                                case "CA": {
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("CA;A;N", 0, "Ib", 1, "1.0", 1,
+                                            100.0, 0, 100.0));
+                                }break;
+                                case "CB": {
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("CB;A;N", 0, "Ib", 1, "1.0", 1,
+                                            0, 100.0, 100.0));
+                                }break;
+                                case "BC": {
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("BC;A;N", 0, "Ib", 1, "1.0", 1,
+                                            0, 100.0, 100.0));
+                                }break;
+                            }
+                        }
+
+                        txtFieldInfImb.setDisable(true);
 
                     } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInb.setSelected(false);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                ConsoleHelper.infoException("Неверные данные");
+                            }
+                        });
+                        addTglBtnImb.setSelected(false);
                     }
 
                     //Если выбрано RP+
                 } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfInb.getText().split(";");
+                        String[] inf = txtFieldInfImb.getText().split(",");
                         List<String> inbStr = new ArrayList<>();
                         String phase;
 
@@ -1651,21 +1741,65 @@ public class InfluenceFrame {
                         for (int i = 0; i < inbStr.size(); i++) {
                             influenceInbURPPls[i] = inbStr.get(i);
                         }
-                        /**
-                         * Добавить UnbCommand
-                         */
 
-                        txtFieldInfInb.setDisable(true);
+                        for (String phases : inbStr) {
+
+                            switch (phases) {
+                                case "A": {
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("A;R;P", 7, "Ib", 0, "1.0", 2,
+                                            100.0, 0, 0));
+                                }break;
+                                case "B": {
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("B;R;P", 7, "Ib", 0, "1.0", 2,
+                                            0, 100.0, 0));
+                                }break;
+                                case "C": {
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("C;R;P", 7, "Ib", 0, "1.0", 2,
+                                            0, 0, 100.0));
+                                }break;
+                                case "AB": {
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("AB;R;P", 7, "Ib", 0, "1.0", 2,
+                                            100.0, 100.0, 0));
+                                }break;
+                                case "BA": {
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("BA;R;P", 7, "Ib", 0, "1.0", 2,
+                                            100.0, 100.0, 0));
+                                }break;
+                                case "AC": {
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("AC;R;P", 7, "Ib", 0, "1.0", 2,
+                                            100.0, 0, 100.0));
+                                }break;
+                                case "CA": {
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("CA;R;P", 7, "Ib", 0, "1.0", 2,
+                                            100.0, 0, 100.0));
+                                }break;
+                                case "CB": {
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("CB;R;P", 7, "Ib", 0, "1.0", 2,
+                                            0, 100.0, 100.0));
+                                }break;
+                                case "BC": {
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("BC;R;P", 7, "Ib", 0, "1.0", 2,
+                                            0, 100.0, 100.0));
+                                }break;
+                            }
+                        }
+
+                        txtFieldInfImb.setDisable(true);
 
                     } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInb.setSelected(false);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                ConsoleHelper.infoException("Неверные данные");
+                            }
+                        });
+                        addTglBtnImb.setSelected(false);
                     }
 
                     //Если выбрано RP-
                 } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
                     try {
-                        String[] inf = txtFieldInfInb.getText().split(";");
+                        String[] inf = txtFieldInfImb.getText().split(",");
                         List<String> inbStr = new ArrayList<>();
                         String phase;
 
@@ -1687,38 +1821,106 @@ public class InfluenceFrame {
                         for (int i = 0; i < inbStr.size(); i++) {
                             influenceInbURPMns[i] = inbStr.get(i);
                         }
-                        /**
-                         * Добавить UnbCommand
-                         */
 
-                        txtFieldInfInb.setDisable(true);
+                        for (String phases : inbStr) {
+
+                            switch (phases) {
+                                case "A": {
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("A;R;N", 7, "Ib", 1, "1.0", 3,
+                                            100.0, 0, 0));
+                                }break;
+                                case "B": {
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("B;R;N", 7, "Ib", 1, "1.0", 3,
+                                            0, 100.0, 0));
+                                }break;
+                                case "C": {
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("C;R;N", 7, "Ib", 1, "1.0", 3,
+                                            0, 0, 100.0));
+                                }break;
+                                case "AB": {
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("AB;R;N", 7, "Ib", 1, "1.0", 3,
+                                            100.0, 100.0, 0));
+                                }break;
+                                case "BA": {
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("BA;R;N", 7, "Ib", 1, "1.0", 3,
+                                            100.0, 100.0, 0));
+                                }break;
+                                case "AC": {
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("AC;R;N", 7, "Ib", 1, "1.0", 3,
+                                            100.0, 0, 100.0));
+                                }break;
+                                case "CA": {
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("CA;R;N", 7, "Ib", 1, "1.0", 3,
+                                            100.0, 0, 100.0));
+                                }break;
+                                case "CB": {
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("CB;R;N", 7, "Ib", 1, "1.0", 3,
+                                            0, 100.0, 100.0));
+                                }break;
+                                case "BC": {
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("BC;R;N", 7, "Ib", 1, "1.0", 3,
+                                            0, 100.0, 100.0));
+                                }break;
+                            }
+                        }
+
+                        txtFieldInfImb.setDisable(true);
 
                     } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInb.setSelected(false);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                ConsoleHelper.infoException("Неверные данные");
+                            }
+                        });
+                        addTglBtnImb.setSelected(false);
                     }
                 }
 
             } else {
-                txtFieldInfInb.setDisable(false);
-
-                /**
-                 * Удалить команды с листа
-                 */
+                txtFieldInfImb.setDisable(false);
 
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
 
-                    influenceInbUAPPls = new String[0];
+                    for (int i = 0; i <  inflListForCollumAPPls.size(); i++) {
+                        if (inflListForCollumAPPls.get(i) instanceof ImbalansUCommand) {
+                            inflListForCollumAPPls.remove(i);
+                            i--;
+                        }
+                    }
+
+                    influenceImbUAPPls = new String[0];
 
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
+
+                    for (int i = 0; i <  inflListForCollumAPMns.size(); i++) {
+                        if (inflListForCollumAPMns.get(i) instanceof ImbalansUCommand) {
+                            inflListForCollumAPMns.remove(i);
+                            i--;
+                        }
+                    }
 
                     influenceInbUAPMns = new String[0];
 
                 } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
 
+                    for (int i = 0; i <  inflListForCollumRPPls.size(); i++) {
+                        if (inflListForCollumRPPls.get(i) instanceof ImbalansUCommand) {
+                            inflListForCollumRPPls.remove(i);
+                            i--;
+                        }
+                    }
+
                     influenceInbURPPls = new String[0];
 
                 } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
+
+                    for (int i = 0; i <  inflListForCollumRPMns.size(); i++) {
+                        if (inflListForCollumRPMns.get(i) instanceof ImbalansUCommand) {
+                            inflListForCollumRPMns.remove(i);
+                            i--;
+                        }
+                    }
 
                     influenceInbURPMns = new String[0];
                 }
@@ -1970,7 +2172,7 @@ public class InfluenceFrame {
         influenceFprocPhaseBAPPls = methodic.getSaveInfluenceFprocPhaseBAPPls();
         influenceFprocPhaseCAPPls = methodic.getSaveInfluenceFprocPhaseCAPPls();
 
-        influenceInbUAPPls = methodic.getSaveInfluenceInbUAPPls();
+        influenceImbUAPPls = methodic.getSaveInfluenceInbUAPPls();
 
         influenceUprocAllPhaseAPMns = methodic.getSaveInfluenceUprocAllPhaseAPMns();
         influenceUprocPhaseAAPMns = methodic.getSaveInfluenceUprocPhaseAAPMns();
@@ -2025,7 +2227,7 @@ public class InfluenceFrame {
         methodic.setSaveInfluenceFprocPhaseBAPPls(influenceFprocPhaseBAPPls);
         methodic.setSaveInfluenceFprocPhaseCAPPls(influenceFprocPhaseCAPPls);
 
-        methodic.setSaveInfluenceInbUAPPls(influenceInbUAPPls);
+        methodic.setSaveInfluenceInbUAPPls(influenceImbUAPPls);
 
         methodic.setSaveInfluenceUprocAllPhaseAPMns(influenceUprocAllPhaseAPMns);
         methodic.setSaveInfluenceUprocPhaseAAPMns(influenceUprocPhaseAAPMns);
@@ -2438,16 +2640,16 @@ public class InfluenceFrame {
             txtFieldInfFPhaseC.setDisable(false);
         }
 
-        if (influenceInbUAPPls.length != 0) {
-            infStr = Arrays.toString(influenceInbUAPPls);
-            txtFieldInfInb.setText(infStr.substring(1, infStr.length() - 1));
+        if (influenceImbUAPPls.length != 0) {
+            infStr = Arrays.toString(influenceImbUAPPls);
+            txtFieldInfImb.setText(infStr.substring(1, infStr.length() - 1));
 
-            addTglBtnInb.setSelected(true);
-            txtFieldInfInb.setDisable(true);
+            addTglBtnImb.setSelected(true);
+            txtFieldInfImb.setDisable(true);
         } else {
-            txtFieldInfInb.setDisable(false);
-            txtFieldInfInb.clear();
-            addTglBtnInb.setSelected(false);
+            txtFieldInfImb.setDisable(false);
+            txtFieldInfImb.clear();
+            addTglBtnImb.setSelected(false);
         }
     }
 
@@ -2590,14 +2792,14 @@ public class InfluenceFrame {
 
         if (influenceInbUAPMns.length != 0) {
             infStr = Arrays.toString(influenceInbUAPMns);
-            txtFieldInfInb.setText(infStr.substring(1, infStr.length() - 1));
+            txtFieldInfImb.setText(infStr.substring(1, infStr.length() - 1));
 
-            addTglBtnInb.setSelected(true);
-            txtFieldInfInb.setDisable(true);
+            addTglBtnImb.setSelected(true);
+            txtFieldInfImb.setDisable(true);
         } else {
-            txtFieldInfInb.setDisable(false);
-            txtFieldInfInb.clear();
-            addTglBtnInb.setSelected(false);
+            txtFieldInfImb.setDisable(false);
+            txtFieldInfImb.clear();
+            addTglBtnImb.setSelected(false);
         }
     }
 
@@ -2739,14 +2941,14 @@ public class InfluenceFrame {
 
         if (influenceInbURPPls.length != 0) {
             infStr = Arrays.toString(influenceInbURPPls);
-            txtFieldInfInb.setText(infStr.substring(1, infStr.length() - 1));
+            txtFieldInfImb.setText(infStr.substring(1, infStr.length() - 1));
 
-            addTglBtnInb.setSelected(true);
-            txtFieldInfInb.setDisable(true);
+            addTglBtnImb.setSelected(true);
+            txtFieldInfImb.setDisable(true);
         } else {
-            txtFieldInfInb.setDisable(false);
-            txtFieldInfInb.clear();
-            addTglBtnInb.setSelected(false);
+            txtFieldInfImb.setDisable(false);
+            txtFieldInfImb.clear();
+            addTglBtnImb.setSelected(false);
         }
     }
 
@@ -2888,14 +3090,14 @@ public class InfluenceFrame {
 
         if (influenceInbURPMns.length != 0) {
             infStr = Arrays.toString(influenceInbURPMns);
-            txtFieldInfInb.setText(infStr.substring(1, infStr.length() - 1));
+            txtFieldInfImb.setText(infStr.substring(1, infStr.length() - 1));
 
-            addTglBtnInb.setSelected(true);
-            txtFieldInfInb.setDisable(true);
+            addTglBtnImb.setSelected(true);
+            txtFieldInfImb.setDisable(true);
         } else {
-            txtFieldInfInb.setDisable(false);
-            txtFieldInfInb.clear();
-            addTglBtnInb.setSelected(false);
+            txtFieldInfImb.setDisable(false);
+            txtFieldInfImb.clear();
+            addTglBtnImb.setSelected(false);
         }
     }
 
@@ -3087,95 +3289,97 @@ public class InfluenceFrame {
             char[] charIdTestPoint;
 
             for (Commands command : inflListForCollum) {
-                charIdTestPoint = ((ErrorCommand) command).getId().toCharArray();
+                if (command instanceof ErrorCommand) {
+                    charIdTestPoint = ((ErrorCommand) command).getId().toCharArray();
 
-                if (charIdTestPoint[0] == 'U') {
+                    if (charIdTestPoint[0] == 'U') {
 
-                    if (charIdTestPoint[4] == 'H') {
-                        for (Node node : gridPaneUAllPhase.getChildren()) {
-                            if (node != null) {
-                                if (((ErrorCommand) command).getId().equals(node.getId())) {
-                                    ((CheckBox) node).setSelected(true);
-                                    break;
+                        if (charIdTestPoint[4] == 'H') {
+                            for (Node node : gridPaneUAllPhase.getChildren()) {
+                                if (node != null) {
+                                    if (((ErrorCommand) command).getId().equals(node.getId())) {
+                                        ((CheckBox) node).setSelected(true);
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (charIdTestPoint[4] == 'A') {
-                        for (Node node : gridPaneUPhaseA.getChildren()) {
-                            if (node != null) {
-                                if (((ErrorCommand) command).getId().equals(node.getId())) {
-                                    ((CheckBox) node).setSelected(true);
-                                    break;
+                        if (charIdTestPoint[4] == 'A') {
+                            for (Node node : gridPaneUPhaseA.getChildren()) {
+                                if (node != null) {
+                                    if (((ErrorCommand) command).getId().equals(node.getId())) {
+                                        ((CheckBox) node).setSelected(true);
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (charIdTestPoint[4] == 'B') {
-                        for (Node node : gridPaneUPhaseB.getChildren()) {
-                            if (node != null) {
-                                if (((ErrorCommand) command).getId().equals(node.getId())) {
-                                    ((CheckBox) node).setSelected(true);
-                                    break;
+                        if (charIdTestPoint[4] == 'B') {
+                            for (Node node : gridPaneUPhaseB.getChildren()) {
+                                if (node != null) {
+                                    if (((ErrorCommand) command).getId().equals(node.getId())) {
+                                        ((CheckBox) node).setSelected(true);
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (charIdTestPoint[4] == 'C') {
-                        for (Node node : gridPaneUPhaseC.getChildren()) {
-                            if (node != null) {
-                                if (((ErrorCommand) command).getId().equals(node.getId())) {
-                                    ((CheckBox) node).setSelected(true);
-                                    break;
+                        if (charIdTestPoint[4] == 'C') {
+                            for (Node node : gridPaneUPhaseC.getChildren()) {
+                                if (node != null) {
+                                    if (((ErrorCommand) command).getId().equals(node.getId())) {
+                                        ((CheckBox) node).setSelected(true);
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                } else if (charIdTestPoint[0] == 'F') {
+                    } else if (charIdTestPoint[0] == 'F') {
 
-                    if (charIdTestPoint[4] == 'H') {
-                        for (Node node : gridPaneFAllPhase.getChildren()) {
-                            if (node != null) {
-                                if (((ErrorCommand) command).getId().equals(node.getId())) {
-                                    ((CheckBox) node).setSelected(true);
-                                    break;
+                        if (charIdTestPoint[4] == 'H') {
+                            for (Node node : gridPaneFAllPhase.getChildren()) {
+                                if (node != null) {
+                                    if (((ErrorCommand) command).getId().equals(node.getId())) {
+                                        ((CheckBox) node).setSelected(true);
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (charIdTestPoint[4] == 'A') {
-                        for (Node node : gridPaneFPhaseA.getChildren()) {
-                            if (node != null) {
-                                if (((ErrorCommand) command).getId().equals(node.getId())) {
-                                    ((CheckBox) node).setSelected(true);
-                                    break;
+                        if (charIdTestPoint[4] == 'A') {
+                            for (Node node : gridPaneFPhaseA.getChildren()) {
+                                if (node != null) {
+                                    if (((ErrorCommand) command).getId().equals(node.getId())) {
+                                        ((CheckBox) node).setSelected(true);
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (charIdTestPoint[4] == 'B') {
-                        for (Node node : gridPaneFPhaseB.getChildren()) {
-                            if (node != null) {
-                                if (((ErrorCommand) command).getId().equals(node.getId())) {
-                                    ((CheckBox) node).setSelected(true);
-                                    break;
+                        if (charIdTestPoint[4] == 'B') {
+                            for (Node node : gridPaneFPhaseB.getChildren()) {
+                                if (node != null) {
+                                    if (((ErrorCommand) command).getId().equals(node.getId())) {
+                                        ((CheckBox) node).setSelected(true);
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (charIdTestPoint[4] == 'C') {
-                        for (Node node : gridPaneFPhaseC.getChildren()) {
-                            if (node != null) {
-                                if (((ErrorCommand) command).getId().equals(node.getId())) {
-                                    ((CheckBox) node).setSelected(true);
-                                    break;
+                        if (charIdTestPoint[4] == 'C') {
+                            for (Node node : gridPaneFPhaseC.getChildren()) {
+                                if (node != null) {
+                                    if (((ErrorCommand) command).getId().equals(node.getId())) {
+                                        ((CheckBox) node).setSelected(true);
+                                        break;
+                                    }
                                 }
                             }
                         }

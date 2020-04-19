@@ -274,8 +274,8 @@
          <children>
             <Label layoutX="76.0" layoutY="49.0" text="Фазы на которые необходимо подать напрядение" />
             <Label fx:id="directLabInb" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
-            <ToggleButton fx:id="addTglBtnInb" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
-            <TextField fx:id="txtFieldInfInb" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+            <ToggleButton fx:id="addTglBtnImb" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+            <TextField fx:id="txtFieldInfImb" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
          </children>
       </Pane>
     </children>

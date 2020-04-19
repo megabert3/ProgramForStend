@@ -162,6 +162,13 @@ public class Meter implements Serializable{
 
                 } else if (command instanceof RTCCommand) {
                     errorListAPPls.add(new RTCResult(name));
+
+                } else if (command instanceof ConstantCommand) {
+                    errorListAPPls.add(new ConstantResult(name));
+
+                } else if (command instanceof ImbalansUCommand) {
+
+                    errorListAPPls.add(new ImbUResult(name));
                 }
             } break;
             case 1: {
@@ -195,6 +202,12 @@ public class Meter implements Serializable{
 
                 } else if (command instanceof RTCCommand) {
                     errorListAPMns.add(new RTCResult(name));
+
+                } else if (command instanceof ConstantCommand) {
+                    errorListAPMns.add(new ConstantResult(name));
+
+                } else if (command instanceof ImbalansUCommand) {
+                    errorListAPMns.add(new ImbUResult(name));
                 }
             } break;
             case 2: {
@@ -229,6 +242,13 @@ public class Meter implements Serializable{
 
                 } else if (command instanceof RTCCommand) {
                     errorListRPPls.add(new RTCResult(name));
+
+                } else if (command instanceof ConstantCommand) {
+                    errorListRPPls.add(new ConstantResult(name));
+
+                } else if (command instanceof ImbalansUCommand) {
+
+                    errorListRPPls.add(new ImbUResult(name));
                 }
             } break;
             case 3: {
@@ -263,6 +283,12 @@ public class Meter implements Serializable{
 
                 } else if (command instanceof RTCCommand) {
                     errorListRPMns.add(new RTCResult(name));
+
+                } else if (command instanceof ConstantCommand) {
+                    errorListRPMns.add(new ConstantResult(name));
+
+                } else if (command instanceof ImbalansUCommand) {
+                    errorListRPMns.add(new ImbUResult(name));
                 }
             } break;
         }
@@ -749,7 +775,7 @@ public class Meter implements Serializable{
     }
 
     //Абстрактный класс для записи результата каждой точки
-    public abstract class CommandResult implements Serializable{
+    public abstract class CommandResult implements Serializable {
 
         //Имя команды
         String nameCommand;
@@ -846,14 +872,13 @@ public class Meter implements Serializable{
     }
 
     //Класс для записи результата исполнения CreepCommnad
-    public class CreepResult extends CommandResult implements Serializable{
+    public class CreepResult extends CommandResult implements Serializable {
 
         //Время провала теста
         String timeToAllTest;
 
         CreepResult(String name) {
             super.setNameCommand(name);
-            super.setPassTest(true);
         }
 
         public String getTimeToAllTest() {
@@ -866,7 +891,7 @@ public class Meter implements Serializable{
     }
 
     //Класс для записи результата исполнения StartCommnad
-    public class StartResult extends CommandResult implements Serializable{
+    public class StartResult extends CommandResult implements Serializable {
 
         //Время прохождения теста
         long timeToPass;
@@ -888,16 +913,23 @@ public class Meter implements Serializable{
     }
 
     //Класс для записи результата исполнения StartCommnad
-    private class RTCResult extends CommandResult implements Serializable{
+    private class RTCResult extends CommandResult implements Serializable {
 
         RTCResult(String name) {
             super.setNameCommand(name);
         }
     }
 
-    private class Constant extends CommandResult implements Serializable{
+    private class ConstantResult extends CommandResult implements Serializable {
 
-        Constant(String name) {
+        ConstantResult(String name) {
+            super.setNameCommand(name);
+        }
+    }
+
+    private class ImbUResult extends CommandResult implements Serializable {
+
+        public ImbUResult(String name) {
             super.setNameCommand(name);
         }
     }
