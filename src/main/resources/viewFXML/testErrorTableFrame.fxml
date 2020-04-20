@@ -15,9 +15,6 @@
       <Button fx:id="btnSave" layoutX="1032.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventSaveExit" prefHeight="70.0" prefWidth="100.0" text="Сохранить" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="150.0" />
       <Button fx:id="btnExit" layoutX="1144.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventSaveExit" prefHeight="70.0" prefWidth="100.0" text="Выйти" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="33.0" />
       <Button fx:id="btnStop" layoutX="890.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" text="Остановка теста" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="279.0" />
-      <ToggleButton fx:id="tglBtnAuto" layoutX="530.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" text="Автоматический" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="639.0" />
-      <ToggleButton fx:id="tglBtnManualMode" layoutX="650.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" text="Ручной режим" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="519.0" />
-      <ToggleButton fx:id="tglBtnUnom" layoutX="770.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" text="Напряжение" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="399.0" />
       <Pane layoutX="36.0" layoutY="737.0" AnchorPane.bottomAnchor="75.0">
          <children>
             <ToggleButton fx:id="tglBtnAPPls" mnemonicParsing="false" onAction="#actionEventSwithEnergyPane" prefHeight="46.0" prefWidth="108.0" text="А.Э. +" />
@@ -52,5 +49,8 @@
             <CheckBox fx:id="checkBoxDisableAll" layoutX="6.0" layoutY="3.0" mnemonicParsing="false" onAction="#checBoxAllDisAction" />
          </children>
       </Pane>
+      <Button fx:id="tglBtnAuto" layoutX="530.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" text="Автоматический" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="639.0" />
+      <Button fx:id="tglBtnManualMode" layoutX="650.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" text="Ручной режим" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="519.0" />
+      <Button fx:id="tglBtnUnom" layoutX="770.0" layoutY="760.0" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" text="Напряжение" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="399.0" />
    </children>
 </AnchorPane>

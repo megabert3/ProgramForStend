@@ -449,4 +449,24 @@ public class CreepCommand implements Commands, Serializable {
     public void setNextCommand(boolean nextCommand) {
         this.nextCommand = nextCommand;
     }
+
+    @Override
+    public void setPulse(String pulse) {
+
+    }
+
+    @Override
+    public void setCountResult(String countResult) {
+
+    }
+
+    @Override
+    public void setEmax(String emax) {
+
+    }
+
+    @Override
+    public void setEmin(String emin) {
+
+    }
 }

@@ -7,7 +7,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -99,103 +98,7 @@ public class TestErrorTableFrameController {
 
     private String witness;
 
-    private Service<Void> threadAutomaticTest = new Service<Void>() {
-        @Override
-        protected Task<Void> createTask() {
-            return new Task<Void>() {
-                @Override
-                protected Void call() {
-                    try {
-                        try {
-                            System.out.println("Поток threadAutomaticTest начал свою работу");
-                            isFinish = false;
-                            startAutomaticTest();
-                            isFinish = true;
-                            System.out.println("Поток threadAutomaticTest закончил свою работу");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            System.out.println("Сработал перехват в классе TestErrorTableFrameController" +
-                                    "в потоке threadAutomaticTest");
-                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                            isFinish = true;
-                        }
-                    }catch (ConnectForStendExeption e) {
-                        System.out.println("Ошибка подключения");
-                        isFinish = true;
-                        e.printStackTrace();
-                        connectionException();
-                    }
-                    return null;
-                }
-            };
-        }
-    };
-
-    private Service<Void> threadManualTest = new Service<Void>() {
-        @Override
-        protected Task<Void> createTask() {
-            return new Task<Void>() {
-                @Override
-                protected Void call() {
-                    try {
-                        try {
-                            System.out.println("Поток threadManualTest начал свою работу");
-                            isFinish = false;
-                            startManualTest();
-                            isFinish = true;
-                            System.out.println("Поток threadManualTest закончил свою работу");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            System.out.println("Сработал перехват в классе TestErrorTableFrameController" +
-                                    "в потоке threadManualTest");
-                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                            isFinish = true;
-                        }
-                    }catch (ConnectForStendExeption e) {
-                        System.out.println("Ошибка подключения");
-                        isFinish = true;
-                        e.printStackTrace();
-                        connectionException();
-                    }
-                    return null;
-                }
-            };
-        }
-    };
-
-    private Service<Void> threadUn = new Service<Void>() {
-        @Override
-        protected Task<Void> createTask() {
-            return new Task<Void>() {
-                @Override
-                protected Void call() {
-                    try {
-                        try {
-                            System.out.println("Поток threadUn начал свою работу");
-                            isFinish = false;
-                            startUn();
-                            isFinish = true;
-                            System.out.println("Поток threadUn закончил свою работу");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            System.out.println("Сработал перехват в классе TestErrorTableFrameController" +
-                                    "в потоке threadUn");
-                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                            isFinish = true;
-                        }
-                    }catch (ConnectForStendExeption e) {
-                        e.printStackTrace();
-                        connectionException();
-                        isFinish = true;
-                    }
-                    return null;
-                }
-            };
-        }
-    };
+    private Thread thread = new Thread();
 
     @FXML
     private Button btnSave;
@@ -228,13 +131,13 @@ public class TestErrorTableFrameController {
     private Button btnStop;
 
     @FXML
-    private ToggleButton tglBtnAuto;
+    private Button tglBtnAuto;
 
     @FXML
-    private ToggleButton tglBtnManualMode;
+    private Button tglBtnManualMode;
 
     @FXML
-    private ToggleButton tglBtnUnom;
+    private Button tglBtnUnom;
 
     @FXML
     private ToggleButton tglBtnAPPls;
@@ -324,161 +227,201 @@ public class TestErrorTableFrameController {
     }
 
     @FXML
-    void actionEventTestControl(ActionEvent event) {
-
+    void actionEventTestControl(ActionEvent event) throws InterruptedException {
         //------------------------------------------------------------------------------------------------
         //Логика работы автоматического режима работы
         if (event.getSource() == tglBtnAuto) {
 
-            if (threadManualTest.isRunning()) {
-                System.out.println("Останавливаю threadManualTest");
-                System.out.println("Статус threadManualTest до остановки " + threadManualTest.getState());
-                threadManualTest.cancel();
-                System.out.println("Статус threadManualTest после остановки остановки " + threadManualTest.getState());
-
-                while (!isFinish) {
-                    System.out.println("Завершение threadManualTest");
-                }
+            if (thread.isAlive()) {
+                System.out.println("Останавливаю thread");
+                System.out.println("Статус thread до остановки " + thread.getState());
+                System.out.println("До команды интерапт " + thread.isInterrupted());
+                thread.interrupt();
+                System.out.println("После команды интерапт команды интерапт " + thread.isInterrupted());
+                System.out.println("Статус thread после остановки остановки " + thread.getState());
             }
 
-            if (threadUn.isRunning()) {
-                System.out.println("Останавливаю threadUn");
-                System.out.println("Статус threadUn до остановки " + threadUn.getState());
-                threadUn.cancel();
-                System.out.println("Статус threadUn после остановки остановки " + threadUn.getState());
-
-                while (!isFinish) {
-                    System.out.println("Завершение threadUn");
-                }
+            while (thread.isAlive()) {
+                Thread.sleep(1000);
+                System.out.println("Завершение thread");
+                System.out.println("isInterrupted " + thread.isInterrupted());
             }
-            System.out.println("Состояние threadAutomaticTest до ресета " + threadAutomaticTest.getState());
-            threadAutomaticTest.reset();
-            System.out.println("Состояние threadAutomaticTest после ресета " + threadAutomaticTest.getState());
-            threadAutomaticTest.start();
+
+            tglBtnAuto.setDisable(true);
+
+            tglBtnManualMode.setDisable(false);
+            tglBtnUnom.setDisable(false);
+
+            Task<Void> threadAutomaticTestTask = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    try {
+                        try {
+                            System.out.println("Поток threadAutomaticTest начал свою работу");
+                            isFinish = false;
+                            startAutomaticTest();
+                            isFinish = true;
+                            System.out.println("Поток threadAutomaticTest закончил свою работу");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("Сработал перехват в классе TestErrorTableFrameController" +
+                                    "в потоке threadAutomaticTest");
+                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                            isFinish = true;
+                        }
+                    } catch (ConnectForStendExeption e) {
+                        System.out.println("Ошибка подключения");
+                        isFinish = true;
+                        e.printStackTrace();
+                        connectionException();
+                    }
+                    return null;
+                }
+            };
+
+            thread = new Thread(threadAutomaticTestTask);
+            thread.start();
         }
 
         //------------------------------------------------------------------------------------------------
         //Логика работы ручного режима работы
         if (event.getSource() == tglBtnManualMode) {
 
-            if (threadAutomaticTest.isRunning()) {
-                System.out.println("Останавливаю threadAutomaticTest");
-                System.out.println("Статус threadAutomaticTest до остановки " + threadManualTest.getState());
-                threadManualTest.cancel();
-                System.out.println("Статус threadAutomaticTest после остановки остановки " + threadManualTest.getState());
-
-                while (!isFinish) {
-                    System.out.println("Завершение threadAutomaticTest");
-                }
+            if (thread.isAlive()) {
+                System.out.println("Останавливаю thread");
+                System.out.println("Статус thread до остановки " + thread.getState());
+                System.out.println("До команды интерапт " + thread.isInterrupted());
+                thread.interrupt();
+                System.out.println("После команды интерапт команды интерапт " + thread.isInterrupted());
+                System.out.println("Статус thread после остановки остановки " + thread.getState());
             }
 
-            if (threadUn.isRunning()) {
-                System.out.println("Останавливаю threadUn");
-                System.out.println("Статус threadUn до остановки " + threadUn.getState());
-                threadUn.cancel();
-                System.out.println("Статус threadUn после остановки остановки " + threadUn.getState());
-
-                while (!isFinish) {
-                    System.out.println("Завершение threadUn");
-                }
+            while (thread.isAlive()) {
+                Thread.sleep(1000);
+                System.out.println("Завершение thread");
+                System.out.println("isInterrupted " + thread.isInterrupted());
             }
 
-            System.out.println("Состояние threadManualTest до ресета " + threadManualTest.getState());
-            threadManualTest.reset();
-            System.out.println("Состояние threadManualTest после ресета " + threadManualTest.getState());
-            threadManualTest.start();
+            tglBtnManualMode.setDisable(true);
+
+            tglBtnUnom.setDisable(false);
+            tglBtnAuto.setDisable(false);
+
+            Task<Void> threadManualTest = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    try {
+                        try {
+                            System.out.println("Поток threadManualTest начал свою работу");
+                            isFinish = false;
+                            startManualTest();
+                            isFinish = true;
+                            System.out.println("Поток threadManualTest закончил свою работу");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("Сработал перехват в классе TestErrorTableFrameController" +
+                                    "в потоке threadManualTest");
+                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                            isFinish = true;
+                        }
+                    } catch (ConnectForStendExeption e) {
+                        System.out.println("Ошибка подключения");
+                        isFinish = true;
+                        e.printStackTrace();
+                        connectionException();
+                    }
+                    return null;
+                }
+            };
+
+            thread = new Thread(threadManualTest);
+            thread.start();
         }
 
         //------------------------------------------------------------------------------------------------
         //Логика работы подачи напряжения
         if (event.getSource() == tglBtnUnom) {
 
-            if (threadAutomaticTest.isRunning()) {
+            if (thread.isAlive()) {
                 System.out.println("Останавливаю threadAutomaticTest");
-                System.out.println("Статус threadAutomaticTest до остановки " + threadManualTest.getState());
-                threadManualTest.cancel();
-                System.out.println("Статус threadAutomaticTest после остановки остановки " + threadManualTest.getState());
-
-                while (!isFinish) {
-                    System.out.println("Завершение threadAutomaticTest");
-                }
+                System.out.println("Статус threadAutomaticTest до остановки " + thread.getState());
+                System.out.println("До команды интерапт " + thread.isInterrupted());
+                thread.interrupt();
+                System.out.println("После команды интерапт команды интерапт " + thread.isInterrupted());
+                System.out.println("Статус threadAutomaticTest после остановки остановки " + thread.getState());
             }
 
-            if (threadManualTest.isRunning()) {
-                System.out.println("Останавливаю threadManualTest");
-                System.out.println("Статус threadManualTest до остановки " + threadManualTest.getState());
-                threadManualTest.cancel();
-                System.out.println("Статус threadManualTest после остановки остановки " + threadManualTest.getState());
-
-                while (!isFinish) {
-                    System.out.println("Завершение threadManualTest");
-                }
+            while (thread.isAlive()) {
+                Thread.sleep(1000);
+                System.out.println("Завершение thread");
+                System.out.println("isInterrupted " + thread.isInterrupted());
             }
 
-            System.out.println("Состояние threadUn до ресета " + threadUn.getState());
-            threadUn.reset();
-            System.out.println("Состояние threadUn после ресета " + threadUn.getState());
-            threadUn.start();
+            tglBtnManualMode.setDisable(false);
+
+            tglBtnUnom.setDisable(true);
+            tglBtnAuto.setDisable(false);
+
+            Task<Void> threadUnTask = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    try {
+                        try {
+                            System.out.println("Поток threadUn начал свою работу");
+                            isFinish = false;
+                            startUn();
+                            isFinish = true;
+                            System.out.println("Поток threadUn закончил свою работу");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("Сработал перехват в классе TestErrorTableFrameController" +
+                                    "в потоке threadUn");
+                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                            isFinish = true;
+                        }
+                    } catch (ConnectForStendExeption e) {
+                        e.printStackTrace();
+                        connectionException();
+                        isFinish = true;
+                    }
+                    return null;
+                }
+            };
+
+            thread = new Thread(threadUnTask);
+            thread.start();
         }
 
         //------------------------------------------------------------------------------------------------
         //Логика работы остановки теста
         if (event.getSource() == btnStop) {
-            if (threadAutomaticTest.isRunning()) {
-                System.out.println("Останавливаю threadAutomaticTest");
-                System.out.println("Статус threadAutomaticTest до остановки " + threadManualTest.getState());
-                threadManualTest.cancel();
-                System.out.println("Статус threadAutomaticTest после остановки остановки " + threadManualTest.getState());
-
-                while (!isFinish) {
-                    System.out.println("Завершение threadAutomaticTest");
-                }
+            if (thread.isAlive()) {
+                System.out.println("Останавливаю thread");
+                System.out.println("Статус thread до остановки " + thread.getState());
+                System.out.println("До команды интерапт " + thread.isInterrupted());
+                thread.interrupt();
+                System.out.println("После команды интерапт команды интерапт " + thread.isInterrupted());
+                System.out.println("Статус thread после остановки остановки " + thread.getState());
             }
 
-            if (threadManualTest.isRunning()) {
-                System.out.println("Останавливаю threadManualTest");
-                System.out.println("Статус threadManualTest до остановки " + threadManualTest.getState());
-                threadManualTest.cancel();
-                System.out.println("Статус threadManualTest после остановки остановки " + threadManualTest.getState());
-
-                while (!isFinish) {
-                    System.out.println("Завершение threadManualTest");
-                }
+            while (thread.isAlive()) {
+                Thread.sleep(1000);
+                System.out.println("Завершение thread");
+                System.out.println("isInterrupted " + thread.isInterrupted());
             }
 
-            if (threadUn.isRunning()) {
-                System.out.println("Останавливаю threadUn");
-                System.out.println("Статус threadUn до остановки " + threadUn.getState());
-                threadUn.cancel();
-                System.out.println("Статус threadUn после остановки остановки " + threadUn.getState());
-
-                while (!isFinish) {
-                    System.out.println("Завершение threadUn");
-                }
-            }
-
-            System.out.println("Обнуляю табло погрешности, выключаю напряжение и ток");
-
-            tglBtnAuto.setDisable(false);
-            tglBtnAuto.setSelected(false);
             tglBtnManualMode.setDisable(false);
-            tglBtnManualMode.setSelected(false);
             tglBtnUnom.setDisable(false);
-            tglBtnUnom.setSelected(false);
+            tglBtnAuto.setDisable(false);
         }
     }
 
     //Блок команд для старта автоматического теста
     private void startAutomaticTest() throws ConnectForStendExeption {
         int phase;
-
-        tglBtnAuto.setSelected(true);
-        tglBtnAuto.setDisable(true);
-
-        tglBtnManualMode.setDisable(false);
-        tglBtnManualMode.setSelected(false);
-        tglBtnUnom.setDisable(false);
-        tglBtnUnom.setSelected(false);
 
         //Если выбрана панель AP+
         if (tglBtnAPPls.isSelected()) {
@@ -519,16 +462,6 @@ public class TestErrorTableFrameController {
     private void startManualTest() throws ConnectForStendExeption {
         int phase;
 
-        tglBtnAuto.setDisable(false);
-        tglBtnAuto.setSelected(false);
-
-        tglBtnManualMode.setSelected(true);
-        tglBtnManualMode.setDisable(true);
-
-        tglBtnUnom.setDisable(false);
-        tglBtnUnom.setSelected(false);
-
-
         //Если выбрана панель AP+
         if (tglBtnAPPls.isSelected()) {
             if (typeCircuitThreePhase) {
@@ -568,15 +501,6 @@ public class TestErrorTableFrameController {
     private void startUn () throws ConnectForStendExeption {
 
         int phase;
-
-        tglBtnAuto.setDisable(false);
-        tglBtnAuto.setSelected(false);
-
-        tglBtnManualMode.setDisable(false);
-        tglBtnManualMode.setSelected(false);
-
-        tglBtnUnom.setSelected(true);
-        tglBtnUnom.setDisable(true);
 
         if (typeCircuitThreePhase) {
             phase = 1;
@@ -713,7 +637,6 @@ public class TestErrorTableFrameController {
                 errorsView.getSelectionModel().select(i);
             }
         }
-        tglBtnAuto.setSelected(false);
     }
 
     //Старт ручного теста в зависимости от выбранной панели (направления и типа энергии)
@@ -1409,11 +1332,8 @@ public class TestErrorTableFrameController {
         });
 
         tglBtnAuto.setDisable(false);
-        tglBtnAuto.setSelected(false);
         tglBtnManualMode.setDisable(false);
-        tglBtnManualMode.setSelected(false);
         tglBtnUnom.setDisable(false);
-        tglBtnUnom.setSelected(false);
     }
     
     //=====================================================================================

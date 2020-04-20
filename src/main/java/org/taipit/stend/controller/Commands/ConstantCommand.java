@@ -25,6 +25,26 @@ public class ConstantCommand implements Commands, Serializable {
     }
 
     @Override
+    public void setEmax(String emax) {
+
+    }
+
+    @Override
+    public void setEmin(String emin) {
+
+    }
+
+    @Override
+    public void setPulse(String pulse) {
+
+    }
+
+    @Override
+    public void setCountResult(String countResult) {
+
+    }
+
+    @Override
     public boolean execute() {
         return Boolean.parseBoolean(null);
     }

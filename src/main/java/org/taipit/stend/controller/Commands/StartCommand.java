@@ -94,7 +94,6 @@ public class StartCommand implements Commands, Serializable {
         this.gostTest = gostTest;
     }
 
-
     @Override
     public boolean execute() throws ConnectForStendExeption {
         try {
@@ -468,6 +467,26 @@ public class StartCommand implements Commands, Serializable {
     @Override
     public void setNextCommand(boolean nextCommand) {
         this.nextCommand = nextCommand;
+    }
+
+    @Override
+    public void setPulse(String pulse) {
+
+    }
+
+    @Override
+    public void setCountResult(String countResult) {
+
+    }
+
+    @Override
+    public void setEmax(String emax) {
+
+    }
+
+    @Override
+    public void setEmin(String emin) {
+
     }
 
     //reset

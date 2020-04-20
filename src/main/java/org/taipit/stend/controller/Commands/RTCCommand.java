@@ -363,4 +363,23 @@ public class RTCCommand implements Commands, Serializable {
         this.meterList = meterList;
     }
 
+    @Override
+    public void setPulse(String pulse) {
+
+    }
+
+    @Override
+    public void setCountResult(String countResult) {
+
+    }
+
+    @Override
+    public void setEmax(String emax) {
+
+    }
+
+    @Override
+    public void setEmin(String emin) {
+
+    }
 }

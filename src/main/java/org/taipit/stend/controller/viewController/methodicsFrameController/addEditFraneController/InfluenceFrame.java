@@ -3802,7 +3802,7 @@ public class InfluenceFrame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
-                ((ErrorCommand) command).setEmax(newImpulseValue);
+                command.setEmax(newImpulseValue);
 
             });
 
@@ -3814,7 +3814,7 @@ public class InfluenceFrame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
-                ((ErrorCommand) command).setEmin(newImpulseValue);
+                command.setEmin(newImpulseValue);
 
             });
 
@@ -3826,7 +3826,7 @@ public class InfluenceFrame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
-                ((ErrorCommand) command).setPulse(newImpulseValue);
+                command.setPulse(newImpulseValue);
 
             });
 

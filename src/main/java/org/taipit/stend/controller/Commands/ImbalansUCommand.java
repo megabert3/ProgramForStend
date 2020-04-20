@@ -4,10 +4,11 @@ import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
-public class ImbalansUCommand implements Commands {
+public class ImbalansUCommand implements Commands, Serializable {
 
     private StendDLLCommands stendDLLCommands;
 

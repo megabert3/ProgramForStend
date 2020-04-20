@@ -19,7 +19,13 @@ public interface Commands{
 
     void setNextCommand(boolean nextCommand);
 
+    void setPulse(String pulse);
 
+    void setCountResult(String countResult);
+
+    void setEmax(String emax);
+
+    void setEmin(String emin);
 
     //Имя команды
     String getName();
