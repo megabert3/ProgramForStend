@@ -2,7 +2,7 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
-import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
+import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
@@ -143,265 +143,245 @@ public class ErrorCommand implements Commands, Serializable {
     //===================================================================================================
     //Команда выполнения для последовательного теста
     @Override
-    public boolean execute() throws ConnectForStendExeption {
-        try {
+    public synchronized boolean execute() throws ConnectForStendExeption, InterruptedException {
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("execute_1");
+            throw new InterruptedException();
+        }
+
+        //Выбор константы в зависимости от энергии
+        if (channelFlag == 0 || channelFlag == 1) {
+            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
+        } else {
+            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
+        }
+
+        flagInStop = initBoolList();
+
+        if (current.equals("Ib")) {
+            ratedCurr = Ib;
+        } else {
+            ratedCurr = Imax;
+        }
+
+        for (Meter meter : meterForTestList) {
+            meter.setAmountMeasur(0);
+            meter.setErrorResultChange(0);
+            meter.returnResultCommand(index, channelFlag).setLastResult("N");
+        }
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("execute_2");
+            throw new InterruptedException();
+        }
+
+        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("execute_3");
+            throw new InterruptedException();
+        }
+
+        Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("execute_4");
+            throw new InterruptedException();
+        }
+
+        //Устанавливаем местам импульсный выход
+        stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("execute_5");
+            throw new InterruptedException();
+        }
+
+        //Сказать константу счётчика стенду для кажого места
+        stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("execute_6");
+            throw new InterruptedException();
+        }
+
+        //Для быстрой становки флага прошёл счётчик тест или нет
+        Meter.CommandResult resultMeter;
+
+        int resultNo;
+        String strError;
+        String[] strMass;
+        String error;
+
+        //Для сравнения
+        double doubleErr;
+
+        while (flagInStop.containsValue(false)) {
+
             if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
-                return false;
-            }
-            //Выбор константы в зависимости от энергии
-            if (channelFlag == 0 || channelFlag == 1) {
-                constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
-            } else {
-                constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
-            }
-
-            flagInStop = initBoolList();
-
-            if (current.equals("Ib")) {
-                ratedCurr = Ib;
-            } else {
-                ratedCurr = Imax;
+                System.out.println("execute_7");
+                throw new InterruptedException();
             }
 
             for (Meter meter : meterForTestList) {
-                meter.setAmountMeasur(0);
-                meter.setErrorResultChange(0);
-                meter.returnResultCommand(index, channelFlag).setLastResult("N");
-            }
-
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
-                return false;
-            }
-
-            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
-
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                return false;
-            }
-
-            //Устанавливаем местам импульсный выход
-            stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
-
-            Thread.sleep(stendDLLCommands.getPauseForStabization());
-
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода ErrorCommand");
-                return false;
-            }
-
-            //Сказать константу счётчика стенду для кажого места
-            stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
-
-            //Для быстрой становки флага прошёл счётчик тест или нет
-            Meter.CommandResult resultMeter;
-
-            int resultNo;
-            String strError;
-            String[] strMass;
-            String error;
-
-            //Для сравнения
-            double doubleErr;
-
-            while (flagInStop.containsValue(false)) {
 
                 if (Thread.currentThread().isInterrupted()) {
-                    System.out.println("Получил сигнал о завершении потока из команды ErrorCommand из внешнего цикла перед опросом счётчиков");
-                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода ErrorCommand");
-                    return false;
+                    System.out.println("execute_8");
+                    throw new InterruptedException();
                 }
 
-                for (Meter meter : meterForTestList) {
+                strError = stendDLLCommands.meterErrorRead(meter.getId());
+                strMass = strError.split(",");
 
-                    if (Thread.currentThread().isInterrupted()) {
-                        System.out.println("Получил сигнал о завершении потока из команды ErrorCommand из внутреннего цикла перед опросом счётчикА");
-                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                        System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода ErrorCommand");
-                        return false;
+                if (strMass.length != 2) {
+                    continue;
+                }
+
+                resultNo = Integer.parseInt(strMass[0]);
+                error = strMass[1];
+
+                if (resultNo != 0) {
+                    resultMeter = meter.setResultsInErrorList(index, resultNo, error, channelFlag);
+                    doubleErr = Double.parseDouble(error);
+
+                    if (doubleErr > emax || doubleErr < emin) {
+                        resultMeter.setLastResult("F" + error);
+                        resultMeter.setPassTest(false);
+                    } else {
+                        resultMeter.setLastResult("P" + error);
+                        resultMeter.setPassTest(true);
                     }
 
-                    strError = stendDLLCommands.meterErrorRead(meter.getId());
-                    strMass = strError.split(",");
-
-                    if (strMass.length != 2) {
-                        continue;
+                    if (meter.getErrorResultChange() != resultNo) {
+                        meter.setAmountMeasur(meter.getAmountMeasur() + 1);
+                        meter.setErrorResultChange(resultNo);
                     }
+                }
 
-                    resultNo = Integer.parseInt(strMass[0]);
-                    error = strMass[1];
-
-                    if (resultNo != 0) {
-                        resultMeter = meter.setResultsInErrorList(index, resultNo, error, channelFlag);
-                        doubleErr = Double.parseDouble(error);
-
-                        if (doubleErr > emax || doubleErr < emin) {
-                            resultMeter.setLastResult("F" + error);
-                            resultMeter.setPassTest(false);
-                        } else {
-                            resultMeter.setLastResult("P" + error);
-                            resultMeter.setPassTest(true);
-                        }
-
-                        if (meter.getErrorResultChange() != resultNo) {
-                            meter.setAmountMeasur(meter.getAmountMeasur() + 1);
-                            meter.setErrorResultChange(resultNo);
-                        }
-                    }
-
-                    if (meter.getAmountMeasur() >= countResult) {
-                        flagInStop.put(meter.getId(), true);
-                    }
+                if (meter.getAmountMeasur() >= countResult) {
+                    flagInStop.put(meter.getId(), true);
                 }
             }
-
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
-            if (!Thread.currentThread().isInterrupted() && nextCommand) return true;
-
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-
-        }catch (InterruptedException e) {
-            System.out.println("Поймал ошибку Interrupted в команде ErrorCommand");
-            System.out.println("Состояние нити до команты interrupt в команде ErrorCommand " + Thread.currentThread().getState());
-            Thread.currentThread().interrupt();
-            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
-            return false;
         }
+
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+
+        if (!Thread.currentThread().isInterrupted() && nextCommand) return true;
+
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         return !Thread.currentThread().isInterrupted();
     }
 
     //Метод для цикличной поверки счётчиков
     @Override
-    public void executeForContinuousTest() throws ConnectForStendExeption {
-        try {
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
-                return;
-            }
+    public synchronized void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
 
-            //Выбор константы в зависимости от энергии
-            if (channelFlag == 0 || channelFlag == 1) {
-                constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
-            } else {
-                constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
-            }
+        //Выбор константы в зависимости от энергии
+        if (channelFlag == 0 || channelFlag == 1) {
+            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
+        } else {
+            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
+        }
+
+        for (Meter meter : meterForTestList) {
+            meter.returnResultCommand(index, channelFlag).setLastResult("N");
+        }
+
+        if (current.equals("Ib")) {
+            ratedCurr = Ib;
+        } else {
+            ratedCurr = Imax;
+        }
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("executeForContinuousTest_2");
+            throw new InterruptedException();
+        }
+
+        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("executeForContinuousTest_3");
+            throw new InterruptedException();
+        }
+
+        Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("executeForContinuousTest_4");
+            throw new InterruptedException();
+        }
+
+        //Устанавливаем местам импульсный выход
+        stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("executeForContinuousTest_5");
+            throw new InterruptedException();
+        }
+
+        //Сказать константу счётчика стенду для кажого места
+        stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("executeForContinuousTest_6");
+            throw new InterruptedException();
+        }
+
+        //Для быстрой становки флага прошёл счётчик тест или нет
+        Meter.CommandResult resultMeter;
+
+        int resultNo;
+        String strError;
+        String[] strMass;
+        String error;
+        double doubleErr;
+
+        while (!Thread.currentThread().isInterrupted()) {
 
             for (Meter meter : meterForTestList) {
-                meter.returnResultCommand(index, channelFlag).setLastResult("N");
-            }
 
-            if (current.equals("Ib")) {
-                ratedCurr = Ib;
-            } else {
-                ratedCurr = Imax;
-            }
+                if (Thread.currentThread().isInterrupted()) {
+                    System.out.println("executeForContinuousTest_7");
+                    throw new InterruptedException();
+                }
 
-            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                strError = stendDLLCommands.meterErrorRead(meter.getId());
+                strMass = strError.split(",");
 
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                return;
-            }
+                if (strMass.length != 2) {
+                    continue;
+                }
 
-            //Устанавливаем местам импульсный выход
-            stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
+                resultNo = Integer.parseInt(strMass[0]);
+                error = strMass[1];
 
-            Thread.sleep(stendDLLCommands.getPauseForStabization());
+                if (resultNo != 0) {
+                    resultMeter = meter.setResultsInErrorList(index, resultNo, error, channelFlag);
+                    doubleErr = Double.parseDouble(error);
 
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                return;
-            }
-
-            //Сказать константу счётчика стенду для кажого места
-            stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
-
-            //Для быстрой становки флага прошёл счётчик тест или нет
-            Meter.CommandResult resultMeter;
-
-            int resultNo;
-            String strError;
-            String[] strMass;
-            String error;
-            double doubleErr;
-
-            while (!Thread.currentThread().isInterrupted()) {
-
-
-                for (Meter meter : meterForTestList) {
-
-                    if (Thread.currentThread().isInterrupted()) {
-                        System.out.println("Получил сигнал о завершении потока из команды ErrorCommand из внутреннего цикла перед опросом счётчикА");
-                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                        System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода ErrorCommand");
-                        return;
-                    }
-
-                    strError = stendDLLCommands.meterErrorRead(meter.getId());
-                    strMass = strError.split(",");
-
-                    if (strMass.length != 2) {
-                        continue;
-                    }
-
-                    resultNo = Integer.parseInt(strMass[0]);
-                    error = strMass[1];
-
-                    if (resultNo != 0) {
-                        resultMeter = meter.setResultsInErrorList(index, resultNo, error, channelFlag);
-                        doubleErr = Double.parseDouble(error);
-
-                        if (doubleErr > emax || doubleErr < emin) {
-                            resultMeter.setLastResult("F" + error);
-                            resultMeter.setLastResulString(error);
-                            resultMeter.setPassTest(false);
-                        } else {
-                            resultMeter.setLastResult("P" + error);
-                            resultMeter.setLastResulString(error);
-                            resultMeter.setPassTest(true);
-                        }
+                    if (doubleErr > emax || doubleErr < emin) {
+                        resultMeter.setLastResult("F" + error);
+                        resultMeter.setLastResulString(error);
+                        resultMeter.setPassTest(false);
+                    } else {
+                        resultMeter.setLastResult("P" + error);
+                        resultMeter.setLastResulString(error);
+                        resultMeter.setPassTest(true);
                     }
                 }
-                Thread.sleep(300);
             }
-
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-
-        }catch (InterruptedException e) {
-            System.out.println("Поймал ошибку Interrupted в команде ErrorCommand");
-            System.out.println("Состояние нити до команты interrupt в команде ErrorCommand " + Thread.currentThread().getState());
-            Thread.currentThread().interrupt();
-            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
+            Thread.sleep(300);
         }
+
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     //Опрашивает счётчики до нужно значения проходов

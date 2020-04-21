@@ -11,9 +11,9 @@ import java.util.List;
 public interface Commands{
 
     //Выполнение команды
-    boolean execute() throws ConnectForStendExeption;
+    boolean execute() throws ConnectForStendExeption, InterruptedException;
 
-    void executeForContinuousTest() throws ConnectForStendExeption;
+    void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException;
 
     void setInterrupt(boolean interrupt);
 

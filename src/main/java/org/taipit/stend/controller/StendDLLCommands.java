@@ -82,7 +82,7 @@ public abstract class StendDLLCommands {
     }
 
     //Устанавливает значение импульсного выхода у установки для каждого метса
-    public void setEnergyPulse (List<Meter> meterList, int channelFlag) throws ConnectForStendExeption {
+    public synchronized void setEnergyPulse (List<Meter> meterList, int channelFlag) throws ConnectForStendExeption {
         for (Meter meter : meterList) {
             boolean setEnergy = setPulseChannel(meter.getId(), channelFlag);
 
@@ -159,7 +159,7 @@ public abstract class StendDLLCommands {
     }
 
     //Включить напряжение и ток без регулеровки пофазного напряжения
-    public boolean getUI(int phase,
+    public synchronized boolean getUI(int phase,
                          double ratedVolt,
                          double ratedCurr,
                          double ratedFreq,
@@ -175,7 +175,7 @@ public abstract class StendDLLCommands {
     }
 
     //Включить напряжение и ток с регулировкой пофазного напряжения
-    public boolean getUIWithPhase (int phase,
+    public synchronized boolean getUIWithPhase (int phase,
                                    double ratedVolt,
                                    double ratedCurr,
                                    double ratedFreq,
@@ -192,12 +192,12 @@ public abstract class StendDLLCommands {
     }
 
     // Сброс всех ошибок
-    public boolean errorClear() {
+    public synchronized boolean errorClear() {
         return stend.Error_Clear(port);
     }
 
     // Выключение напряжения и тока (кнопка Стоп)
-    public boolean powerOf() {
+    public synchronized boolean powerOf() {
         return stend.Power_Off(port);
     }
 
@@ -209,14 +209,14 @@ public abstract class StendDLLCommands {
     }
 
     // Получить ошибку навешенного счетчика
-    public String meterErrorRead(int meterNo) {
+    public synchronized String meterErrorRead(int meterNo) {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.Error_Read(pointer, meterNo, port);
         return pointer.getValue().getString(0, "ASCII");
     }
 
     //Сказать константу счётчика стенду для кажого места
-    public boolean setMetersConstantToStend(List<Meter> metersList, int constant, int amountImpulse) throws ConnectForStendExeption {
+    public synchronized boolean setMetersConstantToStend(List<Meter> metersList, int constant, int amountImpulse) throws ConnectForStendExeption {
         for (Meter meter : metersList) {
             if (!errorStart(meter.getId(), constant, amountImpulse)) throw new ConnectForStendExeption();
         }
@@ -224,13 +224,13 @@ public abstract class StendDLLCommands {
     }
 
     // Запустить проверку навешенного счетчика (напряжение и ток должны быть включены)
-    public boolean errorStart(int meterNo, double constant, int pulse) {
+    public synchronized boolean errorStart(int meterNo, double constant, int pulse) {
         return stend.Error_Start(meterNo, constant, pulse, port);
     }
 
 
     // Установка режима импульсов
-    public boolean setPulseChannel(int meterNo, int channelFlag) {
+    public synchronized boolean setPulseChannel(int meterNo, int channelFlag) {
         return stend.Set_Pulse_Channel(meterNo, channelFlag, port);
     }
 
@@ -255,12 +255,12 @@ public abstract class StendDLLCommands {
     }
 
     // Поиск метки
-    public boolean searchMark(int meterNo) {
+    public synchronized boolean searchMark(int meterNo) {
         return stend.Search_mark(meterNo, port);
     }
 
     // результат поиска метки
-    public boolean searchMarkResult(int meterNo) {
+    public synchronized boolean searchMarkResult(int meterNo) {
         return stend.Search_mark_Result(meterNo, port);
     }
 
@@ -297,13 +297,13 @@ public abstract class StendDLLCommands {
     }
 
     // Старт теста ТХЧ
-    public boolean clockErrorStart(int meterNo, double freq, int duration) {
+    public synchronized boolean clockErrorStart(int meterNo, double freq, int duration) {
         return stend.Clock_Error_Start(meterNo, freq, duration, port);
     }
 
     // Прочитать результаты теста ТХЧ. Должна вызываться по прошествии времени, отведенного на тест
     // + запас в пару секунд
-    public String clockErrorRead (double freq, int errType, int meterNo) {
+    public synchronized String clockErrorRead (double freq, int errType, int meterNo) {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.Clock_Error_Read(pointer, freq, errType, meterNo, port);
         return pointer.getValue().getString(0, "ASCII");
