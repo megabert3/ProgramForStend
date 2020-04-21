@@ -265,7 +265,7 @@ public abstract class StendDLLCommands {
     }
 
     // Выключение нагрузки (тока)
-    public boolean powerPause() {
+    public synchronized boolean powerPause() {
         return stend.Power_Pause(port);
     }
 

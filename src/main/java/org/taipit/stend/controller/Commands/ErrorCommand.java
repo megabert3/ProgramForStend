@@ -143,7 +143,7 @@ public class ErrorCommand implements Commands, Serializable {
     //===================================================================================================
     //Команда выполнения для последовательного теста
     @Override
-    public synchronized boolean execute() throws ConnectForStendExeption, InterruptedException {
+    public boolean execute() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             System.out.println("execute_1");
             throw new InterruptedException();
@@ -276,7 +276,7 @@ public class ErrorCommand implements Commands, Serializable {
 
     //Метод для цикличной поверки счётчиков
     @Override
-    public synchronized void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
+    public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
