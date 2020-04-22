@@ -2,7 +2,7 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
-import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
@@ -178,6 +178,9 @@ public class ErrorCommand implements Commands, Serializable {
         if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
 
+        //Разблокирую интерфейc кнопок
+        TestErrorTableFrameController.unblockBtn.setValue(true);
+
         if (Thread.currentThread().isInterrupted()) {
             System.out.println("execute_3");
             throw new InterruptedException();
@@ -305,6 +308,9 @@ public class ErrorCommand implements Commands, Serializable {
 
         if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+        //Разблокирую интерфейc кнопок
+        TestErrorTableFrameController.unblockBtn.setValue(true);
 
         if (Thread.currentThread().isInterrupted()) {
             System.out.println("executeForContinuousTest_3");

@@ -2,6 +2,7 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
+import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
@@ -174,6 +175,9 @@ public class ImbalansUCommand implements Commands, Serializable {
             if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers, voltPerPhaseA, voltPerPhaseB, voltPerPhaseC,
                     currPer, iABC, cosP)) throw new ConnectForStendExeption();
 
+            //Разблокирую интерфейc кнопок
+            TestErrorTableFrameController.unblockBtn.setValue(true);
+
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
@@ -305,6 +309,9 @@ public class ImbalansUCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers, voltPerPhaseA, voltPerPhaseB, voltPerPhaseC,
                     currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+            //Разблокирую интерфейc кнопок
+            TestErrorTableFrameController.unblockBtn.setValue(true);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");

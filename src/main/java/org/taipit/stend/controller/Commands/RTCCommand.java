@@ -72,6 +72,9 @@ public class RTCCommand implements Commands, Serializable {
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
                     100.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
+            //Разблокирую интерфейc кнопок
+            TestErrorTableFrameController.unblockBtn.setValue(true);
+
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
@@ -181,6 +184,9 @@ public class RTCCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
                     0.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
+
+            //Разблокирую интерфейc кнопок
+            TestErrorTableFrameController.unblockBtn.setValue(true);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды RTCCommand");

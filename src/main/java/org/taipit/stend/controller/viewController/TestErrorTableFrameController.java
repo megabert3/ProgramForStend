@@ -7,7 +7,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -36,6 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestErrorTableFrameController {
+
+    //Для разблокировки кнопок
+    public static SimpleBooleanProperty unblockBtn = new SimpleBooleanProperty(false);
 
     StendDLLCommands stendDLLCommands;
 
@@ -95,10 +97,6 @@ public class TestErrorTableFrameController {
     private String controller;
 
     private String witness;
-
-    //private ExecutorService executorService = newSingleThreadExecutor();
-
-    private Thread thread = new Thread();
 
     private Thread automaticTestThread = new Thread();
 
@@ -237,46 +235,35 @@ public class TestErrorTableFrameController {
         //------------------------------------------------------------------------------------------------
         //Логика работы автоматического режима работы
         if (event.getSource() == tglBtnAuto) {
+            unblockBtn.setValue(false);
 
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+
                     if (manualTestThread.isAlive()) {
                         manualTestThread.interrupt();
-                        tglBtnManualMode.setSelected(false);
                     }
 
                     if (UnomThread.isAlive()) {
                         UnomThread.interrupt();
-                        tglBtnUnom.setSelected(false);
                     }
 
+                    tglBtnUnom.setSelected(false);
+                    tglBtnManualMode.setSelected(false);
                     tglBtnAuto.setSelected(true);
-                    tglBtnAuto.setDisable(true);
 
                     automaticTestThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 try {
-                                    if (stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
                                     startAutomaticTest();
 
-                                    Platform.runLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            tglBtnAuto.setDisable(false);
-                                        }
-                                    });
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
-                                    Platform.runLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            tglBtnAuto.setDisable(false);
-                                        }
-                                    });
                                 }
                             } catch (ConnectForStendExeption e) {
                                 e.printStackTrace();
@@ -284,12 +271,13 @@ public class TestErrorTableFrameController {
                                     @Override
                                     public void run() {
                                         ConsoleHelper.infoException("Потеряна связь с установкой");
-                                        tglBtnAuto.setDisable(false);
+                                        tglBtnAuto.setSelected(false);
                                     }
                                 });
                             }
                         }
                     });
+                    automaticTestThread.start();
                 }
             });
         }
@@ -297,46 +285,35 @@ public class TestErrorTableFrameController {
         //------------------------------------------------------------------------------------------------
         //Логика работы ручного режима работы
         if (event.getSource() == tglBtnManualMode) {
+            unblockBtn.setValue(false);
 
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+
                     if (automaticTestThread.isAlive()) {
                         automaticTestThread.interrupt();
-                        tglBtnAuto.setSelected(false);
                     }
 
                     if (UnomThread.isAlive()) {
                         UnomThread.interrupt();
-                        tglBtnUnom.setSelected(false);
                     }
 
+                    tglBtnUnom.setSelected(false);
+                    tglBtnAuto.setSelected(false);
                     tglBtnManualMode.setSelected(true);
-                    tglBtnManualMode.setDisable(true);
 
-                    automaticTestThread = new Thread(new Runnable() {
+                    manualTestThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 try {
-                                    if (stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
                                     startManualTest();
 
-                                    Platform.runLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            tglBtnManualMode.setDisable(false);
-                                        }
-                                    });
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
-                                    Platform.runLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            tglBtnManualMode.setDisable(false);
-                                        }
-                                    });
                                 }
                             } catch (ConnectForStendExeption e) {
                                 e.printStackTrace();
@@ -344,12 +321,13 @@ public class TestErrorTableFrameController {
                                     @Override
                                     public void run() {
                                         ConsoleHelper.infoException("Потеряна связь с установкой");
-                                        tglBtnManualMode.setDisable(false);
+                                        tglBtnManualMode.setSelected(false);
                                     }
                                 });
                             }
                         }
                     });
+                    manualTestThread.start();
                 }
             });
         }
@@ -358,50 +336,38 @@ public class TestErrorTableFrameController {
         //Логика работы подачи напряжения
         if (event.getSource() == tglBtnUnom) {
 
-            if (tglBtnUnom.isSelected()) {
-                tglBtnUnom.setSelected(true);
-                return;
-            }
+            unblockBtn.setValue(false);
 
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+
+
+                    tglBtnManualMode.setDisable(false);
+
                     if (automaticTestThread.isAlive()) {
                         automaticTestThread.interrupt();
-                        tglBtnAuto.setSelected(false);
                     }
 
                     if (manualTestThread.isAlive()) {
                         manualTestThread.interrupt();
-                        tglBtnManualMode.setSelected(false);
                     }
 
+                    tglBtnManualMode.setSelected(false);
+                    tglBtnAuto.setSelected(false);
                     tglBtnUnom.setSelected(true);
-                    tglBtnUnom.setDisable(true);
 
                     UnomThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 try {
-                                    if (stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
                                     startUn();
 
-                                    Platform.runLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            tglBtnUnom.setDisable(false);
-                                        }
-                                    });
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
-                                    Platform.runLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            tglBtnUnom.setDisable(false);
-                                        }
-                                    });
                                 }
                             } catch (ConnectForStendExeption e) {
                                 e.printStackTrace();
@@ -409,12 +375,13 @@ public class TestErrorTableFrameController {
                                     @Override
                                     public void run() {
                                         ConsoleHelper.infoException("Потеряна связь с установкой");
-                                        tglBtnUnom.setDisable(false);
+                                        tglBtnUnom.setSelected(false);
                                     }
                                 });
                             }
                         }
                     });
+                    UnomThread.start();
                 }
             });
         }
@@ -422,29 +389,35 @@ public class TestErrorTableFrameController {
         //------------------------------------------------------------------------------------------------
         //Логика работы остановки теста
         if (event.getSource() == btnStop) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    if (manualTestThread.isAlive()) {
-                        manualTestThread.interrupt();
+
+            if (manualTestThread.isAlive()) {
+                manualTestThread.interrupt();
+            }
+
+            if (automaticTestThread.isAlive()) {
+                automaticTestThread.interrupt();
+            }
+
+            if (UnomThread.isAlive()) {
+                UnomThread.interrupt();
+            }
+
+            tglBtnManualMode.setSelected(false);
+            tglBtnAuto.setSelected(false);
+            tglBtnUnom.setSelected(false);
+
+            try {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            }catch (ConnectForStendExeption e) {
+                e.printStackTrace();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ConsoleHelper.infoException("Потеряна связь с утановкой");
                     }
-
-                    if (automaticTestThread.isAlive()) {
-                        automaticTestThread.interrupt();
-                    }
-
-                    if (UnomThread.isAlive()) {
-                        UnomThread.interrupt();
-                    }
-
-                    tglBtnManualMode.setSelected(false);
-                    tglBtnAuto.setSelected(false);
-                    tglBtnUnom.setSelected(false);
-
-                    stendDLLCommands.errorClear();
-                    stendDLLCommands.powerOf();
-                }
-            });
+                });
+            }
         }
     }
 
@@ -540,6 +513,7 @@ public class TestErrorTableFrameController {
         if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
 
         if (!stendDLLCommands.getUI(phase, Un, 0, Fn, 0, 0, 100.0, 0, "H", "1.0")) throw new ConnectForStendExeption();
+        unblockBtn.setValue(true);
     }
 
     //Старт автоматического теста в зависимости от выбранной панели (направления и типа энергии)
@@ -913,6 +887,32 @@ public class TestErrorTableFrameController {
 
     @FXML
     void initialize() {
+
+        unblockBtn.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            tglBtnUnom.setDisable(false);
+                            tglBtnManualMode.setDisable(false);
+                            tglBtnAuto.setDisable(false);
+                        }
+                    });
+                } else {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            tglBtnUnom.setDisable(true);
+                            tglBtnManualMode.setDisable(true);
+                            tglBtnAuto.setDisable(true);
+                        }
+                    });
+                }
+            }
+        });
+
         tglBtnAPPls.setSelected(true);
 
         checBoxePane.toFront();

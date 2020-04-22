@@ -2,6 +2,7 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
+import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
@@ -92,6 +93,9 @@ public class CreepCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
                     voltPer, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
+
+            //Разблокирую интерфейc кнопок
+            TestErrorTableFrameController.unblockBtn.setValue(true);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды CreepCommand");
@@ -205,6 +209,9 @@ public class CreepCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
                     voltPer, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
+
+            //Разблокирую интерфейc кнопок
+            TestErrorTableFrameController.unblockBtn.setValue(true);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды CreepCommand");

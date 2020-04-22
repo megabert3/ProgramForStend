@@ -106,6 +106,9 @@ public class StartCommand implements Commands, Serializable {
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
                     100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
+            //Разблокирую интерфейc кнопок
+            TestErrorTableFrameController.unblockBtn.setValue(true);
+
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды StartCommand");
                 if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
@@ -222,6 +225,9 @@ public class StartCommand implements Commands, Serializable {
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, revers,
                     100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
+
+            //Разблокирую интерфейc кнопок
+            TestErrorTableFrameController.unblockBtn.setValue(true);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды StartCommand");
