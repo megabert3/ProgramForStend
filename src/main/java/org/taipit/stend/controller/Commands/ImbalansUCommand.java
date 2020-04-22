@@ -176,7 +176,7 @@ public class ImbalansUCommand implements Commands, Serializable {
                     currPer, iABC, cosP)) throw new ConnectForStendExeption();
 
             //Разблокирую интерфейc кнопок
-            TestErrorTableFrameController.unblockBtn.setValue(true);
+            TestErrorTableFrameController.blockBtns.setValue(false);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
@@ -311,7 +311,7 @@ public class ImbalansUCommand implements Commands, Serializable {
                     currPer, iABC, cosP)) throw new ConnectForStendExeption();
 
             //Разблокирую интерфейc кнопок
-            TestErrorTableFrameController.unblockBtn.setValue(true);
+            TestErrorTableFrameController.blockBtns.setValue(false);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");

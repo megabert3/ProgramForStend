@@ -73,7 +73,7 @@ public class RTCCommand implements Commands, Serializable {
                     100.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
             //Разблокирую интерфейc кнопок
-            TestErrorTableFrameController.unblockBtn.setValue(true);
+            TestErrorTableFrameController.blockBtns.setValue(false);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
@@ -186,7 +186,7 @@ public class RTCCommand implements Commands, Serializable {
                     0.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
             //Разблокирую интерфейc кнопок
-            TestErrorTableFrameController.unblockBtn.setValue(true);
+            TestErrorTableFrameController.blockBtns.setValue(false);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
@@ -213,7 +213,7 @@ public class RTCCommand implements Commands, Serializable {
                     throw new ConnectForStendExeption();
             }
 
-            while (!TestErrorTableFrameController.interrupt) {
+            while (!Thread.currentThread().isInterrupted()) {
 
                 Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
 

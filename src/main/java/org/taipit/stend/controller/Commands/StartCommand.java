@@ -107,7 +107,7 @@ public class StartCommand implements Commands, Serializable {
                     100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
             //Разблокирую интерфейc кнопок
-            TestErrorTableFrameController.unblockBtn.setValue(true);
+            TestErrorTableFrameController.blockBtns.setValue(false);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды StartCommand");
@@ -227,7 +227,7 @@ public class StartCommand implements Commands, Serializable {
                     100.0, 100.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
             //Разблокирую интерфейc кнопок
-            TestErrorTableFrameController.unblockBtn.setValue(true);
+            TestErrorTableFrameController.blockBtns.setValue(false);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды StartCommand");

@@ -762,9 +762,6 @@ public class AddEditFrameController {
                 for (int y = 0; y < powerFactor.size(); y++) {
                     //Устанавливаю CheckBox в нужную и соответствующую ячейку
                     checkBox = new CheckBox();
-//                    checkBox.setPrefWidth(20);
-//                    checkBox.setPrefHeight(10);
-                    //checkBox.getStylesheets().add(getClass().getResource("\\styleCSS\\checkBoxForGridPane.css").toExternalForm());
 
                     checkBox.setId(gridPane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
 

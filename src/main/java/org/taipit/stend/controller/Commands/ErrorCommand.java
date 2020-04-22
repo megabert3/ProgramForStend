@@ -179,7 +179,7 @@ public class ErrorCommand implements Commands, Serializable {
                 voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
 
         //Разблокирую интерфейc кнопок
-        TestErrorTableFrameController.unblockBtn.setValue(true);
+        TestErrorTableFrameController.blockBtns.setValue(false);
 
         if (Thread.currentThread().isInterrupted()) {
             System.out.println("execute_3");
@@ -310,7 +310,7 @@ public class ErrorCommand implements Commands, Serializable {
                 voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
 
         //Разблокирую интерфейc кнопок
-        TestErrorTableFrameController.unblockBtn.setValue(true);
+        TestErrorTableFrameController.blockBtns.setValue(false);
 
         if (Thread.currentThread().isInterrupted()) {
             System.out.println("executeForContinuousTest_3");

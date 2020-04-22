@@ -95,7 +95,7 @@ public class CreepCommand implements Commands, Serializable {
                     voltPer, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
             //Разблокирую интерфейc кнопок
-            TestErrorTableFrameController.unblockBtn.setValue(true);
+            TestErrorTableFrameController.blockBtns.setValue(false);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды CreepCommand");
@@ -211,7 +211,7 @@ public class CreepCommand implements Commands, Serializable {
                     voltPer, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
 
             //Разблокирую интерфейc кнопок
-            TestErrorTableFrameController.unblockBtn.setValue(true);
+            TestErrorTableFrameController.blockBtns.setValue(false);
 
             if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Получил сигнал о завершении потока из команды CreepCommand");
