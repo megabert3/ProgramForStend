@@ -128,17 +128,17 @@ public class TestParametersFrameController {
     void buttonActionTestFrame(ActionEvent event) {
         if (event.getSource() == btnStartTest) {
             //Напряжение
-            float Un = 0;
+            float Un;
             //Базовый ток
-            float Ib = 0;
+            float Ib;
             //Максимальный ток
-            float Imax = 0;
+            float Imax;
             //Частота
-            float Fn = 0;
+            float Fn;
             //Класс точности AP
-            float accuracyClassAP = 0;
+            float accuracyClassAP;
             //Класс точности RP
-            float accuracyClassRP = 0;
+            float accuracyClassRP;
 
             txtFldUnom.setStyle("");
             txtFldFrg.setStyle("");
