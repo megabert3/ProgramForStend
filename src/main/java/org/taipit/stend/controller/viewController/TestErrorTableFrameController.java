@@ -188,6 +188,7 @@ public class TestErrorTableFrameController {
                             tglBtnUnom.setDisable(true);
                             tglBtnManualMode.setDisable(true);
                             tglBtnAuto.setDisable(true);
+                            btnStop.setDisable(true);
                         }
                     });
                 } else {
@@ -197,6 +198,7 @@ public class TestErrorTableFrameController {
                             tglBtnUnom.setDisable(false);
                             tglBtnManualMode.setDisable(false);
                             tglBtnAuto.setDisable(false);
+                            btnStop.setDisable(false);
                         }
                     });
                 }
@@ -327,7 +329,7 @@ public class TestErrorTableFrameController {
         //Логика работы ручного режима работы
         if (event.getSource() == tglBtnManualMode) {
 
-            if (automaticTestThread.isAlive()) {
+            if (manualTestThread.isAlive()) {
                 tglBtnManualMode.setSelected(true);
                 return;
             }
@@ -385,6 +387,7 @@ public class TestErrorTableFrameController {
         if (event.getSource() == tglBtnUnom) {
 
             if (startUnTest) {
+                tglBtnUnom.setSelected(true);
                 return;
 
             } else {

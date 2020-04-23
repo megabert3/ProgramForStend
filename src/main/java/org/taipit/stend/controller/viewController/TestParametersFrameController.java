@@ -146,7 +146,6 @@ public class TestParametersFrameController {
             txtFldAccuracyRP.setStyle("");
             txtFldCurrent.setStyle("");
 
-
             try {
                 try {
                     if (chosBxMetodics.getValue() == null) throw new InfoExсeption();
