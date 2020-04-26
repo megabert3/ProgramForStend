@@ -111,7 +111,7 @@ public class ErrorCommand implements Commands, Serializable {
         if (iABC.equals("H")) {
             name = (cosP + "; " + currentPerсent + " " + current.trim());
         } else {
-            name = (iABC + ": " + cosP + "; " + currentPerсent + " " + current);
+            name = (iABC + "; " + cosP + "; " + currentPerсent + " " + current);
         }
 
         currPer = Double.parseDouble(currentPerсent) * 100;

@@ -1126,6 +1126,28 @@ public class AddEditFrameController {
             }
         };
 
+        //Компараторы для точек
+        Comparator<String> comparatorForCommands = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                String[] arrO1 = o1.split(";");
+                String[] arrO2 = o2.split(";");
+
+                if (arrO1.length < arrO2.length) {
+                    return 1;
+                } else if (arrO1.length > arrO2.length){
+                    return -1;
+                } else {
+                    if (arrO1.length == 2 && arrO2.length == 2) {
+
+                    }
+                }
+
+            }
+        };
+
+        loadCurrTabColAPPls.setComparator(comparatorForCommands);
+
         //Перенос строк
         viewPointTableAPPls.setRowFactory(dragAndRow);
         viewPointTableAPMns.setRowFactory(dragAndRow);
@@ -2813,22 +2835,6 @@ public class AddEditFrameController {
 
     public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {
         this.methodicsAddEditDeleteFrameController = methodicsAddEditDeleteFrameController;
-    }
-
-    ObservableList<Commands> getTestListForCollumAPPls() {
-        return testListForCollumAPPls;
-    }
-
-    ObservableList<Commands> getTestListForCollumAPMns() {
-        return testListForCollumAPMns;
-    }
-
-    ObservableList<Commands> getTestListForCollumRPPls() {
-        return testListForCollumRPPls;
-    }
-
-    ObservableList<Commands> getTestListForCollumRPMns() {
-        return testListForCollumRPMns;
     }
 
     public void setMethodic(Methodic methodic) {

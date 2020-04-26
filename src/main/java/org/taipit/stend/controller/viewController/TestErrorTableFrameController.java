@@ -442,39 +442,44 @@ public class TestErrorTableFrameController {
         //Логика работы остановки теста
         if (event.getSource() == btnStop) {
 
-            if (manualTestThread.isAlive()) {
-                manualTestThread.interrupt();
-            }
-
-            if (automaticTestThread.isAlive()) {
-                automaticTestThread.interrupt();
-            }
-
-            if (UnomThread.isAlive()) {
-                UnomThread.interrupt();
-            }
-
-            tglBtnManualMode.setSelected(false);
-            tglBtnAuto.setSelected(false);
-            tglBtnUnom.setSelected(false);
-            startUnTest = false;
-
-            try {
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-            }catch (ConnectForStendExeption e) {
-                e.printStackTrace();
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        ConsoleHelper.infoException("Потеряна связь с утановкой");
-                        tglBtnManualMode.setSelected(false);
-                        tglBtnAuto.setSelected(false);
-                        tglBtnUnom.setSelected(false);
-                        startUnTest = false;
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    if (manualTestThread.isAlive()) {
+                        manualTestThread.interrupt();
                     }
-                });
-            }
+
+                    if (automaticTestThread.isAlive()) {
+                        automaticTestThread.interrupt();
+                    }
+
+                    if (UnomThread.isAlive()) {
+                        UnomThread.interrupt();
+                    }
+
+                    tglBtnManualMode.setSelected(false);
+                    tglBtnAuto.setSelected(false);
+                    tglBtnUnom.setSelected(false);
+                    startUnTest = false;
+
+                    try {
+                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                    }catch (ConnectForStendExeption e) {
+                        e.printStackTrace();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                ConsoleHelper.infoException("Потеряна связь с утановкой");
+                                tglBtnManualMode.setSelected(false);
+                                tglBtnAuto.setSelected(false);
+                                tglBtnUnom.setSelected(false);
+                                startUnTest = false;
+                            }
+                        });
+                    }
+                }
+            });
         }
     }
 
@@ -778,6 +783,7 @@ public class TestErrorTableFrameController {
     private void initErrorPaneForAPPls() {
         setTabColTestPoints(commandsAPPls);
         setErrorTablesAPPls();
+        setlectFirsCommand();
         checkBoxDisableAll.setSelected(true);
     }
 
@@ -785,6 +791,7 @@ public class TestErrorTableFrameController {
     private void initErrorPaneForAPMns() {
         setTabColTestPoints(commandsAPMns);
         setErrorTablesAPMns();
+        setlectFirsCommand();
         checkBoxDisableAll.setSelected(true);
     }
 
@@ -792,6 +799,7 @@ public class TestErrorTableFrameController {
     private void initErrorPaneForRPPls() {
         setTabColTestPoints(commandsRPPls);
         setErrorTablesRPPls();
+        setlectFirsCommand();
         checkBoxDisableAll.setSelected(true);
     }
 
@@ -799,6 +807,7 @@ public class TestErrorTableFrameController {
     private void initErrorPaneForRPMns() {
         setTabColTestPoints(commandsRPMns);
         setErrorTablesRPMns();
+        setlectFirsCommand();
         checkBoxDisableAll.setSelected(true);
     }
 
@@ -830,6 +839,16 @@ public class TestErrorTableFrameController {
     private void setErrorTablesRPMns() {
         for (int i = 0; i < tabViewErrorsList.size(); i++) {
             tabViewErrorsList.get(i).setItems(FXCollections.observableArrayList(listMetersForTest.get(i).getErrorListRPMns()));
+        }
+    }
+
+    private void setlectFirsCommand() {
+        if (tabViewTestPoints.getItems().size() != 0) {
+            tabViewTestPoints.getSelectionModel().select(0);
+
+            for (TableView<Meter.CommandResult> tableViewError : tabViewErrorsList) {
+                tableViewError.getSelectionModel().select(0);
+            }
         }
     }
 
@@ -865,6 +884,7 @@ public class TestErrorTableFrameController {
 
         //Установка чек боксов для отключения или включения точки
         tabViewTestPoints.setEditable(true);
+        tabViewTestPoints.setPlaceholder(new Label("Нет точек"));
         tabColTestPointsDis.setCellValueFactory(tabColCellData);
         tabColTestPointsDis.setCellFactory(tabColCell);
         tabColTestPointsDis.setSortable(false);
@@ -889,11 +909,10 @@ public class TestErrorTableFrameController {
 
             for (int i = 0; i < listMetersForTest.size(); i++) {
                 //Создаю колонки
-                addTableViewAndCollumnInErrorPane(i, paneErrors.getPrefWidth() / listMetersForTest.size(), paneErrors.getPrefHeight(),
-                        i * (paneErrors.getPrefWidth() / listMetersForTest.size()), 0);
-
+                addTableViewAndCollumnInErrorPane(i);
             }
 
+            //Устанавливаю размер колонок под окно погрешности
             paneErrors.widthProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -919,21 +938,17 @@ public class TestErrorTableFrameController {
         } else if (listMetersForTest.size() <= 24) {
 
             if (listMetersForTest.size() % 2 == 0) {
-                double widthColumn = paneErrors.getPrefWidth() / (listMetersForTest.size() / 2);
-                double heightColumn = paneErrors.getPrefHeight() / 2;
 
                 for (int j = 0; j < 2; j++) {
                     if (j == 0) {
 
                         for (int i = 0; i < listMetersForTest.size() / 2; i++) {
-                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
-                                    i * widthColumn, 0);
+                            addTableViewAndCollumnInErrorPane(i);
                         }
                     } else {
 
                         for (int i = 0; i < listMetersForTest.size() / 2; i++) {
-                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2, widthColumn, heightColumn,
-                                    i * widthColumn, paneErrors.getPrefHeight() / 2);
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2);
                         }
                     }
                 }
@@ -956,7 +971,6 @@ public class TestErrorTableFrameController {
 
                             tabViewErrorsList.get(i).setLayoutX(widthColumn * (i - (tabViewErrorsList.size() / 2)));
                         }
-
                     }
                 });
 
@@ -979,20 +993,15 @@ public class TestErrorTableFrameController {
 
             } else {
 
-                double widthColumn = paneErrors.getPrefWidth() / (listMetersForTest.size() / 2 + 1);
-                double heightColumn = paneErrors.getPrefHeight() / 2;
-
                 for (int j = 0; j < 2; j++) {
                     if (j == 0) {
                         for (int i = 0; i < (listMetersForTest.size() / 2) + 1; i++) {
-                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
-                                    i * widthColumn, 0);
+                            addTableViewAndCollumnInErrorPane(i);
                         }
 
                     } else {
                         for (int i = 0; i < listMetersForTest.size() / 2; i++) {
-                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1, widthColumn, heightColumn,
-                                    i * widthColumn, paneErrors.getPrefHeight() / 2);
+                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1);
 
                         }
                     }
@@ -1003,9 +1012,9 @@ public class TestErrorTableFrameController {
                     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                         int meters = listMetersForTest.size();
 
-                        double widthColumn = ((Double) newValue) / (meters / 2) + 1;
+                        double widthColumn = ((Double) newValue) / (meters / 2 + 1);
 
-                        for (int i = 0; i < (meters / 2) + 1; i++) {
+                        for (int i = 0; i < meters / 2 + 1; i++) {
                             tabViewErrorsList.get(i).setPrefWidth(widthColumn);
                             tabViewErrorsList.get(i).getColumns().get(0).setPrefWidth(widthColumn);
 
@@ -1039,104 +1048,47 @@ public class TestErrorTableFrameController {
                     }
                 });
             }
-
-
-//                double widthColumn;
-//                double heightColumn = paneErrors.getPrefHeight() / 2;
-//
-//                for (int j = 0; j < 2; j++) {
-//                    if (j == 0) {
-//                        widthColumn = paneErrors.getPrefWidth() / (listMetersForTest.size() / 2 + 1);
-//
-//                        for (int i = 0; i < (listMetersForTest.size() / 2) + 1; i++) {
-//                            addTableViewAndCollumnInErrorPane(i, widthColumn, heightColumn,
-//                                    i * widthColumn, 0);
-//
-//                        }
-//                    } else {
-//                        widthColumn = paneErrors.getPrefWidth() / (listMetersForTest.size() / 2);
-//
-//                        for (int i = 0; i < listMetersForTest.size() / 2; i++) {
-//                            addTableViewAndCollumnInErrorPane(i + listMetersForTest.size() / 2 + 1, widthColumn, heightColumn,
-//                                    i * widthColumn, paneErrors.getPrefHeight() / 2);
-//
-//                        }
-//                    }
-//                }
-//
-//                paneErrors.widthProperty().addListener(new ChangeListener<Number>() {
-//                    @Override
-//                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//                        int meters = listMetersForTest.size();
-//
-//                        double widthColumn = ((Double) newValue) / (meters / 2) + 1;
-//
-//                        for (int i = 0; i < (meters / 2) + 1; i++) {
-//                            tabViewErrorsList.get(i).setPrefWidth(widthColumn);
-//                            tabViewErrorsList.get(i).getColumns().get(0).setPrefWidth(widthColumn);
-//
-//                            tabViewErrorsList.get(i).setLayoutX(widthColumn * i);
-//                        }
-//
-//                        widthColumn = ((Double) newValue) / (meters / 2);
-//
-//                        for (int i = (meters / 2) + 1; i < tabViewErrorsList.size(); i++) {
-//                            tabViewErrorsList.get(i).setPrefWidth(widthColumn);
-//                            tabViewErrorsList.get(i).getColumns().get(0).setPrefWidth(widthColumn);
-//
-//                            tabViewErrorsList.get(i).setLayoutX(widthColumn * (i - ((meters / 2) + 1)));
-//                        }
-//
-//                    }
-//                });
-//
-//                paneErrors.heightProperty().addListener(new ChangeListener<Number>() {
-//                    @Override
-//                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//                        double height = ((Double) newValue) / 2;
-//
-//                        for (int i = 0; i < tabViewErrorsList.size(); i++) {
-//                            tabViewErrorsList.get(i).setPrefHeight(height);
-//                        }
-//
-//                        for (int i = tabViewErrorsList.size() / 2  + 1; i < tabViewErrorsList.size(); i++) {
-//                            tabViewErrorsList.get(i).setLayoutY(height);
-//                        }
-//                    }
-//                });
-//            }
-        }
-
-        tglBtnAPPls.fire();
-
-        //--------------------------------------------------------------------
-        //Устанавливаю фокусировку на окне ошибок такую же как и в окне точек
-        //AP+
-        //Значение при инициализации
-        tabViewTestPoints.getSelectionModel().select(0);
-
-        for (TableView<Meter.CommandResult> tableViewError : tabViewErrorsList) {
-            tableViewError.getSelectionModel().select(0);
         }
 
         //Если выбираю точку испытания, то должна выставляться фокусировка и на панели с погрешностью
-        ObservableList<TablePosition> tablePositionsAPPls = tabViewTestPoints.getSelectionModel().getSelectedCells();
+        if (listMetersForTest.size() <= 12) {
+            ObservableList<TablePosition> tablePositions = tabViewTestPoints.getSelectionModel().getSelectedCells();
 
-        tablePositionsAPPls.addListener(new ListChangeListener<TablePosition>() {
-            @Override
-            public void onChanged(Change<? extends TablePosition> c) {
-                int i = tabViewTestPoints.getSelectionModel().getFocusedIndex();
+            tablePositions.addListener(new ListChangeListener<TablePosition>() {
+                @Override
+                public void onChanged(Change<? extends TablePosition> c) {
+                    int i = tabViewTestPoints.getSelectionModel().getFocusedIndex();
 
-                for (TableView<Meter.CommandResult> tableViewError : tabViewErrorsList) {
+                    for (TableView<Meter.CommandResult> tableViewError : tabViewErrorsList) {
 
-                    if (!tableViewError.getSelectionModel().isSelected(i)) {
-                        tableViewError.getFocusModel().focus(i);
-                        tableViewError.getSelectionModel().select(i);
-                        tableViewError.scrollTo(i - 5);
+                        if (!tableViewError.getSelectionModel().isSelected(i)) {
+                            tableViewError.getFocusModel().focus(i);
+                            tableViewError.getSelectionModel().select(i);
+                        }
                     }
                 }
-            }
-        });
+            });
+
+        } else {
+
+            ObservableList<TablePosition> tablePositions = tabViewTestPoints.getSelectionModel().getSelectedCells();
+
+            tablePositions.addListener(new ListChangeListener<TablePosition>() {
+                @Override
+                public void onChanged(Change<? extends TablePosition> c) {
+                    int i = tabViewTestPoints.getSelectionModel().getFocusedIndex();
+
+                    for (TableView<Meter.CommandResult> tableViewError : tabViewErrorsList) {
+
+                        if (!tableViewError.getSelectionModel().isSelected(i)) {
+                            tableViewError.getFocusModel().focus(i);
+                            tableViewError.getSelectionModel().select(i);
+                            tableViewError.scrollTo(i - 5);
+                        }
+                    }
+                }
+            });
+        }
 
         //Устанавливаю общий селект для таблиц с погрешностью
         for (int i = 0; i < tabViewErrorsList.size(); i++) {
@@ -1157,6 +1109,18 @@ public class TestErrorTableFrameController {
                     }
                 }
             });
+        }
+
+        if (commandsAPPls.size() != 0) {
+            tglBtnAPPls.fire();
+        } else if (commandsAPMns.size() != 0) {
+            tglBtnAPMns.fire();
+        } else if (commandsRPPls.size() != 0) {
+            tglBtnRPPls.fire();
+        } else if (commandsRPMns.size() != 0) {
+            tglBtnRPMns.fire();
+        } else {
+            tglBtnAPPls.fire();
         }
     }
 
@@ -1190,7 +1154,7 @@ public class TestErrorTableFrameController {
         }
     }
 
-    private void addTableViewAndCollumnInErrorPane(int index, double prefWidth, double prefHeight, double layoutX, double layoutY) {
+    private void addTableViewAndCollumnInErrorPane(int index) {
 
         //Настройка для отдельного поля счётчика изменения цвета погрешности после окончания теста
         Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>> cellFactoryEndTest =
@@ -1231,12 +1195,9 @@ public class TestErrorTableFrameController {
         column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
         column.setSortable(false);
         column.setCellFactory(cellFactoryEndTest);
-        tableView.setPrefSize(prefWidth, prefHeight);
-        column.setPrefWidth(tableView.getPrefWidth());
-        tableView.setLayoutX(layoutX);
-        tableView.setLayoutY(layoutY);
         tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
         tableView.getColumns().add(column);
+        tableView.setPlaceholder(new Label("Нет точек"));
         paneErrors.getChildren().add(tableView);
         tabViewErrorsList.add(tableView);
     }

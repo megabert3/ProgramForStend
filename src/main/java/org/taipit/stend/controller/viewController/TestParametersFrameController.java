@@ -271,18 +271,6 @@ public class TestParametersFrameController {
 
                 if (metersList.isEmpty()) throw new InfoExсeption();
 
-                Methodic methodic = MethodicsForTest.getMethodicsForTestInstance().getMethodic(chosBxMetodics.getValue());
-
-                if (methodic == null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            ConsoleHelper.infoException("Методики с указанным именем\nне существует");
-                        }
-                    });
-                    return;
-                }
-
                 //Передаю установленные параметры всем счётчикам
                 for (Meter meter : metersList) {
                     meter.setIb(Ib);
@@ -452,7 +440,6 @@ public class TestParametersFrameController {
         chosBxPowerType.setValue(properties.getProperty("lastTypeCircuit"));
         chosBxtypeOfMeasuringElement.setValue(properties.getProperty("lastTypeOfMeasuringElement"));
         chosBxTypeMeter.setValue(properties.getProperty("lastMeterTypeOnePhaseMultiTarif"));
-        chosBxMetodics.setValue(properties.getProperty("lastMethodicName"));
 
         //Устанавливаем слушателей
         chosBxUnom.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
@@ -546,6 +533,12 @@ public class TestParametersFrameController {
             }
         });
 
+        Methodic methodic1 = MethodicsForTest.getMethodicsForTestInstance().getMethodic(properties.getProperty("lastMethodicName"));
+
+        if (methodic1 != null) {
+            chosBxMetodics.setValue(methodic1.getMethodicName());
+        }
+
         initTableView();
     }
 
@@ -561,8 +554,6 @@ public class TestParametersFrameController {
         }
 
         meterObservableList = FXCollections.observableArrayList(metersList);
-
-        tabVParamMeters.setEditable(true);
 
         //Установка чек боксов и добавление к ним слушателя
         tabColMeterDis.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, Boolean>, ObservableValue<Boolean>>() {

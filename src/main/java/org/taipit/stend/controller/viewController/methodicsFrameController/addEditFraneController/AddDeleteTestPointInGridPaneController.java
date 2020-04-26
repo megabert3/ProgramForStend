@@ -11,15 +11,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import oracle.jrockit.jfr.jdkevents.ThrowableTracer;
-import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
 
 
 public class AddDeleteTestPointInGridPaneController {
