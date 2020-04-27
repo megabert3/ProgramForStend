@@ -1130,19 +1130,79 @@ public class AddEditFrameController {
         Comparator<String> comparatorForCommands = new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
+
+                //Общая точка
                 String[] arrO1 = o1.split(";");
                 String[] arrO2 = o2.split(";");
 
-                if (arrO1.length < arrO2.length) {
-                    return 1;
-                } else if (arrO1.length > arrO2.length){
-                    return -1;
-                } else {
-                    if (arrO1.length == 2 && arrO2.length == 2) {
+                //Токи
+                String[] curArr1;
+                String[] curArr2;
 
+                //Фаза
+                char phaseO1;
+                char phaseO2;
+
+                //Значение тока
+                float current1;
+                float current2;
+
+                //Тип мощности
+                String powerFactorType1;
+                String powerFactorType2;
+
+                //Значение угла
+                float powerFactor1;
+                float powerFactor2;
+
+                //Тесты самоход чувств и т.д. вниз
+                if (arrO1.length < 2 && arrO2.length > 2) {
+                    return -1;
+                } else if (arrO1.length > 2 && arrO2.length < 2) {
+                    return 1;
+                } else if (arrO1.length > 1 && arrO2.length > 1) {
+                    if (arrO1.length == 2 && arrO2.length == 3) {
+                        return 1;
+                    } else if (arrO1.length == 3 && arrO2.length == 2) {
+                        return -1;
+                    } else if (arrO1.length == 2 && arrO2.length == 2) {
+                        curArr1 = arrO1[1].trim().split(" ");
+                        curArr2 = arrO2[1].trim().split(" ");
+
+                        if (curArr1[1].equals("Imax") && curArr2[1].equals("Ib")) {
+                            return 1;
+                        } else if (curArr1[1].equals("Ib") && curArr2[1].equals("Imax")) {
+                            return -1;
+                        } else if (curArr1[1].equals("Imax") && curArr2[1].equals("Imax")) {
+                            current1 = Float.parseFloat(curArr1[0]);
+                            current2 = Float.parseFloat(curArr2[0]);
+
+                            if (current1 > current2) {
+                                return 1;
+                            } else if (current1 < current2) {
+                                return -1;
+                            } else if (current1 == current2) {
+                                powerFactorType1 = arrO1[0];
+                                powerFactorType2 = arrO2[0];
+
+                                if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && (powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                    return 1;
+                                } else if ((powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                    return -1;
+                                } else if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                    powerFactor1 = Float.parseFloat(powerFactorType1);
+                                    powerFactor2 = Float.parseFloat(powerFactorType2);
+
+                                    if (powerFactor1 > powerFactor2) {
+                                        return 1;
+                                    } else {
+                                        return -1;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-
             }
         };
 
