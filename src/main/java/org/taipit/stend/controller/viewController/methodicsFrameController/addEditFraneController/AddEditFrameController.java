@@ -1198,11 +1198,462 @@ public class AddEditFrameController {
                                     } else {
                                         return -1;
                                     }
+                                } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                    return 1;
+                                } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
+                                    return -1;
+                                } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
+                                    String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                    String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                    powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                    powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                    if (powerFactor1 > powerFactor2) {
+                                        return 1;
+                                    } else {
+                                        return -1;
+                                    }
+                                } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+                                    String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                    String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                    powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                    powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                    if (powerFactor1 > powerFactor2) {
+                                        return 1;
+                                    } else {
+                                        return -1;
+                                    }
+                                }
+                            }
+                        } else if (curArr1[1].equals("Ib") && curArr2[1].equals("Ib")) {
+                            current1 = Float.parseFloat(curArr1[0]);
+                            current2 = Float.parseFloat(curArr2[0]);
+
+                            if (current1 > current2) {
+                                return 1;
+                            } else if (current1 < current2) {
+                                return -1;
+                            } else if (current1 == current2) {
+                                powerFactorType1 = arrO1[0];
+                                powerFactorType2 = arrO2[0];
+
+                                if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && (powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                    return 1;
+                                } else if ((powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                    return -1;
+                                } else if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                    powerFactor1 = Float.parseFloat(powerFactorType1);
+                                    powerFactor2 = Float.parseFloat(powerFactorType2);
+
+                                    if (powerFactor1 > powerFactor2) {
+                                        return 1;
+                                    } else {
+                                        return -1;
+                                    }
+                                } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                    return 1;
+                                } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
+                                    return -1;
+                                } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
+                                    String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                    String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                    powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                    powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                    if (powerFactor1 > powerFactor2) {
+                                        return 1;
+                                    } else {
+                                        return -1;
+                                    }
+                                } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+                                    String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                    String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                    powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                    powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                    if (powerFactor1 > powerFactor2) {
+                                        return 1;
+                                    } else {
+                                        return -1;
+                                    }
                                 }
                             }
                         }
+                    } else if (arrO1.length == 3 && arrO2.length == 3) {
+                        if (arrO1[0].equals("A") && (arrO2[0].equals("B") || arrO2[0].equals("C"))) {
+                            return 1;
+                        } else if (arrO1[0].equals("A") && arrO2[0].equals("A")) {
+                            curArr1 = arrO1[2].trim().split(" ");
+                            curArr2 = arrO2[2].trim().split(" ");
+
+                            if (curArr1[1].equals("Imax") && curArr2[1].equals("Ib")) {
+                                return 1;
+                            } else if (curArr1[1].equals("Ib") && curArr2[1].equals("Imax")) {
+                                return -1;
+                            } else if (curArr1[1].equals("Imax") && curArr2[1].equals("Imax")) {
+                                current1 = Float.parseFloat(curArr1[0]);
+                                current2 = Float.parseFloat(curArr2[0]);
+
+                                if (current1 > current2) {
+                                    return 1;
+                                } else if (current1 < current2) {
+                                    return -1;
+                                } else if (current1 == current2) {
+                                    powerFactorType1 = arrO1[1].trim();
+                                    powerFactorType2 = arrO2[1].trim();
+
+                                    if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && (powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return 1;
+                                    } else if ((powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return -1;
+                                    } else if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        powerFactor1 = Float.parseFloat(powerFactorType1);
+                                        powerFactor2 = Float.parseFloat(powerFactorType2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                        return 1;
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
+                                        return -1;
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    }
+                                }
+                            } else if (curArr1[1].equals("Ib") && curArr2[1].equals("Ib")) {
+                                current1 = Float.parseFloat(curArr1[0]);
+                                current2 = Float.parseFloat(curArr2[0]);
+
+                                if (current1 > current2) {
+                                    return 1;
+                                } else if (current1 < current2) {
+                                    return -1;
+                                } else if (current1 == current2) {
+                                    powerFactorType1 = arrO1[1];
+                                    powerFactorType2 = arrO2[1];
+
+                                    if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && (powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return 1;
+                                    } else if ((powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return -1;
+                                    } else if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        powerFactor1 = Float.parseFloat(powerFactorType1);
+                                        powerFactor2 = Float.parseFloat(powerFactorType2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                        return 1;
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
+                                        return -1;
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (arrO1[0].equals("B") && arrO2[0].equals("C")) {
+                            return 1;
+                        }else if (arrO1[0].equals("B") && arrO2[0].equals("B")) {
+                            curArr1 = arrO1[2].trim().split(" ");
+                            curArr2 = arrO2[2].trim().split(" ");
+
+                            if (curArr1[1].equals("Imax") && curArr2[1].equals("Ib")) {
+                                return 1;
+                            } else if (curArr1[1].equals("Ib") && curArr2[1].equals("Imax")) {
+                                return -1;
+                            } else if (curArr1[1].equals("Imax") && curArr2[1].equals("Imax")) {
+                                current1 = Float.parseFloat(curArr1[0]);
+                                current2 = Float.parseFloat(curArr2[0]);
+
+                                if (current1 > current2) {
+                                    return 1;
+                                } else if (current1 < current2) {
+                                    return -1;
+                                } else if (current1 == current2) {
+                                    powerFactorType1 = arrO1[1].trim();
+                                    powerFactorType2 = arrO2[1].trim();
+
+                                    if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && (powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return 1;
+                                    } else if ((powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return -1;
+                                    } else if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        powerFactor1 = Float.parseFloat(powerFactorType1);
+                                        powerFactor2 = Float.parseFloat(powerFactorType2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                        return 1;
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
+                                        return -1;
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    }
+                                }
+                            } else if (curArr1[1].equals("Ib") && curArr2[1].equals("Ib")) {
+                                current1 = Float.parseFloat(curArr1[0]);
+                                current2 = Float.parseFloat(curArr2[0]);
+
+                                if (current1 > current2) {
+                                    return 1;
+                                } else if (current1 < current2) {
+                                    return -1;
+                                } else if (current1 == current2) {
+                                    powerFactorType1 = arrO1[1];
+                                    powerFactorType2 = arrO2[1];
+
+                                    if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && (powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return 1;
+                                    } else if ((powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return -1;
+                                    } else if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        powerFactor1 = Float.parseFloat(powerFactorType1);
+                                        powerFactor2 = Float.parseFloat(powerFactorType2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                        return 1;
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
+                                        return -1;
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (arrO1[0].equals("C") && arrO2[0].equals("C")) {
+                            curArr1 = arrO1[2].trim().split(" ");
+                            curArr2 = arrO2[2].trim().split(" ");
+
+                            if (curArr1[1].equals("Imax") && curArr2[1].equals("Ib")) {
+                                return 1;
+                            } else if (curArr1[1].equals("Ib") && curArr2[1].equals("Imax")) {
+                                return -1;
+                            } else if (curArr1[1].equals("Imax") && curArr2[1].equals("Imax")) {
+                                current1 = Float.parseFloat(curArr1[0]);
+                                current2 = Float.parseFloat(curArr2[0]);
+
+                                if (current1 > current2) {
+                                    return 1;
+                                } else if (current1 < current2) {
+                                    return -1;
+                                } else if (current1 == current2) {
+                                    powerFactorType1 = arrO1[1].trim();
+                                    powerFactorType2 = arrO2[1].trim();
+
+                                    if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && (powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return 1;
+                                    } else if ((powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return -1;
+                                    } else if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        powerFactor1 = Float.parseFloat(powerFactorType1);
+                                        powerFactor2 = Float.parseFloat(powerFactorType2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                        return 1;
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
+                                        return -1;
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    }
+                                }
+                            } else if (curArr1[1].equals("Ib") && curArr2[1].equals("Ib")) {
+                                current1 = Float.parseFloat(curArr1[0]);
+                                current2 = Float.parseFloat(curArr2[0]);
+
+                                if (current1 > current2) {
+                                    return 1;
+                                } else if (current1 < current2) {
+                                    return -1;
+                                } else if (current1 == current2) {
+                                    powerFactorType1 = arrO1[0];
+                                    powerFactorType2 = arrO2[0];
+
+                                    if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && (powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return 1;
+                                    } else if ((powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        return -1;
+                                    } else if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && !(powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
+                                        powerFactor1 = Float.parseFloat(powerFactorType1);
+                                        powerFactor2 = Float.parseFloat(powerFactorType2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                        return 1;
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
+                                        return -1;
+                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+                                        String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
+                                        String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
+
+                                        powerFactor1 = Float.parseFloat(powerFactorStr1);
+                                        powerFactor2 = Float.parseFloat(powerFactorStr2);
+
+                                        if (powerFactor1 > powerFactor2) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
+                                    }
+                                }
+                            }
+                        } else if ((arrO1[0].equals("B") || (arrO1[0].equals("C")) && arrO2[0].equals("A"))){
+                            return -1;
+                        } else if (arrO1[0].equals("C") && arrO2[0].equals("B")) {
+                            return -1;
+                        }
                     }
                 }
+                return -1;
             }
         };
 
