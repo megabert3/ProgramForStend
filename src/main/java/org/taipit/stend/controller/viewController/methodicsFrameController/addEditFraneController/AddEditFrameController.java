@@ -1139,10 +1139,6 @@ public class AddEditFrameController {
                 String[] curArr1;
                 String[] curArr2;
 
-                //Фаза
-                char phaseO1;
-                char phaseO2;
-
                 //Значение тока
                 float current1;
                 float current2;
@@ -1199,10 +1195,6 @@ public class AddEditFrameController {
                                         return -1;
                                     }
                                 } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
-                                    return 1;
-                                } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
-                                    return -1;
-                                } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
                                     String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                     String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1211,10 +1203,17 @@ public class AddEditFrameController {
 
                                     if (powerFactor1 > powerFactor2) {
                                         return 1;
-                                    } else {
+                                    } else if (powerFactor1 < powerFactor2) {
                                         return -1;
+                                    } else if (powerFactor1 == powerFactor2) {
+                                        if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
                                     }
-                                } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+
+                                } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
                                     String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                     String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1223,8 +1222,14 @@ public class AddEditFrameController {
 
                                     if (powerFactor1 > powerFactor2) {
                                         return 1;
-                                    } else {
+                                    } else if (powerFactor1 < powerFactor2) {
                                         return -1;
+                                    } else if (powerFactor1 == powerFactor2) {
+                                        if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
                                     }
                                 }
                             }
@@ -1254,10 +1259,6 @@ public class AddEditFrameController {
                                         return -1;
                                     }
                                 } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
-                                    return 1;
-                                } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
-                                    return -1;
-                                } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
                                     String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                     String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1266,10 +1267,17 @@ public class AddEditFrameController {
 
                                     if (powerFactor1 > powerFactor2) {
                                         return 1;
-                                    } else {
+                                    } else if (powerFactor1 < powerFactor2) {
                                         return -1;
+                                    } else if (powerFactor1 == powerFactor2) {
+                                        if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
                                     }
-                                } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+
+                                } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
                                     String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                     String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1278,12 +1286,19 @@ public class AddEditFrameController {
 
                                     if (powerFactor1 > powerFactor2) {
                                         return 1;
-                                    } else {
+                                    } else if (powerFactor1 < powerFactor2) {
                                         return -1;
+                                    } else if (powerFactor1 == powerFactor2) {
+                                        if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                            return 1;
+                                        } else {
+                                            return -1;
+                                        }
                                     }
                                 }
                             }
                         }
+
                     } else if (arrO1.length == 3 && arrO2.length == 3) {
                         if (arrO1[0].equals("A") && (arrO2[0].equals("B") || arrO2[0].equals("C"))) {
                             return 1;
@@ -1321,10 +1336,6 @@ public class AddEditFrameController {
                                             return -1;
                                         }
                                     } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
-                                        return 1;
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
-                                        return -1;
-                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1333,10 +1344,17 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1345,8 +1363,14 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
                                     }
                                 }
@@ -1359,8 +1383,8 @@ public class AddEditFrameController {
                                 } else if (current1 < current2) {
                                     return -1;
                                 } else if (current1 == current2) {
-                                    powerFactorType1 = arrO1[1];
-                                    powerFactorType2 = arrO2[1];
+                                    powerFactorType1 = arrO1[1].trim();
+                                    powerFactorType2 = arrO2[1].trim();
 
                                     if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && (powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
                                         return 1;
@@ -1376,10 +1400,6 @@ public class AddEditFrameController {
                                             return -1;
                                         }
                                     } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
-                                        return 1;
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
-                                        return -1;
-                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1388,10 +1408,17 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1400,15 +1427,24 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
                                     }
                                 }
                             }
+
                         } else if (arrO1[0].equals("B") && arrO2[0].equals("C")) {
                             return 1;
-                        }else if (arrO1[0].equals("B") && arrO2[0].equals("B")) {
+                        } else if (arrO1[0].equals("C") && arrO2[0].equals("B")) {
+                            return -1;
+                        } else if (arrO1[0].equals("B") && arrO2[0].equals("B")) {
                             curArr1 = arrO1[2].trim().split(" ");
                             curArr2 = arrO2[2].trim().split(" ");
 
@@ -1442,10 +1478,6 @@ public class AddEditFrameController {
                                             return -1;
                                         }
                                     } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
-                                        return 1;
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
-                                        return -1;
-                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1454,10 +1486,17 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1466,8 +1505,14 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
                                     }
                                 }
@@ -1480,8 +1525,8 @@ public class AddEditFrameController {
                                 } else if (current1 < current2) {
                                     return -1;
                                 } else if (current1 == current2) {
-                                    powerFactorType1 = arrO1[1];
-                                    powerFactorType2 = arrO2[1];
+                                    powerFactorType1 = arrO1[1].trim();
+                                    powerFactorType2 = arrO2[1].trim();
 
                                     if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && (powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
                                         return 1;
@@ -1497,10 +1542,6 @@ public class AddEditFrameController {
                                             return -1;
                                         }
                                     } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
-                                        return 1;
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
-                                        return -1;
-                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1509,10 +1550,17 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1521,8 +1569,14 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
                                     }
                                 }
@@ -1561,10 +1615,6 @@ public class AddEditFrameController {
                                             return -1;
                                         }
                                     } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
-                                        return 1;
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
-                                        return -1;
-                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1573,10 +1623,17 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1585,8 +1642,14 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
                                     }
                                 }
@@ -1599,8 +1662,8 @@ public class AddEditFrameController {
                                 } else if (current1 < current2) {
                                     return -1;
                                 } else if (current1 == current2) {
-                                    powerFactorType1 = arrO1[0];
-                                    powerFactorType2 = arrO2[0];
+                                    powerFactorType1 = arrO1[1].trim();
+                                    powerFactorType2 = arrO2[1].trim();
 
                                     if (!(powerFactorType1.contains("C") || powerFactorType1.contains("L")) && (powerFactorType2.contains("C") || powerFactorType2.contains("L"))) {
                                         return 1;
@@ -1616,10 +1679,6 @@ public class AddEditFrameController {
                                             return -1;
                                         }
                                     } else if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
-                                        return 1;
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
-                                        return -1;
-                                    } else if (powerFactorType1.contains("L") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1628,10 +1687,17 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
-                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("C")) {
+
+                                    } else if (powerFactorType1.contains("C") && powerFactorType2.contains("L")) {
                                         String powerFactorStr1 = powerFactorType1.substring(0, powerFactorType1.length() - 1);
                                         String powerFactorStr2 = powerFactorType2.substring(0, powerFactorType2.length() - 1);
 
@@ -1640,15 +1706,19 @@ public class AddEditFrameController {
 
                                         if (powerFactor1 > powerFactor2) {
                                             return 1;
-                                        } else {
+                                        } else if (powerFactor1 < powerFactor2) {
                                             return -1;
+                                        } else if (powerFactor1 == powerFactor2) {
+                                            if (powerFactorType1.contains("L") && powerFactorType2.contains("C")) {
+                                                return 1;
+                                            } else {
+                                                return -1;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        } else if ((arrO1[0].equals("B") || (arrO1[0].equals("C")) && arrO2[0].equals("A"))){
-                            return -1;
-                        } else if (arrO1[0].equals("C") && arrO2[0].equals("B")) {
+                        } else if ((arrO1[0].equals("B") || (arrO1[0].equals("C")) && arrO2[0].equals("A"))) {
                             return -1;
                         }
                     }
@@ -1657,7 +1727,31 @@ public class AddEditFrameController {
             }
         };
 
+        //Устанавливаю компаратор
         loadCurrTabColAPPls.setComparator(comparatorForCommands);
+        loadCurrTabColAPMns.setComparator(comparatorForCommands);
+        loadCurrTabColRPPls.setComparator(comparatorForCommands);
+        loadCurrTabColRPMns.setComparator(comparatorForCommands);
+
+        eMaxTabColAPPls.setSortable(false);
+        eMinTabColAPPls.setSortable(false);
+        amountImplTabColAPPls.setSortable(false);
+        amountMeasTabColAPPls.setSortable(false);
+
+        eMaxTabColAPMns.setSortable(false);
+        eMinTabColAPMns.setSortable(false);
+        amountImplTabColAPMns.setSortable(false);
+        amountMeasTabColAPMns.setSortable(false);
+
+        eMaxTabColRPPls.setSortable(false);
+        eMinTabColRPPls.setSortable(false);
+        amountImplTabColRPPls.setSortable(false);
+        amountMeasTabColRPPls.setSortable(false);
+
+        eMaxTabColRPMns.setSortable(false);
+        eMinTabColRPMns.setSortable(false);
+        amountImplTabColRPMns.setSortable(false);
+        amountMeasTabColRPMns.setSortable(false);
 
         //Перенос строк
         viewPointTableAPPls.setRowFactory(dragAndRow);
