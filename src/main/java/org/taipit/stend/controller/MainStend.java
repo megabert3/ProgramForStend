@@ -9,8 +9,8 @@ import java.io.*;
 public class MainStend {
 
     public static void main(String[] args) {
-        String pow = "0,25L";
-        String now = pow.substring(0, pow.length() - 1);
+        String pow = "110.0%Un";
+        String now = pow.substring(0, pow.length() - 3);
         System.out.println(now);
 
 //        File excelFile = new File("C:\\Users\\bert1\\Desktop\\test\\test.xlsx");

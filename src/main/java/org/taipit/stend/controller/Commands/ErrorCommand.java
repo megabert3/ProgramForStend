@@ -134,7 +134,7 @@ public class ErrorCommand implements Commands, Serializable {
 
         //47.0%Un: 0.5L; 0.01 Ib
         //A: 47.0%Un: 0.5L; 0.01 Ib
-        name = (strPhase + voltPer + "%" + param + "n: " + cosP + "; " + currentPerсent + " " + current.trim());
+        name = (strPhase + voltPer + "%" + param + "n; " + cosP + "; " + currentPerсent + " " + current.trim());
 
         currPer = Double.parseDouble(currentPerсent) * 100;
         phaseSrequence = 0;
