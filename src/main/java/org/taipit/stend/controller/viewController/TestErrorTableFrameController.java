@@ -241,11 +241,7 @@ public class TestErrorTableFrameController {
             }
         });
 
-        tglBtnAPPls.setSelected(true);
-
         checBoxePane.toFront();
-
-        checkBoxDisableAll.setSelected(true);
     }
 
     @FXML
@@ -493,6 +489,9 @@ public class TestErrorTableFrameController {
         //Логика работы остановки теста
         if (event.getSource() == btnStop) {
 
+            /**
+             * Подумать
+             */
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -500,40 +499,52 @@ public class TestErrorTableFrameController {
                         blockBtns.setValue(true);
                         manualTestThread.interrupt();
                     }
+                }
+            });
 
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
                     if (automaticTestThread.isAlive()) {
                         blockBtns.setValue(true);
                         automaticTestThread.interrupt();
                     }
+                }
+            });
 
-                    if (UnomThread.isAlive()) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    if (UnomThread.isAlive() || startUnTest) {
                         blockBtns.setValue(true);
                         UnomThread.interrupt();
-                    }
-
-                    try {
-                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-
-                        tglBtnManualMode.setSelected(false);
-                        tglBtnAuto.setSelected(false);
-                        tglBtnUnom.setSelected(false);
                         startUnTest = false;
-                    }catch (ConnectForStendExeption e) {
-                        e.printStackTrace();
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Потеряна связь с утановкой");
-                                tglBtnManualMode.setSelected(false);
-                                tglBtnAuto.setSelected(false);
-                                tglBtnUnom.setSelected(false);
-                                startUnTest = false;
-                            }
-                        });
                     }
                 }
             });
+
+            try {
+                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
+                tglBtnManualMode.setSelected(false);
+                tglBtnAuto.setSelected(false);
+                tglBtnUnom.setSelected(false);
+                blockBtns.setValue(false);
+
+            }catch (ConnectForStendExeption e) {
+                e.printStackTrace();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ConsoleHelper.infoException("Потеряна связь с утановкой");
+                        tglBtnManualMode.setSelected(false);
+                        tglBtnAuto.setSelected(false);
+                        tglBtnUnom.setSelected(false);
+                        blockBtns.setValue(false);
+                    }
+                });
+            }
         }
     }
 
@@ -635,6 +646,25 @@ public class TestErrorTableFrameController {
     //Старт автоматического теста в зависимости от выбранной панели (направления и типа энергии)
     private void startTestOnSelectPane(int phase, long timeCRPForGOST, long timeSTAForGOST)
             throws ConnectForStendExeption, InterruptedException {
+
+        ObservableList<Commands> selectedCommand = tabViewTestPoints.getSelectionModel().getSelectedItems();
+
+        selectedCommand.addListener(new ListChangeListener<Commands>() {
+            @Override
+            public void onChanged(Change<? extends Commands> c) {
+                /**
+                 * Установка блокировки кнопок и панели
+                 * Завевршение старой точки
+                 * Установка нового индекса
+                 */
+
+                int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
+
+                Commands focusedCommand = c.getList().get(0);
+
+
+            }
+        });
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 
@@ -1352,7 +1382,6 @@ public class TestErrorTableFrameController {
 
         timeToStartTestGOSTRP = initTimeForStartGOSTTest(accuracyClassRP, constantMeterRP);
     }
-
     //=====================================================================================
     //get sets
 
