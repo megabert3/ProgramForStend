@@ -12,11 +12,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -96,8 +98,11 @@ public class TestErrorTableFrameController {
 
     private Thread UnomThread = new Thread();
 
-    //Для блокировки кнопок
+    //Для блокировки кнопок управления
     public static SimpleBooleanProperty blockBtns = new SimpleBooleanProperty(false);
+
+    //Для блокировки кнопок управления
+    public static SimpleBooleanProperty blockTypeEnergyAndDirectionBtns = new SimpleBooleanProperty(false);
 
     private boolean startUnTest = false;
 
@@ -171,6 +176,18 @@ public class TestErrorTableFrameController {
     private Label txtLabDate;
 
     @FXML
+    private SplitPane splPane;
+
+    @FXML
+    private AnchorPane mainPane;
+
+    @FXML
+    private Pane buttonPane;
+
+    @FXML
+    private Pane energyAndDirectionBtnsPane;
+
+    @FXML
     void initialize() {
 
         blockBtns.addListener(new ChangeListener<Boolean>() {
@@ -180,20 +197,44 @@ public class TestErrorTableFrameController {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
+                            buttonPane.setCursor(Cursor.WAIT);
                             tglBtnUnom.setDisable(true);
                             tglBtnManualMode.setDisable(true);
                             tglBtnAuto.setDisable(true);
                             btnStop.setDisable(true);
+
                         }
                     });
                 } else {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
+                            buttonPane.setCursor(Cursor.DEFAULT);
                             tglBtnUnom.setDisable(false);
                             tglBtnManualMode.setDisable(false);
                             tglBtnAuto.setDisable(false);
                             btnStop.setDisable(false);
+                        }
+                    });
+                }
+            }
+        });
+
+        blockTypeEnergyAndDirectionBtns.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            energyAndDirectionBtnsPane.setDisable(true);
+                        }
+                    });
+                } else {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            energyAndDirectionBtnsPane.setDisable(false);
                         }
                     });
                 }
@@ -296,10 +337,13 @@ public class TestErrorTableFrameController {
                             try {
                                 try {
                                     if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
+                                    blockTypeEnergyAndDirectionBtns.setValue(true);
                                     startAutomaticTest();
-
+                                    blockTypeEnergyAndDirectionBtns.setValue(false);
+                                    blockBtns.setValue(false);
                                 } catch (InterruptedException e) {
+                                    blockBtns.setValue(false);
+                                    blockTypeEnergyAndDirectionBtns.setValue(false);
                                     e.printStackTrace();
                                 }
                             } catch (ConnectForStendExeption e) {
@@ -310,6 +354,7 @@ public class TestErrorTableFrameController {
                                         ConsoleHelper.infoException("Потеряна связь с установкой");
                                         blockBtns.setValue(false);
                                         tglBtnAuto.setSelected(false);
+                                        blockTypeEnergyAndDirectionBtns.setValue(false);
                                     }
                                 });
                             }
@@ -354,9 +399,15 @@ public class TestErrorTableFrameController {
                                 try {
                                     if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
+                                    blockTypeEnergyAndDirectionBtns.setValue(true);
+
                                     startManualTest();
 
+                                    blockTypeEnergyAndDirectionBtns.setValue(false);
+                                    blockBtns.setValue(false);
                                 } catch (InterruptedException e) {
+                                    blockTypeEnergyAndDirectionBtns.setValue(false);
+                                    blockBtns.setValue(false);
                                     e.printStackTrace();
                                 }
                             } catch (ConnectForStendExeption e) {
@@ -446,25 +497,28 @@ public class TestErrorTableFrameController {
                 @Override
                 public void run() {
                     if (manualTestThread.isAlive()) {
+                        blockBtns.setValue(true);
                         manualTestThread.interrupt();
                     }
 
                     if (automaticTestThread.isAlive()) {
+                        blockBtns.setValue(true);
                         automaticTestThread.interrupt();
                     }
 
                     if (UnomThread.isAlive()) {
+                        blockBtns.setValue(true);
                         UnomThread.interrupt();
                     }
-
-                    tglBtnManualMode.setSelected(false);
-                    tglBtnAuto.setSelected(false);
-                    tglBtnUnom.setSelected(false);
-                    startUnTest = false;
 
                     try {
                         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
+                        tglBtnManualMode.setSelected(false);
+                        tglBtnAuto.setSelected(false);
+                        tglBtnUnom.setSelected(false);
+                        startUnTest = false;
                     }catch (ConnectForStendExeption e) {
                         e.printStackTrace();
                         Platform.runLater(new Runnable() {
