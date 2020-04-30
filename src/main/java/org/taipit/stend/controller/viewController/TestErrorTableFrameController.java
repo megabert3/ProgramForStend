@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -241,6 +242,61 @@ public class TestErrorTableFrameController {
             }
         });
 
+        btnStop.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                new Thread(new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        blockBtns.setValue(true);
+
+                        if (manualTestThread.isAlive()) {
+                            manualTestThread.interrupt();
+                        }
+
+                        if (automaticTestThread.isAlive()) {
+                            automaticTestThread.interrupt();
+                        }
+
+                        if (UnomThread.isAlive() || startUnTest) {
+                            UnomThread.interrupt();
+                            startUnTest = false;
+                        }
+
+                        try {
+                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();;
+
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tglBtnManualMode.setSelected(false);
+                                    tglBtnAuto.setSelected(false);
+                                    tglBtnUnom.setSelected(false);
+                                }
+                            });
+
+                            blockBtns.setValue(false);
+
+                        }catch (ConnectForStendExeption e) {
+                            e.printStackTrace();
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ConsoleHelper.infoException("Потеряна связь с утановкой");
+                                    tglBtnManualMode.setSelected(false);
+                                    tglBtnAuto.setSelected(false);
+                                    tglBtnUnom.setSelected(false);
+                                    blockBtns.setValue(false);
+                                }
+                            });
+                        }
+                        return null;
+                    }
+                }).start();
+            }
+        });
         checBoxePane.toFront();
     }
 
@@ -480,68 +536,6 @@ public class TestErrorTableFrameController {
                             }
                         });
                         UnomThread.start();
-                    }
-                });
-            }
-        }
-
-        //------------------------------------------------------------------------------------------------
-        //Логика работы остановки теста
-        if (event.getSource() == btnStop) {
-
-            /**
-             * Подумать
-             */
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    if (manualTestThread.isAlive()) {
-                        blockBtns.setValue(true);
-                        manualTestThread.interrupt();
-                    }
-                }
-            });
-
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    if (automaticTestThread.isAlive()) {
-                        blockBtns.setValue(true);
-                        automaticTestThread.interrupt();
-                    }
-                }
-            });
-
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    if (UnomThread.isAlive() || startUnTest) {
-                        blockBtns.setValue(true);
-                        UnomThread.interrupt();
-                        startUnTest = false;
-                    }
-                }
-            });
-
-            try {
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-
-                tglBtnManualMode.setSelected(false);
-                tglBtnAuto.setSelected(false);
-                tglBtnUnom.setSelected(false);
-                blockBtns.setValue(false);
-
-            }catch (ConnectForStendExeption e) {
-                e.printStackTrace();
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        ConsoleHelper.infoException("Потеряна связь с утановкой");
-                        tglBtnManualMode.setSelected(false);
-                        tglBtnAuto.setSelected(false);
-                        tglBtnUnom.setSelected(false);
-                        blockBtns.setValue(false);
                     }
                 });
             }
