@@ -15,7 +15,9 @@ import java.util.Properties;
 
 public class ParametersMethodicController {
 
-    private AddEditFrameController addEditFrameController;
+    private AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController;
+
+    private AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController;
 
     private Methodic methodic;
 
@@ -122,8 +124,13 @@ public class ParametersMethodicController {
                 chosBxMeterModel.setDisable(true);
                 txtFldMeterModel.setDisable(true);
 
-                addEditFrameController.setBindParameters(true);
-                addEditFrameController.getParametersBtn().setSelected(true);
+                if (addEditPointsThreePhaseStendFrameController != null) {
+                    addEditPointsThreePhaseStendFrameController.setBindParameters(true);
+                    addEditPointsThreePhaseStendFrameController.getParametersBtn().setSelected(true);
+                } else {
+                    addEditPointsOnePhaseStendFrameController.setBindParameters(true);
+                    addEditPointsOnePhaseStendFrameController.getParametersBtn().setSelected(true);
+                }
 
                 methodic.setBindsParameters(true);
 
@@ -160,8 +167,13 @@ public class ParametersMethodicController {
                 chosBxMeterModel.setDisable(false);
                 txtFldMeterModel.setDisable(false);
 
-                addEditFrameController.setBindParameters(false);
-                addEditFrameController.getParametersBtn().setSelected(false);
+                if (addEditPointsThreePhaseStendFrameController != null) {
+                    addEditPointsThreePhaseStendFrameController.setBindParameters(false);
+                    addEditPointsThreePhaseStendFrameController.getParametersBtn().setSelected(false);
+                } else {
+                    addEditPointsOnePhaseStendFrameController.setBindParameters(false);
+                    addEditPointsOnePhaseStendFrameController.getParametersBtn().setSelected(false);
+                }
 
                 methodic.setBindsParameters(false);
             }
@@ -325,9 +337,14 @@ public class ParametersMethodicController {
         tglBtnSetPatemeters.setSelected(true);
     }
 
-    public void setAddEditFrameController(AddEditFrameController addEditFrameController) {
-        this.addEditFrameController = addEditFrameController;
+    public void setAddEditPointsThreePhaseStendFrameController(AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController) {
+        this.addEditPointsThreePhaseStendFrameController = addEditPointsThreePhaseStendFrameController;
     }
+
+    public void setAddEditPointsOnePhaseStendFrameController(AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController) {
+        this.addEditPointsOnePhaseStendFrameController = addEditPointsOnePhaseStendFrameController;
+    }
+
 
     public void setMethodic(Methodic methodic) {
         this.methodic = methodic;

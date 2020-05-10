@@ -20,7 +20,9 @@ import java.util.Comparator;
 
 public class AddDeleteTestPointInGridPaneController {
 
-    private AddEditFrameController addEditFrameController;
+    private AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController;
+
+    private AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController;
 
     private ObservableList<String> powerFactor = FXCollections.observableArrayList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
     private ObservableList<String> current = FXCollections.observableArrayList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
@@ -137,9 +139,15 @@ public class AddDeleteTestPointInGridPaneController {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        addEditFrameController.refreshGridPaneAndScrolPane();
-                        addEditFrameController.addTestPointsOnGreedPane();
-                        addEditFrameController.addListenerToCheckBoxes();
+                        if (addEditPointsThreePhaseStendFrameController != null) {
+                            addEditPointsThreePhaseStendFrameController.refreshGridPaneAndScrolPane();
+                            addEditPointsThreePhaseStendFrameController.addTestPointsOnGreedPane();
+                            addEditPointsThreePhaseStendFrameController.addListenerToCheckBoxes();
+                        } else {
+                            addEditPointsOnePhaseStendFrameController.refreshGridPaneAndScrolPane();
+                            addEditPointsOnePhaseStendFrameController.addTestPointsOnGreedPane();
+                            addEditPointsOnePhaseStendFrameController.addListenerToCheckBoxes();
+                        }
                     }
                 });
 
@@ -218,7 +226,11 @@ public class AddDeleteTestPointInGridPaneController {
         }
     }
 
-    public void setAddEditFrameController(AddEditFrameController addEditFrameController) {
-        this.addEditFrameController = addEditFrameController;
+    public void setAddEditPointsThreePhaseStendFrameController(AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController) {
+        this.addEditPointsThreePhaseStendFrameController = addEditPointsThreePhaseStendFrameController;
+    }
+
+    public void setAddEditPointsOnePhaseStendFrameController(AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController) {
+        this.addEditPointsOnePhaseStendFrameController = addEditPointsOnePhaseStendFrameController;
     }
 }

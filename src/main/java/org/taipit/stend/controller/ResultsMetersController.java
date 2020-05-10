@@ -18,13 +18,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.helper.frameManager.Frame;
 import org.taipit.stend.model.ResultsTest;
 
-public class ResultsMetersController {
+public class ResultsMetersController implements Frame {
 
     private ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
 
@@ -33,12 +35,6 @@ public class ResultsMetersController {
     private String[] resultMass = properties.getProperty("restMeterResults").split(", ");
 
     private ObservableList<Meter> observableList = FXCollections.observableArrayList(resultsTest.getListAllResults());
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private Button btnEdit;
@@ -178,6 +174,7 @@ public class ResultsMetersController {
             Stage stage = new Stage();
             stage.setTitle("Редактирование результатов");
             stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
         }
 
@@ -536,5 +533,10 @@ public class ResultsMetersController {
 
     public TableView<Meter> getTabViewResults() {
         return tabViewResults;
+    }
+
+    @Override
+    public Stage getStage() {
+        return (Stage) btnDelete.getScene().getWindow();
     }
 }

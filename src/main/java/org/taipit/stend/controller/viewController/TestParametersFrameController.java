@@ -33,10 +33,11 @@ import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
+import org.taipit.stend.helper.frameManager.Frame;
 import org.taipit.stend.model.Methodic;
 import org.taipit.stend.model.MethodicsForTest;
 
-public class TestParametersFrameController {
+public class TestParametersFrameController implements Frame {
 
     private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
@@ -719,4 +720,8 @@ public class TestParametersFrameController {
         tabVParamMeters.refresh();
     }
 
+    @Override
+    public Stage getStage() {
+        return (Stage) btnStartTest.getScene().getWindow();
+    }
 }

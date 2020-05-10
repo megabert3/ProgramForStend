@@ -1,8 +1,5 @@
 package org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController;
 
-import java.io.IOException;
-import java.util.*;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -37,16 +34,20 @@ import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicNameController;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.helper.frameManager.Frame;
 import org.taipit.stend.model.Methodic;
 import org.taipit.stend.model.MethodicsForTest;
 
-public class AddEditFrameController {
+import java.io.IOException;
+import java.util.*;
 
-    private AddEditFrameController addEditFrameController = this;
+public class AddEditPointsOnePhaseStendFrameController implements  Frame {
+
+    private AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController = this;
 
     private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
-    private InfluenceFrame influenceFrame;
+    private InfluencePointsThreePhaseStendFrame influencePointsThreePhaseStendFrame;
 
     private MethodicNameController methodicNameController;
 
@@ -629,7 +630,7 @@ public class AddEditFrameController {
                     fxmlLoader.load();
 
                     AddDeleteTestPointInGridPaneController addDeleteTestPointInGridPaneController = fxmlLoader.getController();
-                    addDeleteTestPointInGridPaneController.setAddEditFrameController(addEditFrameController);
+                    addDeleteTestPointInGridPaneController.setAddEditPointsOnePhaseStendFrameController(addEditPointsOnePhaseStendFrameController);
 
                     Parent root = fxmlLoader.getRoot();
                     Stage stage = new Stage();
@@ -2452,19 +2453,19 @@ public class AddEditFrameController {
     void influenceAction(ActionEvent event) {
         if (event.getSource() == influenceBtn) {
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/influenceFrame.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/influencePointsThreePhaseStendFrame.fxml"));
             try {
                 fxmlLoader.load();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            influenceFrame = fxmlLoader.getController();
+            influencePointsThreePhaseStendFrame = fxmlLoader.getController();
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    influenceFrame.myInitInflFrame(methodic);
-                    influenceFrame.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+                    influencePointsThreePhaseStendFrame.myInitInflFrame(methodic);
+                    influencePointsThreePhaseStendFrame.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
                 }
             });
 
@@ -2491,7 +2492,7 @@ public class AddEditFrameController {
 
                 ParametersMethodicController parametersMethodicController = fxmlLoader.getController();
                 parametersMethodicController.setMethodic(methodic);
-                parametersMethodicController.setAddEditFrameController(this);
+                parametersMethodicController.setAddEditPointsOnePhaseStendFrameController(this);
 
                 if (bindParameters) {
                     parametersMethodicController.setDisableAllParam();
@@ -2513,10 +2514,58 @@ public class AddEditFrameController {
     @FXML
     void saveOrCancelAction(ActionEvent event) {
         if (event.getSource() == SaveBtn) {
-            methodic.addCommandToList(0, new ArrayList<>(testListForCollumAPPls));
-            methodic.addCommandToList(1, new ArrayList<>(testListForCollumAPMns));
-            methodic.addCommandToList(2, new ArrayList<>(testListForCollumRPPls));
-            methodic.addCommandToList(3, new ArrayList<>(testListForCollumRPMns));
+
+            List<Commands> listErrorCommand;
+            List<Commands> listCreepStartRTCCommadns;
+
+            listErrorCommand = methodic.getCommandsMap().get(0);
+            listCreepStartRTCCommadns = methodic.getCreepStartRTCConstCommandsMap().get(0);
+
+            for (Commands command : testListForCollumAPPls) {
+                if (command instanceof ErrorCommand) {
+                    listErrorCommand.add(command);
+                } else {
+                    listCreepStartRTCCommadns.add(command);
+                }
+            }
+
+            listErrorCommand = methodic.getCommandsMap().get(1);
+            listCreepStartRTCCommadns = methodic.getCreepStartRTCConstCommandsMap().get(1);
+
+            for (Commands command : testListForCollumAPMns) {
+                if (command instanceof ErrorCommand) {
+                    listErrorCommand.add(command);
+                } else {
+                    listCreepStartRTCCommadns.add(command);
+                }
+            }
+
+            listErrorCommand = methodic.getCommandsMap().get(2);
+            listCreepStartRTCCommadns = methodic.getCreepStartRTCConstCommandsMap().get(2);
+
+            for (Commands command : testListForCollumRPPls) {
+                if (command instanceof ErrorCommand) {
+                    listErrorCommand.add(command);
+                } else {
+                    listCreepStartRTCCommadns.add(command);
+                }
+            }
+
+            listErrorCommand = methodic.getCommandsMap().get(3);
+            listCreepStartRTCCommadns = methodic.getCreepStartRTCConstCommandsMap().get(3);
+
+            for (Commands command : testListForCollumRPMns) {
+                if (command instanceof ErrorCommand) {
+                    listErrorCommand.add(command);
+                } else {
+                    listCreepStartRTCCommadns.add(command);
+                }
+            }
+
+//            methodic.addCommandToList(0, new ArrayList<>(testListForCollumAPPls));
+//            methodic.addCommandToList(1, new ArrayList<>(testListForCollumAPMns));
+//            methodic.addCommandToList(2, new ArrayList<>(testListForCollumRPPls));
+//            methodic.addCommandToList(3, new ArrayList<>(testListForCollumRPMns));
 
             if (edit) {
                 methodicsAddEditDeleteFrameController.setListsView(methodic);
@@ -3602,5 +3651,10 @@ public class AddEditFrameController {
 
     public ToggleButton getParametersBtn() {
         return parametersBtn;
+    }
+
+    @Override
+    public Stage getStage() {
+        return null;
     }
 }

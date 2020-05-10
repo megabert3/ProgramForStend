@@ -9,17 +9,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import org.taipit.stend.controller.OnePhaseStend;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.helper.frameManager.Frame;
 import org.taipit.stend.model.MeterParamepersForProperty;
 import org.taipit.stend.model.MeterParameter;
 
 import java.net.URL;
 import java.util.*;
 
-public class PropertiesController implements Initializable {
+public class PropertiesController implements Initializable, Frame {
 
 //----------------------------------------------------------- Menu
     @FXML
@@ -274,5 +276,10 @@ public class PropertiesController implements Initializable {
                 listViewParameters.setItems(FXCollections.observableArrayList(c.getList().get(0).getParameterValues()));
             }
         });
+    }
+
+    @Override
+    public Stage getStage() {
+        return (Stage) stendBtn.getScene().getWindow();
     }
 }

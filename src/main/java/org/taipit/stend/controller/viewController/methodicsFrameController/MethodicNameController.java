@@ -1,11 +1,7 @@
 package org.taipit.stend.controller.viewController.methodicsFrameController;
 import java.io.IOException;
-import java.util.TreeSet;
 
 import javafx.application.Platform;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,7 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditFrameController;
+import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditPointsOnePhaseStendFrameController;
+import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditPointsThreePhaseStendFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 import org.taipit.stend.model.Methodic;
@@ -25,7 +22,9 @@ import org.taipit.stend.model.MethodicsForTest;
 
 public class MethodicNameController {
 
-    private AddEditFrameController addEditFrameController;
+    private AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController;
+
+    private AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController;
 
     private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
 
@@ -83,13 +82,13 @@ public class MethodicNameController {
                     clone = false;
 
                 }catch (InfoExсeption | CloneNotSupportedException e) {
+                    e.printStackTrace();
                     labelInfo.setText("Методика с таким именем уже существует");
                 }
 
             //Если нажата кнопка "Добавить"
             } else if (add){
                 try {
-
                     name = nameField.getText().trim();
 
                     if (name.isEmpty()) {
@@ -102,27 +101,58 @@ public class MethodicNameController {
                         return;
                     }
 
-                    methodicsForTest.addMethodicToList(name, new Methodic());
+                    methodic = new Methodic();
 
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addEditMet.fxml"));
-                    fxmlLoader.load();
-                    Parent root = fxmlLoader.getRoot();
+                    methodicsForTest.addMethodicToList(name, methodic);
+
                     Stage stage = new Stage();
-                    stage.setTitle("Добавление методики");
-                    stage.setScene(new Scene(root));
 
-                    addEditFrameController = fxmlLoader.getController();
+                    if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
 
-                    addEditFrameController.setMethodicNameController(this);
-                    addEditFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
-                    addEditFrameController.setMethodic(methodicsForTest.getMethodic(name));
-                    addEditFrameController.setTextFielMethodicName();
-                    addEditFrameController.addListenerToCheckBoxes();
+                        methodic.setThreePhaseStendMethodic(true);
 
-                    stage.show();
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addEditPointsThreePhaseStendMet.fxml"));
+                        fxmlLoader.load();
+                        Parent root = fxmlLoader.getRoot();
+                        stage.setTitle("Добавление методики");
+                        stage.setScene(new Scene(root));
 
-                    addEditFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+                        addEditPointsThreePhaseStendFrameController = fxmlLoader.getController();
+
+                        addEditPointsThreePhaseStendFrameController.setMethodicNameController(this);
+                        addEditPointsThreePhaseStendFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
+                        addEditPointsThreePhaseStendFrameController.setMethodic(methodicsForTest.getMethodic(name));
+                        addEditPointsThreePhaseStendFrameController.setTextFielMethodicName();
+                        addEditPointsThreePhaseStendFrameController.addListenerToCheckBoxes();
+
+                        stage.show();
+
+                        addEditPointsThreePhaseStendFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+                    } else {
+
+                        methodic.setThreePhaseStendMethodic(false);
+
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addEditPointsOnePhaseStendMet.fxml"));
+                        fxmlLoader.load();
+                        Parent root = fxmlLoader.getRoot();
+                        stage.setTitle("Добавление методики");
+                        stage.setScene(new Scene(root));
+
+                        addEditPointsOnePhaseStendFrameController = fxmlLoader.getController();
+
+                        addEditPointsOnePhaseStendFrameController.setMethodicNameController(this);
+                        addEditPointsOnePhaseStendFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
+                        addEditPointsOnePhaseStendFrameController.setMethodic(methodicsForTest.getMethodic(name));
+                        addEditPointsOnePhaseStendFrameController.setTextFielMethodicName();
+                        addEditPointsOnePhaseStendFrameController.addListenerToCheckBoxes();
+
+                        stage.show();
+
+                        addEditPointsOnePhaseStendFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+                    }
+
                     Stage methodicsAddEditDeleteFrameControllerStage = (Stage) methodicsAddEditDeleteFrameController.getEditMetBtn().getScene().getWindow();
                     methodicsAddEditDeleteFrameControllerStage.hide();
 
@@ -137,7 +167,7 @@ public class MethodicNameController {
                     });
 
                     add = false;
-                    Stage stageMetodicName = (Stage) nameField.getScene().getWindow();
+                    Stage stageMetodicName = (Stage) acceptNameBtn.getScene().getWindow();
                     stageMetodicName.close();
 
                 } catch (InfoExсeption e) {

@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Methodic implements Cloneable, Serializable {
 
-    //Эта методика сделала для трехфащного стенда?
+    //Эта методика сделала для трехфазного стенда?
     private boolean threePhaseStendMethodic;
 
     private String methodicName;
@@ -34,6 +34,10 @@ public class Methodic implements Cloneable, Serializable {
 
     //Объект для сохранения точек связанных с влиянием
     private InfluenceMetodic influenceMetodic = new InfluenceMetodic();
+
+    //Объект для сохранения точек Самохода, чувствительности и влияния
+
+    private CreepStartRTCConst creepStartRTCConst = new CreepStartRTCConst();
 
     public Methodic() {
         commandsMap.put(0, new ArrayList<Commands>());
@@ -394,6 +398,10 @@ public class Methodic implements Cloneable, Serializable {
         this.influenceMetodic.saveInfluenceFprocPhaseCRPMns = saveInfluenceFprocPhaseCRPMns;
     }
 
+    public Map<Integer, List<Commands>> getCreepStartRTCConstCommandsMap() {
+        return creepStartRTCConst.creepStartRTCConstCommandsMap;
+    }
+
    //======================================================================================
     public boolean isThreePhaseStendMethodic() {
         return threePhaseStendMethodic;
@@ -503,8 +511,11 @@ public class Methodic implements Cloneable, Serializable {
         return typeOfMeasuringElementShunt;
     }
 
+
+//===========================================================================================
     //Внутренний класс отвечающий за точки влияния
     class InfluenceMetodic implements Cloneable, Serializable{
+
         InfluenceMetodic() {
             influenceCommandsMap.put(0, new ArrayList<>());
             influenceCommandsMap.put(1, new ArrayList<>());
@@ -570,4 +581,25 @@ public class Methodic implements Cloneable, Serializable {
             return super.clone();
         }
     }
+
+    //==================================================================
+    //Внутренний класс отвечающий за точки самохода, чувствительности, ТХЧ, Константы
+
+    class CreepStartRTCConst implements Serializable, Cloneable {
+
+        CreepStartRTCConst() {
+            creepStartRTCConstCommandsMap.put(0, new ArrayList<>());
+            creepStartRTCConstCommandsMap.put(1, new ArrayList<>());
+            creepStartRTCConstCommandsMap.put(2, new ArrayList<>());
+            creepStartRTCConstCommandsMap.put(3, new ArrayList<>());
+        }
+
+        private Map<Integer, List<Commands>> creepStartRTCConstCommandsMap = new HashMap<>(4);
+
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            return super.clone();
+        }
+    }
+
 }

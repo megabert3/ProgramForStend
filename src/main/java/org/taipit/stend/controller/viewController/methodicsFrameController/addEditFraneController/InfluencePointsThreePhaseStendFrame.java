@@ -32,9 +32,9 @@ import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.Methodic;
 import java.util.*;
 
-public class InfluenceFrame {
+public class InfluencePointsThreePhaseStendFrame {
 
-    private AddEditFrameController addEditFrameController;
+    private AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController;
 
     private Methodic methodic;
 

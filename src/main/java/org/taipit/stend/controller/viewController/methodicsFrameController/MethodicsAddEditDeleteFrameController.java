@@ -25,16 +25,17 @@ import javafx.stage.Stage;
 
 import javafx.stage.WindowEvent;
 import org.taipit.stend.controller.Commands.Commands;
-import org.taipit.stend.controller.Commands.ErrorCommand;
 import org.taipit.stend.controller.viewController.YesOrNoFrameController;
-import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditFrameController;
+import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditPointsOnePhaseStendFrameController;
+import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditPointsThreePhaseStendFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
+import org.taipit.stend.helper.frameManager.Frame;
 import org.taipit.stend.model.Methodic;
 import org.taipit.stend.model.MethodicsForTest;
 
 
-public class MethodicsAddEditDeleteFrameController {
+public class MethodicsAddEditDeleteFrameController implements Frame {
 
     private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
 
@@ -51,7 +52,8 @@ public class MethodicsAddEditDeleteFrameController {
 
     private MethodicNameController methodicNameController;
 
-    private AddEditFrameController addEditFrameController;
+    private AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController;
+    private AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController;
 
     @FXML
     private AnchorPane mainAnchorPane;
@@ -200,48 +202,106 @@ public class MethodicsAddEditDeleteFrameController {
 
         //Редактирование методики
         if (event.getSource() == editMetBtn) {
-            if (focusedMetodic == null) {
-                System.out.println("Выберите методику");
+            try {
+                if (focusedMetodic == null) throw new InfoExсeption("Не выбрана методика");
+
+            }catch (InfoExсeption e) {
+                e.printStackTrace();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ConsoleHelper.infoException("Выберите методику");
+                    }
+                });
             }
 
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addEditMet.fxml"));
-            try {
-                fxmlLoader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Parent root = fxmlLoader.getRoot();
             Stage stage = new Stage();
-            stage.setTitle("Редактирование методики");
-            stage.setScene(new Scene(root));
 
-            addEditFrameController = fxmlLoader.getController();
-            addEditFrameController.setMethodic(focusedMetodic);
-            addEditFrameController.setEdit(true);
-
-            if (focusedMetodic.isBindsParameters()) {
-                addEditFrameController.setBindParameters(true);
-                addEditFrameController.getParametersBtn().setSelected(true);
-            }
-
-            addEditFrameController.initEditsMetodic();
-
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    addEditFrameController.addTestPointsOnGreedPane();
-                    addEditFrameController.addListenerToCheckBoxes();
+            if (focusedMetodic.isThreePhaseStendMethodic()) {
+                fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addEditPointsThreePhaseStendMet.fxml"));
+                try {
+                    fxmlLoader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            });
+                Parent root = fxmlLoader.getRoot();
+
+                stage.setTitle("Редактирование методики");
+                stage.setScene(new Scene(root));
+
+                addEditPointsThreePhaseStendFrameController = fxmlLoader.getController();
+                addEditPointsThreePhaseStendFrameController.setMethodic(focusedMetodic);
+                addEditPointsThreePhaseStendFrameController.setEdit(true);
+
+                if (focusedMetodic.isBindsParameters()) {
+                    addEditPointsThreePhaseStendFrameController.setBindParameters(true);
+                    addEditPointsThreePhaseStendFrameController.getParametersBtn().setSelected(true);
+                }
+
+                addEditPointsThreePhaseStendFrameController.initEditsMetodic();
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        addEditPointsThreePhaseStendFrameController.addTestPointsOnGreedPane();
+                        addEditPointsThreePhaseStendFrameController.addListenerToCheckBoxes();
+                    }
+                });
 
 
-            addEditFrameController.setMethodicsAddEditDeleteFrameController(this);
-            addEditFrameController.setTextFielMethodicName();
+                addEditPointsThreePhaseStendFrameController.setMethodicsAddEditDeleteFrameController(this);
+                addEditPointsThreePhaseStendFrameController.setTextFielMethodicName();
+
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.show();
+
+                addEditPointsThreePhaseStendFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+
+            } else {
+
+                fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addEditPointsOnePhaseStendMet.fxml"));
+                try {
+                    fxmlLoader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Parent root = fxmlLoader.getRoot();
+
+                stage.setTitle("Редактирование методики");
+                stage.setScene(new Scene(root));
+
+                addEditPointsOnePhaseStendFrameController = fxmlLoader.getController();
+                addEditPointsOnePhaseStendFrameController.setMethodic(focusedMetodic);
+                addEditPointsOnePhaseStendFrameController.setEdit(true);
+
+                if (focusedMetodic.isBindsParameters()) {
+                    addEditPointsOnePhaseStendFrameController.setBindParameters(true);
+                    addEditPointsOnePhaseStendFrameController.getParametersBtn().setSelected(true);
+                }
+
+                addEditPointsOnePhaseStendFrameController.initEditsMetodic();
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        addEditPointsOnePhaseStendFrameController.addTestPointsOnGreedPane();
+                        addEditPointsOnePhaseStendFrameController.addListenerToCheckBoxes();
+                    }
+                });
+
+                addEditPointsOnePhaseStendFrameController.setMethodicsAddEditDeleteFrameController(this);
+                addEditPointsOnePhaseStendFrameController.setTextFielMethodicName();
+
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.show();
+
+                addEditPointsOnePhaseStendFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+
+            }
 
             Stage stage1 = (Stage) editMetBtn.getScene().getWindow();
 
-            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
@@ -251,12 +311,7 @@ public class MethodicsAddEditDeleteFrameController {
                 }
             });
 
-            stage.show();
-
             stage1.hide();
-
-            addEditFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
-
         }
 
         //Если нажата кнопка копирования методики
@@ -394,11 +449,19 @@ public class MethodicsAddEditDeleteFrameController {
             comandListAPPls.add(inflAPPls.getName());
         }
 
+        for (Commands creepStaConsAPPls : focusedMetodic.getCreepStartRTCConstCommandsMap().get(0)) {
+            comandListAPPls.add(creepStaConsAPPls.getName());
+        }
+
         for (Commands commandsAPMns : focusedMetodic.getCommandsMap().get(1)) {
             comandListAPMns.add(commandsAPMns.getName());
         }
         for (Commands inflAPMns : focusedMetodic.getSaveInflListForCollumAPMns()) {
             comandListAPMns.add(inflAPMns.getName());
+        }
+
+        for (Commands creepStaConsAPMns : focusedMetodic.getCreepStartRTCConstCommandsMap().get(1)) {
+            comandListAPMns.add(creepStaConsAPMns.getName());
         }
 
         for (Commands commandsRPPls : focusedMetodic.getCommandsMap().get(2)) {
@@ -408,11 +471,19 @@ public class MethodicsAddEditDeleteFrameController {
             comandListRPPls.add(inflRPPls.getName());
         }
 
+        for (Commands creepStaConsRPPls : focusedMetodic.getCreepStartRTCConstCommandsMap().get(2)) {
+            comandListRPPls.add(creepStaConsRPPls.getName());
+        }
+
         for (Commands commandsRPMns : focusedMetodic.getCommandsMap().get(3)) {
             comandListRPMns.add(commandsRPMns.getName());
         }
         for (Commands inflRPMns : focusedMetodic.getSaveInflListForCollumRPMns()) {
             comandListRPMns.add(inflRPMns.getName());
+        }
+
+        for (Commands creepStaConsRPMns : focusedMetodic.getCreepStartRTCConstCommandsMap().get(3)) {
+            comandListRPMns.add(creepStaConsRPMns.getName());
         }
 
         ListViewAPPls.setItems(FXCollections.observableArrayList(comandListAPPls));
@@ -436,11 +507,19 @@ public class MethodicsAddEditDeleteFrameController {
             comandListAPPls.add(inflAPPls.getName());
         }
 
+        for (Commands creepStaConsAPPls : focusedMetodic.getCreepStartRTCConstCommandsMap().get(0)) {
+            comandListAPPls.add(creepStaConsAPPls.getName());
+        }
+
         for (Commands commandsAPMns : focusedMetodic.getCommandsMap().get(1)) {
             comandListAPMns.add(commandsAPMns.getName());
         }
         for (Commands inflAPMns : focusedMetodic.getSaveInflListForCollumAPMns()) {
             comandListAPMns.add(inflAPMns.getName());
+        }
+
+        for (Commands creepStaConsAPMns : focusedMetodic.getCreepStartRTCConstCommandsMap().get(1)) {
+            comandListAPMns.add(creepStaConsAPMns.getName());
         }
 
         for (Commands commandsRPPls : focusedMetodic.getCommandsMap().get(2)) {
@@ -450,11 +529,19 @@ public class MethodicsAddEditDeleteFrameController {
             comandListRPPls.add(inflRPPls.getName());
         }
 
+        for (Commands creepStaConsRPPls : focusedMetodic.getCreepStartRTCConstCommandsMap().get(2)) {
+            comandListRPPls.add(creepStaConsRPPls.getName());
+        }
+
         for (Commands commandsRPMns : focusedMetodic.getCommandsMap().get(3)) {
             comandListRPMns.add(commandsRPMns.getName());
         }
         for (Commands inflRPMns : focusedMetodic.getSaveInflListForCollumRPMns()) {
             comandListRPMns.add(inflRPMns.getName());
+        }
+
+        for (Commands creepStaConsRPMns : focusedMetodic.getCreepStartRTCConstCommandsMap().get(3)) {
+            comandListRPMns.add(creepStaConsRPMns.getName());
         }
 
         ListViewAPPls.setItems(FXCollections.observableArrayList(comandListAPPls));
@@ -506,5 +593,10 @@ public class MethodicsAddEditDeleteFrameController {
 
     public Button getEditMetBtn() {
         return editMetBtn;
+    }
+
+    @Override
+    public Stage getStage() {
+        return (Stage) addMetBtn.getScene().getWindow();
     }
 }
