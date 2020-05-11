@@ -64,7 +64,7 @@
          <children>
             <VBox fx:id="vBoxForPhaseTgBtn" layoutY="34.0" prefHeight="230.0" prefWidth="108.0" style="-fx-background-color: #303030;">
                <children>
-                  <ToggleButton fx:id="allPhaseBtn" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Одна цепь">
+                  <ToggleButton fx:id="onePhaseBtn" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" text="Одна цепь">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>

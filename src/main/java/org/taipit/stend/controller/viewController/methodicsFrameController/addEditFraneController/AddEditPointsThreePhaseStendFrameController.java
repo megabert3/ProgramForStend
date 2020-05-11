@@ -31,21 +31,18 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.*;
-import org.taipit.stend.controller.OnePhaseStend;
-import org.taipit.stend.controller.StendDLLCommands;
-import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicNameController;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.frameManager.Frame;
-import org.taipit.stend.model.Methodic;
-import org.taipit.stend.model.MethodicsForTest;
+import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
+import org.taipit.stend.model.metodics.MetodicsForTest;
 
 public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     private AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController = this;
 
-    private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
+    private MetodicsForTest metodicsForTest = MetodicsForTest.getMetodicsForTestInstance();
 
     private InfluencePointsThreePhaseStendFrame influencePointsThreePhaseStendFrame;
 
@@ -53,9 +50,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
 
-    private Methodic methodic;
-
-    private StendDLLCommands stendDLLCommands;
+    private MethodicForThreePhaseStend methodicForThreePhaseStend;
 
     private boolean bindParameters;
 
@@ -67,9 +62,6 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     //Значения выставленного тока
     private List<String> current;
-
-    //Это трёхфазный стенд?
-    private boolean isThrePhaseStend;
 
     private List<GridPane> gridPanesEnergyAndPhase = new ArrayList<>();
 
@@ -598,14 +590,11 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     //Устанавливает имя методики полученное с другого окна
     public void setTextFielMethodicName() {
-        metodicNameTxtFld.setText(methodic.getMethodicName());
+        metodicNameTxtFld.setText(methodicForThreePhaseStend.getMetodicName());
     }
 
     @FXML
     void initialize() {
-        if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
-            isThrePhaseStend = true;
-        }
 
         current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
         powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
@@ -678,41 +667,24 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     }
 
     private void setIdGridPanes() {
-        if (isThrePhaseStend) {
-            gridPaneAllPhaseAPPlus.setId("1;H;A;P");
-            gridPanePhaseAAPPlus.setId("1;A;A;P");
-            gridPanePhaseBAPPlus.setId("1;B;A;P");
-            gridPanePhaseCAPPlus.setId("1;C;A;P");
-            gridPaneAllPhaseAPMinus.setId("1;H;A;N");
-            gridPanePhaseAAPMinus.setId("1;A;A;N");
-            gridPanePhaseBAPMinus.setId("1;B;A;N");
-            gridPanePhaseCAPMinus.setId("1;C;A;N");
-            gridPaneAllPhaseRPPlus.setId("5;H;R;P");
-            gridPanePhaseARPPlus.setId("5;A;R;P");
-            gridPanePhaseBRPPlus.setId("5;B;R;P");
-            gridPanePhaseCRPPlus.setId("5;C;R;P");
-            gridPaneAllPhaseRPMinus.setId("5;H;R;N");
-            gridPanePhaseARPMinus.setId("5;A;R;N");
-            gridPanePhaseBRPMinus.setId("5;B;R;N");
-            gridPanePhaseCRPMinus.setId("5;C;R;N");
-        } else {
-            gridPaneAllPhaseAPPlus.setId("0;H;A;P");
-            gridPanePhaseAAPPlus.setId("0;A;A;P");
-            gridPanePhaseBAPPlus.setId("0;B;A;P");
-            gridPanePhaseCAPPlus.setId("0;C;A;P");
-            gridPaneAllPhaseAPMinus.setId("0;H;A;N");
-            gridPanePhaseAAPMinus.setId("0;A;A;N");
-            gridPanePhaseBAPMinus.setId("0;B;A;N");
-            gridPanePhaseCAPMinus.setId("0;C;A;N");
-            gridPaneAllPhaseRPPlus.setId("7;H;R;P");
-            gridPanePhaseARPPlus.setId("7;A;R;P");
-            gridPanePhaseBRPPlus.setId("7;B;R;P");
-            gridPanePhaseCRPPlus.setId("7;C;R;P");
-            gridPaneAllPhaseRPMinus.setId("7;H;R;N");
-            gridPanePhaseARPMinus.setId("7;A;R;N");
-            gridPanePhaseBRPMinus.setId("7;B;R;N");
-            gridPanePhaseCRPMinus.setId("7;C;R;N");
-        }
+
+        gridPaneAllPhaseAPPlus.setId("1;H;A;P");
+        gridPanePhaseAAPPlus.setId("1;A;A;P");
+        gridPanePhaseBAPPlus.setId("1;B;A;P");
+        gridPanePhaseCAPPlus.setId("1;C;A;P");
+        gridPaneAllPhaseAPMinus.setId("1;H;A;N");
+        gridPanePhaseAAPMinus.setId("1;A;A;N");
+        gridPanePhaseBAPMinus.setId("1;B;A;N");
+        gridPanePhaseCAPMinus.setId("1;C;A;N");
+        gridPaneAllPhaseRPPlus.setId("5;H;R;P");
+        gridPanePhaseARPPlus.setId("5;A;R;P");
+        gridPanePhaseBRPPlus.setId("5;B;R;P");
+        gridPanePhaseCRPPlus.setId("5;C;R;P");
+        gridPaneAllPhaseRPMinus.setId("5;H;R;N");
+        gridPanePhaseARPMinus.setId("5;A;R;N");
+        gridPanePhaseBRPMinus.setId("5;B;R;N");
+        gridPanePhaseCRPMinus.setId("5;C;R;N");
+
 
         gridPanesEnergyAndPhase= Arrays.asList(
                 gridPaneAllPhaseAPPlus,
@@ -1927,15 +1899,15 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     //Проверияет нет ли данных с полученной методики и если у неё есть данные, то выгружает её в это окно
     //Необходимо для команды Редактирования методики
     public void initEditsMetodic() {
-        testListForCollumAPPls.addAll(methodic.getCommandsMap().get(0));
-        testListForCollumAPMns.addAll(methodic.getCommandsMap().get(1));
-        testListForCollumRPPls.addAll(methodic.getCommandsMap().get(2));
-        testListForCollumRPMns.addAll(methodic.getCommandsMap().get(3));
+        testListForCollumAPPls.addAll(methodicForThreePhaseStend.getCommandsMap().get(0));
+        testListForCollumAPMns.addAll(methodicForThreePhaseStend.getCommandsMap().get(1));
+        testListForCollumRPPls.addAll(methodicForThreePhaseStend.getCommandsMap().get(2));
+        testListForCollumRPMns.addAll(methodicForThreePhaseStend.getCommandsMap().get(3));
 
-        testListForCollumAPPls.addAll(methodic.getCreepStartRTCConstCommandsMap().get(0));
-        testListForCollumAPMns.addAll(methodic.getCreepStartRTCConstCommandsMap().get(1));
-        testListForCollumRPPls.addAll(methodic.getCreepStartRTCConstCommandsMap().get(2));
-        testListForCollumRPMns.addAll(methodic.getCreepStartRTCConstCommandsMap().get(3));
+        testListForCollumAPPls.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(0));
+        testListForCollumAPMns.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(1));
+        testListForCollumRPPls.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(2));
+        testListForCollumRPMns.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(3));
     }
 
     //Задаёт параметр true или false нужному checkBox'у
@@ -2458,7 +2430,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     void influenceAction(ActionEvent event) {
         if (event.getSource() == influenceBtn) {
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/influencePointsThreePhaseStendFrame.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/ThreePhase/influencePointsThreePhaseStendFrame.fxml"));
             try {
                 fxmlLoader.load();
             } catch (IOException e) {
@@ -2470,7 +2442,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    influencePointsThreePhaseStendFrame.myInitInflFrame(methodic);
+                    influencePointsThreePhaseStendFrame.myInitInflFrame(methodicForThreePhaseStend);
                     influencePointsThreePhaseStendFrame.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
                 }
             });
@@ -2497,7 +2469,8 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 fxmlLoader.load();
 
                 ParametersMethodicController parametersMethodicController = fxmlLoader.getController();
-                parametersMethodicController.setMethodic(methodic);
+                parametersMethodicController.getCircutChkBx().setVisible(false);
+                parametersMethodicController.setMethodicForStend(methodicForThreePhaseStend);
                 parametersMethodicController.setAddEditPointsThreePhaseStendFrameController(this);
 
                 if (bindParameters) {
@@ -2534,8 +2507,8 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }
             }
 
-            methodic.getCommandsMap().put(0, listErrorCommand);
-            methodic.getCreepStartRTCConstCommandsMap().put(0, listCreepStartRTCCommadns);
+            methodicForThreePhaseStend.getCommandsMap().put(0, listErrorCommand);
+            methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().put(0, listCreepStartRTCCommadns);
 
             listErrorCommand = new ArrayList<>();
             listCreepStartRTCCommadns = new ArrayList<>();
@@ -2548,8 +2521,8 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }
             }
 
-            methodic.getCommandsMap().put(1, listErrorCommand);
-            methodic.getCreepStartRTCConstCommandsMap().put(1, listCreepStartRTCCommadns);
+            methodicForThreePhaseStend.getCommandsMap().put(1, listErrorCommand);
+            methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().put(1, listCreepStartRTCCommadns);
 
             listErrorCommand = new ArrayList<>();
             listCreepStartRTCCommadns = new ArrayList<>();
@@ -2562,8 +2535,8 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }
             }
 
-            methodic.getCommandsMap().put(2, listErrorCommand);
-            methodic.getCreepStartRTCConstCommandsMap().put(2, listCreepStartRTCCommadns);
+            methodicForThreePhaseStend.getCommandsMap().put(2, listErrorCommand);
+            methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().put(2, listCreepStartRTCCommadns);
 
             listErrorCommand = new ArrayList<>();
             listCreepStartRTCCommadns = new ArrayList<>();
@@ -2576,16 +2549,16 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }
             }
 
-            methodic.getCommandsMap().put(3, listErrorCommand);
-            methodic.getCreepStartRTCConstCommandsMap().put(3, listCreepStartRTCCommadns);
+            methodicForThreePhaseStend.getCommandsMap().put(3, listErrorCommand);
+            methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().put(3, listCreepStartRTCCommadns);
 
             if (edit) {
-                methodicsAddEditDeleteFrameController.setListsView(methodic);
+                methodicsAddEditDeleteFrameController.setListsView(methodicForThreePhaseStend);
             }else {
                 methodicsAddEditDeleteFrameController.refreshMethodicList();
             }
 
-            methodicsForTest.serializationMetodics();
+            metodicsForTest.serializationMetodics();
             Stage stage1 = (Stage) methodicsAddEditDeleteFrameController.getEditMetBtn().getScene().getWindow();
             stage1.show();
 
@@ -2610,7 +2583,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами пользователя AP+
         if (event.getSource() == addTglBtnCRPAPPls) {
             if (addTglBtnCRPAPPls.isSelected()) {
-                creepCommand = new CreepCommand(false, 0, txtFieldTimeCRPAPPls.getText());
+                creepCommand = new CreepCommand(true, false, 0, txtFieldTimeCRPAPPls.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
@@ -2625,7 +2598,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход AP+")) {
+                        if (command.getName().equals("Самоход AP+")) {
                             testListForCollumAPPls.remove(command);
                             break;
                         }
@@ -2644,7 +2617,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами по ГОСТу AP+
         if (event.getSource() == addTglBtnCRPAPPlsGOST) {
             if (addTglBtnCRPAPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(true, 0);
+                creepCommand = new CreepCommand(true, true, 0);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -2656,7 +2629,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход AP+ ГОСТ")) {
+                        if (command.getName().equals("Самоход AP+ ГОСТ")) {
                             testListForCollumAPPls.remove(command);
                             break;
                         }
@@ -2672,7 +2645,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами пользователя AP-
         if (event.getSource() == addTglBtnCRPAPMns) {
             if (addTglBtnCRPAPMns.isSelected()) {
-                creepCommand = new CreepCommand(false, 1, txtFieldTimeCRPAPMns.getText());
+                creepCommand = new CreepCommand(true, false, 1, txtFieldTimeCRPAPMns.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPMns.getText()));
@@ -2687,7 +2660,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumAPMns) {
                     if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход AP-")) {
+                        if (command.getName().equals("Самоход AP-")) {
                             testListForCollumAPMns.remove(command);
                             break;
                         }
@@ -2706,7 +2679,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnCRPAPMnsGOST) {
             if (addTglBtnCRPAPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(true, 1);
+                creepCommand = new CreepCommand(true, true, 1);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -2718,7 +2691,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumAPMns) {
                     if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход AP- ГОСТ")) {
+                        if (command.getName().equals("Самоход AP- ГОСТ")) {
                             testListForCollumAPMns.remove(command);
                             break;
                         }
@@ -2734,7 +2707,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами пользователя RP+
         if (event.getSource() == addTglBtnCRPRPPls) {
             if (addTglBtnCRPRPPls.isSelected()) {
-                creepCommand = new CreepCommand(false, 2, txtFieldTimeCRPRPPls.getText());
+                creepCommand = new CreepCommand(true, false, 2, txtFieldTimeCRPRPPls.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPPls.getText()));
@@ -2749,7 +2722,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumRPPls) {
                     if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход RP+")) {
+                        if (command.getName().equals("Самоход RP+")) {
                             testListForCollumRPPls.remove(command);
                             break;
                         }
@@ -2768,7 +2741,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnCRPRPPlsGOST) {
             if (addTglBtnCRPRPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(true, 2);
+                creepCommand = new CreepCommand(true, true, 2);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -2780,7 +2753,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumRPPls) {
                     if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход RP+ ГОСТ")) {
+                        if (command.getName().equals("Самоход RP+ ГОСТ")) {
                             testListForCollumRPPls.remove(command);
                             break;
                         }
@@ -2796,7 +2769,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами пользователя RP-
         if (event.getSource() == addTglBtnCRPRPMns) {
             if (addTglBtnCRPRPMns.isSelected()) {
-                creepCommand = new CreepCommand(false, 3, txtFieldTimeCRPRPMns.getText());
+                creepCommand = new CreepCommand(true, false, 3, txtFieldTimeCRPRPMns.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPMns.getText()));
@@ -2811,7 +2784,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumRPMns) {
                     if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход RP-")) {
+                        if (command.getName().equals("Самоход RP-")) {
                             testListForCollumRPMns.remove(command);
                             break;
                         }
@@ -2830,7 +2803,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnCRPRPMnsGOST) {
             if (addTglBtnCRPRPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(true, 3);
+                creepCommand = new CreepCommand(true, true, 3);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -2842,7 +2815,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumRPMns) {
                     if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход RP- ГОСТ")) {
+                        if (command.getName().equals("Самоход RP- ГОСТ")) {
                             testListForCollumRPMns.remove(command);
                             break;
                         }
@@ -2859,7 +2832,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         StartCommand startCommand;
         if (event.getSource() == addTglBtnSTAAPPls) {
             if (addTglBtnSTAAPPls.isSelected()) {
-                startCommand = new StartCommand(0, 0, false, txtFieldTimeSRAAPPls.getText());
+                startCommand = new StartCommand(true, 0, 0, false, txtFieldTimeSRAAPPls.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPPls.getText()));
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPPls.getText()));
@@ -2874,7 +2847,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность AP+")) {
+                        if (command.getName().equals("Чувствительность AP+")) {
                             testListForCollumAPPls.remove(command);
                             break;
                         }
@@ -2893,7 +2866,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу AP+
         if (event.getSource() == addTglBtnSTAAPPlsGOST) {
             if (addTglBtnSTAAPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(0, 0, true);
+                startCommand = new StartCommand(true, 0, 0, true);
 
                 startCommand.setName("Чувствительность ГОСТ AP+");
 
@@ -2902,7 +2875,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ AP+")) {
+                        if (command.getName().equals("Чувствительность ГОСТ AP+")) {
                             testListForCollumAPPls.remove(command);
                             break;
                         }
@@ -2918,7 +2891,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление теста на чувствительность с параметрами пользователя AP-
         if (event.getSource() == addTglBtnSTAAPMns) {
             if (addTglBtnSTAAPMns.isSelected()) {
-                startCommand = new StartCommand(1, 1, false, txtFieldTimeSRAAPMns.getText());
+                startCommand = new StartCommand(true, 1, 1, false, txtFieldTimeSRAAPMns.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPMns.getText()));
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPMns.getText()));
@@ -2933,7 +2906,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumAPMns) {
                     if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность AP-")) {
+                        if (command.getName().equals("Чувствительность AP-")) {
                             testListForCollumAPMns.remove(command);
                             break;
                         }
@@ -2952,7 +2925,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnSTAAPMnsGOST) {
             if (addTglBtnSTAAPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(1, 1, true);
+                startCommand = new StartCommand(true, 1, 1, true);
 
                 startCommand.setName("Чувствительность ГОСТ AP-");
 
@@ -2961,7 +2934,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumAPMns) {
                     if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ AP-")) {
+                        if (command.getName().equals("Чувствительность ГОСТ AP-")) {
                             testListForCollumAPMns.remove(command);
                             break;
                         }
@@ -2977,7 +2950,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление теста на чувствительность с параметрами пользователя RP+
         if (event.getSource() == addTglBtnSTARPPls) {
             if (addTglBtnSTARPPls.isSelected()) {
-                startCommand = new StartCommand(0, 2, false, txtFieldTimeSRARPPls.getText());
+                startCommand = new StartCommand(true, 0, 2, false, txtFieldTimeSRARPPls.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPPls.getText()));
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPPls.getText()));
@@ -2993,7 +2966,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumRPPls) {
                     if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность RP+")) {
+                        if (command.getName().equals("Чувствительность RP+")) {
                             testListForCollumRPPls.remove(command);
                             break;
                         }
@@ -3012,7 +2985,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnSTARPPlsGOST) {
             if (addTglBtnSTARPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(0, 1, true);
+                startCommand = new StartCommand(true, 0, 1, true);
 
                 startCommand.setName("Чувствительность ГОСТ RP+");
 
@@ -3037,7 +3010,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление теста на чувствительность с параметрами пользователя RP-
         if (event.getSource() == addTglBtnSTARPMns) {
             if (addTglBtnSTARPMns.isSelected()) {
-                startCommand = new StartCommand(1, 3, false, txtFieldTimeSRARPMns.getText());
+                startCommand = new StartCommand(true, 1, 3, false, txtFieldTimeSRARPMns.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPMns.getText()));
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPMns.getText()));
@@ -3052,7 +3025,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumRPMns) {
                     if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность RP-")) {
+                        if (command.getName().equals("Чувствительность RP-")) {
                             testListForCollumRPMns.remove(command);
                             break;
                         }
@@ -3071,7 +3044,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnSTARPMnsGOST) {
             if (addTglBtnSTARPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(0, 3, true);
+                startCommand = new StartCommand(true, 0, 3, true);
 
                 startCommand.setName("Чувствительность ГОСТ RP-");
 
@@ -3080,7 +3053,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumRPMns) {
                     if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ RP-")) {
+                        if (command.getName().equals("Чувствительность ГОСТ RP-")) {
                             testListForCollumRPMns.remove(command);
                             break;
                         }
@@ -3124,7 +3097,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ AP+")) {
+                        if (command.getName().equals("ТХЧ AP+")) {
                             testListForCollumAPPls.remove(command);
                             break;
                         }
@@ -3170,7 +3143,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumAPMns) {
                     if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ AP-")) {
+                        if (command.getName().equals("ТХЧ AP-")) {
                             testListForCollumAPMns.remove(command);
                             break;
                         }
@@ -3263,7 +3236,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             } else {
                 for (Commands command : testListForCollumRPMns) {
                     if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ RP-")) {
+                        if (command.getName().equals("ТХЧ RP-")) {
                             testListForCollumRPMns.remove(command);
                             break;
                         }
@@ -3530,11 +3503,6 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     //Добавляет тестовую точку в методику
     private void addTestPointInMethodic(String testPoint) {
-        if (isThrePhaseStend) {
-            stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
-        } else {
-            stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
-        }
 
         String[] dirCurFactor = testPoint.split(";");
 
@@ -3571,18 +3539,18 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
 
         if (energyType.equals("A") && currentDirection.equals("P")) {
-            testListForCollumAPPls.add(new ErrorCommand(testPoint, phase, current, 0, percent, iABC, powerFactor, 0));
+            testListForCollumAPPls.add(new ErrorCommand(true, testPoint, phase, current, 0, percent, iABC, powerFactor, 0));
         }
         if (energyType.equals("A") && currentDirection.equals("N")) {
-            testListForCollumAPMns.add(new ErrorCommand(testPoint, phase, current, 1, percent, iABC, powerFactor, 1));
+            testListForCollumAPMns.add(new ErrorCommand(true, testPoint, phase, current, 1, percent, iABC, powerFactor, 1));
         }
 
         if (energyType.equals("R") && currentDirection.equals("P")) {
-            testListForCollumRPPls.add(new ErrorCommand(testPoint, phase, current, 0, percent, iABC, powerFactor, 2));
+            testListForCollumRPPls.add(new ErrorCommand(true, testPoint, phase, current, 0, percent, iABC, powerFactor, 2));
         }
 
         if (energyType.equals("R") && currentDirection.equals("N")) {
-            testListForCollumRPMns.add(new ErrorCommand(testPoint, phase, current, 1, percent, iABC, powerFactor, 3));
+            testListForCollumRPMns.add(new ErrorCommand(true, testPoint, phase, current, 1, percent, iABC, powerFactor, 3));
         }
     }
 
@@ -3649,8 +3617,8 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         this.methodicsAddEditDeleteFrameController = methodicsAddEditDeleteFrameController;
     }
 
-    public void setMethodic(Methodic methodic) {
-        this.methodic = methodic;
+    public void setMethodicForThreePhaseStend(MethodicForThreePhaseStend methodicForThreePhaseStend) {
+        this.methodicForThreePhaseStend = methodicForThreePhaseStend;
     }
 
     public void setEdit(boolean edit) {

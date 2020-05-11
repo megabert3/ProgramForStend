@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
-
 
 <AnchorPane prefHeight="241.0" prefWidth="914.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.ParametersMethodicController">
    <children>
@@ -41,5 +41,6 @@
       <Text fill="WHITE" layoutX="677.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Завод изготовитель" />
       <Text fill="WHITE" layoutX="677.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Модель счётчика" />
       <ToggleButton fx:id="tglBtnSetPatemeters" layoutX="707.0" layoutY="189.0" mnemonicParsing="false" onAction="#setParametersAction" prefHeight="25.0" prefWidth="146.0" text="Установить параметры" />
+      <CheckBox fx:id="circutChkBx" layoutX="518.0" layoutY="193.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefWidth="129.0" text="Две токовые цепи" textFill="WHITE" />
    </children>
 </AnchorPane>

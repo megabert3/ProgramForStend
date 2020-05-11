@@ -12,6 +12,9 @@ import java.util.Map;
 
 public class StartCommand implements Commands, Serializable {
 
+    //Эта команда из методики для трёхфазного теста?
+    private boolean threePhaseCommand;
+
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
 
@@ -65,7 +68,8 @@ public class StartCommand implements Commands, Serializable {
 
     private HashMap<Integer, Boolean> startCommandResult;
 
-    public StartCommand(int revers, int channelFlag, boolean gostTest, String userTimeTest) {
+    public StartCommand(boolean threePhaseCommand, int revers, int channelFlag, boolean gostTest, String userTimeTest) {
+        this.threePhaseCommand = threePhaseCommand;
         this.userTimeTest = userTimeTest;
         this.revers = revers;
         this.channelFlag = channelFlag;
@@ -88,7 +92,8 @@ public class StartCommand implements Commands, Serializable {
         }
     }
 
-    public StartCommand(int revers, int channelFlag, boolean gostTest) {
+    public StartCommand(boolean threePhaseCommand, int revers, int channelFlag, boolean gostTest) {
+        this.threePhaseCommand = threePhaseCommand;
         this.revers = revers;
         this.channelFlag = channelFlag;
         this.gostTest = gostTest;

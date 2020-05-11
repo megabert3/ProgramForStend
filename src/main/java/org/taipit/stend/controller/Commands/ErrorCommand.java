@@ -14,6 +14,9 @@ public class ErrorCommand implements Commands, Serializable {
 
     private StendDLLCommands stendDLLCommands;
 
+    //Эта команда из методики для трёхфазного теста?
+    private boolean threePhaseCommand;
+
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
 
@@ -98,7 +101,8 @@ public class ErrorCommand implements Commands, Serializable {
     //Флаг для прекращения сбора погрешности
     private HashMap<Integer, Boolean> flagInStop;
 
-    public ErrorCommand(String id, int phase, String current, int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
+    public ErrorCommand(boolean threePhaseStendCommand, String id, int phase, String current, int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
+        this.threePhaseCommand = threePhaseStendCommand;
         this.id = id;
         this.phase = phase;
         this.current = current;
@@ -120,8 +124,9 @@ public class ErrorCommand implements Commands, Serializable {
     }
 
     //Конструктор для создания объекта с вклатки "Влияние"
-    public ErrorCommand(String strPhase, String param, String id, int phase, String current,
+    public ErrorCommand(boolean threePhaseStendCommand, String strPhase, String param, String id, int phase, String current,
                         double voltPer, int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
+        this.threePhaseCommand = threePhaseStendCommand;
         this.id = id;
         this.phase = phase;
         this.current = current;

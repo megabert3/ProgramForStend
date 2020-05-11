@@ -4,25 +4,24 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
-import org.taipit.stend.model.Methodic;
-import org.taipit.stend.model.MethodicsForTest;
+import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
+import org.taipit.stend.model.metodics.Metodic;
+import org.taipit.stend.model.metodics.MetodicsForTest;
 import org.taipit.stend.model.ResultsTest;
 
 import java.util.List;
 
 public class YesOrNoFrameController {
 
-    MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
+    MetodicsForTest metodicsForTest = MetodicsForTest.getMetodicsForTestInstance();
 
     private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
 
     private Stage stageSaveResultTest;
 
-    private Methodic methodic;
+    private Metodic methodicForStend;
 
     //Запрос с окна удаления методики
     private boolean deliteMethodic;
@@ -56,11 +55,11 @@ public class YesOrNoFrameController {
         if (event.getSource() == yesBtn) {
             if (deliteMethodic) {
 
-                methodicsForTest.deleteMethodic(methodic.getMethodicName());
+                metodicsForTest.deleteMethodic(methodicForStend.getMetodicName());
 
                 methodicsAddEditDeleteFrameController.refreshAfterDelete();
 
-                methodicsForTest.serializationMetodics();
+                metodicsForTest.serializationMetodics();
 
                 stageYesOrNo.close();
 
@@ -99,8 +98,8 @@ public class YesOrNoFrameController {
         this.deliteMethodic = deliteMethodic;
     }
 
-    public void setMethodic(Methodic methodic) {
-        this.methodic = methodic;
+    public void setMethodicForStend(Metodic methodicForStend) {
+        this.methodicForStend = methodicForStend;
     }
 
     public Label getQuestionTxt() {

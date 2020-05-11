@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1226.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.InfluencePointsOnePhaseStendFrame">
+    <children>
+        <Button fx:id="saveBtn" layoutX="1054.0" layoutY="675.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="41.0" prefWidth="150.0" text="Сохранить">
+            <graphic>
+                <ImageView fitHeight="30.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
+            </graphic>
+        </Button>
+        <AnchorPane layoutX="28.0" layoutY="438.0" prefHeight="175.0" prefWidth="750.0">
+            <children>
+                <HBox alignment="TOP_RIGHT" prefHeight="35.0" prefWidth="750.0" style="-fx-background-color: #6A6A6A;">
+                    <children>
+                        <ToggleButton fx:id="APPlusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="A.P. +">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                            </graphic>
+                        </ToggleButton>
+                        <ToggleButton fx:id="APMinusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="A.P. -">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                            </graphic>
+                        </ToggleButton>
+                        <ToggleButton fx:id="RPPlusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="R.P.+">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                            </graphic>
+                        </ToggleButton>
+                        <ToggleButton fx:id="RPMinusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="R.P.-">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                            </graphic>
+                        </ToggleButton>
+                    </children>
+                </HBox>
+                <StackPane layoutX="-1.0" layoutY="35.0" prefHeight="140.0" prefWidth="750.0">
+                    <children>
+                  <Pane fx:id="mainPhaseAPane" prefHeight="140.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="140.0" prefWidth="150.0" style="-fx-background-color: #303030;">
+                           <children>
+                              <ToggleButton fx:id="selectInfUPhaseATgl" mnemonicParsing="false" onAction="#selectInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Напряжение" />
+                              <ToggleButton fx:id="selectInfFPhaseATgl" mnemonicParsing="false" onAction="#selectInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Частота" />
+                           </children>
+                        </VBox>
+                        <StackPane layoutX="150.0" layoutY="-1.0" prefHeight="140.0" prefWidth="600.0">
+                           <children>
+                              <Pane fx:id="InflUPhaseAPane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="76.0" layoutY="49.0" text="Влияние напряжения, %" />
+                                    <Label fx:id="directLabPhaseAU" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
+                                    <ToggleButton fx:id="addTglBtnInfUPhaseA" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+                                    <TextField fx:id="txtFieldInfUPhaseA" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="InflFPhaseAPane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="76.0" layoutY="49.0" text="Влияние частоты, %" />
+                                    <Label fx:id="directLabPhaseAF" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
+                                    <ToggleButton fx:id="addTglBtnInfFPhaseA" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+                                    <TextField fx:id="txtFieldInfFPhaseA" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="mainPhaseBPane" prefHeight="140.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="140.0" prefWidth="150.0" style="-fx-background-color: #303030;">
+                           <children>
+                              <ToggleButton fx:id="selectInfUPhaseBTgl" mnemonicParsing="false" onAction="#selectInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Напряжение" />
+                              <ToggleButton fx:id="selectInfFPhaseBTgl" mnemonicParsing="false" onAction="#selectInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Частота" />
+                           </children>
+                        </VBox>
+                        <StackPane layoutX="150.0" layoutY="-1.0" prefHeight="140.0" prefWidth="600.0">
+                           <children>
+                              <Pane fx:id="InflUPhaseBPane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="76.0" layoutY="49.0" text="Влияние напряжения, %" />
+                                    <Label fx:id="directLabPhaseBU" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
+                                    <ToggleButton fx:id="addTglBtnInfUPhaseB" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+                                    <TextField fx:id="txtFieldInfUPhaseB" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="InflFPhaseBPane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="76.0" layoutY="49.0" text="Влияние частоты, %" />
+                                    <Label fx:id="directLabPhaseBF" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
+                                    <ToggleButton fx:id="addTglBtnInfFPhaseB" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+                                    <TextField fx:id="txtFieldInfFPhaseB" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="mainPhaseCPane" prefHeight="140.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="140.0" prefWidth="150.0" style="-fx-background-color: #303030;">
+                           <children>
+                              <ToggleButton fx:id="selectInfUPhaseCTgl" mnemonicParsing="false" onAction="#selectInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Напряжение" />
+                              <ToggleButton fx:id="selectInfFPhaseCTgl" mnemonicParsing="false" onAction="#selectInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Частота" />
+                           </children>
+                        </VBox>
+                        <StackPane layoutX="150.0" layoutY="-1.0" prefHeight="140.0" prefWidth="600.0">
+                           <children>
+                              <Pane fx:id="InflUPhaseCPane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="76.0" layoutY="49.0" text="Влияние напряжения, %" />
+                                    <Label fx:id="directLabPhaseCU" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
+                                    <ToggleButton fx:id="addTglBtnInfUPhaseC" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+                                    <TextField fx:id="txtFieldInfUPhaseC" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="InflFPhaseCPane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="76.0" layoutY="49.0" text="Влияние частоты, %" />
+                                    <Label fx:id="directLabPhaseCF" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
+                                    <ToggleButton fx:id="addTglBtnInfFPhaseC" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+                                    <TextField fx:id="txtFieldInfFPhaseC" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </Pane>
+                        <Pane fx:id="mainAllPhasePane" prefHeight="140.0" prefWidth="200.0">
+                            <children>
+                                <VBox prefHeight="140.0" prefWidth="150.0" style="-fx-background-color: #303030;">
+                                    <children>
+                                        <ToggleButton fx:id="selectInfUAllPhaseTgl" mnemonicParsing="false" onAction="#selectInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Напряжение" />
+                                        <ToggleButton fx:id="selectInfFAllPhaseTgl" mnemonicParsing="false" onAction="#selectInfluenceTests" prefHeight="40.0" prefWidth="150.0" text="Частота" />
+                                    </children>
+                                </VBox>
+                                <StackPane layoutX="150.0" layoutY="-1.0" prefHeight="140.0" prefWidth="600.0">
+                                    <children>
+                                        <Pane fx:id="InflFAllPhasePane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                            <children>
+                                                <Label layoutX="76.0" layoutY="49.0" text="Влияние частоты, %" />
+                                                <Label fx:id="directLabAllPhaseF" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
+                                                <ToggleButton fx:id="addTglBtnInfFAllPhase" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+                                                <TextField fx:id="txtFieldInfFAllPhase" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+                                            </children>
+                                        </Pane>
+                                        <Pane fx:id="InflUAllPhasePane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                            <children>
+                                                <Label layoutX="76.0" layoutY="49.0" text="Влияние напряжения, %" />
+                                                <Label fx:id="directLabAllPhaseU" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" />
+                                                <ToggleButton fx:id="addTglBtnInfUAllPhase" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" text="Добавить" />
+                                                <TextField fx:id="txtFieldInfUAllPhase" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" />
+                                            </children>
+                                        </Pane>
+                                    </children>
+                                </StackPane>
+                            </children>
+                        </Pane>
+                    </children>
+                </StackPane>
+            </children>
+        </AnchorPane>
+        <Pane prefHeight="115.0" prefWidth="1226.0" style="-fx-background-color: #2E2E2E;" />
+        <AnchorPane layoutX="28.0" layoutY="80.0" prefHeight="230.0" prefWidth="751.0">
+            <children>
+                <VBox fx:id="vBoxForPhaseTgBtn" layoutY="34.0" prefHeight="230.0" prefWidth="108.0" style="-fx-background-color: #303030;">
+                    <children>
+                        <ToggleButton fx:id="allPhaseBtn" mnemonicParsing="false" onAction="#setPhaseGridPaneAction" prefHeight="40.0" prefWidth="150.0" text="Одна цепь">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                            </graphic>
+                        </ToggleButton>
+                  <ToggleButton fx:id="phaseABtn" mnemonicParsing="false" onAction="#setPhaseGridPaneAction" prefHeight="40.0" prefWidth="150.0" text="Цепь А">
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </ToggleButton>
+                  <ToggleButton fx:id="phaseBBtn" mnemonicParsing="false" onAction="#setPhaseGridPaneAction" prefHeight="40.0" prefWidth="150.0" text="Цепь B">
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </ToggleButton>
+                    </children>
+                </VBox>
+                <HBox fx:id="hBoxForDirectionTgBtn" alignment="TOP_RIGHT" prefHeight="35.0" prefWidth="751.0" style="-fx-background-color: #2E2E2E;">
+                    <children>
+                        <ToggleButton fx:id="APPlus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="A.P. +">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                            </graphic>
+                        </ToggleButton>
+                        <ToggleButton fx:id="APMinus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="A.P. -">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                            </graphic>
+                        </ToggleButton>
+                        <ToggleButton fx:id="RPPlus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="R.P.+">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                            </graphic>
+                        </ToggleButton>
+                        <ToggleButton fx:id="RPMinus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="R.P.-">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                            </graphic>
+                        </ToggleButton>
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="799.0" layoutY="77.0" prefHeight="575.0" prefWidth="405.0">
+            <children>
+                <StackPane prefHeight="575.0" prefWidth="405.0">
+                    <children>
+                        <TableView fx:id="viewPointTableRPPls" prefHeight="575.0" prefWidth="405.0">
+                            <columns>
+                                <TableColumn fx:id="loadCurrTabColRPPls" prefWidth="125.0" text="Нагрузка" />
+                                <TableColumn fx:id="eMaxTabColRPPls" prefWidth="65.0" text="Emax" />
+                                <TableColumn fx:id="eMinTabColRPPls" prefWidth="65.0" text="Emin" />
+                                <TableColumn fx:id="amountImplTabColRPPls" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColRPPls" text="Измерения" />
+                            </columns>
+                        </TableView>
+                        <TableView fx:id="viewPointTableRPMns" prefHeight="575.0" prefWidth="402.0">
+                            <columns>
+                                <TableColumn fx:id="loadCurrTabColRPMns" prefWidth="125.0" text="Нагрузка" />
+                                <TableColumn fx:id="eMaxTabColRPMns" prefWidth="65.0" text="Emax" />
+                                <TableColumn fx:id="eMinTabColRPMns" prefWidth="65.0" text="Emin" />
+                                <TableColumn fx:id="amountImplTabColRPMns" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColRPMns" text="Измерения" />
+                            </columns>
+                        </TableView>
+                        <TableView fx:id="viewPointTableAPPls" prefHeight="575.0" prefWidth="402.0">
+                            <columns>
+                                <TableColumn fx:id="loadCurrTabColAPPls" prefWidth="125.0" text="Нагрузка" />
+                                <TableColumn fx:id="eMaxTabColAPPls" prefWidth="65.0" text="Emax" />
+                                <TableColumn fx:id="eMinTabColAPPls" prefWidth="65.0" text="Emin" />
+                                <TableColumn fx:id="amountImplTabColAPPls" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColAPPls" text="Измерения" />
+                            </columns>
+                        </TableView>
+                        <TableView fx:id="viewPointTableAPMns" prefHeight="575.0" prefWidth="402.0">
+                            <columns>
+                                <TableColumn fx:id="loadCurrTabColAPMns" prefWidth="125.0" text="Нагрузка" />
+                                <TableColumn fx:id="eMaxTabColAPMns" prefWidth="65.0" text="Emax" />
+                                <TableColumn fx:id="eMinTabColAPMns" prefWidth="65.0" text="Emin" />
+                                <TableColumn fx:id="amountImplTabColAPMns" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColAPMns" text="Измерения" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </StackPane>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

@@ -9,6 +9,9 @@ public class ConstantCommand implements Commands, Serializable {
     //Включает или выключает в автоматическом режиме точку
     private boolean active = true;
 
+    //Эта команда из методики для трёхфазного теста?
+    private boolean threePhaseCommand;
+
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption {
 

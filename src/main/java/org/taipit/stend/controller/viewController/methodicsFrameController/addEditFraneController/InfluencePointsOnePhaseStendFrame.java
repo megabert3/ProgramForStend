@@ -24,22 +24,14 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.controller.Commands.ErrorCommand;
-import org.taipit.stend.controller.Commands.ImbalansUCommand;
-import org.taipit.stend.controller.OnePhaseStend;
-import org.taipit.stend.controller.StendDLLCommands;
-import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.helper.ConsoleHelper;
-import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
+import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
 
 import java.util.*;
 
-public class InfluencePointsThreePhaseStendFrame {
+public class InfluencePointsOnePhaseStendFrame {
 
-    private AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController;
-
-    private MethodicForThreePhaseStend methodicForThreePhaseStend;
-
-    private StendDLLCommands stendDLLCommands;
+    private MethodicForOnePhaseStend methodicForOnePhaseStend;
 
     //Значения коэффициента мощности
     private List<String> powerFactor;
@@ -61,9 +53,6 @@ public class InfluencePointsThreePhaseStendFrame {
 
     private Pane fillSquare = new Pane();
 
-    //Это трёхфазный стенд?
-    private boolean isThrePhaseStend;
-
     //Листы с точками тестирования до сохранения
     private ObservableList<Commands> inflListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> inflListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
@@ -76,7 +65,6 @@ public class InfluencePointsThreePhaseStendFrame {
     private List<Commands> saveInflListForCollumRPPls = new ArrayList<>();
     private List<Commands> saveInflListForCollumRPMns = new ArrayList<>();
 
-
 //=====================================================================
     //Поля необходимые для добавления точек испытания на влияние
     //До сохранения
@@ -84,53 +72,37 @@ public class InfluencePointsThreePhaseStendFrame {
     private float[] influenceUprocAllPhaseAPPls = new float[0];
     private float[] influenceUprocPhaseAAPPls = new float[0];
     private float[] influenceUprocPhaseBAPPls = new float[0];
-    private float[] influenceUprocPhaseCAPPls = new float[0];
 
     private float[] influenceFprocAllPhaseAPPls = new float[0];
     private float[] influenceFprocPhaseAAPPls = new float[0];
     private float[] influenceFprocPhaseBAPPls = new float[0];
-    private float[] influenceFprocPhaseCAPPls = new float[0];
-
-    private String[] influenceImbUAPPls = new String[0];
 
     //AP-
     private float[] influenceUprocAllPhaseAPMns = new float[0];
     private float[] influenceUprocPhaseAAPMns = new float[0];
     private float[] influenceUprocPhaseBAPMns = new float[0];
-    private float[] influenceUprocPhaseCAPMns = new float[0];
 
     private float[] influenceFprocAllPhaseAPMns = new float[0];
     private float[] influenceFprocPhaseAAPMns = new float[0];
     private float[] influenceFprocPhaseBAPMns = new float[0];
-    private float[] influenceFprocPhaseCAPMns = new float[0];
-
-    private String[] influenceInbUAPMns = new String[0];
 
     //RP+
     private float[] influenceUprocAllPhaseRPPls = new float[0];
     private float[] influenceUprocPhaseARPPls = new float[0];
     private float[] influenceUprocPhaseBRPPls = new float[0];
-    private float[] influenceUprocPhaseCRPPls = new float[0];
 
     private float[] influenceFprocAllPhaseRPPls = new float[0];
     private float[] influenceFprocPhaseARPPls = new float[0];
     private float[] influenceFprocPhaseBRPPls = new float[0];
-    private float[] influenceFprocPhaseCRPPls = new float[0];
-
-    private String[] influenceInbURPPls = new String[0];
 
     //RP-
     private float[] influenceUprocAllPhaseRPMns = new float[0];
     private float[] influenceUprocPhaseARPMns = new float[0];
     private float[] influenceUprocPhaseBRPMns = new float[0];
-    private float[] influenceUprocPhaseCRPMns = new float[0];
 
     private float[] influenceFprocAllPhaseRPMns = new float[0];
     private float[] influenceFprocPhaseARPMns = new float[0];
     private float[] influenceFprocPhaseBRPMns = new float[0];
-    private float[] influenceFprocPhaseCRPMns = new float[0];
-
-    private String[] influenceInbURPMns = new String[0];
 
     //======================================================================
     @FXML
@@ -374,9 +346,6 @@ public class InfluencePointsThreePhaseStendFrame {
     private ToggleButton phaseBBtn;
 
     @FXML
-    private ToggleButton phaseCBtn;
-
-    @FXML
     private HBox hBoxForDirectionTgBtn;
 
     @FXML
@@ -391,49 +360,29 @@ public class InfluencePointsThreePhaseStendFrame {
     @FXML
     private ToggleButton RPMinus;
 
-    @FXML
-    private Pane InflInbPane;
-
-    @FXML
-    private ToggleButton selectInfInb;
-
-    @FXML
-    private Label directLabInb;
-
-    @FXML
-    private ToggleButton addTglBtnImb;
-
-    @FXML
-    private TextField txtFieldInfImb;
-
     //Данный блок отвечает за сетку выбора точки.
     //Влияние напряжения
     private GridPane gridPaneUAllPhase = new GridPane();
     private GridPane gridPaneUPhaseA = new GridPane();
     private GridPane gridPaneUPhaseB = new GridPane();
-    private GridPane gridPaneUPhaseC = new GridPane();
 
     //Влияние частоты
     private GridPane gridPaneFAllPhase = new GridPane();
     private GridPane gridPaneFPhaseA = new GridPane();
     private GridPane gridPaneFPhaseB = new GridPane();
-    private GridPane gridPaneFPhaseC = new GridPane();
 
     @FXML
     void initialize() {
-        if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
-            isThrePhaseStend = true;
-        }
         current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
         powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
 
         initMainScrollPaneAndScrollPaneCurrentScrollPanePowerFactor();
     }
 
-    public void myInitInflFrame(MethodicForThreePhaseStend methodicForThreePhaseStend) {
-        this.methodicForThreePhaseStend = methodicForThreePhaseStend;
+    public void myInitInflFrame(MethodicForOnePhaseStend methodicForOnePhaseStend) {
+        this.methodicForOnePhaseStend = methodicForOnePhaseStend;
 
-        intitInflFields(methodicForThreePhaseStend);
+        intitInflFields(this.methodicForOnePhaseStend);
 
         APPlus.fire();
 
@@ -862,144 +811,6 @@ public class InfluencePointsThreePhaseStendFrame {
             }
         }
 
-        //Влияние напряжения Фаза C
-        if (event.getSource() == addTglBtnInfUPhaseC) {
-            if (addTglBtnInfUPhaseC.isSelected()) {
-
-                //Если выбрано AP+
-                if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfUPhaseC.getText().split(",");
-                        List<Float> inflFloat = new ArrayList<>();
-                        Float procFloat;
-
-                        for (String proc : inf) {
-                            procFloat = Float.parseFloat(proc.trim());
-                            inflFloat.add(procFloat);
-                        }
-
-                        influenceUprocPhaseCAPPls = new float[inflFloat.size()];
-
-                        for (int i = 0; i < inflFloat.size(); i++) {
-                            influenceUprocPhaseCAPPls[i] = inflFloat.get(i);
-                        }
-
-                        gridPaneUPhaseC.setDisable(false);
-                        txtFieldInfUPhaseC.setDisable(true);
-                    } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInfUPhaseC.setSelected(false);
-                    }
-
-                    //Если выбрано AP-
-                } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfUPhaseC.getText().split(",");
-                        List<Float> inflFloat = new ArrayList<>();
-                        Float procFloat;
-
-                        for (String proc : inf) {
-                            procFloat = Float.parseFloat(proc.trim());
-                            inflFloat.add(procFloat);
-                        }
-
-                        influenceUprocPhaseCAPMns = new float[inflFloat.size()];
-
-                        for (int i = 0; i < inflFloat.size(); i++) {
-                            influenceUprocPhaseCAPMns[i] = inflFloat.get(i);
-                        }
-
-                        gridPaneUPhaseC.setDisable(false);
-                        txtFieldInfUPhaseC.setDisable(true);
-                    } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInfUPhaseC.setSelected(false);
-                    }
-
-                    //Если выбрано RP+
-                } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfUPhaseC.getText().split(",");
-                        List<Float> inflFloat = new ArrayList<>();
-                        Float procFloat;
-
-                        for (String proc : inf) {
-                            procFloat = Float.parseFloat(proc.trim());
-                            inflFloat.add(procFloat);
-                        }
-
-                        influenceUprocPhaseCRPPls = new float[inflFloat.size()];
-
-                        for (int i = 0; i < inflFloat.size(); i++) {
-                            influenceUprocPhaseCRPPls[i] = inflFloat.get(i);
-                        }
-
-                        gridPaneUPhaseC.setDisable(false);
-                        txtFieldInfUPhaseC.setDisable(true);
-                    } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInfUPhaseC.setSelected(false);
-                    }
-
-                    //Если выбрано RP-
-                } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfUPhaseC.getText().split(",");
-                        List<Float> inflFloat = new ArrayList<>();
-                        Float procFloat;
-
-                        for (String proc : inf) {
-                            procFloat = Float.parseFloat(proc.trim());
-                            inflFloat.add(procFloat);
-                        }
-
-                        influenceUprocPhaseCRPMns = new float[inflFloat.size()];
-
-                        for (int i = 0; i < inflFloat.size(); i++) {
-                            influenceUprocPhaseCRPMns[i] = inflFloat.get(i);
-                        }
-
-                        gridPaneUPhaseC.setDisable(false);
-                        txtFieldInfUPhaseC.setDisable(true);
-                    } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInfUPhaseC.setSelected(false);
-                    }
-                }
-            } else {
-                gridPaneUPhaseC.setDisable(true);
-                txtFieldInfUPhaseC.setDisable(false);
-
-                CheckBox checkBox;
-                for (Node node : gridPaneUPhaseC.getChildren()) {
-                    try {
-                        checkBox = (CheckBox) node;
-                        if (checkBox.isSelected()) {
-                            checkBox.setSelected(false);
-                        }
-                    } catch (ClassCastException ignore) {
-                    }
-                }
-
-                if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
-
-                    influenceUprocPhaseCAPPls = new float[0];
-
-                } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
-
-                    influenceUprocPhaseCAPMns = new float[0];
-
-                } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
-
-                    influenceUprocPhaseCRPPls = new float[0];
-
-                } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
-
-                    influenceUprocPhaseCRPMns = new float[0];
-                }
-            }
-        }
-
         //Влияние частоты все фазы
         if (event.getSource() == addTglBtnInfFAllPhase) {
             if (addTglBtnInfFAllPhase.isSelected()) {
@@ -1413,520 +1224,6 @@ public class InfluencePointsThreePhaseStendFrame {
                 }
             }
         }
-
-        //Влияние напряжения Фаза C
-        if (event.getSource() == addTglBtnInfFPhaseC) {
-            if (addTglBtnInfFPhaseC.isSelected()) {
-
-                //Если выбрано AP+
-                if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfFPhaseC.getText().split(",");
-                        List<Float> inflFloat = new ArrayList<>();
-                        Float procFloat;
-
-                        for (String proc : inf) {
-                            procFloat = Float.parseFloat(proc.trim());
-                            inflFloat.add(procFloat);
-                        }
-
-                        influenceFprocPhaseCAPPls = new float[inflFloat.size()];
-
-                        for (int i = 0; i < inflFloat.size(); i++) {
-                            influenceFprocPhaseCAPPls[i] = inflFloat.get(i);
-                        }
-
-                        gridPaneFPhaseC.setDisable(false);
-                        txtFieldInfFPhaseC.setDisable(true);
-                    } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInfFPhaseC.setSelected(false);
-                    }
-
-                    //Если выбрано AP-
-                } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfFPhaseC.getText().split(",");
-                        List<Float> inflFloat = new ArrayList<>();
-                        Float procFloat;
-
-                        for (String proc : inf) {
-                            procFloat = Float.parseFloat(proc.trim());
-                            inflFloat.add(procFloat);
-                        }
-
-                        influenceFprocPhaseCAPMns = new float[inflFloat.size()];
-
-                        for (int i = 0; i < inflFloat.size(); i++) {
-                            influenceFprocPhaseCAPMns[i] = inflFloat.get(i);
-                        }
-
-                        gridPaneFPhaseC.setDisable(false);
-                        txtFieldInfFPhaseC.setDisable(true);
-                    } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInfFPhaseC.setSelected(false);
-                    }
-
-                    //Если выбрано RP+
-                } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfFPhaseC.getText().split(",");
-                        List<Float> inflFloat = new ArrayList<>();
-                        Float procFloat;
-
-                        for (String proc : inf) {
-                            procFloat = Float.parseFloat(proc.trim());
-                            inflFloat.add(procFloat);
-                        }
-
-                        influenceFprocPhaseCRPPls = new float[inflFloat.size()];
-
-                        for (int i = 0; i < inflFloat.size(); i++) {
-                            influenceFprocPhaseCRPPls[i] = inflFloat.get(i);
-                        }
-
-                        gridPaneFPhaseC.setDisable(false);
-                        txtFieldInfFPhaseC.setDisable(true);
-                    } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInfFPhaseC.setSelected(false);
-                    }
-
-                    //Если выбрано RP-
-                } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfFPhaseC.getText().split(",");
-                        List<Float> inflFloat = new ArrayList<>();
-                        Float procFloat;
-
-                        for (String proc : inf) {
-                            procFloat = Float.parseFloat(proc.trim());
-                            inflFloat.add(procFloat);
-                        }
-
-                        influenceFprocPhaseCRPMns = new float[inflFloat.size()];
-
-                        for (int i = 0; i < inflFloat.size(); i++) {
-                            influenceFprocPhaseCRPMns[i] = inflFloat.get(i);
-                        }
-
-                        gridPaneFPhaseC.setDisable(false);
-                        txtFieldInfFPhaseC.setDisable(true);
-                    } catch (NumberFormatException e) {
-                        //InfoEx
-                        addTglBtnInfFPhaseC.setSelected(false);
-                    }
-                }
-            } else {
-                gridPaneFPhaseC.setDisable(true);
-                txtFieldInfFPhaseC.setDisable(false);
-
-                CheckBox checkBox;
-                for (Node node : gridPaneFPhaseC.getChildren()) {
-                    try {
-                        checkBox = (CheckBox) node;
-                        if (checkBox.isSelected()) {
-                            checkBox.setSelected(false);
-                        }
-                    } catch (ClassCastException ignore) {
-                    }
-                }
-
-                if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
-
-                    influenceFprocPhaseCAPPls = new float[0];
-
-                } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
-
-                    influenceFprocPhaseCAPMns = new float[0];
-
-                } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
-
-                    influenceFprocPhaseCRPPls = new float[0];
-
-                } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
-
-                    influenceFprocPhaseCRPMns = new float[0];
-                }
-            }
-        }
-
-        //Если нажата кнопка добавления теста влияния imb
-        if (event.getSource() == addTglBtnImb) {
-            if (addTglBtnImb.isSelected()) {
-
-                //Если выбрано AP+
-                if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfImb.getText().split(",");
-                        List<String> inbStr = new ArrayList<>();
-                        String phase;
-
-                        for (String phaseInb : inf) {
-                            phase = phaseInb.trim();
-
-                            if (phase.equals("A") || phase.equals("B") || phase.equals("C") || phase.equals("AB") || phase.equals("BA") ||
-                                    phase.equals("BC") || phase.equals("CB") || phase.equals("CA") || phase.equals("AC")) {
-
-                                inbStr.add(phase);
-
-                            } else {
-                                throw new NumberFormatException("Неверные данные");
-                            }
-                        }
-
-                        influenceImbUAPPls = new String[inbStr.size()];
-
-                        for (int i = 0; i < inbStr.size(); i++) {
-                            influenceImbUAPPls[i] = inbStr.get(i);
-                        }
-
-                        for (String phases : inbStr) {
-
-                            switch (phases) {
-                                case "A": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("A;A;P", 0, "Ib", 0, "1.0", 0,
-                                            100.0, 0, 0));
-                                }break;
-                                case "B": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("B;A;P", 0, "Ib", 0, "1.0", 0,
-                                            0, 100.0, 0));
-                                }break;
-                                case "C": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("C;A;P", 0, "Ib", 0, "1.0", 0,
-                                            0, 0, 100.0));
-                                }break;
-                                case "AB": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("AB;A;P", 0, "Ib", 0, "1.0", 0,
-                                            100.0, 100.0, 0));
-                                }break;
-                                case "BA": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("BA;A;P", 0, "Ib", 0, "1.0", 0,
-                                            100.0, 100.0, 0));
-                                }break;
-                                case "AC": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("AC;A;P", 0, "Ib", 0, "1.0", 0,
-                                            100.0, 0, 100.0));
-                                }break;
-                                case "CA": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("CA;A;P", 0, "Ib", 0, "1.0", 0,
-                                            100.0, 0, 100.0));
-                                }break;
-                                case "CB": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("CB;A;P", 0, "Ib", 0, "1.0", 0,
-                                            0, 100.0, 100.0));
-                                }break;
-                                case "BC": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("BC;A;P", 0, "Ib", 0, "1.0", 0,
-                                            0, 100.0, 100.0));
-                                }break;
-                            }
-                        }
-
-                        txtFieldInfImb.setDisable(true);
-
-                    } catch (NumberFormatException e) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Невeрные данные");
-                            }
-                        });
-
-                        addTglBtnImb.setSelected(false);
-                    }
-
-                    //Если выбрано AP-
-                } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfImb.getText().split(",");
-                        List<String> inbStr = new ArrayList<>();
-                        String phase;
-
-                        for (String phaseInb : inf) {
-                            phase = phaseInb.trim();
-
-                            if (phase.equals("A") || phase.equals("B") || phase.equals("C") || phase.equals("AB") || phase.equals("BA") ||
-                                    phase.equals("BC") || phase.equals("CB") || phase.equals("CA") || phase.equals("AC")) {
-
-                                inbStr.add(phase);
-
-                            } else {
-                                throw new NumberFormatException("Неверные данные");
-                            }
-                        }
-
-                        influenceInbUAPMns = new String[inbStr.size()];
-
-                        for (int i = 0; i < inbStr.size(); i++) {
-                            influenceInbUAPMns[i] = inbStr.get(i);
-                        }
-
-                        for (String phases : inbStr) {
-
-                            switch (phases) {
-                                case "A": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("A;A;N", 0, "Ib", 1, "1.0", 1,
-                                            100.0, 0, 0));
-                                }break;
-                                case "B": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("B;A;N", 0, "Ib", 1, "1.0", 1,
-                                            0, 100.0, 0));
-                                }break;
-                                case "C": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("C;A;N", 0, "Ib", 1, "1.0", 1,
-                                            0, 0, 100.0));
-                                }break;
-                                case "AB": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("AB;A;N", 0, "Ib", 1, "1.0", 1,
-                                            100.0, 100.0, 0));
-                                }break;
-                                case "BA": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("BA;A;N", 0, "Ib", 1, "1.0", 1,
-                                            100.0, 100.0, 0));
-                                }break;
-                                case "AC": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("AC;A;N", 0, "Ib", 1, "1.0", 1,
-                                            100.0, 0, 100.0));
-                                }break;
-                                case "CA": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("CA;A;N", 0, "Ib", 1, "1.0", 1,
-                                            100.0, 0, 100.0));
-                                }break;
-                                case "CB": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("CB;A;N", 0, "Ib", 1, "1.0", 1,
-                                            0, 100.0, 100.0));
-                                }break;
-                                case "BC": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("BC;A;N", 0, "Ib", 1, "1.0", 1,
-                                            0, 100.0, 100.0));
-                                }break;
-                            }
-                        }
-
-                        txtFieldInfImb.setDisable(true);
-
-                    } catch (NumberFormatException e) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Неверные данные");
-                            }
-                        });
-                        addTglBtnImb.setSelected(false);
-                    }
-
-                    //Если выбрано RP+
-                } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfImb.getText().split(",");
-                        List<String> inbStr = new ArrayList<>();
-                        String phase;
-
-                        for (String phaseInb : inf) {
-                            phase = phaseInb.trim();
-
-                            if (phase.equals("A") || phase.equals("B") || phase.equals("C") || phase.equals("AB") || phase.equals("BA") ||
-                                    phase.equals("BC") || phase.equals("CB") || phase.equals("CA") || phase.equals("AC")) {
-
-                                inbStr.add(phase);
-
-                            } else {
-                                throw new NumberFormatException("Неверные данные");
-                            }
-                        }
-
-                        influenceInbURPPls = new String[inbStr.size()];
-
-                        for (int i = 0; i < inbStr.size(); i++) {
-                            influenceInbURPPls[i] = inbStr.get(i);
-                        }
-
-                        for (String phases : inbStr) {
-
-                            switch (phases) {
-                                case "A": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("A;R;P", 7, "Ib", 0, "1.0", 2,
-                                            100.0, 0, 0));
-                                }break;
-                                case "B": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("B;R;P", 7, "Ib", 0, "1.0", 2,
-                                            0, 100.0, 0));
-                                }break;
-                                case "C": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("C;R;P", 7, "Ib", 0, "1.0", 2,
-                                            0, 0, 100.0));
-                                }break;
-                                case "AB": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("AB;R;P", 7, "Ib", 0, "1.0", 2,
-                                            100.0, 100.0, 0));
-                                }break;
-                                case "BA": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("BA;R;P", 7, "Ib", 0, "1.0", 2,
-                                            100.0, 100.0, 0));
-                                }break;
-                                case "AC": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("AC;R;P", 7, "Ib", 0, "1.0", 2,
-                                            100.0, 0, 100.0));
-                                }break;
-                                case "CA": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("CA;R;P", 7, "Ib", 0, "1.0", 2,
-                                            100.0, 0, 100.0));
-                                }break;
-                                case "CB": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("CB;R;P", 7, "Ib", 0, "1.0", 2,
-                                            0, 100.0, 100.0));
-                                }break;
-                                case "BC": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("BC;R;P", 7, "Ib", 0, "1.0", 2,
-                                            0, 100.0, 100.0));
-                                }break;
-                            }
-                        }
-
-                        txtFieldInfImb.setDisable(true);
-
-                    } catch (NumberFormatException e) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Неверные данные");
-                            }
-                        });
-                        addTglBtnImb.setSelected(false);
-                    }
-
-                    //Если выбрано RP-
-                } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
-                    try {
-                        String[] inf = txtFieldInfImb.getText().split(",");
-                        List<String> inbStr = new ArrayList<>();
-                        String phase;
-
-                        for (String phaseInb : inf) {
-                            phase = phaseInb.trim();
-
-                            if (phase.equals("A") || phase.equals("B") || phase.equals("C") || phase.equals("AB") || phase.equals("BA") ||
-                                    phase.equals("BC") || phase.equals("CB") || phase.equals("CA") || phase.equals("AC")) {
-
-                                inbStr.add(phase);
-
-                            } else {
-                                throw new NumberFormatException("Неверные данные");
-                            }
-                        }
-
-                        influenceInbURPMns = new String[inbStr.size()];
-
-                        for (int i = 0; i < inbStr.size(); i++) {
-                            influenceInbURPMns[i] = inbStr.get(i);
-                        }
-
-                        for (String phases : inbStr) {
-
-                            switch (phases) {
-                                case "A": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("A;R;N", 7, "Ib", 1, "1.0", 3,
-                                            100.0, 0, 0));
-                                }break;
-                                case "B": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("B;R;N", 7, "Ib", 1, "1.0", 3,
-                                            0, 100.0, 0));
-                                }break;
-                                case "C": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("C;R;N", 7, "Ib", 1, "1.0", 3,
-                                            0, 0, 100.0));
-                                }break;
-                                case "AB": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("AB;R;N", 7, "Ib", 1, "1.0", 3,
-                                            100.0, 100.0, 0));
-                                }break;
-                                case "BA": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("BA;R;N", 7, "Ib", 1, "1.0", 3,
-                                            100.0, 100.0, 0));
-                                }break;
-                                case "AC": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("AC;R;N", 7, "Ib", 1, "1.0", 3,
-                                            100.0, 0, 100.0));
-                                }break;
-                                case "CA": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("CA;R;N", 7, "Ib", 1, "1.0", 3,
-                                            100.0, 0, 100.0));
-                                }break;
-                                case "CB": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("CB;R;N", 7, "Ib", 1, "1.0", 3,
-                                            0, 100.0, 100.0));
-                                }break;
-                                case "BC": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("BC;R;N", 7, "Ib", 1, "1.0", 3,
-                                            0, 100.0, 100.0));
-                                }break;
-                            }
-                        }
-
-                        txtFieldInfImb.setDisable(true);
-
-                    } catch (NumberFormatException e) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Неверные данные");
-                            }
-                        });
-                        addTglBtnImb.setSelected(false);
-                    }
-                }
-
-            } else {
-                txtFieldInfImb.setDisable(false);
-
-                if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
-
-                    for (int i = 0; i <  inflListForCollumAPPls.size(); i++) {
-                        if (inflListForCollumAPPls.get(i) instanceof ImbalansUCommand) {
-                            inflListForCollumAPPls.remove(i);
-                            i--;
-                        }
-                    }
-
-                    influenceImbUAPPls = new String[0];
-
-                } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
-
-                    for (int i = 0; i <  inflListForCollumAPMns.size(); i++) {
-                        if (inflListForCollumAPMns.get(i) instanceof ImbalansUCommand) {
-                            inflListForCollumAPMns.remove(i);
-                            i--;
-                        }
-                    }
-
-                    influenceInbUAPMns = new String[0];
-
-                } else if (RPPlus.isSelected() || RPPlusCRPSTA.isSelected()) {
-
-                    for (int i = 0; i <  inflListForCollumRPPls.size(); i++) {
-                        if (inflListForCollumRPPls.get(i) instanceof ImbalansUCommand) {
-                            inflListForCollumRPPls.remove(i);
-                            i--;
-                        }
-                    }
-
-                    influenceInbURPPls = new String[0];
-
-                } else if (RPMinus.isSelected() || RPMinusCRPSTA.isSelected()) {
-
-                    for (int i = 0; i <  inflListForCollumRPMns.size(); i++) {
-                        if (inflListForCollumRPMns.get(i) instanceof ImbalansUCommand) {
-                            inflListForCollumRPMns.remove(i);
-                            i--;
-                        }
-                    }
-
-                    influenceInbURPMns = new String[0];
-                }
-            }
-        }
     }
 
     @FXML
@@ -1934,8 +1231,6 @@ public class InfluencePointsThreePhaseStendFrame {
         if (event.getSource() == selectInfUAllPhaseTgl) {
             selectInfUAllPhaseTgl.setSelected(true);
             selectInfFAllPhaseTgl.setSelected(false);
-            selectInfInb.setSelected(false);
-            InflInbPane.toBack();
 
             InflUAllPhasePane.toFront();
             gridPaneUAllPhase.toFront();
@@ -1944,8 +1239,6 @@ public class InfluencePointsThreePhaseStendFrame {
         if (event.getSource() == selectInfFAllPhaseTgl) {
             selectInfUAllPhaseTgl.setSelected(false);
             selectInfFAllPhaseTgl.setSelected(true);
-            selectInfInb.setSelected(false);
-            InflInbPane.toBack();
 
             InflFAllPhasePane.toFront();
             gridPaneFAllPhase.toFront();
@@ -1955,8 +1248,6 @@ public class InfluencePointsThreePhaseStendFrame {
         if (event.getSource() == selectInfUPhaseATgl) {
             selectInfUPhaseATgl.setSelected(true);
             selectInfFPhaseATgl.setSelected(false);
-            selectInfInb.setSelected(false);
-            InflInbPane.toBack();
 
             InflUPhaseAPane.toFront();
             gridPaneUPhaseA.toFront();
@@ -1965,8 +1256,6 @@ public class InfluencePointsThreePhaseStendFrame {
         if (event.getSource() == selectInfFPhaseATgl) {
             selectInfUPhaseATgl.setSelected(false);
             selectInfFPhaseATgl.setSelected(true);
-            selectInfInb.setSelected(false);
-            InflInbPane.toBack();
 
             InflFPhaseAPane.toFront();
             gridPaneFPhaseA.toFront();
@@ -1975,8 +1264,6 @@ public class InfluencePointsThreePhaseStendFrame {
         if (event.getSource() == selectInfUPhaseBTgl) {
             selectInfUPhaseBTgl.setSelected(true);
             selectInfFPhaseBTgl.setSelected(false);
-            selectInfInb.setSelected(false);
-            InflInbPane.toBack();
 
             InflUPhaseBPane.toFront();
             gridPaneUPhaseB.toFront();
@@ -1985,8 +1272,6 @@ public class InfluencePointsThreePhaseStendFrame {
         if (event.getSource() == selectInfFPhaseBTgl) {
             selectInfUPhaseBTgl.setSelected(false);
             selectInfFPhaseBTgl.setSelected(true);
-            selectInfInb.setSelected(false);
-            InflInbPane.toBack();
 
             InflFPhaseBPane.toFront();
             gridPaneFPhaseB.toFront();
@@ -1995,36 +1280,15 @@ public class InfluencePointsThreePhaseStendFrame {
         if (event.getSource() == selectInfUPhaseCTgl) {
             selectInfUPhaseCTgl.setSelected(true);
             selectInfFPhaseCTgl.setSelected(false);
-            selectInfInb.setSelected(false);
-            InflInbPane.toBack();
 
             InflUPhaseCPane.toFront();
-            gridPaneUPhaseC.toFront();
         }
 
         if (event.getSource() == selectInfFPhaseCTgl) {
             selectInfUPhaseCTgl.setSelected(false);
             selectInfFPhaseCTgl.setSelected(true);
-            selectInfInb.setSelected(false);
-            InflInbPane.toBack();
 
             InflFPhaseCPane.toFront();
-            gridPaneFPhaseC.toFront();
-        }
-
-        if (event.getSource() == selectInfInb) {
-            selectInfUAllPhaseTgl.setSelected(false);
-            selectInfUPhaseATgl.setSelected(false);
-            selectInfUPhaseBTgl.setSelected(false);
-            selectInfUPhaseCTgl.setSelected(false);
-
-            selectInfFAllPhaseTgl.setSelected(false);
-            selectInfFPhaseATgl.setSelected(false);
-            selectInfFPhaseBTgl.setSelected(false);
-            selectInfFPhaseCTgl.setSelected(false);
-
-            selectInfInb.setSelected(true);
-            InflInbPane.toFront();
         }
     }
 
@@ -2043,7 +1307,6 @@ public class InfluencePointsThreePhaseStendFrame {
             allPhaseBtn.setSelected(true);
             phaseABtn.setSelected(false);
             phaseBBtn.setSelected(false);
-            phaseCBtn.setSelected(false);
 
             mainAllPhasePane.toFront();
             selectInfUAllPhaseTgl.fire();
@@ -2053,7 +1316,6 @@ public class InfluencePointsThreePhaseStendFrame {
             allPhaseBtn.setSelected(false);
             phaseABtn.setSelected(true);
             phaseBBtn.setSelected(false);
-            phaseCBtn.setSelected(false);
 
             mainPhaseAPane.toFront();
             selectInfUPhaseATgl.fire();
@@ -2063,20 +1325,9 @@ public class InfluencePointsThreePhaseStendFrame {
             allPhaseBtn.setSelected(false);
             phaseABtn.setSelected(false);
             phaseBBtn.setSelected(true);
-            phaseCBtn.setSelected(false);
 
             mainPhaseBPane.toFront();
             selectInfUPhaseBTgl.fire();
-        }
-
-        if (event.getSource() == phaseCBtn) {
-            allPhaseBtn.setSelected(false);
-            phaseABtn.setSelected(false);
-            phaseBBtn.setSelected(false);
-            phaseCBtn.setSelected(true);
-
-            mainPhaseCPane.toFront();
-            selectInfUPhaseCTgl.fire();
         }
     }
 
@@ -2157,114 +1408,82 @@ public class InfluencePointsThreePhaseStendFrame {
     }
 
     //Инициализация полей влияния
-    private void intitInflFields(MethodicForThreePhaseStend methodicForThreePhaseStend) {
-        inflListForCollumAPPls = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumAPPls());
-        inflListForCollumAPMns = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumAPMns());
-        inflListForCollumRPPls = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumRPPls());
-        inflListForCollumRPMns = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumRPMns());
+    private void intitInflFields(MethodicForOnePhaseStend methodicForOnePhaseStend) {
+        inflListForCollumAPPls = FXCollections.observableArrayList(methodicForOnePhaseStend.getSaveInflListForCollumAPPls());
+        inflListForCollumAPMns = FXCollections.observableArrayList(methodicForOnePhaseStend.getSaveInflListForCollumAPMns());
+        inflListForCollumRPPls = FXCollections.observableArrayList(methodicForOnePhaseStend.getSaveInflListForCollumRPPls());
+        inflListForCollumRPMns = FXCollections.observableArrayList(methodicForOnePhaseStend.getSaveInflListForCollumRPMns());
 
-        influenceUprocAllPhaseAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPPls();
-        influenceUprocPhaseAAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPPls();
-        influenceUprocPhaseBAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPPls();
-        influenceUprocPhaseCAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCAPPls();
+        influenceUprocAllPhaseAPPls = methodicForOnePhaseStend.getSaveInfluenceUprocAllPhaseAPPls();
+        influenceUprocPhaseAAPPls = methodicForOnePhaseStend.getSaveInfluenceUprocPhaseAAPPls();
+        influenceUprocPhaseBAPPls = methodicForOnePhaseStend.getSaveInfluenceUprocPhaseBAPPls();
 
-        influenceFprocAllPhaseAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseAPPls();
-        influenceFprocPhaseAAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseAAPPls();
-        influenceFprocPhaseBAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBAPPls();
-        influenceFprocPhaseCAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCAPPls();
+        influenceFprocAllPhaseAPPls = methodicForOnePhaseStend.getSaveInfluenceFprocAllPhaseAPPls();
+        influenceFprocPhaseAAPPls = methodicForOnePhaseStend.getSaveInfluenceFprocPhaseAAPPls();
+        influenceFprocPhaseBAPPls = methodicForOnePhaseStend.getSaveInfluenceFprocPhaseBAPPls();
 
-        influenceImbUAPPls = methodicForThreePhaseStend.getSaveInfluenceInbUAPPls();
+        influenceUprocAllPhaseAPMns = methodicForOnePhaseStend.getSaveInfluenceUprocAllPhaseAPMns();
+        influenceUprocPhaseAAPMns = methodicForOnePhaseStend.getSaveInfluenceUprocPhaseAAPMns();
+        influenceUprocPhaseBAPMns = methodicForOnePhaseStend.getSaveInfluenceUprocPhaseBAPMns();
 
-        influenceUprocAllPhaseAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPMns();
-        influenceUprocPhaseAAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPMns();
-        influenceUprocPhaseBAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPMns();
-        influenceUprocPhaseCAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCAPMns();
+        influenceFprocAllPhaseAPMns = methodicForOnePhaseStend.getSaveInfluenceFprocAllPhaseAPMns();
+        influenceFprocPhaseAAPMns = methodicForOnePhaseStend.getSaveInfluenceFprocPhaseAAPMns();
+        influenceFprocPhaseBAPMns = methodicForOnePhaseStend.getSaveInfluenceFprocPhaseBAPMns();
 
-        influenceFprocAllPhaseAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseAPMns();
-        influenceFprocPhaseAAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseAAPMns();
-        influenceFprocPhaseBAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBAPMns();
-        influenceFprocPhaseCAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCAPMns();
+        influenceUprocAllPhaseRPPls = methodicForOnePhaseStend.getSaveInfluenceUprocAllPhaseRPPls();
+        influenceUprocPhaseARPPls = methodicForOnePhaseStend.getSaveInfluenceUprocPhaseARPPls();
+        influenceUprocPhaseBRPPls = methodicForOnePhaseStend.getSaveInfluenceUprocPhaseBRPPls();
 
-        influenceInbUAPMns = methodicForThreePhaseStend.getSaveInfluenceInbUAPMns();
+        influenceFprocAllPhaseRPPls = methodicForOnePhaseStend.getSaveInfluenceFprocAllPhaseRPPls();
+        influenceFprocPhaseARPPls = methodicForOnePhaseStend.getSaveInfluenceFprocPhaseARPPls();
+        influenceFprocPhaseBRPPls = methodicForOnePhaseStend.getSaveInfluenceFprocPhaseBRPPls();
 
-        influenceUprocAllPhaseRPPls = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseRPPls();
-        influenceUprocPhaseARPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseARPPls();
-        influenceUprocPhaseBRPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBRPPls();
-        influenceUprocPhaseCRPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCRPPls();
+        influenceUprocAllPhaseRPMns = methodicForOnePhaseStend.getSaveInfluenceUprocAllPhaseRPMns();
+        influenceUprocPhaseARPMns = methodicForOnePhaseStend.getSaveInfluenceUprocPhaseARPMns();
+        influenceUprocPhaseBRPMns = methodicForOnePhaseStend.getSaveInfluenceUprocPhaseBRPMns();
 
-        influenceFprocAllPhaseRPPls = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseRPPls();
-        influenceFprocPhaseARPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseARPPls();
-        influenceFprocPhaseBRPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBRPPls();
-        influenceFprocPhaseCRPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCRPPls();
-
-        influenceInbURPPls = methodicForThreePhaseStend.getSaveInfluenceInbURPPls();
-
-        influenceUprocAllPhaseRPMns = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseRPMns();
-        influenceUprocPhaseARPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseARPMns();
-        influenceUprocPhaseBRPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBRPMns();
-        influenceUprocPhaseCRPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCRPMns();
-
-        influenceFprocAllPhaseRPMns = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseRPMns();
-        influenceFprocPhaseARPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseARPMns();
-        influenceFprocPhaseBRPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBRPMns();
-        influenceFprocPhaseCRPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCRPMns();
-
-        influenceInbURPMns = methodicForThreePhaseStend.getSaveInfluenceInbURPMns();
+        influenceFprocAllPhaseRPMns = methodicForOnePhaseStend.getSaveInfluenceFprocAllPhaseRPMns();
+        influenceFprocPhaseARPMns = methodicForOnePhaseStend.getSaveInfluenceFprocPhaseARPMns();
+        influenceFprocPhaseBRPMns = methodicForOnePhaseStend.getSaveInfluenceFprocPhaseBRPMns();
     }
 
     private void saveInflInMetodic() {
-        methodicForThreePhaseStend.setSaveInflListForCollumAPPls(new ArrayList<>(inflListForCollumAPPls));
-        methodicForThreePhaseStend.setSaveInflListForCollumAPMns(new ArrayList<>(inflListForCollumAPMns));
-        methodicForThreePhaseStend.setSaveInflListForCollumRPPls(new ArrayList<>(inflListForCollumRPPls));
-        methodicForThreePhaseStend.setSaveInflListForCollumRPMns(new ArrayList<>(inflListForCollumRPMns));
+        methodicForOnePhaseStend.setSaveInflListForCollumAPPls(new ArrayList<>(inflListForCollumAPPls));
+        methodicForOnePhaseStend.setSaveInflListForCollumAPMns(new ArrayList<>(inflListForCollumAPMns));
+        methodicForOnePhaseStend.setSaveInflListForCollumRPPls(new ArrayList<>(inflListForCollumRPPls));
+        methodicForOnePhaseStend.setSaveInflListForCollumRPMns(new ArrayList<>(inflListForCollumRPMns));
 
-        methodicForThreePhaseStend.setSaveInfluenceUprocAllPhaseAPPls(influenceUprocAllPhaseAPPls);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseAAPPls(influenceUprocPhaseAAPPls);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseBAPPls(influenceUprocPhaseBAPPls);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseCAPPls(influenceUprocPhaseCAPPls);
+        methodicForOnePhaseStend.setSaveInfluenceUprocAllPhaseAPPls(influenceUprocAllPhaseAPPls);
+        methodicForOnePhaseStend.setSaveInfluenceUprocPhaseAAPPls(influenceUprocPhaseAAPPls);
+        methodicForOnePhaseStend.setSaveInfluenceUprocPhaseBAPPls(influenceUprocPhaseBAPPls);
 
-        methodicForThreePhaseStend.setSaveInfluenceFprocAllPhaseAPPls(influenceFprocAllPhaseAPPls);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseAAPPls(influenceFprocPhaseAAPPls);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseBAPPls(influenceFprocPhaseBAPPls);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseCAPPls(influenceFprocPhaseCAPPls);
+        methodicForOnePhaseStend.setSaveInfluenceFprocAllPhaseAPPls(influenceFprocAllPhaseAPPls);
+        methodicForOnePhaseStend.setSaveInfluenceFprocPhaseAAPPls(influenceFprocPhaseAAPPls);
+        methodicForOnePhaseStend.setSaveInfluenceFprocPhaseBAPPls(influenceFprocPhaseBAPPls);
 
-        methodicForThreePhaseStend.setSaveInfluenceInbUAPPls(influenceImbUAPPls);
+        methodicForOnePhaseStend.setSaveInfluenceUprocAllPhaseAPMns(influenceUprocAllPhaseAPMns);
+        methodicForOnePhaseStend.setSaveInfluenceUprocPhaseAAPMns(influenceUprocPhaseAAPMns);
+        methodicForOnePhaseStend.setSaveInfluenceUprocPhaseBAPMns(influenceUprocPhaseBAPMns);
 
-        methodicForThreePhaseStend.setSaveInfluenceUprocAllPhaseAPMns(influenceUprocAllPhaseAPMns);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseAAPMns(influenceUprocPhaseAAPMns);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseBAPMns(influenceUprocPhaseBAPMns);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseCAPMns(influenceUprocPhaseCAPMns);
+        methodicForOnePhaseStend.setSaveInfluenceFprocAllPhaseAPMns(influenceFprocAllPhaseAPMns);
+        methodicForOnePhaseStend.setSaveInfluenceFprocPhaseAAPMns(influenceFprocPhaseAAPMns);
+        methodicForOnePhaseStend.setSaveInfluenceFprocPhaseBAPMns(influenceFprocPhaseBAPMns);
 
-        methodicForThreePhaseStend.setSaveInfluenceFprocAllPhaseAPMns(influenceFprocAllPhaseAPMns);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseAAPMns(influenceFprocPhaseAAPMns);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseBAPMns(influenceFprocPhaseBAPMns);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseCAPMns(influenceFprocPhaseCAPMns);
+        methodicForOnePhaseStend.setSaveInfluenceUprocAllPhaseRPPls(influenceUprocAllPhaseRPPls);
+        methodicForOnePhaseStend.setSaveInfluenceUprocPhaseARPPls(influenceUprocPhaseARPPls);
+        methodicForOnePhaseStend.setSaveInfluenceUprocPhaseBRPPls(influenceUprocPhaseBRPPls);
 
-        methodicForThreePhaseStend.setSaveInfluenceInbUAPMns(influenceInbUAPMns);
+        methodicForOnePhaseStend.setSaveInfluenceFprocAllPhaseRPPls(influenceFprocAllPhaseRPPls);
+        methodicForOnePhaseStend.setSaveInfluenceFprocPhaseARPPls(influenceFprocPhaseARPPls);
+        methodicForOnePhaseStend.setSaveInfluenceFprocPhaseBRPPls(influenceFprocPhaseBRPPls);
 
-        methodicForThreePhaseStend.setSaveInfluenceUprocAllPhaseRPPls(influenceUprocAllPhaseRPPls);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseARPPls(influenceUprocPhaseARPPls);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseBRPPls(influenceUprocPhaseBRPPls);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseCRPPls(influenceUprocPhaseCRPPls);
+        methodicForOnePhaseStend.setSaveInfluenceUprocAllPhaseRPMns(influenceUprocAllPhaseRPMns);
+        methodicForOnePhaseStend.setSaveInfluenceUprocPhaseARPMns(influenceUprocPhaseARPMns);
+        methodicForOnePhaseStend.setSaveInfluenceUprocPhaseBRPMns(influenceUprocPhaseBRPMns);
 
-        methodicForThreePhaseStend.setSaveInfluenceFprocAllPhaseRPPls(influenceFprocAllPhaseRPPls);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseARPPls(influenceFprocPhaseARPPls);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseBRPPls(influenceFprocPhaseBRPPls);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseCRPPls(influenceFprocPhaseCRPPls);
-
-        methodicForThreePhaseStend.setSaveInfluenceInbURPPls(influenceInbURPPls);
-
-        methodicForThreePhaseStend.setSaveInfluenceUprocAllPhaseRPMns(influenceUprocAllPhaseRPMns);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseARPMns(influenceUprocPhaseARPMns);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseBRPMns(influenceUprocPhaseBRPMns);
-        methodicForThreePhaseStend.setSaveInfluenceUprocPhaseCRPMns(influenceUprocPhaseCRPMns);
-
-        methodicForThreePhaseStend.setSaveInfluenceFprocAllPhaseRPMns(influenceFprocAllPhaseRPMns);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseARPMns(influenceFprocPhaseARPMns);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseBRPMns(influenceFprocPhaseBRPMns);
-        methodicForThreePhaseStend.setSaveInfluenceFprocPhaseCRPMns(influenceFprocPhaseCRPMns);
-
-        methodicForThreePhaseStend.setSaveInfluenceInbURPMns(influenceInbURPPls);
+        methodicForOnePhaseStend.setSaveInfluenceFprocAllPhaseRPMns(influenceFprocAllPhaseRPMns);
+        methodicForOnePhaseStend.setSaveInfluenceFprocPhaseARPMns(influenceFprocPhaseARPMns);
+        methodicForOnePhaseStend.setSaveInfluenceFprocPhaseBRPMns(influenceFprocPhaseBRPMns);
     }
 
     //=========================================================================================================//
@@ -2455,8 +1674,6 @@ public class InfluencePointsThreePhaseStendFrame {
         allPhaseBtn.setSelected(true);
         phaseABtn.setSelected(false);
         phaseBBtn.setSelected(false);
-        phaseCBtn.setSelected(false);
-        selectInfInb.setSelected(false);
 
         gridPaneUAllPhase.toFront();
 
@@ -2465,7 +1682,6 @@ public class InfluencePointsThreePhaseStendFrame {
         selectInfFAllPhaseTgl.setSelected(false);
 
         InflUAllPhasePane.toFront();
-        InflInbPane.toBack();
     }
 
     private void initAllGridPanesForAPPls() {
@@ -2512,8 +1728,6 @@ public class InfluencePointsThreePhaseStendFrame {
         directLabPhaseAF.setText("Активная энергия в прямом направлении тока");
         directLabPhaseBF.setText("Активная энергия в прямом направлении тока");
         directLabPhaseCF.setText("Активная энергия в прямом направлении тока");
-
-        directLabInb.setText("Активная энергия в прямом направлении тока");
 
         if (influenceUprocAllPhaseAPPls.length != 0) {
             infStr = Arrays.toString(influenceUprocAllPhaseAPPls);
@@ -2564,22 +1778,6 @@ public class InfluencePointsThreePhaseStendFrame {
             txtFieldInfUPhaseB.setDisable(false);
         }
 
-        if (influenceUprocPhaseCAPPls.length != 0) {
-            infStr = Arrays.toString(influenceUprocPhaseCAPPls);
-
-            txtFieldInfUPhaseC.setText(infStr.substring(1, infStr.length() - 1));
-
-            addTglBtnInfUPhaseC.setSelected(true);
-            gridPaneUPhaseC.setDisable(false);
-            txtFieldInfUPhaseC.setDisable(true);
-        } else {
-            txtFieldInfUPhaseC.setDisable(false);
-            txtFieldInfUPhaseC.clear();
-            addTglBtnInfUPhaseC.setSelected(false);
-            gridPaneUPhaseC.setDisable(true);
-            txtFieldInfUPhaseC.setDisable(false);
-        }
-
         if (influenceFprocAllPhaseAPPls.length != 0) {
             infStr = Arrays.toString(influenceFprocAllPhaseAPPls);
 
@@ -2625,33 +1823,6 @@ public class InfluencePointsThreePhaseStendFrame {
             gridPaneFPhaseB.setDisable(true);
             txtFieldInfFPhaseB.setDisable(false);
         }
-
-        if (influenceFprocPhaseCAPPls.length != 0) {
-            infStr = Arrays.toString(influenceFprocPhaseCAPPls);
-            txtFieldInfFPhaseC.setText(infStr.substring(1, infStr.length() - 1));
-
-            addTglBtnInfFPhaseC.setSelected(true);
-            gridPaneFPhaseC.setDisable(false);
-            txtFieldInfFPhaseC.setDisable(true);
-        } else {
-            txtFieldInfFPhaseC.setDisable(false);
-            txtFieldInfFPhaseC.clear();
-            addTglBtnInfFPhaseC.setSelected(false);
-            gridPaneFPhaseC.setDisable(true);
-            txtFieldInfFPhaseC.setDisable(false);
-        }
-
-        if (influenceImbUAPPls.length != 0) {
-            infStr = Arrays.toString(influenceImbUAPPls);
-            txtFieldInfImb.setText(infStr.substring(1, infStr.length() - 1));
-
-            addTglBtnImb.setSelected(true);
-            txtFieldInfImb.setDisable(true);
-        } else {
-            txtFieldInfImb.setDisable(false);
-            txtFieldInfImb.clear();
-            addTglBtnImb.setSelected(false);
-        }
     }
 
     private void initSelectPanesAPMns() {
@@ -2666,8 +1837,6 @@ public class InfluencePointsThreePhaseStendFrame {
         directLabPhaseAF.setText("Активная энергия в обратном направлении тока");
         directLabPhaseBF.setText("Активная энергия в обратном направлении тока");
         directLabPhaseCF.setText("Активная энергия в обратном направлении тока");
-
-        directLabInb.setText("Активная энергия в обратном направлении тока");
 
         if (influenceUprocAllPhaseAPMns.length != 0) {
             infStr = Arrays.toString(influenceUprocAllPhaseAPMns);
@@ -2714,22 +1883,6 @@ public class InfluencePointsThreePhaseStendFrame {
             txtFieldInfUPhaseB.setDisable(false);
         }
 
-        if (influenceUprocPhaseCAPMns.length != 0) {
-            infStr = Arrays.toString(influenceUprocPhaseCAPMns);
-            txtFieldInfUPhaseC.setText(infStr .substring(1, infStr.length() - 1));
-
-            addTglBtnInfUPhaseC.setSelected(true);
-            gridPaneUPhaseC.setDisable(false);
-            txtFieldInfUPhaseC.setDisable(true);
-        } else {
-            txtFieldInfUPhaseC.setDisable(false);
-            txtFieldInfUPhaseC.clear();
-            addTglBtnInfUPhaseC.setSelected(false);
-            gridPaneUPhaseC.setDisable(true);
-            txtFieldInfUPhaseC.setDisable(false);
-        }
-
-
         if (influenceFprocAllPhaseAPMns.length != 0) {
             infStr = Arrays.toString(influenceFprocAllPhaseAPMns);
             txtFieldInfFAllPhase.setText(infStr .substring(1, infStr.length() - 1));
@@ -2774,34 +1927,6 @@ public class InfluencePointsThreePhaseStendFrame {
             gridPaneFPhaseB.setDisable(true);
             txtFieldInfFPhaseB.setDisable(false);
         }
-
-        if (influenceFprocPhaseCAPMns.length != 0) {
-            infStr = Arrays.toString(influenceFprocPhaseCAPMns);
-            txtFieldInfFPhaseC.setText(infStr .substring(1, infStr.length() - 1));
-
-            addTglBtnInfFPhaseC.setSelected(true);
-            gridPaneFPhaseC.setDisable(false);
-            txtFieldInfFPhaseC.setDisable(true);
-        } else {
-            txtFieldInfFPhaseC.setDisable(false);
-            txtFieldInfFPhaseC.clear();
-            addTglBtnInfFPhaseC.setSelected(false);
-            gridPaneFPhaseC.setDisable(true);
-            txtFieldInfFPhaseC.setDisable(false);
-
-        }
-
-        if (influenceInbUAPMns.length != 0) {
-            infStr = Arrays.toString(influenceInbUAPMns);
-            txtFieldInfImb.setText(infStr.substring(1, infStr.length() - 1));
-
-            addTglBtnImb.setSelected(true);
-            txtFieldInfImb.setDisable(true);
-        } else {
-            txtFieldInfImb.setDisable(false);
-            txtFieldInfImb.clear();
-            addTglBtnImb.setSelected(false);
-        }
     }
 
     private void initSelectPanesRPPls() {
@@ -2816,8 +1941,6 @@ public class InfluencePointsThreePhaseStendFrame {
         directLabPhaseAF.setText("Реактивная энергия в прямом направлении тока");
         directLabPhaseBF.setText("Реактивная энергия в прямом направлении тока");
         directLabPhaseCF.setText("Реактивная энергия в прямом направлении тока");
-
-        directLabInb.setText("Реактивная энергия в прямом направлении тока");
 
         if (influenceUprocAllPhaseRPPls.length != 0) {
             infStr = Arrays.toString(influenceUprocAllPhaseRPPls);
@@ -2864,22 +1987,6 @@ public class InfluencePointsThreePhaseStendFrame {
             txtFieldInfUPhaseB.setDisable(false);
         }
 
-        if (influenceUprocPhaseCRPPls.length != 0) {
-            infStr = Arrays.toString(influenceUprocPhaseCRPPls);
-            txtFieldInfUPhaseC.setText(infStr .substring(1, infStr.length() - 1));
-
-            addTglBtnInfUPhaseC.setSelected(true);
-            gridPaneUPhaseC.setDisable(false);
-            txtFieldInfUPhaseC.setDisable(true);
-        } else {
-            txtFieldInfUPhaseC.setDisable(false);
-            txtFieldInfUPhaseC.clear();
-            addTglBtnInfUPhaseC.setSelected(false);
-            gridPaneUPhaseC.setDisable(true);
-            txtFieldInfUPhaseC.setDisable(false);
-        }
-
-
         if (influenceFprocAllPhaseRPPls.length != 0) {
             infStr = Arrays.toString(influenceFprocAllPhaseRPPls);
             txtFieldInfFAllPhase.setText(infStr .substring(1, infStr.length() - 1));
@@ -2924,33 +2031,6 @@ public class InfluencePointsThreePhaseStendFrame {
             gridPaneFPhaseB.setDisable(true);
             txtFieldInfFPhaseB.setDisable(false);
         }
-
-        if (influenceFprocPhaseCRPPls.length != 0) {
-            infStr = Arrays.toString(influenceFprocPhaseCRPPls);
-            txtFieldInfFPhaseC.setText(infStr .substring(1, infStr.length() - 1));
-
-            addTglBtnInfFPhaseC.setSelected(true);
-            gridPaneFPhaseC.setDisable(false);
-            txtFieldInfFPhaseC.setDisable(true);
-        } else {
-            txtFieldInfFPhaseC.setDisable(false);
-            txtFieldInfFPhaseC.clear();
-            addTglBtnInfFPhaseC.setSelected(false);
-            gridPaneFPhaseC.setDisable(true);
-            txtFieldInfFPhaseC.setDisable(false);
-        }
-
-        if (influenceInbURPPls.length != 0) {
-            infStr = Arrays.toString(influenceInbURPPls);
-            txtFieldInfImb.setText(infStr.substring(1, infStr.length() - 1));
-
-            addTglBtnImb.setSelected(true);
-            txtFieldInfImb.setDisable(true);
-        } else {
-            txtFieldInfImb.setDisable(false);
-            txtFieldInfImb.clear();
-            addTglBtnImb.setSelected(false);
-        }
     }
 
     private void initSelectPanesRPMns() {
@@ -2965,8 +2045,6 @@ public class InfluencePointsThreePhaseStendFrame {
         directLabPhaseAF.setText("Реактивная энергия в обратном направлении тока");
         directLabPhaseBF.setText("Реактивная энергия в обратном направлении тока");
         directLabPhaseCF.setText("Реактивная энергия в обратном направлении тока");
-
-        directLabInb.setText("Реактивная энергия в обратном направлении тока");
 
         if (influenceUprocAllPhaseRPMns.length != 0) {
             infStr = Arrays.toString(influenceUprocAllPhaseRPMns);
@@ -3013,22 +2091,6 @@ public class InfluencePointsThreePhaseStendFrame {
             txtFieldInfUPhaseB.setDisable(false);
         }
 
-        if (influenceUprocPhaseCRPMns.length != 0) {
-            infStr = Arrays.toString(influenceUprocPhaseCRPMns);
-            txtFieldInfUPhaseC.setText(infStr.substring(1, infStr.length() - 1));
-
-            addTglBtnInfUPhaseC.setSelected(true);
-            gridPaneUPhaseC.setDisable(false);
-            txtFieldInfUPhaseC.setDisable(true);
-        } else {
-            txtFieldInfUPhaseC.setDisable(false);
-            txtFieldInfUPhaseC.clear();
-            addTglBtnInfUPhaseC.setSelected(false);
-            gridPaneUPhaseC.setDisable(true);
-            txtFieldInfUPhaseC.setDisable(false);
-        }
-
-
         if (influenceFprocAllPhaseRPMns.length != 0) {
             infStr = Arrays.toString(influenceFprocAllPhaseRPMns);
             txtFieldInfFAllPhase.setText(infStr.substring(1, infStr.length() - 1));
@@ -3073,33 +2135,6 @@ public class InfluencePointsThreePhaseStendFrame {
             gridPaneFPhaseB.setDisable(true);
             txtFieldInfFPhaseB.setDisable(false);
         }
-
-        if (influenceFprocPhaseCRPMns.length != 0) {
-            infStr = Arrays.toString(influenceFprocPhaseCRPMns);
-            txtFieldInfFPhaseC.setText(infStr.substring(1, infStr.length() - 1));
-
-            addTglBtnInfUPhaseC.setSelected(true);
-            gridPaneUPhaseC.setDisable(false);
-            txtFieldInfUPhaseC.setDisable(true);
-        } else {
-            txtFieldInfFPhaseC.setDisable(false);
-            txtFieldInfFPhaseC.clear();
-            addTglBtnInfFPhaseC.setSelected(false);
-            gridPaneFPhaseC.setDisable(true);
-            txtFieldInfFPhaseC.setDisable(false);
-        }
-
-        if (influenceInbURPMns.length != 0) {
-            infStr = Arrays.toString(influenceInbURPMns);
-            txtFieldInfImb.setText(infStr.substring(1, infStr.length() - 1));
-
-            addTglBtnImb.setSelected(true);
-            txtFieldInfImb.setDisable(true);
-        } else {
-            txtFieldInfImb.setDisable(false);
-            txtFieldInfImb.clear();
-            addTglBtnImb.setSelected(false);
-        }
     }
 
     //Удаляет старые GridPane и инициализирует новые после смены напрявления или типа энергии
@@ -3109,32 +2144,26 @@ public class InfluencePointsThreePhaseStendFrame {
         gridPaneUAllPhase = new GridPane();
         gridPaneUPhaseA = new GridPane();
         gridPaneUPhaseB = new GridPane();
-        gridPaneUPhaseC = new GridPane();
 
         gridPaneFAllPhase = new GridPane();
         gridPaneFPhaseA = new GridPane();
         gridPaneFPhaseB = new GridPane();
-        gridPaneFPhaseC = new GridPane();
 
-        gridPaneUAllPhase.setId("U;1;H;A;P");
-        gridPaneUPhaseA.setId("U;1;A;A;P");
-        gridPaneUPhaseB.setId("U;1;B;A;P");
-        gridPaneUPhaseC.setId("U;1;C;A;P");
+        gridPaneUAllPhase.setId("U;0;H;A;P");
+        gridPaneUPhaseA.setId("U;0;A;A;P");
+        gridPaneUPhaseB.setId("U;0;B;A;P");
 
-        gridPaneFAllPhase.setId("F;1;H;A;P");
-        gridPaneFPhaseA.setId("F;1;A;A;P");
-        gridPaneFPhaseB.setId("F;1;B;A;P");
-        gridPaneFPhaseC.setId("F;1;C;A;P");
+        gridPaneFAllPhase.setId("F;0;H;A;P");
+        gridPaneFPhaseA.setId("F;0;A;A;P");
+        gridPaneFPhaseB.setId("F;0;B;A;P");
 
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
                 gridPaneUPhaseA,
                 gridPaneUPhaseB,
-                gridPaneUPhaseC,
                 gridPaneFAllPhase,
                 gridPaneFPhaseA,
-                gridPaneFPhaseB,
-                gridPaneFPhaseC
+                gridPaneFPhaseB
         );
         stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
     }
@@ -3145,32 +2174,26 @@ public class InfluencePointsThreePhaseStendFrame {
         gridPaneUAllPhase = new GridPane();
         gridPaneUPhaseA = new GridPane();
         gridPaneUPhaseB = new GridPane();
-        gridPaneUPhaseC = new GridPane();
 
         gridPaneFAllPhase = new GridPane();
         gridPaneFPhaseA = new GridPane();
         gridPaneFPhaseB = new GridPane();
-        gridPaneFPhaseC = new GridPane();
 
-        gridPaneUAllPhase.setId("U;1;H;A;N");
-        gridPaneUPhaseA.setId("U;1;A;A;N");
-        gridPaneUPhaseB.setId("U;1;B;A;N");
-        gridPaneUPhaseC.setId("U;1;C;A;N");
+        gridPaneUAllPhase.setId("U;0;H;A;N");
+        gridPaneUPhaseA.setId("U;0;A;A;N");
+        gridPaneUPhaseB.setId("U;0;B;A;N");
 
-        gridPaneFAllPhase.setId("F;1;H;A;N");
-        gridPaneFPhaseA.setId("F;1;A;A;N");
-        gridPaneFPhaseB.setId("F;1;B;A;N");
-        gridPaneFPhaseC.setId("F;1;C;A;N");
+        gridPaneFAllPhase.setId("F;0;H;A;N");
+        gridPaneFPhaseA.setId("F;0;A;A;N");
+        gridPaneFPhaseB.setId("F;0;B;A;N");
 
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
                 gridPaneUPhaseA,
                 gridPaneUPhaseB,
-                gridPaneUPhaseC,
                 gridPaneFAllPhase,
                 gridPaneFPhaseA,
-                gridPaneFPhaseB,
-                gridPaneFPhaseC
+                gridPaneFPhaseB
         );
         stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
     }
@@ -3181,32 +2204,26 @@ public class InfluencePointsThreePhaseStendFrame {
         gridPaneUAllPhase = new GridPane();
         gridPaneUPhaseA = new GridPane();
         gridPaneUPhaseB = new GridPane();
-        gridPaneUPhaseC = new GridPane();
 
         gridPaneFAllPhase = new GridPane();
         gridPaneFPhaseA = new GridPane();
         gridPaneFPhaseB = new GridPane();
-        gridPaneFPhaseC = new GridPane();
 
-        gridPaneUAllPhase.setId("U;1;H;R;P");
-        gridPaneUPhaseA.setId("U;1;A;R;P");
-        gridPaneUPhaseB.setId("U;1;B;R;P");
-        gridPaneUPhaseC.setId("U;1;C;R;P");
+        gridPaneUAllPhase.setId("U;7;H;R;P");
+        gridPaneUPhaseA.setId("U;7;A;R;P");
+        gridPaneUPhaseB.setId("U;7;B;R;P");
 
-        gridPaneFAllPhase.setId("F;1;H;R;P");
-        gridPaneFPhaseA.setId("F;1;A;R;P");
-        gridPaneFPhaseB.setId("F;1;B;R;P");
-        gridPaneFPhaseC.setId("F;1;C;R;P");
+        gridPaneFAllPhase.setId("F;7;H;R;P");
+        gridPaneFPhaseA.setId("F;7;A;R;P");
+        gridPaneFPhaseB.setId("F;7;B;R;P");
 
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
                 gridPaneUPhaseA,
                 gridPaneUPhaseB,
-                gridPaneUPhaseC,
                 gridPaneFAllPhase,
                 gridPaneFPhaseA,
-                gridPaneFPhaseB,
-                gridPaneFPhaseC
+                gridPaneFPhaseB
         );
         stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
     }
@@ -3217,32 +2234,26 @@ public class InfluencePointsThreePhaseStendFrame {
         gridPaneUAllPhase = new GridPane();
         gridPaneUPhaseA = new GridPane();
         gridPaneUPhaseB = new GridPane();
-        gridPaneUPhaseC = new GridPane();
 
         gridPaneFAllPhase = new GridPane();
         gridPaneFPhaseA = new GridPane();
         gridPaneFPhaseB = new GridPane();
-        gridPaneFPhaseC = new GridPane();
 
-        gridPaneUAllPhase.setId("U;1;H;R;N");
-        gridPaneUPhaseA.setId("U;1;A;R;N");
-        gridPaneUPhaseB.setId("U;1;B;R;N");
-        gridPaneUPhaseC.setId("U;1;C;R;N");
+        gridPaneUAllPhase.setId("U;7;H;R;N");
+        gridPaneUPhaseA.setId("U;7;A;R;N");
+        gridPaneUPhaseB.setId("U;7;B;R;N");
 
-        gridPaneFAllPhase.setId("F;1;H;R;N");
-        gridPaneFPhaseA.setId("F;1;A;R;N");
-        gridPaneFPhaseB.setId("F;1;B;R;N");
-        gridPaneFPhaseC.setId("F;1;C;R;N");
+        gridPaneFAllPhase.setId("F;7;H;R;N");
+        gridPaneFPhaseA.setId("F;7;A;R;N");
+        gridPaneFPhaseB.setId("F;7;B;R;N");
 
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
                 gridPaneUPhaseA,
                 gridPaneUPhaseB,
-                gridPaneUPhaseC,
                 gridPaneFAllPhase,
                 gridPaneFPhaseA,
-                gridPaneFPhaseB,
-                gridPaneFPhaseC
+                gridPaneFPhaseB
         );
         stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
     }
@@ -3328,17 +2339,6 @@ public class InfluencePointsThreePhaseStendFrame {
                             }
                         }
 
-                        if (charIdTestPoint[4] == 'C') {
-                            for (Node node : gridPaneUPhaseC.getChildren()) {
-                                if (node != null) {
-                                    if (((ErrorCommand) command).getId().equals(node.getId())) {
-                                        ((CheckBox) node).setSelected(true);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
                     } else if (charIdTestPoint[0] == 'F') {
 
                         if (charIdTestPoint[4] == 'H') {
@@ -3365,17 +2365,6 @@ public class InfluencePointsThreePhaseStendFrame {
 
                         if (charIdTestPoint[4] == 'B') {
                             for (Node node : gridPaneFPhaseB.getChildren()) {
-                                if (node != null) {
-                                    if (((ErrorCommand) command).getId().equals(node.getId())) {
-                                        ((CheckBox) node).setSelected(true);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (charIdTestPoint[4] == 'C') {
-                            for (Node node : gridPaneFPhaseC.getChildren()) {
                                 if (node != null) {
                                     if (((ErrorCommand) command).getId().equals(node.getId())) {
                                         ((CheckBox) node).setSelected(true);
@@ -3414,7 +2403,6 @@ public class InfluencePointsThreePhaseStendFrame {
 
     //Добавляет тестовую точку в методику
     private void addTestPointInMethodic(String testPoint) {
-
         /** U;1;H;A;P;0.2 Ib;0.5C
          *  По напряжению или частоте
          *  режим;
@@ -3458,24 +2446,19 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 if (iABC.equals("H")) {
                     for (double influenceUproc : influenceUprocAllPhaseAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPPls.add(new ErrorCommand(false,"", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
 
                 } else if (iABC.equals("A")) {
                     for (double influenceUproc : influenceUprocPhaseAAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPPls.add(new ErrorCommand(false, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
 
                 } else if (iABC.equals("B")) {
                     for (double influenceUproc : influenceUprocPhaseBAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
-                                0, percent, iABC, powerFactor, 0));
-                    }
-                } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceUprocPhaseCAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPPls.add(new ErrorCommand(false, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
                 }
@@ -3484,28 +2467,21 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 if (iABC.equals("H")) {
                     for (double influenceUproc : influenceFprocAllPhaseAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPPls.add(new ErrorCommand(false, "", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
 
                 } else if (iABC.equals("A")) {
                     for (double influenceUproc : influenceFprocPhaseAAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPPls.add(new ErrorCommand(false, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
 
                 } else if (iABC.equals("B")) {
                     for (double influenceUproc : influenceFprocPhaseBAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPPls.add(new ErrorCommand(false, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
-
-                } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceFprocPhaseCAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceUproc,
-                                0, percent, iABC, powerFactor, 0));
-                    }
-
                 }
             }
 
@@ -3516,53 +2492,42 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 if (iABC.equals("H")) {
                     for (double influenceUproc : influenceUprocAllPhaseAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPMns.add(new ErrorCommand(false, "", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 1));
                     }
 
                 } else if (iABC.equals("A")) {
                     for (double influenceUproc : influenceUprocPhaseAAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPMns.add(new ErrorCommand(false, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 1));
                     }
 
                 } else if (iABC.equals("B")) {
                     for (double influenceUproc : influenceUprocPhaseBAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
-                                1, percent, iABC, powerFactor, 1));
-                    }
-                } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceUprocPhaseCAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPMns.add(new ErrorCommand(false, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 1));
                     }
                 }
+
             } else if (influenceUorF.equals("F")) {
 
                 if (iABC.equals("H")) {
                     for (double influenceUproc : influenceFprocAllPhaseAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPMns.add(new ErrorCommand(false, "", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 1));
                     }
 
                 } else if (iABC.equals("A")) {
                     for (double influenceUproc : influenceFprocPhaseAAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPMns.add(new ErrorCommand(false, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 1));
                     }
 
                 } else if (iABC.equals("B")) {
                     for (double influenceUproc : influenceFprocPhaseBAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumAPMns.add(new ErrorCommand(false, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 1));
                     }
-
-                } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceFprocPhaseCAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceUproc,
-                                1, percent, iABC, powerFactor, 1));
-                    }
-
                 }
             }
 
@@ -3573,24 +2538,19 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 if (iABC.equals("H")) {
                     for (double influenceUproc : influenceUprocAllPhaseRPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPPls.add(new ErrorCommand(false, "", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 2));
                     }
 
                 } else if (iABC.equals("A")) {
                     for (double influenceUproc : influenceUprocPhaseARPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPPls.add(new ErrorCommand(false, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 2));
                     }
 
                 } else if (iABC.equals("B")) {
                     for (double influenceUproc : influenceUprocPhaseBRPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
-                                0, percent, iABC, powerFactor, 2));
-                    }
-                } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceUprocPhaseCRPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPPls.add(new ErrorCommand(false, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 2));
                     }
                 }
@@ -3598,28 +2558,21 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 if (iABC.equals("H")) {
                     for (double influenceUproc : influenceFprocAllPhaseRPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPPls.add(new ErrorCommand(false, "", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 2));
                     }
 
                 } else if (iABC.equals("A")) {
                     for (double influenceUproc : influenceFprocPhaseARPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPPls.add(new ErrorCommand(false, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 2));
                     }
 
                 } else if (iABC.equals("B")) {
                     for (double influenceUproc : influenceFprocPhaseBRPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPPls.add(new ErrorCommand(false, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 2));
                     }
-
-                } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceFprocPhaseCRPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
-                                0, percent, iABC, powerFactor, 2));
-                    }
-
                 }
             }
 
@@ -3631,51 +2584,39 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 if (iABC.equals("H")) {
                     for (double influenceUproc : influenceUprocAllPhaseRPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPMns.add(new ErrorCommand(false, "", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 3));
                     }
 
                 } else if (iABC.equals("A")) {
                     for (double influenceUproc : influenceUprocPhaseARPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPMns.add(new ErrorCommand(false, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 3));
                     }
 
                 } else if (iABC.equals("B")) {
                     for (double influenceUproc : influenceUprocPhaseBRPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
-                                1, percent, iABC, powerFactor, 3));
-                    }
-                } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceUprocPhaseCRPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPMns.add(new ErrorCommand(false, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 3));
                     }
                 }
-
             } else if (influenceUorF.equals("F")) {
 
                 if (iABC.equals("H")) {
                     for (double influenceUproc : influenceFprocAllPhaseRPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPMns.add(new ErrorCommand(false, "", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 3));
                     }
 
                 } else if (iABC.equals("A")) {
                     for (double influenceUproc : influenceFprocPhaseARPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPMns.add(new ErrorCommand(false, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 3));
                     }
 
                 } else if (iABC.equals("B")) {
                     for (double influenceUproc : influenceFprocPhaseBRPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
-                                1, percent, iABC, powerFactor, 3));
-                    }
-
-                } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceFprocPhaseCRPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                        inflListForCollumRPMns.add(new ErrorCommand(false, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 1, percent, iABC, powerFactor, 3));
                     }
                 }
@@ -5205,9 +4146,5 @@ public class InfluencePointsThreePhaseStendFrame {
         viewPointTableAPMns.setItems(inflListForCollumAPMns);
         viewPointTableRPPls.setItems(inflListForCollumRPPls);
         viewPointTableRPMns.setItems(inflListForCollumRPMns);
-    }
-
-    public void setMethodicForThreePhaseStend(MethodicForThreePhaseStend methodicForThreePhaseStend) {
-        this.methodicForThreePhaseStend = methodicForThreePhaseStend;
     }
 }

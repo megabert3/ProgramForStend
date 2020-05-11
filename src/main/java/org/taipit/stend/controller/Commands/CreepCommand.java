@@ -13,6 +13,9 @@ import java.util.Map;
 
 public class CreepCommand implements Commands, Serializable {
 
+    //Эта команда из методики для трёхфазного теста?
+    private boolean threePhaseCommand;
+
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
 
@@ -55,7 +58,8 @@ public class CreepCommand implements Commands, Serializable {
 
     private HashMap<Integer, Boolean> creepCommandResult;
 
-    public CreepCommand(boolean gostTest, int channelFlag, String userTimeTest) {
+    public CreepCommand(boolean threePhaseCommand, boolean gostTest, int channelFlag, String userTimeTest) {
+        this.threePhaseCommand = threePhaseCommand;
         this.gostTest = gostTest;
         this.channelFlag = channelFlag;
         this.userTimeTest = userTimeTest;
@@ -76,7 +80,8 @@ public class CreepCommand implements Commands, Serializable {
         }
     }
 
-    public CreepCommand(boolean gostTest, int channelFlag) {
+    public CreepCommand(boolean threePhaseCommand, boolean gostTest, int channelFlag) {
+        this.threePhaseCommand = threePhaseCommand;
         this.gostTest = gostTest;
         this.channelFlag = channelFlag;
     }

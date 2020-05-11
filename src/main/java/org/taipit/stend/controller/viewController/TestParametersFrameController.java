@@ -34,16 +34,16 @@ import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 import org.taipit.stend.helper.frameManager.Frame;
-import org.taipit.stend.model.Methodic;
-import org.taipit.stend.model.MethodicsForTest;
+import org.taipit.stend.model.metodics.Metodic;
+import org.taipit.stend.model.metodics.MetodicsForTest;
 
 public class TestParametersFrameController implements Frame {
 
-    private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
+    private MetodicsForTest metodicsForTest = MetodicsForTest.getMetodicsForTestInstance();
 
     private StendDLLCommands stendDLLCommands;
 
-    private Methodic methodic;
+    private Metodic methodicForStend;
 
     private Properties properties = ConsoleHelper.properties;
 
@@ -314,9 +314,9 @@ public class TestParametersFrameController implements Frame {
 
                 TestErrorTableFrameController testErrorTableFrameController = fxmlLoader.getController();
 
-                //Учтановка и передача параметров
+                //Установка и передача параметров
                 testErrorTableFrameController.setStendDLLCommands(stendDLLCommands);
-                testErrorTableFrameController.setMethodic(methodic);
+                testErrorTableFrameController.setMethodicForStend(methodicForStend);
                 testErrorTableFrameController.setUn(Un);
                 testErrorTableFrameController.setAccuracyClassAP(accuracyClassAP);
                 testErrorTableFrameController.setAccuracyClassRP(accuracyClassRP);
@@ -428,8 +428,8 @@ public class TestParametersFrameController implements Frame {
         chosBxtypeOfMeasuringElement.getItems().addAll(typeOfMeasuringElementComBox);
         chosBxTypeMeter.getItems().addAll(typeMeter);
 
-        for (Methodic methodic : methodicsForTest.getMethodics()) {
-            chosBxMetodics.getItems().add(methodic.getMethodicName());
+        for (Metodic methodicForStend : metodicsForTest.getMethodicForStends()) {
+            chosBxMetodics.getItems().add(methodicForStend.getMetodicName());
         }
 
         //Задаём текстовым полям последнее сохранённое значение
@@ -462,40 +462,40 @@ public class TestParametersFrameController implements Frame {
         chosBxMetodics.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                methodic = MethodicsForTest.getMethodicsForTestInstance().getMethodic(chosBxMetodics.getValue());
+                methodicForStend = MetodicsForTest.getMetodicsForTestInstance().getMetodic(chosBxMetodics.getValue());
 
-                if (methodic.isBindsParameters()) {
-                    txtFldUnom.setText(methodic.getUnom());
+                if (methodicForStend.isBindsParameters()) {
+                    txtFldUnom.setText(methodicForStend.getUnom());
                     txtFldUnom.setDisable(true);
                     chosBxUnom.setDisable(true);
 
-                    txtFldCurrent.setText(methodic.getImaxAndInom());
+                    txtFldCurrent.setText(methodicForStend.getImaxAndInom());
                     txtFldCurrent.setDisable(true);
                     chosBxCurrent.setDisable(true);
 
-                    txtFldFrg.setText(methodic.getFnom());
+                    txtFldFrg.setText(methodicForStend.getFnom());
                     txtFldFrg.setDisable(true);
                     chosBxFrg.setDisable(true);
 
-                    txtFldAccuracyAP.setText(methodic.getAccuracyClassMeterAP());
+                    txtFldAccuracyAP.setText(methodicForStend.getAccuracyClassMeterAP());
                     txtFldAccuracyAP.setDisable(true);
                     chosBxAccuracyAP.setDisable(true);
 
-                    txtFldAccuracyRP.setText(methodic.getAccuracyClassMeterRP());
+                    txtFldAccuracyRP.setText(methodicForStend.getAccuracyClassMeterRP());
                     txtFldAccuracyRP.setDisable(true);
                     chosBxAccuracyRP.setDisable(true);
 
-                    chosBxTypeMeter.setValue(methodic.getTypeMeter());
+                    chosBxTypeMeter.setValue(methodicForStend.getTypeMeter());
                     chosBxTypeMeter.setDisable(true);
 
-                    chosBxtypeOfMeasuringElement.setValue(methodic.getTypeOfMeasuringElementShunt());
+                    chosBxtypeOfMeasuringElement.setValue(methodicForStend.getTypeOfMeasuringElementShunt());
                     chosBxtypeOfMeasuringElement.setDisable(true);
 
                     for (Meter meter : metersList) {
-                        meter.setConstantMeterAP(methodic.getConstantAP());
-                        meter.setConstantMeterRP(methodic.getConstantRP());
+                        meter.setConstantMeterAP(methodicForStend.getConstantAP());
+                        meter.setConstantMeterRP(methodicForStend.getConstantRP());
                         meter.setModelMeter(meter.getModelMeter());
-                        meter.setFactoryManufacturer(methodic.getFactoryManufactuter());
+                        meter.setFactoryManufacturer(methodicForStend.getFactoryManufactuter());
                     }
 
                     tabVParamMeters.refresh();
@@ -534,10 +534,10 @@ public class TestParametersFrameController implements Frame {
             }
         });
 
-        Methodic methodic1 = MethodicsForTest.getMethodicsForTestInstance().getMethodic(properties.getProperty("lastMethodicName"));
+        Metodic methodicForStend1 = MetodicsForTest.getMetodicsForTestInstance().getMetodic(properties.getProperty("lastMethodicName"));
 
-        if (methodic1 != null) {
-            chosBxMetodics.setValue(methodic1.getMethodicName());
+        if (methodicForStend1 != null) {
+            chosBxMetodics.setValue(methodicForStend1.getMetodicName());
         }
 
         initTableView();

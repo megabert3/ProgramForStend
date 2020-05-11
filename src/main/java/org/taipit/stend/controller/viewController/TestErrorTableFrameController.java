@@ -30,7 +30,7 @@ import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
-import org.taipit.stend.model.Methodic;
+import org.taipit.stend.model.metodics.Metodic;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -39,7 +39,7 @@ import java.util.List;
 
 public class TestErrorTableFrameController {
 
-    StendDLLCommands stendDLLCommands;
+    private StendDLLCommands stendDLLCommands;
 
     public static boolean interrupt;
 
@@ -48,7 +48,7 @@ public class TestErrorTableFrameController {
 
     private List<Meter> listMetersForTest;
 
-    private Methodic methodic;
+    private Metodic methodicForStend;
 
     //Список команд
     private ObservableList<Commands> commandsAPPls = FXCollections.observableArrayList(new ArrayList<>());
@@ -1112,17 +1112,17 @@ public class TestErrorTableFrameController {
         tabColTestPointsDis.setSortable(false);
 
         //Установка команд для таблицы с выбором команды для испытания
-        commandsAPPls.setAll(methodic.getCommandsMap().get(0));
-        commandsAPPls.addAll(methodic.getSaveInflListForCollumAPPls());
+        commandsAPPls.setAll(methodicForStend.getCommandsMap().get(0));
+        commandsAPPls.addAll(methodicForStend.getSaveInflListForCollumAPPls());
 
-        commandsAPMns.setAll(methodic.getCommandsMap().get(1));
-        commandsAPMns.addAll(methodic.getSaveInflListForCollumAPMns());
+        commandsAPMns.setAll(methodicForStend.getCommandsMap().get(1));
+        commandsAPMns.addAll(methodicForStend.getSaveInflListForCollumAPMns());
 
-        commandsRPPls.setAll(methodic.getCommandsMap().get(2));
-        commandsRPPls.addAll(methodic.getSaveInflListForCollumRPPls());
+        commandsRPPls.setAll(methodicForStend.getCommandsMap().get(2));
+        commandsRPPls.addAll(methodicForStend.getSaveInflListForCollumRPPls());
 
-        commandsRPMns.setAll(methodic.getCommandsMap().get(3));
-        commandsRPMns.addAll(methodic.getSaveInflListForCollumRPMns());
+        commandsRPMns.setAll(methodicForStend.getCommandsMap().get(3));
+        commandsRPMns.addAll(methodicForStend.getSaveInflListForCollumRPMns());
 
         initErrorsForMeters();
 
@@ -1587,8 +1587,8 @@ public class TestErrorTableFrameController {
         Fn = fn;
     }
 
-    public void setMethodic(Methodic methodic) {
-        this.methodic = methodic;
+    public void setMethodicForStend(Metodic methodicForStend) {
+        this.methodicForStend = methodicForStend;
     }
 
     public void setTypeOfMeasuringElementShunt(boolean typeOfMeasuringElementShunt) {

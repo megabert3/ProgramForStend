@@ -27,4 +27,8 @@ public interface Commands{
     //Выбрано ли точка испытания
     boolean isActive();
     void setActive(boolean active);
+
+//    boolean isThreePhaseCommand();
+//
+//    void setThreePhaseCommand(boolean threePhaseCommand);
 }

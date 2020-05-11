@@ -5,11 +5,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import org.taipit.stend.helper.ConsoleHelper;
-import org.taipit.stend.model.Methodic;
+import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
+import org.taipit.stend.model.metodics.Metodic;
 
 import java.util.Properties;
 
@@ -19,7 +21,7 @@ public class ParametersMethodicController {
 
     private AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController;
 
-    private Methodic methodic;
+    private Metodic methodicForStend;
 
     private Properties properties = ConsoleHelper.properties;
 
@@ -34,6 +36,9 @@ public class ParametersMethodicController {
     private String[] constantMeterRP = properties.getProperty("constantMeterRP").split(", ");
     private String[] meterModel = properties.getProperty("meterModels").split(", ");
     private String[] factoryManufacturer = properties.getProperty("meterManufacturer").split(", ");
+
+    @FXML
+    private CheckBox circutChkBx;
 
     @FXML
     private ComboBox<String> chosBxUnom;
@@ -132,19 +137,24 @@ public class ParametersMethodicController {
                     addEditPointsOnePhaseStendFrameController.getParametersBtn().setSelected(true);
                 }
 
-                methodic.setBindsParameters(true);
+                methodicForStend.setBindsParameters(true);
 
-                methodic.setUnom(txtFldUnom.getText());
-                methodic.setImaxAndInom(txtFldCurrent.getText());
-                methodic.setFnom(txtFldFrg.getText());
-                methodic.setAccuracyClassMeterAP(txtFldAccuracyAP.getText());
-                methodic.setAccuracyClassMeterRP(txtFldAccuracyRP.getText());
-                methodic.setTypeMeter(chosBxTypeMeter.getValue());
-                methodic.setTypeOfMeasuringElementShunt(chosBxtypeOfMeasuringElement.getValue());
-                methodic.setConstantAP(txtFldConstantMeterAP.getText());
-                methodic.setConstantRP(txtFldConstantMeterRP.getText());
-                methodic.setFactoryManufactuter(txtFldMeterManufacturer.getText());
-                methodic.setMeterModel(txtFldMeterModel.getText());
+                methodicForStend.setUnom(txtFldUnom.getText());
+                methodicForStend.setImaxAndInom(txtFldCurrent.getText());
+                methodicForStend.setFnom(txtFldFrg.getText());
+                methodicForStend.setAccuracyClassMeterAP(txtFldAccuracyAP.getText());
+                methodicForStend.setAccuracyClassMeterRP(txtFldAccuracyRP.getText());
+                methodicForStend.setTypeMeter(chosBxTypeMeter.getValue());
+                methodicForStend.setTypeOfMeasuringElementShunt(chosBxtypeOfMeasuringElement.getValue());
+                methodicForStend.setConstantAP(txtFldConstantMeterAP.getText());
+                methodicForStend.setConstantRP(txtFldConstantMeterRP.getText());
+                methodicForStend.setFactoryManufactuter(txtFldMeterManufacturer.getText());
+                methodicForStend.setMeterModel(txtFldMeterModel.getText());
+
+                if (methodicForStend instanceof MethodicForOnePhaseStend) {
+                    ((MethodicForOnePhaseStend) methodicForStend).setTwoCircut(circutChkBx.isSelected());
+                    circutChkBx.setDisable(true);
+                }
             } else {
                 chosBxUnom.setDisable(false);
                 txtFldUnom.setDisable(false);
@@ -175,7 +185,11 @@ public class ParametersMethodicController {
                     addEditPointsOnePhaseStendFrameController.getParametersBtn().setSelected(false);
                 }
 
-                methodic.setBindsParameters(false);
+                methodicForStend.setBindsParameters(false);
+
+                if (methodicForStend instanceof MethodicForOnePhaseStend) {
+                    circutChkBx.setDisable(false);
+                }
             }
         }
     }
@@ -289,52 +303,68 @@ public class ParametersMethodicController {
                 }
             });
         }
+
+        circutChkBx.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    ((MethodicForOnePhaseStend) methodicForStend).setTwoCircut(true);
+                } else {
+                    ((MethodicForOnePhaseStend) methodicForStend).setTwoCircut(false);
+                }
+            }
+        });
     }
 
     public void setDisableAllParam() {
-        txtFldUnom.setText(methodic.getUnom());
+        txtFldUnom.setText(methodicForStend.getUnom());
         chosBxUnom.setDisable(true);
         txtFldUnom.setDisable(true);
 
-        txtFldAccuracyAP.setText(methodic.getAccuracyClassMeterAP());
+        txtFldAccuracyAP.setText(methodicForStend.getAccuracyClassMeterAP());
         chosBxAccuracyAP.setDisable(true);
         txtFldAccuracyAP.setDisable(true);
 
-        txtFldAccuracyRP.setText(methodic.getAccuracyClassMeterRP());
+        txtFldAccuracyRP.setText(methodicForStend.getAccuracyClassMeterRP());
         chosBxAccuracyRP.setDisable(true);
         txtFldAccuracyRP.setDisable(true);
 
-        txtFldCurrent.setText(methodic.getImaxAndInom());
+        txtFldCurrent.setText(methodicForStend.getImaxAndInom());
         txtFldCurrent.setDisable(true);
         chosBxCurrent.setDisable(true);
 
-        chosBxtypeOfMeasuringElement.setValue(methodic.getTypeOfMeasuringElementShunt());
+        chosBxtypeOfMeasuringElement.setValue(methodicForStend.getTypeOfMeasuringElementShunt());
         chosBxtypeOfMeasuringElement.setDisable(true);
 
-        txtFldFrg.setText(methodic.getFnom());
+        txtFldFrg.setText(methodicForStend.getFnom());
         txtFldFrg.setDisable(true);
         chosBxFrg.setDisable(true);
 
-        chosBxTypeMeter.setValue(methodic.getTypeMeter());
+        chosBxTypeMeter.setValue(methodicForStend.getTypeMeter());
         chosBxTypeMeter.setDisable(true);
 
-        txtFldConstantMeterAP.setText(methodic.getConstantAP());
+        txtFldConstantMeterAP.setText(methodicForStend.getConstantAP());
         txtFldConstantMeterAP.setDisable(true);
         chosBxConstantMeterAP.setDisable(true);
 
-        txtFldConstantMeterRP.setText(methodic.getConstantRP());
+        txtFldConstantMeterRP.setText(methodicForStend.getConstantRP());
         txtFldConstantMeterRP.setDisable(true);
         chosBxConstantMeterRP.setDisable(true);
 
-        txtFldMeterManufacturer.setText(methodic.getFactoryManufactuter());
+        txtFldMeterManufacturer.setText(methodicForStend.getFactoryManufactuter());
         txtFldMeterManufacturer.setDisable(true);
         chosBxMeterManufacturer.setDisable(true);
 
-        txtFldMeterModel.setText(methodic.getFactoryManufactuter());
+        txtFldMeterModel.setText(methodicForStend.getFactoryManufactuter());
         txtFldMeterModel.setDisable(true);
         chosBxMeterModel.setDisable(true);
 
         tglBtnSetPatemeters.setSelected(true);
+
+        if (methodicForStend instanceof MethodicForOnePhaseStend) {
+            circutChkBx.setSelected(((MethodicForOnePhaseStend) methodicForStend).isTwoCircut());
+            circutChkBx.setDisable(true);
+        }
     }
 
     public void setAddEditPointsThreePhaseStendFrameController(AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController) {
@@ -346,7 +376,11 @@ public class ParametersMethodicController {
     }
 
 
-    public void setMethodic(Methodic methodic) {
-        this.methodic = methodic;
+    public void setMethodicForStend(Metodic methodicForStend) {
+        this.methodicForStend = methodicForStend;
+    }
+
+    public CheckBox getCircutChkBx() {
+        return circutChkBx;
     }
 }

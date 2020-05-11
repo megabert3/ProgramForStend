@@ -31,18 +31,20 @@ import org.taipit.stend.controller.viewController.methodicsFrameController.addEd
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 import org.taipit.stend.helper.frameManager.Frame;
-import org.taipit.stend.model.Methodic;
-import org.taipit.stend.model.MethodicsForTest;
+import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
+import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
+import org.taipit.stend.model.metodics.Metodic;
+import org.taipit.stend.model.metodics.MetodicsForTest;
 
 
 public class MethodicsAddEditDeleteFrameController implements Frame {
 
-    private MethodicsForTest methodicsForTest = MethodicsForTest.getMethodicsForTestInstance();
+    private MetodicsForTest metodicsForTest = MetodicsForTest.getMetodicsForTestInstance();
 
-    private ObservableList<Methodic> metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
+    private ObservableList<Metodic> metodicsNameList = FXCollections.observableArrayList(metodicsForTest.getMethodicForStends());
 
     //Выделенная методикка
-    private Methodic focusedMetodic;
+    private Metodic focusedMetodic;
 
     //Листы для точек из методики
     private List<String> comandListAPPls = new ArrayList<>();
@@ -89,10 +91,10 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
     private Button BtnGoToStartTest;
 
     @FXML
-    private TableView<Methodic> viewPointTable = new TableView<>();
+    private TableView<Metodic> viewPointTable = new TableView<>();
 
     @FXML
-    private TableColumn<Methodic, String> tabClMethodics;
+    private TableColumn<Metodic, String> tabClMethodics;
 
     @FXML
     private ListView<String> ListViewAPPls;
@@ -218,8 +220,9 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
             FXMLLoader fxmlLoader = new FXMLLoader();
             Stage stage = new Stage();
 
-            if (focusedMetodic.isThreePhaseStendMethodic()) {
-                fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addEditPointsThreePhaseStendMet.fxml"));
+            if (focusedMetodic instanceof MethodicForThreePhaseStend) {
+
+                fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/ThreePhase/addEditPointsThreePhaseStendMet.fxml"));
                 try {
                     fxmlLoader.load();
                 } catch (IOException e) {
@@ -231,7 +234,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
                 stage.setScene(new Scene(root));
 
                 addEditPointsThreePhaseStendFrameController = fxmlLoader.getController();
-                addEditPointsThreePhaseStendFrameController.setMethodic(focusedMetodic);
+                addEditPointsThreePhaseStendFrameController.setMethodicForThreePhaseStend((MethodicForThreePhaseStend) focusedMetodic);
                 addEditPointsThreePhaseStendFrameController.setEdit(true);
 
                 if (focusedMetodic.isBindsParameters()) {
@@ -260,7 +263,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
             } else {
 
-                fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/addEditPointsOnePhaseStendMet.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/OnePhase/addEditPointsOnePhaseStendMet.fxml"));
                 try {
                     fxmlLoader.load();
                 } catch (IOException e) {
@@ -272,7 +275,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
                 stage.setScene(new Scene(root));
 
                 addEditPointsOnePhaseStendFrameController = fxmlLoader.getController();
-                addEditPointsOnePhaseStendFrameController.setMethodic(focusedMetodic);
+                addEditPointsOnePhaseStendFrameController.setMethodicForOnePhaseStend((MethodicForOnePhaseStend) focusedMetodic);
                 addEditPointsOnePhaseStendFrameController.setEdit(true);
 
                 if (focusedMetodic.isBindsParameters()) {
@@ -331,7 +334,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
             MethodicNameController methodicNameController = fxmlLoader.getController();
             methodicNameController.setClone(true);
-            methodicNameController.setMethodic(focusedMetodic);
+            methodicNameController.setMethodicForStend(focusedMetodic);
             methodicNameController.setMethodicsAddEditDeleteFrameController(this);
 
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -355,9 +358,9 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
             YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
             yesOrNoFrameController.setDeliteMethodic(true);
-            yesOrNoFrameController.setMethodic(focusedMetodic);
+            yesOrNoFrameController.setMethodicForStend(focusedMetodic);
             yesOrNoFrameController.getQuestionTxt().setText("Вы действительно желаете удалить\nметодику: " +
-                    focusedMetodic.getMethodicName() + "?");
+                    focusedMetodic.getMetodicName() + "?");
             yesOrNoFrameController.getQuestionTxt().setLayoutX(150);
             yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
             yesOrNoFrameController.setMethodicsAddEditDeleteFrameController(this);
@@ -368,12 +371,12 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
     //Инициирует список методик
     private void initMethodicListName() {
-        tabClMethodics.setCellValueFactory(new PropertyValueFactory<>("methodicName"));
+        tabClMethodics.setCellValueFactory(new PropertyValueFactory<>("metodicName"));
 
         tabClMethodics.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        tabClMethodics.setOnEditCommit((TableColumn.CellEditEvent<Methodic, String> event) -> {
-            TablePosition<Methodic, String> pos = event.getTablePosition();
+        tabClMethodics.setOnEditCommit((TableColumn.CellEditEvent<Metodic, String> event) -> {
+            TablePosition<Metodic, String> pos = event.getTablePosition();
 
             String newImpulseValue = event.getNewValue();
 
@@ -391,13 +394,13 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
             int row = pos.getRow();
 
-            Methodic methodic = event.getTableView().getItems().get(row);
+            Metodic methodicForStend = event.getTableView().getItems().get(row);
             try {
-                for (Methodic methodicName : MethodicsForTest.getMethodicsForTestInstance().getMethodics()) {
-                    if (methodicName.getMethodicName().equals(newImpulseValue)) throw new InfoExсeption();
+                for (Metodic methodicForStendName : MetodicsForTest.getMetodicsForTestInstance().getMethodicForStends()) {
+                    if (methodicForStendName.getMetodicName().equals(newImpulseValue)) throw new InfoExсeption();
                 }
 
-                methodic.setMethodicName(newImpulseValue);
+                methodicForStend.setMetodicName(newImpulseValue);
 
             }catch (InfoExсeption e) {
                 e.printStackTrace();
@@ -419,9 +422,9 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
         metodicsNameList = viewPointTable.getSelectionModel().getSelectedItems();
 
-        metodicsNameList.addListener(new ListChangeListener<Methodic>() {
+        metodicsNameList.addListener(new ListChangeListener<Metodic>() {
             @Override
-            public void onChanged(Change<? extends Methodic> c) {
+            public void onChanged(Change<? extends Metodic> c) {
                 tglBtnAPPls.setSelected(true);
                 focusedMetodic = c.getList().get(0);
 
@@ -445,6 +448,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         for (Commands commandsAPPls : focusedMetodic.getCommandsMap().get(0)) {
             comandListAPPls.add(commandsAPPls.getName());
         }
+
         for (Commands inflAPPls : focusedMetodic.getSaveInflListForCollumAPPls()) {
             comandListAPPls.add(inflAPPls.getName());
         }
@@ -456,6 +460,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         for (Commands commandsAPMns : focusedMetodic.getCommandsMap().get(1)) {
             comandListAPMns.add(commandsAPMns.getName());
         }
+
         for (Commands inflAPMns : focusedMetodic.getSaveInflListForCollumAPMns()) {
             comandListAPMns.add(inflAPMns.getName());
         }
@@ -467,6 +472,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         for (Commands commandsRPPls : focusedMetodic.getCommandsMap().get(2)) {
             comandListRPPls.add(commandsRPPls.getName());
         }
+
         for (Commands inflRPPls : focusedMetodic.getSaveInflListForCollumRPPls()) {
             comandListRPPls.add(inflRPPls.getName());
         }
@@ -478,6 +484,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         for (Commands commandsRPMns : focusedMetodic.getCommandsMap().get(3)) {
             comandListRPMns.add(commandsRPMns.getName());
         }
+
         for (Commands inflRPMns : focusedMetodic.getSaveInflListForCollumRPMns()) {
             comandListRPMns.add(inflRPMns.getName());
         }
@@ -492,8 +499,8 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
     }
 
-    public void setListsView(Methodic methodic) {
-        focusedMetodic = methodic;
+    public void setListsView(Metodic methodicForThreePhaseStend) {
+        focusedMetodic = methodicForThreePhaseStend;
 
         comandListAPPls.clear();
         comandListAPMns.clear();
@@ -503,6 +510,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         for (Commands commandsAPPls : focusedMetodic.getCommandsMap().get(0)) {
             comandListAPPls.add(commandsAPPls.getName());
         }
+
         for (Commands inflAPPls : focusedMetodic.getSaveInflListForCollumAPPls()) {
             comandListAPPls.add(inflAPPls.getName());
         }
@@ -514,6 +522,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         for (Commands commandsAPMns : focusedMetodic.getCommandsMap().get(1)) {
             comandListAPMns.add(commandsAPMns.getName());
         }
+
         for (Commands inflAPMns : focusedMetodic.getSaveInflListForCollumAPMns()) {
             comandListAPMns.add(inflAPMns.getName());
         }
@@ -525,6 +534,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         for (Commands commandsRPPls : focusedMetodic.getCommandsMap().get(2)) {
             comandListRPPls.add(commandsRPPls.getName());
         }
+
         for (Commands inflRPPls : focusedMetodic.getSaveInflListForCollumRPPls()) {
             comandListRPPls.add(inflRPPls.getName());
         }
@@ -536,6 +546,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         for (Commands commandsRPMns : focusedMetodic.getCommandsMap().get(3)) {
             comandListRPMns.add(commandsRPMns.getName());
         }
+
         for (Commands inflRPMns : focusedMetodic.getSaveInflListForCollumRPMns()) {
             comandListRPMns.add(inflRPMns.getName());
         }
@@ -559,14 +570,14 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
     //Обновление списка методик после добавления методики
     public void refreshMethodicList() {
-        metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
+        metodicsNameList = FXCollections.observableArrayList(metodicsForTest.getMethodicForStends());
 
         initMethodicListName();
     }
 
     //Обновление списка после удаления методики
     public void refreshAfterDelete() {
-        metodicsNameList = FXCollections.observableArrayList(methodicsForTest.getMethodics());
+        metodicsNameList = FXCollections.observableArrayList(metodicsForTest.getMethodicForStends());
 
         initMethodicListName();
 

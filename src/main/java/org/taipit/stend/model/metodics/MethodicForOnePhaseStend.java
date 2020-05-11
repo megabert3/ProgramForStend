@@ -1,4 +1,4 @@
-package org.taipit.stend.model;
+package org.taipit.stend.model.metodics;
 
 import org.taipit.stend.controller.Commands.Commands;
 
@@ -8,14 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Methodic implements Cloneable, Serializable {
+public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializable {
 
-    //Эта методика сделала для трехфазного стенда?
-    private boolean threePhaseStendMethodic;
-
-    private String methodicName;
+    private String metodicName;
 
     private boolean bindsParameters;
+
+    private boolean twoCircut;
 
     private String Unom;
     private String ImaxAndInom;
@@ -39,7 +38,7 @@ public class Methodic implements Cloneable, Serializable {
 
     private CreepStartRTCConst creepStartRTCConst = new CreepStartRTCConst();
 
-    public Methodic() {
+    public MethodicForOnePhaseStend() {
         commandsMap.put(0, new ArrayList<Commands>());
         commandsMap.put(1, new ArrayList<Commands>());
         commandsMap.put(2, new ArrayList<Commands>());
@@ -59,12 +58,12 @@ public class Methodic implements Cloneable, Serializable {
         return commandsMap;
     }
 
-    public String getMethodicName() {
-        return methodicName;
+    public String getMetodicName() {
+        return metodicName;
     }
 
-    public void setMethodicName(String methodicName) {
-        this.methodicName = methodicName;
+    public void setMetodicName(String methodicName) {
+        this.metodicName = methodicName;
     }
 
     @Override
@@ -105,37 +104,12 @@ public class Methodic implements Cloneable, Serializable {
         return influenceMetodic.influenceCommandsMap.get(3);
     }
 
-    //Инбаланс
-    public void setSaveInfluenceInbUAPPls(String[] saveInfluenceInbUAPPls) {
-        influenceMetodic.saveInfluenceInbUAPPls = saveInfluenceInbUAPPls;
+    public boolean isTwoCircut() {
+        return twoCircut;
     }
 
-    public void setSaveInfluenceInbUAPMns(String[] saveInfluenceInbUAPMns) {
-        influenceMetodic.saveInfluenceInbUAPMns = saveInfluenceInbUAPMns;
-    }
-
-    public void setSaveInfluenceInbURPPls(String[] saveInfluenceInbURPPls) {
-        influenceMetodic.saveInfluenceInbURPPls = saveInfluenceInbURPPls;
-    }
-
-    public void setSaveInfluenceInbURPMns(String[] saveInfluenceInbURPMns) {
-        influenceMetodic.saveInfluenceInbURPMns = saveInfluenceInbURPMns;
-    }
-
-    public String[] getSaveInfluenceInbUAPPls() {
-        return influenceMetodic.saveInfluenceInbUAPPls;
-    }
-
-    public String[] getSaveInfluenceInbUAPMns() {
-        return influenceMetodic.saveInfluenceInbUAPMns;
-    }
-
-    public String[] getSaveInfluenceInbURPPls() {
-        return influenceMetodic.saveInfluenceInbURPPls;
-    }
-
-    public String[] getSaveInfluenceInbURPMns() {
-        return influenceMetodic.saveInfluenceInbURPMns;
+    public void setTwoCircut(boolean twoCircut) {
+        this.twoCircut = twoCircut;
     }
 
     //Влияние AP+
@@ -163,14 +137,6 @@ public class Methodic implements Cloneable, Serializable {
         this.influenceMetodic.saveInfluenceUprocPhaseBAPPls = saveInfluenceUprocPhaseBAPPls;
     }
 
-    public float[] getSaveInfluenceUprocPhaseCAPPls() {
-        return influenceMetodic.saveInfluenceUprocPhaseCAPPls;
-    }
-
-    public void setSaveInfluenceUprocPhaseCAPPls(float[] saveInfluenceUprocPhaseCAPPls) {
-        this.influenceMetodic.saveInfluenceUprocPhaseCAPPls = saveInfluenceUprocPhaseCAPPls;
-    }
-
     public float[] getSaveInfluenceFprocAllPhaseAPPls() {
         return influenceMetodic.saveInfluenceFprocAllPhaseAPPls;
     }
@@ -193,14 +159,6 @@ public class Methodic implements Cloneable, Serializable {
 
     public void setSaveInfluenceFprocPhaseBAPPls(float[] saveInfluenceFprocPhaseBAPPls) {
         this.influenceMetodic.saveInfluenceFprocPhaseBAPPls = saveInfluenceFprocPhaseBAPPls;
-    }
-
-    public float[] getSaveInfluenceFprocPhaseCAPPls() {
-        return influenceMetodic.saveInfluenceFprocPhaseCAPPls;
-    }
-
-    public void setSaveInfluenceFprocPhaseCAPPls(float[] saveInfluenceFprocPhaseCAPPls) {
-        this.influenceMetodic.saveInfluenceFprocPhaseCAPPls = saveInfluenceFprocPhaseCAPPls;
     }
 
     //Влияние AP-
@@ -228,14 +186,6 @@ public class Methodic implements Cloneable, Serializable {
         this.influenceMetodic.saveInfluenceUprocPhaseBAPMns = saveInfluenceUprocPhaseBAPMns;
     }
 
-    public float[] getSaveInfluenceUprocPhaseCAPMns() {
-        return influenceMetodic.saveInfluenceUprocPhaseCAPMns;
-    }
-
-    public void setSaveInfluenceUprocPhaseCAPMns(float[] saveInfluenceUprocPhaseCAPMns) {
-        this.influenceMetodic.saveInfluenceUprocPhaseCAPMns = saveInfluenceUprocPhaseCAPMns;
-    }
-
     public float[] getSaveInfluenceFprocAllPhaseAPMns() {
         return influenceMetodic.saveInfluenceFprocAllPhaseAPMns;
     }
@@ -258,14 +208,6 @@ public class Methodic implements Cloneable, Serializable {
 
     public void setSaveInfluenceFprocPhaseBAPMns(float[] saveInfluenceFprocPhaseBAPMns) {
         this.influenceMetodic.saveInfluenceFprocPhaseBAPMns = saveInfluenceFprocPhaseBAPMns;
-    }
-
-    public float[] getSaveInfluenceFprocPhaseCAPMns() {
-        return influenceMetodic.saveInfluenceFprocPhaseCAPMns;
-    }
-
-    public void setSaveInfluenceFprocPhaseCAPMns(float[] saveInfluenceFprocPhaseCAPMns) {
-        this.influenceMetodic.saveInfluenceFprocPhaseCAPMns = saveInfluenceFprocPhaseCAPMns;
     }
 
     public float[] getSaveInfluenceUprocAllPhaseRPPls() {
@@ -293,14 +235,6 @@ public class Methodic implements Cloneable, Serializable {
         this.influenceMetodic.saveInfluenceUprocPhaseBRPPls = saveInfluenceUprocPhaseBRPPls;
     }
 
-    public float[] getSaveInfluenceUprocPhaseCRPPls() {
-        return influenceMetodic.saveInfluenceUprocPhaseCRPPls;
-    }
-
-    public void setSaveInfluenceUprocPhaseCRPPls(float[] saveInfluenceUprocPhaseCRPPls) {
-        this.influenceMetodic.saveInfluenceUprocPhaseCRPPls = saveInfluenceUprocPhaseCRPPls;
-    }
-
     public float[] getSaveInfluenceFprocAllPhaseRPPls() {
         return influenceMetodic.saveInfluenceFprocAllPhaseRPPls;
     }
@@ -323,14 +257,6 @@ public class Methodic implements Cloneable, Serializable {
 
     public void setSaveInfluenceFprocPhaseBRPPls(float[] saveInfluenceFprocPhaseBRPPls) {
         this.influenceMetodic.saveInfluenceFprocPhaseBRPPls = saveInfluenceFprocPhaseBRPPls;
-    }
-
-    public float[] getSaveInfluenceFprocPhaseCRPPls() {
-        return influenceMetodic.saveInfluenceFprocPhaseCRPPls;
-    }
-
-    public void setSaveInfluenceFprocPhaseCRPPls(float[] saveInfluenceFprocPhaseCRPPls) {
-        this.influenceMetodic.saveInfluenceFprocPhaseCRPPls = saveInfluenceFprocPhaseCRPPls;
     }
 
     //Влияние RP-
@@ -358,14 +284,6 @@ public class Methodic implements Cloneable, Serializable {
         this.influenceMetodic.saveInfluenceUprocPhaseBRPMns = saveInfluenceUprocPhaseBRPMns;
     }
 
-    public float[] getSaveInfluenceUprocPhaseCRPMns() {
-        return influenceMetodic.saveInfluenceUprocPhaseCRPMns;
-    }
-
-    public void setSaveInfluenceUprocPhaseCRPMns(float[] saveInfluenceUprocPhaseCRPMns) {
-        this.influenceMetodic.saveInfluenceUprocPhaseCRPMns = saveInfluenceUprocPhaseCRPMns;
-    }
-
     public float[] getSaveInfluenceFprocAllPhaseRPMns() {
         return influenceMetodic.saveInfluenceFprocAllPhaseRPMns;
     }
@@ -390,26 +308,11 @@ public class Methodic implements Cloneable, Serializable {
         this.influenceMetodic.saveInfluenceFprocPhaseBRPMns = saveInfluenceFprocPhaseBRPMns;
     }
 
-    public float[] getSaveInfluenceFprocPhaseCRPMns() {
-        return influenceMetodic.saveInfluenceFprocPhaseCRPMns;
-    }
-
-    public void setSaveInfluenceFprocPhaseCRPMns(float[] saveInfluenceFprocPhaseCRPMns) {
-        this.influenceMetodic.saveInfluenceFprocPhaseCRPMns = saveInfluenceFprocPhaseCRPMns;
-    }
-
     public Map<Integer, List<Commands>> getCreepStartRTCConstCommandsMap() {
         return creepStartRTCConst.creepStartRTCConstCommandsMap;
     }
 
    //======================================================================================
-    public boolean isThreePhaseStendMethodic() {
-        return threePhaseStendMethodic;
-    }
-
-    public void setThreePhaseStendMethodic(boolean threePhaseStendMethodic) {
-        this.threePhaseStendMethodic = threePhaseStendMethodic;
-    }
 
     public boolean isBindsParameters() {
         return bindsParameters;
@@ -528,53 +431,37 @@ public class Methodic implements Cloneable, Serializable {
         private float[] saveInfluenceUprocAllPhaseAPPls = new float[0];
         private float[] saveInfluenceUprocPhaseAAPPls = new float[0];
         private float[] saveInfluenceUprocPhaseBAPPls = new float[0];
-        private float[] saveInfluenceUprocPhaseCAPPls = new float[0];
 
         private float[] saveInfluenceFprocAllPhaseAPPls = new float[0];
         private float[] saveInfluenceFprocPhaseAAPPls = new float[0];
         private float[] saveInfluenceFprocPhaseBAPPls = new float[0];
-        private float[] saveInfluenceFprocPhaseCAPPls = new float[0];
-
-        private String[] saveInfluenceInbUAPPls = new String[0];
 
         //AP-
         private float[] saveInfluenceUprocAllPhaseAPMns = new float[0];
         private float[] saveInfluenceUprocPhaseAAPMns = new float[0];
         private float[] saveInfluenceUprocPhaseBAPMns = new float[0];
-        private float[] saveInfluenceUprocPhaseCAPMns = new float[0];
 
         private float[] saveInfluenceFprocAllPhaseAPMns = new float[0];
         private float[] saveInfluenceFprocPhaseAAPMns = new float[0];
         private float[] saveInfluenceFprocPhaseBAPMns = new float[0];
-        private float[] saveInfluenceFprocPhaseCAPMns = new float[0];
-
-        private String[] saveInfluenceInbUAPMns = new String[0];
 
         //RP+
         private float[] saveInfluenceUprocAllPhaseRPPls = new float[0];
         private float[] saveInfluenceUprocPhaseARPPls = new float[0];
         private float[] saveInfluenceUprocPhaseBRPPls = new float[0];
-        private float[] saveInfluenceUprocPhaseCRPPls = new float[0];
 
         private float[] saveInfluenceFprocAllPhaseRPPls = new float[0];
         private float[] saveInfluenceFprocPhaseARPPls = new float[0];
         private float[] saveInfluenceFprocPhaseBRPPls = new float[0];
-        private float[] saveInfluenceFprocPhaseCRPPls = new float[0];
-
-        private String[] saveInfluenceInbURPPls = new String[0];
 
         //RP-
         private float[] saveInfluenceUprocAllPhaseRPMns = new float[0];
         private float[] saveInfluenceUprocPhaseARPMns = new float[0];
         private float[] saveInfluenceUprocPhaseBRPMns = new float[0];
-        private float[] saveInfluenceUprocPhaseCRPMns = new float[0];
 
         private float[] saveInfluenceFprocAllPhaseRPMns = new float[0];
         private float[] saveInfluenceFprocPhaseARPMns = new float[0];
         private float[] saveInfluenceFprocPhaseBRPMns = new float[0];
-        private float[] saveInfluenceFprocPhaseCRPMns = new float[0];
-
-        private String[] saveInfluenceInbURPMns = new String[0];
 
         @Override
         public Object clone() throws CloneNotSupportedException {
