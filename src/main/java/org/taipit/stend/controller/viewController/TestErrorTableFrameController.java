@@ -113,19 +113,21 @@ public class TestErrorTableFrameController {
         @Override
         public void onChanged(Change<? extends Commands> c) {
             automaticTestThread.interrupt();
+
             automaticTestThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         try {
+                            blockBtns.setValue(true);
                             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                             startAutomaticTest();
                             blockTypeEnergyAndDirectionBtns.setValue(false);
-                        }catch (InterruptedException e) {
+                        } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
 
-                    }catch (ConnectForStendExeption e) {
+                    } catch (ConnectForStendExeption e) {
                         e.printStackTrace();
                         Platform.runLater(new Runnable() {
                             @Override
@@ -156,10 +158,10 @@ public class TestErrorTableFrameController {
                 public void run() {
                     try {
                         try {
+                            blockBtns.setValue(true);
                             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
                             startManualTest();
-
 //                                                blockTypeEnergyAndDirectionBtns.setValue(false);
 //                                                blockBtns.setValue(false);
                         } catch (InterruptedException e) {
@@ -588,59 +590,6 @@ public class TestErrorTableFrameController {
                     }
                 });
             }
-
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    blockBtns.setValue(true);
-                    startUnTest = false;
-
-                    if (automaticTestThread.isAlive()) {
-                        automaticTestThread.interrupt();
-                    }
-
-                    if (UnomThread.isAlive()) {
-                        UnomThread.interrupt();
-                    }
-
-                    tglBtnUnom.setSelected(false);
-                    tglBtnAuto.setSelected(false);
-                    tglBtnManualMode.setSelected(true);
-
-                    manualTestThread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                try {
-                                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
-                                    blockTypeEnergyAndDirectionBtns.setValue(true);
-
-                                    startManualTest();
-
-                                    blockTypeEnergyAndDirectionBtns.setValue(false);
-                                    blockBtns.setValue(false);
-                                } catch (InterruptedException e) {
-                                    blockTypeEnergyAndDirectionBtns.setValue(false);
-                                    blockBtns.setValue(false);
-                                    e.printStackTrace();
-                                }
-                            } catch (ConnectForStendExeption e) {
-                                e.printStackTrace();
-                                Platform.runLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ConsoleHelper.infoException("Потеряна связь с установкой");
-                                        blockBtns.setValue(false);
-                                        tglBtnManualMode.setSelected(false);
-                                    }
-                                });
-                            }
-                        }
-                    });
-                    manualTestThread.start();
-                }
-            });
         }
 
         //------------------------------------------------------------------------------------------------
