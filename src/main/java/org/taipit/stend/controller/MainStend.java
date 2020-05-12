@@ -1,53 +1,57 @@
 package org.taipit.stend.controller;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import java.io.*;
-
 public class MainStend {
 
     public static void main(String[] args) {
-        String pow = "110.0%Un";
-        String now = pow.substring(0, pow.length() - 3);
-        System.out.println(now);
+        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
+        try {
 
-//        File excelFile = new File("C:\\Users\\bert1\\Desktop\\test\\test.xlsx");
-//        Workbook wb = new XSSFWorkbook();
+            stendDLLCommands.getUI(1, 230, 5, 50, 0, 0, 100, 0, "H", "1.0");
+
+            Thread.sleep(3000);
+
+            for (int i = 1; i < 3; i++) {
+                stendDLLCommands.constTestStart(i, 8000);
+            }
+
+            stendDLLCommands.getUI(1, 230, 5, 50, 0, 0, 100, 100, "H", "1.0");
+
+            Thread.sleep(15000);
+
+            for (int i = 1; i < 3; i++) {
+                //System.out.println(stendDLLCommands.constPulseRead(8000, i));
+            }
+
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
+
+        }catch (Exception e) {
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
+        }
+
+// Старт теста констант
+// Meter_No - номер места
+// Constant - постоянная
+// Dev_Port - номер com-порта
+
+//        boolean ConstTest_Start(int Meter_No,
+//        double Constant,
+//        int Dev_Port);
 //
-//        CellStyle style = wb.createCellStyle();
-//
-//        Sheet testSheet = wb.createSheet("testSheet");
-//        Row row = testSheet.createRow(0);
-//        Cell cell = row.createCell(1);
-//        XSSFFont font = ((XSSFWorkbook) wb).createFont();
-//        font.setColor(XSSFFont.COLOR_RED);
-//        style.setFont(font);
-//        cell.setCellValue("dfsdf");
-//        cell.setCellStyle(style);
-//
-//
-//
-//
-//        try (FileOutputStream fileOutputStream = new FileOutputStream(excelFile)) {
-//            wb.write(fileOutputStream);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//    }
-//
-//    private static void createCell(Workbook wb, Row row, int column, HorizontalAlignment halign, VerticalAlignment valign) {
-//        Cell cell = row.createCell(column);
-//        cell.setCellValue("Align It hjhbn;.jbh");
-//        CellStyle cellStyle = wb.createCellStyle();
-//        cellStyle.setAlignment(halign);
-//        cellStyle.setVerticalAlignment(valign);
-//        cell.setCellStyle(cellStyle);
-//    }
+////--------------------------------------------------------------------------- ConstPulse_Read
+//// Чтение данных по энергии
+//// MeterKWH - значения счетчика
+//// StdKWH - Значение эталонника
+//// Constant - постоянная
+//// Meter_No - номер места
+//// Dev_Port - номер com-порта
+
+//        boolean ConstPulse_Read(String MeterKWH,
+//                String StdKWH,
+//        double Constant,
+//        int Meter_No,
+//        int Dev_Port);
+
     }
 }

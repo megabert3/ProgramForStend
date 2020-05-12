@@ -251,8 +251,8 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 // Constant - постоянная
 // Meter_No - номер места
 // Dev_Port - номер com-порта
-    boolean ConstPulse_Read(String MeterKWH,
-                            String StdKWH,
+    boolean ConstPulse_Read(double MeterKWH,
+                            double StdKWH,
                             double Constant,
                             int Meter_No,
                             int Dev_Port);
