@@ -1,6 +1,5 @@
 package org.taipit.stend.controller;
 
-import org.taipit.stend.helper.ConsoleHelper;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -22,17 +21,4 @@ public class ThreePhaseStend extends StendDLLCommands implements Serializable {
         }
         return threePhaseStend;
     }
-
-    private String stendModel = ConsoleHelper.properties.getProperty("stendModel");
-
-    private String refMetModel = ConsoleHelper.properties.getProperty("refMeterModel");
-
-    public List<String> getStendModelList() {
-        return stendModelList;
-    }
-
-    public List<String> getRefMetModelList() {
-        return refMetModelList;
-    }
-
 }

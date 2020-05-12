@@ -34,6 +34,9 @@ import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 import org.taipit.stend.helper.frameManager.Frame;
+import org.taipit.stend.helper.frameManager.FrameManager;
+import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
+import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
 import org.taipit.stend.model.metodics.MetodicsForTest;
 
@@ -52,6 +55,11 @@ public class TestParametersFrameController implements Frame {
     private ObservableList<Meter> meterObservableList;
 
     private File fileMetersNo = new File(properties.getProperty("testParamFrame.fileForSerNo"));
+
+    private boolean twoCircut;
+
+    @FXML
+    private CheckBox twoCircutChcBox;
 
     @FXML
     private ComboBox<String> chosBxTypeMeter;
@@ -286,20 +294,37 @@ public class TestParametersFrameController implements Frame {
                     meter.setTypeMeter(chosBxTypeMeter.getValue());
                 }
 
-                properties.setProperty("lastUnom", txtFldUnom.getText());
-                properties.setProperty("lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
-                properties.setProperty("lastAccuracyClassMeterRP", txtFldAccuracyRP.getText());
-                properties.setProperty("lastInomAndImax", txtFldCurrent.getText());
-                properties.setProperty("lastTypeOfMeasuringElement", chosBxtypeOfMeasuringElement.getValue());
-                properties.setProperty("lastTypeCircuit", chosBxPowerType.getValue());
-                properties.setProperty("lastFnom", txtFldFrg.getText());
-                properties.setProperty("lastMeterManufacturer", metersList.get(0).getFactoryManufacturer());
-                properties.setProperty("lastMeterConstantAP", metersList.get(0).getConstantMeterAP());
-                properties.setProperty("lastMeterConstantRP", metersList.get(0).getConstantMeterRP());
-                properties.setProperty("lastMethodicName", chosBxMetodics.getValue());
-                properties.setProperty("lastMeterTypeOnePhaseMultiTarif", chosBxTypeMeter.getValue());
+                if (stendDLLCommands instanceof ThreePhaseStend) {
+                    properties.setProperty("threePhaseStand.lastUnom", txtFldUnom.getText());
+                    properties.setProperty("threePhaseStand.lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
+                    properties.setProperty("threePhaseStand.lastAccuracyClassMeterRP", txtFldAccuracyRP.getText());
+                    properties.setProperty("threePhaseStand.lastInomAndImax", txtFldCurrent.getText());
+                    properties.setProperty("threePhaseStand.lastTypeOfMeasuringElement", chosBxtypeOfMeasuringElement.getValue());
+                    properties.setProperty("threePhaseStand.lastTypeCircuit", chosBxPowerType.getValue());
+                    properties.setProperty("threePhaseStand.lastFnom", txtFldFrg.getText());
+                    properties.setProperty("threePhaseStand.lastMeterManufacturer", metersList.get(0).getFactoryManufacturer());
+                    properties.setProperty("threePhaseStand.lastMeterConstantAP", metersList.get(0).getConstantMeterAP());
+                    properties.setProperty("threePhaseStand.lastMeterConstantRP", metersList.get(0).getConstantMeterRP());
+                    properties.setProperty("threePhaseStand.lastMethodicName", chosBxMetodics.getValue());
+                    properties.setProperty("threePhaseStand.lastMeterTypeOnePhaseMultiTarif", chosBxTypeMeter.getValue());
 
-                ConsoleHelper.saveProperties();
+                    ConsoleHelper.saveProperties();
+                } else {
+                    properties.setProperty("onePhaseStand.lastUnom", txtFldUnom.getText());
+                    properties.setProperty("onePhaseStand.lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
+                    properties.setProperty("onePhaseStand.lastAccuracyClassMeterRP", txtFldAccuracyRP.getText());
+                    properties.setProperty("onePhaseStand.lastInomAndImax", txtFldCurrent.getText());
+                    properties.setProperty("onePhaseStand.lastTypeOfMeasuringElement", chosBxtypeOfMeasuringElement.getValue());
+                    properties.setProperty("onePhaseStand.lastTypeCircuit", chosBxPowerType.getValue());
+                    properties.setProperty("onePhaseStand.lastFnom", txtFldFrg.getText());
+                    properties.setProperty("onePhaseStand.lastMeterManufacturer", metersList.get(0).getFactoryManufacturer());
+                    properties.setProperty("onePhaseStand.lastMeterConstantAP", metersList.get(0).getConstantMeterAP());
+                    properties.setProperty("onePhaseStand.lastMeterConstantRP", metersList.get(0).getConstantMeterRP());
+                    properties.setProperty("onePhaseStand.lastMethodicName", chosBxMetodics.getValue());
+                    properties.setProperty("onePhaseStand.lastMeterTypeOnePhaseMultiTarif", chosBxTypeMeter.getValue());
+
+                    ConsoleHelper.saveProperties();
+                }
 
                 //Загрузка окна испытания
                 FXMLLoader fxmlLoader = new FXMLLoader();
@@ -346,6 +371,7 @@ public class TestParametersFrameController implements Frame {
 
                 Stage stage1 = (Stage) btnStartTest.getScene().getWindow();
                 stage1.close();
+                FrameManager.frameManagerInstance().testParametersFrameController = null;
 
             }catch (NumberFormatException e) {
                 System.out.println("Произошла ошибка при переносе значений");
@@ -401,7 +427,16 @@ public class TestParametersFrameController implements Frame {
     void initialize() {
         if (properties.getProperty("stendType").equals("ThreePhaseStend")) {
             stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
-        } else stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
+            twoCircutChcBox.setVisible(false);
+            twoCircutChcBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    twoCircut = newValue;
+                }
+            });
+        } else {
+            stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
+        }
 
         initComboBoxesAndAddListerners();
     }
@@ -414,9 +449,34 @@ public class TestParametersFrameController implements Frame {
         String[] InomAndImaxComBox = properties.getProperty("InomAndImax").split(", ");
         String[] accuracyClassMeterAPComBox = properties.getProperty("accuracyClassMeterAP").split(", ");
         String[] accuracyClassMeterRPComBox = properties.getProperty("accuracyClassMeterRP").split(", ");
-        String[] typeCircuitComBox = properties.getProperty("typeCircuit").split(", ");
         String[] typeOfMeasuringElementComBox = properties.getProperty("typeOfMeasuringElement").split(", ");
         String[] typeMeter = properties.getProperty("meterTypeOnePhaseMultiTarif").split(", ");
+
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            for (Metodic methodicForStend : metodicsForTest.getMethodicForStends()) {
+                chosBxMetodics.getItems().add(methodicForStend.getMetodicName());
+            }
+
+            //Задаём текстовым полям последнее сохранённое значение
+            txtFldUnom.setText(properties.getProperty("threePhaseStand.lastUnom"));
+            txtFldFrg.setText(properties.getProperty("threePhaseStand.lastFnom"));
+            txtFldCurrent.setText(properties.getProperty("threePhaseStand.lastInomAndImax"));
+            txtFldAccuracyAP.setText(properties.getProperty("threePhaseStand.lastAccuracyClassMeterAP"));
+            txtFldAccuracyRP.setText(properties.getProperty("threePhaseStand.lastAccuracyClassMeterRP"));
+            chosBxPowerType.setValue(properties.getProperty("threePhaseStand.lastTypeCircuit"));
+            chosBxtypeOfMeasuringElement.setValue(properties.getProperty("threePhaseStand.lastTypeOfMeasuringElement"));
+            chosBxTypeMeter.setValue(properties.getProperty("threePhaseStand.lastMeterTypeOnePhaseMultiTarif"));
+
+            chosBxPowerType.getItems().addAll(properties.getProperty("threePhaseStand.typeCircuit").split(", "));
+        } else {
+            for (Metodic methodicForStend : metodicsForTest.getMethodicForStends()) {
+                if (methodicForStend instanceof MethodicForOnePhaseStend) {
+                    chosBxMetodics.getItems().add(methodicForStend.getMetodicName());
+                }
+            }
+
+            chosBxPowerType.getItems().addAll(properties.getProperty("onePhaseStand.typeCircuit").split(", "));
+        }
 
         //Кладём элементы в КомбоБокс
         chosBxUnom.getItems().addAll(UnomComBox);
@@ -424,23 +484,18 @@ public class TestParametersFrameController implements Frame {
         chosBxCurrent.getItems().addAll(InomAndImaxComBox);
         chosBxAccuracyAP.getItems().addAll(accuracyClassMeterAPComBox);
         chosBxAccuracyRP.getItems().addAll(accuracyClassMeterRPComBox);
-        chosBxPowerType.getItems().addAll(typeCircuitComBox);
         chosBxtypeOfMeasuringElement.getItems().addAll(typeOfMeasuringElementComBox);
         chosBxTypeMeter.getItems().addAll(typeMeter);
 
-        for (Metodic methodicForStend : metodicsForTest.getMethodicForStends()) {
-            chosBxMetodics.getItems().add(methodicForStend.getMetodicName());
-        }
-
         //Задаём текстовым полям последнее сохранённое значение
-        txtFldUnom.setText(properties.getProperty("lastUnom"));
-        txtFldFrg.setText(properties.getProperty("lastFnom"));
-        txtFldCurrent.setText(properties.getProperty("lastInomAndImax"));
-        txtFldAccuracyAP.setText(properties.getProperty("lastAccuracyClassMeterAP"));
-        txtFldAccuracyRP.setText(properties.getProperty("lastAccuracyClassMeterRP"));
-        chosBxPowerType.setValue(properties.getProperty("lastTypeCircuit"));
-        chosBxtypeOfMeasuringElement.setValue(properties.getProperty("lastTypeOfMeasuringElement"));
-        chosBxTypeMeter.setValue(properties.getProperty("lastMeterTypeOnePhaseMultiTarif"));
+        txtFldUnom.setText(properties.getProperty("onePhaseStand.lastUnom"));
+        txtFldFrg.setText(properties.getProperty("onePhaseStand.lastFnom"));
+        txtFldCurrent.setText(properties.getProperty("onePhaseStand.lastInomAndImax"));
+        txtFldAccuracyAP.setText(properties.getProperty("onePhaseStand.lastAccuracyClassMeterAP"));
+        txtFldAccuracyRP.setText(properties.getProperty("onePhaseStand.lastAccuracyClassMeterRP"));
+        chosBxPowerType.setValue(properties.getProperty("onePhaseStand.lastTypeCircuit"));
+        chosBxtypeOfMeasuringElement.setValue(properties.getProperty("onePhaseStand.lastTypeOfMeasuringElement"));
+        chosBxTypeMeter.setValue(properties.getProperty("onePhaseStand.lastMeterTypeOnePhaseMultiTarif"));
 
         //Устанавливаем слушателей
         chosBxUnom.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
@@ -463,6 +518,17 @@ public class TestParametersFrameController implements Frame {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 methodicForStend = MetodicsForTest.getMetodicsForTestInstance().getMetodic(chosBxMetodics.getValue());
+
+
+                if (methodicForStend instanceof MethodicForThreePhaseStend) {
+                    chosBxPowerType.getItems().clear();
+                    chosBxPowerType.getItems().addAll(properties.getProperty("threePhaseStand.typeCircuit").split(", "));
+                    chosBxPowerType.setValue(chosBxPowerType.getItems().get(0));
+                } else {
+                    chosBxPowerType.getItems().clear();
+                    chosBxPowerType.getItems().addAll(properties.getProperty("onePhaseStand.typeCircuit").split(", "));
+                    chosBxPowerType.setValue(chosBxPowerType.getItems().get(0));
+                }
 
                 if (methodicForStend.isBindsParameters()) {
                     txtFldUnom.setText(methodicForStend.getUnom());

@@ -162,11 +162,9 @@ public class TestErrorTableFrameController {
                             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
                             startManualTest();
-//                                                blockTypeEnergyAndDirectionBtns.setValue(false);
-//                                                blockBtns.setValue(false);
+
                         } catch (InterruptedException e) {
-//                                                blockTypeEnergyAndDirectionBtns.setValue(false);
-//                                                blockBtns.setValue(false);
+
                             e.printStackTrace();
                         }
                     } catch (ConnectForStendExeption e) {

@@ -1,9 +1,5 @@
 package org.taipit.stend.controller;
 
-
-import org.taipit.stend.helper.ConsoleHelper;
-import org.taipit.stend.model.StendDLL;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,22 +19,4 @@ public class OnePhaseStend extends StendDLLCommands{
         }
         return onePhaseStendInstance;
     }
-
-    private StendDLL stendDLL = StendDLL.INSTANCE;
-
-    private String stendModel = ConsoleHelper.properties.getProperty("stendModel");
-
-    private String refMetModel = ConsoleHelper.properties.getProperty("refMeterModel");
-
-    private int port = Integer.parseInt(ConsoleHelper.properties.getProperty("stendCOMPort"));
-
-    public List<String> getStendModelList() {
-        return stendModelList;
-    }
-
-    public List<String> getRefMetModelList() {
-        return refMetModelList;
-    }
-
-
 }

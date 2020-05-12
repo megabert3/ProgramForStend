@@ -37,7 +37,7 @@ public class FrameManager {
     private ResultsMetersController resultsMetersController;
 
     //Окно настройки и запуска теста
-    TestParametersFrameController testParametersFrameController;
+    public TestParametersFrameController testParametersFrameController;
 
     public enum FrameType {
         PROPERTIES,
