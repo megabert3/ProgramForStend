@@ -2,6 +2,7 @@ package org.taipit.stend.controller;
 
 import com.sun.jna.Memory;
 
+import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.PointerByReference;
 import jssc.SerialPortList;
 import org.taipit.stend.helper.ConsoleHelper;
@@ -280,21 +281,23 @@ public abstract class StendDLLCommands {
         return stend.ConstTest_Start(meterNo, constant, port);
     }
 
-    // Чтение данных по энергии
-    public boolean constPulseRead (double meterKWH, double stdKWH, double constant, int meterNo) {
-        stend.ConstPulse_Read(meterKWH, stdKWH, constant, meterNo, port);
-        return true;
-    }
-
 //    // Чтение данных по энергии
-//    public double constPulseRead (double constant, int meterNo) {
-//        PointerByReference pointerMeterKWH = new PointerByReference(new Memory(1024));
-//        PointerByReference pointerStdKWH = new PointerByReference(new Memory(1024));
-//
-//        stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port);
-//
-//        return pointerMeterKWH.getValue().getDouble(0); //+ " : " + "MeterKWH " + pointerStdKWH.getValue().getDouble(0));
+//    public boolean constPulseRead (double meterKWH, double stdKWH, double constant, int meterNo) {
+//        stend.ConstPulse_Read(meterKWH, stdKWH, constant, meterNo, port);
+//        return true;
 //    }
+
+    // Чтение данных по энергии
+    public double constPulseRead (double constant, int meterNo) {
+        DoubleByReference pointerMeterKWH = new DoubleByReference();
+        DoubleByReference pointerStdKWH = new DoubleByReference();
+
+        stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port);
+
+        System.out.println("MeterKWH " + pointerMeterKWH.getValue() + " StdKWH " + pointerStdKWH.getValue());
+
+        return ((pointerMeterKWH.getValue() - pointerStdKWH.getValue()) / pointerStdKWH.getValue()) * 100;
+    }
 
     // Выбор цепи
     public boolean selectCircuit(int circuit) {

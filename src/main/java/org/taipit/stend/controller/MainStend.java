@@ -6,24 +6,27 @@ public class MainStend {
         StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
         try {
 
+            stendDLLCommands.errorClear();
+
             stendDLLCommands.getUI(1, 230, 5, 50, 0, 0, 100, 0, "H", "1.0");
 
             Thread.sleep(3000);
 
             for (int i = 1; i < 3; i++) {
+                stendDLLCommands.setPulseChannel(i, 0);
                 stendDLLCommands.constTestStart(i, 8000);
             }
 
-            stendDLLCommands.getUI(1, 230, 5, 50, 0, 0, 100, 100, "H", "1.0");
+            stendDLLCommands.getUI(1, 230, 10, 50, 0, 0, 100, 100, "H", "1.0");
 
-            Thread.sleep(15000);
+            Thread.sleep(60000);
+
+            stendDLLCommands.powerOf();
 
             for (int i = 1; i < 3; i++) {
-                //System.out.println(stendDLLCommands.constPulseRead(8000, i));
+                System.out.println(stendDLLCommands.constPulseRead(8000, i));
             }
 
-            stendDLLCommands.errorClear();
-            stendDLLCommands.powerOf();
 
         }catch (Exception e) {
             stendDLLCommands.errorClear();

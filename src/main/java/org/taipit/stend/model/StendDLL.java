@@ -2,6 +2,7 @@ package org.taipit.stend.model;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
+import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 
@@ -251,8 +252,8 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 // Constant - постоянная
 // Meter_No - номер места
 // Dev_Port - номер com-порта
-    boolean ConstPulse_Read(double MeterKWH,
-                            double StdKWH,
+    boolean ConstPulse_Read(DoubleByReference MeterKWH,
+                            DoubleByReference StdKWH,
                             double Constant,
                             int Meter_No,
                             int Dev_Port);
