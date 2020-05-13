@@ -913,21 +913,21 @@ public class Meter implements Serializable{
     }
 
     //Класс для записи результата исполнения StartCommnad
-    private class RTCResult extends CommandResult implements Serializable {
+    public class RTCResult extends CommandResult implements Serializable {
 
         RTCResult(String name) {
             super.setNameCommand(name);
         }
     }
 
-    private class ConstantResult extends CommandResult implements Serializable {
+    public class ConstantResult extends CommandResult implements Serializable {
 
         ConstantResult(String name) {
             super.setNameCommand(name);
         }
     }
 
-    private class ImbUResult extends CommandResult implements Serializable {
+    public class ImbUResult extends CommandResult implements Serializable {
 
         public ImbUResult(String name) {
             super.setNameCommand(name);
