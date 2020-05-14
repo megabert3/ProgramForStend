@@ -252,10 +252,24 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     private TextField txtFieldConsErAPPls;
 
     @FXML
-    private TextField txtFieldEngConstAPPls;
+    private TextField  txtFieldEngConstAPPls;
 
     @FXML
-    private TextField txtFieldConstAPPls;
+    private TextField txtFieldConstTimeAPPls;
+
+    @FXML
+    private TextField txtFieldConsProcUAPPls;
+
+    @FXML
+    private TextField txtFieldConsProcIAPPls;
+
+    private ToggleGroup radioBtnGroupAPPls = new ToggleGroup();
+
+    @FXML
+    private RadioButton radBtnConstTimeAPPls;
+
+    @FXML
+    private RadioButton radBtnConstEnergyAPPls;
 
     @FXML
     private ToggleButton addTglBtnConstAPPls;
@@ -273,7 +287,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     private ToggleButton addTglBtnRTCAPPls;
 
     @FXML
-    private ChoiceBox<String> ChcBxRTCErrAPPls;
+    private ComboBox<String> ChcBxRTCErrAPPls;
 
     @FXML
     private TextField txtFldRTCTimeMshAPPls;
@@ -383,7 +397,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     private ToggleButton addTglBtnRTCAPMns;
 
     @FXML
-    private ChoiceBox<String> ChcBxRTCErrAPMns;
+    private ComboBox<String> ChcBxRTCErrAPMns;
 
     @FXML
     private TextField txtFldRTCTimeMshAPMns;
@@ -395,10 +409,24 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     private TextField txtFieldConsErAPMns;
 
     @FXML
-    private TextField txtFieldEngConstAPMns;
+    private TextField  txtFieldEngConstAPMns;
 
     @FXML
-    private TextField txtFieldConstAPMns;
+    private TextField txtFieldConstTimeAPMns;
+
+    @FXML
+    private TextField txtFieldConsProcUAPMns;
+
+    @FXML
+    private TextField txtFieldConsProcIAPMns;
+
+    private ToggleGroup radioBtnGroupAPMns = new ToggleGroup();
+
+    @FXML
+    private RadioButton radBtnConstTimeAPMns;
+
+    @FXML
+    private RadioButton radBtnConstEnergyAPMns;
 
     @FXML
     private ToggleButton addTglBtnConstAPMns;
@@ -472,7 +500,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     private ToggleButton addTglBtnRTCRPPls;
 
     @FXML
-    private ChoiceBox<String> ChcBxRTCErrRPPls;
+    private ComboBox<String> ChcBxRTCErrRPPls;
 
     @FXML
     private TextField txtFldRTCTimeMshRPPls;
@@ -484,10 +512,24 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     private TextField txtFieldConsErRPPls;
 
     @FXML
-    private TextField txtFieldEngConstRPPls;
+    private TextField  txtFieldEngConstRPPls;
 
     @FXML
-    private TextField txtFieldConstRPPls;
+    private TextField txtFieldConstTimeRPPls;
+
+    @FXML
+    private TextField txtFieldConsProcURPPls;
+
+    @FXML
+    private TextField txtFieldConsProcIRPPls;
+
+    private ToggleGroup radioBtnGroupRPPls = new ToggleGroup();
+
+    @FXML
+    private RadioButton radBtnConstTimeRPPls;
+
+    @FXML
+    private RadioButton radBtnConstEnergyRPPls;
 
     @FXML
     private ToggleButton addTglBtnConstRPPls;
@@ -570,16 +612,30 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     private TextField txtFieldConsErRPMns;
 
     @FXML
-    private TextField txtFieldEngConstRPMns;
+    private TextField  txtFieldEngConstRPMns;
 
     @FXML
-    private TextField txtFieldConstRPMns;
+    private TextField txtFieldConstTimeRPMns;
 
     @FXML
-    private ChoiceBox<String> ChcBxRTCErrRPMns;
+    private TextField txtFieldConsProcURPMns;
+
+    @FXML
+    private TextField txtFieldConsProcIRPMns;
+
+    private ToggleGroup radioBtnGroupRPMns = new ToggleGroup();
+
+    @FXML
+    private RadioButton radBtnConstTimeRPMns;
+
+    @FXML
+    private RadioButton radBtnConstEnergyRPMns;
 
     @FXML
     private ToggleButton addTglBtnConstRPMns;
+
+    @FXML
+    private ComboBox<String> ChcBxRTCErrRPMns;
     //---------------------------------------------------------------------
 
     @FXML
@@ -635,6 +691,22 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         });
 
         initTableView();
+
+        radBtnConstEnergyAPPls.setToggleGroup(radioBtnGroupAPPls);
+        radBtnConstTimeAPPls.setToggleGroup(radioBtnGroupAPPls);
+        radBtnConstTimeAPPls.setSelected(true);
+
+        radBtnConstEnergyAPMns.setToggleGroup(radioBtnGroupAPMns);
+        radBtnConstTimeAPMns.setToggleGroup(radioBtnGroupAPMns);
+        radBtnConstTimeAPMns.setSelected(true);
+
+        radBtnConstEnergyRPPls.setToggleGroup(radioBtnGroupRPPls);
+        radBtnConstTimeRPPls.setToggleGroup(radioBtnGroupRPPls);
+        radBtnConstTimeRPPls.setSelected(true);
+
+        radBtnConstEnergyRPMns.setToggleGroup(radioBtnGroupRPMns);
+        radBtnConstTimeRPMns.setToggleGroup(radioBtnGroupRPMns);
+        radBtnConstTimeRPMns.setSelected(true);
 
         APPlus.setSelected(true);
         allPhaseBtn.setSelected(true);
@@ -1916,7 +1988,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
         if (!testListForCollumAPPls.isEmpty()) {
 
-            for (Commands command :testListForCollumAPPls) {
+            for (Commands command : testListForCollumAPPls) {
                 if (command instanceof ErrorCommand) {
                     testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
@@ -1973,6 +2045,8 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     addTglBtnRTCAPPls.setSelected(true);
 
                     RTCTogBtnAPPls.setSelected(true);
+
+                } else if (command instanceof ConstantCommand) {
                 }
             }
         }
@@ -3066,194 +3140,195 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             }
         }
 
-        RTCCommand rtcCommand;
-        //Добаление теста "точность хода часов" AP+
-        String cbValue;
-        if(event.getSource() == addTglBtnRTCAPPls) {
-            if (addTglBtnRTCAPPls.isSelected()) {
-                if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
-
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 0, Double.parseDouble(txtFieldRngEAPPls.getText()), 0);
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 1, Double.parseDouble(txtFieldRngEAPPls.getText()), 0);
-                    cbValue = "Сутч. погрешность";
-                }
-
-                rtcCommand.setName("ТХЧ AP+");
-
-                testListForCollumAPPls.add(rtcCommand);
-
-                RTCTogBtnAPPls.setSelected(true);
-                ChcBxRTCErrAPPls.getItems().clear();
-                ChcBxRTCErrAPPls.getItems().addAll(cbValue);
-                ChcBxRTCErrAPPls.getSelectionModel().select(0);
-
-                txtFldRTCTimeMshAPPls.setDisable(true);
-                txtFldRTCAmtMshAPPls.setDisable(true);
-                txtFieldRngEAPPls.setDisable(true);
-            } else {
-                for (Commands command : testListForCollumAPPls) {
-                    if (command instanceof RTCCommand) {
-                        if (command.getName().equals("ТХЧ AP+")) {
-                            testListForCollumAPPls.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                RTCTogBtnAPPls.setSelected(false);
-                ChcBxRTCErrAPPls.getItems().clear();
-                ChcBxRTCErrAPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrAPPls.getSelectionModel().select(0);
-
-                txtFldRTCTimeMshAPPls.setDisable(false);
-                txtFldRTCAmtMshAPPls.setDisable(false);
-                txtFieldRngEAPPls.setDisable(false);
-            }
-        }
-
-        //Добаление теста "точность хода часов" AP-
-        if(event.getSource() == addTglBtnRTCAPMns) {
-            if (addTglBtnRTCAPMns.isSelected()) {
-                if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 0, Double.parseDouble(txtFieldRngEAPMns.getText()), 1);
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 1, Double.parseDouble(txtFieldRngEAPMns.getText()), 1);
-                    cbValue = "Сутч. погрешность";
-                }
-
-                rtcCommand.setName("ТХЧ AP-");
-
-                RTCTogBtnAPMns.setSelected(true);
-                ChcBxRTCErrAPMns.getItems().clear();
-                ChcBxRTCErrAPMns.getItems().addAll(cbValue);
-                ChcBxRTCErrAPMns.getSelectionModel().select(0);
-
-                txtFldRTCTimeMshAPMns.setDisable(true);
-                txtFldRTCAmtMshAPMns.setDisable(true);
-                txtFieldRngEAPMns.setDisable(true);
-
-                testListForCollumAPMns.add(rtcCommand);
-            } else {
-                for (Commands command : testListForCollumAPMns) {
-                    if (command instanceof RTCCommand) {
-                        if (command.getName().equals("ТХЧ AP-")) {
-                            testListForCollumAPMns.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                RTCTogBtnAPMns.setSelected(false);
-                ChcBxRTCErrAPMns.getItems().clear();
-                ChcBxRTCErrAPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrAPMns.getSelectionModel().select(0);
-
-                txtFldRTCTimeMshAPMns.setDisable(false);
-                txtFldRTCAmtMshAPMns.setDisable(false);
-                txtFieldRngEAPMns.setDisable(false);
-            }
-        }
-
-        //Добаление теста "точность хода часов" RP+
-        if(event.getSource() == addTglBtnRTCRPPls) {
-            if (addTglBtnRTCRPPls.isSelected()) {
-                if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 0, Double.parseDouble(txtFieldRngERPPls.getText()), 2);
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 1, Double.parseDouble(txtFieldRngERPPls.getText()), 2);
-                    cbValue = "Сутч. погрешность";
-                }
-
-                rtcCommand.setName("ТХЧ RP+");
-
-                RTCTogBtnRPPls.setSelected(true);
-                ChcBxRTCErrRPPls.getItems().clear();
-                ChcBxRTCErrRPPls.getItems().addAll(cbValue);
-                ChcBxRTCErrRPPls.getSelectionModel().select(0);
-
-                txtFldRTCTimeMshRPPls.setDisable(true);
-                txtFldRTCAmtMshRPPls.setDisable(true);
-                txtFieldRngERPPls.setDisable(true);
-
-                testListForCollumRPPls.add(rtcCommand);
-
-            } else {
-                for (Commands command : testListForCollumRPPls) {
-                    if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ RP+")) {
-                            testListForCollumRPPls.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                RTCTogBtnRPPls.setSelected(false);
-                ChcBxRTCErrRPPls.getItems().clear();
-                ChcBxRTCErrRPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrRPPls.getSelectionModel().select(0);
-
-                txtFldRTCTimeMshRPPls.setDisable(false);
-                txtFldRTCAmtMshRPPls.setDisable(false);
-                txtFieldRngERPPls.setDisable(false);
-            }
-        }
-
-        //Добаление теста "точность хода часов" RP-
-        if(event.getSource() == addTglBtnRTCRPMns) {
-            if (addTglBtnRTCRPMns.isSelected()) {
-                if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 0, Double.parseDouble(txtFieldRngERPMns.getText()), 3);
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 1, Double.parseDouble(txtFieldRngERPMns.getText()), 3);
-                    cbValue = "Сутч. погрешность";
-                }
-
-                rtcCommand.setName("ТХЧ RP-");
-
-                RTCTogBtnRPMns.setSelected(true);
-                ChcBxRTCErrRPMns.getItems().clear();
-                ChcBxRTCErrRPMns.getItems().addAll(cbValue);
-                ChcBxRTCErrRPMns.getSelectionModel().select(0);
-
-                txtFldRTCTimeMshRPMns.setDisable(true);
-                txtFldRTCAmtMshRPMns.setDisable(true);
-                txtFieldRngERPMns.setDisable(true);
-
-                testListForCollumRPMns.add(rtcCommand);
-            } else {
-                for (Commands command : testListForCollumRPMns) {
-                    if (command instanceof RTCCommand) {
-                        if (command.getName().equals("ТХЧ RP-")) {
-                            testListForCollumRPMns.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                RTCTogBtnRPMns.setSelected(false);
-                ChcBxRTCErrRPMns.getItems().clear();
-                ChcBxRTCErrRPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrRPMns.getSelectionModel().select(0);
-
-                txtFldRTCTimeMshRPMns.setDisable(false);
-                txtFldRTCAmtMshRPMns.setDisable(false);
-                txtFieldRngERPMns.setDisable(false);
-            }
-        }
+//        RTCCommand rtcCommand;
+//        //Добаление теста "точность хода часов" AP+
+//        String cbValue;
+//        if(event.getSource() == addTglBtnRTCAPPls) {
+//            if (addTglBtnRTCAPPls.isSelected()) {
+//                if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
+//
+//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
+//                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 0, Double.parseDouble(txtFieldRngEAPPls.getText()), 0);
+//                    cbValue = "В ед. частоты";
+//                } else {
+//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
+//                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 1, Double.parseDouble(txtFieldRngEAPPls.getText()), 0);
+//                    cbValue = "Сутч. погрешность";
+//                }
+//
+//                rtcCommand.setName("ТХЧ AP+");
+//
+//                testListForCollumAPPls.add(rtcCommand);
+//
+//                RTCTogBtnAPPls.setSelected(true);
+//                ChcBxRTCErrAPPls.getItems().clear();
+//                ChcBxRTCErrAPPls.getItems().addAll(cbValue);
+//                ChcBxRTCErrAPPls.getSelectionModel().select(0);
+//
+//                txtFldRTCTimeMshAPPls.setDisable(true);
+//                txtFldRTCAmtMshAPPls.setDisable(true);
+//                txtFieldRngEAPPls.setDisable(true);
+//            } else {
+//                for (Commands command : testListForCollumAPPls) {
+//                    if (command instanceof RTCCommand) {
+//                        if (command.getName().equals("ТХЧ AP+")) {
+//                            testListForCollumAPPls.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                RTCTogBtnAPPls.setSelected(false);
+//                ChcBxRTCErrAPPls.getItems().clear();
+//                ChcBxRTCErrAPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+//                ChcBxRTCErrAPPls.getSelectionModel().select(0);
+//
+//                txtFldRTCTimeMshAPPls.setDisable(false);
+//                txtFldRTCAmtMshAPPls.setDisable(false);
+//                txtFieldRngEAPPls.setDisable(false);
+//            }
+//        }
+//
+//        //Добаление теста "точность хода часов" AP-
+//        if(event.getSource() == addTglBtnRTCAPMns) {
+//            if (addTglBtnRTCAPMns.isSelected()) {
+//                if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
+//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
+//                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 0, Double.parseDouble(txtFieldRngEAPMns.getText()), 1);
+//                    cbValue = "В ед. частоты";
+//                } else {
+//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
+//                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 1, Double.parseDouble(txtFieldRngEAPMns.getText()), 1);
+//                    cbValue = "Сутч. погрешность";
+//                }
+//
+//                rtcCommand.setName("ТХЧ AP-");
+//
+//                RTCTogBtnAPMns.setSelected(true);
+//                ChcBxRTCErrAPMns.getItems().clear();
+//                ChcBxRTCErrAPMns.getItems().addAll(cbValue);
+//                ChcBxRTCErrAPMns.getSelectionModel().select(0);
+//
+//                txtFldRTCTimeMshAPMns.setDisable(true);
+//                txtFldRTCAmtMshAPMns.setDisable(true);
+//                txtFieldRngEAPMns.setDisable(true);
+//
+//                testListForCollumAPMns.add(rtcCommand);
+//            } else {
+//                for (Commands command : testListForCollumAPMns) {
+//                    if (command instanceof RTCCommand) {
+//                        if (command.getName().equals("ТХЧ AP-")) {
+//                            testListForCollumAPMns.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                RTCTogBtnAPMns.setSelected(false);
+//                ChcBxRTCErrAPMns.getItems().clear();
+//                ChcBxRTCErrAPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+//                ChcBxRTCErrAPMns.getSelectionModel().select(0);
+//
+//                txtFldRTCTimeMshAPMns.setDisable(false);
+//                txtFldRTCAmtMshAPMns.setDisable(false);
+//                txtFieldRngEAPMns.setDisable(false);
+//            }
+//        }
+//
+//        //Добаление теста "точность хода часов" RP+
+//        if(event.getSource() == addTglBtnRTCRPPls) {
+//            if (addTglBtnRTCRPPls.isSelected()) {
+//                if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
+//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
+//                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 0, Double.parseDouble(txtFieldRngERPPls.getText()), 2);
+//                    cbValue = "В ед. частоты";
+//                } else {
+//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
+//                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 1, Double.parseDouble(txtFieldRngERPPls.getText()), 2);
+//                    cbValue = "Сутч. погрешность";
+//                }
+//
+//                rtcCommand.setName("ТХЧ RP+");
+//
+//                RTCTogBtnRPPls.setSelected(true);
+//                ChcBxRTCErrRPPls.getItems().clear();
+//                ChcBxRTCErrRPPls.getItems().addAll(cbValue);
+//                ChcBxRTCErrRPPls.getSelectionModel().select(0);
+//
+//                txtFldRTCTimeMshRPPls.setDisable(true);
+//                txtFldRTCAmtMshRPPls.setDisable(true);
+//                txtFieldRngERPPls.setDisable(true);
+//
+//                testListForCollumRPPls.add(rtcCommand);
+//
+//            } else {
+//                for (Commands command : testListForCollumRPPls) {
+//                    if (command instanceof RTCCommand) {
+//                        if (((RTCCommand) command).getName().equals("ТХЧ RP+")) {
+//                            testListForCollumRPPls.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                RTCTogBtnRPPls.setSelected(false);
+//                ChcBxRTCErrRPPls.getItems().clear();
+//                ChcBxRTCErrRPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+//                ChcBxRTCErrRPPls.getSelectionModel().select(0);
+//
+//                txtFldRTCTimeMshRPPls.setDisable(false);
+//                txtFldRTCAmtMshRPPls.setDisable(false);
+//                txtFieldRngERPPls.setDisable(false);
+//            }
+//        }
+//
+//        //Добаление теста "точность хода часов" RP-
+//        if(event.getSource() == addTglBtnRTCRPMns) {
+//            if (addTglBtnRTCRPMns.isSelected()) {
+//                if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
+//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
+//                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 0, Double.parseDouble(txtFieldRngERPMns.getText()), 3);
+//                    cbValue = "В ед. частоты";
+//                } else {
+//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
+//                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 1, Double.parseDouble(txtFieldRngERPMns.getText()), 3);
+//                    cbValue = "Сутч. погрешность";
+//                }
+//
+//                rtcCommand.setName("ТХЧ RP-");
+//
+//                RTCTogBtnRPMns.setSelected(true);
+//                ChcBxRTCErrRPMns.getItems().clear();
+//                ChcBxRTCErrRPMns.getItems().addAll(cbValue);
+//                ChcBxRTCErrRPMns.getSelectionModel().select(0);
+//
+//                txtFldRTCTimeMshRPMns.setDisable(true);
+//                txtFldRTCAmtMshRPMns.setDisable(true);
+//                txtFieldRngERPMns.setDisable(true);
+//
+//                testListForCollumRPMns.add(rtcCommand);
+//            } else {
+//                for (Commands command : testListForCollumRPMns) {
+//                    if (command instanceof RTCCommand) {
+//                        if (command.getName().equals("ТХЧ RP-")) {
+//                            testListForCollumRPMns.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                RTCTogBtnRPMns.setSelected(false);
+//                ChcBxRTCErrRPMns.getItems().clear();
+//                ChcBxRTCErrRPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
+//                ChcBxRTCErrRPMns.getSelectionModel().select(0);
+//
+//                txtFldRTCTimeMshRPMns.setDisable(false);
+//                txtFldRTCAmtMshRPMns.setDisable(false);
+//                txtFieldRngERPMns.setDisable(false);
+//            }
+//        }
     }
+
 
     private void initCoiseBoxParamForRTC() {
         ChcBxRTCErrAPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");

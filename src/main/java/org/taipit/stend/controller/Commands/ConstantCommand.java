@@ -36,10 +36,10 @@ public class ConstantCommand implements Commands, Serializable {
     private List<Meter> meterForTestList;
 
     //Максимальный порог ошибки
-    private double emin = -1.0;
+    private double eminProc;
 
     //Минимальный порог ошибки
-    private double emax = 1.0;
+    private double emaxProc;
 
     //Кол-во импульсов для расчёта ошибки
     private int pulse = 20;
@@ -98,7 +98,8 @@ public class ConstantCommand implements Commands, Serializable {
     //Флаг для прекращения сбора погрешности
     private HashMap<Integer, Boolean> flagInStop;
 
-    public ConstantCommand(boolean threePhaseStendCommand, boolean runTestToTime, String strTimeToTest, String id, String name, double voltPer, double currPer, int revers, int channelFlag) {
+    public ConstantCommand(boolean threePhaseStendCommand, boolean runTestToTime, String strTimeToTest, String id,
+                           String name, double voltPer, double currPer, int revers, int channelFlag, double eminProc, double emaxProc) {
         this.threePhaseCommand = threePhaseStendCommand;
         this.runTestToTime = runTestToTime;
         this.strTimeToTest = strTimeToTest;
@@ -108,6 +109,8 @@ public class ConstantCommand implements Commands, Serializable {
         this.currPer = currPer;
         this.revers = revers;
         this.channelFlag = channelFlag;
+        this.eminProc = eminProc;
+        this.emaxProc = emaxProc;
 
         phaseSrequence = 0;
         cosP = "1.0";
@@ -121,7 +124,8 @@ public class ConstantCommand implements Commands, Serializable {
         timeToTest =  ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
     }
 
-    public ConstantCommand(boolean threePhaseStendCommand, boolean runTestToTime, double kWToTest, String id, String name, double voltPer, double currPer, int revers, int channelFlag) {
+    public ConstantCommand(boolean threePhaseStendCommand, boolean runTestToTime, double kWToTest, String id,
+                           String name, double voltPer, double currPer, int revers, int channelFlag, double eminProc, double emaxProc) {
         this.threePhaseCommand = threePhaseStendCommand;
         this.runTestToTime = runTestToTime;
         this.kWToTest = kWToTest;
@@ -131,6 +135,8 @@ public class ConstantCommand implements Commands, Serializable {
         this.currPer = currPer;
         this.revers = revers;
         this.channelFlag = channelFlag;
+        this.eminProc = eminProc;
+        this.emaxProc = emaxProc;
 
         phaseSrequence = 0;
         cosP = "1.0";
@@ -222,7 +228,7 @@ public class ConstantCommand implements Commands, Serializable {
                 result = stendDLLCommands.constPulseRead(constantMeter, meter.getId());
                 Meter.ConstantResult commandResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
 
-                if (result < emin || result > emax) {
+                if (result < eminProc || result > emaxProc) {
                     commandResult.setPassTest(false);
                     commandResult.setLastResult("F" + result);
                     commandResult.getResults()[0] = result + "П";
@@ -253,7 +259,7 @@ public class ConstantCommand implements Commands, Serializable {
                 result = stendDLLCommands.constPulseRead(constantMeter, meter.getId());
                 Meter.ConstantResult commandResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
 
-                if (result < emin || result > emax) {
+                if (result < eminProc || result > emaxProc) {
                     commandResult.setPassTest(false);
                     commandResult.setLastResult("F" + result);
                     commandResult.getResults()[0] = result + "П";
@@ -278,111 +284,7 @@ public class ConstantCommand implements Commands, Serializable {
     //Метод для цикличной поверки счётчиков
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
-        if (Thread.currentThread().isInterrupted()) {
-            throw new InterruptedException();
-        }
 
-        //Выбор константы в зависимости от энергии
-        if (channelFlag == 0 || channelFlag == 1) {
-            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
-        } else {
-            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
-        }
-
-        for (Meter meter : meterForTestList) {
-            meter.returnResultCommand(index, channelFlag).setLastResult("N");
-        }
-
-        ratedCurr = Ib;
-
-
-        if (Thread.currentThread().isInterrupted()) {
-            System.out.println("executeForContinuousTest_2");
-            throw new InterruptedException();
-        }
-
-        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
-
-        //Разблокирую интерфейc кнопок
-        TestErrorTableFrameController.blockBtns.setValue(false);
-
-        if (Thread.currentThread().isInterrupted()) {
-            System.out.println("executeForContinuousTest_3");
-            throw new InterruptedException();
-        }
-
-        Thread.sleep(stendDLLCommands.getPauseForStabization());
-
-        if (Thread.currentThread().isInterrupted()) {
-            System.out.println("executeForContinuousTest_4");
-            throw new InterruptedException();
-        }
-
-        //Устанавливаем местам импульсный выход
-        stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
-
-        if (Thread.currentThread().isInterrupted()) {
-            System.out.println("executeForContinuousTest_5");
-            throw new InterruptedException();
-        }
-
-        //Сказать константу счётчика стенду для кажого места
-        stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
-
-        if (Thread.currentThread().isInterrupted()) {
-            System.out.println("executeForContinuousTest_6");
-            throw new InterruptedException();
-        }
-
-        //Для быстрой становки флага прошёл счётчик тест или нет
-        Meter.CommandResult resultMeter;
-
-        int resultNo;
-        String strError;
-        String[] strMass;
-        String error;
-        double doubleErr;
-
-        while (!Thread.currentThread().isInterrupted()) {
-
-            for (Meter meter : meterForTestList) {
-
-                if (Thread.currentThread().isInterrupted()) {
-                    System.out.println("executeForContinuousTest_7");
-                    throw new InterruptedException();
-                }
-
-                strError = stendDLLCommands.meterErrorRead(meter.getId());
-                strMass = strError.split(",");
-
-                if (strMass.length != 2) {
-                    continue;
-                }
-
-                resultNo = Integer.parseInt(strMass[0]);
-                error = strMass[1];
-
-                if (resultNo != 0) {
-                    resultMeter = meter.setResultsInErrorList(index, resultNo, error, channelFlag);
-                    doubleErr = Double.parseDouble(error);
-
-                    if (doubleErr > emax || doubleErr < emin) {
-                        resultMeter.setLastResult("F" + error);
-                        resultMeter.setLastResulString(error);
-                        resultMeter.setPassTest(false);
-                    } else {
-                        resultMeter.setLastResult("P" + error);
-                        resultMeter.setLastResulString(error);
-                        resultMeter.setPassTest(true);
-                    }
-                }
-            }
-            Thread.sleep(300);
-        }
-
-        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     //Опрашивает счётчики до нужно значения проходов
@@ -412,11 +314,11 @@ public class ConstantCommand implements Commands, Serializable {
     }
 
     public void setEmin(String emin) {
-        this.emin = Double.parseDouble(emin);
+
     }
 
     public void setEmax(String emax) {
-        this.emax = Double.parseDouble(emax);
+
     }
 
     public String getName() {
@@ -424,19 +326,15 @@ public class ConstantCommand implements Commands, Serializable {
     }
 
     public String getEmin() {
-        return String.valueOf(emin);
+        return null;
     }
 
     public String getEmax() {
-        return String.valueOf(emax);
+        return null;
     }
 
     public String getPulse() {
         return String.valueOf(pulse);
-    }
-
-    public void setImax(double imax) {
-        Imax = imax;
     }
 
     public void setIb(double ib) {

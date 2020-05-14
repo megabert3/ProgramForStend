@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
@@ -172,21 +172,6 @@
                                     <ToggleButton fx:id="addTglBtnSTAAPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить ГОСТ" />
                                  </children>
                               </Pane>
-                              <Pane fx:id="paneRTCAPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
-                                    <Label layoutX="60.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
-                                    <Label layoutX="26.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
-                                    <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldRngEAPPls" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFldRTCAmtMshAPPls" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <ToggleButton fx:id="addTglBtnRTCAPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
-                                    <ChoiceBox fx:id="ChcBxRTCErrAPPls" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <Label layoutX="356.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
-                                    <TextField fx:id="txtFldRTCTimeMshAPPls" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
-                                 </children>
-                              </Pane>
                               <Pane fx:id="paneCRPAPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
                                  <children>
                                     <Label layoutX="277.0" layoutY="14.0" text="Самоход" textFill="WHITE" />
@@ -220,6 +205,21 @@
                                     <RadioButton fx:id="radBtnConstEnergyAPPls" layoutX="110.0" layoutY="144.0" mnemonicParsing="false" />
                                  </children>
                               </Pane>
+                              <Pane fx:id="paneRTCAPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
+                                    <Label layoutX="60.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
+                                    <Label layoutX="26.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
+                                    <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldRngEAPPls" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
+                                    <TextField fx:id="txtFldRTCAmtMshAPPls" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
+                                    <ToggleButton fx:id="addTglBtnRTCAPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
+                                    <Label layoutX="356.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
+                                    <TextField fx:id="txtFldRTCTimeMshAPPls" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
+                                    <ComboBox fx:id="ChcBxRTCErrAPPls" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="109.0" />
+                                 </children>
+                              </Pane>
                            </children>
                         </StackPane>
                      </children>
@@ -228,21 +228,6 @@
                      <children>
                         <StackPane layoutX="150.0" prefHeight="220.0" prefWidth="600.0">
                            <children>
-                              <Pane fx:id="paneRTCAPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в обратном направлении тока" textFill="WHITE" />
-                                    <Label layoutX="60.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
-                                    <Label layoutX="26.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
-                                    <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldRngEAPMns" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFldRTCAmtMshAPMns" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <ToggleButton fx:id="addTglBtnRTCAPMns" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
-                                    <ChoiceBox fx:id="ChcBxRTCErrAPMns" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <Label layoutX="356.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
-                                    <TextField fx:id="txtFldRTCTimeMshAPMns" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
-                                 </children>
-                              </Pane>
                               <Pane fx:id="paneSTAAPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
                                  <children>
                                     <Label layoutX="253.0" layoutY="14.0" text="Чувствительность" textFill="WHITE" />
@@ -290,6 +275,21 @@
                                     <RadioButton fx:id="radBtnConstEnergyAPMns" layoutX="110.0" layoutY="144.0" mnemonicParsing="false" />
                                  </children>
                               </Pane>
+                              <Pane fx:id="paneRTCAPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Активная энергия в обратном направлении тока" textFill="WHITE" />
+                                    <Label layoutX="60.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
+                                    <Label layoutX="26.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
+                                    <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldRngEAPMns" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
+                                    <TextField fx:id="txtFldRTCAmtMshAPMns" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
+                                    <ToggleButton fx:id="addTglBtnRTCAPMns" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
+                                    <Label layoutX="356.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
+                                    <TextField fx:id="txtFldRTCTimeMshAPMns" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
+                                    <ComboBox fx:id="ChcBxRTCErrAPMns" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="109.0" />
+                                 </children>
+                              </Pane>
                            </children>
                         </StackPane>
                         <VBox prefHeight="220.0" prefWidth="150.0" style="-fx-background-color: #303030;">
@@ -318,21 +318,6 @@
                                     <TextField fx:id="txtFieldSTAAmtImpRPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" />
                                     <ToggleButton fx:id="addTglBtnSTARPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить" />
                                     <ToggleButton fx:id="addTglBtnSTARPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добавить ГОСТ" />
-                                 </children>
-                              </Pane>
-                              <Pane fx:id="paneRTCRPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в прямом направлении тока" textFill="WHITE" />
-                                    <Label layoutX="61.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
-                                    <Label layoutX="27.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
-                                    <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldRngERPPls" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFldRTCAmtMshRPPls" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <ToggleButton fx:id="addTglBtnRTCRPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
-                                    <ChoiceBox fx:id="ChcBxRTCErrRPPls" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFldRTCTimeMshRPPls" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <Label layoutX="357.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
                                  </children>
                               </Pane>
                               <Pane fx:id="paneCRPRPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
@@ -366,6 +351,21 @@
                                     <Label layoutX="275.0" layoutY="145.0" text="Ib, %" textFill="WHITE" />
                                     <RadioButton fx:id="radBtnConstTimeRPPls" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" />
                                     <RadioButton fx:id="radBtnConstEnergyRPPls" layoutX="110.0" layoutY="144.0" mnemonicParsing="false" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneRTCRPPls" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в прямом направлении тока" textFill="WHITE" />
+                                    <Label layoutX="61.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
+                                    <Label layoutX="27.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
+                                    <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldRngERPPls" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
+                                    <TextField fx:id="txtFldRTCAmtMshRPPls" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
+                                    <ToggleButton fx:id="addTglBtnRTCRPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
+                                    <TextField fx:id="txtFldRTCTimeMshRPPls" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
+                                    <Label layoutX="357.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
+                                    <ComboBox fx:id="ChcBxRTCErrRPPls" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="109.0" />
                                  </children>
                               </Pane>
                            </children>
@@ -406,21 +406,6 @@
                                     <ToggleButton fx:id="addTglBtnSTARPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" text="Добвить ГОСТ" />
                                  </children>
                               </Pane>
-                              <Pane fx:id="paneRTCRPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
-                                 <children>
-                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
-                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в обратном направлении тока" textFill="WHITE" />
-                                    <Label layoutX="25.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
-                                    <Label layoutX="24.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
-                                    <Label layoutX="310.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldRngERPMns" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <TextField fx:id="txtFldRTCAmtMshRPMns" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
-                                    <ToggleButton fx:id="addTglBtnRTCRPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
-                                    <ChoiceBox fx:id="ChcBxRTCErrRPMns" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" />
-                                    <Label layoutX="310.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
-                                    <TextField fx:id="txtFldRTCTimeMshRPMns" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
-                                 </children>
-                              </Pane>
                               <Pane fx:id="paneCRPRPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
                                  <children>
                                     <Label layoutX="277.0" layoutY="14.0" text="Самоход" textFill="WHITE" />
@@ -452,6 +437,21 @@
                                     <Label layoutX="275.0" layoutY="145.0" text="Ib, %" textFill="WHITE" />
                                     <RadioButton fx:id="radBtnConstTimeRPMns" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" />
                                     <RadioButton fx:id="radBtnConstEnergyRPMns" layoutX="110.0" layoutY="144.0" mnemonicParsing="false" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneRTCRPMns" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+                                 <children>
+                                    <Label layoutX="253.0" layoutY="14.0" text="Точность хода часов" textFill="WHITE" />
+                                    <Label layoutX="168.0" layoutY="40.0" text="Реактивная энергия в обратном направлении тока" textFill="WHITE" />
+                                    <Label layoutX="25.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
+                                    <Label layoutX="24.0" layoutY="145.0" text="Диапазон ошибки" textFill="WHITE" />
+                                    <Label layoutX="310.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
+                                    <TextField fx:id="txtFieldRngERPMns" layoutX="131.0" layoutY="141.0" prefHeight="25.0" prefWidth="108.0" />
+                                    <TextField fx:id="txtFldRTCAmtMshRPMns" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" />
+                                    <ToggleButton fx:id="addTglBtnRTCRPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" text="Добавить" />
+                                    <Label layoutX="310.0" layoutY="145.0" text="Время вычисления" textFill="WHITE" />
+                                    <TextField fx:id="txtFldRTCTimeMshRPMns" layoutX="465.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" />
+                                    <ComboBox fx:id="ChcBxRTCErrRPMns" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="109.0" />
                                  </children>
                               </Pane>
                            </children>

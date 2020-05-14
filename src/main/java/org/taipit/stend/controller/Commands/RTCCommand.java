@@ -13,7 +13,10 @@ public class RTCCommand implements Commands, Serializable {
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
 
-    private boolean interrupt;
+    private String id;
+
+    //Команда из методики для трехфазной установки?
+    private boolean threePhaseCommand;
 
     private boolean nextCommand;
 
@@ -36,7 +39,10 @@ public class RTCCommand implements Commands, Serializable {
     private double errorForFalseTest;
 
     //Количество повторов теста
-    private int countResult;
+    private String countResult;
+
+    //Количество повторов теста
+    private int countResultTest;
 
     //Частота
     private double freg;
@@ -50,10 +56,13 @@ public class RTCCommand implements Commands, Serializable {
     //Тип измерения
     private int errorType;
 
-    public RTCCommand(int pulseForRTC, double freg, int countResult, int errorType, double errorForFalseTest, int channelFlagForSave) {
+    public RTCCommand(boolean threePhaseCommand, String id , String name,int pulseForRTC, double freg, int countResultTest, int errorType, double errorForFalseTest, int channelFlagForSave) {
+        this.threePhaseCommand = threePhaseCommand;
+        this.id = id;
+        this.name = name;
         this.pulseForRTC = pulseForRTC;
         this.freg = freg;
-        this.countResult = countResult;
+        this.countResultTest = countResultTest;
         this.errorType = errorType;
         this.errorForFalseTest = errorForFalseTest;
         this.channelFlagForSave = channelFlagForSave;
@@ -102,7 +111,7 @@ public class RTCCommand implements Commands, Serializable {
 
             Meter.CommandResult errorCommand;
 
-            while (count < countResult) {
+            while (count < countResultTest) {
 
                 if (Thread.currentThread().isInterrupted()) {
                     System.out.println("Получил сигнал о завершении потока из команды StartCommand из внешнего цикла");
@@ -309,7 +318,6 @@ public class RTCCommand implements Commands, Serializable {
 
     @Override
     public void setInterrupt(boolean interrupt) {
-        this.interrupt = interrupt;
     }
 
     @Override
@@ -349,8 +357,8 @@ public class RTCCommand implements Commands, Serializable {
         return errorType;
     }
 
-    public int getCountResult() {
-        return countResult;
+    public String getCountResult() {
+        return null;
     }
 
     public boolean isActive() {
@@ -387,5 +395,13 @@ public class RTCCommand implements Commands, Serializable {
     @Override
     public void setEmin(String emin) {
 
+    }
+
+    public int getCountResultTest() {
+        return countResultTest;
+    }
+
+    public void setCountResultTest(int countResultTest) {
+        this.countResultTest = countResultTest;
     }
 }

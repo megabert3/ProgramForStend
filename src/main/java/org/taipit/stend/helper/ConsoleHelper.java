@@ -1,5 +1,6 @@
 package org.taipit.stend.helper;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -44,24 +45,29 @@ public class ConsoleHelper {
     }
 
     public static void infoException(String mess) {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/exceptionFrame.fxml"));
-        try {
-            fxmlLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/exceptionFrame.fxml"));
+                try {
+                    fxmlLoader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-        ExceptionFrameController exceptionFrameController = fxmlLoader.getController();
-        exceptionFrameController.getLabel().setText(mess);
+                ExceptionFrameController exceptionFrameController = fxmlLoader.getController();
+                exceptionFrameController.getLabel().setText(mess);
 
-        Parent root = fxmlLoader.getRoot();
-        Stage stage = new Stage();
-        stage.setTitle("Ошибка");
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
+                Parent root = fxmlLoader.getRoot();
+                Stage stage = new Stage();
+                stage.setTitle("Ошибка");
+                stage.setScene(new Scene(root));
+                stage.initModality(Modality.APPLICATION_MODAL);
 
-        stage.show();
+                stage.show();
+            }
+        });
     }
 
 

@@ -245,10 +245,24 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private TextField txtFieldConsErAPPls;
 
     @FXML
-    private TextField txtFieldEngConstAPPls;
+    private TextField  txtFieldEngConstAPPls;
 
     @FXML
-    private TextField txtFieldConstAPPls;
+    private TextField txtFieldConstTimeAPPls;
+
+    @FXML
+    private TextField txtFieldConsProcUAPPls;
+
+    @FXML
+    private TextField txtFieldConsProcIAPPls;
+
+    private ToggleGroup radioBtnGroupAPPls = new ToggleGroup();
+
+    @FXML
+    private RadioButton radBtnConstTimeAPPls;
+
+    @FXML
+    private RadioButton radBtnConstEnergyAPPls;
 
     @FXML
     private ToggleButton addTglBtnConstAPPls;
@@ -266,7 +280,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private ToggleButton addTglBtnRTCAPPls;
 
     @FXML
-    private ChoiceBox<String> ChcBxRTCErrAPPls;
+    private ComboBox<String> ChcBxRTCErrAPPls;
 
     @FXML
     private TextField txtFldRTCTimeMshAPPls;
@@ -376,7 +390,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private ToggleButton addTglBtnRTCAPMns;
 
     @FXML
-    private ChoiceBox<String> ChcBxRTCErrAPMns;
+    private ComboBox<String> ChcBxRTCErrAPMns;
 
     @FXML
     private TextField txtFldRTCTimeMshAPMns;
@@ -388,10 +402,24 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private TextField txtFieldConsErAPMns;
 
     @FXML
-    private TextField txtFieldEngConstAPMns;
+    private TextField  txtFieldEngConstAPMns;
 
     @FXML
-    private TextField txtFieldConstAPMns;
+    private TextField txtFieldConstTimeAPMns;
+
+    @FXML
+    private TextField txtFieldConsProcUAPMns;
+
+    @FXML
+    private TextField txtFieldConsProcIAPMns;
+
+    private ToggleGroup radioBtnGroupAPMns = new ToggleGroup();
+
+    @FXML
+    private RadioButton radBtnConstTimeAPMns;
+
+    @FXML
+    private RadioButton radBtnConstEnergyAPMns;
 
     @FXML
     private ToggleButton addTglBtnConstAPMns;
@@ -465,7 +493,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private ToggleButton addTglBtnRTCRPPls;
 
     @FXML
-    private ChoiceBox<String> ChcBxRTCErrRPPls;
+    private ComboBox<String> ChcBxRTCErrRPPls;
 
     @FXML
     private TextField txtFldRTCTimeMshRPPls;
@@ -477,10 +505,24 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private TextField txtFieldConsErRPPls;
 
     @FXML
-    private TextField txtFieldEngConstRPPls;
+    private TextField  txtFieldEngConstRPPls;
 
     @FXML
-    private TextField txtFieldConstRPPls;
+    private TextField txtFieldConstTimeRPPls;
+
+    @FXML
+    private TextField txtFieldConsProcURPPls;
+
+    @FXML
+    private TextField txtFieldConsProcIRPPls;
+
+    private ToggleGroup radioBtnGroupRPPls = new ToggleGroup();
+
+    @FXML
+    private RadioButton radBtnConstTimeRPPls;
+
+    @FXML
+    private RadioButton radBtnConstEnergyRPPls;
 
     @FXML
     private ToggleButton addTglBtnConstRPPls;
@@ -563,13 +605,27 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private TextField txtFieldConsErRPMns;
 
     @FXML
-    private TextField txtFieldEngConstRPMns;
+    private TextField  txtFieldEngConstRPMns;
 
     @FXML
-    private TextField txtFieldConstRPMns;
+    private TextField txtFieldConstTimeRPMns;
 
     @FXML
-    private ChoiceBox<String> ChcBxRTCErrRPMns;
+    private TextField txtFieldConsProcURPMns;
+
+    @FXML
+    private TextField txtFieldConsProcIRPMns;
+
+    private ToggleGroup radioBtnGroupRPMns = new ToggleGroup();
+
+    @FXML
+    private RadioButton radBtnConstTimeRPMns;
+
+    @FXML
+    private RadioButton radBtnConstEnergyRPMns;
+
+    @FXML
+    private ComboBox<String> ChcBxRTCErrRPMns;
 
     @FXML
     private ToggleButton addTglBtnConstRPMns;
@@ -628,6 +684,22 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         });
 
         initTableView();
+
+        radBtnConstEnergyAPPls.setToggleGroup(radioBtnGroupAPPls);
+        radBtnConstTimeAPPls.setToggleGroup(radioBtnGroupAPPls);
+        radBtnConstTimeAPPls.setSelected(true);
+
+        radBtnConstEnergyAPMns.setToggleGroup(radioBtnGroupAPMns);
+        radBtnConstTimeAPMns.setToggleGroup(radioBtnGroupAPMns);
+        radBtnConstTimeAPMns.setSelected(true);
+
+        radBtnConstEnergyRPPls.setToggleGroup(radioBtnGroupRPPls);
+        radBtnConstTimeRPPls.setToggleGroup(radioBtnGroupRPPls);
+        radBtnConstTimeRPPls.setSelected(true);
+
+        radBtnConstEnergyRPMns.setToggleGroup(radioBtnGroupRPMns);
+        radBtnConstTimeRPMns.setToggleGroup(radioBtnGroupRPMns);
+        radBtnConstTimeRPMns.setSelected(true);
 
         APPlus.setSelected(true);
         onePhaseBtn.setSelected(true);
@@ -2999,191 +3071,781 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         }
 
-        RTCCommand rtcCommand;
         //Добаление теста "точность хода часов" AP+
-        String cbValue;
         if(event.getSource() == addTglBtnRTCAPPls) {
-            if (addTglBtnRTCAPPls.isSelected()) {
-                if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
 
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 0, Double.parseDouble(txtFieldRngEAPPls.getText()), 0);
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 1, Double.parseDouble(txtFieldRngEAPPls.getText()), 0);
-                    cbValue = "Сутч. погрешность";
+            if (addTglBtnRTCAPPls.isSelected()) {
+
+                txtFieldRngEAPPls.setStyle("");
+                txtFldRTCAmtMshAPPls.setStyle("");
+                txtFldRTCTimeMshAPPls.setStyle("");
+
+                double errorRange;
+                int amoutMeash;
+                int timeToMeash;
+
+                try {
+                    errorRange = Double.parseDouble(txtFieldRngEAPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldRngEAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCAPPls.setSelected(false);
+                    return;
                 }
 
-                rtcCommand.setName("ТХЧ AP+");
+                try {
+                    amoutMeash = Integer.parseInt(txtFldRTCAmtMshAPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCAmtMshAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCAPPls.setSelected(false);
+                    return;
+                }
 
-                testListForCollumAPPls.add(rtcCommand);
+                try {
+                    timeToMeash = Integer.parseInt(txtFldRTCTimeMshAPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCTimeMshAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCAPPls.setSelected(false);
+                    return;
+                }
 
-                RTCTogBtnAPPls.setSelected(true);
-                ChcBxRTCErrAPPls.getItems().clear();
-                ChcBxRTCErrAPPls.getItems().addAll(cbValue);
-                ChcBxRTCErrAPPls.getSelectionModel().select(0);
+                if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
 
+                    testListForCollumAPPls.add(new RTCCommand(false, "RTC;A;P", "ТХЧ AP+", timeToMeash, 1.000000,
+                            amoutMeash, 0, errorRange, 0));
+                } else {
+
+                    testListForCollumAPPls.add(new RTCCommand(false, "RTC;A;P", "ТХЧ AP+", timeToMeash, 1.000000,
+                            amoutMeash, 1, errorRange, 0));
+                }
+
+                ChcBxRTCErrAPPls.setDisable(true);
                 txtFldRTCTimeMshAPPls.setDisable(true);
                 txtFldRTCAmtMshAPPls.setDisable(true);
                 txtFieldRngEAPPls.setDisable(true);
+
             } else {
                 for (Commands command : testListForCollumAPPls) {
-                    if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ AP+")) {
-                            testListForCollumAPPls.remove(command);
-                            break;
-                        }
+                    if (command.getName().equals("ТХЧ AP+")) {
+                        testListForCollumAPPls.remove(command);
+                        break;
                     }
                 }
 
-                RTCTogBtnAPPls.setSelected(false);
-                ChcBxRTCErrAPPls.getItems().clear();
-                ChcBxRTCErrAPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrAPPls.getSelectionModel().select(0);
-
+                ChcBxRTCErrAPPls.setDisable(false);
                 txtFldRTCTimeMshAPPls.setDisable(false);
                 txtFldRTCAmtMshAPPls.setDisable(false);
                 txtFieldRngEAPPls.setDisable(false);
             }
         }
 
-        //Добаление теста "точность хода часов" AP-
         if(event.getSource() == addTglBtnRTCAPMns) {
+
             if (addTglBtnRTCAPMns.isSelected()) {
-                if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 0, Double.parseDouble(txtFieldRngEAPMns.getText()), 1);
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 1, Double.parseDouble(txtFieldRngEAPMns.getText()), 1);
-                    cbValue = "Сутч. погрешность";
+
+                txtFieldRngEAPMns.setStyle("");
+                txtFldRTCAmtMshAPMns.setStyle("");
+                txtFldRTCTimeMshAPMns.setStyle("");
+
+                double errorRange;
+                int amoutMeash;
+                int timeToMeash;
+
+                try {
+                    errorRange = Double.parseDouble(txtFieldRngEAPMns.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldRngEAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCAPMns.setSelected(false);
+                    return;
                 }
 
-                rtcCommand.setName("ТХЧ AP-");
+                try {
+                    amoutMeash = Integer.parseInt(txtFldRTCAmtMshAPMns.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCAmtMshAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCAPMns.setSelected(false);
+                    return;
+                }
 
-                RTCTogBtnAPMns.setSelected(true);
-                ChcBxRTCErrAPMns.getItems().clear();
-                ChcBxRTCErrAPMns.getItems().addAll(cbValue);
-                ChcBxRTCErrAPMns.getSelectionModel().select(0);
+                try {
+                    timeToMeash = Integer.parseInt(txtFldRTCTimeMshAPMns.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCTimeMshAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCAPMns.setSelected(false);
+                    return;
+                }
 
+                if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
+
+                    testListForCollumAPMns.add(new RTCCommand(false, "RTC;A;N", "ТХЧ AP-", timeToMeash, 1.000000,
+                            amoutMeash, 0, errorRange, 1));
+                } else {
+
+                    testListForCollumAPMns.add(new RTCCommand(false, "RTC;A;N", "ТХЧ AP-", timeToMeash, 1.000000,
+                            amoutMeash, 1, errorRange, 1));
+                }
+
+                ChcBxRTCErrAPMns.setDisable(true);
                 txtFldRTCTimeMshAPMns.setDisable(true);
                 txtFldRTCAmtMshAPMns.setDisable(true);
                 txtFieldRngEAPMns.setDisable(true);
 
-                testListForCollumAPMns.add(rtcCommand);
             } else {
                 for (Commands command : testListForCollumAPMns) {
-                    if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ AP-")) {
-                            testListForCollumAPMns.remove(command);
-                            break;
-                        }
+                    if (command.getName().equals("ТХЧ AP-")) {
+                        testListForCollumAPMns.remove(command);
+                        break;
                     }
                 }
 
-                RTCTogBtnAPMns.setSelected(false);
-                ChcBxRTCErrAPMns.getItems().clear();
-                ChcBxRTCErrAPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrAPMns.getSelectionModel().select(0);
-
+                ChcBxRTCErrAPMns.setDisable(false);
                 txtFldRTCTimeMshAPMns.setDisable(false);
                 txtFldRTCAmtMshAPMns.setDisable(false);
                 txtFieldRngEAPMns.setDisable(false);
             }
         }
 
-        //Добаление теста "точность хода часов" RP+
         if(event.getSource() == addTglBtnRTCRPPls) {
+
             if (addTglBtnRTCRPPls.isSelected()) {
-                if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 0, Double.parseDouble(txtFieldRngERPPls.getText()), 2);
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 1, Double.parseDouble(txtFieldRngERPPls.getText()), 2);
-                    cbValue = "Сутч. погрешность";
+
+                txtFieldRngERPPls.setStyle("");
+                txtFldRTCAmtMshRPPls.setStyle("");
+                txtFldRTCTimeMshRPPls.setStyle("");
+
+                double errorRange;
+                int amoutMeash;
+                int timeToMeash;
+
+                try {
+                    errorRange = Double.parseDouble(txtFieldRngERPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldRngERPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCRPPls.setSelected(false);
+                    return;
                 }
 
-                rtcCommand.setName("ТХЧ RP+");
+                try {
+                    amoutMeash = Integer.parseInt(txtFldRTCAmtMshRPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCAmtMshRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCRPPls.setSelected(false);
+                    return;
+                }
 
-                RTCTogBtnRPPls.setSelected(true);
-                ChcBxRTCErrRPPls.getItems().clear();
-                ChcBxRTCErrRPPls.getItems().addAll(cbValue);
-                ChcBxRTCErrRPPls.getSelectionModel().select(0);
+                try {
+                    timeToMeash = Integer.parseInt(txtFldRTCTimeMshRPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCTimeMshRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCRPPls.setSelected(false);
+                    return;
+                }
 
+                if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
+
+                    testListForCollumRPPls.add(new RTCCommand(false, "RTC;R;P", "ТХЧ RP+", timeToMeash, 1.000000,
+                            amoutMeash, 0, errorRange, 3));
+                } else {
+
+                    testListForCollumRPPls.add(new RTCCommand(false, "RTC;R;P", "ТХЧ RP+", timeToMeash, 1.000000,
+                            amoutMeash, 1, errorRange, 3));
+                }
+
+                ChcBxRTCErrRPPls.setDisable(true);
                 txtFldRTCTimeMshRPPls.setDisable(true);
                 txtFldRTCAmtMshRPPls.setDisable(true);
                 txtFieldRngERPPls.setDisable(true);
 
-                testListForCollumRPPls.add(rtcCommand);
-
             } else {
                 for (Commands command : testListForCollumRPPls) {
-                    if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ RP+")) {
-                            testListForCollumRPPls.remove(command);
-                            break;
-                        }
+                    if (command.getName().equals("ТХЧ RP+")) {
+                        testListForCollumRPPls.remove(command);
+                        break;
                     }
                 }
 
-                RTCTogBtnRPPls.setSelected(false);
-                ChcBxRTCErrRPPls.getItems().clear();
-                ChcBxRTCErrRPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrRPPls.getSelectionModel().select(0);
-
+                ChcBxRTCErrRPPls.setDisable(false);
                 txtFldRTCTimeMshRPPls.setDisable(false);
                 txtFldRTCAmtMshRPPls.setDisable(false);
                 txtFieldRngERPPls.setDisable(false);
             }
         }
 
-        //Добаление теста "точность хода часов" RP-
         if(event.getSource() == addTglBtnRTCRPMns) {
+
             if (addTglBtnRTCRPMns.isSelected()) {
-                if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 0, Double.parseDouble(txtFieldRngERPMns.getText()), 3);
-                    cbValue = "В ед. частоты";
-                } else {
-                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
-                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 1, Double.parseDouble(txtFieldRngERPMns.getText()), 3);
-                    cbValue = "Сутч. погрешность";
+
+                txtFieldRngERPMns.setStyle("");
+                txtFldRTCAmtMshRPMns.setStyle("");
+                txtFldRTCTimeMshRPMns.setStyle("");
+
+                double errorRange;
+                int amoutMeash;
+                int timeToMeash;
+
+                try {
+                    errorRange = Double.parseDouble(txtFieldRngERPMns.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldRngERPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCRPMns.setSelected(false);
+                    return;
                 }
 
-                rtcCommand.setName("ТХЧ RP-");
+                try {
+                    amoutMeash = Integer.parseInt(txtFldRTCAmtMshRPMns.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCAmtMshRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCRPMns.setSelected(false);
+                    return;
+                }
 
-                RTCTogBtnRPMns.setSelected(true);
-                ChcBxRTCErrRPMns.getItems().clear();
-                ChcBxRTCErrRPMns.getItems().addAll(cbValue);
-                ChcBxRTCErrRPMns.getSelectionModel().select(0);
+                try {
+                    timeToMeash = Integer.parseInt(txtFldRTCTimeMshRPMns.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCTimeMshRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCRPMns.setSelected(false);
+                    return;
+                }
 
+                if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
+
+                    testListForCollumRPMns.add(new RTCCommand(false, "RTC;R;N", "ТХЧ RP-", timeToMeash, 1.000000,
+                            amoutMeash, 0, errorRange, 3));
+                } else {
+
+                    testListForCollumRPMns.add(new RTCCommand(false, "RTC;R;N", "ТХЧ RP-", timeToMeash, 1.000000,
+                            amoutMeash, 1, errorRange, 3));
+                }
+
+                ChcBxRTCErrRPMns.setDisable(true);
                 txtFldRTCTimeMshRPMns.setDisable(true);
                 txtFldRTCAmtMshRPMns.setDisable(true);
                 txtFieldRngERPMns.setDisable(true);
 
-                testListForCollumRPMns.add(rtcCommand);
             } else {
                 for (Commands command : testListForCollumRPMns) {
-                    if (command instanceof RTCCommand) {
-                        if (((RTCCommand) command).getName().equals("ТХЧ RP-")) {
-                            testListForCollumRPMns.remove(command);
-                            break;
-                        }
+                    if (command.getName().equals("ТХЧ RP-")) {
+                        testListForCollumRPMns.remove(command);
+                        break;
                     }
                 }
 
-                RTCTogBtnRPMns.setSelected(false);
-                ChcBxRTCErrRPMns.getItems().clear();
-                ChcBxRTCErrRPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-                ChcBxRTCErrRPMns.getSelectionModel().select(0);
-
+                ChcBxRTCErrRPMns.setDisable(false);
                 txtFldRTCTimeMshRPMns.setDisable(false);
                 txtFldRTCAmtMshRPMns.setDisable(false);
                 txtFieldRngERPMns.setDisable(false);
+            }
+        }
+
+        //Добавление теста константы
+        if (event.getSource() == addTglBtnConstAPPls) {
+
+            txtFieldConstTimeAPPls.setStyle("");
+            txtFieldEngConstAPPls.setStyle("");
+            txtFieldConsProcUAPPls.setStyle("");
+            txtFieldConsProcIAPPls.setStyle("");
+            txtFieldConsErAPPls.setStyle("");
+
+            if (addTglBtnConstAPPls.isSelected()) {
+                double Uproc;
+                double IbProc;
+                double errorRange;
+
+                try {
+                     Uproc = Double.parseDouble(txtFieldConsProcUAPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsProcUAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstAPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                     IbProc = Double.parseDouble(txtFieldConsProcIAPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsProcIAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstAPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    errorRange = Double.parseDouble(txtFieldConsErAPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsErAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstAPPls.setSelected(false);
+                    return;
+                }
+
+                if (radBtnConstTimeAPPls.isSelected()) {
+                    String time = txtFieldConstTimeAPPls.getText();
+                    String[] arrTime = time.split(":");
+
+                    if (time.length() != 8 || arrTime.length != 3) {
+                        ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
+                        txtFieldConstTimeAPPls.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        addTglBtnConstAPPls.setSelected(false);
+                        return;
+                    }
+
+                    try {
+                        String hours = arrTime[0];
+                        String mins = arrTime[1];
+                        String seks = arrTime[2];
+
+                        long timeTimeTestToMill = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+
+                        if (timeTimeTestToMill < 60) {
+                            ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
+                            txtFieldConstTimeAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstAPPls.setSelected(false);
+                            return;
+                        }
+
+                    }catch (NumberFormatException e) {
+                        ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
+                        txtFieldConstTimeAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstAPPls.setSelected(false);
+                        return;
+                    }
+
+                    testListForCollumAPPls.add(new ConstantCommand(false, true, time,
+                            "const;T;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+
+                    txtFieldConstTimeAPPls.setDisable(true);
+                    txtFieldEngConstAPPls.setDisable(true);
+                    txtFieldConsProcUAPPls.setDisable(true);
+                    txtFieldConsProcIAPPls.setDisable(true);
+                    txtFieldConsErAPPls.setDisable(true);
+
+                } else {
+                    double testEnergy;
+                    try {
+                        testEnergy = Double.parseDouble(txtFieldEngConstAPPls.getText());
+                    }catch (NumberFormatException e) {
+                        ConsoleHelper.infoException("Неверные данные");
+                        txtFieldEngConstAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstAPPls.setSelected(false);
+                        return;
+                    }
+
+                    if (testEnergy < 0.1) {
+                        ConsoleHelper.infoException("Неверные данные\nэнергия не должна быть меньше 0.1кВ");
+                        txtFieldEngConstAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstAPPls.setSelected(false);
+                        return;
+                    }
+
+                    testListForCollumAPPls.add(new ConstantCommand(false, false, testEnergy,
+                            "const;E;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+
+                    txtFieldConstTimeAPPls.setDisable(true);
+                    txtFieldEngConstAPPls.setDisable(true);
+                    txtFieldConsProcUAPPls.setDisable(true);
+                    txtFieldConsProcIAPPls.setDisable(true);
+                    txtFieldConsErAPPls.setDisable(true);
+                }
+
+            } else {
+                for (Commands commands : testListForCollumAPPls) {
+                    if (commands.getName().equals("Сонстанта AP+")) {
+                        testListForCollumAPPls.remove(commands);
+                        break;
+                    }
+                }
+
+                txtFieldConstTimeAPPls.setDisable(false);
+                txtFieldEngConstAPPls.setDisable(false);
+                txtFieldConsProcUAPPls.setDisable(false);
+                txtFieldConsProcIAPPls.setDisable(false);
+                txtFieldConsErAPPls.setDisable(false);
+            }
+        }
+
+        if (event.getSource() == addTglBtnConstAPMns) {
+
+            txtFieldConstTimeAPMns.setStyle("");
+            txtFieldEngConstAPMns.setStyle("");
+            txtFieldConsProcUAPMns.setStyle("");
+            txtFieldConsProcIAPMns.setStyle("");
+            txtFieldConsErAPMns.setStyle("");
+
+            if (addTglBtnConstAPMns.isSelected()) {
+                double Uproc;
+                double IbProc;
+                double errorRange;
+
+                try {
+                    Uproc = Double.parseDouble(txtFieldConsProcUAPMns.getText());
+                } catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsProcUAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstAPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    IbProc = Double.parseDouble(txtFieldConsProcIAPMns.getText());
+                } catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsProcIAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstAPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    errorRange = Double.parseDouble(txtFieldConsErAPMns.getText());
+                } catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsErAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstAPMns.setSelected(false);
+                    return;
+                }
+
+                if (radBtnConstTimeAPMns.isSelected()) {
+                    String time = txtFieldConstTimeAPMns.getText();
+                    String[] arrTime = time.split(":");
+
+                    if (time.length() != 8 || arrTime.length != 3) {
+                        ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
+                        txtFieldConstTimeAPMns.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        addTglBtnConstAPMns.setSelected(false);
+                        return;
+                    }
+
+                    try {
+                        String hours = arrTime[0];
+                        String mins = arrTime[1];
+                        String seks = arrTime[2];
+
+                        long timeTimeTestToMill = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+
+                        if (timeTimeTestToMill < 60) {
+                            ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
+                            txtFieldConstTimeAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstAPMns.setSelected(false);
+                            return;
+                        }
+
+                    } catch (NumberFormatException e) {
+                        ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
+                        txtFieldConstTimeAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstAPMns.setSelected(false);
+                        return;
+                    }
+
+                    testListForCollumAPMns.add(new ConstantCommand(false, true, time,
+                            "const;T;A;N", "Сонстанта AP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+
+                    txtFieldConstTimeAPMns.setDisable(true);
+                    txtFieldEngConstAPMns.setDisable(true);
+                    txtFieldConsProcUAPMns.setDisable(true);
+                    txtFieldConsProcIAPMns.setDisable(true);
+                    txtFieldConsErAPMns.setDisable(true);
+
+                } else {
+                    double testEnergy;
+                    try {
+                        testEnergy = Double.parseDouble(txtFieldEngConstAPMns.getText());
+                    } catch (NumberFormatException e) {
+                        ConsoleHelper.infoException("Неверные данные");
+                        txtFieldEngConstAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstAPMns.setSelected(false);
+                        return;
+                    }
+
+                    if (testEnergy < 0.1) {
+                        ConsoleHelper.infoException("Неверные данные\nэнергия не должна быть меньше 0.1кВ");
+                        txtFieldEngConstAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstAPMns.setSelected(false);
+                        return;
+                    }
+
+                    testListForCollumAPMns.add(new ConstantCommand(false, false, testEnergy,
+                            "const;E;A;N", "Сонстанта AP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+
+                    txtFieldConstTimeAPMns.setDisable(true);
+                    txtFieldEngConstAPMns.setDisable(true);
+                    txtFieldConsProcUAPMns.setDisable(true);
+                    txtFieldConsProcIAPMns.setDisable(true);
+                    txtFieldConsErAPMns.setDisable(true);
+                }
+
+            } else {
+                for (Commands commands : testListForCollumAPMns) {
+                    if (commands.getName().equals("Сонстанта AP-")) {
+                        testListForCollumAPMns.remove(commands);
+                        break;
+                    }
+                }
+
+                txtFieldConstTimeAPMns.setDisable(false);
+                txtFieldEngConstAPMns.setDisable(false);
+                txtFieldConsProcUAPMns.setDisable(false);
+                txtFieldConsProcIAPMns.setDisable(false);
+                txtFieldConsErAPMns.setDisable(false);
+            }
+        }
+
+        if (event.getSource() == addTglBtnConstRPPls) {
+
+            txtFieldConstTimeRPPls.setStyle("");
+            txtFieldEngConstRPPls.setStyle("");
+            txtFieldConsProcURPPls.setStyle("");
+            txtFieldConsProcIRPPls.setStyle("");
+            txtFieldConsErRPPls.setStyle("");
+
+            if (addTglBtnConstRPPls.isSelected()) {
+                double Uproc;
+                double IbProc;
+                double errorRange;
+
+                try {
+                    Uproc = Double.parseDouble(txtFieldConsProcURPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsProcURPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstRPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    IbProc = Double.parseDouble(txtFieldConsProcIRPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsProcIRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstRPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    errorRange = Double.parseDouble(txtFieldConsErRPPls.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsErRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstRPPls.setSelected(false);
+                    return;
+                }
+
+                if (radBtnConstTimeRPPls.isSelected()) {
+                    String time = txtFieldConstTimeRPPls.getText();
+                    String[] arrTime = time.split(":");
+
+                    if (time.length() != 8 || arrTime.length != 3) {
+                        ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
+                        txtFieldConstTimeRPPls.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        addTglBtnConstRPPls.setSelected(false);
+                        return;
+                    }
+
+                    try {
+                        String hours = arrTime[0];
+                        String mins = arrTime[1];
+                        String seks = arrTime[2];
+
+                        long timeTimeTestToMill = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+
+                        if (timeTimeTestToMill < 60) {
+                            ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
+                            txtFieldConstTimeRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstRPPls.setSelected(false);
+                            return;
+                        }
+
+                    }catch (NumberFormatException e) {
+                        ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
+                        txtFieldConstTimeRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstRPPls.setSelected(false);
+                        return;
+                    }
+
+                    testListForCollumRPPls.add(new ConstantCommand(false, true, time,
+                            "const;T;R;P", "Сонстанта RP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+
+                    txtFieldConstTimeRPPls.setDisable(true);
+                    txtFieldEngConstRPPls.setDisable(true);
+                    txtFieldConsProcURPPls.setDisable(true);
+                    txtFieldConsProcIRPPls.setDisable(true);
+                    txtFieldConsErRPPls.setDisable(true);
+
+                } else {
+                    double testEnergy;
+                    try {
+                        testEnergy = Double.parseDouble(txtFieldEngConstRPPls.getText());
+                    }catch (NumberFormatException e) {
+                        ConsoleHelper.infoException("Неверные данные");
+                        txtFieldEngConstRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstRPPls.setSelected(false);
+                        return;
+                    }
+
+                    if (testEnergy < 0.1) {
+                        ConsoleHelper.infoException("Неверные данные\nэнергия не должна быть меньше 0.1кВ");
+                        txtFieldEngConstRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstRPPls.setSelected(false);
+                        return;
+                    }
+
+                    testListForCollumRPPls.add(new ConstantCommand(false, false, testEnergy,
+                            "const;E;R;P", "Сонстанта RP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+
+                    txtFieldConstTimeRPPls.setDisable(true);
+                    txtFieldEngConstRPPls.setDisable(true);
+                    txtFieldConsProcURPPls.setDisable(true);
+                    txtFieldConsProcIRPPls.setDisable(true);
+                    txtFieldConsErRPPls.setDisable(true);
+                }
+
+            } else {
+                for (Commands commands : testListForCollumRPPls) {
+                    if (commands.getName().equals("Сонстанта RP+")) {
+                        testListForCollumRPPls.remove(commands);
+                        break;
+                    }
+                }
+
+                txtFieldConstTimeRPPls.setDisable(false);
+                txtFieldEngConstRPPls.setDisable(false);
+                txtFieldConsProcURPPls.setDisable(false);
+                txtFieldConsProcIRPPls.setDisable(false);
+                txtFieldConsErRPPls.setDisable(false);
+            }
+        }
+
+        if (event.getSource() == addTglBtnConstRPMns) {
+
+            txtFieldConstTimeRPMns.setStyle("");
+            txtFieldEngConstRPMns.setStyle("");
+            txtFieldConsProcURPMns.setStyle("");
+            txtFieldConsProcIRPMns.setStyle("");
+            txtFieldConsErRPMns.setStyle("");
+
+            if (addTglBtnConstRPMns.isSelected()) {
+                double Uproc;
+                double IbProc;
+                double errorRange;
+
+                try {
+                    Uproc = Double.parseDouble(txtFieldConsProcURPMns.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsProcURPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstRPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    IbProc = Double.parseDouble(txtFieldConsProcIRPMns.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsProcIRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstRPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    errorRange = Double.parseDouble(txtFieldConsErRPMns.getText());
+                }catch (NumberFormatException e) {
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldConsErRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnConstRPMns.setSelected(false);
+                    return;
+                }
+
+                if (radBtnConstTimeRPMns.isSelected()) {
+                    String time = txtFieldConstTimeRPMns.getText();
+                    String[] arrTime = time.split(":");
+
+                    if (time.length() != 8 || arrTime.length != 3) {
+                        ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
+                        txtFieldConstTimeRPMns.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        addTglBtnConstRPMns.setSelected(false);
+                        return;
+                    }
+
+                    try {
+                        String hours = arrTime[0];
+                        String mins = arrTime[1];
+                        String seks = arrTime[2];
+
+                        long timeTimeTestToMill = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+
+                        if (timeTimeTestToMill < 60) {
+                            ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
+                            txtFieldConstTimeRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstRPMns.setSelected(false);
+                            return;
+                        }
+
+                    }catch (NumberFormatException e) {
+                        ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
+                        txtFieldConstTimeRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstRPMns.setSelected(false);
+                        return;
+                    }
+
+                    testListForCollumRPMns.add(new ConstantCommand(false, true, time,
+                            "const;T;R;N", "Сонстанта RP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+
+                    txtFieldConstTimeRPMns.setDisable(true);
+                    txtFieldEngConstRPMns.setDisable(true);
+                    txtFieldConsProcURPMns.setDisable(true);
+                    txtFieldConsProcIRPMns.setDisable(true);
+                    txtFieldConsErRPMns.setDisable(true);
+
+                } else {
+                    double testEnergy;
+                    try {
+                        testEnergy = Double.parseDouble(txtFieldEngConstRPMns.getText());
+                    }catch (NumberFormatException e) {
+                        ConsoleHelper.infoException("Неверные данные");
+                        txtFieldEngConstRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstRPMns.setSelected(false);
+                        return;
+                    }
+
+                    if (testEnergy < 0.1) {
+                        ConsoleHelper.infoException("Неверные данные\nэнергия не должна быть меньше 0.1кВ");
+                        txtFieldEngConstRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnConstRPMns.setSelected(false);
+                        return;
+                    }
+
+                    testListForCollumRPMns.add(new ConstantCommand(false, false, testEnergy,
+                            "const;E;R;N", "Сонстанта RP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+
+                    txtFieldConstTimeRPMns.setDisable(true);
+                    txtFieldEngConstRPMns.setDisable(true);
+                    txtFieldConsProcURPMns.setDisable(true);
+                    txtFieldConsProcIRPMns.setDisable(true);
+                    txtFieldConsErRPMns.setDisable(true);
+                }
+
+            } else {
+                for (Commands commands : testListForCollumRPPls) {
+                    if (commands.getName().equals("Сонстанта RP+")) {
+                        testListForCollumRPPls.remove(commands);
+                        break;
+                    }
+                }
+
+                txtFieldConstTimeRPMns.setDisable(false);
+                txtFieldEngConstRPMns.setDisable(false);
+                txtFieldConsProcURPMns.setDisable(false);
+                txtFieldConsProcIRPMns.setDisable(false);
+                txtFieldConsErRPMns.setDisable(false);
             }
         }
     }
