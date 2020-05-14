@@ -14,7 +14,6 @@ public class ConstantCommand implements Commands, Serializable {
 
     private StendDLLCommands stendDLLCommands;
 
-
     private boolean threePhaseCommand;
 
     //Необходим для быстрого доступа к Объекту класса resultCommand
@@ -42,7 +41,7 @@ public class ConstantCommand implements Commands, Serializable {
     private double emaxProc;
 
     //Кол-во импульсов для расчёта ошибки
-    private int pulse = 20;
+    private int pulse;
 
     //Имя точки для отображения в таблице
     private String name;
@@ -90,13 +89,10 @@ public class ConstantCommand implements Commands, Serializable {
     private int channelFlag;
 
     //Количество повторов теста
-    private int countResult = 2;
+    private int countResult;
 
     //Константа счётчика для теста
     private int constantMeter;
-
-    //Флаг для прекращения сбора погрешности
-    private HashMap<Integer, Boolean> flagInStop;
 
     public ConstantCommand(boolean threePhaseStendCommand, boolean runTestToTime, String strTimeToTest, String id,
                            String name, double voltPer, double currPer, int revers, int channelFlag, double eminProc, double emaxProc) {
@@ -152,7 +148,6 @@ public class ConstantCommand implements Commands, Serializable {
             throw new InterruptedException();
         }
 
-        //flagInStop = initBoolList();
         ratedCurr = Ib;
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
@@ -284,7 +279,129 @@ public class ConstantCommand implements Commands, Serializable {
     //Метод для цикличной поверки счётчиков
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("execute_1");
+            throw new InterruptedException();
+        }
 
+        ratedCurr = Ib;
+
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+
+            if (threePhaseCommand) {
+                iABC = "H";
+                //Выбор константы в зависимости от энергии
+                if (channelFlag <= 1) {
+                    constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
+                    phase = 1;
+                } else {
+                    constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
+                    phase = 6;
+                }
+            } else {
+                iABC = "C";
+                if (channelFlag <= 1) {
+                    constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
+                    phase = 0;
+                } else {
+                    constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
+                    phase = 7;
+                }
+            }
+        } else {
+            iABC = "H";
+            if (channelFlag <= 1) {
+                constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
+                phase = 0;
+            } else {
+                constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
+                phase = 7;
+            }
+        }
+
+        for (Meter meter : meterForTestList) {
+            meter.returnResultCommand(index, channelFlag).setLastResult("N");
+        }
+
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("execute_2");
+            throw new InterruptedException();
+        }
+
+        //Устанавливаем местам импульсный выход
+        stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
+
+        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPer, 0, iABC, cosP)) throw new ConnectForStendExeption();
+
+        //Разблокирую интерфейc кнопок
+        TestErrorTableFrameController.blockBtns.setValue(false);
+
+        Thread.sleep(5000);
+
+        //Устанавливаю
+        for (Meter meter : meterForTestList) {
+            stendDLLCommands.constTestStart(meter.getId(), constantMeter);
+        }
+
+        if (runTestToTime) {
+            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+            Thread.sleep(timeToTest);
+
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
+            //Получаю результат
+            double result;
+            for (Meter meter : meterForTestList) {
+
+                result = stendDLLCommands.constPulseRead(constantMeter, meter.getId());
+                Meter.ConstantResult commandResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
+
+                if (result < eminProc || result > emaxProc) {
+                    commandResult.setPassTest(false);
+                    commandResult.setLastResult("F" + result);
+                    commandResult.getResults()[0] = result + "П";
+                } else {
+                    commandResult.setPassTest(true);
+                    commandResult.setLastResult("P" + result);
+                    commandResult.getResults()[0] = result + "Г";
+                }
+            }
+
+        } else {
+            double refMeterEnergy = 0;
+            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+            while (kWToTest > refMeterEnergy) {
+                refMeterEnergy = stendDLLCommands.constEnergyRead(constantMeter, 1);
+
+                Thread.sleep(3000);
+            }
+
+            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
+            //Получаю результат
+            double result;
+            for (Meter meter : meterForTestList) {
+
+                result = stendDLLCommands.constPulseRead(constantMeter, meter.getId());
+                Meter.ConstantResult commandResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
+
+                if (result < eminProc || result > emaxProc) {
+                    commandResult.setPassTest(false);
+                    commandResult.setLastResult("F" + result);
+                    commandResult.getResults()[0] = result + "П";
+                } else {
+                    commandResult.setPassTest(true);
+                    commandResult.setLastResult("P" + result);
+                    commandResult.getResults()[0] = result + "Г";
+                }
+            }
+
+        }
     }
 
     //Опрашивает счётчики до нужно значения проходов
@@ -334,7 +451,7 @@ public class ConstantCommand implements Commands, Serializable {
     }
 
     public String getPulse() {
-        return String.valueOf(pulse);
+        return null;
     }
 
     public void setIb(double ib) {
@@ -366,7 +483,7 @@ public class ConstantCommand implements Commands, Serializable {
     }
 
     public String getCountResult() {
-        return String.valueOf(countResult);
+        return null;
     }
 
     public void setNextCommand(boolean nextCommand) {
@@ -376,5 +493,29 @@ public class ConstantCommand implements Commands, Serializable {
     @Override
     public void setInterrupt(boolean interrupt) {
 
+    }
+
+    public boolean isRunTestToTime() {
+        return runTestToTime;
+    }
+
+    public String getStrTimeToTest() {
+        return strTimeToTest;
+    }
+
+    public double getkWToTest() {
+        return kWToTest;
+    }
+
+    public double getVoltPer() {
+        return voltPer;
+    }
+
+    public double getCurrPer() {
+        return currPer;
+    }
+
+    public double getEmaxProc() {
+        return emaxProc;
     }
 }

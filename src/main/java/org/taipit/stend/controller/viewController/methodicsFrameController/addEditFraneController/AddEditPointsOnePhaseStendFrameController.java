@@ -1965,6 +1965,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         testListForCollumAPMns.addAll(methodicForOnePhaseStend.getCommandsMap().get(1));
         testListForCollumRPPls.addAll(methodicForOnePhaseStend.getCommandsMap().get(2));
         testListForCollumRPMns.addAll(methodicForOnePhaseStend.getCommandsMap().get(3));
+
+        testListForCollumAPPls.addAll(methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(0));
+        testListForCollumAPMns.addAll(methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(1));
+        testListForCollumRPPls.addAll(methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(2));
+        testListForCollumRPMns.addAll(methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(3));
     }
 
     //Задаёт параметр true или false нужному checkBox'у
@@ -2012,14 +2017,15 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     STATogBtnAPPls.setSelected(true);
 
                 } else if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
+
+                    if (((RTCCommand) command).getErrorType() == 0) {
                         ChcBxRTCErrAPPls.setValue("В ед. частоты");
                     } else {
                         ChcBxRTCErrAPPls.setValue("Сутч. погрешность");
                     }
 
                     txtFieldRngEAPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshAPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+                    txtFldRTCAmtMshAPPls.setText(String.valueOf(((RTCCommand) command).getCountResultTest()));
                     txtFldRTCTimeMshAPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
 
                     ChcBxRTCErrAPPls.setDisable(true);
@@ -2030,6 +2036,32 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     addTglBtnRTCAPPls.setSelected(true);
 
                     RTCTogBtnAPPls.setSelected(true);
+
+                } else if (command instanceof ConstantCommand) {
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+
+                    if (((ConstantCommand) command).isRunTestToTime()) {
+                        radBtnConstTimeAPPls.setSelected(true);
+                        txtFieldConstTimeAPPls.setText(constantCommand.getStrTimeToTest());
+                    } else {
+                        radBtnConstEnergyAPPls.setSelected(true);
+                        txtFieldEngConstAPPls.setText(String.valueOf(constantCommand.getkWToTest()));
+                    }
+
+                    txtFieldConsProcUAPPls.setText(String.valueOf(constantCommand.getVoltPer()));
+                    txtFieldConsProcIAPPls.setText(String.valueOf(constantCommand.getCurrPer()));
+                    txtFieldConsErAPPls.setText(String.valueOf(Math.abs(constantCommand.getEmaxProc())));
+
+                    addTglBtnConstAPPls.setSelected(true);
+                    ConstTogBtnAPPls.setSelected(true);
+
+                    radBtnConstTimeAPPls.setDisable(true);
+                    txtFieldConstTimeAPPls.setDisable(true);
+                    radBtnConstEnergyAPPls.setDisable(true);
+                    txtFieldEngConstAPPls.setDisable(true);
+                    txtFieldConsProcUAPPls.setDisable(true);
+                    txtFieldConsProcIAPPls.setDisable(true);
+                    txtFieldConsErAPPls.setDisable(true);
                 }
             }
         }
@@ -2075,14 +2107,15 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     STATogBtnAPMns.setSelected(true);
 
                 } else if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
+
+                    if (((RTCCommand) command).getErrorType() == 0) {
                         ChcBxRTCErrAPMns.setValue("В ед. частоты");
                     } else {
                         ChcBxRTCErrAPMns.setValue("Сутч. погрешность");
                     }
 
                     txtFieldRngEAPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshAPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+                    txtFldRTCAmtMshAPMns.setText(String.valueOf(((RTCCommand) command).getCountResultTest()));
                     txtFldRTCTimeMshAPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
 
                     ChcBxRTCErrAPMns.setDisable(true);
@@ -2093,6 +2126,32 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     addTglBtnRTCAPMns.setSelected(true);
 
                     RTCTogBtnAPMns.setSelected(true);
+
+                } else if (command instanceof ConstantCommand) {
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+
+                    if (((ConstantCommand) command).isRunTestToTime()) {
+                        radBtnConstTimeAPMns.setSelected(true);
+                        txtFieldConstTimeAPMns.setText(constantCommand.getStrTimeToTest());
+                    } else {
+                        radBtnConstEnergyAPMns.setSelected(true);
+                        txtFieldEngConstAPMns.setText(String.valueOf(constantCommand.getkWToTest()));
+                    }
+
+                    txtFieldConsProcUAPMns.setText(String.valueOf(constantCommand.getVoltPer()));
+                    txtFieldConsProcIAPMns.setText(String.valueOf(constantCommand.getCurrPer()));
+                    txtFieldConsErAPMns.setText(String.valueOf(Math.abs(constantCommand.getEmaxProc())));
+
+                    addTglBtnConstAPMns.setSelected(true);
+                    ConstTogBtnAPMns.setSelected(true);
+
+                    radBtnConstTimeAPMns.setDisable(true);
+                    txtFieldConstTimeAPMns.setDisable(true);
+                    radBtnConstEnergyAPMns.setDisable(true);
+                    txtFieldEngConstAPMns.setDisable(true);
+                    txtFieldConsProcUAPMns.setDisable(true);
+                    txtFieldConsProcIAPMns.setDisable(true);
+                    txtFieldConsErAPMns.setDisable(true);
                 }
             }
         }
@@ -2120,6 +2179,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         addTglBtnCRPRPPlsGOST.setSelected(true);
                     }
                     CRPTogBtnRPPls.setSelected(true);
+
                 } else if (command instanceof StartCommand) {
                     if (!((StartCommand) command).isGostTest()) {
                         txtFieldSTAIProcRPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
@@ -2137,14 +2197,15 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     STATogBtnRPPls.setSelected(true);
 
                 } else if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
+
+                    if (((RTCCommand) command).getErrorType() == 0) {
                         ChcBxRTCErrRPPls.setValue("В ед. частоты");
                     } else {
                         ChcBxRTCErrRPPls.setValue("Сутч. погрешность");
                     }
 
                     txtFieldRngERPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshRPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+                    txtFldRTCAmtMshRPPls.setText(String.valueOf(((RTCCommand) command).getCountResultTest()));
                     txtFldRTCTimeMshRPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
 
                     ChcBxRTCErrRPPls.setDisable(true);
@@ -2155,6 +2216,32 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     addTglBtnRTCRPPls.setSelected(true);
 
                     RTCTogBtnRPPls.setSelected(true);
+
+                } else if (command instanceof ConstantCommand) {
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+
+                    if (((ConstantCommand) command).isRunTestToTime()) {
+                        radBtnConstTimeRPPls.setSelected(true);
+                        txtFieldConstTimeRPPls.setText(constantCommand.getStrTimeToTest());
+                    } else {
+                        radBtnConstEnergyRPPls.setSelected(true);
+                        txtFieldEngConstRPPls.setText(String.valueOf(constantCommand.getkWToTest()));
+                    }
+
+                    txtFieldConsProcURPPls.setText(String.valueOf(constantCommand.getVoltPer()));
+                    txtFieldConsProcIRPPls.setText(String.valueOf(constantCommand.getCurrPer()));
+                    txtFieldConsErRPPls.setText(String.valueOf(Math.abs(constantCommand.getEmaxProc())));
+
+                    addTglBtnConstRPPls.setSelected(true);
+                    ConstTogBtnRPPls.setSelected(true);
+
+                    radBtnConstTimeRPPls.setDisable(true);
+                    txtFieldConstTimeRPPls.setDisable(true);
+                    radBtnConstEnergyRPPls.setDisable(true);
+                    txtFieldEngConstRPPls.setDisable(true);
+                    txtFieldConsProcURPPls.setDisable(true);
+                    txtFieldConsProcIRPPls.setDisable(true);
+                    txtFieldConsErRPPls.setDisable(true);
                 }
             }
         }
@@ -2200,14 +2287,15 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     STATogBtnRPMns.setSelected(true);
 
                 } else if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
+
+                    if (((RTCCommand) command).getErrorType() == 0) {
                         ChcBxRTCErrRPMns.setValue("В ед. частоты");
                     } else {
                         ChcBxRTCErrRPMns.setValue("Сутч. погрешность");
                     }
 
                     txtFieldRngERPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshRPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+                    txtFldRTCAmtMshRPMns.setText(String.valueOf(((RTCCommand) command).getCountResultTest()));
                     txtFldRTCTimeMshRPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
 
                     ChcBxRTCErrRPMns.setDisable(true);
@@ -2218,6 +2306,32 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     addTglBtnRTCRPMns.setSelected(true);
 
                     RTCTogBtnRPMns.setSelected(true);
+
+                } else if (command instanceof ConstantCommand) {
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+
+                    if (((ConstantCommand) command).isRunTestToTime()) {
+                        radBtnConstTimeRPMns.setSelected(true);
+                        txtFieldConstTimeRPMns.setText(constantCommand.getStrTimeToTest());
+                    } else {
+                        radBtnConstEnergyRPMns.setSelected(true);
+                        txtFieldEngConstRPMns.setText(String.valueOf(constantCommand.getkWToTest()));
+                    }
+
+                    txtFieldConsProcURPMns.setText(String.valueOf(constantCommand.getVoltPer()));
+                    txtFieldConsProcIRPMns.setText(String.valueOf(constantCommand.getCurrPer()));
+                    txtFieldConsErRPMns.setText(String.valueOf(Math.abs(constantCommand.getEmaxProc())));
+
+                    addTglBtnConstRPMns.setSelected(true);
+                    ConstTogBtnRPMns.setSelected(true);
+
+                    radBtnConstTimeRPMns.setDisable(true);
+                    txtFieldConstTimeRPMns.setDisable(true);
+                    radBtnConstEnergyRPMns.setDisable(true);
+                    txtFieldEngConstRPMns.setDisable(true);
+                    txtFieldConsProcURPMns.setDisable(true);
+                    txtFieldConsProcIRPMns.setDisable(true);
+                    txtFieldConsErRPMns.setDisable(true);
                 }
             }
         }
@@ -2516,6 +2630,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             listErrorCommand = methodicForOnePhaseStend.getCommandsMap().get(0);
             listCreepStartRTCCommadns = methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(0);
 
+            listErrorCommand.clear();
+            listCreepStartRTCCommadns.clear();
+
             for (Commands command : testListForCollumAPPls) {
                 if (command instanceof ErrorCommand) {
                     listErrorCommand.add(command);
@@ -2526,6 +2643,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             listErrorCommand = methodicForOnePhaseStend.getCommandsMap().get(1);
             listCreepStartRTCCommadns = methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(1);
+
+            listErrorCommand.clear();
+            listCreepStartRTCCommadns.clear();
 
             for (Commands command : testListForCollumAPMns) {
                 if (command instanceof ErrorCommand) {
@@ -2538,6 +2658,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             listErrorCommand = methodicForOnePhaseStend.getCommandsMap().get(2);
             listCreepStartRTCCommadns = methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(2);
 
+            listErrorCommand.clear();
+            listCreepStartRTCCommadns.clear();
+
             for (Commands command : testListForCollumRPPls) {
                 if (command instanceof ErrorCommand) {
                     listErrorCommand.add(command);
@@ -2548,6 +2671,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             listErrorCommand = methodicForOnePhaseStend.getCommandsMap().get(3);
             listCreepStartRTCCommadns = methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(3);
+
+            listErrorCommand.clear();
+            listCreepStartRTCCommadns.clear();
 
             for (Commands command : testListForCollumRPMns) {
                 if (command instanceof ErrorCommand) {
@@ -3126,6 +3252,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCAmtMshAPPls.setDisable(true);
                 txtFieldRngEAPPls.setDisable(true);
 
+                RTCTogBtnAPPls.setSelected(true);
+
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command.getName().equals("ТХЧ AP+")) {
@@ -3138,6 +3266,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCTimeMshAPPls.setDisable(false);
                 txtFldRTCAmtMshAPPls.setDisable(false);
                 txtFieldRngEAPPls.setDisable(false);
+                RTCTogBtnAPPls.setSelected(false);
             }
         }
 
@@ -3195,6 +3324,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCAmtMshAPMns.setDisable(true);
                 txtFieldRngEAPMns.setDisable(true);
 
+                RTCTogBtnAPMns.setSelected(true);
+
             } else {
                 for (Commands command : testListForCollumAPMns) {
                     if (command.getName().equals("ТХЧ AP-")) {
@@ -3207,6 +3338,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCTimeMshAPMns.setDisable(false);
                 txtFldRTCAmtMshAPMns.setDisable(false);
                 txtFieldRngEAPMns.setDisable(false);
+
+                RTCTogBtnAPMns.setSelected(false);
             }
         }
 
@@ -3264,6 +3397,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCAmtMshRPPls.setDisable(true);
                 txtFieldRngERPPls.setDisable(true);
 
+                RTCTogBtnRPPls.setSelected(true);
+
             } else {
                 for (Commands command : testListForCollumRPPls) {
                     if (command.getName().equals("ТХЧ RP+")) {
@@ -3276,6 +3411,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCTimeMshRPPls.setDisable(false);
                 txtFldRTCAmtMshRPPls.setDisable(false);
                 txtFieldRngERPPls.setDisable(false);
+
+                RTCTogBtnRPPls.setSelected(false);
             }
         }
 
@@ -3333,6 +3470,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCAmtMshRPMns.setDisable(true);
                 txtFieldRngERPMns.setDisable(true);
 
+                RTCTogBtnRPMns.setSelected(true);
+
             } else {
                 for (Commands command : testListForCollumRPMns) {
                     if (command.getName().equals("ТХЧ RP-")) {
@@ -3345,6 +3484,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCTimeMshRPMns.setDisable(false);
                 txtFldRTCAmtMshRPMns.setDisable(false);
                 txtFieldRngERPMns.setDisable(false);
+
+                RTCTogBtnRPMns.setSelected(false);
             }
         }
 
@@ -3424,12 +3565,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     testListForCollumAPPls.add(new ConstantCommand(false, true, time,
                             "const;T;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
-                    txtFieldConstTimeAPPls.setDisable(true);
-                    txtFieldEngConstAPPls.setDisable(true);
-                    txtFieldConsProcUAPPls.setDisable(true);
-                    txtFieldConsProcIAPPls.setDisable(true);
-                    txtFieldConsErAPPls.setDisable(true);
-
                 } else {
                     double testEnergy;
                     try {
@@ -3451,12 +3586,17 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     testListForCollumAPPls.add(new ConstantCommand(false, false, testEnergy,
                             "const;E;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
-                    txtFieldConstTimeAPPls.setDisable(true);
-                    txtFieldEngConstAPPls.setDisable(true);
-                    txtFieldConsProcUAPPls.setDisable(true);
-                    txtFieldConsProcIAPPls.setDisable(true);
-                    txtFieldConsErAPPls.setDisable(true);
                 }
+
+                txtFieldConstTimeAPPls.setDisable(true);
+                txtFieldEngConstAPPls.setDisable(true);
+                txtFieldConsProcUAPPls.setDisable(true);
+                txtFieldConsProcIAPPls.setDisable(true);
+                txtFieldConsErAPPls.setDisable(true);
+                radBtnConstTimeAPPls.setDisable(true);
+                radBtnConstEnergyAPPls.setDisable(true);
+
+                ConstTogBtnAPPls.setSelected(true);
 
             } else {
                 for (Commands commands : testListForCollumAPPls) {
@@ -3471,6 +3611,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFieldConsProcUAPPls.setDisable(false);
                 txtFieldConsProcIAPPls.setDisable(false);
                 txtFieldConsErAPPls.setDisable(false);
+                radBtnConstTimeAPPls.setDisable(false);
+                radBtnConstEnergyAPPls.setDisable(false);
+
+                ConstTogBtnAPPls.setSelected(false);
             }
         }
 
@@ -3549,11 +3693,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     testListForCollumAPMns.add(new ConstantCommand(false, true, time,
                             "const;T;A;N", "Сонстанта AP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
-                    txtFieldConstTimeAPMns.setDisable(true);
-                    txtFieldEngConstAPMns.setDisable(true);
-                    txtFieldConsProcUAPMns.setDisable(true);
-                    txtFieldConsProcIAPMns.setDisable(true);
-                    txtFieldConsErAPMns.setDisable(true);
 
                 } else {
                     double testEnergy;
@@ -3576,12 +3715,17 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     testListForCollumAPMns.add(new ConstantCommand(false, false, testEnergy,
                             "const;E;A;N", "Сонстанта AP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
-                    txtFieldConstTimeAPMns.setDisable(true);
-                    txtFieldEngConstAPMns.setDisable(true);
-                    txtFieldConsProcUAPMns.setDisable(true);
-                    txtFieldConsProcIAPMns.setDisable(true);
-                    txtFieldConsErAPMns.setDisable(true);
                 }
+
+                txtFieldConstTimeAPMns.setDisable(true);
+                txtFieldEngConstAPMns.setDisable(true);
+                txtFieldConsProcUAPMns.setDisable(true);
+                txtFieldConsProcIAPMns.setDisable(true);
+                txtFieldConsErAPMns.setDisable(true);
+                radBtnConstTimeAPMns.setDisable(true);
+                radBtnConstEnergyAPMns.setDisable(true);
+
+                ConstTogBtnAPMns.setSelected(true);
 
             } else {
                 for (Commands commands : testListForCollumAPMns) {
@@ -3596,6 +3740,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFieldConsProcUAPMns.setDisable(false);
                 txtFieldConsProcIAPMns.setDisable(false);
                 txtFieldConsErAPMns.setDisable(false);
+                radBtnConstTimeAPMns.setDisable(false);
+                radBtnConstEnergyAPMns.setDisable(false);
+
+                ConstTogBtnAPMns.setSelected(false);
             }
         }
 
@@ -3674,11 +3822,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     testListForCollumRPPls.add(new ConstantCommand(false, true, time,
                             "const;T;R;P", "Сонстанта RP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
-                    txtFieldConstTimeRPPls.setDisable(true);
-                    txtFieldEngConstRPPls.setDisable(true);
-                    txtFieldConsProcURPPls.setDisable(true);
-                    txtFieldConsProcIRPPls.setDisable(true);
-                    txtFieldConsErRPPls.setDisable(true);
 
                 } else {
                     double testEnergy;
@@ -3701,12 +3844,17 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     testListForCollumRPPls.add(new ConstantCommand(false, false, testEnergy,
                             "const;E;R;P", "Сонстанта RP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
-                    txtFieldConstTimeRPPls.setDisable(true);
-                    txtFieldEngConstRPPls.setDisable(true);
-                    txtFieldConsProcURPPls.setDisable(true);
-                    txtFieldConsProcIRPPls.setDisable(true);
-                    txtFieldConsErRPPls.setDisable(true);
                 }
+
+                txtFieldConstTimeRPPls.setDisable(true);
+                txtFieldEngConstRPPls.setDisable(true);
+                txtFieldConsProcURPPls.setDisable(true);
+                txtFieldConsProcIRPPls.setDisable(true);
+                txtFieldConsErRPPls.setDisable(true);
+                radBtnConstTimeRPPls.setDisable(true);
+                radBtnConstEnergyRPPls.setDisable(true);
+
+                ConstTogBtnRPPls.setSelected(true);
 
             } else {
                 for (Commands commands : testListForCollumRPPls) {
@@ -3721,6 +3869,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFieldConsProcURPPls.setDisable(false);
                 txtFieldConsProcIRPPls.setDisable(false);
                 txtFieldConsErRPPls.setDisable(false);
+                radBtnConstTimeRPPls.setDisable(false);
+                radBtnConstEnergyRPPls.setDisable(false);
+
+                ConstTogBtnRPPls.setSelected(false);
             }
         }
 
@@ -3799,11 +3951,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     testListForCollumRPMns.add(new ConstantCommand(false, true, time,
                             "const;T;R;N", "Сонстанта RP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
-                    txtFieldConstTimeRPMns.setDisable(true);
-                    txtFieldEngConstRPMns.setDisable(true);
-                    txtFieldConsProcURPMns.setDisable(true);
-                    txtFieldConsProcIRPMns.setDisable(true);
-                    txtFieldConsErRPMns.setDisable(true);
 
                 } else {
                     double testEnergy;
@@ -3826,17 +3973,22 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     testListForCollumRPMns.add(new ConstantCommand(false, false, testEnergy,
                             "const;E;R;N", "Сонстанта RP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
-                    txtFieldConstTimeRPMns.setDisable(true);
-                    txtFieldEngConstRPMns.setDisable(true);
-                    txtFieldConsProcURPMns.setDisable(true);
-                    txtFieldConsProcIRPMns.setDisable(true);
-                    txtFieldConsErRPMns.setDisable(true);
                 }
 
+                txtFieldConstTimeRPMns.setDisable(true);
+                txtFieldEngConstRPMns.setDisable(true);
+                txtFieldConsProcURPMns.setDisable(true);
+                txtFieldConsProcIRPMns.setDisable(true);
+                txtFieldConsErRPMns.setDisable(true);
+                radBtnConstTimeRPMns.setDisable(true);
+                radBtnConstEnergyRPMns.setDisable(true);
+
+                ConstTogBtnRPMns.setSelected(true);
+
             } else {
-                for (Commands commands : testListForCollumRPPls) {
-                    if (commands.getName().equals("Сонстанта RP+")) {
-                        testListForCollumRPPls.remove(commands);
+                for (Commands commands : testListForCollumRPMns) {
+                    if (commands.getName().equals("Сонстанта RP-")) {
+                        testListForCollumRPMns.remove(commands);
                         break;
                     }
                 }
@@ -3846,6 +3998,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFieldConsProcURPMns.setDisable(false);
                 txtFieldConsProcIRPMns.setDisable(false);
                 txtFieldConsErRPMns.setDisable(false);
+                radBtnConstTimeRPMns.setDisable(false);
+                radBtnConstEnergyRPMns.setDisable(false);
+
+                ConstTogBtnRPMns.setSelected(true);
             }
         }
     }
@@ -3918,6 +4074,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             RPPlusCRPSTA.setSelected(false);
             RPMinusCRPSTA.setSelected(false);
         }
+
         if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
             setDefPosBtn();
             viewPointTableRPPls.toFront();
@@ -3934,6 +4091,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             RPPlusCRPSTA.setSelected(true);
             RPMinusCRPSTA.setSelected(false);
         }
+
         if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
             setDefPosBtn();
             viewPointTableRPMns.toFront();

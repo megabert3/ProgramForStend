@@ -209,12 +209,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
             }catch (InfoExсeption e) {
                 e.printStackTrace();
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        ConsoleHelper.infoException("Выберите методику");
-                    }
-                });
+                ConsoleHelper.infoException("Выберите методику");
             }
 
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -228,6 +223,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
                 Parent root = fxmlLoader.getRoot();
 
                 stage.setTitle("Редактирование методики");
