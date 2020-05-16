@@ -53,6 +53,8 @@ public class StartCommand implements Commands, Serializable {
     //Имя точки для отображения в таблице
     private String name;
 
+    private String id;
+
     //Время расчитывается по госту?
     private boolean gostTest;
 
@@ -68,8 +70,10 @@ public class StartCommand implements Commands, Serializable {
 
     private HashMap<Integer, Boolean> startCommandResult;
 
-    public StartCommand(boolean threePhaseCommand, int revers, int channelFlag, boolean gostTest, String userTimeTest) {
+    public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest, String userTimeTest) {
         this.threePhaseCommand = threePhaseCommand;
+        this.name = name;
+        this.id = id;
         this.userTimeTest = userTimeTest;
         this.revers = revers;
         this.channelFlag = channelFlag;
@@ -92,7 +96,7 @@ public class StartCommand implements Commands, Serializable {
         }
     }
 
-    public StartCommand(boolean threePhaseCommand, int revers, int channelFlag, boolean gostTest) {
+    public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest) {
         this.threePhaseCommand = threePhaseCommand;
         this.revers = revers;
         this.channelFlag = channelFlag;
@@ -179,11 +183,11 @@ public class StartCommand implements Commands, Serializable {
                                 startCommandResult.put(mapResult.getKey(), true);
                             } else {
                                 stendDLLCommands.searchMark(mapResult.getKey());
-                                errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                                errorCommand.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                             }
 
                         } else {
-                            errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                            errorCommand.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
                     }
                 }
@@ -293,11 +297,11 @@ public class StartCommand implements Commands, Serializable {
                                     startCommandResult.put(mapResult.getKey(), true);
                                 } else {
                                     stendDLLCommands.searchMark(mapResult.getKey());
-                                    errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                                    errorCommand.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                                 }
 
                             } else {
-                                errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                                errorCommand.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                             }
                         }
                     }
@@ -371,8 +375,8 @@ public class StartCommand implements Commands, Serializable {
         }
         Meter.StartResult commandResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(false);
-        commandResult.setLastResult("F" + timeFail + " П");
-        commandResult.setLastResulString(timeFail);
+        commandResult.setLastResultForTabView("F" + timeFail + " П");
+        commandResult.setLastResult(timeFail);
         commandResult.getResults()[countResult] = timeFail + " П";
     }
 
@@ -394,9 +398,18 @@ public class StartCommand implements Commands, Serializable {
         }
         Meter.StartResult commandResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(true);
-        commandResult.setLastResult("P" + timePass + " +");
-        commandResult.setLastResulString(timePass);
+        commandResult.setLastResultForTabView("P" + timePass + " +");
+        commandResult.setLastResult(timePass);
         commandResult.getResults()[countResult] = timePass + " Г";
+    }
+
+    //reset
+    private void setDefTestrResults(Meter meter, int channelFlag, int index) {
+        Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
+        startResult.setLastResultForTabView(null);
+        startResult.setPassTest(false);
+        meter.setAmountImn(0);
+        stendDLLCommands.searchMark(meter.getId());
     }
 
     public void setIndex(int index) {
@@ -475,6 +488,7 @@ public class StartCommand implements Commands, Serializable {
     public void setInterrupt(boolean interrupt) {
         this.interrupt = interrupt;
     }
+
     @Override
     public void setNextCommand(boolean nextCommand) {
         this.nextCommand = nextCommand;
@@ -500,13 +514,7 @@ public class StartCommand implements Commands, Serializable {
 
     }
 
-    //reset
-    private void setDefTestrResults(Meter meter, int channelFlag, int index) {
-        Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
-        startResult.setLastResult(null);
-        startResult.setPassTest(false);
-        meter.setAmountImn(0);
-        stendDLLCommands.searchMark(meter.getId());
+    public String getId() {
+        return id;
     }
-
 }

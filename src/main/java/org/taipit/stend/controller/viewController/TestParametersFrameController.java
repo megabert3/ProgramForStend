@@ -32,11 +32,9 @@ import org.taipit.stend.controller.OnePhaseStend;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.helper.ConsoleHelper;
-import org.taipit.stend.helper.exeptions.InfoExсeption;
 import org.taipit.stend.helper.frameManager.Frame;
 import org.taipit.stend.helper.frameManager.FrameManager;
 import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
-import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
 import org.taipit.stend.model.metodics.MetodicsForTest;
 
@@ -44,9 +42,9 @@ public class TestParametersFrameController implements Frame {
 
     private MetodicsForTest metodicsForTest = MetodicsForTest.getMetodicsForTestInstance();
 
-    private StendDLLCommands stendDLLCommands;
-
     private Metodic methodicForStend;
+
+    private StendDLLCommands stendDLLCommands;
 
     private Properties properties = ConsoleHelper.properties;
 
@@ -150,251 +148,216 @@ public class TestParametersFrameController implements Frame {
             float accuracyClassRP;
 
             txtFldUnom.setStyle("");
+            txtFldCurrent.setStyle("");
             txtFldFrg.setStyle("");
             txtFldAccuracyAP.setStyle("");
             txtFldAccuracyRP.setStyle("");
-            txtFldCurrent.setStyle("");
+
+            if (chosBxMetodics.getValue() == null) {
+                ConsoleHelper.infoException("Выберите методику");
+                return;
+            }
+
+            methodicForStend = metodicsForTest.getMetodic(chosBxMetodics.getValue());
 
             try {
-                try {
-                    if (chosBxMetodics.getValue() == null) throw new InfoExсeption();
-                }catch (InfoExсeption e) {
-                    e.printStackTrace();
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            ConsoleHelper.infoException("Выберите методику");
-                        }
-                    });
-                    return;
-                }
-
-                //Номинальное напряжение
-                try {
-                    Un = Float.parseFloat(txtFldUnom.getText());
-                }catch (NumberFormatException e) {
-                    e.printStackTrace();
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            ConsoleHelper.infoException("Недопустимое значение параметра");
-                            txtFldUnom.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
-                        }
-                    });
-                    return;
-                }
-
-                try {
-                    Fn = Float.parseFloat(txtFldFrg.getText());
-                }catch (NumberFormatException e) {
-                    e.printStackTrace();
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            ConsoleHelper.infoException("Недопустимое значение параметра");
-                            txtFldFrg.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
-                        }
-                    });
-                    return;
-                }
-
-                try {
-                    accuracyClassAP = Float.parseFloat(txtFldAccuracyAP.getText());
-                }catch (NumberFormatException e) {
-                    e.printStackTrace();
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            ConsoleHelper.infoException("Недопустимое значение параметра");
-                            txtFldAccuracyAP.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
-                        }
-                    });
-                    return;
-                }
-
-                try {
-                    accuracyClassRP = Float.parseFloat(txtFldAccuracyRP.getText());
-                }catch (NumberFormatException e) {
-                    e.printStackTrace();
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            ConsoleHelper.infoException("Недопустимое значение параметра");
-                            txtFldAccuracyRP.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
-                        }
-                    });
-                    return;
-                }
-
-                StringBuilder stringBuilder = new StringBuilder();
-                Pattern pat = Pattern.compile("[0-9]+");
-                Matcher mat = pat.matcher(txtFldCurrent.getText());
-
-                while (mat.find()) {
-                    stringBuilder.append(mat.group()).append(",");
-                }
-
-                String[] current = new String(stringBuilder).split(",");
-
-                try {
-                    Ib = Float.parseFloat(current[0]);
-                    Imax = Float.parseFloat(current[1]);
-                }catch (NumberFormatException e) {
-                    e.printStackTrace();
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            ConsoleHelper.infoException("Недопустимое значение параметра");
-                            txtFldCurrent.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
-                        }
-                    });
-                    return;
-                }
-
-                //Тип измерительного элемета
-                boolean typeOfMeasuringElementShunt = false;
-
-                if (chosBxtypeOfMeasuringElement.getValue().equals("Шунт")) {
-                    typeOfMeasuringElementShunt = true;
-                }
-
-                //Тип сети
-                boolean typeCircuitThreePhase = false;
-                if (chosBxPowerType.getValue().equals("3P4W")) {
-                    typeCircuitThreePhase = true;
-                }
-
-                //Оставляем только выделенные счётчики
-                for (int i = 0; i < metersList.size(); i++) {
-                    if (!metersList.get(i).isActiveSeat()) {
-                        metersList.remove(i);
-                        i--;
-                    }
-                }
-
-                if (metersList.isEmpty()) throw new InfoExсeption();
-
-                //Передаю установленные параметры всем счётчикам
-                for (Meter meter : metersList) {
-                    meter.setIb(Ib);
-                    meter.setImax(Imax);
-                    meter.setFn(Fn);
-                    meter.setUn(Un);
-                    meter.setTypeCircuitThreePhase(typeCircuitThreePhase);
-                    meter.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
-                    meter.setAccuracyClassAP(accuracyClassAP);
-                    meter.setAccuracyClassRP(accuracyClassRP);
-                    meter.setInomImax(txtFldCurrent.getText());
-                    meter.setTypeMeter(chosBxTypeMeter.getValue());
-                }
-
-                if (stendDLLCommands instanceof ThreePhaseStend) {
-                    properties.setProperty("threePhaseStand.lastUnom", txtFldUnom.getText());
-                    properties.setProperty("threePhaseStand.lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
-                    properties.setProperty("threePhaseStand.lastAccuracyClassMeterRP", txtFldAccuracyRP.getText());
-                    properties.setProperty("threePhaseStand.lastInomAndImax", txtFldCurrent.getText());
-                    properties.setProperty("threePhaseStand.lastTypeOfMeasuringElement", chosBxtypeOfMeasuringElement.getValue());
-                    properties.setProperty("threePhaseStand.lastTypeCircuit", chosBxPowerType.getValue());
-                    properties.setProperty("threePhaseStand.lastFnom", txtFldFrg.getText());
-                    properties.setProperty("threePhaseStand.lastMeterManufacturer", metersList.get(0).getFactoryManufacturer());
-                    properties.setProperty("threePhaseStand.lastMeterConstantAP", metersList.get(0).getConstantMeterAP());
-                    properties.setProperty("threePhaseStand.lastMeterConstantRP", metersList.get(0).getConstantMeterRP());
-                    properties.setProperty("threePhaseStand.lastMethodicName", chosBxMetodics.getValue());
-                    properties.setProperty("threePhaseStand.lastMeterTypeOnePhaseMultiTarif", chosBxTypeMeter.getValue());
-
-                    ConsoleHelper.saveProperties();
-                } else {
-                    properties.setProperty("onePhaseStand.lastUnom", txtFldUnom.getText());
-                    properties.setProperty("onePhaseStand.lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
-                    properties.setProperty("onePhaseStand.lastAccuracyClassMeterRP", txtFldAccuracyRP.getText());
-                    properties.setProperty("onePhaseStand.lastInomAndImax", txtFldCurrent.getText());
-                    properties.setProperty("onePhaseStand.lastTypeOfMeasuringElement", chosBxtypeOfMeasuringElement.getValue());
-                    properties.setProperty("onePhaseStand.lastTypeCircuit", chosBxPowerType.getValue());
-                    properties.setProperty("onePhaseStand.lastFnom", txtFldFrg.getText());
-                    properties.setProperty("onePhaseStand.lastMeterManufacturer", metersList.get(0).getFactoryManufacturer());
-                    properties.setProperty("onePhaseStand.lastMeterConstantAP", metersList.get(0).getConstantMeterAP());
-                    properties.setProperty("onePhaseStand.lastMeterConstantRP", metersList.get(0).getConstantMeterRP());
-                    properties.setProperty("onePhaseStand.lastMethodicName", chosBxMetodics.getValue());
-                    properties.setProperty("onePhaseStand.lastMeterTypeOnePhaseMultiTarif", chosBxTypeMeter.getValue());
-
-                    ConsoleHelper.saveProperties();
-                }
-
-                //Загрузка окна испытания
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/viewFXML/testErrorTableFrame.fxml"));
-
-                fxmlLoader.load();
-
-                Parent root = fxmlLoader.getRoot();
-                Stage stage = new Stage();
-                stage.setTitle("Поверка счётчиков");
-                stage.setScene(new Scene(root));
-
-                TestErrorTableFrameController testErrorTableFrameController = fxmlLoader.getController();
-
-                //Установка и передача параметров
-                testErrorTableFrameController.setStendDLLCommands(stendDLLCommands);
-                testErrorTableFrameController.setMethodicForStend(methodicForStend);
-                testErrorTableFrameController.setUn(Un);
-                testErrorTableFrameController.setAccuracyClassAP(accuracyClassAP);
-                testErrorTableFrameController.setAccuracyClassRP(accuracyClassRP);
-                testErrorTableFrameController.setFn(Fn);
-                testErrorTableFrameController.setIb(Ib);
-                testErrorTableFrameController.setImax(Imax);
-                testErrorTableFrameController.setTypeCircuit(typeCircuitThreePhase);
-                testErrorTableFrameController.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
-
-                //Установка информации в окне теста
-                testErrorTableFrameController.getTxtLabUn().setText("Uн = " + Un + " В");
-                testErrorTableFrameController.getTxtLabInom().setText("Iн = "+ Ib +" А");
-                testErrorTableFrameController.getTxtLabImax().setText("Iмакc = " + Imax + " А");
-                testErrorTableFrameController.getTxtLabFn().setText("Fн = " + Fn + " Гц");
-                testErrorTableFrameController.getTxtLabTypeCircuit().setText("Тип сети: " + chosBxPowerType.getValue());
-                testErrorTableFrameController.getTxtLabAccuracyСlass().setText("Класс точности: " + txtFldAccuracyAP.getText() + "/" + txtFldAccuracyRP.getText()  + " Акт/Реак");
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-                testErrorTableFrameController.getTxtLabDate().setText("Дата: " + simpleDateFormat.format(new Date()));
-
-                testErrorTableFrameController.setListMetersForTest(metersList);
-
-                testErrorTableFrameController.myInitTestErrorTableFrame();
-
-                stage.show();
-
-                testErrorTableFrameController.initScrolBars();
-
-                Stage stage1 = (Stage) btnStartTest.getScene().getWindow();
-                stage1.close();
-                FrameManager.frameManagerInstance().testParametersFrameController = null;
-
-            }catch (NumberFormatException e) {
-                System.out.println("Произошла ошибка при переносе значений");
+                Un = Float.parseFloat(txtFldUnom.getText());
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
-            }catch (IOException e) {
-                System.out.println("Произошла ошибка при загрузке окна");
-                e.getStackTrace();
-            }catch (InfoExсeption e) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/viewFXML/exceptionFrame.fxml/"));
-                try {
-                    fxmlLoader.load();
-                } catch (IOException er) {
-                    e.printStackTrace();
-                }
-
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        ConsoleHelper.infoException("Должен быть выбран\n хотябы один счётчик");
-                    }
-                });
+                ConsoleHelper.infoException("Недопустимое значение параметра");
+                txtFldUnom.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                return;
             }
+
+            try {
+                Fn = Float.parseFloat(txtFldFrg.getText());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                ConsoleHelper.infoException("Недопустимое значение параметра");
+                txtFldFrg.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                return;
+            }
+
+            try {
+                accuracyClassAP = Float.parseFloat(txtFldAccuracyAP.getText());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                ConsoleHelper.infoException("Недопустимое значение параметра");
+                txtFldAccuracyAP.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                return;
+            }
+
+            try {
+                accuracyClassRP = Float.parseFloat(txtFldAccuracyRP.getText());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                ConsoleHelper.infoException("Недопустимое значение параметра");
+                txtFldAccuracyRP.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                return;
+            }
+
+            StringBuilder stringBuilder = new StringBuilder();
+            Pattern pat = Pattern.compile("[0-9]+");
+            Matcher mat = pat.matcher(txtFldCurrent.getText());
+
+            while (mat.find()) {
+                stringBuilder.append(mat.group()).append(",");
+            }
+
+            String[] current = new String(stringBuilder).split(",");
+
+            try {
+                Ib = Float.parseFloat(current[0]);
+                Imax = Float.parseFloat(current[1]);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                ConsoleHelper.infoException("Недопустимое значение параметра");
+                txtFldCurrent.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                return;
+            }
+
+            try {
+                Integer.parseInt(metersList.get(0).getConstantMeterAP());
+            } catch (NumberFormatException e) {
+                ConsoleHelper.infoException("Недопустимое значение\nПостоянной счётчика А.Э.");
+                return;
+            }
+
+            try {
+                Integer.parseInt(metersList.get(0).getConstantMeterRP());
+            } catch (NumberFormatException e) {
+                ConsoleHelper.infoException("Недопустимое значение\nПостоянной счётчика Р.Э");
+                return;
+            }
+
+            //Тип измерительного элемета
+            boolean typeOfMeasuringElementShunt = false;
+
+            if (chosBxtypeOfMeasuringElement.getValue().equals("Шунт")) {
+                typeOfMeasuringElementShunt = true;
+            }
+
+            //Тип сети
+            boolean typeCircuitThreePhase = false;
+            if (chosBxPowerType.getValue().equals("3P4W")) {
+                typeCircuitThreePhase = true;
+            }
+
+            //Оставляем только выделенные счётчики
+            for (int i = 0; i < metersList.size(); i++) {
+                if (!metersList.get(i).isActiveSeat()) {
+                    metersList.remove(i);
+                    i--;
+                }
+            }
+
+            if (metersList.isEmpty()) {
+                ConsoleHelper.infoException("Должен быть выбран хотя бы один счётчик");
+                return;
+            }
+
+            //Передаю установленные параметры всем счётчикам
+            for (Meter meter : metersList) {
+                meter.setIb(Ib);
+                meter.setImax(Imax);
+                meter.setFn(Fn);
+                meter.setUn(Un);
+                meter.setTypeCircuitThreePhase(typeCircuitThreePhase);
+                meter.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
+                meter.setAccuracyClassAP(accuracyClassAP);
+                meter.setAccuracyClassRP(accuracyClassRP);
+                meter.setInomImax(txtFldCurrent.getText());
+                meter.setTypeMeter(chosBxTypeMeter.getValue());
+            }
+
+            if (stendDLLCommands instanceof ThreePhaseStend) {
+                properties.setProperty("threePhaseStand.lastUnom", txtFldUnom.getText());
+                properties.setProperty("threePhaseStand.lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
+                properties.setProperty("threePhaseStand.lastAccuracyClassMeterRP", txtFldAccuracyRP.getText());
+                properties.setProperty("threePhaseStand.lastInomAndImax", txtFldCurrent.getText());
+                properties.setProperty("threePhaseStand.lastTypeOfMeasuringElement", chosBxtypeOfMeasuringElement.getValue());
+                properties.setProperty("threePhaseStand.lastTypeCircuit", chosBxPowerType.getValue());
+                properties.setProperty("threePhaseStand.lastFnom", txtFldFrg.getText());
+                properties.setProperty("threePhaseStand.lastMeterManufacturer", metersList.get(0).getFactoryManufacturer());
+                properties.setProperty("threePhaseStand.lastMeterConstantAP", metersList.get(0).getConstantMeterAP());
+                properties.setProperty("threePhaseStand.lastMeterConstantRP", metersList.get(0).getConstantMeterRP());
+                properties.setProperty("threePhaseStand.lastMethodicName", chosBxMetodics.getValue());
+                properties.setProperty("threePhaseStand.lastMeterTypeOnePhaseMultiTarif", chosBxTypeMeter.getValue());
+
+            } else {
+                properties.setProperty("onePhaseStand.lastUnom", txtFldUnom.getText());
+                properties.setProperty("onePhaseStand.lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
+                properties.setProperty("onePhaseStand.lastAccuracyClassMeterRP", txtFldAccuracyRP.getText());
+                properties.setProperty("onePhaseStand.lastInomAndImax", txtFldCurrent.getText());
+                properties.setProperty("onePhaseStand.lastTypeOfMeasuringElement", chosBxtypeOfMeasuringElement.getValue());
+                properties.setProperty("onePhaseStand.lastTypeCircuit", chosBxPowerType.getValue());
+                properties.setProperty("onePhaseStand.lastFnom", txtFldFrg.getText());
+                properties.setProperty("onePhaseStand.lastMeterManufacturer", metersList.get(0).getFactoryManufacturer());
+                properties.setProperty("onePhaseStand.lastMeterConstantAP", metersList.get(0).getConstantMeterAP());
+                properties.setProperty("onePhaseStand.lastMeterConstantRP", metersList.get(0).getConstantMeterRP());
+                properties.setProperty("onePhaseStand.lastMetodicName", chosBxMetodics.getValue());
+                properties.setProperty("onePhaseStand.lastMeterTypeOnePhaseMultiTarif", chosBxTypeMeter.getValue());
+
+                if (twoCircut) {
+                    properties.setProperty("onePhaseStand.lastTwoCircut", "T");
+                }else {
+                    properties.setProperty("onePhaseStand.lastTwoCircut", "F");
+                }
+            }
+
+            ConsoleHelper.saveProperties();
+
+            //Загрузка окна испытания
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/viewFXML/testErrorTableFrame.fxml"));
+
+            try {
+                fxmlLoader.load();
+            } catch (IOException e) {
+                ConsoleHelper.infoException("Не найден файл загрузки окна\nПопробуйте ещё раз или проверьте целостность\n файлов программы");
+            }
+
+            Parent root = fxmlLoader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Поверка счётчиков");
+            stage.setScene(new Scene(root));
+
+            TestErrorTableFrameController testErrorTableFrameController = fxmlLoader.getController();
+
+            //Установка и передача параметров
+            testErrorTableFrameController.setStendDLLCommands(stendDLLCommands);
+            testErrorTableFrameController.setMethodicForStend(methodicForStend);
+            testErrorTableFrameController.setUn(Un);
+            testErrorTableFrameController.setAccuracyClassAP(accuracyClassAP);
+            testErrorTableFrameController.setAccuracyClassRP(accuracyClassRP);
+            testErrorTableFrameController.setFn(Fn);
+            testErrorTableFrameController.setIb(Ib);
+            testErrorTableFrameController.setImax(Imax);
+            testErrorTableFrameController.setTypeCircuit(typeCircuitThreePhase);
+            testErrorTableFrameController.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
+
+            //Установка информации в окне теста
+            testErrorTableFrameController.getTxtLabUn().setText("Uн = " + Un + " В");
+            testErrorTableFrameController.getTxtLabInom().setText("Iн = " + Ib + " А");
+            testErrorTableFrameController.getTxtLabImax().setText("Iмакc = " + Imax + " А");
+            testErrorTableFrameController.getTxtLabFn().setText("Fн = " + Fn + " Гц");
+            testErrorTableFrameController.getTxtLabTypeCircuit().setText("Тип сети: " + chosBxPowerType.getValue());
+            testErrorTableFrameController.getTxtLabAccuracyСlass().setText("Класс точности: " + txtFldAccuracyAP.getText() + "/" + txtFldAccuracyRP.getText() + " Акт/Реак");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            testErrorTableFrameController.getTxtLabDate().setText("Дата: " + simpleDateFormat.format(new Date()));
+
+            testErrorTableFrameController.setListMetersForTest(metersList);
+
+            testErrorTableFrameController.myInitTestErrorTableFrame();
+
+            stage.show();
+
+            testErrorTableFrameController.initScrolBars();
+
+            Stage stage1 = (Stage) btnStartTest.getScene().getWindow();
+            stage1.close();
+            FrameManager.frameManagerInstance().testParametersFrameController = null;
+
         }
 
         if (event.getSource() == btnNumbersMe) {
@@ -427,18 +390,209 @@ public class TestParametersFrameController implements Frame {
     void initialize() {
         if (properties.getProperty("stendType").equals("ThreePhaseStend")) {
             stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
+
+            initTableView();
+            initComboBoxesAndAddListerners();
+
             twoCircutChcBox.setVisible(false);
+            initForThreePhaseStend();
+
+        } else {
+            stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
+            initForOnePhaseStend();
+
+            initTableView();
+            initComboBoxesAndAddListerners();
+
             twoCircutChcBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                     twoCircut = newValue;
                 }
             });
-        } else {
-            stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
+        }
+    }
+
+    private void initForOnePhaseStend() {
+
+        for (Metodic onePhaseMethodic : metodicsForTest.getMethodicForStends()) {
+            if (onePhaseMethodic instanceof MethodicForOnePhaseStend) {
+                chosBxMetodics.getItems().add(onePhaseMethodic.getMetodicName());
+            }
         }
 
-        initComboBoxesAndAddListerners();
+        String lastSelectedMetodic = properties.getProperty("onePhaseStand.lastMetodicName");
+
+        Metodic metodic = metodicsForTest.getMetodic(lastSelectedMetodic);
+
+        if (metodic != null) {
+            chosBxMetodics.setValue(lastSelectedMetodic);
+
+            if (metodic.isBindsParameters()) {
+                setMetodicParameters(metodic);
+            } else {
+                setDefautParametersForOnePhaseStand();
+            }
+        } else {
+            chosBxMetodics.setValue("");
+            setDefautParametersForOnePhaseStand();
+        }
+    }
+
+    private void initForThreePhaseStend() {
+
+        for (Metodic metodic : metodicsForTest.getMethodicForStends()) {
+            chosBxMetodics.getItems().add(metodic.getMetodicName());
+        }
+
+        String lastSelectedMetodic = properties.getProperty("threePhaseStand.lastMetodicName");
+
+        Metodic metodic = metodicsForTest.getMetodic(lastSelectedMetodic);
+
+        if (metodic != null) {
+            chosBxMetodics.setValue(lastSelectedMetodic);
+
+            if (metodic.isBindsParameters()) {
+                setMetodicParameters(metodic);
+            } else {
+                setDefautParametersForThreePhaseStand();
+            }
+        } else {
+            chosBxMetodics.setValue("");
+            setDefautParametersForThreePhaseStand();
+        }
+    }
+
+    private void setDefautParametersForThreePhaseStand() {
+        txtFldUnom.setText(properties.getProperty("threePhaseStand.lastUnom"));
+        txtFldCurrent.setText(properties.getProperty("threePhaseStand.lastInomAndImax"));
+        txtFldFrg.setText(properties.getProperty("threePhaseStand.lastFnom"));
+        txtFldAccuracyAP.setText(properties.getProperty("threePhaseStand.lastAccuracyClassMeterAP"));
+        txtFldAccuracyRP.setText(properties.getProperty("threePhaseStand.lastAccuracyClassMeterRP"));
+        chosBxTypeMeter.setValue(properties.getProperty("threePhaseStand.lastMeterTypeOnePhaseMultiTarif"));
+        chosBxtypeOfMeasuringElement.setValue(properties.getProperty("threePhaseStand.lastTypeOfMeasuringElement"));
+        chosBxPowerType.setValue(properties.getProperty("threePhaseStand.lastTypeCircuit"));
+
+        for (Meter meter : metersList) {
+            meter.setConstantMeterAP(properties.getProperty("threePhaseStand.lastMeterConstantAP"));
+            meter.setConstantMeterRP(properties.getProperty("threePhaseStand.lastMeterConstantRP"));
+            meter.setModelMeter(properties.getProperty("threePhaseStand.lastMeterModel"));
+            meter.setFactoryManufacturer(properties.getProperty("threePhaseStand.lastMeterManufacturer"));
+        }
+
+        tabVParamMeters.refresh();
+
+        tabColConstAPMeter.setEditable(true);
+        tabColConstRPMeter.setEditable(true);
+        tabColModelMeter.setEditable(true);
+        tabColManufacturer.setEditable(true);
+
+        txtFldUnom.setDisable(false);
+        chosBxUnom.setDisable(false);
+        txtFldCurrent.setDisable(false);
+        chosBxCurrent.setDisable(false);
+        txtFldFrg.setDisable(false);
+        chosBxFrg.setDisable(false);
+        txtFldAccuracyAP.setDisable(false);
+        chosBxAccuracyAP.setDisable(false);
+        txtFldAccuracyRP.setDisable(false);
+        chosBxAccuracyRP.setDisable(false);
+        chosBxTypeMeter.setDisable(false);
+        chosBxtypeOfMeasuringElement.setDisable(false);
+        chosBxPowerType.setDisable(false);
+        twoCircutChcBox.setDisable(false);
+    }
+
+    private void setDefautParametersForOnePhaseStand() {
+        txtFldUnom.setText(properties.getProperty("onePhaseStand.lastUnom"));
+        txtFldCurrent.setText(properties.getProperty("onePhaseStand.lastInomAndImax"));
+        txtFldFrg.setText(properties.getProperty("onePhaseStand.lastFnom"));
+        txtFldAccuracyAP.setText(properties.getProperty("onePhaseStand.lastAccuracyClassMeterAP"));
+        txtFldAccuracyRP.setText(properties.getProperty("onePhaseStand.lastAccuracyClassMeterRP"));
+        chosBxTypeMeter.setValue(properties.getProperty("onePhaseStand.lastMeterTypeOnePhaseMultiTarif"));
+        chosBxtypeOfMeasuringElement.setValue(properties.getProperty("onePhaseStand.lastTypeOfMeasuringElement"));
+        chosBxPowerType.setValue(properties.getProperty("onePhaseStand.lastTypeCircuit"));
+
+        if (properties.getProperty("onePhaseStand.lastTwoCircut").equals("T")) {
+            twoCircutChcBox.setSelected(true);
+        } else {
+            twoCircutChcBox.setSelected(false);
+        }
+
+        for (Meter meter : metersList) {
+            meter.setConstantMeterAP(properties.getProperty("onePhaseStand.lastMeterConstantAP"));
+            meter.setConstantMeterRP(properties.getProperty("onePhaseStand.lastMeterConstantRP"));
+            meter.setModelMeter(properties.getProperty("onePhaseStand.lastMeterModel"));
+            meter.setFactoryManufacturer(properties.getProperty("onePhaseStand.lastMeterManufacturer"));
+        }
+
+        tabVParamMeters.refresh();
+
+        tabColConstAPMeter.setEditable(true);
+        tabColConstRPMeter.setEditable(true);
+        tabColModelMeter.setEditable(true);
+        tabColManufacturer.setEditable(true);
+
+        twoCircutChcBox.setDisable(false);
+
+        txtFldUnom.setDisable(false);
+        chosBxUnom.setDisable(false);
+        txtFldCurrent.setDisable(false);
+        chosBxCurrent.setDisable(false);
+        txtFldFrg.setDisable(false);
+        chosBxFrg.setDisable(false);
+        txtFldAccuracyAP.setDisable(false);
+        chosBxAccuracyAP.setDisable(false);
+        txtFldAccuracyRP.setDisable(false);
+        chosBxAccuracyRP.setDisable(false);
+        chosBxTypeMeter.setDisable(false);
+        chosBxtypeOfMeasuringElement.setDisable(false);
+        chosBxPowerType.setDisable(false);
+    }
+
+    private void setMetodicParameters(Metodic metodic) {
+        txtFldUnom.setText(metodic.getUnom());
+        txtFldCurrent.setText(metodic.getImaxAndInom());
+        txtFldFrg.setText(metodic.getFnom());
+        txtFldAccuracyAP.setText(metodic.getAccuracyClassMeterAP());
+        txtFldAccuracyRP.setText(metodic.getAccuracyClassMeterRP());
+        chosBxTypeMeter.setValue(metodic.getTypeMeter());
+        chosBxtypeOfMeasuringElement.setValue(metodic.getTypeOfMeasuringElementShunt());
+
+        if (stendDLLCommands instanceof OnePhaseStend) {
+            if (metodic instanceof MethodicForOnePhaseStend) {
+                twoCircutChcBox.setSelected(((MethodicForOnePhaseStend) metodic).isTwoCircut());
+            }
+        }
+
+        for (Meter meter : metersList) {
+            meter.setConstantMeterAP(metodic.getConstantAP());
+            meter.setConstantMeterRP(metodic.getConstantRP());
+            meter.setModelMeter(metodic.getMeterModel());
+            meter.setFactoryManufacturer(metodic.getFactoryManufactuter());
+        }
+
+        tabVParamMeters.refresh();
+
+        tabColConstAPMeter.setEditable(false);
+        tabColConstRPMeter.setEditable(false);
+        tabColModelMeter.setEditable(false);
+        tabColManufacturer.setEditable(false);
+
+        txtFldUnom.setDisable(true);
+        chosBxUnom.setDisable(true);
+        txtFldCurrent.setDisable(true);
+        chosBxCurrent.setDisable(true);
+        txtFldFrg.setDisable(true);
+        chosBxFrg.setDisable(true);
+        txtFldAccuracyAP.setDisable(true);
+        chosBxAccuracyAP.setDisable(true);
+        txtFldAccuracyRP.setDisable(true);
+        chosBxAccuracyRP.setDisable(true);
+        chosBxTypeMeter.setDisable(true);
+        chosBxtypeOfMeasuringElement.setDisable(true);
+        chosBxPowerType.setDisable(true);
+        twoCircutChcBox.setDisable(true);
     }
 
     //Инициирует комбо боксы и добавляет им слушателей
@@ -452,60 +606,30 @@ public class TestParametersFrameController implements Frame {
         String[] typeOfMeasuringElementComBox = properties.getProperty("typeOfMeasuringElement").split(", ");
         String[] typeMeter = properties.getProperty("meterTypeOnePhaseMultiTarif").split(", ");
 
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-            for (Metodic methodicForStend : metodicsForTest.getMethodicForStends()) {
-                chosBxMetodics.getItems().add(methodicForStend.getMetodicName());
-            }
-
-            //Задаём текстовым полям последнее сохранённое значение
-            txtFldUnom.setText(properties.getProperty("threePhaseStand.lastUnom"));
-            txtFldFrg.setText(properties.getProperty("threePhaseStand.lastFnom"));
-            txtFldCurrent.setText(properties.getProperty("threePhaseStand.lastInomAndImax"));
-            txtFldAccuracyAP.setText(properties.getProperty("threePhaseStand.lastAccuracyClassMeterAP"));
-            txtFldAccuracyRP.setText(properties.getProperty("threePhaseStand.lastAccuracyClassMeterRP"));
-            chosBxPowerType.setValue(properties.getProperty("threePhaseStand.lastTypeCircuit"));
-            chosBxtypeOfMeasuringElement.setValue(properties.getProperty("threePhaseStand.lastTypeOfMeasuringElement"));
-            chosBxTypeMeter.setValue(properties.getProperty("threePhaseStand.lastMeterTypeOnePhaseMultiTarif"));
-
-            chosBxPowerType.getItems().addAll(properties.getProperty("threePhaseStand.typeCircuit").split(", "));
-        } else {
-            for (Metodic methodicForStend : metodicsForTest.getMethodicForStends()) {
-                if (methodicForStend instanceof MethodicForOnePhaseStend) {
-                    chosBxMetodics.getItems().add(methodicForStend.getMetodicName());
-                }
-            }
-
-            chosBxPowerType.getItems().addAll(properties.getProperty("onePhaseStand.typeCircuit").split(", "));
-        }
-
         //Кладём элементы в КомбоБокс
         chosBxUnom.getItems().addAll(UnomComBox);
-        chosBxFrg.getItems().addAll(FnomComBox);
         chosBxCurrent.getItems().addAll(InomAndImaxComBox);
+        chosBxFrg.getItems().addAll(FnomComBox);
         chosBxAccuracyAP.getItems().addAll(accuracyClassMeterAPComBox);
         chosBxAccuracyRP.getItems().addAll(accuracyClassMeterRPComBox);
         chosBxtypeOfMeasuringElement.getItems().addAll(typeOfMeasuringElementComBox);
         chosBxTypeMeter.getItems().addAll(typeMeter);
 
-        //Задаём текстовым полям последнее сохранённое значение
-        txtFldUnom.setText(properties.getProperty("onePhaseStand.lastUnom"));
-        txtFldFrg.setText(properties.getProperty("onePhaseStand.lastFnom"));
-        txtFldCurrent.setText(properties.getProperty("onePhaseStand.lastInomAndImax"));
-        txtFldAccuracyAP.setText(properties.getProperty("onePhaseStand.lastAccuracyClassMeterAP"));
-        txtFldAccuracyRP.setText(properties.getProperty("onePhaseStand.lastAccuracyClassMeterRP"));
-        chosBxPowerType.setValue(properties.getProperty("onePhaseStand.lastTypeCircuit"));
-        chosBxtypeOfMeasuringElement.setValue(properties.getProperty("onePhaseStand.lastTypeOfMeasuringElement"));
-        chosBxTypeMeter.setValue(properties.getProperty("onePhaseStand.lastMeterTypeOnePhaseMultiTarif"));
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            chosBxPowerType.getItems().addAll(properties.getProperty("threePhaseStand.typeCircuit").split(", "));
+        } else {
+            chosBxPowerType.getItems().addAll(properties.getProperty("onePhaseStand.typeCircuit").split(", "));
+        }
 
         //Устанавливаем слушателей
         chosBxUnom.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-           txtFldUnom.setText(newValue);
-        });
-        chosBxFrg.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            txtFldFrg.setText(newValue);
+            txtFldUnom.setText(newValue);
         });
         chosBxCurrent.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             txtFldCurrent.setText(newValue);
+        });
+        chosBxFrg.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            txtFldFrg.setText(newValue);
         });
         chosBxAccuracyAP.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             txtFldAccuracyAP.setText(newValue);
@@ -514,109 +638,49 @@ public class TestParametersFrameController implements Frame {
             txtFldAccuracyRP.setText(newValue);
         });
 
-        chosBxMetodics.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                methodicForStend = MetodicsForTest.getMetodicsForTestInstance().getMetodic(chosBxMetodics.getValue());
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            chosBxMetodics.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    Metodic metodic = metodicsForTest.getMetodic(newValue);
 
+                    if (metodic != null) {
+                        if (metodic instanceof MethodicForOnePhaseStend) {
+                            chosBxPowerType.getItems().setAll(properties.getProperty("onePhaseStand.typeCircuit").split(", "));
+                        } else {
+                            chosBxPowerType.getItems().setAll(properties.getProperty("threePhaseStand.typeCircuit").split(", "));
+                        }
 
-                if (methodicForStend instanceof MethodicForThreePhaseStend) {
-                    chosBxPowerType.getItems().clear();
-                    chosBxPowerType.getItems().addAll(properties.getProperty("threePhaseStand.typeCircuit").split(", "));
-                    chosBxPowerType.setValue(chosBxPowerType.getItems().get(0));
-                } else {
-                    chosBxPowerType.getItems().clear();
-                    chosBxPowerType.getItems().addAll(properties.getProperty("onePhaseStand.typeCircuit").split(", "));
-                    chosBxPowerType.setValue(chosBxPowerType.getItems().get(0));
-                }
-
-                if (methodicForStend.isBindsParameters()) {
-                    txtFldUnom.setText(methodicForStend.getUnom());
-                    txtFldUnom.setDisable(true);
-                    chosBxUnom.setDisable(true);
-
-                    txtFldCurrent.setText(methodicForStend.getImaxAndInom());
-                    txtFldCurrent.setDisable(true);
-                    chosBxCurrent.setDisable(true);
-
-                    txtFldFrg.setText(methodicForStend.getFnom());
-                    txtFldFrg.setDisable(true);
-                    chosBxFrg.setDisable(true);
-
-                    txtFldAccuracyAP.setText(methodicForStend.getAccuracyClassMeterAP());
-                    txtFldAccuracyAP.setDisable(true);
-                    chosBxAccuracyAP.setDisable(true);
-
-                    txtFldAccuracyRP.setText(methodicForStend.getAccuracyClassMeterRP());
-                    txtFldAccuracyRP.setDisable(true);
-                    chosBxAccuracyRP.setDisable(true);
-
-                    chosBxTypeMeter.setValue(methodicForStend.getTypeMeter());
-                    chosBxTypeMeter.setDisable(true);
-
-                    chosBxtypeOfMeasuringElement.setValue(methodicForStend.getTypeOfMeasuringElementShunt());
-                    chosBxtypeOfMeasuringElement.setDisable(true);
-
-                    for (Meter meter : metersList) {
-                        meter.setConstantMeterAP(methodicForStend.getConstantAP());
-                        meter.setConstantMeterRP(methodicForStend.getConstantRP());
-                        meter.setModelMeter(meter.getModelMeter());
-                        meter.setFactoryManufacturer(methodicForStend.getFactoryManufactuter());
+                        if (metodic.isBindsParameters()) {
+                            setMetodicParameters(metodic);
+                        } else {
+                            setDefautParametersForThreePhaseStand();
+                        }
                     }
-
-                    tabVParamMeters.refresh();
-                    tabVParamMeters.setEditable(false);
-                } else {
-                    txtFldUnom.setText(properties.getProperty("lastUnom"));
-                    txtFldFrg.setText(properties.getProperty("lastFnom"));
-                    txtFldCurrent.setText(properties.getProperty("lastInomAndImax"));
-                    txtFldAccuracyAP.setText(properties.getProperty("lastAccuracyClassMeterAP"));
-                    txtFldAccuracyRP.setText(properties.getProperty("lastAccuracyClassMeterRP"));
-                    chosBxPowerType.setValue(properties.getProperty("lastTypeCircuit"));
-                    chosBxtypeOfMeasuringElement.setValue(properties.getProperty("lastTypeOfMeasuringElement"));
-                    chosBxTypeMeter.setValue(properties.getProperty("lastMeterTypeOnePhaseMultiTarif"));
-
-                    txtFldUnom.setDisable(false);
-                    chosBxUnom.setDisable(false);
-
-                    txtFldCurrent.setDisable(false);
-                    chosBxCurrent.setDisable(false);
-
-                    txtFldFrg.setDisable(false);
-                    chosBxFrg.setDisable(false);
-
-                    txtFldAccuracyAP.setDisable(false);
-                    chosBxAccuracyAP.setDisable(false);
-
-                    txtFldAccuracyRP.setDisable(false);
-                    chosBxAccuracyRP.setDisable(false);
-
-                    chosBxTypeMeter.setDisable(false);
-
-                    chosBxtypeOfMeasuringElement.setDisable(false);
-
-                    tabVParamMeters.setEditable(true);
                 }
-            }
-        });
+            });
+        } else {
+            chosBxMetodics.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    Metodic metodic = metodicsForTest.getMetodic(newValue);
 
-        Metodic methodicForStend1 = MetodicsForTest.getMetodicsForTestInstance().getMetodic(properties.getProperty("lastMethodicName"));
-
-        if (methodicForStend1 != null) {
-            chosBxMetodics.setValue(methodicForStend1.getMetodicName());
+                    if (metodic != null) {
+                        if (metodic.isBindsParameters()) {
+                            setMetodicParameters(metodic);
+                        } else {
+                            setDefautParametersForOnePhaseStand();
+                        }
+                    }
+                }
+            });
         }
-
-        initTableView();
     }
 
     private void initTableView() {
         for (int i = 1; i <= Integer.parseInt(properties.getProperty("stendAmountPlaces")); i++) {
             Meter me = new Meter();
             me.setId(i);
-            me.setConstantMeterAP(properties.getProperty("lastMeterConstantAP"));
-            me.setConstantMeterRP(properties.getProperty("lastMeterConstantRP"));
-            me.setModelMeter(properties.getProperty("lastMeterModel"));
-            me.setFactoryManufacturer(properties.getProperty("lastMeterManufacturer"));
             metersList.add(me);
         }
 
@@ -747,6 +811,8 @@ public class TestParametersFrameController implements Frame {
         });
         tabColManufacturer.setStyle("-fx-alignment: CENTER;");
 
+        tabVParamMeters.setEditable(true);
+
         meterObservableList = FXCollections.observableArrayList(metersList);
         tabVParamMeters.setItems(meterObservableList);
 
@@ -756,6 +822,13 @@ public class TestParametersFrameController implements Frame {
         tabColConstAPMeter.setSortable(false);
         tabColConstRPMeter.setSortable(false);
         tabColModelMeter.setSortable(false);
+        tabColManufacturer.setSortable(false);
+
+        tabColSerNoMeter.setEditable(true);
+        tabColConstAPMeter.setEditable(true);
+        tabColConstRPMeter.setEditable(true);
+        tabColModelMeter.setEditable(true);
+        tabColManufacturer.setEditable(true);
 
         tabVParamMeters.setPlaceholder(new Label("Укажите количество мест в настройках"));
     }

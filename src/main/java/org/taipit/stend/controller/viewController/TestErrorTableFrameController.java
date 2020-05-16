@@ -1304,21 +1304,25 @@ public class TestErrorTableFrameController {
         intiTimeCRPSTATests();
 
         for (Meter meter : listMetersForTest) {
+            /**
+             * Не имя команды, а айди команды
+             * нужно реализовать
+             */
 
-            for (Commands commandName : commandsAPPls) {
-                meter.createError(commandName, 0, commandName.getName(), this);
+            for (Commands command : commandsAPPls) {
+                meter.createError(command, 0, command.getId(), this);
             }
 
-            for (Commands commandName : commandsAPMns) {
-                meter.createError(commandName, 1, commandName.getName(), this);
+            for (Commands command : commandsAPMns) {
+                meter.createError(command, 1, command.getId(), this);
             }
 
-            for (Commands commandName : commandsRPPls) {
-                meter.createError(commandName, 2, commandName.getName(), this);
+            for (Commands command : commandsRPPls) {
+                meter.createError(command, 2, command.getId(), this);
             }
 
-            for (Commands commandName : commandsRPMns) {
-                meter.createError(commandName, 3, commandName.getName(), this);
+            for (Commands command : commandsRPMns) {
+                meter.createError(command, 3, command.getId(), this);
             }
         }
     }

@@ -2714,11 +2714,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление самохода с параметрами пользователя AP+
         if (event.getSource() == addTglBtnCRPAPPls) {
             if (addTglBtnCRPAPPls.isSelected()) {
-                creepCommand = new CreepCommand(false,false, 0, txtFieldTimeCRPAPPls.getText());
+                creepCommand = new CreepCommand(false,false, "Самоход AP+", "CRP;U;A;P",0, txtFieldTimeCRPAPPls.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
-                creepCommand.setName("Самоход AP+");
 
                 txtFieldCRPAmtImpAPPls.setDisable(true);
                 txtFieldTimeCRPAPPls.setDisable(true);
@@ -2741,18 +2740,19 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 if (addTglBtnCRPAPPlsGOST.isSelected()) {
                     CRPTogBtnAPPls.setSelected(true);
-                } else CRPTogBtnAPPls.setSelected(false);
+                } else {
+                    CRPTogBtnAPPls.setSelected(false);
+                }
             }
         }
 
         //Добаление самохода с параметрами по ГОСТу AP+
         if (event.getSource() == addTglBtnCRPAPPlsGOST) {
             if (addTglBtnCRPAPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(false, true, 0);
+                creepCommand = new CreepCommand(false, true, "Самоход AP+ ГОСТ","CRP;G;A;P", 0);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход AP+ ГОСТ");
 
                 CRPTogBtnAPPls.setSelected(true);
 
@@ -2776,11 +2776,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление самохода с параметрами пользователя AP-
         if (event.getSource() == addTglBtnCRPAPMns) {
             if (addTglBtnCRPAPMns.isSelected()) {
-                creepCommand = new CreepCommand(false, false, 1, txtFieldTimeCRPAPMns.getText());
+                creepCommand = new CreepCommand(false, false, "Самоход AP-", "CRP;U;A;N", 1, txtFieldTimeCRPAPMns.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPMns.getText()));
-                creepCommand.setName("Самоход AP-");
 
                 txtFieldCRPAmtImpAPMns.setDisable(true);
                 txtFieldTimeCRPAPMns.setDisable(true);
@@ -2791,7 +2790,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             } else {
                 for (Commands command : testListForCollumAPMns) {
                     if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход AP-")) {
+                        if (command.getName().equals("Самоход AP-")) {
                             testListForCollumAPMns.remove(command);
                             break;
                         }
@@ -2810,11 +2809,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление самохода с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnCRPAPMnsGOST) {
             if (addTglBtnCRPAPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(false, true, 1);
+                creepCommand = new CreepCommand(false, true, "Самоход AP- ГОСТ", "CRP;G;A;N",1);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход AP- ГОСТ");
 
                 CRPTogBtnAPMns.setSelected(true);
 
@@ -2822,7 +2820,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             } else {
                 for (Commands command : testListForCollumAPMns) {
                     if (command instanceof CreepCommand) {
-                        if (((CreepCommand) command).getName().equals("Самоход AP- ГОСТ")) {
+                        if (command.getName().equals("Самоход AP- ГОСТ")) {
                             testListForCollumAPMns.remove(command);
                             break;
                         }
@@ -2838,11 +2836,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление самохода с параметрами пользователя RP+
         if (event.getSource() == addTglBtnCRPRPPls) {
             if (addTglBtnCRPRPPls.isSelected()) {
-                creepCommand = new CreepCommand(false,false, 2, txtFieldTimeCRPRPPls.getText());
+                creepCommand = new CreepCommand(false,false, "Самоход RP+", "CRP;U;R;P",2, txtFieldTimeCRPRPPls.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPPls.getText()));
-                creepCommand.setName("Самоход RP+");
 
                 txtFieldCRPAmtImpRPPls.setDisable(true);
                 txtFieldTimeCRPRPPls.setDisable(true);
@@ -2872,11 +2869,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление самохода с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnCRPRPPlsGOST) {
             if (addTglBtnCRPRPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(false, true, 2);
+                creepCommand = new CreepCommand(false, true, "Самоход RP+ ГОСТ", "CRP;G;R;P", 2);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход RP+ ГОСТ");
 
                 CRPTogBtnRPPls.setSelected(true);
 
@@ -2900,11 +2896,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление самохода с параметрами пользователя RP-
         if (event.getSource() == addTglBtnCRPRPMns) {
             if (addTglBtnCRPRPMns.isSelected()) {
-                creepCommand = new CreepCommand(false,false, 3, txtFieldTimeCRPRPMns.getText());
+                creepCommand = new CreepCommand(false,false, "Самоход RP-", "CRP;U;R;N", 3, txtFieldTimeCRPRPMns.getText());
 
                 creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
                 creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPMns.getText()));
-                creepCommand.setName("Самоход RP-");
 
                 txtFieldCRPAmtImpRPMns.setDisable(true);
                 txtFieldTimeCRPRPMns.setDisable(true);
@@ -2934,11 +2929,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление самохода с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnCRPRPMnsGOST) {
             if (addTglBtnCRPRPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(false, true, 3);
+                creepCommand = new CreepCommand(false, true, "Самоход RP- ГОСТ", "CRP;G;R;N",3);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход RP- ГОСТ");
 
                 CRPTogBtnRPMns.setSelected(true);
 
@@ -2963,11 +2957,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         StartCommand startCommand;
         if (event.getSource() == addTglBtnSTAAPPls) {
             if (addTglBtnSTAAPPls.isSelected()) {
-                startCommand = new StartCommand(false, 0, 0, false, txtFieldTimeSRAAPPls.getText());
+                startCommand = new StartCommand(false, "Чувствительность AP+", "STA;U;A;P", 0, 0, false, txtFieldTimeSRAAPPls.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPPls.getText()));
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPPls.getText()));
-                startCommand.setName("Чувствительность AP+");
 
                 txtFieldSTAAmtImpAPPls.setDisable(true);
                 txtFieldTimeSRAAPPls.setDisable(true);
@@ -2997,9 +2990,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу AP+
         if (event.getSource() == addTglBtnSTAAPPlsGOST) {
             if (addTglBtnSTAAPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(false, 0, 0, true);
-
-                startCommand.setName("Чувствительность ГОСТ AP+");
+                startCommand = new StartCommand(false, "Чувствительность ГОСТ AP+", "STA;G;A;P", 0, 0, true);
 
                 STATogBtnAPPls.setSelected(true);
                 testListForCollumAPPls.add(startCommand);
@@ -3022,11 +3013,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами пользователя AP-
         if (event.getSource() == addTglBtnSTAAPMns) {
             if (addTglBtnSTAAPMns.isSelected()) {
-                startCommand = new StartCommand(false, 1, 1, false, txtFieldTimeSRAAPMns.getText());
+                startCommand = new StartCommand(false, "Чувствительность AP-", "STA;G;A;N", 1, 1, false, txtFieldTimeSRAAPMns.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPMns.getText()));
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPMns.getText()));
-                startCommand.setName("Чувствительность AP-");
 
                 txtFieldSTAAmtImpAPMns.setDisable(true);
                 txtFieldTimeSRAAPMns.setDisable(true);
@@ -3056,9 +3046,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnSTAAPMnsGOST) {
             if (addTglBtnSTAAPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(false, 1, 1, true);
-
-                startCommand.setName("Чувствительность ГОСТ AP-");
+                startCommand = new StartCommand(false, "Чувствительность ГОСТ AP-", "STA;G;A;N", 1, 1, true);
 
                 STATogBtnAPMns.setSelected(true);
                 testListForCollumAPMns.add(startCommand);
@@ -3081,11 +3069,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами пользователя RP+
         if (event.getSource() == addTglBtnSTARPPls) {
             if (addTglBtnSTARPPls.isSelected()) {
-                startCommand = new StartCommand(false, 0, 2, false, txtFieldTimeSRARPPls.getText());
+                startCommand = new StartCommand(false, "Чувствительность RP+", "STA;U;R;P", 0, 2, false, txtFieldTimeSRARPPls.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPPls.getText()));
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPPls.getText()));
-                startCommand.setName("Чувствительность RP+");
 
                 txtFieldSTAAmtImpRPPls.setDisable(true);
                 txtFieldTimeSRARPPls.setDisable(true);
@@ -3116,9 +3103,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnSTARPPlsGOST) {
             if (addTglBtnSTARPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(false, 0, 1, true);
-
-                startCommand.setName("Чувствительность ГОСТ RP+");
+                startCommand = new StartCommand(false, "Чувствительность ГОСТ RP+", "STA;G;R;A", 0, 1, true);
 
                 STATogBtnRPPls.setSelected(true);
                 testListForCollumRPPls.add(startCommand);
@@ -3141,11 +3126,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами пользователя RP-
         if (event.getSource() == addTglBtnSTARPMns) {
             if (addTglBtnSTARPMns.isSelected()) {
-                startCommand = new StartCommand(false, 1, 3, false, txtFieldTimeSRARPMns.getText());
+                startCommand = new StartCommand(false, "Чувствительность RP-","STA;U;R;N", 1, 3, false, txtFieldTimeSRARPMns.getText());
 
                 startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPMns.getText()));
                 startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPMns.getText()));
-                startCommand.setName("Чувствительность RP-");
 
                 txtFieldSTAAmtImpRPMns.setDisable(false);
                 txtFieldTimeSRARPMns.setDisable(false);
@@ -3175,9 +3159,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnSTARPMnsGOST) {
             if (addTglBtnSTARPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(false, 0, 3, true);
-
-                startCommand.setName("Чувствительность ГОСТ RP-");
+                startCommand = new StartCommand(false, "Чувствительность ГОСТ RP-", "STA;G;R;N",0, 3, true);
 
                 STATogBtnRPMns.setSelected(true);
                 testListForCollumRPMns.add(startCommand);
@@ -3256,9 +3238,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             } else {
                 for (Commands command : testListForCollumAPPls) {
-                    if (command.getName().equals("ТХЧ AP+")) {
-                        testListForCollumAPPls.remove(command);
-                        break;
+                    if (command instanceof RTCCommand) {
+                        if (command.getName().equals("ТХЧ AP+")) {
+                            testListForCollumAPPls.remove(command);
+                            break;
+                        }
                     }
                 }
 
@@ -3328,9 +3312,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             } else {
                 for (Commands command : testListForCollumAPMns) {
-                    if (command.getName().equals("ТХЧ AP-")) {
-                        testListForCollumAPMns.remove(command);
-                        break;
+                    if (command instanceof RTCCommand) {
+                        if (command.getName().equals("ТХЧ AP-")) {
+                            testListForCollumAPMns.remove(command);
+                            break;
+                        }
                     }
                 }
 
@@ -3401,9 +3387,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             } else {
                 for (Commands command : testListForCollumRPPls) {
-                    if (command.getName().equals("ТХЧ RP+")) {
-                        testListForCollumRPPls.remove(command);
-                        break;
+                    if (command instanceof ConstantCommand) {
+                        if (command.getName().equals("ТХЧ RP+")) {
+                            testListForCollumRPPls.remove(command);
+                            break;
+                        }
                     }
                 }
 
@@ -3474,9 +3462,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             } else {
                 for (Commands command : testListForCollumRPMns) {
-                    if (command.getName().equals("ТХЧ RP-")) {
-                        testListForCollumRPMns.remove(command);
-                        break;
+                    if (command instanceof ConstantCommand) {
+                        if (command.getName().equals("ТХЧ RP-")) {
+                            testListForCollumRPMns.remove(command);
+                            break;
+                        }
                     }
                 }
 
@@ -3563,7 +3553,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     testListForCollumAPPls.add(new ConstantCommand(false, true, time,
-                            "const;T;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+                            "CNT;T;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
                 } else {
                     double testEnergy;
@@ -3584,7 +3574,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     testListForCollumAPPls.add(new ConstantCommand(false, false, testEnergy,
-                            "const;E;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+                            "CNT;E;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
                 }
 
@@ -3600,9 +3590,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             } else {
                 for (Commands commands : testListForCollumAPPls) {
-                    if (commands.getName().equals("Сонстанта AP+")) {
-                        testListForCollumAPPls.remove(commands);
-                        break;
+                    if (commands instanceof ConstantCommand) {
+                        if (commands.getName().equals("Сонстанта AP+")) {
+                            testListForCollumAPPls.remove(commands);
+                            break;
+                        }
                     }
                 }
 
@@ -3691,7 +3683,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     testListForCollumAPMns.add(new ConstantCommand(false, true, time,
-                            "const;T;A;N", "Сонстанта AP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+                            "CNT;T;A;N", "Сонстанта AP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
 
                 } else {
@@ -3713,7 +3705,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     testListForCollumAPMns.add(new ConstantCommand(false, false, testEnergy,
-                            "const;E;A;N", "Сонстанта AP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+                            "CNT;E;A;N", "Сонстанта AP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
                 }
 
@@ -3729,9 +3721,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             } else {
                 for (Commands commands : testListForCollumAPMns) {
-                    if (commands.getName().equals("Сонстанта AP-")) {
-                        testListForCollumAPMns.remove(commands);
-                        break;
+                    if (commands instanceof ConstantCommand) {
+                        if (commands.getName().equals("Сонстанта AP-")) {
+                            testListForCollumAPMns.remove(commands);
+                            break;
+                        }
                     }
                 }
 
@@ -3842,7 +3836,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     testListForCollumRPPls.add(new ConstantCommand(false, false, testEnergy,
-                            "const;E;R;P", "Сонстанта RP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+                            "CNT;E;R;P", "Сонстанта RP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
                 }
 
@@ -3858,9 +3852,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             } else {
                 for (Commands commands : testListForCollumRPPls) {
-                    if (commands.getName().equals("Сонстанта RP+")) {
-                        testListForCollumRPPls.remove(commands);
-                        break;
+                    if (commands instanceof ConstantCommand) {
+                        if (commands.getName().equals("Сонстанта RP+")) {
+                            testListForCollumRPPls.remove(commands);
+                            break;
+                        }
                     }
                 }
 
@@ -3949,7 +3945,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     testListForCollumRPMns.add(new ConstantCommand(false, true, time,
-                            "const;T;R;N", "Сонстанта RP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+                            "CNT;T;R;N", "Сонстанта RP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
 
                 } else {
@@ -3971,7 +3967,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     testListForCollumRPMns.add(new ConstantCommand(false, false, testEnergy,
-                            "const;E;R;N", "Сонстанта RP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
+                            "CNT;E;R;N", "Сонстанта RP-", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
                 }
 
@@ -3987,9 +3983,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             } else {
                 for (Commands commands : testListForCollumRPMns) {
-                    if (commands.getName().equals("Сонстанта RP-")) {
-                        testListForCollumRPMns.remove(commands);
-                        break;
+                    if (commands instanceof ConstantCommand) {
+                        if (commands.getName().equals("Сонстанта RP-")) {
+                            testListForCollumRPMns.remove(commands);
+                            break;
+                        }
                     }
                 }
 

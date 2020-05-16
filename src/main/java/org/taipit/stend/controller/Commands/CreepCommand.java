@@ -43,6 +43,8 @@ public class CreepCommand implements Commands, Serializable {
     //Имя точки для отображения в таблице
     private String name;
 
+    private String id;
+
     //Время расчитывается по госту?
     private boolean gostTest;
 
@@ -58,8 +60,10 @@ public class CreepCommand implements Commands, Serializable {
 
     private HashMap<Integer, Boolean> creepCommandResult;
 
-    public CreepCommand(boolean threePhaseCommand, boolean gostTest, int channelFlag, String userTimeTest) {
+    public CreepCommand(boolean threePhaseCommand, boolean gostTest, String name, String id, int channelFlag, String userTimeTest) {
         this.threePhaseCommand = threePhaseCommand;
+        this.name = name;
+        this.id = id;
         this.gostTest = gostTest;
         this.channelFlag = channelFlag;
         this.userTimeTest = userTimeTest;
@@ -80,9 +84,11 @@ public class CreepCommand implements Commands, Serializable {
         }
     }
 
-    public CreepCommand(boolean threePhaseCommand, boolean gostTest, int channelFlag) {
+    public CreepCommand(boolean threePhaseCommand, boolean gostTest, String name, String id,  int channelFlag) {
         this.threePhaseCommand = threePhaseCommand;
         this.gostTest = gostTest;
+        this.name = name;
+        this.id = id;
         this.channelFlag = channelFlag;
     }
 
@@ -167,11 +173,11 @@ public class CreepCommand implements Commands, Serializable {
                                 creepCommandResult.put(mapResult.getKey(), false);
                             } else {
                                 stendDLLCommands.searchMark(mapResult.getKey());
-                                errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                                errorCommand.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                             }
 
                         } else {
-                            errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                            errorCommand.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
                     }
                 }
@@ -285,11 +291,11 @@ public class CreepCommand implements Commands, Serializable {
                                     creepCommandResult.put(mapResult.getKey(), false);
                                 } else {
                                     stendDLLCommands.searchMark(mapResult.getKey());
-                                    errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                                    errorCommand.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                                 }
 
                             } else {
-                                errorCommand.setLastResult("N" + getTime(timeEnd - System.currentTimeMillis()));
+                                errorCommand.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                             }
                         }
                     }
@@ -340,7 +346,7 @@ public class CreepCommand implements Commands, Serializable {
     //reset
     private void setDefTestrResults(Meter meter, int channelFlag, int index) {
         Meter.CreepResult creepResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
-        creepResult.setLastResult(null);
+        creepResult.setLastResultForTabView(null);
         creepResult.setPassTest(true);
         meter.setAmountImn(0);
         stendDLLCommands.searchMark(meter.getId());
@@ -351,8 +357,8 @@ public class CreepCommand implements Commands, Serializable {
         meter.setCreepTest(false);
         Meter.CreepResult commandResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(false);
-        commandResult.setLastResult("F" + timeFail + " " + "П");
-        commandResult.setLastResulString(timeFail);
+        commandResult.setLastResultForTabView("F" + timeFail + " " + "П");
+        commandResult.setLastResult(timeFail);
         commandResult.getResults()[countResult] = timeFail + " П";
     }
 
@@ -361,8 +367,8 @@ public class CreepCommand implements Commands, Serializable {
         meter.setCreepTest(true);
         Meter.CreepResult commandResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
         commandResult.setPassTest(true);
-        commandResult.setLastResult("P" + timePass + " " + "Г");
-        commandResult.setLastResulString(timePass);
+        commandResult.setLastResultForTabView("P" + timePass + " " + "Г");
+        commandResult.setLastResult(timePass);
         commandResult.getResults()[countResult] = timePass + " Г";
     }
 
@@ -480,5 +486,9 @@ public class CreepCommand implements Commands, Serializable {
     @Override
     public void setEmin(String emin) {
 
+    }
+
+    public String getId() {
+        return id;
     }
 }

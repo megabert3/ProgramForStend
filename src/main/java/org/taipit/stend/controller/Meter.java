@@ -127,168 +127,168 @@ public class Meter implements Serializable{
     private List<CommandResult> errorListRPPls = new ArrayList<>();
     private List<CommandResult> errorListRPMns = new ArrayList<>();
 
-    public void createError(Commands command, int numberArrayList , String name, TestErrorTableFrameController testErrorTableFrameController) {
+    public void createError(Commands command, int numberArrayList , String id, TestErrorTableFrameController testErrorTableFrameController) {
         switch (numberArrayList) {
             case 0: {
                 if (command instanceof ErrorCommand) {
-                    errorListAPPls.add(new ErrorResult(name));
+                    errorListAPPls.add(new ErrorResult(id));
 
                 } else if (command instanceof CreepCommand) {
 
-                    CreepResult creepResult = new CreepResult(name);
+                    CreepResult creepResult = new CreepResult(id);
 
                     //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
+                        creepResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
                     } else {
 
-                        creepResult.setLastResult("N" + getTime(((CreepCommand) command).getTimeForTest()));
+                        creepResult.setLastResultForTabView("N" + getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
                     errorListAPPls.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
 
-                    StartResult startResult = new StartResult(name);
+                    StartResult startResult = new StartResult(id);
 
                     //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
+                        startResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
                     }else {
-                        startResult.setLastResult("N" + getTime(((StartCommand) command).getTimeForTest()));
+                        startResult.setLastResultForTabView("N" + getTime(((StartCommand) command).getTimeForTest()));
                     }
 
                     errorListAPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
-                    errorListAPPls.add(new RTCResult(name));
+                    errorListAPPls.add(new RTCResult(id));
 
                 } else if (command instanceof ConstantCommand) {
-                    errorListAPPls.add(new ConstantResult(name));
+                    errorListAPPls.add(new ConstantResult(id));
 
                 } else if (command instanceof ImbalansUCommand) {
 
-                    errorListAPPls.add(new ImbUResult(name));
+                    errorListAPPls.add(new ImbUResult(id));
                 }
             } break;
             case 1: {
                 if (command instanceof ErrorCommand) {
-                    errorListAPMns.add(new ErrorResult(name));
+                    errorListAPMns.add(new ErrorResult(id));
 
                 } else if (command instanceof CreepCommand) {
-                    CreepResult creepResult = new CreepResult(name);
+                    CreepResult creepResult = new CreepResult(id);
 
                     //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
+                        creepResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
                     } else {
-                        creepResult.setLastResult("N" + getTime(((CreepCommand) command).getTimeForTest()));
+                        creepResult.setLastResultForTabView("N" + getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
                     errorListAPMns.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
 
-                    StartResult startResult = new StartResult(name);
+                    StartResult startResult = new StartResult(id);
 
                     //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
+                        startResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
                     }else {
-                        startResult.setLastResult("N" + getTime(((StartCommand) command).getTimeForTest()));
+                        startResult.setLastResultForTabView("N" + getTime(((StartCommand) command).getTimeForTest()));
                     }
 
                     errorListAPMns.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
-                    errorListAPMns.add(new RTCResult(name));
+                    errorListAPMns.add(new RTCResult(id));
 
                 } else if (command instanceof ConstantCommand) {
-                    errorListAPMns.add(new ConstantResult(name));
+                    errorListAPMns.add(new ConstantResult(id));
 
                 } else if (command instanceof ImbalansUCommand) {
-                    errorListAPMns.add(new ImbUResult(name));
+                    errorListAPMns.add(new ImbUResult(id));
                 }
             } break;
             case 2: {
                 if (command instanceof ErrorCommand) {
-                    errorListRPPls.add(new ErrorResult(name));
+                    errorListRPPls.add(new ErrorResult(id));
 
                 } else if (command instanceof CreepCommand) {
 
-                    CreepResult creepResult = new CreepResult(name);
+                    CreepResult creepResult = new CreepResult(id);
 
                     //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
+                        creepResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
                     } else {
-                        creepResult.setLastResult("N" + getTime(((CreepCommand) command).getTimeForTest()));
+                        creepResult.setLastResultForTabView("N" + getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
                     errorListRPPls.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
 
-                    StartResult startResult = new StartResult(name);
+                    StartResult startResult = new StartResult(id);
 
                     //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
+                        startResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
                     }else {
-                        startResult.setLastResult("N" + getTime(((StartCommand) command).getTimeForTest()));
+                        startResult.setLastResultForTabView("N" + getTime(((StartCommand) command).getTimeForTest()));
                     }
 
                     errorListRPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
-                    errorListRPPls.add(new RTCResult(name));
+                    errorListRPPls.add(new RTCResult(id));
 
                 } else if (command instanceof ConstantCommand) {
-                    errorListRPPls.add(new ConstantResult(name));
+                    errorListRPPls.add(new ConstantResult(id));
 
                 } else if (command instanceof ImbalansUCommand) {
 
-                    errorListRPPls.add(new ImbUResult(name));
+                    errorListRPPls.add(new ImbUResult(id));
                 }
             } break;
             case 3: {
                 if (command instanceof ErrorCommand) {
-                    errorListRPMns.add(new ErrorResult(name));
+                    errorListRPMns.add(new ErrorResult(id));
 
                 } else if (command instanceof CreepCommand) {
 
-                    CreepResult creepResult = new CreepResult(name);
+                    CreepResult creepResult = new CreepResult(id);
 
                     //Отображаю время теста
                     if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
+                        creepResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
                     } else {
-                        creepResult.setLastResult("N" + getTime(((CreepCommand) command).getTimeForTest()));
+                        creepResult.setLastResultForTabView("N" + getTime(((CreepCommand) command).getTimeForTest()));
                     }
 
                     errorListRPMns.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
 
-                    StartResult startResult = new StartResult(name);
+                    StartResult startResult = new StartResult(id);
 
                     //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResult("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
+                        startResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
                     }else {
-                        startResult.setLastResult("N" + getTime(((StartCommand) command).getTimeForTest()));
+                        startResult.setLastResultForTabView("N" + getTime(((StartCommand) command).getTimeForTest()));
                     }
 
                     errorListRPMns.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
-                    errorListRPMns.add(new RTCResult(name));
+                    errorListRPMns.add(new RTCResult(id));
 
                 } else if (command instanceof ConstantCommand) {
-                    errorListRPMns.add(new ConstantResult(name));
+                    errorListRPMns.add(new ConstantResult(id));
 
                 } else if (command instanceof ImbalansUCommand) {
-                    errorListRPMns.add(new ImbUResult(name));
+                    errorListRPMns.add(new ImbUResult(id));
                 }
             } break;
         }
@@ -322,28 +322,28 @@ public class Meter implements Serializable{
         switch (energyPulseChanel) {
             case 0: {
                 commandResult = errorListAPPls.get(index);
-                commandResult.setLastResulString(error);
+                commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
 
             case 1: {
                 commandResult = errorListAPMns.get(index);
-                commandResult.setLastResulString(error);
+                commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
 
             case 2: {
                 commandResult = errorListRPPls.get(index);
-                commandResult.setLastResulString(error);
+                commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
 
             case 3: {
                 commandResult = errorListRPMns.get(index);
-                commandResult.setLastResulString(error);
+                commandResult.setLastResult(error);
                 commandResult.getResults()[resultNo] = error;
                 return commandResult;
             }
@@ -774,78 +774,54 @@ public class Meter implements Serializable{
         this.typeMeter = typeMeter;
     }
 
+
+
+    //==============================================================================================
     //Абстрактный класс для записи результата каждой точки
     public abstract class CommandResult implements Serializable {
 
-        //Имя команды
-        String nameCommand;
+        CommandResult(String id) {
+            this.id = id;
+            this.lastResultForTabView = new SimpleStringProperty();
+        }
 
         //Последний результат теста
-        transient SimpleStringProperty lastResult;
+        private transient SimpleStringProperty lastResultForTabView;
 
-        String lastResulString;
+        //Идентификатор команды
+        private String id;
+
+        private String lastResult;
 
         //Верхняя граница погрешности
-        String maxError;
+        private String maxError;
 
         //Нижняя граница погрешности
-        String minError;
+        private String minError;
 
         //Погрешность в диапазоне (прошла тест или нет)
-        Boolean passTest = null;
+        private Boolean passTest = null;
 
         //10-ть последних результатов
-        String[] results = new String[10];
+        private String[] results = new String[10];
 
-        CommandResult() {
-            this.lastResult = new SimpleStringProperty();
+        public String getId() {
+            return id;
         }
 
-        public String getLastResult() {
-            return lastResult.get();
+        void setId(String id) {
+            this.id = id;
         }
 
-        public SimpleStringProperty lastResultProperty() {
-            return lastResult;
+        public Boolean getPassTest() {
+            return passTest;
         }
 
-        public void setLastResult(String lastResult) {
-            this.lastResult.set(lastResult);
+        public void setPassTest(Boolean passTest) {
+            this.passTest = passTest;
         }
 
-        public String getNameCommand() {
-            return nameCommand;
-        }
-
-        public String[] getResults() {
-            return results;
-        }
-
-        void setNameCommand(String nameCommand) {
-            this.nameCommand = nameCommand;
-        }
-
-        public void setResults(String[] results) {
-            this.results = results;
-        }
-
-        public void setMaxError(String maxError) {
-            this.maxError = maxError;
-        }
-
-        public void setMinError(String minError) {
-            this.minError = minError;
-        }
-
-        public String getMaxError() {
-            return maxError;
-        }
-
-        public String getMinError() {
-            return minError;
-        }
-
-        Boolean isPassTest() {
+        public Boolean isPassTest() {
             return passTest;
         }
 
@@ -853,21 +829,56 @@ public class Meter implements Serializable{
             this.passTest = passTest;
         }
 
-        public String getLastResulString() {
-            return lastResulString;
+        public String getLastResultForTabView() {
+            return lastResultForTabView.get();
         }
 
-        public void setLastResulString(String lastResulString) {
-            this.lastResulString = lastResulString;
+        public SimpleStringProperty lastResultForTabViewProperty() {
+            return lastResultForTabView;
         }
 
+        public void setLastResultForTabView(String lastResultForTabView) {
+            this.lastResultForTabView.set(lastResultForTabView);
+        }
+
+        public String getLastResult() {
+            return lastResult;
+        }
+
+        public void setLastResult(String lastResult) {
+            this.lastResult = lastResult;
+        }
+
+        public String getMaxError() {
+            return maxError;
+        }
+
+        public void setMaxError(String maxError) {
+            this.maxError = maxError;
+        }
+
+        public String getMinError() {
+            return minError;
+        }
+
+        public void setMinError(String minError) {
+            this.minError = minError;
+        }
+
+        public String[] getResults() {
+            return results;
+        }
+
+        public void setResults(String[] results) {
+            this.results = results;
+        }
     }
 
     //Класс для записи результата исполнения ErrorCommnad
     public class ErrorResult extends CommandResult implements Serializable {
 
-        ErrorResult(String name) {
-            super.setNameCommand(name);
+        ErrorResult(String id) {
+            super(id);
         }
     }
 
@@ -875,18 +886,18 @@ public class Meter implements Serializable{
     public class CreepResult extends CommandResult implements Serializable {
 
         //Время провала теста
-        String timeToAllTest;
+        private String timeToTest;
 
-        CreepResult(String name) {
-            super.setNameCommand(name);
+        CreepResult(String id) {
+            super(id);
         }
 
-        public String getTimeToAllTest() {
-            return timeToAllTest;
+        public String getTimeToTest() {
+            return timeToTest;
         }
 
-        public void setTimeToAllTest(String timeToAllTest) {
-            this.timeToAllTest = timeToAllTest;
+        public void setTimeToTest(String timeToTest) {
+            this.timeToTest = timeToTest;
         }
     }
 
@@ -894,14 +905,18 @@ public class Meter implements Serializable{
     public class StartResult extends CommandResult implements Serializable {
 
         //Время прохождения теста
-        long timeToPass;
+        private long timeToTest;
 
-        StartResult(String name) {
-            super.setNameCommand(name);
+        StartResult(String id) {
+            super(id);
         }
 
-        public void setTimeToPass(long timeToPass) {
-            this.timeToPass = timeToPass;
+        public void setTimeToTest(long timeToTest) {
+            this.timeToTest = timeToTest;
+        }
+
+        public long getTimeToTest() {
+            return timeToTest;
         }
 
         private String getTime(long mlS){
@@ -915,22 +930,32 @@ public class Meter implements Serializable{
     //Класс для записи результата исполнения StartCommnad
     public class RTCResult extends CommandResult implements Serializable {
 
-        RTCResult(String name) {
-            super.setNameCommand(name);
+        RTCResult(String id) {
+            super(id);
         }
     }
 
     public class ConstantResult extends CommandResult implements Serializable {
 
-        ConstantResult(String name) {
-            super.setNameCommand(name);
+        private String kw;
+
+        ConstantResult(String id) {
+            super(id);
+        }
+
+        public String getKw() {
+            return kw;
+        }
+
+        public void setKw(String kw) {
+            this.kw = kw;
         }
     }
 
     public class ImbUResult extends CommandResult implements Serializable {
 
-        public ImbUResult(String name) {
-            super.setNameCommand(name);
+        public ImbUResult(String id) {
+            super(id);
         }
     }
 }

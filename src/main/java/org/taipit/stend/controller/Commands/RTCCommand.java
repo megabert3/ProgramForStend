@@ -292,25 +292,25 @@ public class RTCCommand implements Commands, Serializable {
         switch (channelFlagForSave) {
             case 0: {
                 commandResult = meter.getErrorListAPPls().get(index);
-                commandResult.setLastResult(String.valueOf(RTCError));
+                commandResult.setLastResultForTabView(String.valueOf(RTCError));
                 commandResult.setPassTest(passOrNot);
             }break;
 
             case 1: {
                 commandResult = meter.getErrorListAPMns().get(index);
-                commandResult.setLastResult(String.valueOf(RTCError));
+                commandResult.setLastResultForTabView(String.valueOf(RTCError));
                 commandResult.setPassTest(passOrNot);
             }break;
 
             case 2: {
                 commandResult = meter.getErrorListRPPls().get(index);
-                commandResult.setLastResult(String.valueOf(RTCError));
+                commandResult.setLastResultForTabView(String.valueOf(RTCError));
                 commandResult.setPassTest(passOrNot);
             }break;
 
             case 3: {
                 commandResult = meter.getErrorListRPMns().get(index);
-                commandResult.setLastResult(String.valueOf(RTCError));
+                commandResult.setLastResultForTabView(String.valueOf(RTCError));
                 commandResult.setPassTest(passOrNot);
             }break;
         }
@@ -403,5 +403,9 @@ public class RTCCommand implements Commands, Serializable {
 
     public void setCountResultTest(int countResultTest) {
         this.countResultTest = countResultTest;
+    }
+
+    public String getId() {
+        return id;
     }
 }

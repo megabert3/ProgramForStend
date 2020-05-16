@@ -164,7 +164,7 @@ public class ImbalansUCommand implements Commands, Serializable {
             for (Meter meter : meterForTestList) {
                 meter.setAmountMeasur(0);
                 meter.setErrorResultChange(0);
-                meter.returnResultCommand(index, channelFlag).setLastResult("N");
+                meter.returnResultCommand(index, channelFlag).setLastResultForTabView("N");
             }
 
             if (Thread.currentThread().isInterrupted()) {
@@ -248,10 +248,10 @@ public class ImbalansUCommand implements Commands, Serializable {
                         doubleErr = Double.parseDouble(error);
 
                         if (doubleErr > emax || doubleErr < emin) {
-                            resultMeter.setLastResult("F" + error);
+                            resultMeter.setLastResultForTabView("F" + error);
                             resultMeter.setPassTest(false);
                         } else {
-                            resultMeter.setLastResult("P" + error);
+                            resultMeter.setLastResultForTabView("P" + error);
                             resultMeter.setPassTest(true);
                         }
 
@@ -302,7 +302,7 @@ public class ImbalansUCommand implements Commands, Serializable {
             }
 
             for (Meter meter : meterForTestList) {
-                meter.returnResultCommand(index, channelFlag).setLastResult("N");
+                meter.returnResultCommand(index, channelFlag).setLastResultForTabView("N");
             }
 
             ratedCurr = Ib;
@@ -374,12 +374,12 @@ public class ImbalansUCommand implements Commands, Serializable {
                         doubleErr = Double.parseDouble(error);
 
                         if (doubleErr > emax || doubleErr < emin) {
-                            resultMeter.setLastResult("F" + error);
-                            resultMeter.setLastResulString(error);
+                            resultMeter.setLastResultForTabView("F" + error);
+                            resultMeter.setLastResult(error);
                             resultMeter.setPassTest(false);
                         } else {
-                            resultMeter.setLastResult("P" + error);
-                            resultMeter.setLastResulString(error);
+                            resultMeter.setLastResultForTabView("P" + error);
+                            resultMeter.setLastResult(error);
                             resultMeter.setPassTest(true);
                         }
                     }

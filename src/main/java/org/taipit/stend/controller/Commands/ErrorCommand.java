@@ -2,6 +2,7 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
+import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
@@ -154,6 +155,24 @@ public class ErrorCommand implements Commands, Serializable {
             throw new InterruptedException();
         }
 
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                if (iABC.equals("H")) {
+                    iABC = "C";
+                }
+            }
+
+        } else {
+            if (!threePhaseCommand) {
+                if (iABC.equals("A")) {
+                    stendDLLCommands.selectCircuit(0);
+                } else if (iABC.equals("B")) {
+                    stendDLLCommands.selectCircuit(1);
+                }
+                iABC = "H";
+            }
+        }
+
         //Выбор константы в зависимости от энергии
         if (channelFlag == 0 || channelFlag == 1) {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
@@ -172,7 +191,7 @@ public class ErrorCommand implements Commands, Serializable {
         for (Meter meter : meterForTestList) {
             meter.setAmountMeasur(0);
             meter.setErrorResultChange(0);
-            meter.returnResultCommand(index, channelFlag).setLastResult("N");
+            meter.returnResultCommand(index, channelFlag).setLastResultForTabView("N");
         }
 
         if (Thread.currentThread().isInterrupted()) {
@@ -254,10 +273,10 @@ public class ErrorCommand implements Commands, Serializable {
                     doubleErr = Double.parseDouble(error);
 
                     if (doubleErr > emax || doubleErr < emin) {
-                        resultMeter.setLastResult("F" + error);
+                        resultMeter.setLastResultForTabView("F" + error);
                         resultMeter.setPassTest(false);
                     } else {
-                        resultMeter.setLastResult("P" + error);
+                        resultMeter.setLastResultForTabView("P" + error);
                         resultMeter.setPassTest(true);
                     }
 
@@ -297,7 +316,7 @@ public class ErrorCommand implements Commands, Serializable {
         }
 
         for (Meter meter : meterForTestList) {
-            meter.returnResultCommand(index, channelFlag).setLastResult("N");
+            meter.returnResultCommand(index, channelFlag).setLastResultForTabView("N");
         }
 
         if (current.equals("Ib")) {
@@ -378,12 +397,12 @@ public class ErrorCommand implements Commands, Serializable {
                     doubleErr = Double.parseDouble(error);
 
                     if (doubleErr > emax || doubleErr < emin) {
-                        resultMeter.setLastResult("F" + error);
-                        resultMeter.setLastResulString(error);
+                        resultMeter.setLastResultForTabView("F" + error);
+                        resultMeter.setLastResult(error);
                         resultMeter.setPassTest(false);
                     } else {
-                        resultMeter.setLastResult("P" + error);
-                        resultMeter.setLastResulString(error);
+                        resultMeter.setLastResultForTabView("P" + error);
+                        resultMeter.setLastResult(error);
                         resultMeter.setPassTest(true);
                     }
                 }

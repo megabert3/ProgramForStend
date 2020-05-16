@@ -24,6 +24,8 @@ public interface Commands{
     //Имя команды
     String getName();
 
+    String getId();
+
     //Выбрано ли точка испытания
     boolean isActive();
     void setActive(boolean active);

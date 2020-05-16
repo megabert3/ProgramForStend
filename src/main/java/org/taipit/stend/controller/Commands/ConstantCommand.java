@@ -148,6 +148,7 @@ public class ConstantCommand implements Commands, Serializable {
             throw new InterruptedException();
         }
 
+
         ratedCurr = Ib;
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
@@ -184,7 +185,7 @@ public class ConstantCommand implements Commands, Serializable {
         }
 
         for (Meter meter : meterForTestList) {
-            meter.returnResultCommand(index, channelFlag).setLastResult("N");
+            meter.returnResultCommand(index, channelFlag).setLastResultForTabView("N");
         }
 
         if (Thread.currentThread().isInterrupted()) {
@@ -225,11 +226,11 @@ public class ConstantCommand implements Commands, Serializable {
 
                 if (result < eminProc || result > emaxProc) {
                     commandResult.setPassTest(false);
-                    commandResult.setLastResult("F" + result);
+                    commandResult.setLastResultForTabView("F" + result);
                     commandResult.getResults()[0] = result + "П";
                 } else {
                     commandResult.setPassTest(true);
-                    commandResult.setLastResult("P" + result);
+                    commandResult.setLastResultForTabView("P" + result);
                     commandResult.getResults()[0] = result + "Г";
                 }
             }
@@ -256,11 +257,11 @@ public class ConstantCommand implements Commands, Serializable {
 
                 if (result < eminProc || result > emaxProc) {
                     commandResult.setPassTest(false);
-                    commandResult.setLastResult("F" + result);
+                    commandResult.setLastResultForTabView("F" + result);
                     commandResult.getResults()[0] = result + "П";
                 } else {
                     commandResult.setPassTest(true);
-                    commandResult.setLastResult("P" + result);
+                    commandResult.setLastResultForTabView("P" + result);
                     commandResult.getResults()[0] = result + "Г";
                 }
             }
@@ -320,7 +321,7 @@ public class ConstantCommand implements Commands, Serializable {
         }
 
         for (Meter meter : meterForTestList) {
-            meter.returnResultCommand(index, channelFlag).setLastResult("N");
+            meter.returnResultCommand(index, channelFlag).setLastResultForTabView("N");
         }
 
         if (Thread.currentThread().isInterrupted()) {
@@ -361,11 +362,11 @@ public class ConstantCommand implements Commands, Serializable {
 
                 if (result < eminProc || result > emaxProc) {
                     commandResult.setPassTest(false);
-                    commandResult.setLastResult("F" + result);
+                    commandResult.setLastResultForTabView("F" + result);
                     commandResult.getResults()[0] = result + "П";
                 } else {
                     commandResult.setPassTest(true);
-                    commandResult.setLastResult("P" + result);
+                    commandResult.setLastResultForTabView("P" + result);
                     commandResult.getResults()[0] = result + "Г";
                 }
             }
@@ -392,11 +393,11 @@ public class ConstantCommand implements Commands, Serializable {
 
                 if (result < eminProc || result > emaxProc) {
                     commandResult.setPassTest(false);
-                    commandResult.setLastResult("F" + result);
+                    commandResult.setLastResultForTabView("F" + result);
                     commandResult.getResults()[0] = result + "П";
                 } else {
                     commandResult.setPassTest(true);
-                    commandResult.setLastResult("P" + result);
+                    commandResult.setLastResultForTabView("P" + result);
                     commandResult.getResults()[0] = result + "Г";
                 }
             }
