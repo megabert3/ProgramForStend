@@ -496,6 +496,10 @@ public class ImbalansUCommand implements Commands, Serializable {
 
     }
 
+    public void setPhase(int phase) {
+        this.phase = phase;
+    }
+
     @Override
     public String toString() {
         if (iABC.equals("H")) {

@@ -157,6 +157,12 @@ public class ErrorCommand implements Commands, Serializable {
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
+                if (phase == 0) {
+                    phase = 1;
+                } else if (phase == 7) {
+                    phase = 5;
+                }
+
                 if (iABC.equals("H")) {
                     iABC = "C";
                 }
@@ -188,11 +194,7 @@ public class ErrorCommand implements Commands, Serializable {
             ratedCurr = Imax;
         }
 
-        for (Meter meter : meterForTestList) {
-            meter.setAmountMeasur(0);
-            meter.setErrorResultChange(0);
-            meter.returnResultCommand(index, channelFlag).setLastResultForTabView("N");
-        }
+        resetError();
 
         if (Thread.currentThread().isInterrupted()) {
             System.out.println("execute_2");
@@ -269,15 +271,13 @@ public class ErrorCommand implements Commands, Serializable {
                 error = strMass[1];
 
                 if (resultNo != 0) {
-                    resultMeter = meter.setResultsInErrorList(index, resultNo, error, channelFlag);
+                    resultMeter = meter.returnResultCommand(index, channelFlag);
                     doubleErr = Double.parseDouble(error);
 
                     if (doubleErr > emax || doubleErr < emin) {
-                        resultMeter.setLastResultForTabView("F" + error);
-                        resultMeter.setPassTest(false);
+                        ((Meter.ErrorResult) resultMeter).setResultErrorCommand("F" + error, resultNo, error, false);
                     } else {
-                        resultMeter.setLastResultForTabView("P" + error);
-                        resultMeter.setPassTest(true);
+                        ((Meter.ErrorResult) resultMeter).setResultErrorCommand("P" + error, resultNo, error, true);
                     }
 
                     if (meter.getErrorResultChange() != resultNo) {
@@ -290,6 +290,8 @@ public class ErrorCommand implements Commands, Serializable {
                     flagInStop.put(meter.getId(), true);
                 }
             }
+
+            Thread.sleep(300);
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
@@ -315,8 +317,28 @@ public class ErrorCommand implements Commands, Serializable {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
         }
 
-        for (Meter meter : meterForTestList) {
-            meter.returnResultCommand(index, channelFlag).setLastResultForTabView("N");
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                if (phase == 0) {
+                    phase = 1;
+                } else if (phase == 7) {
+                    phase = 5;
+                }
+
+                if (iABC.equals("H")) {
+                    iABC = "C";
+                }
+            }
+
+        } else {
+            if (!threePhaseCommand) {
+                if (iABC.equals("A")) {
+                    stendDLLCommands.selectCircuit(0);
+                } else if (iABC.equals("B")) {
+                    stendDLLCommands.selectCircuit(1);
+                }
+                iABC = "H";
+            }
         }
 
         if (current.equals("Ib")) {
@@ -393,17 +415,13 @@ public class ErrorCommand implements Commands, Serializable {
                 error = strMass[1];
 
                 if (resultNo != 0) {
-                    resultMeter = meter.setResultsInErrorList(index, resultNo, error, channelFlag);
+                    resultMeter = meter.returnResultCommand(index, channelFlag);
                     doubleErr = Double.parseDouble(error);
 
                     if (doubleErr > emax || doubleErr < emin) {
-                        resultMeter.setLastResultForTabView("F" + error);
-                        resultMeter.setLastResult(error);
-                        resultMeter.setPassTest(false);
+                        ((Meter.ErrorResult) resultMeter).setResultErrorCommand("F" + error, resultNo, error, false);
                     } else {
-                        resultMeter.setLastResultForTabView("P" + error);
-                        resultMeter.setLastResult(error);
-                        resultMeter.setPassTest(true);
+                        ((Meter.ErrorResult) resultMeter).setResultErrorCommand("P" + error, resultNo, error, true);
                     }
                 }
             }
@@ -422,6 +440,13 @@ public class ErrorCommand implements Commands, Serializable {
             init.put(meter.getId(), false);
         }
         return init;
+    }
+
+    private void resetError() {
+        for (Meter meter : meterForTestList) {
+            meter.setAmountMeasur(0);
+            meter.setErrorResultChange(0);
+        }
     }
 
     public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
@@ -513,5 +538,9 @@ public class ErrorCommand implements Commands, Serializable {
         if (iABC.equals("H")) {
             return (cosP + "; " + currentPerсent + " "  + current);
         } else return (iABC + ": " + cosP + "; " + currentPerсent + " "  + current);
+    }
+
+    public void setPhase(int phase) {
+        this.phase = phase;
     }
 }

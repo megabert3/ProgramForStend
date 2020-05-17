@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -335,6 +334,7 @@ public class TestParametersFrameController implements Frame {
             testErrorTableFrameController.setImax(Imax);
             testErrorTableFrameController.setTypeCircuit(typeCircuitThreePhase);
             testErrorTableFrameController.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
+            testErrorTableFrameController.setTwoCircut(twoCircut);
 
             //Установка информации в окне теста
             testErrorTableFrameController.getTxtLabUn().setText("Uн = " + Un + " В");
@@ -399,10 +399,11 @@ public class TestParametersFrameController implements Frame {
 
         } else {
             stendDLLCommands = OnePhaseStend.getOnePhaseStendInstance();
-            initForOnePhaseStend();
 
             initTableView();
             initComboBoxesAndAddListerners();
+
+            initForOnePhaseStend();
 
             twoCircutChcBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
@@ -452,6 +453,12 @@ public class TestParametersFrameController implements Frame {
         if (metodic != null) {
             chosBxMetodics.setValue(lastSelectedMetodic);
 
+            if (metodic instanceof MethodicForOnePhaseStend) {
+                chosBxPowerType.setValue(properties.getProperty("1P2W"));
+            } else {
+                chosBxPowerType.setValue(properties.getProperty("3P4W"));
+            }
+
             if (metodic.isBindsParameters()) {
                 setMetodicParameters(metodic);
             } else {
@@ -471,7 +478,8 @@ public class TestParametersFrameController implements Frame {
         txtFldAccuracyRP.setText(properties.getProperty("threePhaseStand.lastAccuracyClassMeterRP"));
         chosBxTypeMeter.setValue(properties.getProperty("threePhaseStand.lastMeterTypeOnePhaseMultiTarif"));
         chosBxtypeOfMeasuringElement.setValue(properties.getProperty("threePhaseStand.lastTypeOfMeasuringElement"));
-        chosBxPowerType.setValue(properties.getProperty("threePhaseStand.lastTypeCircuit"));
+
+        chosBxPowerType.setValue("3P4W");
 
         for (Meter meter : metersList) {
             meter.setConstantMeterAP(properties.getProperty("threePhaseStand.lastMeterConstantAP"));
@@ -499,7 +507,6 @@ public class TestParametersFrameController implements Frame {
         chosBxAccuracyRP.setDisable(false);
         chosBxTypeMeter.setDisable(false);
         chosBxtypeOfMeasuringElement.setDisable(false);
-        chosBxPowerType.setDisable(false);
         twoCircutChcBox.setDisable(false);
     }
 
@@ -547,7 +554,6 @@ public class TestParametersFrameController implements Frame {
         chosBxAccuracyRP.setDisable(false);
         chosBxTypeMeter.setDisable(false);
         chosBxtypeOfMeasuringElement.setDisable(false);
-        chosBxPowerType.setDisable(false);
     }
 
     private void setMetodicParameters(Metodic metodic) {
@@ -558,6 +564,12 @@ public class TestParametersFrameController implements Frame {
         txtFldAccuracyRP.setText(metodic.getAccuracyClassMeterRP());
         chosBxTypeMeter.setValue(metodic.getTypeMeter());
         chosBxtypeOfMeasuringElement.setValue(metodic.getTypeOfMeasuringElementShunt());
+
+        if (metodic instanceof MethodicForOnePhaseStend) {
+            chosBxPowerType.setValue("1P2W");
+        } else {
+            chosBxPowerType.setValue("3P4W");
+        }
 
         if (stendDLLCommands instanceof OnePhaseStend) {
             if (metodic instanceof MethodicForOnePhaseStend) {
@@ -591,7 +603,6 @@ public class TestParametersFrameController implements Frame {
         chosBxAccuracyRP.setDisable(true);
         chosBxTypeMeter.setDisable(true);
         chosBxtypeOfMeasuringElement.setDisable(true);
-        chosBxPowerType.setDisable(true);
         twoCircutChcBox.setDisable(true);
     }
 
@@ -642,20 +653,29 @@ public class TestParametersFrameController implements Frame {
             chosBxMetodics.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
                     Metodic metodic = metodicsForTest.getMetodic(newValue);
 
                     if (metodic != null) {
                         if (metodic instanceof MethodicForOnePhaseStend) {
                             chosBxPowerType.getItems().setAll(properties.getProperty("onePhaseStand.typeCircuit").split(", "));
+
+                            if (metodic.isBindsParameters()) {
+                                setMetodicParameters(metodic);
+                            } else {
+                                setDefautParametersForOnePhaseStand();
+                            }
+
                         } else {
                             chosBxPowerType.getItems().setAll(properties.getProperty("threePhaseStand.typeCircuit").split(", "));
+
+                            if (metodic.isBindsParameters()) {
+                                setMetodicParameters(metodic);
+                            } else {
+                                setDefautParametersForThreePhaseStand();
+                            }
                         }
 
-                        if (metodic.isBindsParameters()) {
-                            setMetodicParameters(metodic);
-                        } else {
-                            setDefautParametersForThreePhaseStand();
-                        }
                     }
                 }
             });

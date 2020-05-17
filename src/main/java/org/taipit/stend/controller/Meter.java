@@ -131,7 +131,8 @@ public class Meter implements Serializable{
         switch (numberArrayList) {
             case 0: {
                 if (command instanceof ErrorCommand) {
-                    errorListAPPls.add(new ErrorResult(id));
+                    ErrorCommand errorCommand = (ErrorCommand) command;
+                    errorListAPPls.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
                 } else if (command instanceof CreepCommand) {
 
@@ -154,26 +155,30 @@ public class Meter implements Serializable{
                     //Отображаю время теста
                     if (((StartCommand) command).isGostTest()) {
                         startResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
-                    }else {
+                    } else {
                         startResult.setLastResultForTabView("N" + getTime(((StartCommand) command).getTimeForTest()));
                     }
 
                     errorListAPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
-                    errorListAPPls.add(new RTCResult(id));
+                    RTCCommand rtcCommand = (RTCCommand) command;
+                    errorListAPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest())));
 
                 } else if (command instanceof ConstantCommand) {
-                    errorListAPPls.add(new ConstantResult(id));
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+                    errorListAPPls.add(new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax())));
 
                 } else if (command instanceof ImbalansUCommand) {
 
-                    errorListAPPls.add(new ImbUResult(id));
+                    ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
+                    errorListAPPls.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
                 }
             } break;
             case 1: {
                 if (command instanceof ErrorCommand) {
-                    errorListAPMns.add(new ErrorResult(id));
+                    ErrorCommand errorCommand = (ErrorCommand) command;
+                    errorListAPMns.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
                 } else if (command instanceof CreepCommand) {
                     CreepResult creepResult = new CreepResult(id);
@@ -201,18 +206,25 @@ public class Meter implements Serializable{
                     errorListAPMns.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
-                    errorListAPMns.add(new RTCResult(id));
+
+                    RTCCommand rtcCommand = (RTCCommand) command;
+                    errorListAPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest())));
 
                 } else if (command instanceof ConstantCommand) {
-                    errorListAPMns.add(new ConstantResult(id));
+
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+                    errorListAPMns.add(new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax())));
 
                 } else if (command instanceof ImbalansUCommand) {
-                    errorListAPMns.add(new ImbUResult(id));
+
+                    ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
+                    errorListAPMns.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
                 }
             } break;
             case 2: {
                 if (command instanceof ErrorCommand) {
-                    errorListRPPls.add(new ErrorResult(id));
+                    ErrorCommand errorCommand = (ErrorCommand) command;
+                    errorListRPPls.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
                 } else if (command instanceof CreepCommand) {
 
@@ -241,19 +253,25 @@ public class Meter implements Serializable{
                     errorListRPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
-                    errorListRPPls.add(new RTCResult(id));
+
+                    RTCCommand rtcCommand = (RTCCommand) command;
+                    errorListRPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest())));
 
                 } else if (command instanceof ConstantCommand) {
-                    errorListRPPls.add(new ConstantResult(id));
+
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+                    errorListRPPls.add(new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax())));
 
                 } else if (command instanceof ImbalansUCommand) {
 
-                    errorListRPPls.add(new ImbUResult(id));
+                    ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
+                    errorListRPPls.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
                 }
             } break;
             case 3: {
                 if (command instanceof ErrorCommand) {
-                    errorListRPMns.add(new ErrorResult(id));
+                    ErrorCommand errorCommand = (ErrorCommand) command;
+                    errorListRPMns.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
                 } else if (command instanceof CreepCommand) {
 
@@ -282,13 +300,19 @@ public class Meter implements Serializable{
                     errorListRPMns.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
-                    errorListRPMns.add(new RTCResult(id));
+
+                    RTCCommand rtcCommand = (RTCCommand) command;
+                    errorListRPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest())));
 
                 } else if (command instanceof ConstantCommand) {
-                    errorListRPMns.add(new ConstantResult(id));
+
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+                    errorListRPMns.add(new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax())));
 
                 } else if (command instanceof ImbalansUCommand) {
-                    errorListRPMns.add(new ImbUResult(id));
+
+                    ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
+                    errorListRPMns.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
                 }
             } break;
         }
@@ -877,8 +901,17 @@ public class Meter implements Serializable{
     //Класс для записи результата исполнения ErrorCommnad
     public class ErrorResult extends CommandResult implements Serializable {
 
-        ErrorResult(String id) {
+        ErrorResult(String id, String minError, String maxError) {
             super(id);
+            super.minError = minError;
+            super.maxError = maxError;
+        }
+
+        public void setResultErrorCommand(String errForTab, int resultNo, String error, boolean passOrNot) {
+            super.lastResultForTabView.setValue(errForTab);
+            super.results[resultNo] = error;
+            super.lastResult = error;
+            super.passTest = passOrNot;
         }
     }
 
@@ -930,8 +963,10 @@ public class Meter implements Serializable{
     //Класс для записи результата исполнения StartCommnad
     public class RTCResult extends CommandResult implements Serializable {
 
-        RTCResult(String id) {
+        RTCResult(String id, String emin, String emax) {
             super(id);
+            super.minError = emin;
+            super.maxError = emax;
         }
     }
 
@@ -939,8 +974,10 @@ public class Meter implements Serializable{
 
         private String kw;
 
-        ConstantResult(String id) {
+        ConstantResult(String id, String emin, String emax) {
             super(id);
+            super.minError = emin;
+            super.maxError = emax;
         }
 
         public String getKw() {
@@ -954,8 +991,10 @@ public class Meter implements Serializable{
 
     public class ImbUResult extends CommandResult implements Serializable {
 
-        public ImbUResult(String id) {
+        public ImbUResult(String id, String emin, String emax) {
             super(id);
+            super.minError = emin;
+            super.maxError = emax;
         }
     }
 }

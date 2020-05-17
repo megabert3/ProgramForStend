@@ -56,7 +56,8 @@ public class RTCCommand implements Commands, Serializable {
     //Тип измерения
     private int errorType;
 
-    public RTCCommand(boolean threePhaseCommand, String id , String name,int pulseForRTC, double freg, int countResultTest, int errorType, double errorForFalseTest, int channelFlagForSave) {
+    public RTCCommand(boolean threePhaseCommand, String id , String name, int pulseForRTC, double freg, int countResultTest,
+                      int errorType, double errorForFalseTest, int channelFlagForSave) {
         this.threePhaseCommand = threePhaseCommand;
         this.id = id;
         this.name = name;
@@ -395,6 +396,10 @@ public class RTCCommand implements Commands, Serializable {
     @Override
     public void setEmin(String emin) {
 
+    }
+
+    public void setErrorForFalseTest(double errorForFalseTest) {
+        this.errorForFalseTest = errorForFalseTest;
     }
 
     public int getCountResultTest() {

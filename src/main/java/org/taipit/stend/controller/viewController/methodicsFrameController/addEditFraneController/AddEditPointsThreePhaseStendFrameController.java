@@ -2651,682 +2651,495 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     @FXML
     void addSTAcRPrTCcOnst(ActionEvent event) {
-        //Действие для добавления теста Самоход
-        CreepCommand creepCommand;
-        //---------------------------------------------------------------------------------------
-        //Добаление самохода с параметрами пользователя AP+
-        if (event.getSource() == addTglBtnCRPAPPls) {
-            if (addTglBtnCRPAPPls.isSelected()) {
-                creepCommand = new CreepCommand(true, false, 0, txtFieldTimeCRPAPPls.getText());
-
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
-                creepCommand.setName("Самоход AP+");
-
-                txtFieldCRPAmtImpAPPls.setDisable(true);
-                txtFieldTimeCRPAPPls.setDisable(true);
-                txtFieldCRPUProcAPPls.setDisable(true);
-
-                testListForCollumAPPls.add(creepCommand);
-                CRPTogBtnAPPls.setSelected(true);
-            } else {
-                for (Commands command : testListForCollumAPPls) {
-                    if (command instanceof CreepCommand) {
-                        if (command.getName().equals("Самоход AP+")) {
-                            testListForCollumAPPls.remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldCRPAmtImpAPPls.setDisable(false);
-                txtFieldTimeCRPAPPls.setDisable(false);
-                txtFieldCRPUProcAPPls.setDisable(false);
-
-                if (addTglBtnCRPAPPlsGOST.isSelected()) {
-                    CRPTogBtnAPPls.setSelected(true);
-                } else CRPTogBtnAPPls.setSelected(false);
-            }
-        }
-
-        //Добаление самохода с параметрами по ГОСТу AP+
-        if (event.getSource() == addTglBtnCRPAPPlsGOST) {
-            if (addTglBtnCRPAPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(true, true, 0);
-
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход AP+ ГОСТ");
-
-                CRPTogBtnAPPls.setSelected(true);
-
-                testListForCollumAPPls.add(creepCommand);
-            } else {
-                for (Commands command : testListForCollumAPPls) {
-                    if (command instanceof CreepCommand) {
-                        if (command.getName().equals("Самоход AP+ ГОСТ")) {
-                            testListForCollumAPPls.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnCRPAPPls.isSelected()) {
-                    CRPTogBtnAPPls.setSelected(true);
-                } else CRPTogBtnAPPls.setSelected(false);
-            }
-        }
-
-        //Добаление самохода с параметрами пользователя AP-
-        if (event.getSource() == addTglBtnCRPAPMns) {
-            if (addTglBtnCRPAPMns.isSelected()) {
-                creepCommand = new CreepCommand(true, false, 1, txtFieldTimeCRPAPMns.getText());
-
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPMns.getText()));
-                creepCommand.setName("Самоход AP-");
-
-                txtFieldCRPAmtImpAPMns.setDisable(true);
-                txtFieldTimeCRPAPMns.setDisable(true);
-                txtFieldCRPUProcAPMns.setDisable(true);
-
-                CRPTogBtnAPMns.setSelected(true);
-                testListForCollumAPMns.add(creepCommand);
-            } else {
-                for (Commands command : testListForCollumAPMns) {
-                    if (command instanceof CreepCommand) {
-                        if (command.getName().equals("Самоход AP-")) {
-                            testListForCollumAPMns.remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldCRPAmtImpAPMns.setDisable(false);
-                txtFieldTimeCRPAPMns.setDisable(false);
-                txtFieldCRPUProcAPMns.setDisable(false);
-
-                if (addTglBtnCRPAPMnsGOST.isSelected()) {
-                    CRPTogBtnAPMns.setSelected(true);
-                } else CRPTogBtnAPMns.setSelected(false);
-            }
-        }
-
-        //Добаление самохода с параметрами по ГОСТу AP-
-        if (event.getSource() == addTglBtnCRPAPMnsGOST) {
-            if (addTglBtnCRPAPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(true, true, 1);
-
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход AP- ГОСТ");
-
-                CRPTogBtnAPMns.setSelected(true);
-
-                testListForCollumAPMns.add(creepCommand);
-            } else {
-                for (Commands command : testListForCollumAPMns) {
-                    if (command instanceof CreepCommand) {
-                        if (command.getName().equals("Самоход AP- ГОСТ")) {
-                            testListForCollumAPMns.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnCRPAPMns.isSelected()) {
-                    CRPTogBtnAPMns.setSelected(true);
-                } else CRPTogBtnAPMns.setSelected(false);
-            }
-        }
-
-        //Добаление самохода с параметрами пользователя RP+
-        if (event.getSource() == addTglBtnCRPRPPls) {
-            if (addTglBtnCRPRPPls.isSelected()) {
-                creepCommand = new CreepCommand(true, false, 2, txtFieldTimeCRPRPPls.getText());
-
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPPls.getText()));
-                creepCommand.setName("Самоход RP+");
-
-                txtFieldCRPAmtImpRPPls.setDisable(true);
-                txtFieldTimeCRPRPPls.setDisable(true);
-                txtFieldCRPUProcRPPls.setDisable(true);
-
-                CRPTogBtnRPPls.setSelected(true);
-                testListForCollumRPPls.add(creepCommand);
-            } else {
-                for (Commands command : testListForCollumRPPls) {
-                    if (command instanceof CreepCommand) {
-                        if (command.getName().equals("Самоход RP+")) {
-                            testListForCollumRPPls.remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldCRPAmtImpRPPls.setDisable(false);
-                txtFieldTimeCRPRPPls.setDisable(false);
-                txtFieldCRPUProcRPPls.setDisable(false);
-
-                if (addTglBtnCRPRPPlsGOST.isSelected()) {
-                    CRPTogBtnRPPls.setSelected(true);
-                } else CRPTogBtnRPPls.setSelected(false);
-            }
-        }
-
-        //Добаление самохода с параметрами по ГОСТу RP+
-        if (event.getSource() == addTglBtnCRPRPPlsGOST) {
-            if (addTglBtnCRPRPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(true, true, 2);
-
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход RP+ ГОСТ");
-
-                CRPTogBtnRPPls.setSelected(true);
-
-                testListForCollumRPPls.add(creepCommand);
-            } else {
-                for (Commands command : testListForCollumRPPls) {
-                    if (command instanceof CreepCommand) {
-                        if (command.getName().equals("Самоход RP+ ГОСТ")) {
-                            testListForCollumRPPls.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnCRPRPPls.isSelected()) {
-                    CRPTogBtnRPPls.setSelected(true);
-                } else CRPTogBtnRPPls.setSelected(false);
-            }
-        }
-
-        //Добаление самохода с параметрами пользователя RP-
-        if (event.getSource() == addTglBtnCRPRPMns) {
-            if (addTglBtnCRPRPMns.isSelected()) {
-                creepCommand = new CreepCommand(true, false, 3, txtFieldTimeCRPRPMns.getText());
-
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPMns.getText()));
-                creepCommand.setName("Самоход RP-");
-
-                txtFieldCRPAmtImpRPMns.setDisable(true);
-                txtFieldTimeCRPRPMns.setDisable(true);
-                txtFieldCRPUProcRPMns.setDisable(true);
-
-                CRPTogBtnRPMns.setSelected(true);
-                testListForCollumRPMns.add(creepCommand);
-            } else {
-                for (Commands command : testListForCollumRPMns) {
-                    if (command instanceof CreepCommand) {
-                        if (command.getName().equals("Самоход RP-")) {
-                            testListForCollumRPMns.remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldCRPAmtImpRPMns.setDisable(false);
-                txtFieldTimeCRPRPMns.setDisable(false);
-                txtFieldCRPUProcRPMns.setDisable(false);
-
-                if (addTglBtnCRPRPMnsGOST.isSelected()) {
-                    CRPTogBtnRPMns.setSelected(true);
-                } else CRPTogBtnRPMns.setSelected(false);
-            }
-        }
-
-        //Добаление самохода с параметрами по ГОСТу RP-
-        if (event.getSource() == addTglBtnCRPRPMnsGOST) {
-            if (addTglBtnCRPRPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(true, true, 3);
-
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
-                creepCommand.setName("Самоход RP- ГОСТ");
-
-                CRPTogBtnRPMns.setSelected(true);
-
-                testListForCollumRPMns.add(creepCommand);
-            } else {
-                for (Commands command : testListForCollumRPMns) {
-                    if (command instanceof CreepCommand) {
-                        if (command.getName().equals("Самоход RP- ГОСТ")) {
-                            testListForCollumRPMns.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnCRPRPMns.isSelected()) {
-                    CRPTogBtnRPMns.setSelected(true);
-                } else CRPTogBtnRPMns.setSelected(false);
-            }
-        }
-        //------------------------------------------------------------------------------
-        //Добаление теста на чувствительность с параметрами пользователя AP+
-        StartCommand startCommand;
-        if (event.getSource() == addTglBtnSTAAPPls) {
-            if (addTglBtnSTAAPPls.isSelected()) {
-                startCommand = new StartCommand(true, 0, 0, false, txtFieldTimeSRAAPPls.getText());
-
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPPls.getText()));
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPPls.getText()));
-                startCommand.setName("Чувствительность AP+");
-
-                txtFieldSTAAmtImpAPPls.setDisable(true);
-                txtFieldTimeSRAAPPls.setDisable(true);
-                txtFieldSTAIProcAPPls.setDisable(true);
-
-                STATogBtnAPPls.setSelected(true);
-                testListForCollumAPPls.add(startCommand);
-            } else {
-                for (Commands command : testListForCollumAPPls) {
-                    if (command instanceof StartCommand) {
-                        if (command.getName().equals("Чувствительность AP+")) {
-                            testListForCollumAPPls.remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldSTAAmtImpAPPls.setDisable(false);
-                txtFieldTimeSRAAPPls.setDisable(false);
-                txtFieldSTAIProcAPPls.setDisable(false);
-
-                if (addTglBtnSTAAPPlsGOST.isSelected()) {
-                    STATogBtnAPPls.setSelected(true);
-                } else STATogBtnAPPls.setSelected(false);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами по ГОСТу AP+
-        if (event.getSource() == addTglBtnSTAAPPlsGOST) {
-            if (addTglBtnSTAAPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(true, 0, 0, true);
-
-                startCommand.setName("Чувствительность ГОСТ AP+");
-
-                STATogBtnAPPls.setSelected(true);
-                testListForCollumAPPls.add(startCommand);
-            } else {
-                for (Commands command : testListForCollumAPPls) {
-                    if (command instanceof StartCommand) {
-                        if (command.getName().equals("Чувствительность ГОСТ AP+")) {
-                            testListForCollumAPPls.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnSTAAPPls.isSelected()) {
-                    STATogBtnAPPls.setSelected(true);
-                } else STATogBtnAPPls.setSelected(false);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами пользователя AP-
-        if (event.getSource() == addTglBtnSTAAPMns) {
-            if (addTglBtnSTAAPMns.isSelected()) {
-                startCommand = new StartCommand(true, 1, 1, false, txtFieldTimeSRAAPMns.getText());
-
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPMns.getText()));
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPMns.getText()));
-                startCommand.setName("Чувствительность AP-");
-
-                txtFieldSTAAmtImpAPMns.setDisable(true);
-                txtFieldTimeSRAAPMns.setDisable(true);
-                txtFieldSTAIProcAPMns.setDisable(true);
-
-                STATogBtnAPMns.setSelected(true);
-                testListForCollumAPMns.add(startCommand);
-            } else {
-                for (Commands command : testListForCollumAPMns) {
-                    if (command instanceof StartCommand) {
-                        if (command.getName().equals("Чувствительность AP-")) {
-                            testListForCollumAPMns.remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldSTAAmtImpAPMns.setDisable(false);
-                txtFieldTimeSRAAPMns.setDisable(false);
-                txtFieldSTAIProcAPMns.setDisable(false);
-
-                if (addTglBtnSTAAPMnsGOST.isSelected()) {
-                    STATogBtnAPMns.setSelected(true);
-                } else STATogBtnAPMns.setSelected(false);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами по ГОСТу AP-
-        if (event.getSource() == addTglBtnSTAAPMnsGOST) {
-            if (addTglBtnSTAAPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(true, 1, 1, true);
-
-                startCommand.setName("Чувствительность ГОСТ AP-");
-
-                STATogBtnAPMns.setSelected(true);
-                testListForCollumAPMns.add(startCommand);
-            } else {
-                for (Commands command : testListForCollumAPMns) {
-                    if (command instanceof StartCommand) {
-                        if (command.getName().equals("Чувствительность ГОСТ AP-")) {
-                            testListForCollumAPMns.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnSTAAPMns.isSelected()) {
-                    STATogBtnAPMns.setSelected(true);
-                } else STATogBtnAPMns.setSelected(false);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами пользователя RP+
-        if (event.getSource() == addTglBtnSTARPPls) {
-            if (addTglBtnSTARPPls.isSelected()) {
-                startCommand = new StartCommand(true, 0, 2, false, txtFieldTimeSRARPPls.getText());
-
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPPls.getText()));
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPPls.getText()));
-                startCommand.setName("Чувствительность RP+");
-
-                txtFieldSTAAmtImpRPPls.setDisable(true);
-                txtFieldTimeSRARPPls.setDisable(true);
-                txtFieldSTAIProcRPPls.setDisable(true);
-
-                STATogBtnRPPls.setSelected(true);
-                testListForCollumRPPls.add(startCommand);
-
-            } else {
-                for (Commands command : testListForCollumRPPls) {
-                    if (command instanceof StartCommand) {
-                        if (command.getName().equals("Чувствительность RP+")) {
-                            testListForCollumRPPls.remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldSTAAmtImpRPPls.setDisable(false);
-                txtFieldTimeSRARPPls.setDisable(false);
-                txtFieldSTAIProcRPPls.setDisable(false);
-
-                if (addTglBtnSTARPPlsGOST.isSelected()) {
-                    STATogBtnRPPls.setSelected(true);
-                } else STATogBtnRPPls.setSelected(false);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами по ГОСТу RP+
-        if (event.getSource() == addTglBtnSTARPPlsGOST) {
-            if (addTglBtnSTARPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(true, 0, 1, true);
-
-                startCommand.setName("Чувствительность ГОСТ RP+");
-
-                STATogBtnRPPls.setSelected(true);
-                testListForCollumRPPls.add(startCommand);
-            } else {
-                for (Commands command : testListForCollumRPPls) {
-                    if (command instanceof StartCommand) {
-                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ RP+")) {
-                            testListForCollumRPPls.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnSTARPPls.isSelected()) {
-                    STATogBtnRPPls.setSelected(true);
-                } else STATogBtnRPPls.setSelected(false);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами пользователя RP-
-        if (event.getSource() == addTglBtnSTARPMns) {
-            if (addTglBtnSTARPMns.isSelected()) {
-                startCommand = new StartCommand(true, 1, 3, false, txtFieldTimeSRARPMns.getText());
-
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPMns.getText()));
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPMns.getText()));
-                startCommand.setName("Чувствительность RP-");
-
-                txtFieldSTAAmtImpRPMns.setDisable(false);
-                txtFieldTimeSRARPMns.setDisable(false);
-                txtFieldSTAIProcRPMns.setDisable(false);
-
-                STATogBtnRPMns.setSelected(true);
-                testListForCollumRPMns.add(startCommand);
-            } else {
-                for (Commands command : testListForCollumRPMns) {
-                    if (command instanceof StartCommand) {
-                        if (command.getName().equals("Чувствительность RP-")) {
-                            testListForCollumRPMns.remove(command);
-                            break;
-                        }
-                    }
-                }
-                txtFieldSTAAmtImpRPMns.setDisable(true);
-                txtFieldTimeSRARPMns.setDisable(true);
-                txtFieldSTAIProcRPMns.setDisable(true);
-
-                if (addTglBtnSTARPMnsGOST.isSelected()) {
-                    STATogBtnRPMns.setSelected(true);
-                } else STATogBtnRPMns.setSelected(false);
-            }
-        }
-
-        //Добаление теста на чувствительность с параметрами по ГОСТу RP-
-        if (event.getSource() == addTglBtnSTARPMnsGOST) {
-            if (addTglBtnSTARPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(true, 0, 3, true);
-
-                startCommand.setName("Чувствительность ГОСТ RP-");
-
-                STATogBtnRPMns.setSelected(true);
-                testListForCollumRPMns.add(startCommand);
-            } else {
-                for (Commands command : testListForCollumRPMns) {
-                    if (command instanceof StartCommand) {
-                        if (command.getName().equals("Чувствительность ГОСТ RP-")) {
-                            testListForCollumRPMns.remove(command);
-                            break;
-                        }
-                    }
-                }
-
-                if (addTglBtnSTARPMns.isSelected()) {
-                    STATogBtnRPMns.setSelected(true);
-                } else STATogBtnRPMns.setSelected(false);
-            }
-        }
-
-//        RTCCommand rtcCommand;
-//        //Добаление теста "точность хода часов" AP+
-//        String cbValue;
-//        if(event.getSource() == addTglBtnRTCAPPls) {
-//            if (addTglBtnRTCAPPls.isSelected()) {
-//                if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
+//        //Действие для добавления теста Самоход
+//        CreepCommand creepCommand;
+//        //---------------------------------------------------------------------------------------
+//        //Добаление самохода с параметрами пользователя AP+
+//        if (event.getSource() == addTglBtnCRPAPPls) {
+//            if (addTglBtnCRPAPPls.isSelected()) {
+//                creepCommand = new CreepCommand(true, false, 0, txtFieldTimeCRPAPPls.getText());
 //
-//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
-//                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 0, Double.parseDouble(txtFieldRngEAPPls.getText()), 0);
-//                    cbValue = "В ед. частоты";
-//                } else {
-//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPPls.getText()), 1.000000,
-//                            Integer.parseInt(txtFldRTCAmtMshAPPls.getText()), 1, Double.parseDouble(txtFieldRngEAPPls.getText()), 0);
-//                    cbValue = "Сутч. погрешность";
-//                }
+//                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
+//                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
+//                creepCommand.setName("Самоход AP+");
 //
-//                rtcCommand.setName("ТХЧ AP+");
+//                txtFieldCRPAmtImpAPPls.setDisable(true);
+//                txtFieldTimeCRPAPPls.setDisable(true);
+//                txtFieldCRPUProcAPPls.setDisable(true);
 //
-//                testListForCollumAPPls.add(rtcCommand);
-//
-//                RTCTogBtnAPPls.setSelected(true);
-//                ChcBxRTCErrAPPls.getItems().clear();
-//                ChcBxRTCErrAPPls.getItems().addAll(cbValue);
-//                ChcBxRTCErrAPPls.getSelectionModel().select(0);
-//
-//                txtFldRTCTimeMshAPPls.setDisable(true);
-//                txtFldRTCAmtMshAPPls.setDisable(true);
-//                txtFieldRngEAPPls.setDisable(true);
+//                testListForCollumAPPls.add(creepCommand);
+//                CRPTogBtnAPPls.setSelected(true);
 //            } else {
 //                for (Commands command : testListForCollumAPPls) {
-//                    if (command instanceof RTCCommand) {
-//                        if (command.getName().equals("ТХЧ AP+")) {
+//                    if (command instanceof CreepCommand) {
+//                        if (command.getName().equals("Самоход AP+")) {
+//                            testListForCollumAPPls.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//                txtFieldCRPAmtImpAPPls.setDisable(false);
+//                txtFieldTimeCRPAPPls.setDisable(false);
+//                txtFieldCRPUProcAPPls.setDisable(false);
+//
+//                if (addTglBtnCRPAPPlsGOST.isSelected()) {
+//                    CRPTogBtnAPPls.setSelected(true);
+//                } else CRPTogBtnAPPls.setSelected(false);
+//            }
+//        }
+//
+//        //Добаление самохода с параметрами по ГОСТу AP+
+//        if (event.getSource() == addTglBtnCRPAPPlsGOST) {
+//            if (addTglBtnCRPAPPlsGOST.isSelected()) {
+//                creepCommand = new CreepCommand(true, true, 0);
+//
+//                creepCommand.setPulseValue(2);
+//                creepCommand.setVoltPer(115.0);
+//                creepCommand.setName("Самоход AP+ ГОСТ");
+//
+//                CRPTogBtnAPPls.setSelected(true);
+//
+//                testListForCollumAPPls.add(creepCommand);
+//            } else {
+//                for (Commands command : testListForCollumAPPls) {
+//                    if (command instanceof CreepCommand) {
+//                        if (command.getName().equals("Самоход AP+ ГОСТ")) {
 //                            testListForCollumAPPls.remove(command);
 //                            break;
 //                        }
 //                    }
 //                }
 //
-//                RTCTogBtnAPPls.setSelected(false);
-//                ChcBxRTCErrAPPls.getItems().clear();
-//                ChcBxRTCErrAPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-//                ChcBxRTCErrAPPls.getSelectionModel().select(0);
-//
-//                txtFldRTCTimeMshAPPls.setDisable(false);
-//                txtFldRTCAmtMshAPPls.setDisable(false);
-//                txtFieldRngEAPPls.setDisable(false);
+//                if (addTglBtnCRPAPPls.isSelected()) {
+//                    CRPTogBtnAPPls.setSelected(true);
+//                } else CRPTogBtnAPPls.setSelected(false);
 //            }
 //        }
 //
-//        //Добаление теста "точность хода часов" AP-
-//        if(event.getSource() == addTglBtnRTCAPMns) {
-//            if (addTglBtnRTCAPMns.isSelected()) {
-//                if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
-//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
-//                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 0, Double.parseDouble(txtFieldRngEAPMns.getText()), 1);
-//                    cbValue = "В ед. частоты";
-//                } else {
-//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshAPMns.getText()), 1.000000,
-//                            Integer.parseInt(txtFldRTCAmtMshAPMns.getText()), 1, Double.parseDouble(txtFieldRngEAPMns.getText()), 1);
-//                    cbValue = "Сутч. погрешность";
-//                }
+//        //Добаление самохода с параметрами пользователя AP-
+//        if (event.getSource() == addTglBtnCRPAPMns) {
+//            if (addTglBtnCRPAPMns.isSelected()) {
+//                creepCommand = new CreepCommand(true, false, 1, txtFieldTimeCRPAPMns.getText());
 //
-//                rtcCommand.setName("ТХЧ AP-");
+//                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
+//                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPMns.getText()));
+//                creepCommand.setName("Самоход AP-");
 //
-//                RTCTogBtnAPMns.setSelected(true);
-//                ChcBxRTCErrAPMns.getItems().clear();
-//                ChcBxRTCErrAPMns.getItems().addAll(cbValue);
-//                ChcBxRTCErrAPMns.getSelectionModel().select(0);
+//                txtFieldCRPAmtImpAPMns.setDisable(true);
+//                txtFieldTimeCRPAPMns.setDisable(true);
+//                txtFieldCRPUProcAPMns.setDisable(true);
 //
-//                txtFldRTCTimeMshAPMns.setDisable(true);
-//                txtFldRTCAmtMshAPMns.setDisable(true);
-//                txtFieldRngEAPMns.setDisable(true);
-//
-//                testListForCollumAPMns.add(rtcCommand);
+//                CRPTogBtnAPMns.setSelected(true);
+//                testListForCollumAPMns.add(creepCommand);
 //            } else {
 //                for (Commands command : testListForCollumAPMns) {
-//                    if (command instanceof RTCCommand) {
-//                        if (command.getName().equals("ТХЧ AP-")) {
+//                    if (command instanceof CreepCommand) {
+//                        if (command.getName().equals("Самоход AP-")) {
+//                            testListForCollumAPMns.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//                txtFieldCRPAmtImpAPMns.setDisable(false);
+//                txtFieldTimeCRPAPMns.setDisable(false);
+//                txtFieldCRPUProcAPMns.setDisable(false);
+//
+//                if (addTglBtnCRPAPMnsGOST.isSelected()) {
+//                    CRPTogBtnAPMns.setSelected(true);
+//                } else CRPTogBtnAPMns.setSelected(false);
+//            }
+//        }
+//
+//        //Добаление самохода с параметрами по ГОСТу AP-
+//        if (event.getSource() == addTglBtnCRPAPMnsGOST) {
+//            if (addTglBtnCRPAPMnsGOST.isSelected()) {
+//                creepCommand = new CreepCommand(true, true, 1);
+//
+//                creepCommand.setPulseValue(2);
+//                creepCommand.setVoltPer(115.0);
+//                creepCommand.setName("Самоход AP- ГОСТ");
+//
+//                CRPTogBtnAPMns.setSelected(true);
+//
+//                testListForCollumAPMns.add(creepCommand);
+//            } else {
+//                for (Commands command : testListForCollumAPMns) {
+//                    if (command instanceof CreepCommand) {
+//                        if (command.getName().equals("Самоход AP- ГОСТ")) {
 //                            testListForCollumAPMns.remove(command);
 //                            break;
 //                        }
 //                    }
 //                }
 //
-//                RTCTogBtnAPMns.setSelected(false);
-//                ChcBxRTCErrAPMns.getItems().clear();
-//                ChcBxRTCErrAPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-//                ChcBxRTCErrAPMns.getSelectionModel().select(0);
-//
-//                txtFldRTCTimeMshAPMns.setDisable(false);
-//                txtFldRTCAmtMshAPMns.setDisable(false);
-//                txtFieldRngEAPMns.setDisable(false);
+//                if (addTglBtnCRPAPMns.isSelected()) {
+//                    CRPTogBtnAPMns.setSelected(true);
+//                } else CRPTogBtnAPMns.setSelected(false);
 //            }
 //        }
 //
-//        //Добаление теста "точность хода часов" RP+
-//        if(event.getSource() == addTglBtnRTCRPPls) {
-//            if (addTglBtnRTCRPPls.isSelected()) {
-//                if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
-//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
-//                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 0, Double.parseDouble(txtFieldRngERPPls.getText()), 2);
-//                    cbValue = "В ед. частоты";
-//                } else {
-//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPPls.getText()), 1.000000,
-//                            Integer.parseInt(txtFldRTCAmtMshRPPls.getText()), 1, Double.parseDouble(txtFieldRngERPPls.getText()), 2);
-//                    cbValue = "Сутч. погрешность";
-//                }
+//        //Добаление самохода с параметрами пользователя RP+
+//        if (event.getSource() == addTglBtnCRPRPPls) {
+//            if (addTglBtnCRPRPPls.isSelected()) {
+//                creepCommand = new CreepCommand(true, false, 2, txtFieldTimeCRPRPPls.getText());
 //
-//                rtcCommand.setName("ТХЧ RP+");
+//                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
+//                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPPls.getText()));
+//                creepCommand.setName("Самоход RP+");
 //
-//                RTCTogBtnRPPls.setSelected(true);
-//                ChcBxRTCErrRPPls.getItems().clear();
-//                ChcBxRTCErrRPPls.getItems().addAll(cbValue);
-//                ChcBxRTCErrRPPls.getSelectionModel().select(0);
+//                txtFieldCRPAmtImpRPPls.setDisable(true);
+//                txtFieldTimeCRPRPPls.setDisable(true);
+//                txtFieldCRPUProcRPPls.setDisable(true);
 //
-//                txtFldRTCTimeMshRPPls.setDisable(true);
-//                txtFldRTCAmtMshRPPls.setDisable(true);
-//                txtFieldRngERPPls.setDisable(true);
-//
-//                testListForCollumRPPls.add(rtcCommand);
-//
+//                CRPTogBtnRPPls.setSelected(true);
+//                testListForCollumRPPls.add(creepCommand);
 //            } else {
 //                for (Commands command : testListForCollumRPPls) {
-//                    if (command instanceof RTCCommand) {
-//                        if (((RTCCommand) command).getName().equals("ТХЧ RP+")) {
+//                    if (command instanceof CreepCommand) {
+//                        if (command.getName().equals("Самоход RP+")) {
+//                            testListForCollumRPPls.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//                txtFieldCRPAmtImpRPPls.setDisable(false);
+//                txtFieldTimeCRPRPPls.setDisable(false);
+//                txtFieldCRPUProcRPPls.setDisable(false);
+//
+//                if (addTglBtnCRPRPPlsGOST.isSelected()) {
+//                    CRPTogBtnRPPls.setSelected(true);
+//                } else CRPTogBtnRPPls.setSelected(false);
+//            }
+//        }
+//
+//        //Добаление самохода с параметрами по ГОСТу RP+
+//        if (event.getSource() == addTglBtnCRPRPPlsGOST) {
+//            if (addTglBtnCRPRPPlsGOST.isSelected()) {
+//                creepCommand = new CreepCommand(true, true, 2);
+//
+//                creepCommand.setPulseValue(2);
+//                creepCommand.setVoltPer(115.0);
+//                creepCommand.setName("Самоход RP+ ГОСТ");
+//
+//                CRPTogBtnRPPls.setSelected(true);
+//
+//                testListForCollumRPPls.add(creepCommand);
+//            } else {
+//                for (Commands command : testListForCollumRPPls) {
+//                    if (command instanceof CreepCommand) {
+//                        if (command.getName().equals("Самоход RP+ ГОСТ")) {
 //                            testListForCollumRPPls.remove(command);
 //                            break;
 //                        }
 //                    }
 //                }
 //
-//                RTCTogBtnRPPls.setSelected(false);
-//                ChcBxRTCErrRPPls.getItems().clear();
-//                ChcBxRTCErrRPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-//                ChcBxRTCErrRPPls.getSelectionModel().select(0);
-//
-//                txtFldRTCTimeMshRPPls.setDisable(false);
-//                txtFldRTCAmtMshRPPls.setDisable(false);
-//                txtFieldRngERPPls.setDisable(false);
+//                if (addTglBtnCRPRPPls.isSelected()) {
+//                    CRPTogBtnRPPls.setSelected(true);
+//                } else CRPTogBtnRPPls.setSelected(false);
 //            }
 //        }
 //
-//        //Добаление теста "точность хода часов" RP-
-//        if(event.getSource() == addTglBtnRTCRPMns) {
-//            if (addTglBtnRTCRPMns.isSelected()) {
-//                if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
-//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
-//                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 0, Double.parseDouble(txtFieldRngERPMns.getText()), 3);
-//                    cbValue = "В ед. частоты";
-//                } else {
-//                    rtcCommand = new RTCCommand(Integer.parseInt(txtFldRTCTimeMshRPMns.getText()), 1.000000,
-//                            Integer.parseInt(txtFldRTCAmtMshRPMns.getText()), 1, Double.parseDouble(txtFieldRngERPMns.getText()), 3);
-//                    cbValue = "Сутч. погрешность";
-//                }
+//        //Добаление самохода с параметрами пользователя RP-
+//        if (event.getSource() == addTglBtnCRPRPMns) {
+//            if (addTglBtnCRPRPMns.isSelected()) {
+//                creepCommand = new CreepCommand(true, false, 3, txtFieldTimeCRPRPMns.getText());
 //
-//                rtcCommand.setName("ТХЧ RP-");
+//                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
+//                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPMns.getText()));
+//                creepCommand.setName("Самоход RP-");
 //
-//                RTCTogBtnRPMns.setSelected(true);
-//                ChcBxRTCErrRPMns.getItems().clear();
-//                ChcBxRTCErrRPMns.getItems().addAll(cbValue);
-//                ChcBxRTCErrRPMns.getSelectionModel().select(0);
+//                txtFieldCRPAmtImpRPMns.setDisable(true);
+//                txtFieldTimeCRPRPMns.setDisable(true);
+//                txtFieldCRPUProcRPMns.setDisable(true);
 //
-//                txtFldRTCTimeMshRPMns.setDisable(true);
-//                txtFldRTCAmtMshRPMns.setDisable(true);
-//                txtFieldRngERPMns.setDisable(true);
-//
-//                testListForCollumRPMns.add(rtcCommand);
+//                CRPTogBtnRPMns.setSelected(true);
+//                testListForCollumRPMns.add(creepCommand);
 //            } else {
 //                for (Commands command : testListForCollumRPMns) {
-//                    if (command instanceof RTCCommand) {
-//                        if (command.getName().equals("ТХЧ RP-")) {
+//                    if (command instanceof CreepCommand) {
+//                        if (command.getName().equals("Самоход RP-")) {
+//                            testListForCollumRPMns.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//                txtFieldCRPAmtImpRPMns.setDisable(false);
+//                txtFieldTimeCRPRPMns.setDisable(false);
+//                txtFieldCRPUProcRPMns.setDisable(false);
+//
+//                if (addTglBtnCRPRPMnsGOST.isSelected()) {
+//                    CRPTogBtnRPMns.setSelected(true);
+//                } else CRPTogBtnRPMns.setSelected(false);
+//            }
+//        }
+//
+//        //Добаление самохода с параметрами по ГОСТу RP-
+//        if (event.getSource() == addTglBtnCRPRPMnsGOST) {
+//            if (addTglBtnCRPRPMnsGOST.isSelected()) {
+//                creepCommand = new CreepCommand(true, true, 3);
+//
+//                creepCommand.setPulseValue(2);
+//                creepCommand.setVoltPer(115.0);
+//                creepCommand.setName("Самоход RP- ГОСТ");
+//
+//                CRPTogBtnRPMns.setSelected(true);
+//
+//                testListForCollumRPMns.add(creepCommand);
+//            } else {
+//                for (Commands command : testListForCollumRPMns) {
+//                    if (command instanceof CreepCommand) {
+//                        if (command.getName().equals("Самоход RP- ГОСТ")) {
 //                            testListForCollumRPMns.remove(command);
 //                            break;
 //                        }
 //                    }
 //                }
 //
-//                RTCTogBtnRPMns.setSelected(false);
-//                ChcBxRTCErrRPMns.getItems().clear();
-//                ChcBxRTCErrRPMns.getItems().addAll("В ед. частоты", "Сутч. погрешность");
-//                ChcBxRTCErrRPMns.getSelectionModel().select(0);
-//
-//                txtFldRTCTimeMshRPMns.setDisable(false);
-//                txtFldRTCAmtMshRPMns.setDisable(false);
-//                txtFieldRngERPMns.setDisable(false);
+//                if (addTglBtnCRPRPMns.isSelected()) {
+//                    CRPTogBtnRPMns.setSelected(true);
+//                } else CRPTogBtnRPMns.setSelected(false);
 //            }
 //        }
+//        //------------------------------------------------------------------------------
+//        //Добаление теста на чувствительность с параметрами пользователя AP+
+//        StartCommand startCommand;
+//        if (event.getSource() == addTglBtnSTAAPPls) {
+//            if (addTglBtnSTAAPPls.isSelected()) {
+//                startCommand = new StartCommand(true, 0, 0, false, txtFieldTimeSRAAPPls.getText());
+//
+//                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPPls.getText()));
+//                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPPls.getText()));
+//                startCommand.setName("Чувствительность AP+");
+//
+//                txtFieldSTAAmtImpAPPls.setDisable(true);
+//                txtFieldTimeSRAAPPls.setDisable(true);
+//                txtFieldSTAIProcAPPls.setDisable(true);
+//
+//                STATogBtnAPPls.setSelected(true);
+//                testListForCollumAPPls.add(startCommand);
+//            } else {
+//                for (Commands command : testListForCollumAPPls) {
+//                    if (command instanceof StartCommand) {
+//                        if (command.getName().equals("Чувствительность AP+")) {
+//                            testListForCollumAPPls.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//                txtFieldSTAAmtImpAPPls.setDisable(false);
+//                txtFieldTimeSRAAPPls.setDisable(false);
+//                txtFieldSTAIProcAPPls.setDisable(false);
+//
+//                if (addTglBtnSTAAPPlsGOST.isSelected()) {
+//                    STATogBtnAPPls.setSelected(true);
+//                } else STATogBtnAPPls.setSelected(false);
+//            }
+//        }
+//
+//        //Добаление теста на чувствительность с параметрами по ГОСТу AP+
+//        if (event.getSource() == addTglBtnSTAAPPlsGOST) {
+//            if (addTglBtnSTAAPPlsGOST.isSelected()) {
+//                startCommand = new StartCommand(true, 0, 0, true);
+//
+//                startCommand.setName("Чувствительность ГОСТ AP+");
+//
+//                STATogBtnAPPls.setSelected(true);
+//                testListForCollumAPPls.add(startCommand);
+//            } else {
+//                for (Commands command : testListForCollumAPPls) {
+//                    if (command instanceof StartCommand) {
+//                        if (command.getName().equals("Чувствительность ГОСТ AP+")) {
+//                            testListForCollumAPPls.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                if (addTglBtnSTAAPPls.isSelected()) {
+//                    STATogBtnAPPls.setSelected(true);
+//                } else STATogBtnAPPls.setSelected(false);
+//            }
+//        }
+//
+//        //Добаление теста на чувствительность с параметрами пользователя AP-
+//        if (event.getSource() == addTglBtnSTAAPMns) {
+//            if (addTglBtnSTAAPMns.isSelected()) {
+//                startCommand = new StartCommand(true, 1, 1, false, txtFieldTimeSRAAPMns.getText());
+//
+//                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPMns.getText()));
+//                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPMns.getText()));
+//                startCommand.setName("Чувствительность AP-");
+//
+//                txtFieldSTAAmtImpAPMns.setDisable(true);
+//                txtFieldTimeSRAAPMns.setDisable(true);
+//                txtFieldSTAIProcAPMns.setDisable(true);
+//
+//                STATogBtnAPMns.setSelected(true);
+//                testListForCollumAPMns.add(startCommand);
+//            } else {
+//                for (Commands command : testListForCollumAPMns) {
+//                    if (command instanceof StartCommand) {
+//                        if (command.getName().equals("Чувствительность AP-")) {
+//                            testListForCollumAPMns.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//                txtFieldSTAAmtImpAPMns.setDisable(false);
+//                txtFieldTimeSRAAPMns.setDisable(false);
+//                txtFieldSTAIProcAPMns.setDisable(false);
+//
+//                if (addTglBtnSTAAPMnsGOST.isSelected()) {
+//                    STATogBtnAPMns.setSelected(true);
+//                } else STATogBtnAPMns.setSelected(false);
+//            }
+//        }
+//
+//        //Добаление теста на чувствительность с параметрами по ГОСТу AP-
+//        if (event.getSource() == addTglBtnSTAAPMnsGOST) {
+//            if (addTglBtnSTAAPMnsGOST.isSelected()) {
+//                startCommand = new StartCommand(true, 1, 1, true);
+//
+//                startCommand.setName("Чувствительность ГОСТ AP-");
+//
+//                STATogBtnAPMns.setSelected(true);
+//                testListForCollumAPMns.add(startCommand);
+//            } else {
+//                for (Commands command : testListForCollumAPMns) {
+//                    if (command instanceof StartCommand) {
+//                        if (command.getName().equals("Чувствительность ГОСТ AP-")) {
+//                            testListForCollumAPMns.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                if (addTglBtnSTAAPMns.isSelected()) {
+//                    STATogBtnAPMns.setSelected(true);
+//                } else STATogBtnAPMns.setSelected(false);
+//            }
+//        }
+//
+//        //Добаление теста на чувствительность с параметрами пользователя RP+
+//        if (event.getSource() == addTglBtnSTARPPls) {
+//            if (addTglBtnSTARPPls.isSelected()) {
+//                startCommand = new StartCommand(true, 0, 2, false, txtFieldTimeSRARPPls.getText());
+//
+//                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPPls.getText()));
+//                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPPls.getText()));
+//                startCommand.setName("Чувствительность RP+");
+//
+//                txtFieldSTAAmtImpRPPls.setDisable(true);
+//                txtFieldTimeSRARPPls.setDisable(true);
+//                txtFieldSTAIProcRPPls.setDisable(true);
+//
+//                STATogBtnRPPls.setSelected(true);
+//                testListForCollumRPPls.add(startCommand);
+//
+//            } else {
+//                for (Commands command : testListForCollumRPPls) {
+//                    if (command instanceof StartCommand) {
+//                        if (command.getName().equals("Чувствительность RP+")) {
+//                            testListForCollumRPPls.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//                txtFieldSTAAmtImpRPPls.setDisable(false);
+//                txtFieldTimeSRARPPls.setDisable(false);
+//                txtFieldSTAIProcRPPls.setDisable(false);
+//
+//                if (addTglBtnSTARPPlsGOST.isSelected()) {
+//                    STATogBtnRPPls.setSelected(true);
+//                } else STATogBtnRPPls.setSelected(false);
+//            }
+//        }
+//
+//        //Добаление теста на чувствительность с параметрами по ГОСТу RP+
+//        if (event.getSource() == addTglBtnSTARPPlsGOST) {
+//            if (addTglBtnSTARPPlsGOST.isSelected()) {
+//                startCommand = new StartCommand(true, 0, 1, true);
+//
+//                startCommand.setName("Чувствительность ГОСТ RP+");
+//
+//                STATogBtnRPPls.setSelected(true);
+//                testListForCollumRPPls.add(startCommand);
+//            } else {
+//                for (Commands command : testListForCollumRPPls) {
+//                    if (command instanceof StartCommand) {
+//                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ RP+")) {
+//                            testListForCollumRPPls.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                if (addTglBtnSTARPPls.isSelected()) {
+//                    STATogBtnRPPls.setSelected(true);
+//                } else STATogBtnRPPls.setSelected(false);
+//            }
+//        }
+//
+//        //Добаление теста на чувствительность с параметрами пользователя RP-
+//        if (event.getSource() == addTglBtnSTARPMns) {
+//            if (addTglBtnSTARPMns.isSelected()) {
+//                startCommand = new StartCommand(true, 1, 3, false, txtFieldTimeSRARPMns.getText());
+//
+//                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPMns.getText()));
+//                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPMns.getText()));
+//                startCommand.setName("Чувствительность RP-");
+//
+//                txtFieldSTAAmtImpRPMns.setDisable(false);
+//                txtFieldTimeSRARPMns.setDisable(false);
+//                txtFieldSTAIProcRPMns.setDisable(false);
+//
+//                STATogBtnRPMns.setSelected(true);
+//                testListForCollumRPMns.add(startCommand);
+//            } else {
+//                for (Commands command : testListForCollumRPMns) {
+//                    if (command instanceof StartCommand) {
+//                        if (command.getName().equals("Чувствительность RP-")) {
+//                            testListForCollumRPMns.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//                txtFieldSTAAmtImpRPMns.setDisable(true);
+//                txtFieldTimeSRARPMns.setDisable(true);
+//                txtFieldSTAIProcRPMns.setDisable(true);
+//
+//                if (addTglBtnSTARPMnsGOST.isSelected()) {
+//                    STATogBtnRPMns.setSelected(true);
+//                } else STATogBtnRPMns.setSelected(false);
+//            }
+//        }
+//
+//        //Добаление теста на чувствительность с параметрами по ГОСТу RP-
+//        if (event.getSource() == addTglBtnSTARPMnsGOST) {
+//            if (addTglBtnSTARPMnsGOST.isSelected()) {
+//                startCommand = new StartCommand(true, 0, 3, true);
+//
+//                startCommand.setName("Чувствительность ГОСТ RP-");
+//
+//                STATogBtnRPMns.setSelected(true);
+//                testListForCollumRPMns.add(startCommand);
+//            } else {
+//                for (Commands command : testListForCollumRPMns) {
+//                    if (command instanceof StartCommand) {
+//                        if (command.getName().equals("Чувствительность ГОСТ RP-")) {
+//                            testListForCollumRPMns.remove(command);
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                if (addTglBtnSTARPMns.isSelected()) {
+//                    STATogBtnRPMns.setSelected(true);
+//                } else STATogBtnRPMns.setSelected(false);
+//            }
+//        }
+//
     }
 
 

@@ -30,7 +30,5 @@ public interface Commands{
     boolean isActive();
     void setActive(boolean active);
 
-//    boolean isThreePhaseCommand();
-//
-//    void setThreePhaseCommand(boolean threePhaseCommand);
+    void setPhase(int phase);
 }

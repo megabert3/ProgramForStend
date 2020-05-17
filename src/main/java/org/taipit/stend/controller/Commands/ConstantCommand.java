@@ -138,7 +138,6 @@ public class ConstantCommand implements Commands, Serializable {
         cosP = "1.0";
     }
 
-
     //===================================================================================================
     //Команда выполнения для последовательного теста
     @Override
@@ -518,5 +517,21 @@ public class ConstantCommand implements Commands, Serializable {
 
     public double getEmaxProc() {
         return emaxProc;
+    }
+
+    public double getEminProc() {
+        return eminProc;
+    }
+
+    public void setEminProc(double eminProc) {
+        this.eminProc = eminProc;
+    }
+
+    public void setEmaxProc(double emaxProc) {
+        this.emaxProc = emaxProc;
+    }
+
+    public void setPhase(int phase) {
+        this.phase = phase;
     }
 }
