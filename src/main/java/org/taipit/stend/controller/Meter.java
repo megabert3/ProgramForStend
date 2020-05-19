@@ -7,6 +7,7 @@ import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Meter implements Serializable{
     /**
@@ -97,6 +98,7 @@ public class Meter implements Serializable{
 
     //Общий результат
     private Boolean finalAllTestResult;
+
     //Самоход
     private Boolean creepTest = null;
 
@@ -135,18 +137,14 @@ public class Meter implements Serializable{
                     errorListAPPls.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
                 } else if (command instanceof CreepCommand) {
-
-                    CreepResult creepResult = new CreepResult(id);
+                    CreepCommand creepCommand = (CreepCommand) command;
 
                     //Отображаю время теста
-                    if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
+                    if (creepCommand.isGostTest()) {
+                        errorListAPPls.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()), String.valueOf(creepCommand.getPulseValue())));
                     } else {
-
-                        creepResult.setLastResultForTabView("N" + getTime(((CreepCommand) command).getTimeForTest()));
+                        errorListAPPls.add(new CreepResult(id, getTime(creepCommand.getTimeForTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
-
-                    errorListAPPls.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
 
@@ -175,22 +173,22 @@ public class Meter implements Serializable{
                     errorListAPPls.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
                 }
             } break;
+
             case 1: {
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
                     errorListAPMns.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
                 } else if (command instanceof CreepCommand) {
-                    CreepResult creepResult = new CreepResult(id);
+
+                    CreepCommand creepCommand = (CreepCommand) command;
 
                     //Отображаю время теста
-                    if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()));
+                    if (creepCommand.isGostTest()) {
+                        errorListAPMns.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()), String.valueOf(creepCommand.getPulseValue())));
                     } else {
-                        creepResult.setLastResultForTabView("N" + getTime(((CreepCommand) command).getTimeForTest()));
+                        errorListAPMns.add(new CreepResult(id, getTime(creepCommand.getTimeForTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
-
-                    errorListAPMns.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
 
@@ -221,6 +219,7 @@ public class Meter implements Serializable{
                     errorListAPMns.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
                 }
             } break;
+
             case 2: {
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
@@ -228,16 +227,14 @@ public class Meter implements Serializable{
 
                 } else if (command instanceof CreepCommand) {
 
-                    CreepResult creepResult = new CreepResult(id);
+                    CreepCommand creepCommand = (CreepCommand) command;
 
                     //Отображаю время теста
-                    if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
+                    if (creepCommand.isGostTest()) {
+                        errorListRPPls.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()), String.valueOf(creepCommand.getPulseValue())));
                     } else {
-                        creepResult.setLastResultForTabView("N" + getTime(((CreepCommand) command).getTimeForTest()));
+                        errorListRPPls.add(new CreepResult(id, getTime(creepCommand.getTimeForTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
-
-                    errorListRPPls.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
 
@@ -268,6 +265,7 @@ public class Meter implements Serializable{
                     errorListRPPls.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
                 }
             } break;
+
             case 3: {
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
@@ -275,16 +273,14 @@ public class Meter implements Serializable{
 
                 } else if (command instanceof CreepCommand) {
 
-                    CreepResult creepResult = new CreepResult(id);
+                    CreepCommand creepCommand = (CreepCommand) command;
 
                     //Отображаю время теста
-                    if (((CreepCommand) command).isGostTest()) {
-                        creepResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()));
+                    if (creepCommand.isGostTest()) {
+                        errorListRPMns.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()), String.valueOf(creepCommand.getPulseValue())));
                     } else {
-                        creepResult.setLastResultForTabView("N" + getTime(((CreepCommand) command).getTimeForTest()));
+                        errorListRPMns.add(new CreepResult(id, getTime(creepCommand.getTimeForTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
-
-                    errorListRPMns.add(creepResult);
 
                 } else if (command instanceof StartCommand) {
 
@@ -431,11 +427,9 @@ public class Meter implements Serializable{
 
     //Переводит миллисекунды в формат hh:mm:ss
     private String getTime(long mlS){
-        long s = mlS / 1000;
-        long hours = s / 3600;
-        long minutes = (s % 3600) / 60;
-        long seconds = s % 60;
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(mlS),
+                TimeUnit.MILLISECONDS.toMinutes(mlS) % TimeUnit.HOURS.toMinutes(1),
+                TimeUnit.MILLISECONDS.toSeconds(mlS) % TimeUnit.MINUTES.toSeconds(1));
     }
 
     public String getConstantMeterAP() {
@@ -798,8 +792,6 @@ public class Meter implements Serializable{
         this.typeMeter = typeMeter;
     }
 
-
-
     //==============================================================================================
     //Абстрактный класс для записи результата каждой точки
     public abstract class CommandResult implements Serializable {
@@ -919,18 +911,49 @@ public class Meter implements Serializable{
     public class CreepResult extends CommandResult implements Serializable {
 
         //Время провала теста
-        private String timeToTest;
+        private String timeTheFailTest;
 
-        CreepResult(String id) {
+        private String timeTheTest;
+
+        private String maxPulse;
+
+        CreepResult(String id, String timeTheTest, String maxPulse) {
             super(id);
+            this.timeTheTest = timeTheTest;
+            this.maxPulse = maxPulse;
+            super.lastResultForTabView.setValue("N" + timeTheTest);
         }
 
-        public String getTimeToTest() {
-            return timeToTest;
+        public void setResultCreepCommand(String time, int resultNo, boolean passOrNot) {
+            if (passOrNot) {
+                super.lastResultForTabView.setValue("P" + time + " P");
+                super.lastResult = time + " P";
+                super.results[resultNo] = time + " P";
+                super.passTest = true;
+                creepTest = true;
+            } else {
+                super.lastResultForTabView.setValue("F" + time + " F");
+                super.lastResult = time + " F";
+                super.results[resultNo] = time + " F";
+                super.passTest = false;
+                creepTest = false;
+            }
         }
 
-        public void setTimeToTest(String timeToTest) {
-            this.timeToTest = timeToTest;
+        public String getTimeTheFailTest() {
+            return timeTheFailTest;
+        }
+
+        public void setTimeTheFailTest(String timeTheFailTest) {
+            this.timeTheFailTest = timeTheFailTest;
+        }
+
+        public String getTimeTheTest() {
+            return timeTheTest;
+        }
+
+        public String getMaxPulse() {
+            return maxPulse;
         }
     }
 

@@ -157,25 +157,17 @@ public class ErrorCommand implements Commands, Serializable {
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
-                if (phase == 0) {
-                    phase = 1;
-                } else if (phase == 7) {
-                    phase = 5;
-                }
-
-                if (iABC.equals("H")) {
-                    iABC = "C";
-                }
+                iABC = "C";
             }
-
         } else {
             if (!threePhaseCommand) {
                 if (iABC.equals("A")) {
-                    stendDLLCommands.selectCircuit(0);
+                    if (stendDLLCommands.selectCircuit(0)) throw new ConnectForStendExeption();
+                    iABC = "H";
                 } else if (iABC.equals("B")) {
-                    stendDLLCommands.selectCircuit(1);
+                    if (stendDLLCommands.selectCircuit(1)) throw new ConnectForStendExeption();
+                    iABC = "H";
                 }
-                iABC = "H";
             }
         }
 
@@ -319,25 +311,17 @@ public class ErrorCommand implements Commands, Serializable {
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
-                if (phase == 0) {
-                    phase = 1;
-                } else if (phase == 7) {
-                    phase = 5;
-                }
-
-                if (iABC.equals("H")) {
-                    iABC = "C";
-                }
+                iABC = "C";
             }
-
         } else {
             if (!threePhaseCommand) {
                 if (iABC.equals("A")) {
-                    stendDLLCommands.selectCircuit(0);
+                    if (stendDLLCommands.selectCircuit(0)) throw new ConnectForStendExeption();
+                    iABC = "H";
                 } else if (iABC.equals("B")) {
-                    stendDLLCommands.selectCircuit(1);
+                    if (stendDLLCommands.selectCircuit(1)) throw new ConnectForStendExeption();
+                    iABC = "H";
                 }
-                iABC = "H";
             }
         }
 
