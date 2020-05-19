@@ -286,6 +286,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private TextField txtFldRTCTimeMshAPPls;
 
     @FXML
+    private TextField txtFldRTCFrqAPPls;
+
+    @FXML
     private Pane paneCRPAPPls;
 
     @FXML
@@ -396,6 +399,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private TextField txtFldRTCTimeMshAPMns;
 
     @FXML
+    private TextField txtFldRTCFrqAPMns;
+
+    @FXML
     private Pane paneConstAPMns;
 
     @FXML
@@ -499,6 +505,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private TextField txtFldRTCTimeMshRPPls;
 
     @FXML
+    private TextField txtFldRTCFrqRPPls;
+
+    @FXML
     private Pane paneConstRPPls;
 
     @FXML
@@ -594,6 +603,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
     @FXML
     private TextField txtFldRTCTimeMshRPMns;
+
+    @FXML
+    private TextField txtFldRTCFrqRPMns;
 
     @FXML
     private ToggleButton addTglBtnRTCRPMns;
@@ -2713,17 +2725,65 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //---------------------------------------------------------------------------------------
         //Добаление самохода с параметрами пользователя AP+
         if (event.getSource() == addTglBtnCRPAPPls) {
-            if (addTglBtnCRPAPPls.isSelected()) {
-                creepCommand = new CreepCommand(false,false, "Самоход AP+", "CRP;U;A;P",0, txtFieldTimeCRPAPPls.getText());
 
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
+            if (addTglBtnCRPAPPls.isSelected()) {
+
+                txtFieldCRPUProcAPPls.setStyle("");
+                txtFieldTimeCRPAPPls.setStyle("");
+                txtFieldCRPAmtImpAPPls.setStyle("");
+
+                double procUnom;
+                long timeTest;
+                int amountImp;
+
+                try {
+                    procUnom = Double.parseDouble(txtFieldCRPUProcAPPls.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldCRPUProcAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPAPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    String[] timeArr = txtFieldTimeCRPAPPls.getText().split(":");
+
+                    if (timeArr[0].length() != 2 || timeArr[1].length() != 2 || timeArr[2].length() != 2 || txtFieldTimeCRPAPPls.getText().length() != 8) {
+                        throw new NumberFormatException();
+                    }
+
+                    int hour = Integer.parseInt(timeArr[0]);
+                    int mins = Integer.parseInt(timeArr[1]);
+                    int sek = Integer.parseInt(timeArr[2]);
+
+                    timeTest = (3600 * hour + 60 * mins + sek) * 1000;
+
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeCRPAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPAPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    amountImp = Integer.parseInt(txtFieldCRPAmtImpAPPls.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeCRPAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPAPPls.setSelected(false);
+                    return;
+                }
+
+                testListForCollumAPPls.add(new CreepCommand(false,false, "Самоход AP+", "CRP;U;A;P",0,
+                        timeTest, amountImp, procUnom));
 
                 txtFieldCRPAmtImpAPPls.setDisable(true);
                 txtFieldTimeCRPAPPls.setDisable(true);
                 txtFieldCRPUProcAPPls.setDisable(true);
 
-                testListForCollumAPPls.add(creepCommand);
                 CRPTogBtnAPPls.setSelected(true);
             } else {
                 for (Commands command : testListForCollumAPPls) {
@@ -2776,17 +2836,64 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление самохода с параметрами пользователя AP-
         if (event.getSource() == addTglBtnCRPAPMns) {
             if (addTglBtnCRPAPMns.isSelected()) {
-                creepCommand = new CreepCommand(false, false, "Самоход AP-", "CRP;U;A;N", 1, txtFieldTimeCRPAPMns.getText());
 
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPMns.getText()));
+                txtFieldCRPUProcAPMns.setStyle("");
+                txtFieldTimeCRPAPMns.setStyle("");
+                txtFieldCRPAmtImpAPMns.setStyle("");
+
+                double procUnom;
+                long timeTest;
+                int amountImp;
+
+                try {
+                    procUnom = Double.parseDouble(txtFieldCRPUProcAPMns.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldCRPUProcAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPAPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    String[] timeArr = txtFieldTimeCRPAPMns.getText().split(":");
+
+                    if (timeArr[0].length() != 2 || timeArr[1].length() != 2 || timeArr[2].length() != 2 || txtFieldTimeCRPAPMns.getText().length() != 8) {
+                        throw new NumberFormatException();
+                    }
+
+                    int hour = Integer.parseInt(timeArr[0]);
+                    int mins = Integer.parseInt(timeArr[1]);
+                    int sek = Integer.parseInt(timeArr[2]);
+
+                    timeTest = (3600 * hour + 60 * mins + sek) * 1000;
+
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeCRPAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPAPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    amountImp = Integer.parseInt(txtFieldCRPAmtImpAPMns.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeCRPAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPAPMns.setSelected(false);
+                    return;
+                }
+
+                testListForCollumAPMns.add(new CreepCommand(false,false, "Самоход AP-", "CRP;U;A;N",1,
+                        timeTest, amountImp, procUnom));
 
                 txtFieldCRPAmtImpAPMns.setDisable(true);
                 txtFieldTimeCRPAPMns.setDisable(true);
                 txtFieldCRPUProcAPMns.setDisable(true);
 
                 CRPTogBtnAPMns.setSelected(true);
-                testListForCollumAPMns.add(creepCommand);
             } else {
                 for (Commands command : testListForCollumAPMns) {
                     if (command instanceof CreepCommand) {
@@ -2802,7 +2909,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 if (addTglBtnCRPAPMnsGOST.isSelected()) {
                     CRPTogBtnAPMns.setSelected(true);
-                } else CRPTogBtnAPMns.setSelected(false);
+                } else {
+                    CRPTogBtnAPMns.setSelected(false);
+                }
             }
         }
 
@@ -2836,17 +2945,64 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление самохода с параметрами пользователя RP+
         if (event.getSource() == addTglBtnCRPRPPls) {
             if (addTglBtnCRPRPPls.isSelected()) {
-                creepCommand = new CreepCommand(false,false, "Самоход RP+", "CRP;U;R;P",2, txtFieldTimeCRPRPPls.getText());
 
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPPls.getText()));
+                txtFieldCRPUProcRPPls.setStyle("");
+                txtFieldTimeCRPRPPls.setStyle("");
+                txtFieldCRPAmtImpRPPls.setStyle("");
+
+                double procUnom;
+                long timeTest;
+                int amountImp;
+
+                try {
+                    procUnom = Double.parseDouble(txtFieldCRPUProcRPPls.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldCRPUProcRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPRPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    String[] timeArr = txtFieldTimeCRPRPPls.getText().split(":");
+
+                    if (timeArr[0].length() != 2 || timeArr[1].length() != 2 || timeArr[2].length() != 2 || txtFieldTimeCRPRPPls.getText().length() != 8) {
+                        throw new NumberFormatException();
+                    }
+
+                    int hour = Integer.parseInt(timeArr[0]);
+                    int mins = Integer.parseInt(timeArr[1]);
+                    int sek = Integer.parseInt(timeArr[2]);
+
+                    timeTest = (3600 * hour + 60 * mins + sek) * 1000;
+
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeCRPRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPRPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    amountImp = Integer.parseInt(txtFieldCRPAmtImpRPPls.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeCRPRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPRPPls.setSelected(false);
+                    return;
+                }
+
+                testListForCollumRPPls.add(new CreepCommand(false,false, "Самоход RP+", "CRP;U;R;P",2,
+                        timeTest, amountImp, procUnom));
 
                 txtFieldCRPAmtImpRPPls.setDisable(true);
                 txtFieldTimeCRPRPPls.setDisable(true);
                 txtFieldCRPUProcRPPls.setDisable(true);
 
                 CRPTogBtnRPPls.setSelected(true);
-                testListForCollumRPPls.add(creepCommand);
             } else {
                 for (Commands command : testListForCollumRPPls) {
                     if (command instanceof CreepCommand) {
@@ -2862,7 +3018,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 if (addTglBtnCRPRPPlsGOST.isSelected()) {
                     CRPTogBtnRPPls.setSelected(true);
-                } else CRPTogBtnRPPls.setSelected(false);
+                } else {
+                    CRPTogBtnRPPls.setSelected(false);
+                }
             }
         }
 
@@ -2896,17 +3054,64 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление самохода с параметрами пользователя RP-
         if (event.getSource() == addTglBtnCRPRPMns) {
             if (addTglBtnCRPRPMns.isSelected()) {
-                creepCommand = new CreepCommand(false,false, "Самоход RP-", "CRP;U;R;N", 3, txtFieldTimeCRPRPMns.getText());
 
-                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
-                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPMns.getText()));
+                txtFieldCRPUProcRPMns.setStyle("");
+                txtFieldTimeCRPRPMns.setStyle("");
+                txtFieldCRPAmtImpRPMns.setStyle("");
+
+                double procUnom;
+                long timeTest;
+                int amountImp;
+
+                try {
+                    procUnom = Double.parseDouble(txtFieldCRPUProcRPMns.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldCRPUProcRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPRPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    String[] timeArr = txtFieldTimeCRPRPMns.getText().split(":");
+
+                    if (timeArr[0].length() != 2 || timeArr[1].length() != 2 || timeArr[2].length() != 2 || txtFieldTimeCRPRPMns.getText().length() != 8) {
+                        throw new NumberFormatException();
+                    }
+
+                    int hour = Integer.parseInt(timeArr[0]);
+                    int mins = Integer.parseInt(timeArr[1]);
+                    int sek = Integer.parseInt(timeArr[2]);
+
+                    timeTest = (3600 * hour + 60 * mins + sek) * 1000;
+
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeCRPRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPRPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    amountImp = Integer.parseInt(txtFieldCRPAmtImpRPMns.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeCRPRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnCRPRPMns.setSelected(false);
+                    return;
+                }
+
+                testListForCollumRPMns.add(new CreepCommand(false,false, "Самоход RP-", "CRP;U;R;N",3,
+                        timeTest, amountImp, procUnom));
 
                 txtFieldCRPAmtImpRPMns.setDisable(true);
                 txtFieldTimeCRPRPMns.setDisable(true);
                 txtFieldCRPUProcRPMns.setDisable(true);
 
                 CRPTogBtnRPMns.setSelected(true);
-                testListForCollumRPMns.add(creepCommand);
             } else {
                 for (Commands command : testListForCollumRPMns) {
                     if (command instanceof CreepCommand) {
@@ -2922,7 +3127,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 if (addTglBtnCRPRPMnsGOST.isSelected()) {
                     CRPTogBtnRPMns.setSelected(true);
-                } else CRPTogBtnRPMns.setSelected(false);
+                } else {
+                    CRPTogBtnRPMns.setSelected(false);
+                }
             }
         }
 
@@ -3187,14 +3394,17 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFieldRngEAPPls.setStyle("");
                 txtFldRTCAmtMshAPPls.setStyle("");
                 txtFldRTCTimeMshAPPls.setStyle("");
+                txtFldRTCFrqAPPls.setStyle("");
 
                 double errorRange;
-                int amoutMeash;
-                int timeToMeash;
+                double freg;
+                int anountMeash;
+                int timeMeas;
 
                 try {
                     errorRange = Double.parseDouble(txtFieldRngEAPPls.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldRngEAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPPls.setSelected(false);
@@ -3202,8 +3412,19 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
 
                 try {
-                    amoutMeash = Integer.parseInt(txtFldRTCAmtMshAPPls.getText());
+                    freg = Double.parseDouble(txtFldRTCFrqAPPls.getText());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCFrqAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCAPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    anountMeash = Integer.parseInt(txtFldRTCAmtMshAPPls.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFldRTCAmtMshAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPPls.setSelected(false);
@@ -3211,8 +3432,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
 
                 try {
-                    timeToMeash = Integer.parseInt(txtFldRTCTimeMshAPPls.getText());
+                    timeMeas = Integer.parseInt(txtFldRTCTimeMshAPPls.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFldRTCTimeMshAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPPls.setSelected(false);
@@ -3221,18 +3443,19 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
 
-                    testListForCollumAPPls.add(new RTCCommand(false, "RTC;A;P", "ТХЧ AP+", timeToMeash, 1.000000,
-                            amoutMeash, 0, errorRange, 0));
+                    testListForCollumAPPls.add(new RTCCommand(false, "RTC;A;P", "ТХЧ AP+", timeMeas, freg,
+                            anountMeash, 0, errorRange, 0));
                 } else {
 
-                    testListForCollumAPPls.add(new RTCCommand(false, "RTC;A;P", "ТХЧ AP+", timeToMeash, 1.000000,
-                            amoutMeash, 1, errorRange, 0));
+                    testListForCollumAPPls.add(new RTCCommand(false, "RTC;A;P", "ТХЧ AP+", timeMeas, freg,
+                            anountMeash, 1, errorRange, 0));
                 }
 
                 ChcBxRTCErrAPPls.setDisable(true);
                 txtFldRTCTimeMshAPPls.setDisable(true);
                 txtFldRTCAmtMshAPPls.setDisable(true);
                 txtFieldRngEAPPls.setDisable(true);
+                txtFldRTCFrqAPPls.setDisable(true);
 
                 RTCTogBtnAPPls.setSelected(true);
 
@@ -3250,6 +3473,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCTimeMshAPPls.setDisable(false);
                 txtFldRTCAmtMshAPPls.setDisable(false);
                 txtFieldRngEAPPls.setDisable(false);
+                txtFldRTCFrqAPPls.setDisable(true);
+
                 RTCTogBtnAPPls.setSelected(false);
             }
         }
@@ -3261,14 +3486,17 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFieldRngEAPMns.setStyle("");
                 txtFldRTCAmtMshAPMns.setStyle("");
                 txtFldRTCTimeMshAPMns.setStyle("");
+                txtFldRTCFrqAPMns.setStyle("");
 
                 double errorRange;
-                int amoutMeash;
-                int timeToMeash;
+                double freg;
+                int anountMeash;
+                int timeMeas;
 
                 try {
                     errorRange = Double.parseDouble(txtFieldRngEAPMns.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldRngEAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPMns.setSelected(false);
@@ -3276,8 +3504,19 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
 
                 try {
-                    amoutMeash = Integer.parseInt(txtFldRTCAmtMshAPMns.getText());
+                    freg = Double.parseDouble(txtFldRTCFrqAPMns.getText());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCFrqAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCAPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    anountMeash = Integer.parseInt(txtFldRTCAmtMshAPMns.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFldRTCAmtMshAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPMns.setSelected(false);
@@ -3285,8 +3524,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
 
                 try {
-                    timeToMeash = Integer.parseInt(txtFldRTCTimeMshAPMns.getText());
+                    timeMeas = Integer.parseInt(txtFldRTCTimeMshAPMns.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFldRTCTimeMshAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPMns.setSelected(false);
@@ -3295,18 +3535,19 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
 
-                    testListForCollumAPMns.add(new RTCCommand(false, "RTC;A;N", "ТХЧ AP-", timeToMeash, 1.000000,
-                            amoutMeash, 0, errorRange, 1));
+                    testListForCollumAPMns.add(new RTCCommand(false, "RTC;A;N", "ТХЧ AP-", timeMeas, freg,
+                            anountMeash, 0, errorRange, 1));
                 } else {
 
-                    testListForCollumAPMns.add(new RTCCommand(false, "RTC;A;N", "ТХЧ AP-", timeToMeash, 1.000000,
-                            amoutMeash, 1, errorRange, 1));
+                    testListForCollumAPMns.add(new RTCCommand(false, "RTC;A;N", "ТХЧ AP-", timeMeas, freg,
+                            anountMeash, 1, errorRange, 1));
                 }
 
                 ChcBxRTCErrAPMns.setDisable(true);
                 txtFldRTCTimeMshAPMns.setDisable(true);
                 txtFldRTCAmtMshAPMns.setDisable(true);
                 txtFieldRngEAPMns.setDisable(true);
+                txtFldRTCFrqAPMns.setDisable(true);
 
                 RTCTogBtnAPMns.setSelected(true);
 
@@ -3324,6 +3565,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCTimeMshAPMns.setDisable(false);
                 txtFldRTCAmtMshAPMns.setDisable(false);
                 txtFieldRngEAPMns.setDisable(false);
+                txtFldRTCFrqAPMns.setDisable(true);
 
                 RTCTogBtnAPMns.setSelected(false);
             }
@@ -3336,14 +3578,17 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFieldRngERPPls.setStyle("");
                 txtFldRTCAmtMshRPPls.setStyle("");
                 txtFldRTCTimeMshRPPls.setStyle("");
+                txtFldRTCFrqRPPls.setStyle("");
 
                 double errorRange;
-                int amoutMeash;
-                int timeToMeash;
+                double freg;
+                int anountMeash;
+                int timeMeas;
 
                 try {
                     errorRange = Double.parseDouble(txtFieldRngERPPls.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldRngERPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPPls.setSelected(false);
@@ -3351,8 +3596,19 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
 
                 try {
-                    amoutMeash = Integer.parseInt(txtFldRTCAmtMshRPPls.getText());
+                    freg = Double.parseDouble(txtFldRTCFrqRPPls.getText());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCFrqRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCRPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    anountMeash = Integer.parseInt(txtFldRTCAmtMshRPPls.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFldRTCAmtMshRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPPls.setSelected(false);
@@ -3360,8 +3616,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
 
                 try {
-                    timeToMeash = Integer.parseInt(txtFldRTCTimeMshRPPls.getText());
+                    timeMeas = Integer.parseInt(txtFldRTCTimeMshRPPls.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFldRTCTimeMshRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPPls.setSelected(false);
@@ -3370,24 +3627,25 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
 
-                    testListForCollumRPPls.add(new RTCCommand(false, "RTC;R;P", "ТХЧ RP+", timeToMeash, 1.000000,
-                            amoutMeash, 0, errorRange, 3));
+                    testListForCollumRPPls.add(new RTCCommand(false, "RTC;R;P", "ТХЧ RP+", timeMeas, freg,
+                            anountMeash, 0, errorRange, 2));
                 } else {
 
-                    testListForCollumRPPls.add(new RTCCommand(false, "RTC;R;P", "ТХЧ RP+", timeToMeash, 1.000000,
-                            amoutMeash, 1, errorRange, 3));
+                    testListForCollumRPPls.add(new RTCCommand(false, "RTC;R;P", "ТХЧ RP+", timeMeas, freg,
+                            anountMeash, 1, errorRange, 2));
                 }
 
                 ChcBxRTCErrRPPls.setDisable(true);
                 txtFldRTCTimeMshRPPls.setDisable(true);
                 txtFldRTCAmtMshRPPls.setDisable(true);
                 txtFieldRngERPPls.setDisable(true);
+                txtFldRTCFrqRPPls.setDisable(true);
 
                 RTCTogBtnRPPls.setSelected(true);
 
             } else {
                 for (Commands command : testListForCollumRPPls) {
-                    if (command instanceof ConstantCommand) {
+                    if (command instanceof RTCCommand) {
                         if (command.getName().equals("ТХЧ RP+")) {
                             testListForCollumRPPls.remove(command);
                             break;
@@ -3399,6 +3657,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCTimeMshRPPls.setDisable(false);
                 txtFldRTCAmtMshRPPls.setDisable(false);
                 txtFieldRngERPPls.setDisable(false);
+                txtFldRTCFrqRPPls.setDisable(true);
 
                 RTCTogBtnRPPls.setSelected(false);
             }
@@ -3411,14 +3670,17 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFieldRngERPMns.setStyle("");
                 txtFldRTCAmtMshRPMns.setStyle("");
                 txtFldRTCTimeMshRPMns.setStyle("");
+                txtFldRTCFrqRPMns.setStyle("");
 
                 double errorRange;
-                int amoutMeash;
-                int timeToMeash;
+                double freg;
+                int anountMeash;
+                int timeMeas;
 
                 try {
                     errorRange = Double.parseDouble(txtFieldRngERPMns.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldRngERPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPMns.setSelected(false);
@@ -3426,8 +3688,19 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
 
                 try {
-                    amoutMeash = Integer.parseInt(txtFldRTCAmtMshRPMns.getText());
+                    freg = Double.parseDouble(txtFldRTCFrqRPMns.getText());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFldRTCFrqRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnRTCRPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    anountMeash = Integer.parseInt(txtFldRTCAmtMshRPMns.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFldRTCAmtMshRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPMns.setSelected(false);
@@ -3435,8 +3708,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
 
                 try {
-                    timeToMeash = Integer.parseInt(txtFldRTCTimeMshRPMns.getText());
+                    timeMeas = Integer.parseInt(txtFldRTCTimeMshRPMns.getText());
                 }catch (NumberFormatException e) {
+                    e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
                     txtFldRTCTimeMshRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPMns.setSelected(false);
@@ -3445,24 +3719,25 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
 
-                    testListForCollumRPMns.add(new RTCCommand(false, "RTC;R;N", "ТХЧ RP-", timeToMeash, 1.000000,
-                            amoutMeash, 0, errorRange, 3));
+                    testListForCollumRPMns.add(new RTCCommand(false, "RTC;R;N", "ТХЧ RP-", timeMeas, freg,
+                            anountMeash, 0, errorRange, 3));
                 } else {
 
-                    testListForCollumRPMns.add(new RTCCommand(false, "RTC;R;N", "ТХЧ RP-", timeToMeash, 1.000000,
-                            amoutMeash, 1, errorRange, 3));
+                    testListForCollumRPMns.add(new RTCCommand(false, "RTC;R;N", "ТХЧ RP-", timeMeas, freg,
+                            anountMeash, 1, errorRange, 3));
                 }
 
                 ChcBxRTCErrRPMns.setDisable(true);
                 txtFldRTCTimeMshRPMns.setDisable(true);
                 txtFldRTCAmtMshRPMns.setDisable(true);
                 txtFieldRngERPMns.setDisable(true);
+                txtFldRTCFrqRPMns.setDisable(true);
 
                 RTCTogBtnRPMns.setSelected(true);
 
             } else {
                 for (Commands command : testListForCollumRPMns) {
-                    if (command instanceof ConstantCommand) {
+                    if (command instanceof RTCCommand) {
                         if (command.getName().equals("ТХЧ RP-")) {
                             testListForCollumRPMns.remove(command);
                             break;
@@ -3474,6 +3749,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 txtFldRTCTimeMshRPMns.setDisable(false);
                 txtFldRTCAmtMshRPMns.setDisable(false);
                 txtFieldRngERPMns.setDisable(false);
+                txtFldRTCFrqRPMns.setDisable(true);
 
                 RTCTogBtnRPMns.setSelected(false);
             }

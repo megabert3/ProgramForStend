@@ -51,7 +51,7 @@ public class CreepCommand implements Commands, Serializable {
     private boolean gostTest;
 
     //Время теста введённое пользователем
-    private String userTimeTest;
+    private long userTimeTest;
 
     //Количество импоульсов для провала теста
     private int pulseValue = 2;
@@ -87,28 +87,15 @@ public class CreepCommand implements Commands, Serializable {
 
     private HashMap<Integer, Boolean> creepCommandResult;
 
-    public CreepCommand(boolean threePhaseCommand, boolean gostTest, String name, String id, int channelFlag, String userTimeTest) {
+    public CreepCommand(boolean threePhaseCommand, boolean gostTest, String name, String id, int channelFlag, long userTimeTest, int pulseValue, double voltPer) {
         this.threePhaseCommand = threePhaseCommand;
         this.name = name;
         this.id = id;
         this.gostTest = gostTest;
         this.channelFlag = channelFlag;
         this.userTimeTest = userTimeTest;
-
-        if (!gostTest) {
-            try {
-                String[] timearr = userTimeTest.split(":");
-                String hours = timearr[0];
-                String mins = timearr[1];
-                String seks = timearr[2];
-
-                timeForTest = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
-
-            }catch (NumberFormatException e){
-                e.printStackTrace();
-                System.out.println("Неверные данные для теста");
-            }
-        }
+        this.pulseValue = pulseValue;
+        this.voltPer = voltPer;
     }
 
     public CreepCommand(boolean threePhaseCommand, boolean gostTest, String name, String id,  int channelFlag) {
@@ -380,16 +367,6 @@ public class CreepCommand implements Commands, Serializable {
                 TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
     }
 
-
-//    //Переводит милисикунды в нужный формат
-//    private String getTime(long mlS){
-//        long s = mlS / 1000;
-//        long hours = s / 3600;
-//        long minutes = (s % 3600) / 60;
-//        long seconds = s % 60;
-//        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-//    }
-
     public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
         this.stendDLLCommands = stendDLLCommands;
     }
@@ -434,7 +411,7 @@ public class CreepCommand implements Commands, Serializable {
         return voltPer;
     }
 
-    public String getUserTimeTest() {
+    public long getUserTimeTest() {
         return userTimeTest;
     }
 

@@ -975,12 +975,6 @@ public class Meter implements Serializable{
             return timeToTest;
         }
 
-        private String getTime(long mlS){
-            long hours = mlS * 1000 / 3600;
-            long minutes = ((mlS * 1000) % 3600) / 60;
-            long seconds = (mlS * 1000) % 60;
-            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        }
     }
 
     //Класс для записи результата исполнения StartCommnad

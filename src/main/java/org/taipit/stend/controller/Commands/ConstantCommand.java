@@ -151,35 +151,18 @@ public class ConstantCommand implements Commands, Serializable {
         ratedCurr = Ib;
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
-
-            if (threePhaseCommand) {
-                iABC = "H";
-                //Выбор константы в зависимости от энергии
-                if (channelFlag <= 1) {
-                    constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
-                    phase = 1;
-                } else {
-                    constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
-                    phase = 6;
-                }
-            } else {
+            if (!threePhaseCommand) {
                 iABC = "C";
-                if (channelFlag <= 1) {
-                    constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
-                    phase = 0;
-                } else {
-                    constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
-                    phase = 7;
-                }
             }
+
         } else {
-            iABC = "H";
-            if (channelFlag <= 1) {
-                constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
-                phase = 0;
-            } else {
-                constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
-                phase = 7;
+            if (!threePhaseCommand) {
+                if (iABC.equals("A")) {
+                    if (!stendDLLCommands.selectCircuit(0)) throw new ConnectForStendExeption();
+                } else if (iABC.equals("B")) {
+                    if (!stendDLLCommands.selectCircuit(1)) throw new ConnectForStendExeption();
+                }
+                iABC = "H";
             }
         }
 
