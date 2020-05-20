@@ -59,7 +59,7 @@ public class StartCommand implements Commands, Serializable {
     private boolean gostTest;
 
     //Время теста введённое пользователем
-    private String userTimeTest;
+    private long userTimeTest;
 
     //Количество импульсов для провала теста
     private int pulseValue;
@@ -70,7 +70,7 @@ public class StartCommand implements Commands, Serializable {
 
     private HashMap<Integer, Boolean> startCommandResult;
 
-    public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest, String userTimeTest) {
+    public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest, long userTimeTest, int pulseValue, double ratedCurr) {
         this.threePhaseCommand = threePhaseCommand;
         this.name = name;
         this.id = id;
@@ -78,25 +78,13 @@ public class StartCommand implements Commands, Serializable {
         this.revers = revers;
         this.channelFlag = channelFlag;
         this.gostTest = gostTest;
-
-        if (!gostTest) {
-            try {
-                //Расчёт времени теста исходя из параметров введённых пользователем
-                String[] timearr = userTimeTest.split(":");
-                String hours = timearr[0];
-                String mins = timearr[1];
-                String seks = timearr[2];
-
-                timeForTest = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
-            }catch (NullPointerException e) {
-                e.printStackTrace();
-                System.out.println("Введены неверные данные");
-            }
-
-        }
+        this.pulseValue = pulseValue;
+        this.ratedCurr = ratedCurr;
     }
 
     public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest) {
+        this.name = name;
+        this.id = id;
         this.threePhaseCommand = threePhaseCommand;
         this.revers = revers;
         this.channelFlag = channelFlag;
@@ -448,7 +436,7 @@ public class StartCommand implements Commands, Serializable {
         return gostTest;
     }
 
-    public String getUserTimeTest() {
+    public long getUserTimeTest() {
         return userTimeTest;
     }
 

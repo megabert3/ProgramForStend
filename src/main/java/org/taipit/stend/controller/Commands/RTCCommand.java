@@ -413,4 +413,8 @@ public class RTCCommand implements Commands, Serializable {
     public String getId() {
         return id;
     }
+
+    public double getFreg() {
+        return freg;
+    }
 }

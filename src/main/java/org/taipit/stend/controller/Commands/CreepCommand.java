@@ -477,4 +477,8 @@ public class CreepCommand implements Commands, Serializable {
     public String getId() {
         return id;
     }
+
+    public double getRatedVolt() {
+        return ratedVolt;
+    }
 }

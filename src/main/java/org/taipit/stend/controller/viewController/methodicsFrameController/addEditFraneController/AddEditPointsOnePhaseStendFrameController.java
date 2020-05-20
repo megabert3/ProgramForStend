@@ -37,6 +37,7 @@ import org.taipit.stend.model.metodics.MetodicsForTest;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
@@ -1992,15 +1993,17 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             for (Commands command : testListForCollumAPPls) {
                 if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    testPointIdArr = command.getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
 
                 } else if (command instanceof CreepCommand) {
-                    if (!((CreepCommand) command).isGostTest()) {
+                    CreepCommand creepCommand = (CreepCommand) command;
 
-                        txtFieldCRPUProcAPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPAPPls.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpAPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+                    if (!creepCommand.isGostTest()) {
+
+                        txtFieldCRPUProcAPPls.setText(String.valueOf(creepCommand.getRatedVolt()));
+                        txtFieldTimeCRPAPPls.setText(getTime(creepCommand.getUserTimeTest()));
+                        txtFieldCRPAmtImpAPPls.setText(String.valueOf(creepCommand.getPulseValue()));
 
                         addTglBtnCRPAPPls.setSelected(true);
 
@@ -2013,10 +2016,12 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     CRPTogBtnAPPls.setSelected(true);
 
                 } else if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcAPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRAAPPls.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpAPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+                    StartCommand startCommand = (StartCommand) command;
+
+                    if (!startCommand.isGostTest()) {
+                        txtFieldSTAIProcAPPls.setText(String.valueOf(startCommand.getRatedCurr()));
+                        txtFieldTimeSRAAPPls.setText(getTime(startCommand.getUserTimeTest()));
+                        txtFieldSTAAmtImpAPPls.setText(String.valueOf(startCommand.getPulseValue()));
 
                         addTglBtnSTAAPPls.setSelected(true);
 
@@ -2029,22 +2034,27 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     STATogBtnAPPls.setSelected(true);
 
                 } else if (command instanceof RTCCommand) {
+                    RTCCommand rtcCommand = (RTCCommand) command;
 
-                    if (((RTCCommand) command).getErrorType() == 0) {
+                    if (rtcCommand.getErrorType() == 0) {
                         ChcBxRTCErrAPPls.setValue("В ед. частоты");
                     } else {
                         ChcBxRTCErrAPPls.setValue("Сутч. погрешность");
                     }
 
-                    txtFieldRngEAPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshAPPls.setText(String.valueOf(((RTCCommand) command).getCountResultTest()));
-                    txtFldRTCTimeMshAPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+
+                    txtFieldRngEAPPls.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFldRTCFrqAPPls.setText(String.valueOf(rtcCommand.getFreg()));
+                    txtFldRTCAmtMshAPPls.setText(String.valueOf(rtcCommand.getCountResultTest()));
+                    txtFldRTCTimeMshAPPls.setText(String.valueOf(rtcCommand.getPulseForRTC()));
 
                     ChcBxRTCErrAPPls.setDisable(true);
 
                     txtFieldRngEAPPls.setDisable(true);
+                    txtFldRTCFrqAPPls.setDisable(true);
                     txtFldRTCAmtMshAPPls.setDisable(true);
                     txtFldRTCTimeMshAPPls.setDisable(true);
+
                     addTglBtnRTCAPPls.setSelected(true);
 
                     RTCTogBtnAPPls.setSelected(true);
@@ -2082,15 +2092,17 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             for (Commands command : testListForCollumAPMns) {
                 if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    testPointIdArr = command.getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
+
                 } else if (command instanceof CreepCommand) {
+                    CreepCommand creepCommand = (CreepCommand) command;
 
-                    if (!((CreepCommand) command).isGostTest()) {
+                    if (!creepCommand.isGostTest()) {
 
-                        txtFieldCRPUProcAPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPAPMns.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpAPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+                        txtFieldCRPUProcAPMns.setText(String.valueOf(creepCommand.getRatedVolt()));
+                        txtFieldTimeCRPAPMns.setText(getTime(creepCommand.getUserTimeTest()));
+                        txtFieldCRPAmtImpAPMns.setText(String.valueOf(creepCommand.getPulseValue()));
 
                         addTglBtnCRPAPMns.setSelected(true);
 
@@ -2103,10 +2115,12 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     CRPTogBtnAPMns.setSelected(true);
 
                 } else if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcAPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRAAPMns.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpAPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+                    StartCommand startCommand = (StartCommand) command;
+
+                    if (!startCommand.isGostTest()) {
+                        txtFieldSTAIProcAPMns.setText(String.valueOf(startCommand.getRatedCurr()));
+                        txtFieldTimeSRAAPMns.setText(getTime(startCommand.getUserTimeTest()));
+                        txtFieldSTAAmtImpAPMns.setText(String.valueOf(startCommand.getPulseValue()));
 
                         addTglBtnSTAAPMns.setSelected(true);
 
@@ -2119,22 +2133,26 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     STATogBtnAPMns.setSelected(true);
 
                 } else if (command instanceof RTCCommand) {
+                    RTCCommand rtcCommand = (RTCCommand) command;
 
-                    if (((RTCCommand) command).getErrorType() == 0) {
+                    if (rtcCommand.getErrorType() == 0) {
                         ChcBxRTCErrAPMns.setValue("В ед. частоты");
                     } else {
                         ChcBxRTCErrAPMns.setValue("Сутч. погрешность");
                     }
 
-                    txtFieldRngEAPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshAPMns.setText(String.valueOf(((RTCCommand) command).getCountResultTest()));
-                    txtFldRTCTimeMshAPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+                    txtFieldRngEAPMns.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFldRTCFrqAPMns.setText(String.valueOf(rtcCommand.getFreg()));
+                    txtFldRTCAmtMshAPMns.setText(String.valueOf(rtcCommand.getCountResultTest()));
+                    txtFldRTCTimeMshAPMns.setText(String.valueOf(rtcCommand.getPulseForRTC()));
 
                     ChcBxRTCErrAPMns.setDisable(true);
 
                     txtFieldRngEAPMns.setDisable(true);
+                    txtFldRTCFrqAPMns.setDisable(true);
                     txtFldRTCAmtMshAPMns.setDisable(true);
                     txtFldRTCTimeMshAPMns.setDisable(true);
+
                     addTglBtnRTCAPMns.setSelected(true);
 
                     RTCTogBtnAPMns.setSelected(true);
@@ -2142,7 +2160,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 } else if (command instanceof ConstantCommand) {
                     ConstantCommand constantCommand = (ConstantCommand) command;
 
-                    if (((ConstantCommand) command).isRunTestToTime()) {
+                    if (constantCommand.isRunTestToTime()) {
                         radBtnConstTimeAPMns.setSelected(true);
                         txtFieldConstTimeAPMns.setText(constantCommand.getStrTimeToTest());
                     } else {
@@ -2172,15 +2190,17 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             for (Commands command : testListForCollumRPPls) {
                 if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    testPointIdArr = command.getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
 
                 } else if (command instanceof CreepCommand) {
-                    if (!((CreepCommand) command).isGostTest()) {
+                    CreepCommand creepCommand = (CreepCommand) command;
 
-                        txtFieldCRPUProcRPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPRPPls.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpRPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+                    if (!creepCommand.isGostTest()) {
+
+                        txtFieldCRPUProcRPPls.setText(String.valueOf(creepCommand.getRatedVolt()));
+                        txtFieldTimeCRPRPPls.setText(getTime(creepCommand.getUserTimeTest()));
+                        txtFieldCRPAmtImpRPPls.setText(String.valueOf(creepCommand.getPulseValue()));
 
                         addTglBtnCRPRPPls.setSelected(true);
 
@@ -2193,10 +2213,12 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     CRPTogBtnRPPls.setSelected(true);
 
                 } else if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcRPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRARPPls.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpRPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+                    StartCommand startCommand = (StartCommand) command;
+
+                    if (!startCommand.isGostTest()) {
+                        txtFieldSTAIProcRPPls.setText(String.valueOf(startCommand.getRatedCurr()));
+                        txtFieldTimeSRARPPls.setText(getTime(startCommand.getUserTimeTest()));
+                        txtFieldSTAAmtImpRPPls.setText(String.valueOf(startCommand.getPulseValue()));
 
                         addTglBtnSTARPPls.setSelected(true);
 
@@ -2209,22 +2231,26 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     STATogBtnRPPls.setSelected(true);
 
                 } else if (command instanceof RTCCommand) {
+                    RTCCommand rtcCommand = (RTCCommand) command;
 
-                    if (((RTCCommand) command).getErrorType() == 0) {
+                    if (rtcCommand.getErrorType() == 0) {
                         ChcBxRTCErrRPPls.setValue("В ед. частоты");
                     } else {
                         ChcBxRTCErrRPPls.setValue("Сутч. погрешность");
                     }
 
-                    txtFieldRngERPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshRPPls.setText(String.valueOf(((RTCCommand) command).getCountResultTest()));
-                    txtFldRTCTimeMshRPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+                    txtFieldRngERPPls.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFldRTCFrqRPPls.setText(String.valueOf(rtcCommand.getFreg()));
+                    txtFldRTCAmtMshRPPls.setText(String.valueOf(rtcCommand.getCountResultTest()));
+                    txtFldRTCTimeMshRPPls.setText(String.valueOf(rtcCommand.getPulseForRTC()));
 
                     ChcBxRTCErrRPPls.setDisable(true);
 
                     txtFieldRngERPPls.setDisable(true);
+                    txtFldRTCFrqRPPls.setDisable(true);
                     txtFldRTCAmtMshRPPls.setDisable(true);
                     txtFldRTCTimeMshRPPls.setDisable(true);
+
                     addTglBtnRTCRPPls.setSelected(true);
 
                     RTCTogBtnRPPls.setSelected(true);
@@ -2262,15 +2288,17 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
             for (Commands command : testListForCollumRPMns) {
                 if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+                    testPointIdArr = command.getId().toCharArray();
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
 
                 } else if (command instanceof CreepCommand) {
-                    if (!((CreepCommand) command).isGostTest()) {
+                    CreepCommand creepCommand = (CreepCommand) command;
 
-                        txtFieldCRPUProcRPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPRPMns.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpRPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+                    if (!creepCommand.isGostTest()) {
+
+                        txtFieldCRPUProcRPMns.setText(String.valueOf(creepCommand.getRatedVolt()));
+                        txtFieldTimeCRPRPMns.setText(getTime(creepCommand.getUserTimeTest()));
+                        txtFieldCRPAmtImpRPMns.setText(String.valueOf(creepCommand.getPulseValue()));
 
                         addTglBtnCRPRPMns.setSelected(true);
 
@@ -2283,10 +2311,12 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     CRPTogBtnRPMns.setSelected(true);
 
                 } else if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcRPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRARPMns.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpRPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+                    StartCommand startCommand = (StartCommand) command;
+
+                    if (!startCommand.isGostTest()) {
+                        txtFieldSTAIProcRPMns.setText(String.valueOf(startCommand.getRatedCurr()));
+                        txtFieldTimeSRARPMns.setText(getTime(startCommand.getUserTimeTest()));
+                        txtFieldSTAAmtImpRPMns.setText(String.valueOf(startCommand.getPulseValue()));
 
                         addTglBtnSTARPMns.setSelected(true);
 
@@ -2299,22 +2329,26 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     STATogBtnRPMns.setSelected(true);
 
                 } else if (command instanceof RTCCommand) {
+                    RTCCommand rtcCommand = (RTCCommand) command;
 
-                    if (((RTCCommand) command).getErrorType() == 0) {
+                    if (rtcCommand.getErrorType() == 0) {
                         ChcBxRTCErrRPMns.setValue("В ед. частоты");
                     } else {
                         ChcBxRTCErrRPMns.setValue("Сутч. погрешность");
                     }
 
-                    txtFieldRngERPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshRPMns.setText(String.valueOf(((RTCCommand) command).getCountResultTest()));
-                    txtFldRTCTimeMshRPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+                    txtFieldRngERPMns.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFldRTCFrqRPMns.setText(String.valueOf(rtcCommand.getFreg()));
+                    txtFldRTCAmtMshRPMns.setText(String.valueOf(rtcCommand.getCountResultTest()));
+                    txtFldRTCTimeMshRPMns.setText(String.valueOf(rtcCommand.getPulseForRTC()));
 
                     ChcBxRTCErrRPMns.setDisable(true);
 
                     txtFieldRngERPMns.setDisable(true);
+                    txtFldRTCFrqRPMns.setDisable(true);
                     txtFldRTCAmtMshRPMns.setDisable(true);
                     txtFldRTCTimeMshRPMns.setDisable(true);
+
                     addTglBtnRTCRPMns.setSelected(true);
 
                     RTCTogBtnRPMns.setSelected(true);
@@ -3161,20 +3195,69 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
         //------------------------------------------------------------------------------
         //Добаление теста на чувствительность с параметрами пользователя AP+
-        StartCommand startCommand;
+
         if (event.getSource() == addTglBtnSTAAPPls) {
             if (addTglBtnSTAAPPls.isSelected()) {
-                startCommand = new StartCommand(false, "Чувствительность AP+", "STA;U;A;P", 0, 0, false, txtFieldTimeSRAAPPls.getText());
 
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPPls.getText()));
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPPls.getText()));
+                txtFieldSTAIProcAPPls.setStyle("");
+                txtFieldTimeSRAAPPls.setStyle("");
+                txtFieldSTAAmtImpAPPls.setStyle("");
+
+                double current;
+                long timeTest;
+                int amountImp;
+
+                try {
+                    current = Double.parseDouble(txtFieldSTAIProcAPPls.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldSTAIProcAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTAAPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    String[] timeArr = txtFieldTimeSRAAPPls.getText().split(":");
+
+                    if (timeArr[0].length() != 2 || timeArr[1].length() != 2 || timeArr[2].length() != 2 || txtFieldTimeSRAAPPls.getText().length() != 8) {
+                        throw new NumberFormatException();
+                    }
+
+                    int hour = Integer.parseInt(timeArr[0]);
+                    int mins = Integer.parseInt(timeArr[1]);
+                    int sek = Integer.parseInt(timeArr[2]);
+
+                    timeTest = (3600 * hour + 60 * mins + sek) * 1000;
+
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeSRAAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTAAPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    amountImp = Integer.parseInt(txtFieldSTAAmtImpAPPls.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldSTAAmtImpAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTAAPPls.setSelected(false);
+                    return;
+                }
+
+                testListForCollumAPPls.add(new StartCommand(false, "Чувствительность AP+", "STA;U;A;P", 0,
+                        0,false, timeTest, amountImp, current));
+
 
                 txtFieldSTAAmtImpAPPls.setDisable(true);
                 txtFieldTimeSRAAPPls.setDisable(true);
                 txtFieldSTAIProcAPPls.setDisable(true);
 
                 STATogBtnAPPls.setSelected(true);
-                testListForCollumAPPls.add(startCommand);
+
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof StartCommand) {
@@ -3184,6 +3267,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         }
                     }
                 }
+
                 txtFieldSTAAmtImpAPPls.setDisable(false);
                 txtFieldTimeSRAAPPls.setDisable(false);
                 txtFieldSTAIProcAPPls.setDisable(false);
@@ -3197,10 +3281,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу AP+
         if (event.getSource() == addTglBtnSTAAPPlsGOST) {
             if (addTglBtnSTAAPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(false, "Чувствительность ГОСТ AP+", "STA;G;A;P", 0, 0, true);
+                testListForCollumAPPls.add(new StartCommand(false, "Чувствительность ГОСТ AP+", "STA;G;A;P", 0,
+                        0, true));
 
                 STATogBtnAPPls.setSelected(true);
-                testListForCollumAPPls.add(startCommand);
+
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof StartCommand) {
@@ -3220,17 +3305,66 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами пользователя AP-
         if (event.getSource() == addTglBtnSTAAPMns) {
             if (addTglBtnSTAAPMns.isSelected()) {
-                startCommand = new StartCommand(false, "Чувствительность AP-", "STA;G;A;N", 1, 1, false, txtFieldTimeSRAAPMns.getText());
 
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPMns.getText()));
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPMns.getText()));
+                txtFieldSTAIProcAPMns.setStyle("");
+                txtFieldTimeSRAAPMns.setStyle("");
+                txtFieldSTAAmtImpAPMns.setStyle("");
+
+                double current;
+                long timeTest;
+                int amountImp;
+
+                try {
+                    current = Double.parseDouble(txtFieldSTAIProcAPMns.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldSTAIProcAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTAAPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    String[] timeArr = txtFieldTimeSRAAPMns.getText().split(":");
+
+                    if (timeArr[0].length() != 2 || timeArr[1].length() != 2 || timeArr[2].length() != 2 || txtFieldTimeSRAAPMns.getText().length() != 8) {
+                        throw new NumberFormatException();
+                    }
+
+                    int hour = Integer.parseInt(timeArr[0]);
+                    int mins = Integer.parseInt(timeArr[1]);
+                    int sek = Integer.parseInt(timeArr[2]);
+
+                    timeTest = (3600 * hour + 60 * mins + sek) * 1000;
+
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeSRAAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTAAPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    amountImp = Integer.parseInt(txtFieldSTAAmtImpAPMns.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldSTAAmtImpAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTAAPMns.setSelected(false);
+                    return;
+                }
+
+                testListForCollumAPMns.add(new StartCommand(false, "Чувствительность AP-", "STA;U;A;N", 1,
+                        1,false, timeTest, amountImp, current));
+
 
                 txtFieldSTAAmtImpAPMns.setDisable(true);
                 txtFieldTimeSRAAPMns.setDisable(true);
                 txtFieldSTAIProcAPMns.setDisable(true);
 
                 STATogBtnAPMns.setSelected(true);
-                testListForCollumAPMns.add(startCommand);
+
             } else {
                 for (Commands command : testListForCollumAPMns) {
                     if (command instanceof StartCommand) {
@@ -3240,6 +3374,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         }
                     }
                 }
+
                 txtFieldSTAAmtImpAPMns.setDisable(false);
                 txtFieldTimeSRAAPMns.setDisable(false);
                 txtFieldSTAIProcAPMns.setDisable(false);
@@ -3253,10 +3388,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnSTAAPMnsGOST) {
             if (addTglBtnSTAAPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(false, "Чувствительность ГОСТ AP-", "STA;G;A;N", 1, 1, true);
+                testListForCollumAPMns.add(new StartCommand(false, "Чувствительность ГОСТ AP-", "STA;G;A;N", 1, 1, true));
 
                 STATogBtnAPMns.setSelected(true);
-                testListForCollumAPMns.add(startCommand);
             } else {
                 for (Commands command : testListForCollumAPMns) {
                     if (command instanceof StartCommand) {
@@ -3276,17 +3410,65 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами пользователя RP+
         if (event.getSource() == addTglBtnSTARPPls) {
             if (addTglBtnSTARPPls.isSelected()) {
-                startCommand = new StartCommand(false, "Чувствительность RP+", "STA;U;R;P", 0, 2, false, txtFieldTimeSRARPPls.getText());
 
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPPls.getText()));
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPPls.getText()));
+                txtFieldSTAIProcRPPls.setStyle("");
+                txtFieldTimeSRARPPls.setStyle("");
+                txtFieldSTAAmtImpRPPls.setStyle("");
+
+                double current;
+                long timeTest;
+                int amountImp;
+
+                try {
+                    current = Double.parseDouble(txtFieldSTAIProcRPPls.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldSTAIProcRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTARPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    String[] timeArr = txtFieldTimeSRARPPls.getText().split(":");
+
+                    if (timeArr[0].length() != 2 || timeArr[1].length() != 2 || timeArr[2].length() != 2 || txtFieldTimeSRARPPls.getText().length() != 8) {
+                        throw new NumberFormatException();
+                    }
+
+                    int hour = Integer.parseInt(timeArr[0]);
+                    int mins = Integer.parseInt(timeArr[1]);
+                    int sek = Integer.parseInt(timeArr[2]);
+
+                    timeTest = (3600 * hour + 60 * mins + sek) * 1000;
+
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeSRARPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTARPPls.setSelected(false);
+                    return;
+                }
+
+                try {
+                    amountImp = Integer.parseInt(txtFieldSTAAmtImpRPPls.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldSTAAmtImpRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTARPPls.setSelected(false);
+                    return;
+                }
+
+                testListForCollumRPPls.add(new StartCommand(false, "Чувствительность RP+", "STA;U;R;P", 0,
+                        2,false, timeTest, amountImp, current));
+
 
                 txtFieldSTAAmtImpRPPls.setDisable(true);
                 txtFieldTimeSRARPPls.setDisable(true);
                 txtFieldSTAIProcRPPls.setDisable(true);
 
                 STATogBtnRPPls.setSelected(true);
-                testListForCollumRPPls.add(startCommand);
 
             } else {
                 for (Commands command : testListForCollumRPPls) {
@@ -3297,6 +3479,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         }
                     }
                 }
+
                 txtFieldSTAAmtImpRPPls.setDisable(false);
                 txtFieldTimeSRARPPls.setDisable(false);
                 txtFieldSTAIProcRPPls.setDisable(false);
@@ -3310,10 +3493,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnSTARPPlsGOST) {
             if (addTglBtnSTARPPlsGOST.isSelected()) {
-                startCommand = new StartCommand(false, "Чувствительность ГОСТ RP+", "STA;G;R;A", 0, 1, true);
+                testListForCollumRPPls.add(new StartCommand(false, "Чувствительность ГОСТ RP+", "STA;G;R;A", 0, 1, true));
 
                 STATogBtnRPPls.setSelected(true);
-                testListForCollumRPPls.add(startCommand);
             } else {
                 for (Commands command : testListForCollumRPPls) {
                     if (command instanceof StartCommand) {
@@ -3333,17 +3515,66 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами пользователя RP-
         if (event.getSource() == addTglBtnSTARPMns) {
             if (addTglBtnSTARPMns.isSelected()) {
-                startCommand = new StartCommand(false, "Чувствительность RP-","STA;U;R;N", 1, 3, false, txtFieldTimeSRARPMns.getText());
 
-                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPMns.getText()));
-                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPMns.getText()));
+                txtFieldSTAIProcRPMns.setStyle("");
+                txtFieldTimeSRARPMns.setStyle("");
+                txtFieldSTAAmtImpRPMns.setStyle("");
 
-                txtFieldSTAAmtImpRPMns.setDisable(false);
-                txtFieldTimeSRARPMns.setDisable(false);
-                txtFieldSTAIProcRPMns.setDisable(false);
+                double current;
+                long timeTest;
+                int amountImp;
+
+                try {
+                    current = Double.parseDouble(txtFieldSTAIProcRPMns.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldSTAIProcRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTARPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    String[] timeArr = txtFieldTimeSRARPMns.getText().split(":");
+
+                    if (timeArr[0].length() != 2 || timeArr[1].length() != 2 || timeArr[2].length() != 2 || txtFieldTimeSRARPMns.getText().length() != 8) {
+                        throw new NumberFormatException();
+                    }
+
+                    int hour = Integer.parseInt(timeArr[0]);
+                    int mins = Integer.parseInt(timeArr[1]);
+                    int sek = Integer.parseInt(timeArr[2]);
+
+                    timeTest = (3600 * hour + 60 * mins + sek) * 1000;
+
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldTimeSRARPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTARPMns.setSelected(false);
+                    return;
+                }
+
+                try {
+                    amountImp = Integer.parseInt(txtFieldSTAAmtImpRPMns.getText());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные");
+                    txtFieldSTAAmtImpRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    addTglBtnSTARPMns.setSelected(false);
+                    return;
+                }
+
+                testListForCollumRPMns.add(new StartCommand(false, "Чувствительность RP-", "STA;U;R;N", 1,
+                        3,false, timeTest, amountImp, current));
+
+
+                txtFieldSTAAmtImpRPMns.setDisable(true);
+                txtFieldTimeSRARPMns.setDisable(true);
+                txtFieldSTAIProcRPMns.setDisable(true);
 
                 STATogBtnRPMns.setSelected(true);
-                testListForCollumRPMns.add(startCommand);
+
             } else {
                 for (Commands command : testListForCollumRPMns) {
                     if (command instanceof StartCommand) {
@@ -3353,9 +3584,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         }
                     }
                 }
-                txtFieldSTAAmtImpRPMns.setDisable(true);
-                txtFieldTimeSRARPMns.setDisable(true);
-                txtFieldSTAIProcRPMns.setDisable(true);
+
+                txtFieldSTAAmtImpRPMns.setDisable(false);
+                txtFieldTimeSRARPMns.setDisable(false);
+                txtFieldSTAIProcRPMns.setDisable(false);
 
                 if (addTglBtnSTARPMnsGOST.isSelected()) {
                     STATogBtnRPMns.setSelected(true);
@@ -3366,10 +3598,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnSTARPMnsGOST) {
             if (addTglBtnSTARPMnsGOST.isSelected()) {
-                startCommand = new StartCommand(false, "Чувствительность ГОСТ RP-", "STA;G;R;N",0, 3, true);
+                testListForCollumRPMns.add(new StartCommand(false, "Чувствительность ГОСТ RP-", "STA;G;R;N",0, 3, true));
 
                 STATogBtnRPMns.setSelected(true);
-                testListForCollumRPMns.add(startCommand);
             } else {
                 for (Commands command : testListForCollumRPMns) {
                     if (command instanceof StartCommand) {
@@ -4619,6 +4850,12 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             }
         }
+    }
+
+    private String getTime(long mlS){
+        return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(mlS),
+                TimeUnit.MILLISECONDS.toMinutes(mlS) % TimeUnit.HOURS.toMinutes(1),
+                TimeUnit.MILLISECONDS.toSeconds(mlS) % TimeUnit.MINUTES.toSeconds(1));
     }
 
     public void setMethodicNameController(MethodicNameController methodicNameController) {
