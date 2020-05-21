@@ -1984,260 +1984,260 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     //Задаёт параметр true или false нужному checkBox'у
     public void addTestPointsOnGreedPane() {
-        char[] testPointIdArr;
-
-        if (!testListForCollumAPPls.isEmpty()) {
-
-            for (Commands command : testListForCollumAPPls) {
-                if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-
-                } else if (command instanceof CreepCommand) {
-                    if (!((CreepCommand) command).isGostTest()) {
-
-                        txtFieldCRPUProcAPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPAPPls.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpAPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-
-                        addTglBtnCRPAPPls.setSelected(true);
-
-                        txtFieldCRPUProcAPPls.setDisable(true);
-                        txtFieldTimeCRPAPPls.setDisable(true);
-                        txtFieldCRPAmtImpAPPls.setDisable(true);
-                    } else {
-                        addTglBtnCRPAPPlsGOST.setSelected(true);
-                    }
-                    CRPTogBtnAPPls.setSelected(true);
-
-                } else if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcAPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRAAPPls.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpAPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-
-                        addTglBtnSTAAPPls.setSelected(true);
-
-                        txtFieldSTAIProcAPPls.setDisable(true);
-                        txtFieldTimeSRAAPPls.setDisable(true);
-                        txtFieldSTAAmtImpAPPls.setDisable(true);
-                    }else {
-                        addTglBtnSTAAPPlsGOST.setSelected(true);
-                    }
-                    STATogBtnAPPls.setSelected(true);
-
-                } else if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
-                        ChcBxRTCErrAPPls.setValue("В ед. частоты");
-                    } else {
-                        ChcBxRTCErrAPPls.setValue("Сутч. погрешность");
-                    }
-
-                    txtFieldRngEAPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshAPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshAPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-
-                    ChcBxRTCErrAPPls.setDisable(true);
-
-                    txtFieldRngEAPPls.setDisable(true);
-                    txtFldRTCAmtMshAPPls.setDisable(true);
-                    txtFldRTCTimeMshAPPls.setDisable(true);
-                    addTglBtnRTCAPPls.setSelected(true);
-
-                    RTCTogBtnAPPls.setSelected(true);
-
-                } else if (command instanceof ConstantCommand) {
-                }
-            }
-        }
-
-        if (!testListForCollumAPMns.isEmpty()) {
-
-            for (Commands command : testListForCollumAPMns) {
-                if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-                } else if (command instanceof CreepCommand) {
-
-                    if (!((CreepCommand) command).isGostTest()) {
-
-                        txtFieldCRPUProcAPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPAPMns.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpAPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-
-                        addTglBtnCRPAPMns.setSelected(true);
-
-                        txtFieldCRPUProcAPMns.setDisable(true);
-                        txtFieldTimeCRPAPMns.setDisable(true);
-                        txtFieldCRPAmtImpAPMns.setDisable(true);
-                    } else {
-                        addTglBtnCRPAPMnsGOST.setSelected(true);
-                    }
-                    CRPTogBtnAPMns.setSelected(true);
-
-                } else if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcAPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRAAPMns.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpAPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-
-                        addTglBtnSTAAPMns.setSelected(true);
-
-                        txtFieldSTAIProcAPMns.setDisable(true);
-                        txtFieldTimeSRAAPMns.setDisable(true);
-                        txtFieldSTAAmtImpAPMns.setDisable(true);
-                    }else {
-                        addTglBtnSTAAPMnsGOST.setSelected(true);
-                    }
-                    STATogBtnAPMns.setSelected(true);
-
-                } else if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
-                        ChcBxRTCErrAPMns.setValue("В ед. частоты");
-                    } else {
-                        ChcBxRTCErrAPMns.setValue("Сутч. погрешность");
-                    }
-
-                    txtFieldRngEAPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshAPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshAPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-
-                    ChcBxRTCErrAPMns.setDisable(true);
-
-                    txtFieldRngEAPMns.setDisable(true);
-                    txtFldRTCAmtMshAPMns.setDisable(true);
-                    txtFldRTCTimeMshAPMns.setDisable(true);
-                    addTglBtnRTCAPMns.setSelected(true);
-
-                    RTCTogBtnAPMns.setSelected(true);
-                }
-            }
-        }
-
-        if (!testListForCollumRPPls.isEmpty()) {
-
-            for (Commands command : testListForCollumRPPls) {
-                if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-
-                } else if (command instanceof CreepCommand) {
-                    if (!((CreepCommand) command).isGostTest()) {
-
-                        txtFieldCRPUProcRPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPRPPls.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpRPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-
-                        addTglBtnCRPRPPls.setSelected(true);
-
-                        txtFieldCRPUProcRPPls.setDisable(true);
-                        txtFieldTimeCRPRPPls.setDisable(true);
-                        txtFieldCRPAmtImpRPPls.setDisable(true);
-                    } else {
-                        addTglBtnCRPRPPlsGOST.setSelected(true);
-                    }
-                    CRPTogBtnRPPls.setSelected(true);
-                } else if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcRPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRARPPls.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpRPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-
-                        addTglBtnSTARPPls.setSelected(true);
-
-                        txtFieldSTAIProcRPPls.setDisable(true);
-                        txtFieldTimeSRARPPls.setDisable(true);
-                        txtFieldSTAAmtImpRPPls.setDisable(true);
-                    }else {
-                        addTglBtnSTARPPlsGOST.setSelected(true);
-                    }
-                    STATogBtnRPPls.setSelected(true);
-
-                } else if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
-                        ChcBxRTCErrRPPls.setValue("В ед. частоты");
-                    } else {
-                        ChcBxRTCErrRPPls.setValue("Сутч. погрешность");
-                    }
-
-                    txtFieldRngERPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshRPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshRPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-
-                    ChcBxRTCErrRPPls.setDisable(true);
-
-                    txtFieldRngERPPls.setDisable(true);
-                    txtFldRTCAmtMshRPPls.setDisable(true);
-                    txtFldRTCTimeMshRPPls.setDisable(true);
-                    addTglBtnRTCRPPls.setSelected(true);
-
-                    RTCTogBtnRPPls.setSelected(true);
-                }
-            }
-        }
-
-        if (!testListForCollumRPMns.isEmpty()) {
-
-            for (Commands command : testListForCollumRPMns) {
-                if (command instanceof ErrorCommand) {
-                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-
-                } else if (command instanceof CreepCommand) {
-                    if (!((CreepCommand) command).isGostTest()) {
-
-                        txtFieldCRPUProcRPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-                        txtFieldTimeCRPRPMns.setText(((CreepCommand) command).getUserTimeTest());
-                        txtFieldCRPAmtImpRPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-
-                        addTglBtnCRPRPMns.setSelected(true);
-
-                        txtFieldCRPUProcRPMns.setDisable(true);
-                        txtFieldTimeCRPRPMns.setDisable(true);
-                        txtFieldCRPAmtImpRPMns.setDisable(true);
-                    } else {
-                        addTglBtnCRPRPMnsGOST.setSelected(true);
-                    }
-                    CRPTogBtnRPMns.setSelected(true);
-
-                } else if (command instanceof StartCommand) {
-                    if (!((StartCommand) command).isGostTest()) {
-                        txtFieldSTAIProcRPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-                        txtFieldTimeSRARPMns.setText(((StartCommand) command).getUserTimeTest());
-                        txtFieldSTAAmtImpRPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-
-                        addTglBtnSTARPMns.setSelected(true);
-
-                        txtFieldSTAIProcRPMns.setDisable(true);
-                        txtFieldTimeSRARPMns.setDisable(true);
-                        txtFieldSTAAmtImpRPMns.setDisable(true);
-                    }else {
-                        addTglBtnSTARPMnsGOST.setSelected(true);
-                    }
-                    STATogBtnRPMns.setSelected(true);
-
-                } else if (command instanceof RTCCommand) {
-                    if (((RTCCommand)command).getErrorType() == 0) {
-                        ChcBxRTCErrRPMns.setValue("В ед. частоты");
-                    } else {
-                        ChcBxRTCErrRPMns.setValue("Сутч. погрешность");
-                    }
-
-                    txtFieldRngERPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-                    txtFldRTCAmtMshRPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-                    txtFldRTCTimeMshRPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-
-                    ChcBxRTCErrRPMns.setDisable(true);
-
-                    txtFieldRngERPMns.setDisable(true);
-                    txtFldRTCAmtMshRPMns.setDisable(true);
-                    txtFldRTCTimeMshRPMns.setDisable(true);
-                    addTglBtnRTCRPMns.setSelected(true);
-
-                    RTCTogBtnRPMns.setSelected(true);
-                }
-            }
-        }
+//        char[] testPointIdArr;
+//
+//        if (!testListForCollumAPPls.isEmpty()) {
+//
+//            for (Commands command : testListForCollumAPPls) {
+//                if (command instanceof ErrorCommand) {
+//                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+//                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+//
+//                } else if (command instanceof CreepCommand) {
+//                    if (!((CreepCommand) command).isGostTest()) {
+//
+//                        txtFieldCRPUProcAPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
+//                        txtFieldTimeCRPAPPls.setText(((CreepCommand) command).getUserTimeTest());
+//                        txtFieldCRPAmtImpAPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+//
+//                        addTglBtnCRPAPPls.setSelected(true);
+//
+//                        txtFieldCRPUProcAPPls.setDisable(true);
+//                        txtFieldTimeCRPAPPls.setDisable(true);
+//                        txtFieldCRPAmtImpAPPls.setDisable(true);
+//                    } else {
+//                        addTglBtnCRPAPPlsGOST.setSelected(true);
+//                    }
+//                    CRPTogBtnAPPls.setSelected(true);
+//
+//                } else if (command instanceof StartCommand) {
+//                    if (!((StartCommand) command).isGostTest()) {
+//                        txtFieldSTAIProcAPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
+//                        txtFieldTimeSRAAPPls.setText(((StartCommand) command).getUserTimeTest());
+//                        txtFieldSTAAmtImpAPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+//
+//                        addTglBtnSTAAPPls.setSelected(true);
+//
+//                        txtFieldSTAIProcAPPls.setDisable(true);
+//                        txtFieldTimeSRAAPPls.setDisable(true);
+//                        txtFieldSTAAmtImpAPPls.setDisable(true);
+//                    }else {
+//                        addTglBtnSTAAPPlsGOST.setSelected(true);
+//                    }
+//                    STATogBtnAPPls.setSelected(true);
+//
+//                } else if (command instanceof RTCCommand) {
+//                    if (((RTCCommand)command).getErrorType() == 0) {
+//                        ChcBxRTCErrAPPls.setValue("В ед. частоты");
+//                    } else {
+//                        ChcBxRTCErrAPPls.setValue("Сутч. погрешность");
+//                    }
+//
+//                    txtFieldRngEAPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
+//                    txtFldRTCAmtMshAPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+//                    txtFldRTCTimeMshAPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+//
+//                    ChcBxRTCErrAPPls.setDisable(true);
+//
+//                    txtFieldRngEAPPls.setDisable(true);
+//                    txtFldRTCAmtMshAPPls.setDisable(true);
+//                    txtFldRTCTimeMshAPPls.setDisable(true);
+//                    addTglBtnRTCAPPls.setSelected(true);
+//
+//                    RTCTogBtnAPPls.setSelected(true);
+//
+//                } else if (command instanceof ConstantCommand) {
+//                }
+//            }
+//        }
+//
+//        if (!testListForCollumAPMns.isEmpty()) {
+//
+//            for (Commands command : testListForCollumAPMns) {
+//                if (command instanceof ErrorCommand) {
+//                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+//                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+//                } else if (command instanceof CreepCommand) {
+//
+//                    if (!((CreepCommand) command).isGostTest()) {
+//
+//                        txtFieldCRPUProcAPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
+//                        txtFieldTimeCRPAPMns.setText(((CreepCommand) command).getUserTimeTest());
+//                        txtFieldCRPAmtImpAPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+//
+//                        addTglBtnCRPAPMns.setSelected(true);
+//
+//                        txtFieldCRPUProcAPMns.setDisable(true);
+//                        txtFieldTimeCRPAPMns.setDisable(true);
+//                        txtFieldCRPAmtImpAPMns.setDisable(true);
+//                    } else {
+//                        addTglBtnCRPAPMnsGOST.setSelected(true);
+//                    }
+//                    CRPTogBtnAPMns.setSelected(true);
+//
+//                } else if (command instanceof StartCommand) {
+//                    if (!((StartCommand) command).isGostTest()) {
+//                        txtFieldSTAIProcAPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
+//                        txtFieldTimeSRAAPMns.setText(((StartCommand) command).getUserTimeTest());
+//                        txtFieldSTAAmtImpAPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+//
+//                        addTglBtnSTAAPMns.setSelected(true);
+//
+//                        txtFieldSTAIProcAPMns.setDisable(true);
+//                        txtFieldTimeSRAAPMns.setDisable(true);
+//                        txtFieldSTAAmtImpAPMns.setDisable(true);
+//                    }else {
+//                        addTglBtnSTAAPMnsGOST.setSelected(true);
+//                    }
+//                    STATogBtnAPMns.setSelected(true);
+//
+//                } else if (command instanceof RTCCommand) {
+//                    if (((RTCCommand)command).getErrorType() == 0) {
+//                        ChcBxRTCErrAPMns.setValue("В ед. частоты");
+//                    } else {
+//                        ChcBxRTCErrAPMns.setValue("Сутч. погрешность");
+//                    }
+//
+//                    txtFieldRngEAPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
+//                    txtFldRTCAmtMshAPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+//                    txtFldRTCTimeMshAPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+//
+//                    ChcBxRTCErrAPMns.setDisable(true);
+//
+//                    txtFieldRngEAPMns.setDisable(true);
+//                    txtFldRTCAmtMshAPMns.setDisable(true);
+//                    txtFldRTCTimeMshAPMns.setDisable(true);
+//                    addTglBtnRTCAPMns.setSelected(true);
+//
+//                    RTCTogBtnAPMns.setSelected(true);
+//                }
+//            }
+//        }
+//
+//        if (!testListForCollumRPPls.isEmpty()) {
+//
+//            for (Commands command : testListForCollumRPPls) {
+//                if (command instanceof ErrorCommand) {
+//                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+//                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+//
+//                } else if (command instanceof CreepCommand) {
+//                    if (!((CreepCommand) command).isGostTest()) {
+//
+//                        txtFieldCRPUProcRPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
+//                        txtFieldTimeCRPRPPls.setText(((CreepCommand) command).getUserTimeTest());
+//                        txtFieldCRPAmtImpRPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+//
+//                        addTglBtnCRPRPPls.setSelected(true);
+//
+//                        txtFieldCRPUProcRPPls.setDisable(true);
+//                        txtFieldTimeCRPRPPls.setDisable(true);
+//                        txtFieldCRPAmtImpRPPls.setDisable(true);
+//                    } else {
+//                        addTglBtnCRPRPPlsGOST.setSelected(true);
+//                    }
+//                    CRPTogBtnRPPls.setSelected(true);
+//                } else if (command instanceof StartCommand) {
+//                    if (!((StartCommand) command).isGostTest()) {
+//                        txtFieldSTAIProcRPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
+//                        txtFieldTimeSRARPPls.setText(((StartCommand) command).getUserTimeTest());
+//                        txtFieldSTAAmtImpRPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+//
+//                        addTglBtnSTARPPls.setSelected(true);
+//
+//                        txtFieldSTAIProcRPPls.setDisable(true);
+//                        txtFieldTimeSRARPPls.setDisable(true);
+//                        txtFieldSTAAmtImpRPPls.setDisable(true);
+//                    }else {
+//                        addTglBtnSTARPPlsGOST.setSelected(true);
+//                    }
+//                    STATogBtnRPPls.setSelected(true);
+//
+//                } else if (command instanceof RTCCommand) {
+//                    if (((RTCCommand)command).getErrorType() == 0) {
+//                        ChcBxRTCErrRPPls.setValue("В ед. частоты");
+//                    } else {
+//                        ChcBxRTCErrRPPls.setValue("Сутч. погрешность");
+//                    }
+//
+//                    txtFieldRngERPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
+//                    txtFldRTCAmtMshRPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+//                    txtFldRTCTimeMshRPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+//
+//                    ChcBxRTCErrRPPls.setDisable(true);
+//
+//                    txtFieldRngERPPls.setDisable(true);
+//                    txtFldRTCAmtMshRPPls.setDisable(true);
+//                    txtFldRTCTimeMshRPPls.setDisable(true);
+//                    addTglBtnRTCRPPls.setSelected(true);
+//
+//                    RTCTogBtnRPPls.setSelected(true);
+//                }
+//            }
+//        }
+//
+//        if (!testListForCollumRPMns.isEmpty()) {
+//
+//            for (Commands command : testListForCollumRPMns) {
+//                if (command instanceof ErrorCommand) {
+//                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
+//                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+//
+//                } else if (command instanceof CreepCommand) {
+//                    if (!((CreepCommand) command).isGostTest()) {
+//
+//                        txtFieldCRPUProcRPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
+//                        txtFieldTimeCRPRPMns.setText(((CreepCommand) command).getUserTimeTest());
+//                        txtFieldCRPAmtImpRPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
+//
+//                        addTglBtnCRPRPMns.setSelected(true);
+//
+//                        txtFieldCRPUProcRPMns.setDisable(true);
+//                        txtFieldTimeCRPRPMns.setDisable(true);
+//                        txtFieldCRPAmtImpRPMns.setDisable(true);
+//                    } else {
+//                        addTglBtnCRPRPMnsGOST.setSelected(true);
+//                    }
+//                    CRPTogBtnRPMns.setSelected(true);
+//
+//                } else if (command instanceof StartCommand) {
+//                    if (!((StartCommand) command).isGostTest()) {
+//                        txtFieldSTAIProcRPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
+//                        txtFieldTimeSRARPMns.setText(((StartCommand) command).getUserTimeTest());
+//                        txtFieldSTAAmtImpRPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
+//
+//                        addTglBtnSTARPMns.setSelected(true);
+//
+//                        txtFieldSTAIProcRPMns.setDisable(true);
+//                        txtFieldTimeSRARPMns.setDisable(true);
+//                        txtFieldSTAAmtImpRPMns.setDisable(true);
+//                    }else {
+//                        addTglBtnSTARPMnsGOST.setSelected(true);
+//                    }
+//                    STATogBtnRPMns.setSelected(true);
+//
+//                } else if (command instanceof RTCCommand) {
+//                    if (((RTCCommand)command).getErrorType() == 0) {
+//                        ChcBxRTCErrRPMns.setValue("В ед. частоты");
+//                    } else {
+//                        ChcBxRTCErrRPMns.setValue("Сутч. погрешность");
+//                    }
+//
+//                    txtFieldRngERPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
+//                    txtFldRTCAmtMshRPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
+//                    txtFldRTCTimeMshRPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
+//
+//                    ChcBxRTCErrRPMns.setDisable(true);
+//
+//                    txtFieldRngERPMns.setDisable(true);
+//                    txtFldRTCAmtMshRPMns.setDisable(true);
+//                    txtFldRTCTimeMshRPMns.setDisable(true);
+//                    addTglBtnRTCRPMns.setSelected(true);
+//
+//                    RTCTogBtnRPMns.setSelected(true);
+//                }
+//            }
+//        }
     }
 
     //Находит нужный CheckBox и задаёт значение

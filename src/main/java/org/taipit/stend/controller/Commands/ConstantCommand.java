@@ -25,7 +25,7 @@ public class ConstantCommand implements Commands, Serializable {
     //Эта команда будет проходить по времени?
     private boolean runTestToTime;
 
-    private String strTimeToTest;
+    private long strTimeToTest;
 
     private long timeToTest;
 
@@ -94,7 +94,7 @@ public class ConstantCommand implements Commands, Serializable {
     //Константа счётчика для теста
     private int constantMeter;
 
-    public ConstantCommand(boolean threePhaseStendCommand, boolean runTestToTime, String strTimeToTest, String id,
+    public ConstantCommand(boolean threePhaseStendCommand, boolean runTestToTime, long strTimeToTest, String id,
                            String name, double voltPer, double currPer, int revers, int channelFlag, double eminProc, double emaxProc) {
         this.threePhaseCommand = threePhaseStendCommand;
         this.runTestToTime = runTestToTime;
@@ -110,14 +110,6 @@ public class ConstantCommand implements Commands, Serializable {
 
         phaseSrequence = 0;
         cosP = "1.0";
-
-        String[] timeArr = strTimeToTest.split(":");
-
-        String hours = timeArr[0];
-        String mins = timeArr[1];
-        String seks = timeArr[2];
-
-        timeToTest =  ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
     }
 
     public ConstantCommand(boolean threePhaseStendCommand, boolean runTestToTime, double kWToTest, String id,
@@ -482,7 +474,7 @@ public class ConstantCommand implements Commands, Serializable {
         return runTestToTime;
     }
 
-    public String getStrTimeToTest() {
+    public long getStrTimeToTest() {
         return strTimeToTest;
     }
 
