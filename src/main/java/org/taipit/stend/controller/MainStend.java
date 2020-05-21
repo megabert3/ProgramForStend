@@ -1,37 +1,57 @@
 package org.taipit.stend.controller;
 
+import java.util.concurrent.TimeUnit;
+
 public class MainStend {
 
+    public static String getTime (long time) {
+    return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(time),
+            TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),
+            TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
+    }
+
     public static void main(String[] args) {
-        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
-        try {
 
-            stendDLLCommands.errorClear();
+        String time = "104:60:60";
 
-            stendDLLCommands.getUI(1, 230, 5, 50, 0, 0, 100, 0, "H", "1.0");
+        String[] timeArr = time.split(":");
 
-            Thread.sleep(3000);
+        long timeMls = (Integer.parseInt(timeArr[0]) * 3600 + Integer.parseInt(timeArr[1]) * 60 + Integer.parseInt(timeArr[2])) * 1000;
 
-            for (int i = 1; i < 3; i++) {
-                stendDLLCommands.setPulseChannel(i, 0);
-                stendDLLCommands.constTestStart(i, 8000);
-            }
-
-            stendDLLCommands.getUI(1, 230, 10, 50, 0, 0, 100, 100, "H", "1.0");
-
-            Thread.sleep(60000);
-
-            stendDLLCommands.powerOf();
-
-            for (int i = 1; i < 3; i++) {
-                System.out.println(stendDLLCommands.constPulseRead(8000, i));
-            }
+        System.out.println(time);
+        System.out.println(timeMls);
+        System.out.println(getTime(timeMls));
 
 
-        }catch (Exception e) {
-            stendDLLCommands.errorClear();
-            stendDLLCommands.powerOf();
-        }
+//        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
+//        try {
+//
+//            stendDLLCommands.errorClear();
+//
+//            stendDLLCommands.getUI(1, 230, 5, 50, 0, 0, 100, 0, "H", "1.0");
+//
+//            Thread.sleep(3000);
+//
+//            for (int i = 1; i < 3; i++) {
+//                stendDLLCommands.setPulseChannel(i, 0);
+//                stendDLLCommands.constTestStart(i, 8000);
+//            }
+//
+//            stendDLLCommands.getUI(1, 230, 10, 50, 0, 0, 100, 100, "H", "1.0");
+//
+//            Thread.sleep(60000);
+//
+//            stendDLLCommands.powerOf();
+//
+//            for (int i = 1; i < 3; i++) {
+//                System.out.println(stendDLLCommands.constPulseRead(8000, i));
+//            }
+//
+//
+//        }catch (Exception e) {
+//            stendDLLCommands.errorClear();
+//            stendDLLCommands.powerOf();
+//        }
 
 // Старт теста констант
 // Meter_No - номер места

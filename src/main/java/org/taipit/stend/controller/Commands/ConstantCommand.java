@@ -80,7 +80,7 @@ public class ConstantCommand implements Commands, Serializable {
     private int revers;
 
     //По каким фазам пустить ток
-    private String iABC;
+    private String iABC = "H";
 
     //Активная ли точка
     private boolean active = true;

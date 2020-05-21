@@ -44,6 +44,8 @@ public class RTCCommand implements Commands, Serializable {
     //Количество повторов теста
     private int countResultTest;
 
+    private String iABC = "H";
+
     //Частота
     private double freg;
 
@@ -80,7 +82,7 @@ public class RTCCommand implements Commands, Serializable {
             int count = 0;
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
-                    100.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
+                    100.0, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
             //Разблокирую интерфейc кнопок
             TestErrorTableFrameController.blockBtns.setValue(false);
@@ -193,7 +195,7 @@ public class RTCCommand implements Commands, Serializable {
             int count = 0;
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
-                    0.0, 0.0, "H", "1.0")) throw new ConnectForStendExeption();
+                    0.0, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
             //Разблокирую интерфейc кнопок
             TestErrorTableFrameController.blockBtns.setValue(false);

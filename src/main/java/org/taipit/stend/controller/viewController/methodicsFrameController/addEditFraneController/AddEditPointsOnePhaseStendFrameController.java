@@ -2772,6 +2772,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     procUnom = Double.parseDouble(txtFieldCRPUProcAPPls.getText());
+                    if (procUnom < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -2788,8 +2789,27 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     int hour = Integer.parseInt(timeArr[0].trim());
+                    if (hour < 0) throw new NumberFormatException();
+
                     int mins = Integer.parseInt(timeArr[1].trim());
+                    if (mins < 0) throw new NumberFormatException();
+
+                    if (mins > 59) {
+                        ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                        txtFieldTimeCRPAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnCRPAPPls.setSelected(false);
+                        return;
+                    }
+
                     int sek = Integer.parseInt(timeArr[2].trim());
+                    if (sek < 0) throw new NumberFormatException();
+
+                    if (sek > 59) {
+                        ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                        txtFieldTimeCRPAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnCRPAPPls.setSelected(false);
+                        return;
+                    }
 
                     timeTest = (3600 * hour + 60 * mins + sek) * 1000;
 
@@ -2803,6 +2823,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     amountImp = Integer.parseInt(txtFieldCRPAmtImpAPPls.getText());
+                    if (amountImp < 0) throw new NumberFormatException();
+
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -2881,6 +2903,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     procUnom = Double.parseDouble(txtFieldCRPUProcAPMns.getText());
+                    if (procUnom < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -2897,8 +2920,27 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     int hour = Integer.parseInt(timeArr[0].trim());
+                    if (hour < 0) throw new NumberFormatException();
+
                     int mins = Integer.parseInt(timeArr[1].trim());
+                    if (mins < 0) throw new NumberFormatException();
+
+                    if (mins > 59) {
+                        ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                        txtFieldTimeCRPAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnCRPAPMns.setSelected(false);
+                        return;
+                    }
+
                     int sek = Integer.parseInt(timeArr[2].trim());
+                    if (sek < 0) throw new NumberFormatException();
+
+                    if (sek > 59) {
+                        ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                        txtFieldTimeCRPAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnCRPAPMns.setSelected(false);
+                        return;
+                    }
 
                     timeTest = (3600 * hour + 60 * mins + sek) * 1000;
 
@@ -2912,6 +2954,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     amountImp = Integer.parseInt(txtFieldCRPAmtImpAPMns.getText());
+                    if (amountImp < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -2991,6 +3034,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     procUnom = Double.parseDouble(txtFieldCRPUProcRPPls.getText());
+                    if (procUnom < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3007,8 +3051,27 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     int hour = Integer.parseInt(timeArr[0].trim());
+                    if (hour < 0) throw new NumberFormatException();
+
                     int mins = Integer.parseInt(timeArr[1].trim());
+                    if (mins < 0) throw new NumberFormatException();
+
+                    if (mins > 59) {
+                        ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                        txtFieldTimeCRPRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnCRPRPPls.setSelected(false);
+                        return;
+                    }
+
                     int sek = Integer.parseInt(timeArr[2].trim());
+                    if (sek < 0) throw new NumberFormatException();
+
+                    if (sek > 59) {
+                        ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                        txtFieldTimeCRPRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnCRPRPPls.setSelected(false);
+                        return;
+                    }
 
                     timeTest = (3600 * hour + 60 * mins + sek) * 1000;
 
@@ -3022,6 +3085,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     amountImp = Integer.parseInt(txtFieldCRPAmtImpRPPls.getText());
+                    if (amountImp < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3100,6 +3164,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     procUnom = Double.parseDouble(txtFieldCRPUProcRPMns.getText());
+                    if (procUnom < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3116,8 +3181,27 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     int hour = Integer.parseInt(timeArr[0].trim());
+                    if (hour < 0) throw new NumberFormatException();
+
                     int mins = Integer.parseInt(timeArr[1].trim());
+                    if (mins < 0) throw new NumberFormatException();
+
+                    if (mins > 59) {
+                        ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                        txtFieldTimeCRPRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnCRPRPMns.setSelected(false);
+                        return;
+                    }
+
                     int sek = Integer.parseInt(timeArr[2].trim());
+                    if (sek < 0) throw new NumberFormatException();
+
+                    if (sek > 59) {
+                        ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                        txtFieldTimeCRPRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnCRPRPMns.setSelected(false);
+                        return;
+                    }
 
                     timeTest = (3600 * hour + 60 * mins + sek) * 1000;
 
@@ -3131,6 +3215,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     amountImp = Integer.parseInt(txtFieldCRPAmtImpRPMns.getText());
+                    if (amountImp < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3211,6 +3296,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     current = Double.parseDouble(txtFieldSTAIProcAPPls.getText());
+                    if (current < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3227,8 +3313,25 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     int hour = Integer.parseInt(timeArr[0].trim());
+                    if (hour < 0) throw new NumberFormatException();
+
                     int mins = Integer.parseInt(timeArr[1].trim());
+                    if (mins < 0) throw new NumberFormatException();
+                    if (mins > 59) {
+                        ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                        txtFieldTimeSRAAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnSTAAPPls.setSelected(false);
+                        return;
+                    }
+
                     int sek = Integer.parseInt(timeArr[2].trim());
+                    if (sek < 0) throw new NumberFormatException();
+                    if (sek > 59) {
+                        ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                        txtFieldTimeSRAAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnSTAAPPls.setSelected(false);
+                        return;
+                    }
 
                     timeTest = (3600 * hour + 60 * mins + sek) * 1000;
 
@@ -3242,6 +3345,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     amountImp = Integer.parseInt(txtFieldSTAAmtImpAPPls.getText());
+                    if (amountImp < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3318,6 +3422,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     current = Double.parseDouble(txtFieldSTAIProcAPMns.getText());
+                    if (current < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3334,8 +3439,25 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     int hour = Integer.parseInt(timeArr[0].trim());
+                    if (hour < 0) throw new NumberFormatException();
+
                     int mins = Integer.parseInt(timeArr[1].trim());
+                    if (mins < 0) throw new NumberFormatException();
+                    if (mins > 59) {
+                        ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                        txtFieldTimeSRAAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnSTAAPMns.setSelected(false);
+                        return;
+                    }
+
                     int sek = Integer.parseInt(timeArr[2].trim());
+                    if (sek < 0) throw new NumberFormatException();
+                    if (sek > 59) {
+                        ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                        txtFieldTimeSRAAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnSTAAPMns.setSelected(false);
+                        return;
+                    }
 
                     timeTest = (3600 * hour + 60 * mins + sek) * 1000;
 
@@ -3349,6 +3471,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     amountImp = Integer.parseInt(txtFieldSTAAmtImpAPMns.getText());
+                    if (amountImp < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3423,6 +3546,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     current = Double.parseDouble(txtFieldSTAIProcRPPls.getText());
+                    if (current < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3439,8 +3563,25 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     int hour = Integer.parseInt(timeArr[0].trim());
+                    if (hour < 0) throw new NumberFormatException();
+
                     int mins = Integer.parseInt(timeArr[1].trim());
+                    if (mins < 0) throw new NumberFormatException();
+                    if (mins > 59) {
+                        ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                        txtFieldTimeSRARPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnSTARPPls.setSelected(false);
+                        return;
+                    }
+
                     int sek = Integer.parseInt(timeArr[2].trim());
+                    if (sek < 0) throw new NumberFormatException();
+                    if (sek > 59) {
+                        ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                        txtFieldTimeSRARPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnSTARPPls.setSelected(false);
+                        return;
+                    }
 
                     timeTest = (3600 * hour + 60 * mins + sek) * 1000;
 
@@ -3454,6 +3595,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     amountImp = Integer.parseInt(txtFieldSTAAmtImpRPPls.getText());
+                    if (amountImp < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3528,6 +3670,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     current = Double.parseDouble(txtFieldSTAIProcRPMns.getText());
+                    if (current < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3544,8 +3687,25 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     int hour = Integer.parseInt(timeArr[0].trim());
+                    if (hour < 0) throw new NumberFormatException();
+
                     int mins = Integer.parseInt(timeArr[1].trim());
+                    if (mins < 0) throw new NumberFormatException();
+                    if (mins > 59) {
+                        ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                        txtFieldTimeSRARPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnSTARPMns.setSelected(false);
+                        return;
+                    }
+
                     int sek = Integer.parseInt(timeArr[2].trim());
+                    if (sek < 0) throw new NumberFormatException();
+                    if (sek > 59) {
+                        ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                        txtFieldTimeSRARPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        addTglBtnSTARPMns.setSelected(false);
+                        return;
+                    }
 
                     timeTest = (3600 * hour + 60 * mins + sek) * 1000;
 
@@ -3559,6 +3719,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     amountImp = Integer.parseInt(txtFieldSTAAmtImpRPMns.getText());
+                    if (amountImp < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3636,6 +3797,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     errorRange = Double.parseDouble(txtFieldRngEAPPls.getText());
+                    if (errorRange < 0) throw new NumberFormatException();
+
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3646,6 +3809,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     freg = Double.parseDouble(txtFldRTCFrqAPPls.getText());
+                    if (freg < 0) throw new NumberFormatException();
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3656,6 +3820,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     anountMeash = Integer.parseInt(txtFldRTCAmtMshAPPls.getText());
+                    if (anountMeash < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3666,6 +3831,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     timeMeas = Integer.parseInt(txtFldRTCTimeMshAPPls.getText());
+                    if (timeMeas < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3728,6 +3894,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     errorRange = Double.parseDouble(txtFieldRngEAPMns.getText());
+                    if (errorRange < 0) throw new NumberFormatException();
+
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3738,6 +3906,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     freg = Double.parseDouble(txtFldRTCFrqAPMns.getText());
+                    if (freg < 0) throw new NumberFormatException();
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3748,6 +3917,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     anountMeash = Integer.parseInt(txtFldRTCAmtMshAPMns.getText());
+                    if (anountMeash < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3758,6 +3928,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     timeMeas = Integer.parseInt(txtFldRTCTimeMshAPMns.getText());
+                    if (timeMeas < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3820,6 +3991,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     errorRange = Double.parseDouble(txtFieldRngERPPls.getText());
+                    if (errorRange < 0) throw new NumberFormatException();
+
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3830,6 +4003,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     freg = Double.parseDouble(txtFldRTCFrqRPPls.getText());
+                    if (freg < 0) throw new NumberFormatException();
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3840,6 +4014,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     anountMeash = Integer.parseInt(txtFldRTCAmtMshRPPls.getText());
+                    if (anountMeash < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3850,6 +4025,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     timeMeas = Integer.parseInt(txtFldRTCTimeMshRPPls.getText());
+                    if (timeMeas < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3912,6 +4088,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     errorRange = Double.parseDouble(txtFieldRngERPMns.getText());
+                    if (errorRange < 0) throw new NumberFormatException();
+
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3922,6 +4100,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     freg = Double.parseDouble(txtFldRTCFrqRPMns.getText());
+                    if (freg < 0) throw new NumberFormatException();
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3932,6 +4111,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     anountMeash = Integer.parseInt(txtFldRTCAmtMshRPMns.getText());
+                    if (anountMeash < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -3942,6 +4122,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     timeMeas = Integer.parseInt(txtFldRTCTimeMshRPMns.getText());
+                    if (timeMeas < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
@@ -4006,6 +4187,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                      Uproc = Double.parseDouble(txtFieldConsProcUAPPls.getText());
+                     if (Uproc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsProcUAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4015,6 +4197,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                      IbProc = Double.parseDouble(txtFieldConsProcIAPPls.getText());
+                    if (IbProc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsProcIAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4024,6 +4207,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     errorRange = Double.parseDouble(txtFieldConsErAPPls.getText());
+                    if (errorRange < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsErAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4043,11 +4227,31 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     try {
-                        String hours = arrTime[0].trim();
-                        String mins = arrTime[1].trim();
-                        String seks = arrTime[2].trim();
 
-                        timeTestToMill = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+                        int hours = Integer.parseInt(arrTime[0].trim());
+                        if (hours < 0) throw new NumberFormatException();
+
+                        int mins = Integer.parseInt(arrTime[1].trim());
+                        if (mins < 0) throw new NumberFormatException();
+
+                        if (mins > 59) {
+                            ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                            txtFieldConstTimeAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstAPPls.setSelected(false);
+                            return;
+                        }
+
+                        int sec = Integer.parseInt(arrTime[2].trim());
+                        if (sec < 0) throw new NumberFormatException();
+
+                        if (sec > 59) {
+                            ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                            txtFieldConstTimeAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstAPPls.setSelected(false);
+                            return;
+                        }
+
+                        timeTestToMill = (hours * 3600 + mins * 60 + sec) * 1000;
 
                         if (timeTestToMill < 60000) {
                             ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
@@ -4138,6 +4342,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     Uproc = Double.parseDouble(txtFieldConsProcUAPMns.getText());
+                    if (Uproc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsProcUAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4147,6 +4352,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     IbProc = Double.parseDouble(txtFieldConsProcIAPMns.getText());
+                    if (IbProc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsProcIAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4156,6 +4362,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     errorRange = Double.parseDouble(txtFieldConsErAPMns.getText());
+                    if (errorRange < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsErAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4175,11 +4382,31 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     try {
-                        String hours = arrTime[0].trim();
-                        String mins = arrTime[1].trim();
-                        String seks = arrTime[2].trim();
 
-                        timeTestToMill = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+                        int hours = Integer.parseInt(arrTime[0].trim());
+                        if (hours < 0) throw new NumberFormatException();
+
+                        int mins = Integer.parseInt(arrTime[1].trim());
+                        if (mins < 0) throw new NumberFormatException();
+
+                        if (mins > 59) {
+                            ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                            txtFieldConstTimeAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstAPMns.setSelected(false);
+                            return;
+                        }
+
+                        int sec = Integer.parseInt(arrTime[2].trim());
+                        if (sec < 0) throw new NumberFormatException();
+
+                        if (sec > 59) {
+                            ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                            txtFieldConstTimeAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstAPMns.setSelected(false);
+                            return;
+                        }
+
+                        timeTestToMill = (hours * 3600 + mins * 60 + sec) * 1000;
 
                         if (timeTestToMill < 60000) {
                             ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
@@ -4270,6 +4497,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     Uproc = Double.parseDouble(txtFieldConsProcURPPls.getText());
+                    if (Uproc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsProcURPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4279,6 +4507,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     IbProc = Double.parseDouble(txtFieldConsProcIRPPls.getText());
+                    if (IbProc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsProcIRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4288,6 +4517,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     errorRange = Double.parseDouble(txtFieldConsErRPPls.getText());
+                    if (errorRange < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsErRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4299,7 +4529,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                     String[] arrTime = txtFieldConstTimeRPPls.getText().trim().split(":");
 
-                    if (arrTime.length > 3 || arrTime[0].trim().length() > 2 || arrTime[1].trim().length() > 2 || arrTime[2].trim().length() > 2) {
+                    if (arrTime.length != 3 || arrTime[0].trim().length() > 2 || arrTime[1].trim().length() > 2 || arrTime[2].trim().length() > 2) {
                         ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
                         txtFieldConstTimeRPPls.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
                         addTglBtnConstRPPls.setSelected(false);
@@ -4307,11 +4537,31 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     try {
-                        String hours = arrTime[0].trim();
-                        String mins = arrTime[1].trim();
-                        String seks = arrTime[2].trim();
 
-                        timeTestToMill = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+                        int hours = Integer.parseInt(arrTime[0].trim());
+                        if (hours < 0) throw new NumberFormatException();
+
+                        int mins = Integer.parseInt(arrTime[1].trim());
+                        if (mins < 0) throw new NumberFormatException();
+
+                        if (mins > 59) {
+                            ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                            txtFieldConstTimeRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstRPPls.setSelected(false);
+                            return;
+                        }
+
+                        int sec = Integer.parseInt(arrTime[2].trim());
+                        if (sec < 0) throw new NumberFormatException();
+
+                        if (sec > 59) {
+                            ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                            txtFieldConstTimeRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstRPPls.setSelected(false);
+                            return;
+                        }
+
+                        timeTestToMill = (hours * 3600 + mins * 60 + sec) * 1000;
 
                         if (timeTestToMill < 60000) {
                             ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
@@ -4403,6 +4653,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     Uproc = Double.parseDouble(txtFieldConsProcURPMns.getText());
+                    if (Uproc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsProcURPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4412,6 +4663,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     IbProc = Double.parseDouble(txtFieldConsProcIRPMns.getText());
+                    if (IbProc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsProcIRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4421,6 +4673,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 try {
                     errorRange = Double.parseDouble(txtFieldConsErRPMns.getText());
+                    if (errorRange < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
                     txtFieldConsErRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
@@ -4440,11 +4693,31 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     try {
-                        String hours = arrTime[0].trim();
-                        String mins = arrTime[1].trim();
-                        String seks = arrTime[2].trim();
 
-                        timeTestToMill = ((Integer.parseInt(hours) * 60 * 60) + (Integer.parseInt(mins) * 60) + Integer.parseInt(seks)) * 1000;
+                        int hours = Integer.parseInt(arrTime[0].trim());
+                        if (hours < 0) throw new NumberFormatException();
+
+                        int mins = Integer.parseInt(arrTime[1].trim());
+                        if (mins < 0) throw new NumberFormatException();
+
+                        if (mins > 59) {
+                            ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                            txtFieldConstTimeRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstRPMns.setSelected(false);
+                            return;
+                        }
+
+                        int sec = Integer.parseInt(arrTime[2].trim());
+                        if (sec < 0) throw new NumberFormatException();
+
+                        if (sec > 59) {
+                            ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                            txtFieldConstTimeRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            addTglBtnConstRPMns.setSelected(false);
+                            return;
+                        }
+
+                        timeTestToMill = (hours * 3600 + mins * 60 + sec) * 1000;
 
                         if (timeTestToMill < 60000) {
                             ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
