@@ -50,40 +50,17 @@ public class CreepCommand implements Commands, Serializable {
     //Время расчитывается по госту?
     private boolean gostTest;
 
-    //Время теста введённое пользователем
-    private long userTimeTest;
-
     //Количество импоульсов для провала теста
     private int pulseValue = 2;
 
-    private long timeForTest;
+    //Время теста введённое пользователем
+    private long userTimeTest;
     private long timeStart;
     private long timeEnd;
     private long currTime;
     private String strTime;
 
     private Timer timer;
-
-//    transient private TimerTask timerTask = new TimerTask() {
-//        @Override
-//        public void run() {
-//            if (System.currentTimeMillis() < timeEnd) {
-//                currTime = timeEnd - System.currentTimeMillis();
-//
-//                strTime = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(currTime),
-//                        TimeUnit.MILLISECONDS.toMinutes(currTime) % TimeUnit.HOURS.toMinutes(1),
-//                        TimeUnit.MILLISECONDS.toSeconds(currTime) % TimeUnit.MINUTES.toSeconds(1));
-//
-//                for (Map.Entry<Integer, Boolean> map : creepCommandResult.entrySet()) {
-//                    if (map.getValue()) {
-//                        Meter.CommandResult errorResult = meterList.get(map.getKey() - 1).returnResultCommand(index, pulseValue);
-//                        errorResult.setLastResultForTabView("N"+strTime);
-//                    }
-//                }
-//
-//            } else timer.cancel();
-//        }
-//    };
 
     private HashMap<Integer, Boolean> creepCommandResult;
 
@@ -122,11 +99,14 @@ public class CreepCommand implements Commands, Serializable {
                     for (Map.Entry<Integer, Boolean> map : creepCommandResult.entrySet()) {
                         if (map.getValue()) {
                             Meter.CommandResult errorResult = meterList.get(map.getKey() - 1).returnResultCommand(index, channelFlag);
-                            errorResult.setLastResultForTabView("N"+strTime);
+                            errorResult.setLastResultForTabView("N" + strTime);
                         }
                     }
 
-                } else timer.cancel();
+                } else {
+                    timer.cancel();
+                    System.out.println("Остановлен");
+                }
             }
         };
 
@@ -172,7 +152,7 @@ public class CreepCommand implements Commands, Serializable {
         Meter.CreepResult creepResult;
 
         timeStart = System.currentTimeMillis();
-        timeEnd = timeStart + timeForTest;
+        timeEnd = timeStart + userTimeTest;
 
         timer.schedule(timerTask, 0, 500);
 
@@ -195,7 +175,9 @@ public class CreepCommand implements Commands, Serializable {
                     creepResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
 
                     if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
+
                         stendDLLCommands.searchMark(mapResult.getKey());
+
                         meter.setAmountImn(meter.getAmountImn() + 1);
 
                         if (meter.getAmountImn() > pulseValue) {
@@ -291,7 +273,7 @@ public class CreepCommand implements Commands, Serializable {
             setDefTestResults(channelFlag, index);
 
             timeStart = System.currentTimeMillis();
-            timeEnd = timeStart + timeForTest;
+            timeEnd = timeStart + userTimeTest;
 
             timer.schedule(timerTask, 0, 500);
 
@@ -436,12 +418,8 @@ public class CreepCommand implements Commands, Serializable {
         this.index = index;
     }
 
-    public long getTimeForTest() {
-        return timeForTest;
-    }
-
-    public void setTimeForTest(long timeForTest) {
-        this.timeForTest = timeForTest;
+    public void setUserTimeTest(long userTimeTest) {
+        this.userTimeTest = userTimeTest;
     }
 
     @Override

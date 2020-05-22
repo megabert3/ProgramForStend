@@ -143,7 +143,7 @@ public class Meter implements Serializable{
                     if (creepCommand.isGostTest()) {
                         errorListAPPls.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()), String.valueOf(creepCommand.getPulseValue())));
                     } else {
-                        errorListAPPls.add(new CreepResult(id, getTime(creepCommand.getTimeForTest()), String.valueOf(creepCommand.getPulseValue())));
+                        errorListAPPls.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
 
                 } else if (command instanceof StartCommand) {
@@ -187,7 +187,7 @@ public class Meter implements Serializable{
                     if (creepCommand.isGostTest()) {
                         errorListAPMns.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()), String.valueOf(creepCommand.getPulseValue())));
                     } else {
-                        errorListAPMns.add(new CreepResult(id, getTime(creepCommand.getTimeForTest()), String.valueOf(creepCommand.getPulseValue())));
+                        errorListAPMns.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
 
                 } else if (command instanceof StartCommand) {
@@ -233,7 +233,7 @@ public class Meter implements Serializable{
                     if (creepCommand.isGostTest()) {
                         errorListRPPls.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()), String.valueOf(creepCommand.getPulseValue())));
                     } else {
-                        errorListRPPls.add(new CreepResult(id, getTime(creepCommand.getTimeForTest()), String.valueOf(creepCommand.getPulseValue())));
+                        errorListRPPls.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
 
                 } else if (command instanceof StartCommand) {
@@ -279,7 +279,7 @@ public class Meter implements Serializable{
                     if (creepCommand.isGostTest()) {
                         errorListRPMns.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()), String.valueOf(creepCommand.getPulseValue())));
                     } else {
-                        errorListRPMns.add(new CreepResult(id, getTime(creepCommand.getTimeForTest()), String.valueOf(creepCommand.getPulseValue())));
+                        errorListRPMns.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
 
                 } else if (command instanceof StartCommand) {

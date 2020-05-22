@@ -27,7 +27,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicNameController;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;

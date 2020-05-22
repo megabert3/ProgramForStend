@@ -85,7 +85,7 @@ public class ErrorCommand implements Commands, Serializable {
     private int revers;
 
     //По каким фазам пустить ток
-    private String iABC = "H";
+    private String iABC;
 
     //Активная ли точка
     private boolean active = true;

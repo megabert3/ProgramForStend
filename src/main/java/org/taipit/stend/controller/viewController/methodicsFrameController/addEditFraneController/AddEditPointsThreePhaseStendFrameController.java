@@ -2,6 +2,7 @@ package org.taipit.stend.controller.viewController.methodicsFrameController.addE
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -1996,260 +1997,400 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     //Задаёт параметр true или false нужному checkBox'у
     public void addTestPointsOnGreedPane() {
-//        char[] testPointIdArr;
-//
-//        if (!testListForCollumAPPls.isEmpty()) {
-//
-//            for (Commands command : testListForCollumAPPls) {
-//                if (command instanceof ErrorCommand) {
-//                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-//                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-//
-//                } else if (command instanceof CreepCommand) {
-//                    if (!((CreepCommand) command).isGostTest()) {
-//
-//                        txtFieldCRPUProcAPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-//                        txtFieldTimeCRPAPPls.setText(((CreepCommand) command).getUserTimeTest());
-//                        txtFieldCRPAmtImpAPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-//
-//                        addTglBtnCRPAPPls.setSelected(true);
-//
-//                        txtFieldCRPUProcAPPls.setDisable(true);
-//                        txtFieldTimeCRPAPPls.setDisable(true);
-//                        txtFieldCRPAmtImpAPPls.setDisable(true);
-//                    } else {
-//                        addTglBtnCRPAPPlsGOST.setSelected(true);
-//                    }
-//                    CRPTogBtnAPPls.setSelected(true);
-//
-//                } else if (command instanceof StartCommand) {
-//                    if (!((StartCommand) command).isGostTest()) {
-//                        txtFieldSTAIProcAPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-//                        txtFieldTimeSRAAPPls.setText(((StartCommand) command).getUserTimeTest());
-//                        txtFieldSTAAmtImpAPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-//
-//                        addTglBtnSTAAPPls.setSelected(true);
-//
-//                        txtFieldSTAIProcAPPls.setDisable(true);
-//                        txtFieldTimeSRAAPPls.setDisable(true);
-//                        txtFieldSTAAmtImpAPPls.setDisable(true);
-//                    }else {
-//                        addTglBtnSTAAPPlsGOST.setSelected(true);
-//                    }
-//                    STATogBtnAPPls.setSelected(true);
-//
-//                } else if (command instanceof RTCCommand) {
-//                    if (((RTCCommand)command).getErrorType() == 0) {
-//                        ChcBxRTCErrAPPls.setValue("В ед. частоты");
-//                    } else {
-//                        ChcBxRTCErrAPPls.setValue("Сутч. погрешность");
-//                    }
-//
-//                    txtFieldRngEAPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-//                    txtFldRTCAmtMshAPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-//                    txtFldRTCTimeMshAPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-//
-//                    ChcBxRTCErrAPPls.setDisable(true);
-//
-//                    txtFieldRngEAPPls.setDisable(true);
-//                    txtFldRTCAmtMshAPPls.setDisable(true);
-//                    txtFldRTCTimeMshAPPls.setDisable(true);
-//                    addTglBtnRTCAPPls.setSelected(true);
-//
-//                    RTCTogBtnAPPls.setSelected(true);
-//
-//                } else if (command instanceof ConstantCommand) {
-//                }
-//            }
-//        }
-//
-//        if (!testListForCollumAPMns.isEmpty()) {
-//
-//            for (Commands command : testListForCollumAPMns) {
-//                if (command instanceof ErrorCommand) {
-//                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-//                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-//                } else if (command instanceof CreepCommand) {
-//
-//                    if (!((CreepCommand) command).isGostTest()) {
-//
-//                        txtFieldCRPUProcAPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-//                        txtFieldTimeCRPAPMns.setText(((CreepCommand) command).getUserTimeTest());
-//                        txtFieldCRPAmtImpAPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-//
-//                        addTglBtnCRPAPMns.setSelected(true);
-//
-//                        txtFieldCRPUProcAPMns.setDisable(true);
-//                        txtFieldTimeCRPAPMns.setDisable(true);
-//                        txtFieldCRPAmtImpAPMns.setDisable(true);
-//                    } else {
-//                        addTglBtnCRPAPMnsGOST.setSelected(true);
-//                    }
-//                    CRPTogBtnAPMns.setSelected(true);
-//
-//                } else if (command instanceof StartCommand) {
-//                    if (!((StartCommand) command).isGostTest()) {
-//                        txtFieldSTAIProcAPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-//                        txtFieldTimeSRAAPMns.setText(((StartCommand) command).getUserTimeTest());
-//                        txtFieldSTAAmtImpAPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-//
-//                        addTglBtnSTAAPMns.setSelected(true);
-//
-//                        txtFieldSTAIProcAPMns.setDisable(true);
-//                        txtFieldTimeSRAAPMns.setDisable(true);
-//                        txtFieldSTAAmtImpAPMns.setDisable(true);
-//                    }else {
-//                        addTglBtnSTAAPMnsGOST.setSelected(true);
-//                    }
-//                    STATogBtnAPMns.setSelected(true);
-//
-//                } else if (command instanceof RTCCommand) {
-//                    if (((RTCCommand)command).getErrorType() == 0) {
-//                        ChcBxRTCErrAPMns.setValue("В ед. частоты");
-//                    } else {
-//                        ChcBxRTCErrAPMns.setValue("Сутч. погрешность");
-//                    }
-//
-//                    txtFieldRngEAPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-//                    txtFldRTCAmtMshAPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-//                    txtFldRTCTimeMshAPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-//
-//                    ChcBxRTCErrAPMns.setDisable(true);
-//
-//                    txtFieldRngEAPMns.setDisable(true);
-//                    txtFldRTCAmtMshAPMns.setDisable(true);
-//                    txtFldRTCTimeMshAPMns.setDisable(true);
-//                    addTglBtnRTCAPMns.setSelected(true);
-//
-//                    RTCTogBtnAPMns.setSelected(true);
-//                }
-//            }
-//        }
-//
-//        if (!testListForCollumRPPls.isEmpty()) {
-//
-//            for (Commands command : testListForCollumRPPls) {
-//                if (command instanceof ErrorCommand) {
-//                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-//                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-//
-//                } else if (command instanceof CreepCommand) {
-//                    if (!((CreepCommand) command).isGostTest()) {
-//
-//                        txtFieldCRPUProcRPPls.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-//                        txtFieldTimeCRPRPPls.setText(((CreepCommand) command).getUserTimeTest());
-//                        txtFieldCRPAmtImpRPPls.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-//
-//                        addTglBtnCRPRPPls.setSelected(true);
-//
-//                        txtFieldCRPUProcRPPls.setDisable(true);
-//                        txtFieldTimeCRPRPPls.setDisable(true);
-//                        txtFieldCRPAmtImpRPPls.setDisable(true);
-//                    } else {
-//                        addTglBtnCRPRPPlsGOST.setSelected(true);
-//                    }
-//                    CRPTogBtnRPPls.setSelected(true);
-//                } else if (command instanceof StartCommand) {
-//                    if (!((StartCommand) command).isGostTest()) {
-//                        txtFieldSTAIProcRPPls.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-//                        txtFieldTimeSRARPPls.setText(((StartCommand) command).getUserTimeTest());
-//                        txtFieldSTAAmtImpRPPls.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-//
-//                        addTglBtnSTARPPls.setSelected(true);
-//
-//                        txtFieldSTAIProcRPPls.setDisable(true);
-//                        txtFieldTimeSRARPPls.setDisable(true);
-//                        txtFieldSTAAmtImpRPPls.setDisable(true);
-//                    }else {
-//                        addTglBtnSTARPPlsGOST.setSelected(true);
-//                    }
-//                    STATogBtnRPPls.setSelected(true);
-//
-//                } else if (command instanceof RTCCommand) {
-//                    if (((RTCCommand)command).getErrorType() == 0) {
-//                        ChcBxRTCErrRPPls.setValue("В ед. частоты");
-//                    } else {
-//                        ChcBxRTCErrRPPls.setValue("Сутч. погрешность");
-//                    }
-//
-//                    txtFieldRngERPPls.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-//                    txtFldRTCAmtMshRPPls.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-//                    txtFldRTCTimeMshRPPls.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-//
-//                    ChcBxRTCErrRPPls.setDisable(true);
-//
-//                    txtFieldRngERPPls.setDisable(true);
-//                    txtFldRTCAmtMshRPPls.setDisable(true);
-//                    txtFldRTCTimeMshRPPls.setDisable(true);
-//                    addTglBtnRTCRPPls.setSelected(true);
-//
-//                    RTCTogBtnRPPls.setSelected(true);
-//                }
-//            }
-//        }
-//
-//        if (!testListForCollumRPMns.isEmpty()) {
-//
-//            for (Commands command : testListForCollumRPMns) {
-//                if (command instanceof ErrorCommand) {
-//                    testPointIdArr = ((ErrorCommand) command).getId().toCharArray();
-//                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
-//
-//                } else if (command instanceof CreepCommand) {
-//                    if (!((CreepCommand) command).isGostTest()) {
-//
-//                        txtFieldCRPUProcRPMns.setText(String.valueOf(((CreepCommand) command).getVoltPer()));
-//                        txtFieldTimeCRPRPMns.setText(((CreepCommand) command).getUserTimeTest());
-//                        txtFieldCRPAmtImpRPMns.setText(String.valueOf(((CreepCommand) command).getPulseValue()));
-//
-//                        addTglBtnCRPRPMns.setSelected(true);
-//
-//                        txtFieldCRPUProcRPMns.setDisable(true);
-//                        txtFieldTimeCRPRPMns.setDisable(true);
-//                        txtFieldCRPAmtImpRPMns.setDisable(true);
-//                    } else {
-//                        addTglBtnCRPRPMnsGOST.setSelected(true);
-//                    }
-//                    CRPTogBtnRPMns.setSelected(true);
-//
-//                } else if (command instanceof StartCommand) {
-//                    if (!((StartCommand) command).isGostTest()) {
-//                        txtFieldSTAIProcRPMns.setText(String.valueOf(((StartCommand) command).getRatedCurr()));
-//                        txtFieldTimeSRARPMns.setText(((StartCommand) command).getUserTimeTest());
-//                        txtFieldSTAAmtImpRPMns.setText(String.valueOf(((StartCommand) command).getPulseValue()));
-//
-//                        addTglBtnSTARPMns.setSelected(true);
-//
-//                        txtFieldSTAIProcRPMns.setDisable(true);
-//                        txtFieldTimeSRARPMns.setDisable(true);
-//                        txtFieldSTAAmtImpRPMns.setDisable(true);
-//                    }else {
-//                        addTglBtnSTARPMnsGOST.setSelected(true);
-//                    }
-//                    STATogBtnRPMns.setSelected(true);
-//
-//                } else if (command instanceof RTCCommand) {
-//                    if (((RTCCommand)command).getErrorType() == 0) {
-//                        ChcBxRTCErrRPMns.setValue("В ед. частоты");
-//                    } else {
-//                        ChcBxRTCErrRPMns.setValue("Сутч. погрешность");
-//                    }
-//
-//                    txtFieldRngERPMns.setText(String.valueOf(((RTCCommand) command).getErrorForFalseTest()));
-//                    txtFldRTCAmtMshRPMns.setText(String.valueOf(((RTCCommand) command).getCountResult()));
-//                    txtFldRTCTimeMshRPMns.setText(String.valueOf(((RTCCommand)command).getPulseForRTC()));
-//
-//                    ChcBxRTCErrRPMns.setDisable(true);
-//
-//                    txtFieldRngERPMns.setDisable(true);
-//                    txtFldRTCAmtMshRPMns.setDisable(true);
-//                    txtFldRTCTimeMshRPMns.setDisable(true);
-//                    addTglBtnRTCRPMns.setSelected(true);
-//
-//                    RTCTogBtnRPMns.setSelected(true);
-//                }
-//            }
-//        }
+        char[] testPointIdArr;
+
+        if (!testListForCollumAPPls.isEmpty()) {
+
+            for (Commands command : testListForCollumAPPls) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = command.getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+
+                } else if (command instanceof CreepCommand) {
+                    CreepCommand creepCommand = (CreepCommand) command;
+
+                    if (!creepCommand.isGostTest()) {
+
+                        txtFieldCRPUProcAPPls.setText(String.valueOf(creepCommand.getVoltPer()));
+                        txtFieldTimeCRPAPPls.setText(getTime(creepCommand.getUserTimeTest()));
+                        txtFieldCRPAmtImpAPPls.setText(String.valueOf(creepCommand.getPulseValue()));
+
+                        addTglBtnCRPAPPls.setSelected(true);
+
+                        txtFieldCRPUProcAPPls.setDisable(true);
+                        txtFieldTimeCRPAPPls.setDisable(true);
+                        txtFieldCRPAmtImpAPPls.setDisable(true);
+                    } else {
+                        addTglBtnCRPAPPlsGOST.setSelected(true);
+                    }
+                    CRPTogBtnAPPls.setSelected(true);
+
+                } else if (command instanceof StartCommand) {
+                    StartCommand startCommand = (StartCommand) command;
+
+                    if (!startCommand.isGostTest()) {
+                        txtFieldSTAIProcAPPls.setText(String.valueOf(startCommand.getRatedCurr()));
+                        txtFieldTimeSRAAPPls.setText(getTime(startCommand.getUserTimeTest()));
+                        txtFieldSTAAmtImpAPPls.setText(String.valueOf(startCommand.getPulseValue()));
+
+                        addTglBtnSTAAPPls.setSelected(true);
+
+                        txtFieldSTAIProcAPPls.setDisable(true);
+                        txtFieldTimeSRAAPPls.setDisable(true);
+                        txtFieldSTAAmtImpAPPls.setDisable(true);
+                    }else {
+                        addTglBtnSTAAPPlsGOST.setSelected(true);
+                    }
+                    STATogBtnAPPls.setSelected(true);
+
+                } else if (command instanceof RTCCommand) {
+                    RTCCommand rtcCommand = (RTCCommand) command;
+
+                    if (rtcCommand.getErrorType() == 0) {
+                        ChcBxRTCErrAPPls.setValue("В ед. частоты");
+                    } else {
+                        ChcBxRTCErrAPPls.setValue("Сутч. погрешность");
+                    }
+
+
+                    txtFieldRngEAPPls.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFldRTCFrqAPPls.setText(String.valueOf(rtcCommand.getFreg()));
+                    txtFldRTCAmtMshAPPls.setText(String.valueOf(rtcCommand.getCountResultTest()));
+                    txtFldRTCTimeMshAPPls.setText(String.valueOf(rtcCommand.getPulseForRTC()));
+
+                    ChcBxRTCErrAPPls.setDisable(true);
+
+                    txtFieldRngEAPPls.setDisable(true);
+                    txtFldRTCFrqAPPls.setDisable(true);
+                    txtFldRTCAmtMshAPPls.setDisable(true);
+                    txtFldRTCTimeMshAPPls.setDisable(true);
+
+                    addTglBtnRTCAPPls.setSelected(true);
+
+                    RTCTogBtnAPPls.setSelected(true);
+
+                } else if (command instanceof ConstantCommand) {
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+
+                    if (((ConstantCommand) command).isRunTestToTime()) {
+                        radBtnConstTimeAPPls.setSelected(true);
+                        txtFieldConstTimeAPPls.setText(getTime(constantCommand.getStrTimeToTest()));
+                    } else {
+                        radBtnConstEnergyAPPls.setSelected(true);
+                        txtFieldEngConstAPPls.setText(String.valueOf(constantCommand.getkWToTest()));
+                    }
+
+                    txtFieldConsProcUAPPls.setText(String.valueOf(constantCommand.getVoltPer()));
+                    txtFieldConsProcIAPPls.setText(String.valueOf(constantCommand.getCurrPer()));
+                    txtFieldConsErAPPls.setText(String.valueOf(Math.abs(constantCommand.getEmaxProc())));
+
+                    addTglBtnConstAPPls.setSelected(true);
+                    ConstTogBtnAPPls.setSelected(true);
+
+                    radBtnConstTimeAPPls.setDisable(true);
+                    txtFieldConstTimeAPPls.setDisable(true);
+                    radBtnConstEnergyAPPls.setDisable(true);
+                    txtFieldEngConstAPPls.setDisable(true);
+                    txtFieldConsProcUAPPls.setDisable(true);
+                    txtFieldConsProcIAPPls.setDisable(true);
+                    txtFieldConsErAPPls.setDisable(true);
+                }
+            }
+        }
+
+        if (!testListForCollumAPMns.isEmpty()) {
+
+            for (Commands command : testListForCollumAPMns) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = command.getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+
+                } else if (command instanceof CreepCommand) {
+                    CreepCommand creepCommand = (CreepCommand) command;
+
+                    if (!creepCommand.isGostTest()) {
+
+                        txtFieldCRPUProcAPMns.setText(String.valueOf(creepCommand.getVoltPer()));
+                        txtFieldTimeCRPAPMns.setText(getTime(creepCommand.getUserTimeTest()));
+                        txtFieldCRPAmtImpAPMns.setText(String.valueOf(creepCommand.getPulseValue()));
+
+                        addTglBtnCRPAPMns.setSelected(true);
+
+                        txtFieldCRPUProcAPMns.setDisable(true);
+                        txtFieldTimeCRPAPMns.setDisable(true);
+                        txtFieldCRPAmtImpAPMns.setDisable(true);
+                    } else {
+                        addTglBtnCRPAPMnsGOST.setSelected(true);
+                    }
+                    CRPTogBtnAPMns.setSelected(true);
+
+                } else if (command instanceof StartCommand) {
+                    StartCommand startCommand = (StartCommand) command;
+
+                    if (!startCommand.isGostTest()) {
+                        txtFieldSTAIProcAPMns.setText(String.valueOf(startCommand.getRatedCurr()));
+                        txtFieldTimeSRAAPMns.setText(getTime(startCommand.getUserTimeTest()));
+                        txtFieldSTAAmtImpAPMns.setText(String.valueOf(startCommand.getPulseValue()));
+
+                        addTglBtnSTAAPMns.setSelected(true);
+
+                        txtFieldSTAIProcAPMns.setDisable(true);
+                        txtFieldTimeSRAAPMns.setDisable(true);
+                        txtFieldSTAAmtImpAPMns.setDisable(true);
+                    }else {
+                        addTglBtnSTAAPMnsGOST.setSelected(true);
+                    }
+                    STATogBtnAPMns.setSelected(true);
+
+                } else if (command instanceof RTCCommand) {
+                    RTCCommand rtcCommand = (RTCCommand) command;
+
+                    if (rtcCommand.getErrorType() == 0) {
+                        ChcBxRTCErrAPMns.setValue("В ед. частоты");
+                    } else {
+                        ChcBxRTCErrAPMns.setValue("Сутч. погрешность");
+                    }
+
+                    txtFieldRngEAPMns.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFldRTCFrqAPMns.setText(String.valueOf(rtcCommand.getFreg()));
+                    txtFldRTCAmtMshAPMns.setText(String.valueOf(rtcCommand.getCountResultTest()));
+                    txtFldRTCTimeMshAPMns.setText(String.valueOf(rtcCommand.getPulseForRTC()));
+
+                    ChcBxRTCErrAPMns.setDisable(true);
+
+                    txtFieldRngEAPMns.setDisable(true);
+                    txtFldRTCFrqAPMns.setDisable(true);
+                    txtFldRTCAmtMshAPMns.setDisable(true);
+                    txtFldRTCTimeMshAPMns.setDisable(true);
+
+                    addTglBtnRTCAPMns.setSelected(true);
+
+                    RTCTogBtnAPMns.setSelected(true);
+
+                } else if (command instanceof ConstantCommand) {
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+
+                    if (constantCommand.isRunTestToTime()) {
+                        radBtnConstTimeAPMns.setSelected(true);
+                        txtFieldConstTimeAPMns.setText(getTime(constantCommand.getStrTimeToTest()));
+                    } else {
+                        radBtnConstEnergyAPMns.setSelected(true);
+                        txtFieldEngConstAPMns.setText(String.valueOf(constantCommand.getkWToTest()));
+                    }
+
+                    txtFieldConsProcUAPMns.setText(String.valueOf(constantCommand.getVoltPer()));
+                    txtFieldConsProcIAPMns.setText(String.valueOf(constantCommand.getCurrPer()));
+                    txtFieldConsErAPMns.setText(String.valueOf(Math.abs(constantCommand.getEmaxProc())));
+
+                    addTglBtnConstAPMns.setSelected(true);
+                    ConstTogBtnAPMns.setSelected(true);
+
+                    radBtnConstTimeAPMns.setDisable(true);
+                    txtFieldConstTimeAPMns.setDisable(true);
+                    radBtnConstEnergyAPMns.setDisable(true);
+                    txtFieldEngConstAPMns.setDisable(true);
+                    txtFieldConsProcUAPMns.setDisable(true);
+                    txtFieldConsProcIAPMns.setDisable(true);
+                    txtFieldConsErAPMns.setDisable(true);
+                }
+            }
+        }
+
+        if (!testListForCollumRPPls.isEmpty()) {
+
+            for (Commands command : testListForCollumRPPls) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = command.getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+
+                } else if (command instanceof CreepCommand) {
+                    CreepCommand creepCommand = (CreepCommand) command;
+
+                    if (!creepCommand.isGostTest()) {
+
+                        txtFieldCRPUProcRPPls.setText(String.valueOf(creepCommand.getVoltPer()));
+                        txtFieldTimeCRPRPPls.setText(getTime(creepCommand.getUserTimeTest()));
+                        txtFieldCRPAmtImpRPPls.setText(String.valueOf(creepCommand.getPulseValue()));
+
+                        addTglBtnCRPRPPls.setSelected(true);
+
+                        txtFieldCRPUProcRPPls.setDisable(true);
+                        txtFieldTimeCRPRPPls.setDisable(true);
+                        txtFieldCRPAmtImpRPPls.setDisable(true);
+                    } else {
+                        addTglBtnCRPRPPlsGOST.setSelected(true);
+                    }
+                    CRPTogBtnRPPls.setSelected(true);
+
+                } else if (command instanceof StartCommand) {
+                    StartCommand startCommand = (StartCommand) command;
+
+                    if (!startCommand.isGostTest()) {
+                        txtFieldSTAIProcRPPls.setText(String.valueOf(startCommand.getRatedCurr()));
+                        txtFieldTimeSRARPPls.setText(getTime(startCommand.getUserTimeTest()));
+                        txtFieldSTAAmtImpRPPls.setText(String.valueOf(startCommand.getPulseValue()));
+
+                        addTglBtnSTARPPls.setSelected(true);
+
+                        txtFieldSTAIProcRPPls.setDisable(true);
+                        txtFieldTimeSRARPPls.setDisable(true);
+                        txtFieldSTAAmtImpRPPls.setDisable(true);
+                    }else {
+                        addTglBtnSTARPPlsGOST.setSelected(true);
+                    }
+                    STATogBtnRPPls.setSelected(true);
+
+                } else if (command instanceof RTCCommand) {
+                    RTCCommand rtcCommand = (RTCCommand) command;
+
+                    if (rtcCommand.getErrorType() == 0) {
+                        ChcBxRTCErrRPPls.setValue("В ед. частоты");
+                    } else {
+                        ChcBxRTCErrRPPls.setValue("Сутч. погрешность");
+                    }
+
+                    txtFieldRngERPPls.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFldRTCFrqRPPls.setText(String.valueOf(rtcCommand.getFreg()));
+                    txtFldRTCAmtMshRPPls.setText(String.valueOf(rtcCommand.getCountResultTest()));
+                    txtFldRTCTimeMshRPPls.setText(String.valueOf(rtcCommand.getPulseForRTC()));
+
+                    ChcBxRTCErrRPPls.setDisable(true);
+
+                    txtFieldRngERPPls.setDisable(true);
+                    txtFldRTCFrqRPPls.setDisable(true);
+                    txtFldRTCAmtMshRPPls.setDisable(true);
+                    txtFldRTCTimeMshRPPls.setDisable(true);
+
+                    addTglBtnRTCRPPls.setSelected(true);
+
+                    RTCTogBtnRPPls.setSelected(true);
+
+                } else if (command instanceof ConstantCommand) {
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+
+                    if (((ConstantCommand) command).isRunTestToTime()) {
+                        radBtnConstTimeRPPls.setSelected(true);
+                        txtFieldConstTimeRPPls.setText(getTime(constantCommand.getStrTimeToTest()));
+                    } else {
+                        radBtnConstEnergyRPPls.setSelected(true);
+                        txtFieldEngConstRPPls.setText(String.valueOf(constantCommand.getkWToTest()));
+                    }
+
+                    txtFieldConsProcURPPls.setText(String.valueOf(constantCommand.getVoltPer()));
+                    txtFieldConsProcIRPPls.setText(String.valueOf(constantCommand.getCurrPer()));
+                    txtFieldConsErRPPls.setText(String.valueOf(Math.abs(constantCommand.getEmaxProc())));
+
+                    addTglBtnConstRPPls.setSelected(true);
+                    ConstTogBtnRPPls.setSelected(true);
+
+                    radBtnConstTimeRPPls.setDisable(true);
+                    txtFieldConstTimeRPPls.setDisable(true);
+                    radBtnConstEnergyRPPls.setDisable(true);
+                    txtFieldEngConstRPPls.setDisable(true);
+                    txtFieldConsProcURPPls.setDisable(true);
+                    txtFieldConsProcIRPPls.setDisable(true);
+                    txtFieldConsErRPPls.setDisable(true);
+                }
+            }
+        }
+
+        if (!testListForCollumRPMns.isEmpty()) {
+
+            for (Commands command : testListForCollumRPMns) {
+                if (command instanceof ErrorCommand) {
+                    testPointIdArr = command.getId().toCharArray();
+                    setTrueOrFalseOnCheckBox(testPointIdArr, command);
+
+                } else if (command instanceof CreepCommand) {
+                    CreepCommand creepCommand = (CreepCommand) command;
+
+                    if (!creepCommand.isGostTest()) {
+
+                        txtFieldCRPUProcRPMns.setText(String.valueOf(creepCommand.getVoltPer()));
+                        txtFieldTimeCRPRPMns.setText(getTime(creepCommand.getUserTimeTest()));
+                        txtFieldCRPAmtImpRPMns.setText(String.valueOf(creepCommand.getPulseValue()));
+
+                        addTglBtnCRPRPMns.setSelected(true);
+
+                        txtFieldCRPUProcRPMns.setDisable(true);
+                        txtFieldTimeCRPRPMns.setDisable(true);
+                        txtFieldCRPAmtImpRPMns.setDisable(true);
+                    } else {
+                        addTglBtnCRPRPMnsGOST.setSelected(true);
+                    }
+                    CRPTogBtnRPMns.setSelected(true);
+
+                } else if (command instanceof StartCommand) {
+                    StartCommand startCommand = (StartCommand) command;
+
+                    if (!startCommand.isGostTest()) {
+                        txtFieldSTAIProcRPMns.setText(String.valueOf(startCommand.getRatedCurr()));
+                        txtFieldTimeSRARPMns.setText(getTime(startCommand.getUserTimeTest()));
+                        txtFieldSTAAmtImpRPMns.setText(String.valueOf(startCommand.getPulseValue()));
+
+                        addTglBtnSTARPMns.setSelected(true);
+
+                        txtFieldSTAIProcRPMns.setDisable(true);
+                        txtFieldTimeSRARPMns.setDisable(true);
+                        txtFieldSTAAmtImpRPMns.setDisable(true);
+                    }else {
+                        addTglBtnSTARPMnsGOST.setSelected(true);
+                    }
+                    STATogBtnRPMns.setSelected(true);
+
+                } else if (command instanceof RTCCommand) {
+                    RTCCommand rtcCommand = (RTCCommand) command;
+
+                    if (rtcCommand.getErrorType() == 0) {
+                        ChcBxRTCErrRPMns.setValue("В ед. частоты");
+                    } else {
+                        ChcBxRTCErrRPMns.setValue("Сутч. погрешность");
+                    }
+
+                    txtFieldRngERPMns.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFldRTCFrqRPMns.setText(String.valueOf(rtcCommand.getFreg()));
+                    txtFldRTCAmtMshRPMns.setText(String.valueOf(rtcCommand.getCountResultTest()));
+                    txtFldRTCTimeMshRPMns.setText(String.valueOf(rtcCommand.getPulseForRTC()));
+
+                    ChcBxRTCErrRPMns.setDisable(true);
+
+                    txtFieldRngERPMns.setDisable(true);
+                    txtFldRTCFrqRPMns.setDisable(true);
+                    txtFldRTCAmtMshRPMns.setDisable(true);
+                    txtFldRTCTimeMshRPMns.setDisable(true);
+
+                    addTglBtnRTCRPMns.setSelected(true);
+
+                    RTCTogBtnRPMns.setSelected(true);
+
+                } else if (command instanceof ConstantCommand) {
+                    ConstantCommand constantCommand = (ConstantCommand) command;
+
+                    if (((ConstantCommand) command).isRunTestToTime()) {
+                        radBtnConstTimeRPMns.setSelected(true);
+                        txtFieldConstTimeRPMns.setText(getTime(constantCommand.getStrTimeToTest()));
+                    } else {
+                        radBtnConstEnergyRPMns.setSelected(true);
+                        txtFieldEngConstRPMns.setText(String.valueOf(constantCommand.getkWToTest()));
+                    }
+
+                    txtFieldConsProcURPMns.setText(String.valueOf(constantCommand.getVoltPer()));
+                    txtFieldConsProcIRPMns.setText(String.valueOf(constantCommand.getCurrPer()));
+                    txtFieldConsErRPMns.setText(String.valueOf(Math.abs(constantCommand.getEmaxProc())));
+
+                    addTglBtnConstRPMns.setSelected(true);
+                    ConstTogBtnRPMns.setSelected(true);
+
+                    radBtnConstTimeRPMns.setDisable(true);
+                    txtFieldConstTimeRPMns.setDisable(true);
+                    radBtnConstEnergyRPMns.setDisable(true);
+                    txtFieldEngConstRPMns.setDisable(true);
+                    txtFieldConsProcURPMns.setDisable(true);
+                    txtFieldConsProcIRPMns.setDisable(true);
+                    txtFieldConsErRPMns.setDisable(true);
+                }
+            }
+        }
     }
 
     //Находит нужный CheckBox и задаёт значение
@@ -2663,7 +2804,6 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     @FXML
     void addSTAcRPrTCcOnst(ActionEvent event) {
-
         //Действие для добавления теста Самоход
         CreepCommand creepCommand;
         //---------------------------------------------------------------------------------------
@@ -2743,7 +2883,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     return;
                 }
 
-                testListForCollumAPPls.add(new CreepCommand(false,false, "Самоход AP+", "CRP;U;A;P",0,
+                testListForCollumAPPls.add(new CreepCommand(true,false, "Самоход AP+", "CRP;U;A;P",0,
                         timeTest, amountImp, procUnom));
 
                 txtFieldCRPAmtImpAPPls.setDisable(true);
@@ -2775,7 +2915,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами по ГОСТу AP+
         if (event.getSource() == addTglBtnCRPAPPlsGOST) {
             if (addTglBtnCRPAPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(false, true, "Самоход AP+ ГОСТ","CRP;G;A;P", 0);
+                creepCommand = new CreepCommand(true, true, "Самоход AP+ ГОСТ","CRP;G;A;P", 0);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -2873,7 +3013,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     return;
                 }
 
-                testListForCollumAPMns.add(new CreepCommand(false,false, "Самоход AP-", "CRP;U;A;N",1,
+                testListForCollumAPMns.add(new CreepCommand(true,false, "Самоход AP-", "CRP;U;A;N",1,
                         timeTest, amountImp, procUnom));
 
                 txtFieldCRPAmtImpAPMns.setDisable(true);
@@ -2906,7 +3046,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnCRPAPMnsGOST) {
             if (addTglBtnCRPAPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(false, true, "Самоход AP- ГОСТ", "CRP;G;A;N",1);
+                creepCommand = new CreepCommand(true, true, "Самоход AP- ГОСТ", "CRP;G;A;N",1);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -3004,7 +3144,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     return;
                 }
 
-                testListForCollumRPPls.add(new CreepCommand(false,false, "Самоход RP+", "CRP;U;R;P",2,
+                testListForCollumRPPls.add(new CreepCommand(true,false, "Самоход RP+", "CRP;U;R;P",2,
                         timeTest, amountImp, procUnom));
 
                 txtFieldCRPAmtImpRPPls.setDisable(true);
@@ -3036,7 +3176,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnCRPRPPlsGOST) {
             if (addTglBtnCRPRPPlsGOST.isSelected()) {
-                creepCommand = new CreepCommand(false, true, "Самоход RP+ ГОСТ", "CRP;G;R;P", 2);
+                creepCommand = new CreepCommand(true, true, "Самоход RP+ ГОСТ", "CRP;G;R;P", 2);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -3134,7 +3274,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     return;
                 }
 
-                testListForCollumRPMns.add(new CreepCommand(false,false, "Самоход RP-", "CRP;U;R;N",3,
+                testListForCollumRPMns.add(new CreepCommand(true,false, "Самоход RP-", "CRP;U;R;N",3,
                         timeTest, amountImp, procUnom));
 
                 txtFieldCRPAmtImpRPMns.setDisable(true);
@@ -3167,7 +3307,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnCRPRPMnsGOST) {
             if (addTglBtnCRPRPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(false, true, "Самоход RP- ГОСТ", "CRP;G;R;N",3);
+                creepCommand = new CreepCommand(true, true, "Самоход RP- ГОСТ", "CRP;G;R;N",3);
 
                 creepCommand.setPulseValue(2);
                 creepCommand.setVoltPer(115.0);
@@ -3264,7 +3404,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     return;
                 }
 
-                testListForCollumAPPls.add(new StartCommand(false, "Чувствительность AP+", "STA;U;A;P", 0,
+                testListForCollumAPPls.add(new StartCommand(true, "Чувствительность AP+", "STA;U;A;P", 0,
                         0,false, timeTest, amountImp, current));
 
 
@@ -3297,7 +3437,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу AP+
         if (event.getSource() == addTglBtnSTAAPPlsGOST) {
             if (addTglBtnSTAAPPlsGOST.isSelected()) {
-                testListForCollumAPPls.add(new StartCommand(false, "Чувствительность ГОСТ AP+", "STA;G;A;P", 0,
+                testListForCollumAPPls.add(new StartCommand(true, "Чувствительность ГОСТ AP+", "STA;G;A;P", 0,
                         0, true));
 
                 STATogBtnAPPls.setSelected(true);
@@ -3390,7 +3530,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     return;
                 }
 
-                testListForCollumAPMns.add(new StartCommand(false, "Чувствительность AP-", "STA;U;A;N", 1,
+                testListForCollumAPMns.add(new StartCommand(true, "Чувствительность AP-", "STA;U;A;N", 1,
                         1,false, timeTest, amountImp, current));
 
 
@@ -3423,7 +3563,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnSTAAPMnsGOST) {
             if (addTglBtnSTAAPMnsGOST.isSelected()) {
-                testListForCollumAPMns.add(new StartCommand(false, "Чувствительность ГОСТ AP-", "STA;G;A;N", 1, 1, true));
+                testListForCollumAPMns.add(new StartCommand(true, "Чувствительность ГОСТ AP-", "STA;G;A;N", 1, 1, true));
 
                 STATogBtnAPMns.setSelected(true);
             } else {
@@ -3514,7 +3654,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     return;
                 }
 
-                testListForCollumRPPls.add(new StartCommand(false, "Чувствительность RP+", "STA;U;R;P", 0,
+                testListForCollumRPPls.add(new StartCommand(true, "Чувствительность RP+", "STA;U;R;P", 0,
                         2,false, timeTest, amountImp, current));
 
 
@@ -3547,7 +3687,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnSTARPPlsGOST) {
             if (addTglBtnSTARPPlsGOST.isSelected()) {
-                testListForCollumRPPls.add(new StartCommand(false, "Чувствительность ГОСТ RP+", "STA;G;R;A", 0, 2, true));
+                testListForCollumRPPls.add(new StartCommand(true, "Чувствительность ГОСТ RP+", "STA;G;R;A", 0, 2, true));
 
                 STATogBtnRPPls.setSelected(true);
             } else {
@@ -3638,7 +3778,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     return;
                 }
 
-                testListForCollumRPMns.add(new StartCommand(false, "Чувствительность RP-", "STA;U;R;N", 1,
+                testListForCollumRPMns.add(new StartCommand(true, "Чувствительность RP-", "STA;U;R;N", 1,
                         3,false, timeTest, amountImp, current));
 
 
@@ -3671,7 +3811,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление теста на чувствительность с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnSTARPMnsGOST) {
             if (addTglBtnSTARPMnsGOST.isSelected()) {
-                testListForCollumRPMns.add(new StartCommand(false, "Чувствительность ГОСТ RP-", "STA;G;R;N",1, 3, true));
+                testListForCollumRPMns.add(new StartCommand(true, "Чувствительность ГОСТ RP-", "STA;G;R;N",1, 3, true));
 
                 STATogBtnRPMns.setSelected(true);
             } else {
@@ -3752,11 +3892,11 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                 if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
 
-                    testListForCollumAPPls.add(new RTCCommand(false, "RTC;A;P", "ТХЧ AP+", timeMeas, freg,
+                    testListForCollumAPPls.add(new RTCCommand(true, "RTC;A;P", "ТХЧ AP+", timeMeas, freg,
                             anountMeash, 0, errorRange, 0));
                 } else {
 
-                    testListForCollumAPPls.add(new RTCCommand(false, "RTC;A;P", "ТХЧ AP+", timeMeas, freg,
+                    testListForCollumAPPls.add(new RTCCommand(true, "RTC;A;P", "ТХЧ AP+", timeMeas, freg,
                             anountMeash, 1, errorRange, 0));
                 }
 
@@ -3849,11 +3989,11 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                 if (ChcBxRTCErrAPMns.getValue().equals("В ед. частоты")) {
 
-                    testListForCollumAPMns.add(new RTCCommand(false, "RTC;A;N", "ТХЧ AP-", timeMeas, freg,
+                    testListForCollumAPMns.add(new RTCCommand(true, "RTC;A;N", "ТХЧ AP-", timeMeas, freg,
                             anountMeash, 0, errorRange, 1));
                 } else {
 
-                    testListForCollumAPMns.add(new RTCCommand(false, "RTC;A;N", "ТХЧ AP-", timeMeas, freg,
+                    testListForCollumAPMns.add(new RTCCommand(true, "RTC;A;N", "ТХЧ AP-", timeMeas, freg,
                             anountMeash, 1, errorRange, 1));
                 }
 
@@ -3946,11 +4086,11 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                 if (ChcBxRTCErrRPPls.getValue().equals("В ед. частоты")) {
 
-                    testListForCollumRPPls.add(new RTCCommand(false, "RTC;R;P", "ТХЧ RP+", timeMeas, freg,
+                    testListForCollumRPPls.add(new RTCCommand(true, "RTC;R;P", "ТХЧ RP+", timeMeas, freg,
                             anountMeash, 0, errorRange, 2));
                 } else {
 
-                    testListForCollumRPPls.add(new RTCCommand(false, "RTC;R;P", "ТХЧ RP+", timeMeas, freg,
+                    testListForCollumRPPls.add(new RTCCommand(true, "RTC;R;P", "ТХЧ RP+", timeMeas, freg,
                             anountMeash, 1, errorRange, 2));
                 }
 
@@ -4043,11 +4183,11 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                 if (ChcBxRTCErrRPMns.getValue().equals("В ед. частоты")) {
 
-                    testListForCollumRPMns.add(new RTCCommand(false, "RTC;R;N", "ТХЧ RP-", timeMeas, freg,
+                    testListForCollumRPMns.add(new RTCCommand(true, "RTC;R;N", "ТХЧ RP-", timeMeas, freg,
                             anountMeash, 0, errorRange, 3));
                 } else {
 
-                    testListForCollumRPMns.add(new RTCCommand(false, "RTC;R;N", "ТХЧ RP-", timeMeas, freg,
+                    testListForCollumRPMns.add(new RTCCommand(true, "RTC;R;N", "ТХЧ RP-", timeMeas, freg,
                             anountMeash, 1, errorRange, 3));
                 }
 
@@ -4177,7 +4317,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         return;
                     }
 
-                    testListForCollumAPPls.add(new ConstantCommand(false, true, timeTestToMill,
+                    testListForCollumAPPls.add(new ConstantCommand(true, true, timeTestToMill,
                             "CNT;T;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
                 } else {
@@ -4198,7 +4338,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         return;
                     }
 
-                    testListForCollumAPPls.add(new ConstantCommand(false, false, testEnergy,
+                    testListForCollumAPPls.add(new ConstantCommand(true, false, testEnergy,
                             "CNT;E;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
                 }
@@ -4332,7 +4472,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         return;
                     }
 
-                    testListForCollumAPMns.add(new ConstantCommand(false, true, timeTestToMill,
+                    testListForCollumAPMns.add(new ConstantCommand(true, true, timeTestToMill,
                             "CNT;T;A;N", "Сонстанта AP-", Uproc, IbProc, 1, 1, -errorRange, errorRange));
 
                 } else {
@@ -4353,7 +4493,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         return;
                     }
 
-                    testListForCollumAPMns.add(new ConstantCommand(false, false, testEnergy,
+                    testListForCollumAPMns.add(new ConstantCommand(true, false, testEnergy,
                             "CNT;E;A;N", "Сонстанта AP-", Uproc, IbProc, 1, 1, -errorRange, errorRange));
 
                 }
@@ -4487,7 +4627,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         return;
                     }
 
-                    testListForCollumRPPls.add(new ConstantCommand(false, true, timeTestToMill,
+                    testListForCollumRPPls.add(new ConstantCommand(true, true, timeTestToMill,
                             "CNT;T;R;P", "Сонстанта RP+", Uproc, IbProc, 0, 2, -errorRange, errorRange));
 
 
@@ -4509,7 +4649,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         return;
                     }
 
-                    testListForCollumRPPls.add(new ConstantCommand(false, false, testEnergy,
+                    testListForCollumRPPls.add(new ConstantCommand(true, false, testEnergy,
                             "CNT;E;R;P", "Сонстанта RP+", Uproc, IbProc, 0, 2, -errorRange, errorRange));
 
                 }
@@ -4643,7 +4783,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         return;
                     }
 
-                    testListForCollumRPMns.add(new ConstantCommand(false, true, timeTestToMill,
+                    testListForCollumRPMns.add(new ConstantCommand(true, true, timeTestToMill,
                             "CNT;T;R;N", "Сонстанта RP-", Uproc, IbProc, 1, 3, -errorRange, errorRange));
 
                 } else {
@@ -4664,7 +4804,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         return;
                     }
 
-                    testListForCollumRPMns.add(new ConstantCommand(false, false, testEnergy,
+                    testListForCollumRPMns.add(new ConstantCommand(true, false, testEnergy,
                             "CNT;E;R;N", "Сонстанта RP-", Uproc, IbProc, 1, 3, -errorRange, errorRange));
 
                 }
@@ -4700,495 +4840,6 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 ConstTogBtnRPMns.setSelected(true);
             }
         }
-//        //Действие для добавления теста Самоход
-//        CreepCommand creepCommand;
-//        //---------------------------------------------------------------------------------------
-//        //Добаление самохода с параметрами пользователя AP+
-//        if (event.getSource() == addTglBtnCRPAPPls) {
-//            if (addTglBtnCRPAPPls.isSelected()) {
-//                creepCommand = new CreepCommand(true, false, 0, txtFieldTimeCRPAPPls.getText());
-//
-//                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPPls.getText()));
-//                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPPls.getText()));
-//                creepCommand.setName("Самоход AP+");
-//
-//                txtFieldCRPAmtImpAPPls.setDisable(true);
-//                txtFieldTimeCRPAPPls.setDisable(true);
-//                txtFieldCRPUProcAPPls.setDisable(true);
-//
-//                testListForCollumAPPls.add(creepCommand);
-//                CRPTogBtnAPPls.setSelected(true);
-//            } else {
-//                for (Commands command : testListForCollumAPPls) {
-//                    if (command instanceof CreepCommand) {
-//                        if (command.getName().equals("Самоход AP+")) {
-//                            testListForCollumAPPls.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//                txtFieldCRPAmtImpAPPls.setDisable(false);
-//                txtFieldTimeCRPAPPls.setDisable(false);
-//                txtFieldCRPUProcAPPls.setDisable(false);
-//
-//                if (addTglBtnCRPAPPlsGOST.isSelected()) {
-//                    CRPTogBtnAPPls.setSelected(true);
-//                } else CRPTogBtnAPPls.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление самохода с параметрами по ГОСТу AP+
-//        if (event.getSource() == addTglBtnCRPAPPlsGOST) {
-//            if (addTglBtnCRPAPPlsGOST.isSelected()) {
-//                creepCommand = new CreepCommand(true, true, 0);
-//
-//                creepCommand.setPulseValue(2);
-//                creepCommand.setVoltPer(115.0);
-//                creepCommand.setName("Самоход AP+ ГОСТ");
-//
-//                CRPTogBtnAPPls.setSelected(true);
-//
-//                testListForCollumAPPls.add(creepCommand);
-//            } else {
-//                for (Commands command : testListForCollumAPPls) {
-//                    if (command instanceof CreepCommand) {
-//                        if (command.getName().equals("Самоход AP+ ГОСТ")) {
-//                            testListForCollumAPPls.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                if (addTglBtnCRPAPPls.isSelected()) {
-//                    CRPTogBtnAPPls.setSelected(true);
-//                } else CRPTogBtnAPPls.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление самохода с параметрами пользователя AP-
-//        if (event.getSource() == addTglBtnCRPAPMns) {
-//            if (addTglBtnCRPAPMns.isSelected()) {
-//                creepCommand = new CreepCommand(true, false, 1, txtFieldTimeCRPAPMns.getText());
-//
-//                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpAPMns.getText()));
-//                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcAPMns.getText()));
-//                creepCommand.setName("Самоход AP-");
-//
-//                txtFieldCRPAmtImpAPMns.setDisable(true);
-//                txtFieldTimeCRPAPMns.setDisable(true);
-//                txtFieldCRPUProcAPMns.setDisable(true);
-//
-//                CRPTogBtnAPMns.setSelected(true);
-//                testListForCollumAPMns.add(creepCommand);
-//            } else {
-//                for (Commands command : testListForCollumAPMns) {
-//                    if (command instanceof CreepCommand) {
-//                        if (command.getName().equals("Самоход AP-")) {
-//                            testListForCollumAPMns.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//                txtFieldCRPAmtImpAPMns.setDisable(false);
-//                txtFieldTimeCRPAPMns.setDisable(false);
-//                txtFieldCRPUProcAPMns.setDisable(false);
-//
-//                if (addTglBtnCRPAPMnsGOST.isSelected()) {
-//                    CRPTogBtnAPMns.setSelected(true);
-//                } else CRPTogBtnAPMns.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление самохода с параметрами по ГОСТу AP-
-//        if (event.getSource() == addTglBtnCRPAPMnsGOST) {
-//            if (addTglBtnCRPAPMnsGOST.isSelected()) {
-//                creepCommand = new CreepCommand(true, true, 1);
-//
-//                creepCommand.setPulseValue(2);
-//                creepCommand.setVoltPer(115.0);
-//                creepCommand.setName("Самоход AP- ГОСТ");
-//
-//                CRPTogBtnAPMns.setSelected(true);
-//
-//                testListForCollumAPMns.add(creepCommand);
-//            } else {
-//                for (Commands command : testListForCollumAPMns) {
-//                    if (command instanceof CreepCommand) {
-//                        if (command.getName().equals("Самоход AP- ГОСТ")) {
-//                            testListForCollumAPMns.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                if (addTglBtnCRPAPMns.isSelected()) {
-//                    CRPTogBtnAPMns.setSelected(true);
-//                } else CRPTogBtnAPMns.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление самохода с параметрами пользователя RP+
-//        if (event.getSource() == addTglBtnCRPRPPls) {
-//            if (addTglBtnCRPRPPls.isSelected()) {
-//                creepCommand = new CreepCommand(true, false, 2, txtFieldTimeCRPRPPls.getText());
-//
-//                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPPls.getText()));
-//                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPPls.getText()));
-//                creepCommand.setName("Самоход RP+");
-//
-//                txtFieldCRPAmtImpRPPls.setDisable(true);
-//                txtFieldTimeCRPRPPls.setDisable(true);
-//                txtFieldCRPUProcRPPls.setDisable(true);
-//
-//                CRPTogBtnRPPls.setSelected(true);
-//                testListForCollumRPPls.add(creepCommand);
-//            } else {
-//                for (Commands command : testListForCollumRPPls) {
-//                    if (command instanceof CreepCommand) {
-//                        if (command.getName().equals("Самоход RP+")) {
-//                            testListForCollumRPPls.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//                txtFieldCRPAmtImpRPPls.setDisable(false);
-//                txtFieldTimeCRPRPPls.setDisable(false);
-//                txtFieldCRPUProcRPPls.setDisable(false);
-//
-//                if (addTglBtnCRPRPPlsGOST.isSelected()) {
-//                    CRPTogBtnRPPls.setSelected(true);
-//                } else CRPTogBtnRPPls.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление самохода с параметрами по ГОСТу RP+
-//        if (event.getSource() == addTglBtnCRPRPPlsGOST) {
-//            if (addTglBtnCRPRPPlsGOST.isSelected()) {
-//                creepCommand = new CreepCommand(true, true, 2);
-//
-//                creepCommand.setPulseValue(2);
-//                creepCommand.setVoltPer(115.0);
-//                creepCommand.setName("Самоход RP+ ГОСТ");
-//
-//                CRPTogBtnRPPls.setSelected(true);
-//
-//                testListForCollumRPPls.add(creepCommand);
-//            } else {
-//                for (Commands command : testListForCollumRPPls) {
-//                    if (command instanceof CreepCommand) {
-//                        if (command.getName().equals("Самоход RP+ ГОСТ")) {
-//                            testListForCollumRPPls.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                if (addTglBtnCRPRPPls.isSelected()) {
-//                    CRPTogBtnRPPls.setSelected(true);
-//                } else CRPTogBtnRPPls.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление самохода с параметрами пользователя RP-
-//        if (event.getSource() == addTglBtnCRPRPMns) {
-//            if (addTglBtnCRPRPMns.isSelected()) {
-//                creepCommand = new CreepCommand(true, false, 3, txtFieldTimeCRPRPMns.getText());
-//
-//                creepCommand.setPulseValue(Integer.parseInt(txtFieldCRPAmtImpRPMns.getText()));
-//                creepCommand.setVoltPer(Double.parseDouble(txtFieldCRPUProcRPMns.getText()));
-//                creepCommand.setName("Самоход RP-");
-//
-//                txtFieldCRPAmtImpRPMns.setDisable(true);
-//                txtFieldTimeCRPRPMns.setDisable(true);
-//                txtFieldCRPUProcRPMns.setDisable(true);
-//
-//                CRPTogBtnRPMns.setSelected(true);
-//                testListForCollumRPMns.add(creepCommand);
-//            } else {
-//                for (Commands command : testListForCollumRPMns) {
-//                    if (command instanceof CreepCommand) {
-//                        if (command.getName().equals("Самоход RP-")) {
-//                            testListForCollumRPMns.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//                txtFieldCRPAmtImpRPMns.setDisable(false);
-//                txtFieldTimeCRPRPMns.setDisable(false);
-//                txtFieldCRPUProcRPMns.setDisable(false);
-//
-//                if (addTglBtnCRPRPMnsGOST.isSelected()) {
-//                    CRPTogBtnRPMns.setSelected(true);
-//                } else CRPTogBtnRPMns.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление самохода с параметрами по ГОСТу RP-
-//        if (event.getSource() == addTglBtnCRPRPMnsGOST) {
-//            if (addTglBtnCRPRPMnsGOST.isSelected()) {
-//                creepCommand = new CreepCommand(true, true, 3);
-//
-//                creepCommand.setPulseValue(2);
-//                creepCommand.setVoltPer(115.0);
-//                creepCommand.setName("Самоход RP- ГОСТ");
-//
-//                CRPTogBtnRPMns.setSelected(true);
-//
-//                testListForCollumRPMns.add(creepCommand);
-//            } else {
-//                for (Commands command : testListForCollumRPMns) {
-//                    if (command instanceof CreepCommand) {
-//                        if (command.getName().equals("Самоход RP- ГОСТ")) {
-//                            testListForCollumRPMns.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                if (addTglBtnCRPRPMns.isSelected()) {
-//                    CRPTogBtnRPMns.setSelected(true);
-//                } else CRPTogBtnRPMns.setSelected(false);
-//            }
-//        }
-//        //------------------------------------------------------------------------------
-//        //Добаление теста на чувствительность с параметрами пользователя AP+
-//        StartCommand startCommand;
-//        if (event.getSource() == addTglBtnSTAAPPls) {
-//            if (addTglBtnSTAAPPls.isSelected()) {
-//                startCommand = new StartCommand(true, 0, 0, false, txtFieldTimeSRAAPPls.getText());
-//
-//                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPPls.getText()));
-//                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPPls.getText()));
-//                startCommand.setName("Чувствительность AP+");
-//
-//                txtFieldSTAAmtImpAPPls.setDisable(true);
-//                txtFieldTimeSRAAPPls.setDisable(true);
-//                txtFieldSTAIProcAPPls.setDisable(true);
-//
-//                STATogBtnAPPls.setSelected(true);
-//                testListForCollumAPPls.add(startCommand);
-//            } else {
-//                for (Commands command : testListForCollumAPPls) {
-//                    if (command instanceof StartCommand) {
-//                        if (command.getName().equals("Чувствительность AP+")) {
-//                            testListForCollumAPPls.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//                txtFieldSTAAmtImpAPPls.setDisable(false);
-//                txtFieldTimeSRAAPPls.setDisable(false);
-//                txtFieldSTAIProcAPPls.setDisable(false);
-//
-//                if (addTglBtnSTAAPPlsGOST.isSelected()) {
-//                    STATogBtnAPPls.setSelected(true);
-//                } else STATogBtnAPPls.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление теста на чувствительность с параметрами по ГОСТу AP+
-//        if (event.getSource() == addTglBtnSTAAPPlsGOST) {
-//            if (addTglBtnSTAAPPlsGOST.isSelected()) {
-//                startCommand = new StartCommand(true, 0, 0, true);
-//
-//                startCommand.setName("Чувствительность ГОСТ AP+");
-//
-//                STATogBtnAPPls.setSelected(true);
-//                testListForCollumAPPls.add(startCommand);
-//            } else {
-//                for (Commands command : testListForCollumAPPls) {
-//                    if (command instanceof StartCommand) {
-//                        if (command.getName().equals("Чувствительность ГОСТ AP+")) {
-//                            testListForCollumAPPls.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                if (addTglBtnSTAAPPls.isSelected()) {
-//                    STATogBtnAPPls.setSelected(true);
-//                } else STATogBtnAPPls.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление теста на чувствительность с параметрами пользователя AP-
-//        if (event.getSource() == addTglBtnSTAAPMns) {
-//            if (addTglBtnSTAAPMns.isSelected()) {
-//                startCommand = new StartCommand(true, 1, 1, false, txtFieldTimeSRAAPMns.getText());
-//
-//                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpAPMns.getText()));
-//                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcAPMns.getText()));
-//                startCommand.setName("Чувствительность AP-");
-//
-//                txtFieldSTAAmtImpAPMns.setDisable(true);
-//                txtFieldTimeSRAAPMns.setDisable(true);
-//                txtFieldSTAIProcAPMns.setDisable(true);
-//
-//                STATogBtnAPMns.setSelected(true);
-//                testListForCollumAPMns.add(startCommand);
-//            } else {
-//                for (Commands command : testListForCollumAPMns) {
-//                    if (command instanceof StartCommand) {
-//                        if (command.getName().equals("Чувствительность AP-")) {
-//                            testListForCollumAPMns.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//                txtFieldSTAAmtImpAPMns.setDisable(false);
-//                txtFieldTimeSRAAPMns.setDisable(false);
-//                txtFieldSTAIProcAPMns.setDisable(false);
-//
-//                if (addTglBtnSTAAPMnsGOST.isSelected()) {
-//                    STATogBtnAPMns.setSelected(true);
-//                } else STATogBtnAPMns.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление теста на чувствительность с параметрами по ГОСТу AP-
-//        if (event.getSource() == addTglBtnSTAAPMnsGOST) {
-//            if (addTglBtnSTAAPMnsGOST.isSelected()) {
-//                startCommand = new StartCommand(true, 1, 1, true);
-//
-//                startCommand.setName("Чувствительность ГОСТ AP-");
-//
-//                STATogBtnAPMns.setSelected(true);
-//                testListForCollumAPMns.add(startCommand);
-//            } else {
-//                for (Commands command : testListForCollumAPMns) {
-//                    if (command instanceof StartCommand) {
-//                        if (command.getName().equals("Чувствительность ГОСТ AP-")) {
-//                            testListForCollumAPMns.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                if (addTglBtnSTAAPMns.isSelected()) {
-//                    STATogBtnAPMns.setSelected(true);
-//                } else STATogBtnAPMns.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление теста на чувствительность с параметрами пользователя RP+
-//        if (event.getSource() == addTglBtnSTARPPls) {
-//            if (addTglBtnSTARPPls.isSelected()) {
-//                startCommand = new StartCommand(true, 0, 2, false, txtFieldTimeSRARPPls.getText());
-//
-//                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPPls.getText()));
-//                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPPls.getText()));
-//                startCommand.setName("Чувствительность RP+");
-//
-//                txtFieldSTAAmtImpRPPls.setDisable(true);
-//                txtFieldTimeSRARPPls.setDisable(true);
-//                txtFieldSTAIProcRPPls.setDisable(true);
-//
-//                STATogBtnRPPls.setSelected(true);
-//                testListForCollumRPPls.add(startCommand);
-//
-//            } else {
-//                for (Commands command : testListForCollumRPPls) {
-//                    if (command instanceof StartCommand) {
-//                        if (command.getName().equals("Чувствительность RP+")) {
-//                            testListForCollumRPPls.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//                txtFieldSTAAmtImpRPPls.setDisable(false);
-//                txtFieldTimeSRARPPls.setDisable(false);
-//                txtFieldSTAIProcRPPls.setDisable(false);
-//
-//                if (addTglBtnSTARPPlsGOST.isSelected()) {
-//                    STATogBtnRPPls.setSelected(true);
-//                } else STATogBtnRPPls.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление теста на чувствительность с параметрами по ГОСТу RP+
-//        if (event.getSource() == addTglBtnSTARPPlsGOST) {
-//            if (addTglBtnSTARPPlsGOST.isSelected()) {
-//                startCommand = new StartCommand(true, 0, 1, true);
-//
-//                startCommand.setName("Чувствительность ГОСТ RP+");
-//
-//                STATogBtnRPPls.setSelected(true);
-//                testListForCollumRPPls.add(startCommand);
-//            } else {
-//                for (Commands command : testListForCollumRPPls) {
-//                    if (command instanceof StartCommand) {
-//                        if (((StartCommand) command).getName().equals("Чувствительность ГОСТ RP+")) {
-//                            testListForCollumRPPls.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                if (addTglBtnSTARPPls.isSelected()) {
-//                    STATogBtnRPPls.setSelected(true);
-//                } else STATogBtnRPPls.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление теста на чувствительность с параметрами пользователя RP-
-//        if (event.getSource() == addTglBtnSTARPMns) {
-//            if (addTglBtnSTARPMns.isSelected()) {
-//                startCommand = new StartCommand(true, 1, 3, false, txtFieldTimeSRARPMns.getText());
-//
-//                startCommand.setPulseValue(Integer.parseInt(txtFieldSTAAmtImpRPMns.getText()));
-//                startCommand.setRatedCurr(Double.parseDouble(txtFieldSTAIProcRPMns.getText()));
-//                startCommand.setName("Чувствительность RP-");
-//
-//                txtFieldSTAAmtImpRPMns.setDisable(false);
-//                txtFieldTimeSRARPMns.setDisable(false);
-//                txtFieldSTAIProcRPMns.setDisable(false);
-//
-//                STATogBtnRPMns.setSelected(true);
-//                testListForCollumRPMns.add(startCommand);
-//            } else {
-//                for (Commands command : testListForCollumRPMns) {
-//                    if (command instanceof StartCommand) {
-//                        if (command.getName().equals("Чувствительность RP-")) {
-//                            testListForCollumRPMns.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//                txtFieldSTAAmtImpRPMns.setDisable(true);
-//                txtFieldTimeSRARPMns.setDisable(true);
-//                txtFieldSTAIProcRPMns.setDisable(true);
-//
-//                if (addTglBtnSTARPMnsGOST.isSelected()) {
-//                    STATogBtnRPMns.setSelected(true);
-//                } else STATogBtnRPMns.setSelected(false);
-//            }
-//        }
-//
-//        //Добаление теста на чувствительность с параметрами по ГОСТу RP-
-//        if (event.getSource() == addTglBtnSTARPMnsGOST) {
-//            if (addTglBtnSTARPMnsGOST.isSelected()) {
-//                startCommand = new StartCommand(true, 0, 3, true);
-//
-//                startCommand.setName("Чувствительность ГОСТ RP-");
-//
-//                STATogBtnRPMns.setSelected(true);
-//                testListForCollumRPMns.add(startCommand);
-//            } else {
-//                for (Commands command : testListForCollumRPMns) {
-//                    if (command instanceof StartCommand) {
-//                        if (command.getName().equals("Чувствительность ГОСТ RP-")) {
-//                            testListForCollumRPMns.remove(command);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                if (addTglBtnSTARPMns.isSelected()) {
-//                    STATogBtnRPMns.setSelected(true);
-//                } else STATogBtnRPMns.setSelected(false);
-//            }
-//        }
-//
     }
 
 
@@ -5544,6 +5195,12 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }
             }
         }
+    }
+
+    private String getTime(long mlS){
+        return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(mlS),
+                TimeUnit.MILLISECONDS.toMinutes(mlS) % TimeUnit.HOURS.toMinutes(1),
+                TimeUnit.MILLISECONDS.toSeconds(mlS) % TimeUnit.MINUTES.toSeconds(1));
     }
 
     public void setMethodicNameController(MethodicNameController methodicNameController) {

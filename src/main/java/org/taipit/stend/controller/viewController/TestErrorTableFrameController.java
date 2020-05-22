@@ -869,7 +869,7 @@ public class TestErrorTableFrameController {
         creepCommand.setMeterList(listMetersForTest);
 
         if (creepCommand.isGostTest()) {
-            creepCommand.setTimeForTest(timeForGOSTtest);
+            creepCommand.setUserTimeTest(timeForGOSTtest);
         }
     }
 
@@ -1907,7 +1907,7 @@ public class TestErrorTableFrameController {
         TableView<Meter.CommandResult> tableView = new TableView<>();
         TableColumn<Meter.CommandResult, String> column = new TableColumn<>("Место " + listMetersForTest.get(index).getId());
         column.setStyle("-fx-alignment: CENTER;");
-        column.setCellValueFactory(new PropertyValueFactory<>("lastResult"));
+        column.setCellValueFactory(new PropertyValueFactory<>("lastResultForTabView"));
         column.setSortable(false);
         column.setCellFactory(cellFactoryEndTest);
         tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));

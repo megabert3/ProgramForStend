@@ -10,17 +10,39 @@ public class MainStend {
             TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
-        String time = "104:60:60";
+        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
 
-        String[] timeArr = time.split(":");
+        stendDLLCommands.getUI(0, 230, 0, 50, 0, 0, 100, 0, "H", "1.0");
 
-        long timeMls = (Integer.parseInt(timeArr[0]) * 3600 + Integer.parseInt(timeArr[1]) * 60 + Integer.parseInt(timeArr[2])) * 1000;
+        stendDLLCommands.errorClear();
 
-        System.out.println(time);
-        System.out.println(timeMls);
-        System.out.println(getTime(timeMls));
+        for (int i = 1; i < 3; i++) {
+            stendDLLCommands.setPulseChannel(i, 0);
+            stendDLLCommands.searchMark(i);
+
+        }
+
+        while (true) {
+            for (int i = 1; i < 3; i++) {
+                stendDLLCommands.searchMark(i);
+                if (stendDLLCommands.searchMarkResult(i)) {
+                    stendDLLCommands.searchMark(i);
+                }
+                Thread.sleep(400);
+            }
+
+
+//        String time = "104:60:60";
+//
+//        String[] timeArr = time.split(":");
+//
+//        long timeMls = (Integer.parseInt(timeArr[0]) * 3600 + Integer.parseInt(timeArr[1]) * 60 + Integer.parseInt(timeArr[2])) * 1000;
+//
+//        System.out.println(time);
+//        System.out.println(timeMls);
+//        System.out.println(getTime(timeMls));
 
 
 //        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
@@ -75,6 +97,6 @@ public class MainStend {
 //        double Constant,
 //        int Meter_No,
 //        int Dev_Port);
-
+        }
     }
 }
