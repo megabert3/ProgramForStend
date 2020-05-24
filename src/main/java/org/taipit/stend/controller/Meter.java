@@ -147,17 +147,14 @@ public class Meter implements Serializable{
                     }
 
                 } else if (command instanceof StartCommand) {
-
-                    StartResult startResult = new StartResult(id);
+                    StartCommand startCommand = (StartCommand) command;
 
                     //Отображаю время теста
-                    if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
+                    if (startCommand.isGostTest()) {
+                        errorListAPPls.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()), String.valueOf(startCommand.getPulseValue())));
                     } else {
-                        startResult.setLastResultForTabView("N" + getTime(((StartCommand) command).getTimeForTest()));
+                        errorListAPPls.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
                     }
-
-                    errorListAPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
                     RTCCommand rtcCommand = (RTCCommand) command;
@@ -191,17 +188,14 @@ public class Meter implements Serializable{
                     }
 
                 } else if (command instanceof StartCommand) {
-
-                    StartResult startResult = new StartResult(id);
+                    StartCommand startCommand = (StartCommand) command;
 
                     //Отображаю время теста
-                    if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()));
-                    }else {
-                        startResult.setLastResultForTabView("N" + getTime(((StartCommand) command).getTimeForTest()));
+                    if (startCommand.isGostTest()) {
+                        errorListAPMns.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()), String.valueOf(startCommand.getPulseValue())));
+                    } else {
+                        errorListAPMns.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
                     }
-
-                    errorListAPMns.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
 
@@ -238,16 +232,14 @@ public class Meter implements Serializable{
 
                 } else if (command instanceof StartCommand) {
 
-                    StartResult startResult = new StartResult(id);
+                    StartCommand startCommand = (StartCommand) command;
 
                     //Отображаю время теста
-                    if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
-                    }else {
-                        startResult.setLastResultForTabView("N" + getTime(((StartCommand) command).getTimeForTest()));
+                    if (startCommand.isGostTest()) {
+                        errorListRPPls.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()), String.valueOf(startCommand.getPulseValue())));
+                    } else {
+                        errorListRPPls.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
                     }
-
-                    errorListRPPls.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
 
@@ -284,16 +276,14 @@ public class Meter implements Serializable{
 
                 } else if (command instanceof StartCommand) {
 
-                    StartResult startResult = new StartResult(id);
+                    StartCommand startCommand = (StartCommand) command;
 
                     //Отображаю время теста
-                    if (((StartCommand) command).isGostTest()) {
-                        startResult.setLastResultForTabView("N" + getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()));
-                    }else {
-                        startResult.setLastResultForTabView("N" + getTime(((StartCommand) command).getTimeForTest()));
+                    if (startCommand.isGostTest()) {
+                        errorListRPMns.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()), String.valueOf(startCommand.getPulseValue())));
+                    } else {
+                        errorListRPMns.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
                     }
-
-                    errorListRPMns.add(startResult);
 
                 } else if (command instanceof RTCCommand) {
 
@@ -961,20 +951,55 @@ public class Meter implements Serializable{
     public class StartResult extends CommandResult implements Serializable {
 
         //Время прохождения теста
-        private long timeToTest;
+        private String timeThePassTest;
 
-        StartResult(String id) {
+        private String timeTheTest;
+
+        private String maxPulse;
+
+        StartResult(String id, String timeTheTest, String maxPulse) {
             super(id);
+            this.timeTheTest = timeTheTest;
+            this.maxPulse = maxPulse;
+            super.lastResultForTabView.setValue("N" + timeTheTest);
         }
 
-        public void setTimeToTest(long timeToTest) {
-            this.timeToTest = timeToTest;
-        }
+        public void setResultStartCommand(String time, int resultNo, boolean passOrNot, int chanelFlag) {
+            if (passOrNot) {
+                super.lastResultForTabView.setValue("P" + time + " P");
+                super.lastResult = time + " P";
+                super.results[resultNo] = time + " P";
+                super.passTest = true;
 
-        public long getTimeToTest() {
-            return timeToTest;
-        }
+                switch (chanelFlag) {
+                    case 0: startTestAPPls = true;
+                        break;
+                    case 1: startTestAPMns = true;
+                        break;
+                    case 2: startTestRPPls = true;
+                        break;
+                    case 3: startTestRPPls = true;
+                        break;
+                }
 
+            } else {
+                super.lastResultForTabView.setValue("F" + time + " F");
+                super.lastResult = time + " F";
+                super.results[resultNo] = time + " F";
+                super.passTest = false;
+
+                switch (chanelFlag) {
+                    case 0: startTestAPPls = false;
+                        break;
+                    case 1: startTestAPMns = false;
+                        break;
+                    case 2: startTestRPPls = false;
+                        break;
+                    case 3: startTestRPPls = false;
+                        break;
+                }
+            }
+        }
     }
 
     //Класс для записи результата исполнения StartCommnad
