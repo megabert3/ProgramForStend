@@ -283,25 +283,23 @@ public abstract class StendDLLCommands {
 
 
     // Чтение данных по энергии
-    public double constPulseRead (double constant, int meterNo) {
+    public double constProcRead(double constant, int meterNo) {
         DoubleByReference pointerMeterKWH = new DoubleByReference();
         DoubleByReference pointerStdKWH = new DoubleByReference();
 
         stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port);
-
-        System.out.println("MeterKWH " + pointerMeterKWH.getValue() + " StdKWH " + pointerStdKWH.getValue());
 
         return ((pointerMeterKWH.getValue() - pointerStdKWH.getValue()) / pointerStdKWH.getValue()) * 100;
     }
 
     // Чтение данных по энергии
-    public double constEnergyRead (double constant, int meterNo) {
+    public String constStdEnergyRead(double constant, int meterNo) {
         DoubleByReference pointerMeterKWH = new DoubleByReference();
         DoubleByReference pointerStdKWH = new DoubleByReference();
 
         stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port);
 
-        return pointerStdKWH.getValue();
+        return pointerStdKWH.getValue() + "," + pointerMeterKWH.getValue();
     }
 
     // Выбор цепи

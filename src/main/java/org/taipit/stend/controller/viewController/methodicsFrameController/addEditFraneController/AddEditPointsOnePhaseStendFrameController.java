@@ -2064,7 +2064,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                     if (((ConstantCommand) command).isRunTestToTime()) {
                         radBtnConstTimeAPPls.setSelected(true);
-                        txtFieldConstTimeAPPls.setText(getTime(constantCommand.getStrTimeToTest()));
+                        txtFieldConstTimeAPPls.setText(getTime(constantCommand.getTimeTheTest()));
                     } else {
                         radBtnConstEnergyAPPls.setSelected(true);
                         txtFieldEngConstAPPls.setText(String.valueOf(constantCommand.getkWToTest()));
@@ -2162,7 +2162,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                     if (constantCommand.isRunTestToTime()) {
                         radBtnConstTimeAPMns.setSelected(true);
-                        txtFieldConstTimeAPMns.setText(getTime(constantCommand.getStrTimeToTest()));
+                        txtFieldConstTimeAPMns.setText(getTime(constantCommand.getTimeTheTest()));
                     } else {
                         radBtnConstEnergyAPMns.setSelected(true);
                         txtFieldEngConstAPMns.setText(String.valueOf(constantCommand.getkWToTest()));
@@ -2260,7 +2260,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                     if (((ConstantCommand) command).isRunTestToTime()) {
                         radBtnConstTimeRPPls.setSelected(true);
-                        txtFieldConstTimeRPPls.setText(getTime(constantCommand.getStrTimeToTest()));
+                        txtFieldConstTimeRPPls.setText(getTime(constantCommand.getTimeTheTest()));
                     } else {
                         radBtnConstEnergyRPPls.setSelected(true);
                         txtFieldEngConstRPPls.setText(String.valueOf(constantCommand.getkWToTest()));
@@ -2358,7 +2358,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                     if (((ConstantCommand) command).isRunTestToTime()) {
                         radBtnConstTimeRPMns.setSelected(true);
-                        txtFieldConstTimeRPMns.setText(getTime(constantCommand.getStrTimeToTest()));
+                        txtFieldConstTimeRPMns.setText(getTime(constantCommand.getTimeTheTest()));
                     } else {
                         radBtnConstEnergyRPMns.setSelected(true);
                         txtFieldEngConstRPMns.setText(String.valueOf(constantCommand.getkWToTest()));

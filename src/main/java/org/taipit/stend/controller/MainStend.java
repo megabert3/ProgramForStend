@@ -66,7 +66,7 @@ public class MainStend {
 //            stendDLLCommands.powerOf();
 //
 //            for (int i = 1; i < 3; i++) {
-//                System.out.println(stendDLLCommands.constPulseRead(8000, i));
+//                System.out.println(stendDLLCommands.constProcRead(8000, i));
 //            }
 //
 //

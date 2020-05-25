@@ -1014,7 +1014,9 @@ public class Meter implements Serializable{
 
     public class ConstantResult extends CommandResult implements Serializable {
 
-        private String kw;
+        private String kwMeter;
+
+        private String kwRefMeter;
 
         ConstantResult(String id, String emin, String emax) {
             super(id);
@@ -1022,12 +1024,57 @@ public class Meter implements Serializable{
             super.maxError = emax;
         }
 
-        public String getKw() {
-            return kw;
+        public void setResultConstantCommand(String result, int resultNo, boolean passOrNot, int chanelFlag, String kwMeter, String kwRefMeter) {
+            if (passOrNot) {
+                super.lastResultForTabView.setValue("P" + result + " P");
+                super.lastResult = result;
+                super.results[resultNo] = result;
+                super.passTest = true;
+                this.kwMeter = kwMeter;
+                this.kwRefMeter = kwRefMeter;
+
+                switch (chanelFlag) {
+                    case 0: constantTestAPPls = true;
+                        break;
+                    case 1: constantTestAPMns = true;
+                        break;
+                    case 2: constantTestRPPls = true;
+                        break;
+                    case 3: constantTestRPMns = true;
+                        break;
+                }
+
+            } else {
+                super.lastResultForTabView.setValue("F" + result + " F");
+                super.lastResult = result;
+                super.results[resultNo] = result;
+                super.passTest = false;
+                this.kwMeter = kwMeter;
+                this.kwRefMeter = kwRefMeter;
+
+                switch (chanelFlag) {
+                    case 0: constantTestAPPls = false;
+                        break;
+                    case 1: constantTestAPMns = false;
+                        break;
+                    case 2: constantTestRPPls = false;
+                        break;
+                    case 3: constantTestRPMns = false;
+                        break;
+                }
+            }
         }
 
-        public void setKw(String kw) {
-            this.kw = kw;
+        public String getKwMeter() {
+            return kwMeter;
+        }
+
+        public void setKwMeter(String kwMeter) {
+            this.kwMeter = kwMeter;
+        }
+
+        public String getKwRefMeter() {
+            return kwRefMeter;
         }
     }
 
