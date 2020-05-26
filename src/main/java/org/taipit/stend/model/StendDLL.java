@@ -277,6 +277,15 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
     boolean CutNeutral(int CuttingFlag,
                        int Dev_Port);
 
+//--------------------------------------------------------------------------- SetRefClock
+//Переключить с эталонного счётчика на блок точности хода часов
+//SetFlag:
+//0--OFF (After testing)
+//1—ON (Before testing)
+// Dev_Port - номер com-порта
+    boolean SetRefClock(int SetFlag,
+                        int Dev_Port);
+
 //--------------------------------------------------------------------------- Clock_Error_Start
 // Старт теста ТХЧ
 // Meter_No - номер счетчика (нумерация с 1)

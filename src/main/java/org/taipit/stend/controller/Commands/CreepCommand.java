@@ -51,7 +51,7 @@ public class CreepCommand implements Commands, Serializable {
     private boolean gostTest;
 
     //Количество импоульсов для провала теста
-    private int pulseValue = 2;
+    private int pulseValue;
 
     //Время теста введённое пользователем
     private long userTimeTest;
@@ -59,8 +59,6 @@ public class CreepCommand implements Commands, Serializable {
     private long timeEnd;
     private long currTime;
     private String strTime;
-
-    private Timer timer;
 
     private HashMap<Integer, Boolean> creepCommandResult;
 
@@ -81,34 +79,11 @@ public class CreepCommand implements Commands, Serializable {
         this.name = name;
         this.id = id;
         this.channelFlag = channelFlag;
+        this.pulseValue = 2;
     }
 
     @Override
     public boolean execute() throws ConnectForStendExeption, InterruptedException {
-
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                if (System.currentTimeMillis() < timeEnd) {
-                    currTime = timeEnd - System.currentTimeMillis();
-
-                    strTime = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(currTime),
-                            TimeUnit.MILLISECONDS.toMinutes(currTime) % TimeUnit.HOURS.toMinutes(1),
-                            TimeUnit.MILLISECONDS.toSeconds(currTime) % TimeUnit.MINUTES.toSeconds(1));
-
-                    for (Map.Entry<Integer, Boolean> map : creepCommandResult.entrySet()) {
-                        if (map.getValue()) {
-                            Meter.CommandResult errorResult = meterList.get(map.getKey() - 1).returnResultCommand(index, channelFlag);
-                            errorResult.setLastResultForTabView("N" + strTime);
-                        }
-                    }
-
-                } else {
-                    timer.cancel();
-                    System.out.println("Остановлен");
-                }
-            }
-        };
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -129,7 +104,8 @@ public class CreepCommand implements Commands, Serializable {
 
         creepCommandResult = initCreepCommandResult();
 
-        timer = new Timer(true);
+        //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
+        setDefTestResults(channelFlag, index);
 
         if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
                 voltPer, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
@@ -139,36 +115,26 @@ public class CreepCommand implements Commands, Serializable {
 
         Thread.sleep(500);
 
-        timeStart = System.currentTimeMillis();
-        timeEnd = timeStart + userTimeTest;
-
-        timer.schedule(timerTask, 0, 500);
-
         if (Thread.currentThread().isInterrupted()) {
-            timer.cancel();
             throw new InterruptedException();
         }
 
-        //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-        setDefTestResults(channelFlag, index);
-
+        timeStart = System.currentTimeMillis();
+        timeEnd = timeStart + userTimeTest;
 
         if (Thread.currentThread().isInterrupted()) {
-            timer.cancel();
             throw new InterruptedException();
         }
 
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
             if (Thread.currentThread().isInterrupted()) {
-                timer.cancel();
                 throw new InterruptedException();
             }
 
             for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
 
                 if (Thread.currentThread().isInterrupted()) {
-                    timer.cancel();
                     throw new InterruptedException();
                 }
 
@@ -187,11 +153,15 @@ public class CreepCommand implements Commands, Serializable {
                             stendDLLCommands.crpstaClear(mapResult.getKey());
 
                             stendDLLCommands.crpstaStart(mapResult.getKey());
+
+                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
+                    } else {
+                        creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                     }
                 }
             }
-            Thread.sleep(400);
+            Thread.sleep(350);
         }
 
         //Выставляю результат теста счётчиков, которые прошли тест
@@ -204,36 +174,15 @@ public class CreepCommand implements Commands, Serializable {
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
-            if (!Thread.currentThread().isInterrupted() && nextCommand) return true;
+        if (!Thread.currentThread().isInterrupted() && nextCommand) return true;
 
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
         return !Thread.currentThread().isInterrupted();
     }
 
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
-
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                if (System.currentTimeMillis() < timeEnd) {
-                    currTime = timeEnd - System.currentTimeMillis();
-
-                    strTime = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(currTime),
-                            TimeUnit.MILLISECONDS.toMinutes(currTime) % TimeUnit.HOURS.toMinutes(1),
-                            TimeUnit.MILLISECONDS.toSeconds(currTime) % TimeUnit.MINUTES.toSeconds(1));
-
-                    for (Map.Entry<Integer, Boolean> map : creepCommandResult.entrySet()) {
-                        if (map.getValue()) {
-                            Meter.CommandResult errorResult = meterList.get(map.getKey() - 1).returnResultCommand(index, channelFlag);
-                            errorResult.setLastResultForTabView("N"+strTime);
-                        }
-                    }
-
-                } else timer.cancel();
-            }
-        };
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -246,8 +195,6 @@ public class CreepCommand implements Commands, Serializable {
         }
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-
-        creepCommandResult = initCreepCommandResult();
 
         setDefTestResults(channelFlag, index);
 
@@ -263,10 +210,6 @@ public class CreepCommand implements Commands, Serializable {
 
         Thread.sleep(500);
 
-        if (Thread.currentThread().isInterrupted()) {
-            throw new InterruptedException();
-        }
-
         //Номер измерения
         int countResult = 1;
         Meter meter;
@@ -277,24 +220,20 @@ public class CreepCommand implements Commands, Serializable {
             //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
             setDefTestResults(channelFlag, index);
 
-            timer = new Timer(true);
+            creepCommandResult = initCreepCommandResult();
 
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + userTimeTest;
 
-            timer.schedule(timerTask, 0, 500);
-
             while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
                 if (Thread.currentThread().isInterrupted()) {
-                    timer.cancel();
                     throw new InterruptedException();
                 }
 
                 for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
 
                     if (Thread.currentThread().isInterrupted()) {
-                        timer.cancel();
                         throw new InterruptedException();
                     }
 
@@ -313,11 +252,15 @@ public class CreepCommand implements Commands, Serializable {
                                 stendDLLCommands.crpstaClear(mapResult.getKey());
 
                                 stendDLLCommands.crpstaStart(mapResult.getKey());
+
+                                creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                             }
+                        } else {
+                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
                     }
                 }
-                Thread.sleep(400);
+                Thread.sleep(350);
             }
 
             //Выставляю результат теста счётчиков, которые прошли тест
@@ -327,6 +270,7 @@ public class CreepCommand implements Commands, Serializable {
                     creepResult.setResultCreepCommand(creepResult.getTimeTheTest(), countResult, true);
                 }
             }
+
             countResult++;
         }
 
@@ -334,246 +278,6 @@ public class CreepCommand implements Commands, Serializable {
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
-
-//    @Override
-//    public boolean execute() throws ConnectForStendExeption, InterruptedException {
-//
-//        TimerTask timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                if (System.currentTimeMillis() < timeEnd) {
-//                    currTime = timeEnd - System.currentTimeMillis();
-//
-//                    strTime = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(currTime),
-//                            TimeUnit.MILLISECONDS.toMinutes(currTime) % TimeUnit.HOURS.toMinutes(1),
-//                            TimeUnit.MILLISECONDS.toSeconds(currTime) % TimeUnit.MINUTES.toSeconds(1));
-//
-//                    for (Map.Entry<Integer, Boolean> map : creepCommandResult.entrySet()) {
-//                        if (map.getValue()) {
-//                            Meter.CommandResult errorResult = meterList.get(map.getKey() - 1).returnResultCommand(index, channelFlag);
-//                            errorResult.setLastResultForTabView("N" + strTime);
-//                        }
-//                    }
-//
-//                } else {
-//                    timer.cancel();
-//                    System.out.println("Остановлен");
-//                }
-//            }
-//        };
-//
-//        if (Thread.currentThread().isInterrupted()) {
-//            throw new InterruptedException();
-//        }
-//
-//        if (stendDLLCommands instanceof ThreePhaseStend) {
-//            if (!threePhaseCommand) {
-//                iABC = "C";
-//            }
-//        }
-//
-//        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-//
-//        creepCommandResult = initCreepCommandResult();
-//
-//        timer = new Timer(true);
-//
-//        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
-//                voltPer, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
-//
-//        //Разблокирую интерфейc кнопок
-//        TestErrorTableFrameController.blockBtns.setValue(false);
-//
-//        if (Thread.currentThread().isInterrupted()) {
-//            throw new InterruptedException();
-//        }
-//
-//        Thread.sleep(2000);
-//
-//        //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-//        setDefTestResults(channelFlag, index);
-//
-//
-//        if (Thread.currentThread().isInterrupted()) {
-//            throw new InterruptedException();
-//        }
-//
-//        //Номер измерения
-//        int countResult = 1;
-//        Meter meter;
-//        Meter.CreepResult creepResult;
-//
-//        timeStart = System.currentTimeMillis();
-//        timeEnd = timeStart + userTimeTest;
-//
-//        timer.schedule(timerTask, 0, 500);
-//
-//        while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
-//
-//            if (Thread.currentThread().isInterrupted()) {
-//                timer.cancel();
-//                throw new InterruptedException();
-//            }
-//
-//            for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
-//
-//                if (Thread.currentThread().isInterrupted()) {
-//                    timer.cancel();
-//                    throw new InterruptedException();
-//                }
-//
-//                if (mapResult.getValue()) {
-//                    meter = meterList.get(mapResult.getKey() - 1);
-//                    creepResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
-//
-//                    if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
-//
-//                        stendDLLCommands.searchMark(mapResult.getKey());
-//
-//                        meter.setAmountImn(meter.getAmountImn() + 1);
-//
-//                        if (meter.getAmountImn() > pulseValue) {
-//                            creepCommandResult.put(mapResult.getKey(), false);
-//                            creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
-//                        }
-//                    }
-//                }
-//            }
-//            Thread.sleep(400);
-//        }
-//
-//        //Выставляю результат теста счётчиков, которые прошли тест
-//        for (Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
-//            if (mapResultPass.getValue()) {
-//                creepResult = (Meter.CreepResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
-//                creepResult.setResultCreepCommand(creepResult.getTimeTheTest(), countResult, true);
-//            }
-//        }
-//
-//        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-//
-//        if (!Thread.currentThread().isInterrupted() && nextCommand) return true;
-//
-//        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-//
-//        return !Thread.currentThread().isInterrupted();
-//    }
-//
-//    @Override
-//    public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
-//
-//        TimerTask timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                if (System.currentTimeMillis() < timeEnd) {
-//                    currTime = timeEnd - System.currentTimeMillis();
-//
-//                    strTime = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(currTime),
-//                            TimeUnit.MILLISECONDS.toMinutes(currTime) % TimeUnit.HOURS.toMinutes(1),
-//                            TimeUnit.MILLISECONDS.toSeconds(currTime) % TimeUnit.MINUTES.toSeconds(1));
-//
-//                    for (Map.Entry<Integer, Boolean> map : creepCommandResult.entrySet()) {
-//                        if (map.getValue()) {
-//                            Meter.CommandResult errorResult = meterList.get(map.getKey() - 1).returnResultCommand(index, channelFlag);
-//                            errorResult.setLastResultForTabView("N"+strTime);
-//                        }
-//                    }
-//
-//                } else timer.cancel();
-//            }
-//        };
-//
-//        if (Thread.currentThread().isInterrupted()) {
-//            throw new InterruptedException();
-//        }
-//
-//        if (stendDLLCommands instanceof ThreePhaseStend) {
-//            if (!threePhaseCommand) {
-//                iABC = "C";
-//            }
-//        }
-//
-//        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-//
-//        creepCommandResult = initCreepCommandResult();
-//
-//        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
-//                voltPer, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
-//
-//        //Разблокирую интерфейc кнопок
-//        TestErrorTableFrameController.blockBtns.setValue(false);
-//
-//        if (Thread.currentThread().isInterrupted()) {
-//            throw new InterruptedException();
-//        }
-//
-//        Thread.sleep(2000);
-//
-//        if (Thread.currentThread().isInterrupted()) {
-//            throw new InterruptedException();
-//        }
-//
-//        //Номер измерения
-//        int countResult = 1;
-//        Meter meter;
-//        Meter.CreepResult creepResult;
-//
-//        while (!Thread.currentThread().isInterrupted()) {
-//
-//            timer = new Timer(true);
-//
-//            setDefTestResults(channelFlag, index);
-//
-//            timeStart = System.currentTimeMillis();
-//            timeEnd = timeStart + userTimeTest;
-//
-//            timer.schedule(timerTask, 0, 500);
-//
-//            while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
-//
-//                if (Thread.currentThread().isInterrupted()) {
-//                    timer.cancel();
-//                    throw new InterruptedException();
-//                }
-//
-//                for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
-//
-//                    if (Thread.currentThread().isInterrupted()) {
-//                        timer.cancel();
-//                        throw new InterruptedException();
-//                    }
-//
-//                    if (mapResult.getValue()) {
-//                        meter = meterList.get(mapResult.getKey() - 1);
-//                        creepResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
-//
-//                        if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
-//                            stendDLLCommands.searchMark(mapResult.getKey());
-//                            meter.setAmountImn(meter.getAmountImn() + 1);
-//
-//                            if (meter.getAmountImn() > pulseValue) {
-//                                creepCommandResult.put(mapResult.getKey(), false);
-//                                creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
-//                            }
-//                        }
-//                    }
-//                }
-//                Thread.sleep(400);
-//            }
-//
-//            //Выставляю результат теста счётчиков, которые прошли тест
-//            for (Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
-//                if (mapResultPass.getValue()) {
-//                    creepResult = (Meter.CreepResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
-//                    creepResult.setResultCreepCommand(creepResult.getTimeTheTest(), countResult, true);
-//                }
-//            }
-//            countResult += 1;
-//        }
-//
-//        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-//        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-//    }
 
     private HashMap<Integer, Boolean> initCreepCommandResult() {
         HashMap<Integer, Boolean> init = new HashMap<>(meterList.size());

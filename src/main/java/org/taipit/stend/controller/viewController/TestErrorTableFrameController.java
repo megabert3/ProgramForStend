@@ -570,8 +570,6 @@ public class TestErrorTableFrameController {
                                         blockTypeEnergyAndDirectionBtns.setValue(false);
                                         blockBtns.setValue(false);
                                     } catch (InterruptedException e) {
-//                                        blockTypeEnergyAndDirectionBtns.setValue(false);
-//                                        blockBtns.setValue(false);
                                         e.printStackTrace();
                                     }
                                 } catch (ConnectForStendExeption e) {
@@ -658,79 +656,51 @@ public class TestErrorTableFrameController {
 
     //Блок команд для старта автоматического теста
     private void startAutomaticTest() throws ConnectForStendExeption, InterruptedException {
-        int phase;
 
         //Если выбрана панель AP+
         if (tglBtnAPPls.isSelected()) {
-            if (typeCircuitThreePhase) {
-                phase = 1;
-            } else phase = 0;
 
-            startTestOnSelectPane(phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+            startTestOnSelectPane(timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
             //Если выбрана панель AP-
         } else if(tglBtnAPMns.isSelected()) {
-            if (typeCircuitThreePhase) {
-                phase = 1;
-            } else phase = 0;
 
-            startTestOnSelectPane(phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+            startTestOnSelectPane(timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
             //Если выбрана панель RP+
         } else if(tglBtnRPPls.isSelected()) {
-            if (typeCircuitThreePhase) {
-                phase = 5;
-            } else phase = 7;
 
-           startTestOnSelectPane(phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+           startTestOnSelectPane(timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
 
             //Если выбрана панель RP-
         } else if(tglBtnRPMns.isSelected()) {
 
-            if (typeCircuitThreePhase) {
-                phase = 5;
-            } else phase = 7;
-
-           startTestOnSelectPane(phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+           startTestOnSelectPane(timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
         }
     }
 
     //Общая команда для старта ручного теста
     private void startManualTest() throws ConnectForStendExeption, InterruptedException {
-        int phase;
 
         //Если выбрана панель AP+
         if (tglBtnAPPls.isSelected()) {
-            if (typeCircuitThreePhase) {
-                phase = 1;
-            } else phase = 0;
 
-           startContinuousTestOnSelectPane(phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+           startContinuousTestOnSelectPane(timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
             //Если выбрана панель AP-
         } else if(tglBtnAPMns.isSelected()) {
-            if (typeCircuitThreePhase) {
-                phase = 1;
-            } else phase = 0;
 
-           startContinuousTestOnSelectPane(phase, timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+           startContinuousTestOnSelectPane(timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
 
             //Если выбрана панель RP+
         } else if(tglBtnRPPls.isSelected()) {
-            if (typeCircuitThreePhase) {
-                phase = 5;
-            } else phase = 7;
 
-            startContinuousTestOnSelectPane(phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+            startContinuousTestOnSelectPane(timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
 
             //Если выбрана панель RP-
         } else if(tglBtnRPMns.isSelected()) {
 
-            if (typeCircuitThreePhase) {
-                phase = 5;
-            } else phase = 7;
-
-            startContinuousTestOnSelectPane(phase, timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+            startContinuousTestOnSelectPane(timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
         }
     }
 
@@ -752,7 +722,7 @@ public class TestErrorTableFrameController {
     }
 
     //Старт автоматического теста в зависимости от выбранной панели (направления и типа энергии)
-    private void startTestOnSelectPane(int phase, long timeCRPForGOST, long timeSTAForGOST)
+    private void startTestOnSelectPane(long timeCRPForGOST, long timeSTAForGOST)
             throws ConnectForStendExeption, InterruptedException {
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
@@ -782,15 +752,23 @@ public class TestErrorTableFrameController {
                     command.execute();
                 }else if (command instanceof CreepCommand) {
 
-                    initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
+                    initAllParamForCreepCommand((CreepCommand) command, i, timeCRPForGOST);
                     command.execute();
                 }else if (command instanceof StartCommand) {
 
-                    initAllParamForStartCommand((StartCommand) command, phase, i, timeSTAForGOST);
+                    initAllParamForStartCommand((StartCommand) command, i, timeSTAForGOST);
                     command.execute();
                 }else if (command instanceof RTCCommand) {
 
-                    initAllParamForRTCCommand((RTCCommand) command, phase, i);
+                    initAllParamForRTCCommand((RTCCommand) command, i);
+                    command.execute();
+                }else if (command instanceof ConstantCommand) {
+
+                    initAllParamForConstantCommand((ConstantCommand) command, i);
+                    command.execute();
+                }else if (command instanceof ImbalansUCommand) {
+
+                    initAllParamForImbCommand((ImbalansUCommand) command, i);
                     command.execute();
                 }
             }
@@ -812,7 +790,7 @@ public class TestErrorTableFrameController {
     }
 
     //Старт ручного теста в зависимости от выбранной панели (направления и типа энергии)
-    private void startContinuousTestOnSelectPane(int phase, long timeCRPForGOST, long timeSTAForGOST)
+    private void startContinuousTestOnSelectPane(long timeCRPForGOST, long timeSTAForGOST)
             throws ConnectForStendExeption, InterruptedException {
 
         if (Thread.currentThread().isInterrupted()) {
@@ -832,18 +810,27 @@ public class TestErrorTableFrameController {
             command.executeForContinuousTest();
         }else if (command instanceof CreepCommand) {
 
-            initAllParamForCreepCommand((CreepCommand) command, phase, i, timeCRPForGOST);
+            initAllParamForCreepCommand((CreepCommand) command, i, timeCRPForGOST);
 
             command.executeForContinuousTest();
         }else if (command instanceof StartCommand) {
 
-            initAllParamForStartCommand((StartCommand) command,phase, i, timeSTAForGOST);
+            initAllParamForStartCommand((StartCommand) command, i, timeSTAForGOST);
 
             command.executeForContinuousTest();
         }else if (command instanceof RTCCommand) {
 
-            initAllParamForRTCCommand((RTCCommand) command, phase, i);
+            initAllParamForRTCCommand((RTCCommand) command, i);
 
+            command.executeForContinuousTest();
+
+        }else if (command instanceof ConstantCommand) {
+
+            initAllParamForConstantCommand((ConstantCommand) command, i);
+            command.executeForContinuousTest();
+        }else if (command instanceof ImbalansUCommand) {
+
+            initAllParamForImbCommand((ImbalansUCommand) command, i);
             command.executeForContinuousTest();
         }
     }
@@ -860,9 +847,8 @@ public class TestErrorTableFrameController {
     }
 
     //Инициализирует параметры необходимые для команды самохода
-    private void initAllParamForCreepCommand(CreepCommand creepCommand, int phase, int index, long timeForGOSTtest){
+    private void initAllParamForCreepCommand(CreepCommand creepCommand, int index, long timeForGOSTtest){
         creepCommand.setStendDLLCommands(stendDLLCommands);
-        creepCommand.setPhase(phase);
         creepCommand.setRatedVolt(Un);
         creepCommand.setRatedFreq(Fn);
         creepCommand.setIndex(index);
@@ -874,26 +860,44 @@ public class TestErrorTableFrameController {
     }
 
     //Инициализирует параметры необходимые для команды чувствительность
-    private void initAllParamForStartCommand(StartCommand startCommand, int phase, int index, long timeForGOSTtest) {
+    private void initAllParamForStartCommand(StartCommand startCommand, int index, long timeForGOSTtest) {
         startCommand.setStendDLLCommands(stendDLLCommands);
-        startCommand.setPhase(phase);
         startCommand.setRatedFreq(Fn);
         startCommand.setRatedVolt(Un);
         startCommand.setIndex(index);
+        startCommand.setRatedCurr(Ib);
         startCommand.setMeterList(listMetersForTest);
 
         if (startCommand.isGostTest()) {
-            startCommand.setTimeForTest(timeForGOSTtest);
+            startCommand.setUserTimeTest(timeForGOSTtest);
         }
     }
 
     //Инициализирует параметры необходимые для команды чувстви
-    private void initAllParamForRTCCommand(RTCCommand rTCCommand, int phase, int index) {
+    private void initAllParamForRTCCommand(RTCCommand rTCCommand, int index) {
         rTCCommand.setStendDLLCommands(stendDLLCommands);
-        rTCCommand.setPhase(phase);
         rTCCommand.setRatedVolt(Un);
         rTCCommand.setIndex(index);
         rTCCommand.setMeterList(listMetersForTest);
+    }
+
+    //Инициализирует параметры необходимые для команды чувстви
+    private void initAllParamForConstantCommand(ConstantCommand constantCommand, int index) {
+        constantCommand.setStendDLLCommands(stendDLLCommands);
+        constantCommand.setRatedVolt(Un);
+        constantCommand.setRatedCurr(Ib);
+        constantCommand.setIndex(index);
+        constantCommand.setMeterForTestList(listMetersForTest);
+    }
+
+    private void initAllParamForImbCommand(ImbalansUCommand imbalansUCommand, int index){
+        imbalansUCommand.setStendDLLCommands(stendDLLCommands);
+        imbalansUCommand.setRatedVolt(Un);
+        imbalansUCommand.setIb(Ib);
+        imbalansUCommand.setImax(Imax);
+        imbalansUCommand.setRatedFreq(Fn);
+        imbalansUCommand.setIndex(index);
+        imbalansUCommand.setMeterForTestList(listMetersForTest);
     }
 
     @FXML
@@ -1177,21 +1181,69 @@ public class TestErrorTableFrameController {
             } else {
                 //3P4W, 3P3W, 3P3W 90 R.P., 3P3W 60 R.P.
                 if (typeCircut.equals("3P4W")) {
-                    commandsAPPls.setAll(methodicForStend.getCommandsMap().get(0));
-                    commandsAPPls.addAll(methodicForStend.getSaveInflListForCollumAPPls());
-                    commandsAPPls.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(0));
 
-                    commandsAPMns.setAll(methodicForStend.getCommandsMap().get(1));
-                    commandsAPMns.addAll(methodicForStend.getSaveInflListForCollumAPMns());
-                    commandsAPMns.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(1));
+                    for (Commands command : methodicForStend.getCommandsMap().get(0)) {
+                        command.setPhase(1);
+                        commandsAPPls.add(command);
+                    }
 
-                    commandsRPPls.setAll(methodicForStend.getCommandsMap().get(2));
-                    commandsRPPls.addAll(methodicForStend.getSaveInflListForCollumRPPls());
-                    commandsRPPls.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(2));
+                    for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
+                        command.setPhase(1);
+                        commandsAPPls.add(command);
+                    }
 
-                    commandsRPMns.setAll(methodicForStend.getCommandsMap().get(3));
-                    commandsRPMns.addAll(methodicForStend.getSaveInflListForCollumRPMns());
-                    commandsRPMns.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(3));
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
+                        command.setPhase(1);
+                        commandsAPPls.add(command);
+                    }
+
+
+                    for (Commands command : methodicForStend.getCommandsMap().get(1)) {
+                        command.setPhase(1);
+                        commandsAPMns.add(command);
+                    }
+
+                    for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
+                        command.setPhase(1);
+                        commandsAPMns.add(command);
+                    }
+
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
+                        command.setPhase(1);
+                        commandsAPMns.add(command);
+                    }
+
+
+                    for (Commands command : methodicForStend.getCommandsMap().get(2)) {
+                        command.setPhase(5);
+                        commandsRPPls.add(command);
+                    }
+
+                    for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
+                        command.setPhase(5);
+                        commandsRPPls.add(command);
+                    }
+
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
+                        command.setPhase(5);
+                        commandsRPPls.add(command);
+                    }
+
+
+                    for (Commands command : methodicForStend.getCommandsMap().get(3)) {
+                        command.setPhase(5);
+                        commandsRPMns.add(command);
+                    }
+
+                    for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
+                        command.setPhase(5);
+                        commandsRPMns.add(command);
+                    }
+
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
+                        command.setPhase(5);
+                        commandsRPMns.add(command);
+                    }
 
                 } else if (typeCircut.equals("3P3W")) {
 
@@ -1846,10 +1898,6 @@ public class TestErrorTableFrameController {
         intiTimeCRPSTATests();
 
         for (Meter meter : listMetersForTest) {
-            /**
-             * Не имя команды, а айди команды
-             * нужно реализовать
-             */
 
             for (Commands command : commandsAPPls) {
                 meter.createError(command, 0, command.getId(), this);

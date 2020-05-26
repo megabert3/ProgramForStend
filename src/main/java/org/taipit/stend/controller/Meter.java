@@ -158,7 +158,7 @@ public class Meter implements Serializable{
 
                 } else if (command instanceof RTCCommand) {
                     RTCCommand rtcCommand = (RTCCommand) command;
-                    errorListAPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest())));
+                    errorListAPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), rtcCommand.getFreg()));
 
                 } else if (command instanceof ConstantCommand) {
                     ConstantCommand constantCommand = (ConstantCommand) command;
@@ -200,7 +200,7 @@ public class Meter implements Serializable{
                 } else if (command instanceof RTCCommand) {
 
                     RTCCommand rtcCommand = (RTCCommand) command;
-                    errorListAPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest())));
+                    errorListAPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), rtcCommand.getFreg()));
 
                 } else if (command instanceof ConstantCommand) {
 
@@ -244,7 +244,7 @@ public class Meter implements Serializable{
                 } else if (command instanceof RTCCommand) {
 
                     RTCCommand rtcCommand = (RTCCommand) command;
-                    errorListRPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest())));
+                    errorListRPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), rtcCommand.getFreg()));
 
                 } else if (command instanceof ConstantCommand) {
 
@@ -288,7 +288,7 @@ public class Meter implements Serializable{
                 } else if (command instanceof RTCCommand) {
 
                     RTCCommand rtcCommand = (RTCCommand) command;
-                    errorListRPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest())));
+                    errorListRPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), rtcCommand.getFreg()));
 
                 } else if (command instanceof ConstantCommand) {
 
@@ -923,6 +923,7 @@ public class Meter implements Serializable{
                 creepTest = true;
             } else {
                 super.lastResultForTabView.setValue("F" + time + " F");
+                this.timeTheFailTest = time;
                 super.lastResult = time + " F";
                 super.results[resultNo] = time + " F";
                 super.passTest = false;
@@ -967,6 +968,7 @@ public class Meter implements Serializable{
         public void setResultStartCommand(String time, int resultNo, boolean passOrNot, int chanelFlag) {
             if (passOrNot) {
                 super.lastResultForTabView.setValue("P" + time + " P");
+                this.timeThePassTest = time;
                 super.lastResult = time + " P";
                 super.results[resultNo] = time + " P";
                 super.passTest = true;
@@ -1000,15 +1002,43 @@ public class Meter implements Serializable{
                 }
             }
         }
+
+        public String getTimeTheTest() {
+            return timeTheTest;
+        }
     }
 
     //Класс для записи результата исполнения StartCommnad
     public class RTCResult extends CommandResult implements Serializable {
 
-        RTCResult(String id, String emin, String emax) {
+        double freg;
+
+        RTCResult(String id, String emin, String emax, double freg) {
             super(id);
             super.minError = emin;
             super.maxError = emax;
+            this.freg = freg;
+        }
+
+        public void setResultRTCCommand(String error, int resultNo, boolean passOrNot) {
+            if (passOrNot) {
+                super.lastResultForTabView.setValue("P" + error + " P");
+                super.lastResult = error;
+                super.results[resultNo] = error;
+                super.passTest = true;
+                RTCTest = true;
+
+            } else {
+                super.lastResultForTabView.setValue("F" + error + " F");
+                super.lastResult = error;
+                super.results[resultNo] = error;
+                super.passTest = false;
+                RTCTest = false;
+            }
+        }
+
+        public double getFreg() {
+            return freg;
         }
     }
 

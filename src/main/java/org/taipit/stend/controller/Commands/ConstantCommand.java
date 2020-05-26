@@ -7,6 +7,7 @@ import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -144,8 +145,6 @@ public class ConstantCommand implements Commands, Serializable {
             throw new InterruptedException();
         }
 
-        ratedCurr = Ib;
-
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
                 iABC = "C";
@@ -160,6 +159,13 @@ public class ConstantCommand implements Commands, Serializable {
                 }
                 iABC = "H";
             }
+        }
+
+        //Выбор константы в зависимости от энергии
+        if (channelFlag == 0 || channelFlag == 1) {
+            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
+        } else if (channelFlag == 2 || channelFlag == 3){
+            constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
         }
 
         int countResult = 1;
@@ -272,6 +278,8 @@ public class ConstantCommand implements Commands, Serializable {
                 for (Meter meter : meterForTestList) {
                     kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
 
+                    System.out.println(Arrays.toString(kw));
+
                     constantResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
 
                     constantResult.setLastResultForTabView("N" + kw[1]);
@@ -322,8 +330,6 @@ public class ConstantCommand implements Commands, Serializable {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
-
-        ratedCurr = Ib;
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {

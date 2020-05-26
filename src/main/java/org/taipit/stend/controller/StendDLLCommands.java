@@ -83,19 +83,27 @@ public abstract class StendDLLCommands {
     }
 
     //Устанавливает значение импульсного выхода у установки для каждого метса
-    public synchronized void setEnergyPulse (List<Meter> meterList, int channelFlag) throws ConnectForStendExeption {
+    public synchronized void setEnergyPulse (List<Meter> meterList, int channelFlag) throws ConnectForStendExeption, InterruptedException {
         for (Meter meter : meterList) {
+            int i = 0;
             boolean setEnergy = setPulseChannel(meter.getId(), channelFlag);
 
             if (!setEnergy) {
 
-                while (true) {
+                while (2 > i) {
                     if (setPulseChannel(meter.getId(), channelFlag)) {
                         break;
+                    } else {
+                        Thread.sleep(10);
+                        i++;
                     }
                 }
             }
         }
+    }
+
+    public boolean setRefClock(int setFlag) {
+        return stend.SetRefClock(setFlag, port);
     }
 
     public HashMap<Integer, Meter> getAmountActivePlacesForTest() {
@@ -335,5 +343,9 @@ public abstract class StendDLLCommands {
     //Список портов
     public static String[] massPort() {
         return SerialPortList.getPortNames();
+    }
+
+    public String getTypeReferenceMeter() {
+        return typeReferenceMeter;
     }
 }

@@ -13,25 +13,40 @@ public class MainStend {
     public static void main(String[] args) throws InterruptedException {
 
         StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
-
-        stendDLLCommands.getUI(0, 230, 0, 50, 0, 0, 100, 0, "H", "1.0");
-
         stendDLLCommands.errorClear();
 
-        for (int i = 1; i < 3; i++) {
-            stendDLLCommands.setPulseChannel(i, 0);
-            stendDLLCommands.searchMark(i);
+        stendDLLCommands.getUI(1, 230.0, 5, 50, 0, 0, 100, 0.4, "H", "1.0");
+        System.out.println(stendDLLCommands.stMeterRead());
+        Thread.sleep(3000);
+        System.out.println(stendDLLCommands.stMeterRead());
+        stendDLLCommands.setPulseChannel(1, 0);
 
+        stendDLLCommands.crpstaStart(1);
+
+        boolean result;
+
+        long timeStart = System.currentTimeMillis();
+        long time = timeStart + 15000;
+
+        while (System.currentTimeMillis() < time) {
+            result = stendDLLCommands.crpstaResult(1);
+            System.out.println(stendDLLCommands.stMeterRead());
+            System.out.println(getTime(System.currentTimeMillis() - timeStart));
+            System.out.println(result);
+
+            if (result) {
+                System.out.println("Обновляю");
+                stendDLLCommands.crpstaClear(1);
+                stendDLLCommands.crpstaStart(1);
+            }
+
+            Thread.sleep(200);
         }
 
-        while (true) {
-            for (int i = 1; i < 3; i++) {
-                stendDLLCommands.searchMark(i);
-                if (stendDLLCommands.searchMarkResult(i)) {
-                    stendDLLCommands.searchMark(i);
-                }
-                Thread.sleep(400);
-            }
+        stendDLLCommands.errorClear();
+        stendDLLCommands.powerOf();
+    }
+
 
 
 //        String time = "104:60:60";
@@ -97,6 +112,5 @@ public class MainStend {
 //        double Constant,
 //        int Meter_No,
 //        int Dev_Port);
-        }
-    }
+
 }

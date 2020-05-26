@@ -2,6 +2,7 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
+import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
@@ -72,251 +73,188 @@ public class RTCCommand implements Commands, Serializable {
     }
 
     @Override
-    public boolean execute() throws ConnectForStendExeption {
-        try {
+    public boolean execute() throws ConnectForStendExeption, InterruptedException {
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
+
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                iABC = "C";
+            }
+        }
+
+        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
+                100.0, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
+
+        //Разблокирую интерфейc кнопок
+        TestErrorTableFrameController.blockBtns.setValue(false);
+
+        Thread.sleep(5000);
+
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
+
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+
+        stendDLLCommands.setRefClock(1);
+
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
+
+        for (Meter meter : meterList) {
+            stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC);
+        }
+
+        int count = 0;
+        Meter.RTCResult rtcCommand;
+        double result;
+
+        while (count < countResultTest) {
+
             if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
-                return false;
+                throw new InterruptedException();
             }
 
-            int count = 0;
-
-            if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
-                    100.0, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
-
-            //Разблокирую интерфейc кнопок
-            TestErrorTableFrameController.blockBtns.setValue(false);
-
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                return false;
-            }
-
-            stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-
-            Thread.sleep(stendDLLCommands.getPauseForStabization());
-
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                return false;
-            }
+            Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 100));
 
             for (Meter meter : meterList) {
-                if (!stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC))
-                    throw new ConnectForStendExeption();
-            }
-
-            Meter.CommandResult errorCommand;
-
-            while (count < countResultTest) {
 
                 if (Thread.currentThread().isInterrupted()) {
-                    System.out.println("Получил сигнал о завершении потока из команды StartCommand из внешнего цикла");
-                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                    return false;
+                    throw new InterruptedException();
                 }
 
-                Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
+                try {
+                    rtcCommand = (Meter.RTCResult) meter.returnResultCommand(index, channelFlag);
 
-                if (Thread.currentThread().isInterrupted()) {
-                    System.out.println("Получил сигнал о завершении потока из команды StartCommand из внешнего цикла");
-                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                    return false;
-                }
+                    if (errorType == 0) {
 
-                for (Meter meter : meterList) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        System.out.println("Получил сигнал о завершении потока из команды StartCommand из внешнего цикла");
-                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                        System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                        return false;
-                    }
-
-                    try {
-                        //meter = meterList.get(mapResult.getKey() - 1);
-                        errorCommand = meter.returnResultCommand(index, channelFlag);
-
-                        double result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId())) - 1.000000;
+                        result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId())) - freg;
 
                         if (result > errorForFalseTest || result < -errorForFalseTest) {
-                            addRTCTestResult(meter, result, false, channelFlagForSave);
+                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, false);
                         } else {
-                            addRTCTestResult(meter, result, true, channelFlagForSave);
+                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, true);
                         }
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                        System.out.println("Пустая строчка");
+
+                    } else if (errorType == 1){
+
+                        result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId()));
+
+                        if (result > errorForFalseTest || result < -errorForFalseTest) {
+                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, false);
+                        } else {
+                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, true);
+                        }
+
                     }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    System.out.println("Пустая строчка");
                 }
-                count++;
             }
-
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
-            if (!Thread.currentThread().isInterrupted() && nextCommand) {
-                return true;
-            }
-
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-
-        }catch (InterruptedException e) {
-            System.out.println("Поймал ошибку Interrupted в команде StartCommand");
-            System.out.println("Состояние нити до команты interrupt в команде StartCommand " + Thread.currentThread().getState());
-            Thread.currentThread().interrupt();
-            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
-            return false;
+            count++;
         }
+
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+
+        if (!Thread.currentThread().isInterrupted() && nextCommand) {
+            return true;
+        }
+
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
         return !Thread.currentThread().isInterrupted();
     }
 
     @Override
-    public void executeForContinuousTest() throws ConnectForStendExeption {
-        try {
+    public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
 
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
-                return;
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                iABC = "C";
             }
+        }
 
-            int count = 0;
+        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
+                100.0, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
-            if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
-                    0.0, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
+        //Разблокирую интерфейc кнопок
+        TestErrorTableFrameController.blockBtns.setValue(false);
 
-            //Разблокирую интерфейc кнопок
-            TestErrorTableFrameController.blockBtns.setValue(false);
+        Thread.sleep(5000);
 
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                return;
-            }
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
 
-            stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-            Thread.sleep(stendDLLCommands.getPauseForStabization());
+        stendDLLCommands.setRefClock(1);
 
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
-                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                return;
-            }
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
+
+        for (Meter meter : meterList) {
+            stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC);
+        }
+
+        int count = 0;
+        Meter.RTCResult rtcCommand;
+        double result;
+
+        while (!Thread.currentThread().isInterrupted()) {
+
+            Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
 
             for (Meter meter : meterList) {
-                if (!stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC))
-                    throw new ConnectForStendExeption();
-            }
-
-            while (!Thread.currentThread().isInterrupted()) {
-
-                Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
 
                 if (Thread.currentThread().isInterrupted()) {
-                    System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
-                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                    System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                    return;
+                    throw new InterruptedException();
                 }
 
-                for (Meter meter : meterList) {
-                    try {
-                        if (Thread.currentThread().isInterrupted()) {
-                            System.out.println("Получил сигнал о завершении потока из команды RTCCommand");
-                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-                            System.out.println("Выключил напряжение, ток, отчистил значения и вышел из метода");
-                            return;
-                        }
-                        /**
-                         * Проверить на тру или фолс в корневом методе
-                         */
-                        double result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId())) - 1.000000;
+                try {
+                    rtcCommand = (Meter.RTCResult) meter.returnResultCommand(index, channelFlag);
 
-                        /**
-                         *Сохранять результат в массив результатов и изменять цвет в зависимости от того прошел тест или нет
-                         */
+                    if (errorType == 0) {
+
+                        result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId())) - freg;
+
                         if (result > errorForFalseTest || result < -errorForFalseTest) {
-                            addRTCTestResult(meter, result, false, channelFlagForSave);
+                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, false);
                         } else {
-                            addRTCTestResult(meter, result, true, channelFlagForSave);
+                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, true);
                         }
 
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                        System.out.println("Пустая строчка");
+                    } else if (errorType == 1){
+
+                        result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId()));
+
+                        if (result > errorForFalseTest || result < -errorForFalseTest) {
+                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, false);
+                        } else {
+                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, true);
+                        }
+
                     }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    System.out.println("Пустая строчка");
                 }
-
-                count++;
             }
-
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
-        }catch (InterruptedException e) {
-            System.out.println("Поймал ошибку Interrupted в команде StartCommand");
-            System.out.println("Состояние нити до команты interrupt в команде StartCommand " + Thread.currentThread().getState());
-            Thread.currentThread().interrupt();
-            System.out.println("Узнаю состояние нити после команды interrupt " + Thread.currentThread().getState());
-            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-            System.out.println("Выключил напряжение и ток, очистил результаты и вышел из метода");
-            return;
+            count++;
         }
-    }
 
-    private void addRTCTestResultRass(Meter meter, double RTCError, boolean passOrNot, int channelFlagForSave) {
+        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
-    }
+        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
 
-    private void addRTCTestResult(Meter meter, double RTCError, boolean passOrNot, int channelFlagForSave) {
-        Meter.CommandResult commandResult;
-        meter.setRTCTest(passOrNot);
-
-        switch (channelFlagForSave) {
-            case 0: {
-                commandResult = meter.getErrorListAPPls().get(index);
-                commandResult.setLastResultForTabView(String.valueOf(RTCError));
-                commandResult.setPassTest(passOrNot);
-            }break;
-
-            case 1: {
-                commandResult = meter.getErrorListAPMns().get(index);
-                commandResult.setLastResultForTabView(String.valueOf(RTCError));
-                commandResult.setPassTest(passOrNot);
-            }break;
-
-            case 2: {
-                commandResult = meter.getErrorListRPPls().get(index);
-                commandResult.setLastResultForTabView(String.valueOf(RTCError));
-                commandResult.setPassTest(passOrNot);
-            }break;
-
-            case 3: {
-                commandResult = meter.getErrorListRPMns().get(index);
-                commandResult.setLastResultForTabView(String.valueOf(RTCError));
-                commandResult.setPassTest(passOrNot);
-            }break;
-        }
     }
 
     @Override

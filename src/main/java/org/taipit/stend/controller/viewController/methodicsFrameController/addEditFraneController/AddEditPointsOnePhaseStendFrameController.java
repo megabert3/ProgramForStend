@@ -2866,9 +2866,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             if (addTglBtnCRPAPPlsGOST.isSelected()) {
                 creepCommand = new CreepCommand(false, true, "Самоход AP+ ГОСТ","CRP;G;A;P", 0);
 
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
-
                 CRPTogBtnAPPls.setSelected(true);
 
                 testListForCollumAPPls.add(creepCommand);
@@ -2997,9 +2994,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             if (addTglBtnCRPAPMnsGOST.isSelected()) {
                 creepCommand = new CreepCommand(false, true, "Самоход AP- ГОСТ", "CRP;G;A;N",1);
 
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
-
                 CRPTogBtnAPMns.setSelected(true);
 
                 testListForCollumAPMns.add(creepCommand);
@@ -3126,9 +3120,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         if (event.getSource() == addTglBtnCRPRPPlsGOST) {
             if (addTglBtnCRPRPPlsGOST.isSelected()) {
                 creepCommand = new CreepCommand(false, true, "Самоход RP+ ГОСТ", "CRP;G;R;P", 2);
-
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
 
                 CRPTogBtnRPPls.setSelected(true);
 
@@ -3257,9 +3248,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         if (event.getSource() == addTglBtnCRPRPMnsGOST) {
             if (addTglBtnCRPRPMnsGOST.isSelected()) {
                 creepCommand = new CreepCommand(false, true, "Самоход RP- ГОСТ", "CRP;G;R;N",3);
-
-                creepCommand.setPulseValue(2);
-                creepCommand.setVoltPer(115.0);
 
                 CRPTogBtnRPMns.setSelected(true);
 
