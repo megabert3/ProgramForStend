@@ -9,6 +9,8 @@ import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.model.StendDLL;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 
@@ -297,7 +299,8 @@ public abstract class StendDLLCommands {
 
         stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port);
 
-        return ((pointerMeterKWH.getValue() - pointerStdKWH.getValue()) / pointerStdKWH.getValue()) * 100;
+        return new BigDecimal(((pointerMeterKWH.getValue() - pointerStdKWH.getValue()) / pointerStdKWH.getValue()) * 100)
+                .setScale(5, RoundingMode.HALF_UP).doubleValue();
     }
 
     // Чтение данных по энергии
@@ -307,7 +310,10 @@ public abstract class StendDLLCommands {
 
         stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port);
 
-        return pointerStdKWH.getValue() + "," + pointerMeterKWH.getValue();
+        String bigDecimalMeterKWH = new BigDecimal(pointerMeterKWH.getValue()).setScale(5, RoundingMode.HALF_UP).toString();
+        String bigDecimalStdKWH = new BigDecimal(pointerStdKWH.getValue()).setScale(5, RoundingMode.HALF_UP).toString();
+
+        return bigDecimalMeterKWH + "," + bigDecimalStdKWH;
     }
 
     // Выбор цепи
