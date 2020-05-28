@@ -4,10 +4,11 @@ import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
+import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
+import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -99,7 +100,9 @@ public class ConstantCommand implements Commands, Serializable {
     private long currTime;
     private String strTime;
 
-    private Timer timer;
+    transient private Thread constantThread;
+
+    transient private Timer timer;
 
     public ConstantCommand(boolean threePhaseStendCommand, boolean runTestToTime, long timeToTest, String id,
                            String name, double voltPer, double currPer, int revers, int channelFlag, double eminProc, double emaxProc) {
@@ -145,6 +148,9 @@ public class ConstantCommand implements Commands, Serializable {
             throw new InterruptedException();
         }
 
+        timer = new Timer(true);
+        constantThread = Thread.currentThread();
+
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
                 iABC = "C";
@@ -181,6 +187,8 @@ public class ConstantCommand implements Commands, Serializable {
         //Устанавливаем местам импульсный выход
         stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
 
+        stendDLLCommands.setReviseMode(1);
+
         if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPer, 0, iABC, cosP)) throw new ConnectForStendExeption();
 
@@ -204,8 +212,30 @@ public class ConstantCommand implements Commands, Serializable {
 
         if (runTestToTime) {
 
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    String[] kw;
+                    if (!constantThread.isInterrupted()) {
+                        for (Meter meter : meterForTestList) {
+                            kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
+                            double result = Double.parseDouble(kw[0]);
+
+                            if (result == 0) {
+                                ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
+                                TestErrorTableFrameController.getStaticBtnStop().fire();
+                                timer.cancel();
+                            }
+                        }
+                        timer.cancel();
+                    } else timer.cancel();
+                }
+            };
+
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+            timer.schedule(timerTask, 7000);
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -257,17 +287,39 @@ public class ConstantCommand implements Commands, Serializable {
             }
 
         } else {
+
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    if (!constantThread.isInterrupted()) {
+                        for (Meter meter : meterForTestList) {
+                            double result = Double.parseDouble(meter.returnResultCommand(index, channelFlag).getLastResultForTabView().substring(1));
+                            if (result == 0) {
+                                ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
+                                TestErrorTableFrameController.getStaticBtnStop().fire();
+                                timer.cancel();
+                            }
+                        }
+
+                        timer.cancel();
+                    } else timer.cancel();
+                }
+            };
+
             double refMeterEnergy = 0;
 
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+            timer.schedule(timerTask, 7000);
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
             }
 
             Meter.ConstantResult constantResult;
-            String[] kw = null;
+            String[] kw;
+            double hightKw;
 
             while (kWToTest > refMeterEnergy) {
 
@@ -282,11 +334,13 @@ public class ConstantCommand implements Commands, Serializable {
 
                     constantResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
 
-                    constantResult.setLastResultForTabView("N" + kw[1]);
-                }
+                    constantResult.setLastResultForTabView("N" + kw[0]);
 
-                if (kw != null) {
-                    refMeterEnergy = Double.parseDouble(kw[0]);
+                    hightKw = Double.parseDouble(kw[1]);
+
+                    if (hightKw > refMeterEnergy) {
+                        refMeterEnergy = hightKw;
+                    }
                 }
 
                 Thread.sleep(1000);
@@ -331,6 +385,9 @@ public class ConstantCommand implements Commands, Serializable {
             throw new InterruptedException();
         }
 
+        timer = new Timer(true);
+        constantThread = Thread.currentThread();
+
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
                 iABC = "C";
@@ -360,6 +417,8 @@ public class ConstantCommand implements Commands, Serializable {
         //Устанавливаем местам импульсный выход
         stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
 
+        stendDLLCommands.setReviseMode(1);
+
         if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPer, 0, iABC, cosP)) throw new ConnectForStendExeption();
 
@@ -385,8 +444,30 @@ public class ConstantCommand implements Commands, Serializable {
 
             if (runTestToTime) {
 
+                TimerTask timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        String[] kw;
+                        if (!constantThread.isInterrupted()) {
+                            for (Meter meter : meterForTestList) {
+                                kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
+                                double result = Double.parseDouble(kw[0]);
+
+                                if (result == 0) {
+                                    ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
+                                    TestErrorTableFrameController.getStaticBtnStop().fire();
+                                    timer.cancel();
+                                }
+                            }
+                            timer.cancel();
+                        } else timer.cancel();
+                    }
+                };
+
                 if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                         voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+                timer.schedule(timerTask, 7000);
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
@@ -440,8 +521,28 @@ public class ConstantCommand implements Commands, Serializable {
             } else {
                 double refMeterEnergy = 0;
 
+                TimerTask timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (!constantThread.isInterrupted()) {
+                            for (Meter meter : meterForTestList) {
+                                double result = Double.parseDouble(meter.returnResultCommand(index, channelFlag).getLastResultForTabView().substring(1));
+                                if (result == 0) {
+                                    ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
+                                    TestErrorTableFrameController.getStaticBtnStop().fire();
+                                    timer.cancel();
+                                }
+                            }
+
+                            timer.cancel();
+                        } else timer.cancel();
+                    }
+                };
+
                 if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                         voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+                timer.schedule(timerTask, 7000);
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();

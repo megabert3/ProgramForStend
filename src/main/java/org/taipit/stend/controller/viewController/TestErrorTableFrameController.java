@@ -41,11 +41,13 @@ import java.util.List;
 
 public class TestErrorTableFrameController {
 
+    //public static TestErrorTableFrameController testErrorTableFrameController;
+
+    private static Button btnStopStatic;
+
     private StendDLLCommands stendDLLCommands;
 
     private boolean twoCircut;
-
-    public static boolean interrupt;
 
     //Исполняемая команда
     Commands command;
@@ -281,6 +283,8 @@ public class TestErrorTableFrameController {
     @FXML
     void initialize() {
 
+        btnStopStatic = btnStop;
+
         selectedCommand = tabViewTestPoints.getSelectionModel().getSelectedItems();
 
         blockBtns.addListener(new ChangeListener<Boolean>() {
@@ -397,6 +401,8 @@ public class TestErrorTableFrameController {
                 }).start();
             }
         });
+
+
         checBoxePane.toFront();
     }
 
@@ -502,8 +508,6 @@ public class TestErrorTableFrameController {
                                         blockTypeEnergyAndDirectionBtns.setValue(false);
                                         blockBtns.setValue(false);
                                     } catch (InterruptedException e) {
-                                        //blockBtns.setValue(false);
-                                        //blockTypeEnergyAndDirectionBtns.setValue(false);
                                         e.printStackTrace();
                                     }
                                 } catch (ConnectForStendExeption e) {
@@ -2158,5 +2162,9 @@ public class TestErrorTableFrameController {
 
     public void setTwoCircut(boolean twoCircut) {
         this.twoCircut = twoCircut;
+    }
+
+    public static Button getStaticBtnStop() {
+        return btnStopStatic;
     }
 }

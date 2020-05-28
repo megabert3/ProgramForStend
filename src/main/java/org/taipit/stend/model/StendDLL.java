@@ -318,4 +318,14 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 //--------------------------------------------------------------------------- Dll_Port_Close
 // Закрыть порт
     boolean Dll_Port_Close(PointerByReference close);
+
+    //Мод для включения малых токов
+    boolean Set_ReviseMode(int mode);
+
+    boolean Set_ReviseTime(int time);
+
+    boolean Set_NoRevise(boolean b);
+
+    boolean Power_Revise();
+
 }

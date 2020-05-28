@@ -84,6 +84,8 @@ public class RTCCommand implements Commands, Serializable {
             }
         }
 
+        stendDLLCommands.setReviseMode(1);
+
         if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
                 100.0, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
@@ -180,6 +182,8 @@ public class RTCCommand implements Commands, Serializable {
                 iABC = "C";
             }
         }
+
+        stendDLLCommands.setReviseMode(1);
 
         if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
                 100.0, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();

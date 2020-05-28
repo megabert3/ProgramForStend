@@ -1,8 +1,5 @@
 package org.taipit.stend.controller;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class MainStend {
@@ -14,48 +11,30 @@ public class MainStend {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        double double1 = 0.912985;
-        double doub = new BigDecimal(double1).setScale(3, RoundingMode.HALF_UP).doubleValue();
-        
-        System.out.println(doub);
 
+        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
+
+        String std;
+
+        stendDLLCommands.setReviseMode(1);
+
+        long timeEnd;
+        long time = System.currentTimeMillis();
+        stendDLLCommands.getUI(1, 230.0, 5, 50, 0, 0, 100, 0.4, "H", "1.0");
+        timeEnd = System.currentTimeMillis() - time;
+        System.out.println("Time to set command Adjust_UI " + timeEnd + " ms with RefType: " + stendDLLCommands.getTypeReferenceMeter());
+
+        Thread.sleep(5000);
+
+        time = System.currentTimeMillis();
+        std = stendDLLCommands.stMeterRead();
+        timeEnd = System.currentTimeMillis() - time;
+        System.out.println("Time to set command StdMeter_Read " + timeEnd + " ms with RefType: " + "HY5303C-22");
+        System.out.println("Values returned command StdMeter_Read \n" + std);
+
+        stendDLLCommands.powerOf();
     }
 }
-//
-//        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
-//        stendDLLCommands.errorClear();
-//
-//        stendDLLCommands.getUI(1, 230.0, 5, 50, 0, 0, 100, 0.4, "H", "1.0");
-//        System.out.println(stendDLLCommands.stMeterRead());
-//        Thread.sleep(3000);
-//        System.out.println(stendDLLCommands.stMeterRead());
-//        stendDLLCommands.setPulseChannel(1, 0);
-//
-//        stendDLLCommands.crpstaStart(1);
-//
-//        boolean result;
-//
-//        long timeStart = System.currentTimeMillis();
-//        long time = timeStart + 15000;
-//
-//        while (System.currentTimeMillis() < time) {
-//            result = stendDLLCommands.crpstaResult(1);
-//            System.out.println(stendDLLCommands.stMeterRead());
-//            System.out.println(getTime(System.currentTimeMillis() - timeStart));
-//            System.out.println(result);
-//
-//            if (result) {
-//                System.out.println("Обновляю");
-//                stendDLLCommands.crpstaClear(1);
-//                stendDLLCommands.crpstaStart(1);
-//            }
-//
-//            Thread.sleep(200);
-//        }
-//
-//        stendDLLCommands.errorClear();
-//        stendDLLCommands.powerOf();
-//    }
 //
 //
 //

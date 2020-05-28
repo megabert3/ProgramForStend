@@ -148,6 +148,8 @@ public class StartCommand implements Commands, Serializable {
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
         setDefTestResults(channelFlag, index);
 
+        stendDLLCommands.setReviseMode(1);
+
         if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, 0,
                 voltPer, currPer, iABC, "1.0")) throw new ConnectForStendExeption();
 
@@ -263,6 +265,8 @@ public class StartCommand implements Commands, Serializable {
         Meter.StartResult startResult;
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+
+        stendDLLCommands.setReviseMode(1);
 
         if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, 0,
                 voltPer, currPer, iABC, "1.0")) throw new ConnectForStendExeption();

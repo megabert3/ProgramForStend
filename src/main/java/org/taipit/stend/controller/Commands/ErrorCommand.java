@@ -193,6 +193,8 @@ public class ErrorCommand implements Commands, Serializable {
             throw new InterruptedException();
         }
 
+        stendDLLCommands.setReviseMode(1);
+
         if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
 
@@ -335,6 +337,8 @@ public class ErrorCommand implements Commands, Serializable {
             System.out.println("executeForContinuousTest_2");
             throw new InterruptedException();
         }
+
+        stendDLLCommands.setReviseMode(1);
 
         if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();

@@ -107,6 +107,8 @@ public class CreepCommand implements Commands, Serializable {
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
         setDefTestResults(channelFlag, index);
 
+        stendDLLCommands.setReviseMode(1);
+
         if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
                 voltPer, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
@@ -146,7 +148,7 @@ public class CreepCommand implements Commands, Serializable {
 
                         meter.setAmountImn(meter.getAmountImn() + 1);
 
-                        if (meter.getAmountImn() > pulseValue) {
+                        if (meter.getAmountImn() >= pulseValue) {
                             creepCommandResult.put(mapResult.getKey(), false);
                             creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
                         } else {
@@ -198,6 +200,8 @@ public class CreepCommand implements Commands, Serializable {
 
         setDefTestResults(channelFlag, index);
 
+        stendDLLCommands.setReviseMode(1);
+
         if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
                 voltPer, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
 
@@ -245,7 +249,7 @@ public class CreepCommand implements Commands, Serializable {
 
                             meter.setAmountImn(meter.getAmountImn() + 1);
 
-                            if (meter.getAmountImn() > pulseValue) {
+                            if (meter.getAmountImn() >= pulseValue) {
                                 creepCommandResult.put(mapResult.getKey(), false);
                                 creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
                             } else {

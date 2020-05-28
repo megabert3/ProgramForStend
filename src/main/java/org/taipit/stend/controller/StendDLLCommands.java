@@ -219,6 +219,12 @@ public abstract class StendDLLCommands {
         return pointer.getValue().getString(0, "ASCII");
     }
 
+    public String stMeterRead(String typeReferenceMeter) {
+        PointerByReference pointer = new PointerByReference(new Memory(1024));
+        stend.StdMeter_Read(pointer, typeReferenceMeter, port);
+        return pointer.getValue().getString(0, "ASCII");
+    }
+
     // Получить ошибку навешенного счетчика
     public synchronized String meterErrorRead(int meterNo) {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
@@ -300,7 +306,7 @@ public abstract class StendDLLCommands {
         stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port);
 
         return new BigDecimal(((pointerMeterKWH.getValue() - pointerStdKWH.getValue()) / pointerStdKWH.getValue()) * 100)
-                .setScale(5, RoundingMode.HALF_UP).doubleValue();
+                .setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
     // Чтение данных по энергии
@@ -344,6 +350,18 @@ public abstract class StendDLLCommands {
         PointerByReference pointer = new PointerByReference(new Memory(2048));
         stend.Dll_Port_Close(pointer);
         return pointer.getValue().getString(0, "ASCII");
+    }
+
+    public boolean setReviseMode(int mode) {
+        return stend.Set_ReviseMode(mode);
+    }
+
+    public boolean setReviseTime(int timeSek) {
+        return stend.Set_ReviseTime(timeSek);
+    }
+
+    public boolean setNoRevise(boolean b){
+        return stend.Set_NoRevise(b);
     }
 
     //Список портов

@@ -150,6 +150,7 @@ public class ImbalansUCommand implements Commands, Serializable {
                 System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
                 return false;
             }
+
             //Выбор константы в зависимости от энергии
             if (channelFlag == 0 || channelFlag == 1) {
                 constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
@@ -171,6 +172,8 @@ public class ImbalansUCommand implements Commands, Serializable {
                 System.out.println("Получил сигнал о завершении потока из команды ErrorCommand");
                 return false;
             }
+
+            stendDLLCommands.setReviseMode(1);
 
             if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers, voltPerPhaseA, voltPerPhaseB, voltPerPhaseC,
                     currPer, iABC, cosP)) throw new ConnectForStendExeption();
