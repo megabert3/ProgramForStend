@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.taipit.stend.controller.viewController.ExceptionFrameController;
+import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 
 import java.io.*;
 import java.util.Properties;
@@ -68,6 +69,33 @@ public class ConsoleHelper {
                 stage.show();
             }
         });
+    }
+
+    public static boolean yesOrNoFrame(String title, ) {
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/yesOrNoFrame.fxml"));
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
+        yesOrNoFrameController.setExitSaveResultFrameWithoutSaving(true);
+        yesOrNoFrameController.setStageSaveResultTest(stage);
+        yesOrNoFrameController.getQuestionTxt().setText("Вы уверены, что хотите выйти \nбез сохранения результатов теста?");
+        yesOrNoFrameController.getQuestionTxt().setLayoutX(165);
+        yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
+
+        Parent root = fxmlLoader.getRoot();
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+
+        return null;
     }
 
 

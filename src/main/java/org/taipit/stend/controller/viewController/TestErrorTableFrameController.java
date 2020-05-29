@@ -41,7 +41,7 @@ import java.util.List;
 
 public class TestErrorTableFrameController {
 
-    //public static TestErrorTableFrameController testErrorTableFrameController;
+    public TestErrorTableFrameController testErrorTableFrameController = this;
 
     private static Button btnStopStatic;
 
@@ -128,7 +128,6 @@ public class TestErrorTableFrameController {
                             blockBtns.setValue(true);
                             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                             startAutomaticTest();
-                            blockTypeEnergyAndDirectionBtns.setValue(false);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -381,6 +380,7 @@ public class TestErrorTableFrameController {
                             });
 
                             blockBtns.setValue(false);
+                            blockTypeEnergyAndDirectionBtns.setValue(false);
 
                         }catch (ConnectForStendExeption e) {
                             e.printStackTrace();
@@ -401,7 +401,6 @@ public class TestErrorTableFrameController {
                 }).start();
             }
         });
-
 
         checBoxePane.toFront();
     }
@@ -460,7 +459,13 @@ public class TestErrorTableFrameController {
         }
 
         if (event.getSource() == btnExit) {
+            if (blockTypeEnergyAndDirectionBtns.getValue()) {
+                ConsoleHelper.infoException("Невозможно выйти во время теста");
+            } else {
 
+                Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
+                testErrorTableFrameControllerStage.close();
+            }
         }
     }
 
@@ -479,6 +484,7 @@ public class TestErrorTableFrameController {
                     public void run() {
                         startUnTest = false;
                         blockBtns.setValue(true);
+                        blockTypeEnergyAndDirectionBtns.setValue(true);
 
                         if (manualTestThread.isAlive()) {
                             manualTestThread.interrupt();
@@ -501,27 +507,19 @@ public class TestErrorTableFrameController {
                                 try {
                                     try {
                                         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                                        blockTypeEnergyAndDirectionBtns.setValue(true);
 
                                         startAutomaticTest();
 
-                                        blockTypeEnergyAndDirectionBtns.setValue(false);
-                                        blockBtns.setValue(false);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
                                 } catch (ConnectForStendExeption e) {
                                     e.printStackTrace();
-                                    Platform.runLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            ConsoleHelper.infoException("Потеряна связь с установкой");
-                                            blockBtns.setValue(false);
-                                            tglBtnAuto.setSelected(false);
-                                            blockTypeEnergyAndDirectionBtns.setValue(false);
-                                            selectedCommand.removeListener(automaticListChangeListener);
-                                        }
-                                    });
+                                    ConsoleHelper.infoException("Потеряна связь с установкой");
+                                    blockBtns.setValue(false);
+                                    tglBtnAuto.setSelected(false);
+                                    blockTypeEnergyAndDirectionBtns.setValue(false);
+                                    selectedCommand.removeListener(automaticListChangeListener);
                                 }
                             }
                         });
@@ -543,6 +541,7 @@ public class TestErrorTableFrameController {
                     @Override
                     public void run() {
                         blockBtns.setValue(true);
+                        blockTypeEnergyAndDirectionBtns.setValue(true);
                         startUnTest = false;
 
                         if (automaticTestThread.isAlive()) {
@@ -566,27 +565,17 @@ public class TestErrorTableFrameController {
                                 try {
                                     try {
                                         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
-                                        blockTypeEnergyAndDirectionBtns.setValue(true);
-
                                         startManualTest();
-
-                                        blockTypeEnergyAndDirectionBtns.setValue(false);
-                                        blockBtns.setValue(false);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
                                 } catch (ConnectForStendExeption e) {
                                     e.printStackTrace();
-                                    Platform.runLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            ConsoleHelper.infoException("Потеряна связь с установкой");
-                                            blockBtns.setValue(false);
-                                            tglBtnManualMode.setSelected(false);
-                                            selectedCommand.removeListener(manualListChangeListener);
-                                        }
-                                    });
+                                    ConsoleHelper.infoException("Потеряна связь с установкой");
+                                    blockBtns.setValue(false);
+                                    tglBtnManualMode.setSelected(false);
+                                    selectedCommand.removeListener(manualListChangeListener);
+                                    blockTypeEnergyAndDirectionBtns.setValue(false);
                                 }
                             }
                         });
@@ -639,15 +628,10 @@ public class TestErrorTableFrameController {
                                     }
                                 } catch (ConnectForStendExeption e) {
                                     e.printStackTrace();
-                                    Platform.runLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            ConsoleHelper.infoException("Потеряна связь с установкой");
-                                            blockBtns.setValue(false);
-                                            startUnTest = false;
-                                            tglBtnUnom.setSelected(false);
-                                        }
-                                    });
+                                    ConsoleHelper.infoException("Потеряна связь с установкой");
+                                    blockBtns.setValue(false);
+                                    startUnTest = false;
+                                    tglBtnUnom.setSelected(false);
                                 }
                             }
                         });
