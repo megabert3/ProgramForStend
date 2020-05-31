@@ -6,7 +6,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="157.0" prefWidth="390.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.YesOrNoFrameController">
+<AnchorPane prefHeight="157.0" prefWidth="390.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.YesOrNoFrameControllerTEST">
    <children>
       <Button fx:id="yesBtn" layoutX="31.0" layoutY="96.0" mnemonicParsing="false" onAction="#yesOrNoAction" prefHeight="38.0" prefWidth="114.0" stylesheets="@../styleCSS/buttonStyle.css" text="Да">
          <graphic>

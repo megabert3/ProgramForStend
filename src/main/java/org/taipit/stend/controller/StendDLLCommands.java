@@ -213,13 +213,13 @@ public abstract class StendDLLCommands {
     }
 
     //Получить данные с эталонного счётчика счетчика
-    public String stMeterRead() {
+    public synchronized String stMeterRead() {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.StdMeter_Read(pointer, typeReferenceMeter, port);
         return pointer.getValue().getString(0, "ASCII");
     }
 
-    public String stMeterRead(String typeReferenceMeter) {
+    public synchronized String stMeterRead(String typeReferenceMeter) {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.StdMeter_Read(pointer, typeReferenceMeter, port);
         return pointer.getValue().getString(0, "ASCII");

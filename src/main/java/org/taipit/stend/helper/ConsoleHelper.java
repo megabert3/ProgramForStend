@@ -7,12 +7,15 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.taipit.stend.controller.viewController.ExceptionFrameController;
-import org.taipit.stend.controller.viewController.YesOrNoFrameController;
+import org.taipit.stend.controller.viewController.YesOrNoFrameControllerTEST;
 
 import java.io.*;
 import java.util.Properties;
 
 public class ConsoleHelper {
+
+    //Для диалогового окна да или нет
+    private static Boolean yesOrNo;
 
     //Директроия с файлом пропертиес
     private static final String dir = ".\\src\\main\\resources\\stendProperties.properties";
@@ -71,20 +74,47 @@ public class ConsoleHelper {
         });
     }
 
-    public static boolean yesOrNoFrame(String title, ) {
+    public static Boolean yesOrNoFrame(String title, String textQuestion, double x, double y) {
+
+        yesOrNo = null;
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/yesOrNoFrame.fxml"));
+        fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/yesOrNoFrameTEST.fxml"));
         try {
             fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
-        yesOrNoFrameController.setExitSaveResultFrameWithoutSaving(true);
-        yesOrNoFrameController.setStageSaveResultTest(stage);
-        yesOrNoFrameController.getQuestionTxt().setText("Вы уверены, что хотите выйти \nбез сохранения результатов теста?");
+        YesOrNoFrameControllerTEST yesOrNoFrameController = fxmlLoader.getController();
+        yesOrNoFrameController.getQuestionTxt().setText(textQuestion);
+        yesOrNoFrameController.getQuestionTxt().setLayoutX(x);
+        yesOrNoFrameController.getQuestionTxt().setLayoutY(y);
+
+        Parent root = fxmlLoader.getRoot();
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+
+        return yesOrNo;
+    }
+
+    public static Boolean yesOrNoFrame(String title, String textQuestion) {
+
+        yesOrNo = null;
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/yesOrNoFrameTEST.fxml"));
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        YesOrNoFrameControllerTEST yesOrNoFrameController = fxmlLoader.getController();
+        yesOrNoFrameController.getQuestionTxt().setText(textQuestion);
         yesOrNoFrameController.getQuestionTxt().setLayoutX(165);
         yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
 
@@ -95,7 +125,7 @@ public class ConsoleHelper {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
 
-        return null;
+        return yesOrNo;
     }
 
 
@@ -105,5 +135,9 @@ public class ConsoleHelper {
 
     public static String entString() throws IOException {
         return bufferedReader.readLine();
+    }
+
+    public static void setYesOrNo(Boolean yesOrNo) {
+        ConsoleHelper.yesOrNo = yesOrNo;
     }
 }

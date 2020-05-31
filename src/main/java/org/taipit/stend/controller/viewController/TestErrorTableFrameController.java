@@ -409,6 +409,12 @@ public class TestErrorTableFrameController {
     void actionEventSaveExit(ActionEvent event) {
 
         if (event.getSource() == btnSave) {
+
+            if (blockTypeEnergyAndDirectionBtns.getValue()) {
+                ConsoleHelper.infoException("Нельзя сохранить результаты во время теста");
+                return;
+            }
+
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/viewFXML/saveResultsTest.fxml"));
             try {
@@ -463,8 +469,17 @@ public class TestErrorTableFrameController {
                 ConsoleHelper.infoException("Невозможно выйти во время теста");
             } else {
 
-                Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
-                testErrorTableFrameControllerStage.close();
+                Boolean answer = ConsoleHelper.yesOrNoFrame("Сохранение результатов", "Желаете сохранить результаты теста?");
+
+                if (answer != null) {
+
+                    if (answer) {
+                        btnSave.fire();
+                    } else {
+                        Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
+                        testErrorTableFrameControllerStage.close();
+                    }
+                }
             }
         }
     }
@@ -697,7 +712,7 @@ public class TestErrorTableFrameController {
 
         int phase;
 
-        if (typeCircuitThreePhase) {
+        if (stendDLLCommands instanceof ThreePhaseStend) {
             phase = 1;
         } else {
             phase = 0;
@@ -1873,6 +1888,33 @@ public class TestErrorTableFrameController {
         } else {
             tglBtnAPPls.fire();
         }
+
+        Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
+
+        testErrorTableFrameControllerStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                event.consume();
+
+                if (blockTypeEnergyAndDirectionBtns.getValue()) {
+                    ConsoleHelper.infoException("Нельзя выйти во время теста");
+                    return;
+                }
+
+                Boolean answer = ConsoleHelper.yesOrNoFrame("Сохранение результатов", "Желаете сохранить результаты теста?");
+
+                if (answer != null) {
+
+                    if (answer) {
+                        btnSave.fire();
+                    } else {
+                        Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
+                        testErrorTableFrameControllerStage.close();
+                    }
+                }
+
+            }
+        });
     }
 
     //Добавляет объект resultError к каждому счётчику необходимому для теста
