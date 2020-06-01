@@ -118,8 +118,6 @@ Sa , Sb , Sc , Pall(A.P.) ,Qall( R.P.) ,Sall( Apparent power) , Freq , U_Range ,
 
                     angleUaUb = Double.parseDouble(paramArr[26]);
                     angleUbUc = Double.parseDouble(paramArr[27]);
-
-                    System.out.println(threePhaseRefMeterParameters.toString());
                 }
             };
 

@@ -60,5 +60,6 @@
             <CheckBox fx:id="checkBoxDisableAll" layoutX="6.0" layoutY="3.0" mnemonicParsing="false" onAction="#checBoxAllDisAction" />
          </children>
       </Pane>
+      <ToggleButton fx:id="refMeterParam" layoutX="1119.0" layoutY="10.0" mnemonicParsing="false" onAction="#refMeterParamAction" prefHeight="25.0" prefWidth="117.0" text="Эталоный счётчик" AnchorPane.rightAnchor="41.0" AnchorPane.topAnchor="10.0" />
    </children>
 </AnchorPane>

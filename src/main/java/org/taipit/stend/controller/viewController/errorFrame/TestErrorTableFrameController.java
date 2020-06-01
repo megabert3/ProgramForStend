@@ -35,6 +35,9 @@ import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
+import org.taipit.stend.model.refMeter.OnePhaseRefMeterParameters;
+import org.taipit.stend.model.refMeter.RefMeterParameters;
+import org.taipit.stend.model.refMeter.ThreePhaseRefMeterParameters;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -43,11 +46,11 @@ import java.util.List;
 
 public class TestErrorTableFrameController {
 
-    public TestErrorTableFrameController testErrorTableFrameController = this;
-
     private static Button btnStopStatic;
 
     private StendDLLCommands stendDLLCommands;
+
+    private RefMeterParameters refMeterParameters;
 
     private boolean twoCircut;
 
@@ -106,6 +109,8 @@ public class TestErrorTableFrameController {
     private Thread manualTestThread = new Thread();
 
     private Thread UnomThread = new Thread();
+
+    private boolean startUnTest = false;
 
     //Для блокировки кнопок управления
     public static SimpleBooleanProperty blockBtns = new SimpleBooleanProperty(false);
@@ -194,8 +199,8 @@ public class TestErrorTableFrameController {
         }
     };
 
-
-    private boolean startUnTest = false;
+    @FXML
+    ToggleButton refMeterParam;
 
     @FXML
     private Button btnSave;
@@ -484,6 +489,11 @@ public class TestErrorTableFrameController {
                 }
             }
         }
+    }
+
+    @FXML
+    void refMeterParamAction(ActionEvent event) {
+
     }
 
     @FXML
@@ -1917,6 +1927,14 @@ public class TestErrorTableFrameController {
 
             }
         });
+
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            refMeterParameters = new ThreePhaseRefMeterParameters();
+        } else {
+            refMeterParameters = new OnePhaseRefMeterParameters();
+        }
+
+
     }
 
     //Добавляет объект resultError к каждому счётчику необходимому для теста
