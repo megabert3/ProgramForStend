@@ -7,7 +7,7 @@ import org.taipit.stend.helper.ConsoleHelper;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class OnePhaseRefMeterParameters {
+public class OnePhaseRefMeterParameters implements RefMeterParameters{
 //Однофазное подключение:
 //HY5101C-22(Simulation Meter) : U,I,UI_Angle
 //HY5101C-23?SY3803 : U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq

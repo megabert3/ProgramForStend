@@ -3,12 +3,11 @@ package org.taipit.stend.controller.Commands;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
-import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
+import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 

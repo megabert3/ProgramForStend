@@ -7,7 +7,7 @@ import org.taipit.stend.helper.ConsoleHelper;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ThreePhaseRefMeterParameters {
+public class ThreePhaseRefMeterParameters implements RefMeterParameters{
 /*
 Трех-фазное подключение:
 HY5303C-22, SY3302
@@ -22,6 +22,8 @@ Sa , Sb , Sc , Pall(A.P.) ,Qall( R.P.) ,Sall( Apparent power) , Freq , U_Range ,
 */
 
     private StendDLLCommands threePhaseStend = ThreePhaseStend.getThreePhaseStendInstance();
+
+    ThreePhaseRefMeterParameters threePhaseRefMeterParameters = this;
 
     private double Ua;
     private double Ub;
@@ -116,6 +118,8 @@ Sa , Sb , Sc , Pall(A.P.) ,Qall( R.P.) ,Sall( Apparent power) , Freq , U_Range ,
 
                     angleUaUb = Double.parseDouble(paramArr[26]);
                     angleUbUc = Double.parseDouble(paramArr[27]);
+
+                    System.out.println(threePhaseRefMeterParameters.toString());
                 }
             };
 
@@ -269,5 +273,14 @@ Sa , Sb , Sc , Pall(A.P.) ,Qall( R.P.) ,Sall( Apparent power) , Freq , U_Range ,
 
     public double getPFa() {
         return PFa;
+    }
+
+    @Override
+    public String toString() {
+        return "Ua = " + Ua + "\n" + "Ub = " + Ub + "\n" + "Uc = " + Uc + "\n" + "Ia = " + Ia + "\n" + "Ib = " + Ib + "\n" +
+                "Ic = " + Ic + "\n" + "angleUaIa = " + angleUaIa + "\n" + "angleUbIb = " + angleUbIb + "\n" + "angleUcIc = " + angleUcIc + "\n" +
+                "Pa = " + Pa + "\n" + "Pb = " + Pb + "\n" + "Pc = " + Pc + "\n" + "Qa = " + Qa + "\n" + "Qb = " + Qb + "\n" + "Qc = " + Qc + "\n" +
+                "Sa = " + Sa + "\n" + "Sb = " + Sb + "\n" + "Sc = " + Sc + "\n" + "Pall = " + Pall + "\n" + "Qall = " + Qall + "\n" + "Sall = " + Sall + "\n" +
+                "angleUaUb = " + angleUaUb + "\n" + "angleUbUc = " + angleUbUc;
     }
 }

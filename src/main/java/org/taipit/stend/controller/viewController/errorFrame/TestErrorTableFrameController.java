@@ -1,4 +1,4 @@
-package org.taipit.stend.controller.viewController;
+package org.taipit.stend.controller.viewController.errorFrame;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -29,6 +29,8 @@ import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
+import org.taipit.stend.controller.viewController.SaveResultsTestFrame;
+import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
@@ -1996,7 +1998,7 @@ public class TestErrorTableFrameController {
     }
 
     //Находит все скрол бары
-    void initScrolBars() {
+    public void initScrolBars() {
         ScrollBar verticalBarCommands;
         ScrollBar verticalBarErrorsFirst;
         ScrollBar verticalBarErrorsSecond;
@@ -2094,31 +2096,31 @@ public class TestErrorTableFrameController {
     //=====================================================================================
     //get sets
 
-    Label getTxtLabUn() {
+    public Label getTxtLabUn() {
         return txtLabUn;
     }
 
-    Label getTxtLabInom() {
+    public Label getTxtLabInom() {
         return txtLabInom;
     }
 
-    Label getTxtLabImax() {
+    public Label getTxtLabImax() {
         return txtLabImax;
     }
 
-    Label getTxtLabFn() {
+    public Label getTxtLabFn() {
         return txtLabFn;
     }
 
-    Label getTxtLabTypeCircuit() {
+    public Label getTxtLabTypeCircuit() {
         return txtLabTypeCircuit;
     }
 
-    Label getTxtLabAccuracyСlass() {
+    public Label getTxtLabAccuracyСlass() {
         return txtLabAccuracyСlass;
     }
 
-    Label getTxtLabDate() {
+    public Label getTxtLabDate() {
         return txtLabDate;
     }
 

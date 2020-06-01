@@ -30,6 +30,7 @@ import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.OnePhaseStend;
 import org.taipit.stend.controller.StendDLLCommands;
 import org.taipit.stend.controller.ThreePhaseStend;
+import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.frameManager.Frame;
 import org.taipit.stend.helper.frameManager.FrameManager;

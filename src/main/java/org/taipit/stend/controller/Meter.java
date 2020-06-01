@@ -2,7 +2,7 @@ package org.taipit.stend.controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import org.taipit.stend.controller.Commands.*;
-import org.taipit.stend.controller.viewController.TestErrorTableFrameController;
+import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 
 import java.io.Serializable;
 import java.util.ArrayList;

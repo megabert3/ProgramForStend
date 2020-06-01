@@ -1,5 +1,8 @@
 package org.taipit.stend.controller;
 
+import org.taipit.stend.model.refMeter.RefMeterParameters;
+import org.taipit.stend.model.refMeter.ThreePhaseRefMeterParameters;
+
 import java.util.concurrent.TimeUnit;
 
 public class MainStend {
@@ -14,25 +17,28 @@ public class MainStend {
 
         StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
 
+        ThreePhaseRefMeterParameters refMeterParameters = new ThreePhaseRefMeterParameters();
+
         String std;
 
         stendDLLCommands.setReviseMode(1);
 
         long timeEnd;
         long time = System.currentTimeMillis();
-        stendDLLCommands.getUI(1, 230.0, 5, 50, 0, 0, 100, 0.4, "H", "1.0");
+        stendDLLCommands.getUI(1, 230.0, 5, 50, 0, 0, 100, 100, "H", "1.0");
         timeEnd = System.currentTimeMillis() - time;
         System.out.println("Time to set command Adjust_UI " + timeEnd + " ms with RefType: " + stendDLLCommands.getTypeReferenceMeter());
+
 
         Thread.sleep(5000);
 
         time = System.currentTimeMillis();
         std = stendDLLCommands.stMeterRead();
         timeEnd = System.currentTimeMillis() - time;
-        System.out.println("Time to set command StdMeter_Read " + timeEnd + " ms with RefType: " + "HY5303C-22");
+        System.out.println("Time to set command StdMeter_Read " + timeEnd + " ms with RefType: " + stendDLLCommands.getTypeReferenceMeter());
         System.out.println("Values returned command StdMeter_Read \n" + std);
-
         stendDLLCommands.powerOf();
+
     }
 }
 //
