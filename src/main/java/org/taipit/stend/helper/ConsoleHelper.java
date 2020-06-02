@@ -128,6 +128,23 @@ public class ConsoleHelper {
         return yesOrNo;
     }
 
+    public static Object loadFrame(boolean modality, String path, String title) {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(ConsoleHelper.class.getResource(path));
+        try {
+            fxmlLoader.load();
+        }catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Ошибка при загрузке окна");
+        }
+
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.setScene(new Scene(fxmlLoader.getRoot()));
+
+        return fxmlLoader.getController();
+    }
+
 
     public static void getMessage(String mess) {
         System.out.println(mess);

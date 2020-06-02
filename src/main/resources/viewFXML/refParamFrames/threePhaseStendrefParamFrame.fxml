@@ -1,243 +1,201 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="384.0" prefWidth="168.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.errorFrame.ThreePhaseStendrefParamController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="327.0" prefWidth="623.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.errorFrame.ThreePhaseStendrefParamController">
    <children>
-      <GridPane gridLinesVisible="true" prefHeight="386.0" prefWidth="174.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="44.0" minWidth="0.0" prefWidth="30.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="114.0" minWidth="10.0" prefWidth="107.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="10.0" prefWidth="30.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-         </rowConstraints>
+      <GridPane layoutX="71.0" layoutY="106.0" prefHeight="375.0" prefWidth="623.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <GridPane gridLinesVisible="true" prefHeight="88.0" prefWidth="99.0" GridPane.columnIndex="1">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="21.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" percentHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="A" />
-                  <Label fx:id="labIa" alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="0.000" GridPane.rowIndex="2" />
-                  <Label fx:id="labAang" alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="0.000" GridPane.rowIndex="3" />
-                  <Label fx:id="labUa" alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="0.000" GridPane.rowIndex="1" />
-               </children>
-            </GridPane>
-            <GridPane gridLinesVisible="true" prefHeight="88.0" prefWidth="99.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <GridPane gridLinesVisible="true">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="10.0" prefWidth="30.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="79.0" minWidth="10.0" prefWidth="30.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="21.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="B" />
-                  <Label fx:id="labUb" alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="0.000" GridPane.rowIndex="1" />
-                  <Label fx:id="labIb" alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="0.000" GridPane.rowIndex="2" />
-                  <Label fx:id="labBang" alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="0.000" GridPane.rowIndex="3" />
-               </children>
-            </GridPane>
-            <GridPane gridLinesVisible="true" prefHeight="88.0" prefWidth="99.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="21.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="C" />
-                  <Label fx:id="labUc" alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="0.000" GridPane.rowIndex="1" />
-                  <Label fx:id="labIc" alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="0.000" GridPane.rowIndex="2" />
-                  <Label fx:id="labCang" alignment="CENTER" prefHeight="17.0" prefWidth="110.0" text="0.000" GridPane.rowIndex="3" />
-               </children>
-            </GridPane>
-            <GridPane prefHeight="115.0" prefWidth="33.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="U" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="I" GridPane.rowIndex="2">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="φ" GridPane.rowIndex="3">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-            </GridPane>
-            <GridPane prefHeight="115.0" prefWidth="33.0" GridPane.rowIndex="1">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="U" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="I" GridPane.rowIndex="2">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="φ" GridPane.rowIndex="3">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-            </GridPane>
-            <GridPane prefHeight="115.0" prefWidth="33.0" GridPane.rowIndex="2">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="U" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="I" GridPane.rowIndex="2">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="φ" GridPane.rowIndex="3">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-            </GridPane>
-            <GridPane prefHeight="115.0" prefWidth="33.0" GridPane.columnIndex="2">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="В" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="А" GridPane.rowIndex="2">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="°" GridPane.rowIndex="3">
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="100.0" text="A" GridPane.columnIndex="1">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
+                  <TextField fx:id="txtFldUA" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="U" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="B" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtFldIA" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtFldDegA" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtFldPFA" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtFldPA" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="txtFldQA" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="txtFldSA" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="I" GridPane.rowIndex="2" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="φ" GridPane.rowIndex="3" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="PF" GridPane.rowIndex="4" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="P" GridPane.rowIndex="5" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Q" GridPane.rowIndex="6" />
+                  <Label alignment="CENTER" prefWidth="28.0" text="S" GridPane.rowIndex="7" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="A" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="°" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Вт" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Вар" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="ВА" GridPane.columnIndex="2" GridPane.rowIndex="7" />
                </children>
             </GridPane>
-            <GridPane prefHeight="115.0" prefWidth="33.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <GridPane gridLinesVisible="true" GridPane.columnIndex="1">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="10.0" prefWidth="30.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="79.0" minWidth="10.0" prefWidth="30.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="В" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="А" GridPane.rowIndex="2">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="°" GridPane.rowIndex="3">
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="100.0" text="B" GridPane.columnIndex="1">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
+                  <TextField fx:id="txtFldUB" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="U" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="B" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtFldIB" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtFldDegB" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtFldPFB" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtFldPB" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="txtFldQB" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="txtFldSB" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="I" GridPane.rowIndex="2" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="φ" GridPane.rowIndex="3" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="PF" GridPane.rowIndex="4" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="P" GridPane.rowIndex="5" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Q" GridPane.rowIndex="6" />
+                  <Label alignment="CENTER" prefWidth="28.0" text="S" GridPane.rowIndex="7" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="A" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="°" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Вт" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Вар" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="ВА" GridPane.columnIndex="2" GridPane.rowIndex="7" />
                </children>
             </GridPane>
-            <GridPane prefHeight="115.0" prefWidth="33.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <GridPane gridLinesVisible="true" GridPane.columnIndex="2">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="10.0" prefWidth="30.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="79.0" minWidth="10.0" prefWidth="30.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="В" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="А" GridPane.rowIndex="2">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="°" GridPane.rowIndex="3">
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="100.0" text="B" GridPane.columnIndex="1">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
+                  <TextField fx:id="txtFldUC" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="U" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="B" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtFldIC" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtFldDegC" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtFldPFC" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtFldPC" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="txtFldQC" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="txtFldSC" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="I" GridPane.rowIndex="2" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="φ" GridPane.rowIndex="3" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="PF" GridPane.rowIndex="4" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="P" GridPane.rowIndex="5" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Q" GridPane.rowIndex="6" />
+                  <Label alignment="CENTER" prefWidth="28.0" text="S" GridPane.rowIndex="7" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="A" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="°" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Вт" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Вар" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="ВА" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+               </children>
+            </GridPane>
+            <GridPane gridLinesVisible="true" GridPane.columnIndex="3">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="47.0" minWidth="10.0" prefWidth="35.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="79.0" minWidth="10.0" prefWidth="30.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="100.0" text="Общие" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtFldF" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="F" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Гц" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtFldPall" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtFldQall" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtFldSall" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtFldPFall" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="txtFldUaUb" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="txtFldUbUc" alignment="CENTER" text="0.000" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Pall" GridPane.rowIndex="2" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Qall" GridPane.rowIndex="3" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Sall" GridPane.rowIndex="4" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="PFall" GridPane.rowIndex="5" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="UaUb" GridPane.rowIndex="6" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Вт" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Вар" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="°" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="°" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="UbUc" GridPane.rowIndex="7" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="ВА" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                </children>
             </GridPane>
          </children>

@@ -23,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.*;
@@ -35,9 +36,6 @@ import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
-import org.taipit.stend.model.refMeter.OnePhaseRefMeterParameters;
-import org.taipit.stend.model.refMeter.RefMeterParameters;
-import org.taipit.stend.model.refMeter.ThreePhaseRefMeterParameters;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -50,7 +48,9 @@ public class TestErrorTableFrameController {
 
     private StendDLLCommands stendDLLCommands;
 
-    private RefMeterParameters refMeterParameters;
+    private StendRefParametersForFrame stendRefParametersForFrame;
+
+    private Stage refMeterStage;
 
     private boolean twoCircut;
 
@@ -493,7 +493,13 @@ public class TestErrorTableFrameController {
 
     @FXML
     void refMeterParamAction(ActionEvent event) {
-
+        if (event.getSource() == refMeterParam) {
+            if (refMeterParam.isSelected()) {
+                refMeterStage.show();
+            } else {
+                refMeterStage.hide();
+            }
+        }
     }
 
     @FXML
@@ -1929,12 +1935,41 @@ public class TestErrorTableFrameController {
         });
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
-            refMeterParameters = new ThreePhaseRefMeterParameters();
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/refParamFrames/threePhaseStendrefParamFrame.fxml"));
+                    try {
+                        fxmlLoader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.out.println("Ошибка при загрузке окна.");
+                    }
+
+                    Stage stage = new Stage();
+                    Scene scene = new Scene(fxmlLoader.getRoot());
+                    stage.setTitle("Методики");
+                    stage.setScene(scene);
+
+                    stendRefParametersForFrame = (ThreePhaseStendrefParamController) fxmlLoader.getController();
+                    stendRefParametersForFrame.initTimer(stendDLLCommands);
+                    stendRefParametersForFrame.addMovingActions();
+
+                    stage.initStyle(StageStyle.TRANSPARENT);
+
+
+
+                    refMeterStage = stage;
+
+                    stage.hide();
+                }
+            });
+
         } else {
-            refMeterParameters = new OnePhaseRefMeterParameters();
+            //refMeterParameters = new OnePhaseRefMeterParameters();
         }
-
-
     }
 
     //Добавляет объект resultError к каждому счётчику необходимому для теста
