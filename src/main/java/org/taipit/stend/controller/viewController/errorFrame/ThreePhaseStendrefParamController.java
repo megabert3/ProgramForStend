@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.taipit.stend.controller.StendDLLCommands;
 
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -158,34 +159,39 @@ public class ThreePhaseStendrefParamController implements StendRefParametersForF
                     if (meterParam.length != 0) {
                         //Ua,Ub,Uc,Ia,Ib,Ic,Angle_UaIa, Angle_UbIb, Angle_UcIc, Pa , Pb , Pc , Qa , Qb , Qc , Sa , Sb , Sc ,
                         //Pall(A.P.),Qall(R.P.),Sall(Apparent power), Freq ,PFa,PFb,PFc,PFall, Angle_UaUb, Angle_UbUc
-                        txtFldUA.setText(meterParam[0]);
-                        txtFldUB.setText(meterParam[1]);
-                        txtFldUC.setText(meterParam[2]);
-                        txtFldIA.setText(meterParam[3]);
-                        txtFldIB.setText(meterParam[4]);
-                        txtFldIC.setText(meterParam[5]);
-                        txtFldDegA.setText(meterParam[6]);
-                        txtFldDegB.setText(meterParam[7]);
-                        txtFldDegC.setText(meterParam[8]);
-                        txtFldPA.setText(meterParam[9]);
-                        txtFldPB.setText(meterParam[10]);
-                        txtFldPC.setText(meterParam[11]);
-                        txtFldQA.setText(meterParam[12]);
-                        txtFldQB.setText(meterParam[13]);
-                        txtFldQC.setText(meterParam[14]);
-                        txtFldSA.setText(meterParam[15]);
-                        txtFldSB.setText(meterParam[16]);
-                        txtFldSC.setText(meterParam[17]);
-                        txtFldPall.setText(meterParam[18]);
-                        txtFldQall.setText(meterParam[19]);
-                        txtFldSall.setText(meterParam[20]);
-                        txtFldF.setText(meterParam[21]);
-                        txtFldPFA.setText(meterParam[22]);
-                        txtFldPFB.setText(meterParam[23]);
-                        txtFldPFC.setText(meterParam[24]);
-                        txtFldPFall.setText(meterParam[25]);
-                        txtFldUaUb.setText(meterParam[26]);
-                        txtFldUbUc.setText(meterParam[27]);
+                        System.out.println(Arrays.toString(meterParam));
+                        try {
+                            txtFldUA.setText(meterParam[0]);
+                            txtFldUB.setText(meterParam[1]);
+                            txtFldUC.setText(meterParam[2]);
+                            txtFldIA.setText(meterParam[3]);
+                            txtFldIB.setText(meterParam[4]);
+                            txtFldIC.setText(meterParam[5]);
+                            txtFldDegA.setText(meterParam[6]);
+                            txtFldDegB.setText(meterParam[7]);
+                            txtFldDegC.setText(meterParam[8]);
+                            txtFldPA.setText(meterParam[9]);
+                            txtFldPB.setText(meterParam[10]);
+                            txtFldPC.setText(meterParam[11]);
+                            txtFldQA.setText(meterParam[12]);
+                            txtFldQB.setText(meterParam[13]);
+                            txtFldQC.setText(meterParam[14]);
+                            txtFldSA.setText(meterParam[15]);
+                            txtFldSB.setText(meterParam[16]);
+                            txtFldSC.setText(meterParam[17]);
+                            txtFldPall.setText(meterParam[18]);
+                            txtFldQall.setText(meterParam[19]);
+                            txtFldSall.setText(meterParam[20]);
+                            txtFldF.setText(meterParam[21]);
+                            txtFldPFA.setText(meterParam[22]);
+                            txtFldPFB.setText(meterParam[23]);
+                            txtFldPFC.setText(meterParam[24]);
+                            txtFldPFall.setText(meterParam[25]);
+                            txtFldUaUb.setText(meterParam[26]);
+                            txtFldUbUc.setText(meterParam[27]);
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             };

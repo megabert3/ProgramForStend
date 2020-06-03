@@ -1,6 +1,5 @@
 package org.taipit.stend.controller;
 
-import org.taipit.stend.model.refMeter.RefMeterParameters;
 import org.taipit.stend.model.refMeter.ThreePhaseRefMeterParameters;
 
 import java.util.concurrent.TimeUnit;
@@ -25,7 +24,8 @@ public class MainStend {
 
         long timeEnd;
         long time = System.currentTimeMillis();
-        stendDLLCommands.getUI(1, 230.0, 5, 50, 0, 0, 100, 100, "H", "1.0");
+        //stendDLLCommands.getUI(0, 230.0, 5, 50, 0, 0, 100, 100, "С", "1.0");
+        stendDLLCommands.getUIWithPhase(1, 230.0, 5, 50, 0, 0, 0, 0, 100, 100, "A", "1.0");
         timeEnd = System.currentTimeMillis() - time;
         System.out.println("Time to set command Adjust_UI " + timeEnd + " ms with RefType: " + stendDLLCommands.getTypeReferenceMeter());
 

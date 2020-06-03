@@ -1089,437 +1089,21 @@ public class TestErrorTableFrameController {
 
         //Установка команд для таблицы с выбором команды для испытания
         char[] idChar;
-
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-            String typeCircut = ConsoleHelper.properties.getProperty("threePhaseStand.lastTypeCircuit");
-
-            if (methodicForStend instanceof MethodicForOnePhaseStend) {
-                //AP+
-                //Добавляю точки ErrorCommand
-                for (Commands command : methodicForStend.getCommandsMap().get(0)) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[2] == 'H') {
-                        command.setPhase(1);
-                        commandsAPPls.add(command);
-                    }
-                }
-
-                //Добавляю точки ErrorCommand с окна влияния
-                for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[4] == 'H') {
-                        command.setPhase(1);
-                        commandsAPPls.add(command);
-                    }
-                }
-
-                for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
-                    command.setPhase(1);
-                    commandsAPPls.add(command);
-                }
-
-
-                //AP-
-                //Добавляю точки ErrorCommand
-                for (Commands command : methodicForStend.getCommandsMap().get(1)) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[2] == 'H') {
-                        command.setPhase(1);
-                        commandsAPMns.add(command);
-                    }
-                }
-
-                //Добавляю точки ErrorCommand с окна влияния
-                for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[4] == 'H') {
-                        command.setPhase(1);
-                        commandsAPMns.add(command);
-                    }
-                }
-
-                for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
-                    command.setPhase(1);
-                    commandsAPMns.add(command);
-                }
-
-                //RP+
-                //Добавляю точки ErrorCommand
-                for (Commands command : methodicForStend.getCommandsMap().get(2)) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[2] == 'H') {
-                        command.setPhase(5);
-                        commandsRPPls.add(command);
-                    }
-                }
-
-                //Добавляю точки ErrorCommand с окна влияния
-                for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[4] == 'H') {
-                        command.setPhase(5);
-                        commandsRPPls.add(command);
-                    }
-                }
-
-                for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
-                    command.setPhase(5);
-                    commandsRPPls.add(command);
-                }
-
-                //RP-
-                //Добавляю точки ErrorCommand
-                for (Commands command : methodicForStend.getCommandsMap().get(3)) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[2] == 'H') {
-                        command.setPhase(5);
-                        commandsRPMns.add(command);
-                    }
-                }
-
-                //Добавляю точки ErrorCommand с окна влияния
-                for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[4] == 'H') {
-                        command.setPhase(5);
-                        commandsRPMns.add(command);
-                    }
-                }
-
-                for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
-                    command.setPhase(5);
-                    commandsRPMns.add(command);
-                }
-
-            } else {
-                //3P4W, 3P3W, 3P3W 90 R.P., 3P3W 60 R.P.
-                if (typeCircut.equals("3P4W")) {
-
-                    for (Commands command : methodicForStend.getCommandsMap().get(0)) {
-                        command.setPhase(1);
-                        commandsAPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
-                        command.setPhase(1);
-                        commandsAPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
-                        command.setPhase(1);
-                        commandsAPPls.add(command);
-                    }
-
-
-                    for (Commands command : methodicForStend.getCommandsMap().get(1)) {
-                        command.setPhase(1);
-                        commandsAPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
-                        command.setPhase(1);
-                        commandsAPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
-                        command.setPhase(1);
-                        commandsAPMns.add(command);
-                    }
-
-
-                    for (Commands command : methodicForStend.getCommandsMap().get(2)) {
-                        command.setPhase(5);
-                        commandsRPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
-                        command.setPhase(5);
-                        commandsRPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
-                        command.setPhase(5);
-                        commandsRPPls.add(command);
-                    }
-
-
-                    for (Commands command : methodicForStend.getCommandsMap().get(3)) {
-                        command.setPhase(5);
-                        commandsRPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
-                        command.setPhase(5);
-                        commandsRPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
-                        command.setPhase(5);
-                        commandsRPMns.add(command);
-                    }
-
-                } else if (typeCircut.equals("3P3W")) {
-
-                    //AP+
-                    for (Commands command : methodicForStend.getCommandsMap().get(0)) {
-                        command.setPhase(2);
-                        commandsAPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
-                        command.setPhase(2);
-                        commandsAPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
-                        command.setPhase(2);
-                        commandsAPPls.add(command);
-                    }
-
-                    //AP-
-                    for (Commands command : methodicForStend.getCommandsMap().get(1)) {
-                        command.setPhase(2);
-                        commandsAPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
-                        command.setPhase(2);
-                        commandsAPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
-                        command.setPhase(2);
-                        commandsAPMns.add(command);
-                    }
-
-                    //RP+
-                    for (Commands command : methodicForStend.getCommandsMap().get(2)) {
-                        command.setPhase(6);
-                        commandsRPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
-                        command.setPhase(6);
-                        commandsRPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
-                        command.setPhase(6);
-                        commandsRPPls.add(command);
-                    }
-
-                    //RP-
-                    for (Commands command : methodicForStend.getCommandsMap().get(3)) {
-                        command.setPhase(6);
-                        commandsRPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
-                        command.setPhase(6);
-                        commandsRPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
-                        command.setPhase(6);
-                        commandsRPMns.add(command);
-                    }
-
-                } else if (typeCircut.equals("3P3W 90 R.P.")) {
-                    //RP+
-                    for (Commands command : methodicForStend.getCommandsMap().get(2)) {
-                        command.setPhase(3);
-                        commandsRPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
-                        command.setPhase(3);
-                        commandsRPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
-                        command.setPhase(3);
-                        commandsRPPls.add(command);
-                    }
-
-                    //RP-
-                    for (Commands command : methodicForStend.getCommandsMap().get(3)) {
-                        command.setPhase(3);
-                        commandsRPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
-                        command.setPhase(3);
-                        commandsRPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
-                        command.setPhase(3);
-                        commandsRPMns.add(command);
-                    }
-
-                } else if (typeCircut.equals("3P3W 60 R.P.")) {
-                    //RP+
-                    for (Commands command : methodicForStend.getCommandsMap().get(2)) {
-                        command.setPhase(4);
-                        commandsRPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
-                        command.setPhase(4);
-                        commandsRPPls.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
-                        command.setPhase(4);
-                        commandsRPPls.add(command);
-                    }
-
-                    //RP-
-                    for (Commands command : methodicForStend.getCommandsMap().get(3)) {
-                        command.setPhase(4);
-                        commandsRPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
-                        command.setPhase(4);
-                        commandsRPMns.add(command);
-                    }
-
-                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
-                        command.setPhase(4);
-                        commandsRPMns.add(command);
-                    }
-                }
-            }
-
-            //Однофазный стенд
-        } else {
-
-            if (methodicForStend instanceof ThreePhaseStend) {
-
-                //AP+
-                //Добавляю точки ErrorCommand
-                for (Commands command : methodicForStend.getCommandsMap().get(0)) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[2] == 'H') {
-                        command.setPhase(0);
-                        commandsAPPls.add(command);
-                    }
-                }
-
-                //Добавляю точки ErrorCommand с окна влияния
-                for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[4] == 'H') {
-                        command.setPhase(0);
-                        commandsAPPls.add(command);
-                    }
-                }
-
-                for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
-                    command.setPhase(0);
-                    commandsAPPls.add(command);
-                }
-
-                //AP-
-                //Добавляю точки ErrorCommand
-                for (Commands command : methodicForStend.getCommandsMap().get(1)) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[2] == 'H') {
-                        command.setPhase(0);
-                        commandsAPMns.add(command);
-                    }
-                }
-
-                //Добавляю точки ErrorCommand с окна влияния
-                for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[4] == 'H') {
-                        command.setPhase(0);
-                        commandsAPMns.add(command);
-                    }
-                }
-
-                for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
-                    command.setPhase(0);
-                    commandsAPMns.add(command);
-                }
-
-                //RP+
-                //Добавляю точки ErrorCommand
-                for (Commands command : methodicForStend.getCommandsMap().get(2)) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[2] == 'H') {
-                        command.setPhase(7);
-                        commandsRPPls.add(command);
-                    }
-                }
-
-                //Добавляю точки ErrorCommand с окна влияния
-                for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[4] == 'H') {
-                        command.setPhase(7);
-                        commandsRPPls.add(command);
-                    }
-                }
-
-                for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
-                    command.setPhase(7);
-                    commandsRPPls.add(command);
-                }
-
-                //RP-
-                //Добавляю точки ErrorCommand
-                for (Commands command : methodicForStend.getCommandsMap().get(3)) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[2] == 'H') {
-                        command.setPhase(7);
-                        commandsRPMns.add(command);
-                    }
-                }
-
-                //Добавляю точки ErrorCommand с окна влияния
-                for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
-                    idChar = command.getId().toCharArray();
-
-                    if (idChar[4] == 'H') {
-                        command.setPhase(7);
-                        commandsRPMns.add(command);
-                    }
-                }
-
-                for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
-                    command.setPhase(7);
-                    commandsRPMns.add(command);
-                }
-
-            } else {
-
-                if (twoCircut) {
-
+        Commands cloneCommand;
+        try {
+            if (stendDLLCommands instanceof ThreePhaseStend) {
+                String typeCircut = ConsoleHelper.properties.getProperty("threePhaseStand.lastTypeCircuit");
+
+                if (methodicForStend instanceof MethodicForOnePhaseStend) {
                     //AP+
                     //Добавляю точки ErrorCommand
                     for (Commands command : methodicForStend.getCommandsMap().get(0)) {
                         idChar = command.getId().toCharArray();
 
-                        if (idChar[2] != 'H') {
-                            commandsAPPls.add(command);
+                        if (idChar[2] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPPls.add(cloneCommand);
                         }
                     }
 
@@ -1527,20 +1111,29 @@ public class TestErrorTableFrameController {
                     for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
                         idChar = command.getId().toCharArray();
 
-                        if (idChar[4] != 'H') {
-                            commandsAPPls.add(command);
+                        if (idChar[4] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPPls.add(cloneCommand);
                         }
                     }
 
-                    commandsAPPls.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(0));
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
+                        cloneCommand = command.clone();
+                        cloneCommand.setPhase(0);
+                        commandsAPPls.add(cloneCommand);
+                    }
+
 
                     //AP-
                     //Добавляю точки ErrorCommand
                     for (Commands command : methodicForStend.getCommandsMap().get(1)) {
                         idChar = command.getId().toCharArray();
 
-                        if (idChar[2] != 'H') {
-                            commandsAPMns.add(command);
+                        if (idChar[2] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPMns.add(cloneCommand);
                         }
                     }
 
@@ -1548,20 +1141,28 @@ public class TestErrorTableFrameController {
                     for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
                         idChar = command.getId().toCharArray();
 
-                        if (idChar[4] != 'H') {
-                            commandsAPMns.add(command);
+                        if (idChar[4] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPMns.add(cloneCommand);
                         }
                     }
 
-                    commandsAPMns.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(1));
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
+                        cloneCommand = command.clone();
+                        cloneCommand.setPhase(0);
+                        commandsAPMns.add(cloneCommand);
+                    }
 
                     //RP+
                     //Добавляю точки ErrorCommand
                     for (Commands command : methodicForStend.getCommandsMap().get(2)) {
                         idChar = command.getId().toCharArray();
 
-                        if (idChar[2] != 'H') {
-                            commandsRPPls.add(command);
+                        if (idChar[2] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPPls.add(cloneCommand);
                         }
                     }
 
@@ -1569,20 +1170,28 @@ public class TestErrorTableFrameController {
                     for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
                         idChar = command.getId().toCharArray();
 
-                        if (idChar[4] != 'H') {
-                            commandsRPPls.add(command);
+                        if (idChar[4] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPPls.add(cloneCommand);
                         }
                     }
 
-                    commandsRPPls.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(2));
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
+                        cloneCommand = command.clone();
+                        cloneCommand.setPhase(7);
+                        commandsRPPls.add(cloneCommand);
+                    }
 
                     //RP-
                     //Добавляю точки ErrorCommand
                     for (Commands command : methodicForStend.getCommandsMap().get(3)) {
                         idChar = command.getId().toCharArray();
 
-                        if (idChar[2] != 'H') {
-                            commandsRPMns.add(command);
+                        if (idChar[2] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPMns.add(cloneCommand);
                         }
                     }
 
@@ -1590,100 +1199,618 @@ public class TestErrorTableFrameController {
                     for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
                         idChar = command.getId().toCharArray();
 
-                        if (idChar[4] != 'H') {
-                            commandsRPMns.add(command);
+                        if (idChar[4] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPMns.add(cloneCommand);
                         }
                     }
 
-                    commandsRPMns.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(3));
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
+                        cloneCommand = command.clone();
+                        cloneCommand.setPhase(7);
+                        commandsRPMns.add(cloneCommand);
+                    }
+
+                } else {
+                    //3P4W, 3P3W, 3P3W 90 R.P., 3P3W 60 R.P.
+                    if (typeCircut.equals("3P4W")) {
+
+                        for (Commands command : methodicForStend.getCommandsMap().get(0)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(1);
+                            commandsAPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(1);
+                            commandsAPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(1);
+                            commandsAPPls.add(cloneCommand);
+                        }
+
+
+                        for (Commands command : methodicForStend.getCommandsMap().get(1)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(1);
+                            commandsAPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(1);
+                            commandsAPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(1);
+                            commandsAPMns.add(cloneCommand);
+                        }
+
+
+                        for (Commands command : methodicForStend.getCommandsMap().get(2)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(5);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(5);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(5);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+
+                        for (Commands command : methodicForStend.getCommandsMap().get(3)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(5);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(5);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(5);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                    } else if (typeCircut.equals("3P3W")) {
+
+                        for (Commands command : methodicForStend.getCommandsMap().get(0)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(2);
+                            commandsAPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(2);
+                            commandsAPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(2);
+                            commandsAPPls.add(cloneCommand);
+                        }
+
+
+                        for (Commands command : methodicForStend.getCommandsMap().get(1)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(2);
+                            commandsAPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(2);
+                            commandsAPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(2);
+                            commandsAPMns.add(cloneCommand);
+                        }
+
+
+                        for (Commands command : methodicForStend.getCommandsMap().get(2)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(6);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(6);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(6);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+
+                        for (Commands command : methodicForStend.getCommandsMap().get(3)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(6);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(6);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(6);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                    } else if (typeCircut.equals("3P3W 90 R.P.")) {
+                        //RP+
+                        for (Commands command : methodicForStend.getCommandsMap().get(2)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(3);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(3);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(3);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        //RP-
+                        for (Commands command : methodicForStend.getCommandsMap().get(3)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(3);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(3);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(3);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                    } else if (typeCircut.equals("3P3W 60 R.P.")) {
+                        //RP+
+                        for (Commands command : methodicForStend.getCommandsMap().get(2)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(4);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(4);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(4);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        //RP-
+                        for (Commands command : methodicForStend.getCommandsMap().get(3)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(4);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(4);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(4);
+                            commandsRPMns.add(cloneCommand);
+                        }
+                    }
+                }
+
+                //Однофазный стенд
+            } else {
+
+                if (methodicForStend instanceof ThreePhaseStend) {
+
+                    //AP+
+                    //Добавляю точки ErrorCommand
+                    for (Commands command : methodicForStend.getCommandsMap().get(0)) {
+                        idChar = command.getId().toCharArray();
+
+                        if (idChar[2] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPPls.add(cloneCommand);
+                        }
+                    }
+
+                    //Добавляю точки ErrorCommand с окна влияния
+                    for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
+                        idChar = command.getId().toCharArray();
+
+                        if (idChar[4] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPPls.add(cloneCommand);
+                        }
+                    }
+
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
+                        cloneCommand = command.clone();
+                        cloneCommand.setPhase(0);
+                        commandsAPPls.add(cloneCommand);
+                    }
+
+                    //AP-
+                    //Добавляю точки ErrorCommand
+                    for (Commands command : methodicForStend.getCommandsMap().get(1)) {
+                        idChar = command.getId().toCharArray();
+
+                        if (idChar[2] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPMns.add(cloneCommand);
+                        }
+                    }
+
+                    //Добавляю точки ErrorCommand с окна влияния
+                    for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
+                        idChar = command.getId().toCharArray();
+
+                        if (idChar[4] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPMns.add(cloneCommand);
+                        }
+                    }
+
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
+                        cloneCommand = command.clone();
+                        cloneCommand.setPhase(0);
+                        commandsAPMns.add(cloneCommand);
+                    }
+
+                    //RP+
+                    //Добавляю точки ErrorCommand
+                    for (Commands command : methodicForStend.getCommandsMap().get(2)) {
+                        idChar = command.getId().toCharArray();
+
+                        if (idChar[2] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPPls.add(cloneCommand);
+                        }
+                    }
+
+                    //Добавляю точки ErrorCommand с окна влияния
+                    for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
+                        idChar = command.getId().toCharArray();
+
+                        if (idChar[4] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPPls.add(cloneCommand);
+                        }
+                    }
+
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
+                        cloneCommand = command.clone();
+                        cloneCommand.setPhase(7);
+                        commandsRPPls.add(cloneCommand);
+                    }
+
+                    //RP-
+                    //Добавляю точки ErrorCommand
+                    for (Commands command : methodicForStend.getCommandsMap().get(3)) {
+                        idChar = command.getId().toCharArray();
+
+                        if (idChar[2] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPMns.add(cloneCommand);
+                        }
+                    }
+
+                    //Добавляю точки ErrorCommand с окна влияния
+                    for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
+                        idChar = command.getId().toCharArray();
+
+                        if (idChar[4] == 'H') {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPMns.add(cloneCommand);
+                        }
+                    }
+
+                    for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
+                        cloneCommand = command.clone();
+                        cloneCommand.setPhase(7);
+                        commandsRPMns.add(cloneCommand);
+                    }
 
                 } else {
 
-                    //AP+
-                    //Добавляю точки ErrorCommand
-                    for (Commands command : methodicForStend.getCommandsMap().get(0)) {
-                        idChar = command.getId().toCharArray();
+                    if (twoCircut) {
 
-                        if (idChar[2] == 'H') {
-                            commandsAPPls.add(command);
+                        //AP+
+                        //Добавляю точки ErrorCommand
+                        for (Commands command : methodicForStend.getCommandsMap().get(0)) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[2] != 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(0);
+                                commandsAPPls.add(cloneCommand);
+                            }
+                        }
+
+                        //Добавляю точки ErrorCommand с окна влияния
+                        for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[4] != 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(0);
+                                commandsAPPls.add(cloneCommand);
+                            }
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPPls.add(cloneCommand);
+                        }
+
+                        //AP-
+                        //Добавляю точки ErrorCommand
+                        for (Commands command : methodicForStend.getCommandsMap().get(1)) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[2] != 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(0);
+                                commandsAPMns.add(cloneCommand);
+                            }
+                        }
+
+                        //Добавляю точки ErrorCommand с окна влияния
+                        for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[4] != 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(0);
+                                commandsAPMns.add(cloneCommand);
+                            }
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPMns.add(cloneCommand);
+                        }
+
+                        //RP+
+                        //Добавляю точки ErrorCommand
+                        for (Commands command : methodicForStend.getCommandsMap().get(2)) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[2] != 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(7);
+                                commandsRPPls.add(cloneCommand);
+                            }
+                        }
+
+                        //Добавляю точки ErrorCommand с окна влияния
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[4] != 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(7);
+                                commandsRPPls.add(cloneCommand);
+                            }
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        //RP-
+                        //Добавляю точки ErrorCommand
+                        for (Commands command : methodicForStend.getCommandsMap().get(3)) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[2] != 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(7);
+                                commandsRPMns.add(cloneCommand);
+                            }
+                        }
+
+                        //Добавляю точки ErrorCommand с окна влияния
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[4] != 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(7);
+                                commandsRPMns.add(cloneCommand);
+                            }
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPMns.add(cloneCommand);
+                        }
+
+                    } else {
+
+                        //AP+
+                        //Добавляю точки ErrorCommand
+                        for (Commands command : methodicForStend.getCommandsMap().get(0)) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[2] == 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(0);
+                                commandsAPPls.add(cloneCommand);
+                            }
+                        }
+
+                        //Добавляю точки ErrorCommand с окна влияния
+                        for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[4] == 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(0);
+                                commandsAPPls.add(cloneCommand);
+                            }
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPPls.add(cloneCommand);
+                        }
+
+                        //AP-
+                        //Добавляю точки ErrorCommand
+                        for (Commands command : methodicForStend.getCommandsMap().get(1)) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[2] == 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(0);
+                                commandsAPMns.add(cloneCommand);
+                            }
+                        }
+
+                        //Добавляю точки ErrorCommand с окна влияния
+                        for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[4] == 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(0);
+                                commandsAPMns.add(cloneCommand);
+                            }
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(0);
+                            commandsAPMns.add(cloneCommand);
+                        }
+
+                        //RP+
+                        //Добавляю точки ErrorCommand
+                        for (Commands command : methodicForStend.getCommandsMap().get(2)) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[2] == 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(7);
+                                commandsRPPls.add(cloneCommand);
+                            }
+                        }
+
+                        //Добавляю точки ErrorCommand с окна влияния
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[4] == 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(7);
+                                commandsRPPls.add(cloneCommand);
+                            }
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPPls.add(cloneCommand);
+                        }
+
+                        //RP-
+                        //Добавляю точки ErrorCommand
+                        for (Commands command : methodicForStend.getCommandsMap().get(3)) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[2] == 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(7);
+                                commandsRPMns.add(cloneCommand);
+                            }
+                        }
+
+                        //Добавляю точки ErrorCommand с окна влияния
+                        for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
+                            idChar = command.getId().toCharArray();
+
+                            if (idChar[4] == 'H') {
+                                cloneCommand = command.clone();
+                                cloneCommand.setPhase(7);
+                                commandsRPMns.add(cloneCommand);
+                            }
+                        }
+
+                        for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
+                            cloneCommand = command.clone();
+                            cloneCommand.setPhase(7);
+                            commandsRPMns.add(cloneCommand);
                         }
                     }
-
-                    //Добавляю точки ErrorCommand с окна влияния
-                    for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
-                        idChar = command.getId().toCharArray();
-
-                        if (idChar[4] == 'H') {
-                            commandsAPPls.add(command);
-                        }
-                    }
-
-                    commandsAPPls.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(0));
-
-                    //AP-
-                    //Добавляю точки ErrorCommand
-                    for (Commands command : methodicForStend.getCommandsMap().get(1)) {
-                        idChar = command.getId().toCharArray();
-
-                        if (idChar[2] == 'H') {
-                            commandsAPMns.add(command);
-                        }
-                    }
-
-                    //Добавляю точки ErrorCommand с окна влияния
-                    for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
-                        idChar = command.getId().toCharArray();
-
-                        if (idChar[4] == 'H') {
-                            commandsAPMns.add(command);
-                        }
-                    }
-
-                    commandsAPMns.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(1));
-
-                    //RP+
-                    //Добавляю точки ErrorCommand
-                    for (Commands command : methodicForStend.getCommandsMap().get(2)) {
-                        idChar = command.getId().toCharArray();
-
-                        if (idChar[2] == 'H') {
-                            commandsRPPls.add(command);
-                        }
-                    }
-
-                    //Добавляю точки ErrorCommand с окна влияния
-                    for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
-                        idChar = command.getId().toCharArray();
-
-                        if (idChar[4] == 'H') {
-                            commandsRPPls.add(command);
-                        }
-                    }
-
-                    commandsRPPls.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(2));
-
-                    //RP-
-                    //Добавляю точки ErrorCommand
-                    for (Commands command : methodicForStend.getCommandsMap().get(3)) {
-                        idChar = command.getId().toCharArray();
-
-                        if (idChar[2] == 'H') {
-                            commandsRPMns.add(command);
-                        }
-                    }
-
-                    //Добавляю точки ErrorCommand с окна влияния
-                    for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
-                        idChar = command.getId().toCharArray();
-
-                        if (idChar[4] == 'H') {
-                            commandsRPMns.add(command);
-                        }
-                    }
-
-                    commandsRPMns.addAll(methodicForStend.getCreepStartRTCConstCommandsMap().get(3));
                 }
             }
+        }catch (CloneNotSupportedException e) {
+            e.printStackTrace();
         }
 
         initErrorsForMeters();
@@ -1934,42 +2061,40 @@ public class TestErrorTableFrameController {
             }
         });
 
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/refParamFrames/threePhaseStendrefParamFrame.fxml"));
-                    try {
-                        fxmlLoader.load();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        System.out.println("Ошибка при загрузке окна.");
-                    }
-
-                    Stage stage = new Stage();
-                    Scene scene = new Scene(fxmlLoader.getRoot());
-                    stage.setTitle("Методики");
-                    stage.setScene(scene);
-
-                    stendRefParametersForFrame = (ThreePhaseStendrefParamController) fxmlLoader.getController();
-                    stendRefParametersForFrame.initTimer(stendDLLCommands);
-                    stendRefParametersForFrame.addMovingActions();
-
-                    stage.initStyle(StageStyle.TRANSPARENT);
-
-
-
-                    refMeterStage = stage;
-
-                    stage.hide();
-                }
-            });
-
-        } else {
-            //refMeterParameters = new OnePhaseRefMeterParameters();
-        }
+//        if (stendDLLCommands instanceof ThreePhaseStend) {
+//
+//            Platform.runLater(new Runnable() {
+//                @Override
+//                public void run() {
+//                    FXMLLoader fxmlLoader = new FXMLLoader();
+//                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/refParamFrames/threePhaseStendrefParamFrame.fxml"));
+//                    try {
+//                        fxmlLoader.load();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                        System.out.println("Ошибка при загрузке окна.");
+//                    }
+//
+//                    Stage stage = new Stage();
+//                    Scene scene = new Scene(fxmlLoader.getRoot());
+//                    stage.setTitle("Методики");
+//                    stage.setScene(scene);
+//
+//                    stendRefParametersForFrame = (ThreePhaseStendrefParamController) fxmlLoader.getController();
+//                    stendRefParametersForFrame.initTimer(stendDLLCommands);
+//                    stendRefParametersForFrame.addMovingActions();
+//
+//                    stage.initStyle(StageStyle.TRANSPARENT);
+//
+//                    refMeterStage = stage;
+//
+//                    stage.hide();
+//                }
+//            });
+//
+//        } else {
+//            //refMeterParameters = new OnePhaseRefMeterParameters();
+//        }
     }
 
     //Добавляет объект resultError к каждому счётчику необходимому для теста

@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class ConstantCommand implements Commands, Serializable {
+public class ConstantCommand implements Commands, Serializable, Cloneable {
 
     private StendDLLCommands stendDLLCommands;
 
@@ -57,6 +57,15 @@ public class ConstantCommand implements Commands, Serializable {
 
     //Процент от напряжения
     private double voltPer;
+
+    //Напряжение на фазе А
+    private double voltPerA;
+
+    //Напряжение на фазе B
+    private double voltPerB;
+
+    //Напряжение на фазе C
+    private double voltPerC;
 
     //Ток
     private double ratedCurr;
@@ -150,22 +159,6 @@ public class ConstantCommand implements Commands, Serializable {
         timer = new Timer(true);
         constantThread = Thread.currentThread();
 
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-            if (!threePhaseCommand) {
-                iABC = "C";
-            }
-
-        } else {
-            if (!threePhaseCommand) {
-                if (iABC.equals("A")) {
-                    if (!stendDLLCommands.selectCircuit(0)) throw new ConnectForStendExeption();
-                } else if (iABC.equals("B")) {
-                    if (!stendDLLCommands.selectCircuit(1)) throw new ConnectForStendExeption();
-                }
-                iABC = "H";
-            }
-        }
-
         //Выбор константы в зависимости от энергии
         if (channelFlag == 0 || channelFlag == 1) {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
@@ -188,7 +181,22 @@ public class ConstantCommand implements Commands, Serializable {
 
         stendDLLCommands.setReviseMode(1);
 
-        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                iABC = "C";
+                voltPerC = voltPer;
+                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
+        } else {
+            if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+        }
+
+        if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                 voltPer, 0, iABC, cosP)) throw new ConnectForStendExeption();
 
         //Разблокирую интерфейc кнопок
@@ -215,7 +223,7 @@ public class ConstantCommand implements Commands, Serializable {
                 @Override
                 public void run() {
                     String[] kw;
-                    if (!constantThread.isInterrupted()) {
+                    if (constantThread.isAlive()) {
                         for (Meter meter : meterForTestList) {
                             kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
                             double result = Double.parseDouble(kw[0]);
@@ -231,8 +239,20 @@ public class ConstantCommand implements Commands, Serializable {
                 }
             };
 
-            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            if (stendDLLCommands instanceof ThreePhaseStend) {
+                if (!threePhaseCommand) {
+                    iABC = "C";
+                    voltPerC = voltPer;
+                    if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                } else {
+                    if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                }
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
 
             timer.schedule(timerTask, 7000);
 
@@ -290,7 +310,7 @@ public class ConstantCommand implements Commands, Serializable {
             TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    if (!constantThread.isInterrupted()) {
+                    if (!constantThread.isAlive()) {
                         for (Meter meter : meterForTestList) {
                             double result = Double.parseDouble(meter.returnResultCommand(index, channelFlag).getLastResultForTabView().substring(1));
                             if (result == 0) {
@@ -307,8 +327,20 @@ public class ConstantCommand implements Commands, Serializable {
 
             double refMeterEnergy = 0;
 
-            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            if (stendDLLCommands instanceof ThreePhaseStend) {
+                if (!threePhaseCommand) {
+                    iABC = "C";
+                    voltPerC = voltPer;
+                    if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                } else {
+                    if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                }
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
 
             timer.schedule(timerTask, 7000);
 
@@ -328,8 +360,6 @@ public class ConstantCommand implements Commands, Serializable {
 
                 for (Meter meter : meterForTestList) {
                     kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
-
-                    System.out.println(Arrays.toString(kw));
 
                     constantResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
 
@@ -387,22 +417,6 @@ public class ConstantCommand implements Commands, Serializable {
         timer = new Timer(true);
         constantThread = Thread.currentThread();
 
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-            if (!threePhaseCommand) {
-                iABC = "C";
-            }
-
-        } else {
-            if (!threePhaseCommand) {
-                if (iABC.equals("A")) {
-                    if (!stendDLLCommands.selectCircuit(0)) throw new ConnectForStendExeption();
-                } else if (iABC.equals("B")) {
-                    if (!stendDLLCommands.selectCircuit(1)) throw new ConnectForStendExeption();
-                }
-                iABC = "H";
-            }
-        }
-
         int countResult = 1;
 
         for (Meter meter : meterForTestList) {
@@ -418,8 +432,20 @@ public class ConstantCommand implements Commands, Serializable {
 
         stendDLLCommands.setReviseMode(1);
 
-        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPer, 0, iABC, cosP)) throw new ConnectForStendExeption();
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                iABC = "C";
+                voltPerC = voltPer;
+                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
+        } else {
+            if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+        }
 
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
@@ -447,7 +473,7 @@ public class ConstantCommand implements Commands, Serializable {
                     @Override
                     public void run() {
                         String[] kw;
-                        if (!constantThread.isInterrupted()) {
+                        if (!constantThread.isAlive()) {
                             for (Meter meter : meterForTestList) {
                                 kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
                                 double result = Double.parseDouble(kw[0]);
@@ -463,8 +489,20 @@ public class ConstantCommand implements Commands, Serializable {
                     }
                 };
 
-                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                if (stendDLLCommands instanceof ThreePhaseStend) {
+                    if (!threePhaseCommand) {
+                        iABC = "C";
+                        voltPerC = voltPer;
+                        if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    } else {
+                        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    }
+                } else {
+                    if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                }
 
                 timer.schedule(timerTask, 7000);
 
@@ -523,7 +561,7 @@ public class ConstantCommand implements Commands, Serializable {
                 TimerTask timerTask = new TimerTask() {
                     @Override
                     public void run() {
-                        if (!constantThread.isInterrupted()) {
+                        if (!constantThread.isAlive()) {
                             for (Meter meter : meterForTestList) {
                                 double result = Double.parseDouble(meter.returnResultCommand(index, channelFlag).getLastResultForTabView().substring(1));
                                 if (result == 0) {
@@ -538,8 +576,20 @@ public class ConstantCommand implements Commands, Serializable {
                     }
                 };
 
-                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                if (stendDLLCommands instanceof ThreePhaseStend) {
+                    if (!threePhaseCommand) {
+                        iABC = "C";
+                        voltPerC = voltPer;
+                        if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    } else {
+                        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    }
+                } else {
+                    if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                }
 
                 timer.schedule(timerTask, 7000);
 
@@ -596,8 +646,20 @@ public class ConstantCommand implements Commands, Serializable {
 
             countResult++;
 
-            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                    voltPer, 0, iABC, cosP)) throw new ConnectForStendExeption();
+            if (stendDLLCommands instanceof ThreePhaseStend) {
+                if (!threePhaseCommand) {
+                    iABC = "C";
+                    voltPerC = voltPer;
+                    if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                            voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                } else {
+                    if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                }
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
 
             Thread.sleep(5000);
         }
@@ -726,5 +788,10 @@ public class ConstantCommand implements Commands, Serializable {
 
     public void setRatedCurr(double ratedCurr) {
         this.ratedCurr = ratedCurr;
+    }
+
+    @Override
+    public Commands clone() throws CloneNotSupportedException {
+        return (Commands) super.clone();
     }
 }

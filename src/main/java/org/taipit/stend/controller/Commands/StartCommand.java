@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class StartCommand implements Commands, Serializable {
+public class StartCommand implements Commands, Serializable, Cloneable {
 
     //Эта команда из методики для трёхфазного теста?
     private boolean threePhaseCommand;
@@ -26,26 +26,45 @@ public class StartCommand implements Commands, Serializable {
 
     private List<Meter> meterList;
 
-    //Выставлять в зависимости от выбранного параметра перед тестом
+    //Режим
     private int phase;
 
-    //Номинальное напряжение
+    //Напряжение
     private double ratedVolt;
 
-    //Номинальный ток
+    //Ток
     private double ratedCurr;
 
-    //Номинальная частота
+    //Частота
     private double ratedFreq;
 
-    private double voltPer = 100;
+    //Необходимо сделать в доп тестовом окне
+    private int phaseSrequence;
 
+    //Направление тока
     private int revers;
 
-    //Возможно пригодится
+    //Напряжение на фазе А
+    private double voltPerA;
+
+    //Напряжение на фазе B
+    private double voltPerB;
+
+    //Напряжение на фазе C
+    private double voltPerC;
+
+    public void setVoltPer(double voltPer) {
+        this.voltPer = voltPer;
+    }
+
+    private double voltPer;
+
+    //Процен от тока
     private double currPer;
 
-    //Возможно пригодится
+    //Коэфициент мощности
+    private String cosP = "1.0";
+
     private String iABC = "H";
 
     private int channelFlag;
@@ -69,8 +88,10 @@ public class StartCommand implements Commands, Serializable {
     //Время теста введённое пользователем
     private long timeStart;
     private long timeEnd;
-    private long currTime;
-    private String strTime;
+
+    private Timer timer;
+    private TimerTask timerTask;
+    private Thread currThread;
 
     private HashMap<Integer, Boolean> startCommandResult;
 
@@ -103,6 +124,27 @@ public class StartCommand implements Commands, Serializable {
             throw new InterruptedException();
         }
 
+        currThread = Thread.currentThread();
+
+        timer = new Timer(true);
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Meter.CommandResult creepResult;
+                if (currThread.isAlive()) {
+                    for (Map.Entry<Integer, Boolean> flag : startCommandResult.entrySet()) {
+                        if (!flag.getValue()) {
+                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
+                        }
+                    }
+                } else {
+                    timer.cancel();
+                }
+            }
+        };
+
         Meter meterForCalculate = meterList.get(0);
 
         if (gostTest) {
@@ -116,22 +158,6 @@ public class StartCommand implements Commands, Serializable {
                 } else {
                     double current = 0.002 * meterForCalculate.getIb();
                     currPer = current * 100 / ratedCurr;
-                }
-            }
-        }
-
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-            if (!threePhaseCommand) {
-                iABC = "C";
-            }
-        } else {
-            if (!threePhaseCommand) {
-                if (iABC.equals("A")) {
-                    if (stendDLLCommands.selectCircuit(0)) throw new ConnectForStendExeption();
-                    iABC = "H";
-                } else if (iABC.equals("B")) {
-                    if (stendDLLCommands.selectCircuit(1)) throw new ConnectForStendExeption();
-                    iABC = "H";
                 }
             }
         }
@@ -150,16 +176,31 @@ public class StartCommand implements Commands, Serializable {
 
         stendDLLCommands.setReviseMode(1);
 
-        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, 0,
-                voltPer, currPer, iABC, "1.0")) throw new ConnectForStendExeption();
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                iABC = "C";
+                voltPerC = voltPer;
+                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
+        } else {
+            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+        }
 
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
-        Thread.sleep(500);
+
+        Thread.sleep(500); //Пауза для стабилизации
 
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
+
+        timer.schedule(timerTask, 0, 350);
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -185,18 +226,14 @@ public class StartCommand implements Commands, Serializable {
 
                         meter.setAmountImn(meter.getAmountImn() + 1);
 
-                        if (meter.getAmountImn() > pulseValue) {
+                        if (meter.getAmountImn() >= pulseValue) {
                             startCommandResult.put(mapResult.getKey(), true);
                             startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
                         } else {
                             stendDLLCommands.crpstaClear(mapResult.getKey());
 
                             stendDLLCommands.crpstaStart(mapResult.getKey());
-
-                            startResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
-                    } else {
-                        startResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                     }
                 }
             }
@@ -206,6 +243,7 @@ public class StartCommand implements Commands, Serializable {
         //Выставляю результат теста счётчиков, которые не прошли тест
         for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
             if (!mapResult.getValue()) {
+                mapResult.setValue(true);
                 startResult = (Meter.StartResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
                 startResult.setResultStartCommand(startResult.getTimeTheTest(), countResult, false, channelFlag);
             }
@@ -227,21 +265,24 @@ public class StartCommand implements Commands, Serializable {
             throw new InterruptedException();
         }
 
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-            if (!threePhaseCommand) {
-                iABC = "C";
-            }
-        } else {
-            if (!threePhaseCommand) {
-                if (iABC.equals("A")) {
-                    if (stendDLLCommands.selectCircuit(0)) throw new ConnectForStendExeption();
-                    iABC = "H";
-                } else if (iABC.equals("B")) {
-                    if (stendDLLCommands.selectCircuit(1)) throw new ConnectForStendExeption();
-                    iABC = "H";
+        currThread = Thread.currentThread();
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Meter.CommandResult creepResult;
+                if (currThread.isAlive()) {
+                    for (Map.Entry<Integer, Boolean> flag : startCommandResult.entrySet()) {
+                        if (!flag.getValue()) {
+                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
+                        }
+                    }
+                } else {
+                    timer.cancel();
                 }
             }
-        }
+        };
 
         Meter meterForCalculate = meterList.get(0);
         if (gostTest) {
@@ -268,13 +309,25 @@ public class StartCommand implements Commands, Serializable {
 
         stendDLLCommands.setReviseMode(1);
 
-        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, 0, 0,
-                voltPer, currPer, iABC, "1.0")) throw new ConnectForStendExeption();
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                iABC = "C";
+                voltPerC = voltPer;
+                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
+        } else {
+            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+        }
 
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
-        Thread.sleep(500);
+        Thread.sleep(500); //Время стабилизации
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -282,13 +335,17 @@ public class StartCommand implements Commands, Serializable {
 
         while (!Thread.currentThread().isInterrupted()) {
 
-            startCommandResult = initStartCommandResult();
+            timeStart = System.currentTimeMillis();
+            timeEnd = timeStart + userTimeTest;
 
             //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
             setDefTestResults(channelFlag, index);
 
-            timeStart = System.currentTimeMillis();
-            timeEnd = timeStart + userTimeTest;
+            timer = new Timer(true);
+
+            startCommandResult = initStartCommandResult();
+
+            timer.schedule(timerTask, 0, 350);
 
             while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
 
@@ -304,24 +361,20 @@ public class StartCommand implements Commands, Serializable {
 
                     if (!mapResult.getValue()) {
                         meter = meterList.get(mapResult.getKey() - 1);
-                        startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
-
                         if (stendDLLCommands.crpstaResult(mapResult.getKey())) {
 
                             meter.setAmountImn(meter.getAmountImn() + 1);
 
-                            if (meter.getAmountImn() > pulseValue) {
+                            if (meter.getAmountImn() >= pulseValue) {
                                 startCommandResult.put(mapResult.getKey(), true);
+
+                                startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
                                 startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
                             } else {
                                 stendDLLCommands.crpstaClear(mapResult.getKey());
 
                                 stendDLLCommands.crpstaStart(mapResult.getKey());
-
-                                startResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                             }
-                        } else {
-                            startResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
                     }
                 }
@@ -331,6 +384,7 @@ public class StartCommand implements Commands, Serializable {
             //Выставляю результат теста счётчиков, которые не прошли тест
             for (Map.Entry<Integer, Boolean> mapResultPass : startCommandResult.entrySet()) {
                 if (!mapResultPass.getValue()) {
+                    mapResultPass.setValue(true);
                     startResult = (Meter.StartResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
                     startResult.setResultStartCommand(startResult.getTimeTheTest(), countResult, false, channelFlag);
                 }
@@ -348,52 +402,6 @@ public class StartCommand implements Commands, Serializable {
             init.put(meter.getId(), false);
         }
         return init;
-    }
-
-    //Переносит время провала теста в нужную строку
-    private void addTestTimeFail(Meter meter, int channelFlag, String timeFail, int countResult) {
-        switch (channelFlag) {
-            case 0: {
-                meter.setStartTestAPPls(false);
-            }break;
-            case 1: {
-                meter.setStartTestAPMns(false);
-            }break;
-            case 2: {
-                meter.setStartTestRPPls(false);
-            }break;
-            case 3: {
-                meter.setStartTestRPMns(false);
-            }
-        }
-        Meter.StartResult commandResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
-        commandResult.setPassTest(false);
-        commandResult.setLastResultForTabView("F" + timeFail + " П");
-        commandResult.setLastResult(timeFail);
-        commandResult.getResults()[countResult] = timeFail + " П";
-    }
-
-    //Переносит время провала теста в нужную строку
-    private void addTestTimePass(Meter meter, int channelFlag, String timePass, int countResult) {
-        switch (channelFlag) {
-            case 0: {
-                meter.setStartTestAPPls(true);
-            }break;
-            case 1: {
-                meter.setStartTestAPMns(true);
-            }break;
-            case 2: {
-                meter.setStartTestRPPls(true);
-            }break;
-            case 3: {
-                meter.setStartTestRPMns(true);
-            }break;
-        }
-        Meter.StartResult commandResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
-        commandResult.setPassTest(true);
-        commandResult.setLastResultForTabView("P" + timePass + " +");
-        commandResult.setLastResult(timePass);
-        commandResult.getResults()[countResult] = timePass + " Г";
     }
 
     //reset
@@ -514,5 +522,42 @@ public class StartCommand implements Commands, Serializable {
 
     public String getId() {
         return id;
+    }
+
+    public void setPhaseSrequence(int phaseSrequence) {
+        this.phaseSrequence = phaseSrequence;
+    }
+
+    public void setRevers(int revers) {
+        this.revers = revers;
+    }
+
+    public void setVoltPerA(double voltPerA) {
+        this.voltPerA = voltPerA;
+    }
+
+    public void setVoltPerB(double voltPerB) {
+        this.voltPerB = voltPerB;
+    }
+
+    public void setVoltPerC(double voltPerC) {
+        this.voltPerC = voltPerC;
+    }
+
+    public void setCurrPer(double currPer) {
+        this.currPer = currPer;
+    }
+
+    public void setCosP(String cosP) {
+        this.cosP = cosP;
+    }
+
+    public void setiABC(String iABC) {
+        this.iABC = iABC;
+    }
+
+    @Override
+    public Commands clone() throws CloneNotSupportedException {
+        return (Commands) super.clone();
     }
 }

@@ -1115,5 +1115,13 @@ public class Meter implements Serializable{
             super.minError = emin;
             super.maxError = emax;
         }
+
+        public void setResultImbCommand(String errForTab, int resultNo, String error, boolean passOrNot) {
+            super.lastResultForTabView.setValue(errForTab);
+            super.results[resultNo] = error;
+            super.lastResult = error;
+            super.passTest = passOrNot;
+        }
+
     }
 }

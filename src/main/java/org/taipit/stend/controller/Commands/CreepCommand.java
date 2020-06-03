@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
-public class CreepCommand implements Commands, Serializable {
+public class CreepCommand implements Commands, Serializable, Cloneable {
 
     //Эта команда из методики для трёхфазного теста?
     private boolean threePhaseCommand;
@@ -23,20 +23,47 @@ public class CreepCommand implements Commands, Serializable {
 
     private boolean nextCommand;
 
-    private String iABC = "H";
-
     private StendDLLCommands stendDLLCommands;
 
     //лист с счётчиками
     private List<Meter> meterList;
 
+    //Режим
     private int phase;
 
+    //Напряжение
     private double ratedVolt;
 
+    //Ток
+    private double ratedCurr;
+
+    //Частота
     private double ratedFreq;
 
+    //Необходимо сделать в доп тестовом окне
+    private int phaseSrequence;
+
+    //Направление тока
+    private int revers;
+
+    //Напряжение на фазе А
+    private double voltPerA;
+
+    //Напряжение на фазе B
+    private double voltPerB;
+
+    //Напряжение на фазе C
+    private double voltPerC;
+
     private double voltPer;
+
+    //Процен от тока
+    private double currPer;
+
+    //Коэфициент мощности
+    private String cosP = "1.0";
+
+    private String iABC = "H";
 
     private int channelFlag;
 
@@ -57,8 +84,10 @@ public class CreepCommand implements Commands, Serializable {
     private long userTimeTest;
     private long timeStart;
     private long timeEnd;
-    private long currTime;
-    private String strTime;
+
+    private Timer timer;
+    private TimerTask timerTask;
+    private Thread currThread;
 
     private HashMap<Integer, Boolean> creepCommandResult;
 
@@ -80,20 +109,36 @@ public class CreepCommand implements Commands, Serializable {
         this.id = id;
         this.channelFlag = channelFlag;
         this.pulseValue = 2;
+        this.voltPer = 115;
     }
 
     @Override
     public boolean execute() throws ConnectForStendExeption, InterruptedException {
 
+        currThread = Thread.currentThread();
+
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-            if (!threePhaseCommand) {
-                iABC = "C";
+        timer = new Timer(true);
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Meter.CommandResult creepResult;
+                if (currThread.isAlive()) {
+                    for (Map.Entry<Integer, Boolean> flag : creepCommandResult.entrySet()) {
+                        if (flag.getValue()) {
+                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
+                        }
+                    }
+                } else {
+                    timer.cancel();
+                }
             }
-        }
+        };
 
         //Номер измерения
         int countResult = 1;
@@ -104,25 +149,39 @@ public class CreepCommand implements Commands, Serializable {
 
         creepCommandResult = initCreepCommandResult();
 
-        //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-        setDefTestResults(channelFlag, index);
-
         stendDLLCommands.setReviseMode(1);
 
-        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
-                voltPer, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                iABC = "C";
+                voltPerC = voltPer;
+                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
+        } else {
+            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+        }
 
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
-
-        Thread.sleep(500);
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
+        //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
+        setDefTestResults(channelFlag, index);
+
+        Thread.sleep(500); //Пауза для стабилизации
+
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
+
+        timer.schedule(timerTask, 0, 350);
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -142,7 +201,6 @@ public class CreepCommand implements Commands, Serializable {
 
                 if (mapResult.getValue()) {
                     meter = meterList.get(mapResult.getKey() - 1);
-                    creepResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
 
                     if (stendDLLCommands.crpstaResult(mapResult.getKey())) {
 
@@ -150,16 +208,15 @@ public class CreepCommand implements Commands, Serializable {
 
                         if (meter.getAmountImn() >= pulseValue) {
                             creepCommandResult.put(mapResult.getKey(), false);
+
+                            creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
+
                             creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
                         } else {
                             stendDLLCommands.crpstaClear(mapResult.getKey());
 
                             stendDLLCommands.crpstaStart(mapResult.getKey());
-
-                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
-                    } else {
-                        creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                     }
                 }
             }
@@ -190,20 +247,48 @@ public class CreepCommand implements Commands, Serializable {
             throw new InterruptedException();
         }
 
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-            if (!threePhaseCommand) {
-                iABC = "C";
+        currThread = Thread.currentThread();
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Meter.CommandResult creepResult;
+                if (currThread.isAlive()) {
+                    for (Map.Entry<Integer, Boolean> flag : creepCommandResult.entrySet()) {
+                        if (flag.getValue()) {
+                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
+                        }
+                    }
+                } else {
+                    timer.cancel();
+                }
             }
-        }
+        };
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-        setDefTestResults(channelFlag, index);
+        //Номер измерения
+        int countResult = 1;
+        Meter meter;
+        Meter.CreepResult creepResult;
 
         stendDLLCommands.setReviseMode(1);
 
-        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, 0, 0,
-                voltPer, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                iABC = "C";
+                voltPerC = voltPer;
+                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
+        } else {
+            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+        }
 
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
@@ -212,22 +297,21 @@ public class CreepCommand implements Commands, Serializable {
             throw new InterruptedException();
         }
 
-        Thread.sleep(500);
-
-        //Номер измерения
-        int countResult = 1;
-        Meter meter;
-        Meter.CreepResult creepResult;
+        Thread.sleep(500); // Пауза для стабилизации
 
         while (!Thread.currentThread().isInterrupted()) {
+
+            timeStart = System.currentTimeMillis();
+            timeEnd = timeStart + userTimeTest;
+
+            timer = new Timer(true);
+
+            timer.schedule(timerTask, 0, 350);
 
             //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
             setDefTestResults(channelFlag, index);
 
             creepCommandResult = initCreepCommandResult();
-
-            timeStart = System.currentTimeMillis();
-            timeEnd = timeStart + userTimeTest;
 
             while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
@@ -256,11 +340,7 @@ public class CreepCommand implements Commands, Serializable {
                                 stendDLLCommands.crpstaClear(mapResult.getKey());
 
                                 stendDLLCommands.crpstaStart(mapResult.getKey());
-
-                                creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                             }
-                        } else {
-                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
                     }
                 }
@@ -418,5 +498,46 @@ public class CreepCommand implements Commands, Serializable {
 
     public double getRatedVolt() {
         return ratedVolt;
+    }
+
+    public void setiABC(String iABC) {
+        this.iABC = iABC;
+    }
+
+    public void setRatedCurr(double ratedCurr) {
+        this.ratedCurr = ratedCurr;
+    }
+
+    public void setPhaseSrequence(int phaseSrequence) {
+        this.phaseSrequence = phaseSrequence;
+    }
+
+    public void setRevers(int revers) {
+        this.revers = revers;
+    }
+
+    public void setVoltPerA(double voltPerA) {
+        this.voltPerA = voltPerA;
+    }
+
+    public void setVoltPerB(double voltPerB) {
+        this.voltPerB = voltPerB;
+    }
+
+    public void setVoltPerC(double voltPerC) {
+        this.voltPerC = voltPerC;
+    }
+
+    public void setCurrPer(double currPer) {
+        this.currPer = currPer;
+    }
+
+    public void setCosP(String cosP) {
+        this.cosP = cosP;
+    }
+
+    @Override
+    public Commands clone() throws CloneNotSupportedException {
+        return (Commands) super.clone();
     }
 }

@@ -2,7 +2,7 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
-public interface Commands{
+public interface Commands {
 
     //Выполнение команды
     boolean execute() throws ConnectForStendExeption, InterruptedException;
@@ -31,4 +31,6 @@ public interface Commands{
     void setActive(boolean active);
 
     void setPhase(int phase);
+
+    Commands clone() throws CloneNotSupportedException;
 }

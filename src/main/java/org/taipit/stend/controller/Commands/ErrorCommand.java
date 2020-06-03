@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class ErrorCommand implements Commands, Serializable {
+public class ErrorCommand implements Commands, Serializable, Cloneable {
 
     private StendDLLCommands stendDLLCommands;
 
@@ -63,20 +63,11 @@ public class ErrorCommand implements Commands, Serializable {
     //Напряжение
     private double ratedVolt;
 
-    //Процент от напряжения
-    private double voltPer;
-
     //Ток
     private double ratedCurr;
 
-    //Процен от тока
-    private double currPer;
-
     //Частота
     private double ratedFreq;
-
-    //Коэфициент мощности
-    private String cosP;
 
     //Необходимо сделать в доп тестовом окне
     private int phaseSrequence;
@@ -84,8 +75,26 @@ public class ErrorCommand implements Commands, Serializable {
     //Направление тока
     private int revers;
 
+    //Напряжение на фазе А
+    private double voltPerA;
+
+    //Напряжение на фазе B
+    private double voltPerB;
+
+    //Напряжение на фазе C
+    private double voltPerC;
+
+    //Процент от напряжения
+    private double voltPer;
+
+    //Процен от тока
+    private double currPer;
+
     //По каким фазам пустить ток
     private String iABC;
+
+    //Коэфициент мощности
+    private String cosP;
 
     //Активная ли точка
     private boolean active = true;
@@ -120,7 +129,6 @@ public class ErrorCommand implements Commands, Serializable {
         }
 
         currPer = Double.parseDouble(currentPerсent) * 100;
-        phaseSrequence = 0;
         voltPer = 100.0;
     }
 
@@ -143,7 +151,6 @@ public class ErrorCommand implements Commands, Serializable {
         name = (strPhase + voltPer + "%" + param + "n; " + cosP + "; " + currentPerсent + " " + current.trim());
 
         currPer = Double.parseDouble(currentPerсent) * 100;
-        phaseSrequence = 0;
     }
 
     //===================================================================================================
@@ -151,24 +158,7 @@ public class ErrorCommand implements Commands, Serializable {
     @Override
     public boolean execute() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
-            System.out.println("execute_1");
             throw new InterruptedException();
-        }
-
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-            if (!threePhaseCommand) {
-                iABC = "C";
-            }
-        } else {
-            if (!threePhaseCommand) {
-                if (iABC.equals("A")) {
-                    if (stendDLLCommands.selectCircuit(0)) throw new ConnectForStendExeption();
-                    iABC = "H";
-                } else if (iABC.equals("B")) {
-                    if (stendDLLCommands.selectCircuit(1)) throw new ConnectForStendExeption();
-                    iABC = "H";
-                }
-            }
         }
 
         //Выбор константы в зависимости от энергии
@@ -186,38 +176,53 @@ public class ErrorCommand implements Commands, Serializable {
             ratedCurr = Imax;
         }
 
-        resetError();
-
         if (Thread.currentThread().isInterrupted()) {
-            System.out.println("execute_2");
             throw new InterruptedException();
         }
 
         stendDLLCommands.setReviseMode(1);
 
-        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                iABC = "C";
+                voltPerC = voltPer;
+                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
+        } else {
+            if (!threePhaseCommand) {
+                if (iABC.equals("A")) {
+                    if (stendDLLCommands.selectCircuit(0)) throw new ConnectForStendExeption();
+                    iABC = "H";
+                } else if (iABC.equals("B")) {
+                    if (stendDLLCommands.selectCircuit(1)) throw new ConnectForStendExeption();
+                    iABC = "H";
+                }
+            }
+        }
 
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
         if (Thread.currentThread().isInterrupted()) {
-            System.out.println("execute_3");
             throw new InterruptedException();
         }
 
-        Thread.sleep(stendDLLCommands.getPauseForStabization());
+        Thread.sleep(3000); //stendDLLCommands.getPauseForStabization()
 
         if (Thread.currentThread().isInterrupted()) {
-            System.out.println("execute_4");
             throw new InterruptedException();
         }
+
+        resetError();
 
         //Устанавливаем местам импульсный выход
         stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
 
         if (Thread.currentThread().isInterrupted()) {
-            System.out.println("execute_5");
             throw new InterruptedException();
         }
 
@@ -225,7 +230,6 @@ public class ErrorCommand implements Commands, Serializable {
         stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
 
         if (Thread.currentThread().isInterrupted()) {
-            System.out.println("execute_6");
             throw new InterruptedException();
         }
 
@@ -243,14 +247,12 @@ public class ErrorCommand implements Commands, Serializable {
         while (flagInStop.containsValue(false)) {
 
             if (Thread.currentThread().isInterrupted()) {
-                System.out.println("execute_7");
                 throw new InterruptedException();
             }
 
             for (Meter meter : meterForTestList) {
 
                 if (Thread.currentThread().isInterrupted()) {
-                    System.out.println("execute_8");
                     throw new InterruptedException();
                 }
 
@@ -311,9 +313,27 @@ public class ErrorCommand implements Commands, Serializable {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
         }
 
+        if (current.equals("Ib")) {
+            ratedCurr = Ib;
+        } else {
+            ratedCurr = Imax;
+        }
+
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
+
+        stendDLLCommands.setReviseMode(1);
+
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
                 iABC = "C";
+                voltPerC = voltPer;
+                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             }
         } else {
             if (!threePhaseCommand) {
@@ -327,34 +347,16 @@ public class ErrorCommand implements Commands, Serializable {
             }
         }
 
-        if (current.equals("Ib")) {
-            ratedCurr = Ib;
-        } else {
-            ratedCurr = Imax;
-        }
-
-        if (Thread.currentThread().isInterrupted()) {
-            System.out.println("executeForContinuousTest_2");
-            throw new InterruptedException();
-        }
-
-        stendDLLCommands.setReviseMode(1);
-
-        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
-
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
         if (Thread.currentThread().isInterrupted()) {
-            System.out.println("executeForContinuousTest_3");
             throw new InterruptedException();
         }
 
         Thread.sleep(stendDLLCommands.getPauseForStabization());
 
         if (Thread.currentThread().isInterrupted()) {
-            System.out.println("executeForContinuousTest_4");
             throw new InterruptedException();
         }
 
@@ -362,7 +364,6 @@ public class ErrorCommand implements Commands, Serializable {
         stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
 
         if (Thread.currentThread().isInterrupted()) {
-            System.out.println("executeForContinuousTest_5");
             throw new InterruptedException();
         }
 
@@ -370,7 +371,6 @@ public class ErrorCommand implements Commands, Serializable {
         stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
 
         if (Thread.currentThread().isInterrupted()) {
-            System.out.println("executeForContinuousTest_6");
             throw new InterruptedException();
         }
 
@@ -388,7 +388,6 @@ public class ErrorCommand implements Commands, Serializable {
             for (Meter meter : meterForTestList) {
 
                 if (Thread.currentThread().isInterrupted()) {
-                    System.out.println("executeForContinuousTest_7");
                     throw new InterruptedException();
                 }
 
@@ -530,5 +529,50 @@ public class ErrorCommand implements Commands, Serializable {
 
     public void setPhase(int phase) {
         this.phase = phase;
+    }
+
+    public void setVoltPerA(double voltPerA) {
+        this.voltPerA = voltPerA;
+    }
+
+    public void setVoltPerB(double voltPerB) {
+        this.voltPerB = voltPerB;
+    }
+
+    public void setVoltPerC(double voltPerC) {
+        this.voltPerC = voltPerC;
+    }
+
+    public void setRatedCurr(double ratedCurr) {
+        this.ratedCurr = ratedCurr;
+    }
+
+    public void setPhaseSrequence(int phaseSrequence) {
+        this.phaseSrequence = phaseSrequence;
+    }
+
+    public void setRevers(int revers) {
+        this.revers = revers;
+    }
+
+    public void setVoltPer(double voltPer) {
+        this.voltPer = voltPer;
+    }
+
+    public void setCurrPer(double currPer) {
+        this.currPer = currPer;
+    }
+
+    public void setiABC(String iABC) {
+        this.iABC = iABC;
+    }
+
+    public void setCosP(String cosP) {
+        this.cosP = cosP;
+    }
+
+    @Override
+    public Commands clone() throws CloneNotSupportedException {
+        return (Commands) super.clone();
     }
 }

@@ -9,7 +9,7 @@ import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import java.io.Serializable;
 import java.util.List;
 
-public class RTCCommand implements Commands, Serializable {
+public class RTCCommand implements Commands, Serializable, Cloneable {
 
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
@@ -360,5 +360,10 @@ public class RTCCommand implements Commands, Serializable {
 
     public double getFreg() {
         return freg;
+    }
+
+    @Override
+    public Commands clone() throws CloneNotSupportedException {
+        return (Commands) super.clone();
     }
 }
