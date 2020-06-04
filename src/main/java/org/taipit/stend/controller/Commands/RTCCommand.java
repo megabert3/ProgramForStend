@@ -25,11 +25,44 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
     private StendDLLCommands stendDLLCommands;
 
+    //Режим
     private int phase;
 
+    //Напряжение
     private double ratedVolt;
 
-    private int channelFlag = 4;
+    //Ток
+    private double ratedCurr;
+
+    //Частота
+    private double ratedFreq;
+
+    //Необходимо сделать в доп тестовом окне
+    private int phaseSrequence;
+
+    //Направление тока
+    private int revers;
+
+    //Напряжение на фазе А
+    private double voltPerA;
+
+    //Напряжение на фазе B
+    private double voltPerB;
+
+    //Напряжение на фазе C
+    private double voltPerC;
+
+    private double voltPer;
+
+    //Процен от тока
+    private double currPer;
+
+    //Коэфициент мощности
+    private String cosP = "1.0";
+
+    private String iABC = "H";
+
+    private int channelFlag;
 
     //Для сохранения результата теста в нужное направление
     private int channelFlagForSave;
@@ -44,8 +77,6 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
     //Количество повторов теста
     private int countResultTest;
-
-    private String iABC = "H";
 
     //Частота
     private double freg;
@@ -73,26 +104,40 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public boolean execute() throws ConnectForStendExeption, InterruptedException {
+    public void execute() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-            if (!threePhaseCommand) {
-                iABC = "C";
-            }
-        }
+        int ErrorCommand = 0;
+
+        channelFlag = 4;
 
         stendDLLCommands.setReviseMode(1);
 
-        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
-                100.0, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                iABC = "C";
+                voltPerC = voltPer;
+                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
+        } else {
+            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+        }
 
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
         Thread.sleep(5000);
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -162,13 +207,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
-        if (!Thread.currentThread().isInterrupted() && nextCommand) {
-            return true;
-        }
-
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-
-        return !Thread.currentThread().isInterrupted();
     }
 
     @Override

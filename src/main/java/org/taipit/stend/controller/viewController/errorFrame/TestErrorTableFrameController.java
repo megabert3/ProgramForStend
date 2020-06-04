@@ -133,6 +133,7 @@ public class TestErrorTableFrameController {
                 public void run() {
                     try {
                         try {
+                            refreshRefMeterParameters();
                             blockBtns.setValue(true);
                             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
                             startAutomaticTest();
@@ -152,7 +153,6 @@ public class TestErrorTableFrameController {
                                 selectedCommand.removeListener(automaticListChangeListener);
                             }
                         });
-
                     }
                 }
             });
@@ -171,13 +171,12 @@ public class TestErrorTableFrameController {
                 public void run() {
                     try {
                         try {
+                            refreshRefMeterParameters();
                             blockBtns.setValue(true);
                             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
                             startManualTest();
 
                         } catch (InterruptedException e) {
-
                             e.printStackTrace();
                         }
                     } catch (ConnectForStendExeption e) {
@@ -195,7 +194,6 @@ public class TestErrorTableFrameController {
                     }
                 }
             });
-
             manualTestThread.start();
         }
     };
@@ -374,6 +372,8 @@ public class TestErrorTableFrameController {
                             UnomThread.interrupt();
                             startUnTest = false;
                         }
+
+                        refreshRefMeterParameters();
 
                         try {
                             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();

@@ -118,11 +118,12 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public boolean execute() throws ConnectForStendExeption, InterruptedException {
-
+    public void execute() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
+
+        int refMeterCount = 0;
 
         currThread = Thread.currentThread();
 
@@ -196,8 +197,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-
-        Thread.sleep(500); //Пауза для стабилизации
+        Thread.sleep(1000); //Пауза для стабилизации
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -211,8 +211,9 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
 
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-
-            TestErrorTableFrameController.refreshRefMeterParameters();
+            if (refMeterCount % 7 == 0) {
+                TestErrorTableFrameController.refreshRefMeterParameters();
+            }
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -243,7 +244,9 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                     }
                 }
             }
-            Thread.sleep(350);
+
+            refMeterCount++;
+            Thread.sleep(400);
         }
 
         //Выставляю результат теста счётчиков, которые не прошли тест
@@ -257,11 +260,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
-        if (!Thread.currentThread().isInterrupted() && nextCommand) return true;
-
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-
-        return !Thread.currentThread().isInterrupted();
     }
 
     @Override
@@ -335,7 +334,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(500); //Время стабилизации
+        Thread.sleep(1000); //Время стабилизации
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -343,7 +342,8 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        while (!Thread.currentThread().isInterrupted()) {
+        while (Thread.currentThread().isAlive()) {
+            int refMeterCount = 0;
 
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + userTimeTest;
@@ -358,6 +358,10 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             timer.schedule(timerTask, 0, 350);
 
             while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+
+                if (refMeterCount % 7 == 0) {
+                    TestErrorTableFrameController.refreshRefMeterParameters();
+                }
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
@@ -388,7 +392,9 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                         }
                     }
                 }
-                Thread.sleep(350);
+
+                refMeterCount++;
+                Thread.sleep(400);
             }
 
             //Выставляю результат теста счётчиков, которые не прошли тест

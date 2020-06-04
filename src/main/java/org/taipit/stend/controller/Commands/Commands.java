@@ -5,7 +5,7 @@ import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 public interface Commands {
 
     //Выполнение команды
-    boolean execute() throws ConnectForStendExeption, InterruptedException;
+    void execute() throws ConnectForStendExeption, InterruptedException;
 
     void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException;
 

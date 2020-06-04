@@ -143,10 +143,12 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public boolean execute() throws ConnectForStendExeption, InterruptedException {
+    public void execute() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
+
+        int refMeterCount = 0;
 
         //Выбор константы в зависимости от энергии
         if (channelFlag == 0 || channelFlag == 1) {
@@ -177,11 +179,11 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
-        if (Thread.currentThread().isInterrupted()) {
-            throw new InterruptedException();
-        }
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         Thread.sleep(3000); //stendDLLCommands.getPauseForStabization()
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -215,6 +217,10 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         double doubleErr;
 
         while (flagInStop.containsValue(false)) {
+
+            if (refMeterCount % 10 == 0) {
+                TestErrorTableFrameController.refreshRefMeterParameters();
+            }
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -257,14 +263,13 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
+            refMeterCount++;
             Thread.sleep(300);
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-
-        return !Thread.currentThread().isInterrupted();
     }
 
     //Метод для цикличной поверки счётчиков
@@ -273,6 +278,8 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
+
+        int refMeterCount = 0;
 
         //Выбор константы в зависимости от энергии
         if (channelFlag == 0 || channelFlag == 1) {
@@ -299,11 +306,11 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
-        if (Thread.currentThread().isInterrupted()) {
-            throw new InterruptedException();
-        }
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         Thread.sleep(stendDLLCommands.getPauseForStabization());
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -332,7 +339,11 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         String error;
         double doubleErr;
 
-        while (!Thread.currentThread().isInterrupted()) {
+        while (Thread.currentThread().isAlive()) {
+
+            if (refMeterCount % 10 == 0) {
+                TestErrorTableFrameController.refreshRefMeterParameters();
+            }
 
             for (Meter meter : meterForTestList) {
 
@@ -361,6 +372,8 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
                     }
                 }
             }
+
+            refMeterCount++;
             Thread.sleep(300);
         }
 

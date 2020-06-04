@@ -151,10 +151,12 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
     //===================================================================================================
     //Команда выполнения для последовательного теста
     @Override
-    public boolean execute() throws ConnectForStendExeption, InterruptedException {
+    public void execute() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
+
+        int refMeterCount = 0;
 
         timer = new Timer(true);
         constantThread = Thread.currentThread();
@@ -268,7 +270,9 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             while (System.currentTimeMillis() < timeEnd) {
 
-                TestErrorTableFrameController.refreshRefMeterParameters();
+                if (refMeterCount % 6 == 0) {
+                    TestErrorTableFrameController.refreshRefMeterParameters();
+                }
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
@@ -284,6 +288,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     Meter.CommandResult errorResult = meter.returnResultCommand(index, channelFlag);
                     errorResult.setLastResultForTabView("N" + strTime);
                 }
+
+                refMeterCount++;
 
                 Thread.sleep(500);
             }
@@ -349,9 +355,9 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             }
 
-            timer.schedule(timerTask, 7000);
-
             TestErrorTableFrameController.refreshRefMeterParameters();
+
+            timer.schedule(timerTask, 7000);
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -363,7 +369,9 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             while (kWToTest > refMeterEnergy) {
 
-                TestErrorTableFrameController.refreshRefMeterParameters();
+                if (refMeterCount % 3 == 0) {
+                    TestErrorTableFrameController.refreshRefMeterParameters();
+                }
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
@@ -382,6 +390,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         refMeterEnergy = hightKw;
                     }
                 }
+
+                refMeterCount++;
 
                 Thread.sleep(1000);
             }
@@ -413,11 +423,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
-        if (!Thread.currentThread().isInterrupted() && nextCommand) return true;
-
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-
-        return !Thread.currentThread().isInterrupted();
     }
 
     //Метод для цикличной поверки счётчиков
@@ -428,6 +434,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         }
 
         timer = new Timer(true);
+
         constantThread = Thread.currentThread();
 
         int countResult = 1;
@@ -475,7 +482,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
         while (Thread.currentThread().isAlive()) {
 
-            TestErrorTableFrameController.refreshRefMeterParameters();
+            int refMeterCount = 0;
 
             //Устанавливаю
             for (Meter meter : meterForTestList) {
@@ -536,7 +543,9 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 while (System.currentTimeMillis() < timeEnd) {
 
-                    TestErrorTableFrameController.refreshRefMeterParameters();
+                    if (refMeterCount % 6 == 0) {
+                        TestErrorTableFrameController.refreshRefMeterParameters();
+                    }
 
                     if (Thread.currentThread().isInterrupted()) {
                         throw new InterruptedException();
@@ -552,6 +561,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         Meter.CommandResult errorResult = meter.returnResultCommand(index, channelFlag);
                         errorResult.setLastResultForTabView("N" + strTime);
                     }
+
+                    refMeterCount++;
 
                     Thread.sleep(500);
                 }
@@ -629,7 +640,9 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 while (kWToTest > refMeterEnergy) {
 
-                    TestErrorTableFrameController.refreshRefMeterParameters();
+                    if (refMeterCount % 3 == 0) {
+                        TestErrorTableFrameController.refreshRefMeterParameters();
+                    }
 
                     if (Thread.currentThread().isInterrupted()) {
                         throw new InterruptedException();
@@ -646,6 +659,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     if (kw != null) {
                         refMeterEnergy = Double.parseDouble(kw[0]);
                     }
+
+                    refMeterCount++;
 
                     Thread.sleep(1000);
                 }

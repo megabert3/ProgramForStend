@@ -257,17 +257,17 @@ public abstract class StendDLLCommands {
     }
 
     // Старт CRPSTA
-    public boolean crpstaStart(int meterNo) {
+    public synchronized boolean crpstaStart(int meterNo) {
         return stend.CRPSTA_start(meterNo, port);
     }
 
     // результат CRPSTA
-    public boolean crpstaResult(int meterNo) {
+    public synchronized boolean crpstaResult(int meterNo) {
         return stend.CRPSTA_Result(meterNo, port);
     }
 
     // Очистка CRPSTA
-    public boolean crpstaClear(int meterNo) {
+    public synchronized boolean crpstaClear(int meterNo) {
         return stend.CRPSTA_clear(meterNo, port);
     }
 
@@ -299,7 +299,7 @@ public abstract class StendDLLCommands {
 
 
     // Чтение данных по энергии
-    public double constProcRead(double constant, int meterNo) {
+    public synchronized double constProcRead(double constant, int meterNo) {
         DoubleByReference pointerMeterKWH = new DoubleByReference();
         DoubleByReference pointerStdKWH = new DoubleByReference();
 
@@ -310,7 +310,7 @@ public abstract class StendDLLCommands {
     }
 
     // Чтение данных по энергии
-    public String constStdEnergyRead(double constant, int meterNo) {
+    public synchronized String constStdEnergyRead(double constant, int meterNo) {
         DoubleByReference pointerMeterKWH = new DoubleByReference();
         DoubleByReference pointerStdKWH = new DoubleByReference();
 

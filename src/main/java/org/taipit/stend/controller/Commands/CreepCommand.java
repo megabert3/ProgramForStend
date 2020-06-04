@@ -113,9 +113,11 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public boolean execute() throws ConnectForStendExeption, InterruptedException {
+    public void execute() throws ConnectForStendExeption, InterruptedException {
 
         currThread = Thread.currentThread();
+
+        int refMeterCount = 0;
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -185,7 +187,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
 
-        timer.schedule(timerTask, 0, 350);
+        timer.schedule(timerTask, 0, 300);
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -193,7 +195,9 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
-            TestErrorTableFrameController.refreshRefMeterParameters();
+            if (refMeterCount % 7 == 0) {
+                TestErrorTableFrameController.refreshRefMeterParameters();
+            }
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -226,12 +230,16 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
                     }
                 }
             }
-            Thread.sleep(350);
+
+            refMeterCount++;
+
+            Thread.sleep(400);
         }
 
         //Выставляю результат теста счётчиков, которые прошли тест
         for (Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
             if (mapResultPass.getValue()) {
+                mapResultPass.setValue(true);
                 creepResult = (Meter.CreepResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
                 creepResult.setResultCreepCommand(creepResult.getTimeTheTest(), countResult, true);
             }
@@ -239,11 +247,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
-        if (!Thread.currentThread().isInterrupted() && nextCommand) return true;
-
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-
-        return !Thread.currentThread().isInterrupted();
     }
 
     @Override
@@ -307,9 +311,16 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         Thread.sleep(500); // Пауза для стабилизации
 
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
         while (Thread.currentThread().isAlive()) {
 
-            TestErrorTableFrameController.refreshRefMeterParameters();
+            int refMeterCount = 0;
+
+            //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
+            setDefTestResults(channelFlag, index);
+
+            creepCommandResult = initCreepCommandResult();
 
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + userTimeTest;
@@ -318,14 +329,11 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
             timer.schedule(timerTask, 0, 350);
 
-            //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-            setDefTestResults(channelFlag, index);
-
-            creepCommandResult = initCreepCommandResult();
-
             while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
-                TestErrorTableFrameController.refreshRefMeterParameters();
+                if (refMeterCount % 7 == 0) {
+                    TestErrorTableFrameController.refreshRefMeterParameters();
+                }
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
@@ -356,12 +364,15 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
                         }
                     }
                 }
-                Thread.sleep(350);
+                refMeterCount++;
+
+                Thread.sleep(400);
             }
 
             //Выставляю результат теста счётчиков, которые прошли тест
             for (Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
                 if (mapResultPass.getValue()) {
+                    mapResultPass.setValue(true);
                     creepResult = (Meter.CreepResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
                     creepResult.setResultCreepCommand(creepResult.getTimeTheTest(), countResult, true);
                 }
@@ -369,9 +380,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
             countResult++;
         }
-
-        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
 
