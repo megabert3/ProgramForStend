@@ -35,6 +35,7 @@ import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
+import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
 
 import java.io.IOException;
@@ -48,14 +49,14 @@ public class TestErrorTableFrameController {
 
     private StendDLLCommands stendDLLCommands;
 
-    private StendRefParametersForFrame stendRefParametersForFrame;
+    private static StendRefParametersForFrame stendRefParametersForFrame;
 
     private Stage refMeterStage;
 
     private boolean twoCircut;
 
     //Исполняемая команда
-    Commands command;
+    private Commands command;
 
     private List<Meter> listMetersForTest;
 
@@ -141,10 +142,10 @@ public class TestErrorTableFrameController {
 
                     } catch (ConnectForStendExeption e) {
                         e.printStackTrace();
+                        ConsoleHelper.infoException("Потеряна связь с установкой");
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                ConsoleHelper.infoException("Потеряна связь с установкой");
                                 blockBtns.setValue(false);
                                 tglBtnAuto.setSelected(false);
                                 blockTypeEnergyAndDirectionBtns.setValue(false);
@@ -181,10 +182,10 @@ public class TestErrorTableFrameController {
                         }
                     } catch (ConnectForStendExeption e) {
                         e.printStackTrace();
+                        ConsoleHelper.infoException("Потеряна связь с установкой");
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                ConsoleHelper.infoException("Потеряна связь с установкой");
                                 blockBtns.setValue(false);
                                 tglBtnManualMode.setSelected(false);
                                 blockTypeEnergyAndDirectionBtns.setValue(false);
@@ -360,13 +361,14 @@ public class TestErrorTableFrameController {
 
                         if (manualTestThread.isAlive()) {
                             manualTestThread.interrupt();
-                            selectedCommand.removeListener(manualListChangeListener);
                         }
 
                         if (automaticTestThread.isAlive()) {
                             automaticTestThread.interrupt();
-                            selectedCommand.removeListener(automaticListChangeListener);
                         }
+
+                        selectedCommand.removeListener(manualListChangeListener);
+                        selectedCommand.removeListener(automaticListChangeListener);
 
                         if (UnomThread.isAlive() || startUnTest) {
                             UnomThread.interrupt();
@@ -375,7 +377,9 @@ public class TestErrorTableFrameController {
 
                         try {
                             if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();;
+                            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
+                            TestErrorTableFrameController.refreshRefMeterParameters();
 
                             Platform.runLater(new Runnable() {
                                 @Override
@@ -391,10 +395,10 @@ public class TestErrorTableFrameController {
 
                         }catch (ConnectForStendExeption e) {
                             e.printStackTrace();
+                            ConsoleHelper.infoException("Потеряна связь с утановкой");
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ConsoleHelper.infoException("Потеряна связь с утановкой");
                                     tglBtnManualMode.setSelected(false);
                                     tglBtnAuto.setSelected(false);
                                     tglBtnUnom.setSelected(false);
@@ -539,10 +543,7 @@ public class TestErrorTableFrameController {
                             public void run() {
                                 try {
                                     try {
-                                        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
                                         startAutomaticTest();
-
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -677,51 +678,107 @@ public class TestErrorTableFrameController {
 
     //Блок команд для старта автоматического теста
     private void startAutomaticTest() throws ConnectForStendExeption, InterruptedException {
+        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 
-        //Если выбрана панель AP+
-        if (tglBtnAPPls.isSelected()) {
+        command = tabViewTestPoints.getSelectionModel().getSelectedItem();
 
-            startTestOnSelectPane(timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+        if (!command.isActive()) {
+            for (int index = i + 1; index < tabViewTestPoints.getItems().size(); index++) {
+                if (tabViewTestPoints.getItems().get(index).isActive()) {
+                    tabViewTestPoints.getSelectionModel().select(index);
+                    for (TableView<Meter.CommandResult> errorsView : tabViewErrorsList) {
+                        errorsView.getSelectionModel().select(index);
+                    }
+                    break;
+                }
 
-            //Если выбрана панель AP-
-        } else if(tglBtnAPMns.isSelected()) {
+                if (index == tabViewTestPoints.getItems().size() - 1 && !tabViewTestPoints.getItems().get(index).isActive()) {
+                    btnStop.fire();
+                }
+            }
+        } else {
+            if (command instanceof ErrorCommand) {
 
-            startTestOnSelectPane(timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+                initAllParamForErrorCommand((ErrorCommand) command, i);
+                command.execute();
+            }else if (command instanceof CreepCommand) {
 
-            //Если выбрана панель RP+
-        } else if(tglBtnRPPls.isSelected()) {
+                initAllParamForCreepCommand((CreepCommand) command, i);
+                command.execute();
+            }else if (command instanceof StartCommand) {
 
-           startTestOnSelectPane(timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+                initAllParamForStartCommand((StartCommand) command, i);
+                command.execute();
+            }else if (command instanceof RTCCommand) {
 
-            //Если выбрана панель RP-
-        } else if(tglBtnRPMns.isSelected()) {
+                initAllParamForRTCCommand((RTCCommand) command, i);
+                command.execute();
+            }else if (command instanceof ConstantCommand) {
 
-           startTestOnSelectPane(timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+                initAllParamForConstantCommand((ConstantCommand) command, i);
+                command.execute();
+            }else if (command instanceof ImbalansUCommand) {
+
+                initAllParamForImbCommand((ImbalansUCommand) command, i);
+                command.execute();
+            }
+
+            if (i == tabViewTestPoints.getItems().size() - 1) {
+                btnStop.fire();
+            } else {
+                for (int index = i + 1; index < tabViewTestPoints.getItems().size(); index++) {
+                    if (tabViewTestPoints.getItems().get(index).isActive()) {
+                        tabViewTestPoints.getSelectionModel().select(index);
+                        for (TableView<Meter.CommandResult> errorsView : tabViewErrorsList) {
+                            errorsView.getSelectionModel().select(index);
+                        }
+                        break;
+                    }
+
+                    if (index == tabViewTestPoints.getItems().size() - 1 && !tabViewTestPoints.getItems().get(index).isActive()) {
+                        btnStop.fire();
+                    }
+                }
+            }
         }
     }
 
     //Общая команда для старта ручного теста
     private void startManualTest() throws ConnectForStendExeption, InterruptedException {
 
-        //Если выбрана панель AP+
-        if (tglBtnAPPls.isSelected()) {
+        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 
-           startContinuousTestOnSelectPane(timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+        command = tabViewTestPoints.getSelectionModel().getSelectedItem();
 
-            //Если выбрана панель AP-
-        } else if(tglBtnAPMns.isSelected()) {
+        if (command instanceof ErrorCommand) {
 
-           startContinuousTestOnSelectPane(timeToCreepTestGOSTAP, timeToStartTestGOSTAP);
+            initAllParamForErrorCommand((ErrorCommand) command, i);
 
-            //Если выбрана панель RP+
-        } else if(tglBtnRPPls.isSelected()) {
+            command.executeForContinuousTest();
+        }else if (command instanceof CreepCommand) {
 
-            startContinuousTestOnSelectPane(timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+            initAllParamForCreepCommand((CreepCommand) command, i);
 
-            //Если выбрана панель RP-
-        } else if(tglBtnRPMns.isSelected()) {
+            command.executeForContinuousTest();
+        }else if (command instanceof StartCommand) {
 
-            startContinuousTestOnSelectPane(timeToCreepTestGOSTRP, timeToStartTestGOSTRP);
+            initAllParamForStartCommand((StartCommand) command, i);
+
+            command.executeForContinuousTest();
+        }else if (command instanceof RTCCommand) {
+
+            initAllParamForRTCCommand((RTCCommand) command, i);
+
+            command.executeForContinuousTest();
+
+        }else if (command instanceof ConstantCommand) {
+
+            initAllParamForConstantCommand((ConstantCommand) command, i);
+            command.executeForContinuousTest();
+        }else if (command instanceof ImbalansUCommand) {
+
+            initAllParamForImbCommand((ImbalansUCommand) command, i);
+            command.executeForContinuousTest();
         }
     }
 
@@ -742,120 +799,6 @@ public class TestErrorTableFrameController {
         blockBtns.setValue(false);
     }
 
-    //Старт автоматического теста в зависимости от выбранной панели (направления и типа энергии)
-    private void startTestOnSelectPane(long timeCRPForGOST, long timeSTAForGOST)
-            throws ConnectForStendExeption, InterruptedException {
-
-        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
-
-        while (i < tabViewTestPoints.getItems().size()) {
-
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Сработала команда interrupt в методе startTestOnSelectPane" +
-                        "Вышел из него");
-                return;
-            }
-
-            command = tabViewTestPoints.getSelectionModel().getSelectedItem();
-
-            //Если тестовая точка активна
-            if (command.isActive()) {
-
-                if (i != tabViewTestPoints.getItems().size() - 1) {
-                    command.setNextCommand(true);
-                } else {
-                    command.setNextCommand(false);
-                }
-
-                if (command instanceof ErrorCommand) {
-
-                    initAllParamForErrorCommand((ErrorCommand) command, i);
-                    command.execute();
-                }else if (command instanceof CreepCommand) {
-
-                    initAllParamForCreepCommand((CreepCommand) command, i, timeCRPForGOST);
-                    command.execute();
-                }else if (command instanceof StartCommand) {
-
-                    initAllParamForStartCommand((StartCommand) command, i, timeSTAForGOST);
-                    command.execute();
-                }else if (command instanceof RTCCommand) {
-
-                    initAllParamForRTCCommand((RTCCommand) command, i);
-                    command.execute();
-                }else if (command instanceof ConstantCommand) {
-
-                    initAllParamForConstantCommand((ConstantCommand) command, i);
-                    command.execute();
-                }else if (command instanceof ImbalansUCommand) {
-
-                    initAllParamForImbCommand((ImbalansUCommand) command, i);
-                    command.execute();
-                }
-            }
-
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Сработала команда interrupt в методе startTestOnSelectPane " +
-                        "Вышел из него");
-                return;
-            }
-
-            i++;
-
-            tabViewTestPoints.getSelectionModel().select(i);
-
-            for (TableView<Meter.CommandResult> errorsView : tabViewErrorsList) {
-                errorsView.getSelectionModel().select(i);
-            }
-        }
-    }
-
-    //Старт ручного теста в зависимости от выбранной панели (направления и типа энергии)
-    private void startContinuousTestOnSelectPane(long timeCRPForGOST, long timeSTAForGOST)
-            throws ConnectForStendExeption, InterruptedException {
-
-        if (Thread.currentThread().isInterrupted()) {
-            System.out.println("Сработала команда interrupt в методе startTestOnSelectPane " +
-                    "Вышел из него");
-            return;
-        }
-
-        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
-
-        command = tabViewTestPoints.getSelectionModel().getSelectedItem();
-
-        if (command instanceof ErrorCommand) {
-
-            initAllParamForErrorCommand((ErrorCommand) command, i);
-
-            command.executeForContinuousTest();
-        }else if (command instanceof CreepCommand) {
-
-            initAllParamForCreepCommand((CreepCommand) command, i, timeCRPForGOST);
-
-            command.executeForContinuousTest();
-        }else if (command instanceof StartCommand) {
-
-            initAllParamForStartCommand((StartCommand) command, i, timeSTAForGOST);
-
-            command.executeForContinuousTest();
-        }else if (command instanceof RTCCommand) {
-
-            initAllParamForRTCCommand((RTCCommand) command, i);
-
-            command.executeForContinuousTest();
-
-        }else if (command instanceof ConstantCommand) {
-
-            initAllParamForConstantCommand((ConstantCommand) command, i);
-            command.executeForContinuousTest();
-        }else if (command instanceof ImbalansUCommand) {
-
-            initAllParamForImbCommand((ImbalansUCommand) command, i);
-            command.executeForContinuousTest();
-        }
-    }
-
     //Инициализирует параметры необходимые для снятия погрешности в точке
     private void initAllParamForErrorCommand(ErrorCommand errorCommand, int index){
         errorCommand.setStendDLLCommands(stendDLLCommands);
@@ -868,7 +811,7 @@ public class TestErrorTableFrameController {
     }
 
     //Инициализирует параметры необходимые для команды самохода
-    private void initAllParamForCreepCommand(CreepCommand creepCommand, int index, long timeForGOSTtest){
+    private void initAllParamForCreepCommand(CreepCommand creepCommand, int index){
         creepCommand.setStendDLLCommands(stendDLLCommands);
         creepCommand.setRatedVolt(Un);
         creepCommand.setRatedFreq(Fn);
@@ -876,12 +819,16 @@ public class TestErrorTableFrameController {
         creepCommand.setMeterList(listMetersForTest);
 
         if (creepCommand.isGostTest()) {
-            creepCommand.setUserTimeTest(timeForGOSTtest);
+            if (creepCommand.getChannelFlag() < 2) {
+                creepCommand.setUserTimeTest(timeToCreepTestGOSTAP);
+            } else {
+                creepCommand.setUserTimeTest(timeToCreepTestGOSTRP);
+            }
         }
     }
 
     //Инициализирует параметры необходимые для команды чувствительность
-    private void initAllParamForStartCommand(StartCommand startCommand, int index, long timeForGOSTtest) {
+    private void initAllParamForStartCommand(StartCommand startCommand, int index) {
         startCommand.setStendDLLCommands(stendDLLCommands);
         startCommand.setRatedFreq(Fn);
         startCommand.setRatedVolt(Un);
@@ -890,7 +837,11 @@ public class TestErrorTableFrameController {
         startCommand.setMeterList(listMetersForTest);
 
         if (startCommand.isGostTest()) {
-            startCommand.setUserTimeTest(timeForGOSTtest);
+            if (startCommand.getChannelFlag() < 2) {
+                startCommand.setUserTimeTest(timeToStartTestGOSTAP);
+            } else {
+                startCommand.setUserTimeTest(timeToStartTestGOSTRP);
+            }
         }
     }
 
@@ -2061,40 +2012,44 @@ public class TestErrorTableFrameController {
             }
         });
 
-//        if (stendDLLCommands instanceof ThreePhaseStend) {
-//
-//            Platform.runLater(new Runnable() {
-//                @Override
-//                public void run() {
-//                    FXMLLoader fxmlLoader = new FXMLLoader();
-//                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/refParamFrames/threePhaseStendrefParamFrame.fxml"));
-//                    try {
-//                        fxmlLoader.load();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                        System.out.println("Ошибка при загрузке окна.");
-//                    }
-//
-//                    Stage stage = new Stage();
-//                    Scene scene = new Scene(fxmlLoader.getRoot());
-//                    stage.setTitle("Методики");
-//                    stage.setScene(scene);
-//
-//                    stendRefParametersForFrame = (ThreePhaseStendrefParamController) fxmlLoader.getController();
-//                    stendRefParametersForFrame.initTimer(stendDLLCommands);
-//                    stendRefParametersForFrame.addMovingActions();
-//
-//                    stage.initStyle(StageStyle.TRANSPARENT);
-//
-//                    refMeterStage = stage;
-//
-//                    stage.hide();
-//                }
-//            });
-//
-//        } else {
-//            //refMeterParameters = new OnePhaseRefMeterParameters();
-//        }
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/refParamFrames/threePhaseStendrefParamFrame.fxml"));
+                    try {
+                        fxmlLoader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.out.println("Ошибка при загрузке окна.");
+                    }
+
+                    Stage stage = new Stage();
+                    Scene scene = new Scene(fxmlLoader.getRoot());
+                    stage.setTitle("Методики");
+                    stage.setScene(scene);
+
+                    stendRefParametersForFrame = (ThreePhaseStendrefParamController) fxmlLoader.getController();
+                    stendRefParametersForFrame.initRefType(stendDLLCommands);
+                    stendRefParametersForFrame.addMovingActions();
+
+                    stage.initStyle(StageStyle.TRANSPARENT);
+
+                    refMeterStage = stage;
+
+                    stage.hide();
+                }
+            });
+
+        } else {
+            //refMeterParameters = new OnePhaseRefMeterParameters();
+        }
+    }
+
+    public static void refreshRefMeterParameters() {
+        stendRefParametersForFrame.readParameters();
     }
 
     //Добавляет объект resultError к каждому счётчику необходимому для теста
@@ -2212,8 +2167,12 @@ public class TestErrorTableFrameController {
     private long initTimeForCreepTestGOST(int constMeterForTest) {
         int amountMeasElem;
 
-        if (typeCircuitThreePhase) {
-            amountMeasElem = 3;
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (methodicForStend instanceof MethodicForThreePhaseStend) {
+                amountMeasElem = 3;
+            } else {
+                amountMeasElem = 1;
+            }
         } else amountMeasElem = 1;
 
         double formulaResult = 600000000 / (constMeterForTest * amountMeasElem * Un * Imax);
@@ -2234,8 +2193,12 @@ public class TestErrorTableFrameController {
         int amountMeasElem;
         double ratedCurr;
 
-        if (typeCircuitThreePhase) {
-            amountMeasElem = 3;
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (methodicForStend instanceof MethodicForThreePhaseStend) {
+                amountMeasElem = 3;
+            } else {
+                amountMeasElem = 1;
+            }
         } else amountMeasElem = 1;
 
         if (!typeOfMeasuringElementShunt) {
@@ -2271,6 +2234,7 @@ public class TestErrorTableFrameController {
 
         timeToStartTestGOSTRP = initTimeForStartGOSTTest(accuracyClassRP, constantMeterRP);
     }
+
     //=====================================================================================
     //get sets
 

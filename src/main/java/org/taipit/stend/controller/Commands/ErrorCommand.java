@@ -204,6 +204,8 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             }
         }
 
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
@@ -212,6 +214,8 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         }
 
         Thread.sleep(3000); //stendDLLCommands.getPauseForStabization()
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -249,6 +253,8 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
             }
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
 
             for (Meter meter : meterForTestList) {
 
@@ -347,6 +353,8 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             }
         }
 
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
@@ -356,9 +364,12 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         Thread.sleep(stendDLLCommands.getPauseForStabization());
 
+
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         //Устанавливаем местам импульсный выход
         stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
@@ -383,7 +394,9 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         String error;
         double doubleErr;
 
-        while (!Thread.currentThread().isInterrupted()) {
+        while (Thread.currentThread().isAlive()) {
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
 
             for (Meter meter : meterForTestList) {
 
@@ -412,7 +425,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                     }
                 }
             }
-            Thread.sleep(300);
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();

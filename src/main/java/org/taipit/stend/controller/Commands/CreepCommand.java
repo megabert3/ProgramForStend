@@ -169,6 +169,8 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
@@ -177,6 +179,8 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         setDefTestResults(channelFlag, index);
 
         Thread.sleep(500); //Пауза для стабилизации
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
@@ -188,6 +192,8 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         }
 
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -293,13 +299,17 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
         Thread.sleep(500); // Пауза для стабилизации
 
-        while (!Thread.currentThread().isInterrupted()) {
+        while (Thread.currentThread().isAlive()) {
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
 
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + userTimeTest;
@@ -314,6 +324,8 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
             creepCommandResult = initCreepCommandResult();
 
             while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
+
+                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
@@ -534,6 +546,10 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
     public void setCosP(String cosP) {
         this.cosP = cosP;
+    }
+
+    public int getChannelFlag() {
+        return channelFlag;
     }
 
     @Override

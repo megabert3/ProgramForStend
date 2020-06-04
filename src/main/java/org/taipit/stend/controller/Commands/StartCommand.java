@@ -194,8 +194,12 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
 
         Thread.sleep(500); //Пауза для стабилизации
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
@@ -207,6 +211,8 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
 
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -327,7 +333,11 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
         Thread.sleep(500); //Время стабилизации
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -378,7 +388,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                         }
                     }
                 }
-                Thread.sleep(400);
+                Thread.sleep(350);
             }
 
             //Выставляю результат теста счётчиков, которые не прошли тест
@@ -554,6 +564,10 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
     public void setiABC(String iABC) {
         this.iABC = iABC;
+    }
+
+    public int getChannelFlag() {
+        return channelFlag;
     }
 
     @Override

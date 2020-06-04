@@ -196,11 +196,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
         }
 
-        if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
-                voltPer, 0, iABC, cosP)) throw new ConnectForStendExeption();
-
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -212,6 +211,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         for (Meter meter : meterForTestList) {
             stendDLLCommands.constTestStart(meter.getId(), constantMeter);
         }
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -254,6 +255,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             }
 
+            TestErrorTableFrameController.refreshRefMeterParameters();
+
             timer.schedule(timerTask, 7000);
 
             if (Thread.currentThread().isInterrupted()) {
@@ -264,6 +267,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             timeEnd = timeStart + timeTheTest;
 
             while (System.currentTimeMillis() < timeEnd) {
+
+                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
@@ -284,6 +289,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             }
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
 
             //Получаю результат
             double result;
@@ -344,6 +351,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             timer.schedule(timerTask, 7000);
 
+            TestErrorTableFrameController.refreshRefMeterParameters();
+
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
             }
@@ -353,6 +362,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             double hightKw;
 
             while (kWToTest > refMeterEnergy) {
+
+                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
@@ -376,6 +387,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             }
 
             if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
 
             //Получаю результат
             double result;
@@ -450,13 +463,19 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
         Thread.sleep(5000);
 
-        while (!Thread.currentThread().isInterrupted()) {
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
+        while (Thread.currentThread().isAlive()) {
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
 
             //Устанавливаю
             for (Meter meter : meterForTestList) {
@@ -506,6 +525,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 timer.schedule(timerTask, 7000);
 
+                TestErrorTableFrameController.refreshRefMeterParameters();
+
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
                 }
@@ -514,6 +535,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 timeEnd = timeStart + timeTheTest;
 
                 while (System.currentTimeMillis() < timeEnd) {
+
+                    TestErrorTableFrameController.refreshRefMeterParameters();
 
                     if (Thread.currentThread().isInterrupted()) {
                         throw new InterruptedException();
@@ -534,6 +557,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 }
 
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
+                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 //Получаю результат
                 double result;
@@ -593,6 +618,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 timer.schedule(timerTask, 7000);
 
+                TestErrorTableFrameController.refreshRefMeterParameters();
+
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
                 }
@@ -601,6 +628,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 String[] kw = null;
 
                 while (kWToTest > refMeterEnergy) {
+
+                    TestErrorTableFrameController.refreshRefMeterParameters();
 
                     if (Thread.currentThread().isInterrupted()) {
                         throw new InterruptedException();
@@ -622,6 +651,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 }
 
                 if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+
+                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 //Получаю результат
                 double result;
@@ -661,7 +692,11 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             }
 
+            TestErrorTableFrameController.refreshRefMeterParameters();
+
             Thread.sleep(5000);
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
         }
     }
 
