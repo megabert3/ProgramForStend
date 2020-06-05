@@ -53,11 +53,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     //Напряжение на фазе C
     private double voltPerC;
 
-    public void setVoltPer(double voltPer) {
-        this.voltPer = voltPer;
-    }
-
-    private double voltPer;
+    private double voltPer = 100;
 
     //Процен от тока
     private double currPer;
@@ -123,7 +119,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        int refMeterCount = 0;
+        int refMeterCount = 1;
 
         currThread = Thread.currentThread();
 
@@ -211,7 +207,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
 
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-            if (refMeterCount % 7 == 0) {
+            if (refMeterCount % 8 == 0) {
                 TestErrorTableFrameController.refreshRefMeterParameters();
             }
 
@@ -259,8 +255,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     @Override
@@ -343,7 +337,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
 
         while (Thread.currentThread().isAlive()) {
-            int refMeterCount = 0;
+            int refMeterCount = 1;
 
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + userTimeTest;
@@ -359,7 +353,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
             while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
 
-                if (refMeterCount % 7 == 0) {
+                if (refMeterCount % 8 == 0) {
                     TestErrorTableFrameController.refreshRefMeterParameters();
                 }
 
@@ -409,7 +403,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     private HashMap<Integer, Boolean> initStartCommandResult() {
@@ -574,6 +567,10 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
     public int getChannelFlag() {
         return channelFlag;
+    }
+
+    public void setVoltPer(double voltPer) {
+        this.voltPer = voltPer;
     }
 
     @Override

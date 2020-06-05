@@ -333,7 +333,6 @@ public class TestParametersFrameController implements Frame {
             testErrorTableFrameController.setFn(Fn);
             testErrorTableFrameController.setIb(Ib);
             testErrorTableFrameController.setImax(Imax);
-            testErrorTableFrameController.setTypeCircuit(typeCircuitThreePhase);
             testErrorTableFrameController.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
             testErrorTableFrameController.setTwoCircut(twoCircut);
 

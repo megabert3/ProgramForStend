@@ -148,7 +148,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        int refMeterCount = 0;
+        int refMeterCount = 1;
 
         //Выбор константы в зависимости от энергии
         if (channelFlag == 0 || channelFlag == 1) {
@@ -218,7 +218,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
 
         while (flagInStop.containsValue(false)) {
 
-            if (refMeterCount % 10 == 0) {
+            if (refMeterCount % 11 == 0) {
                 TestErrorTableFrameController.refreshRefMeterParameters();
             }
 
@@ -268,8 +268,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     //Метод для цикличной поверки счётчиков
@@ -279,7 +277,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        int refMeterCount = 0;
+        int refMeterCount = 1;
 
         //Выбор константы в зависимости от энергии
         if (channelFlag == 0 || channelFlag == 1) {
@@ -341,7 +339,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
 
         while (Thread.currentThread().isAlive()) {
 
-            if (refMeterCount % 10 == 0) {
+            if (refMeterCount % 11 == 0) {
                 TestErrorTableFrameController.refreshRefMeterParameters();
             }
 
@@ -378,7 +376,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     //Опрашивает счётчики до нужно значения проходов

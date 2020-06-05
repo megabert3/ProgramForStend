@@ -94,9 +94,6 @@ public class TestErrorTableFrameController {
     //Тип измерительного элемента счётчика шунт/трансформатор
     private boolean typeOfMeasuringElementShunt;
 
-    //Тип сети трёхфазная или однофазная
-    private boolean typeCircuitThreePhase;
-
     private int constantMeterAP;
 
     private int constantMeterRP;
@@ -785,17 +782,17 @@ public class TestErrorTableFrameController {
     //Общая команда для старта напряжения
     private void startUn () throws ConnectForStendExeption, InterruptedException {
 
-        int phase;
-
         if (stendDLLCommands instanceof ThreePhaseStend) {
-            phase = 1;
+            if (methodicForStend instanceof MethodicForThreePhaseStend) {
+                if (!stendDLLCommands.getUI(0, Un, 0, Fn, 0, 0, 100.0, 0, "H", "1.0")) throw new ConnectForStendExeption();
+            } else {
+                if (!stendDLLCommands.getUIWithPhase(1, Un, 0, Fn, 0, 0, 0, 0, 100, 0, "H", "1.0")) throw new ConnectForStendExeption();
+            }
+
         } else {
-            phase = 0;
+            if (!stendDLLCommands.getUI(1, Un, 0, Fn, 0, 0, 100.0, 0, "H", "1.0")) throw new ConnectForStendExeption();
         }
 
-        if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
-
-        if (!stendDLLCommands.getUI(phase, Un, 0, Fn, 0, 0, 100.0, 0, "H", "1.0")) throw new ConnectForStendExeption();
         blockBtns.setValue(false);
     }
 
@@ -2308,10 +2305,6 @@ public class TestErrorTableFrameController {
 
     public void setTypeOfMeasuringElementShunt(boolean typeOfMeasuringElementShunt) {
         this.typeOfMeasuringElementShunt = typeOfMeasuringElementShunt;
-    }
-
-    public void setTypeCircuit(boolean typeCircuitThreePhase) {
-        this.typeCircuitThreePhase = typeCircuitThreePhase;
     }
 
     public void setAccuracyClassAP(double accuracyClassAP) {

@@ -117,7 +117,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         currThread = Thread.currentThread();
 
-        int refMeterCount = 0;
+        int refMeterCount = 1;
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -195,7 +195,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
-            if (refMeterCount % 7 == 0) {
+            if (refMeterCount % 8 == 0) {
                 TestErrorTableFrameController.refreshRefMeterParameters();
             }
 
@@ -246,8 +246,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     @Override
@@ -315,7 +313,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         while (Thread.currentThread().isAlive()) {
 
-            int refMeterCount = 0;
+            int refMeterCount = 1;
 
             //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
             setDefTestResults(channelFlag, index);
@@ -331,7 +329,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
             while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
-                if (refMeterCount % 7 == 0) {
+                if (refMeterCount % 8 == 0) {
                     TestErrorTableFrameController.refreshRefMeterParameters();
                 }
 

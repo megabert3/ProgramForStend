@@ -156,7 +156,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        int refMeterCount = 0;
+        int refMeterCount = 1;
 
         timer = new Timer(true);
         constantThread = Thread.currentThread();
@@ -270,7 +270,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             while (System.currentTimeMillis() < timeEnd) {
 
-                if (refMeterCount % 6 == 0) {
+                if (refMeterCount % 7 == 0) {
                     TestErrorTableFrameController.refreshRefMeterParameters();
                 }
 
@@ -369,7 +369,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             while (kWToTest > refMeterEnergy) {
 
-                if (refMeterCount % 3 == 0) {
+                if (refMeterCount % 4 == 0) {
                     TestErrorTableFrameController.refreshRefMeterParameters();
                 }
 
@@ -422,8 +422,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     //Метод для цикличной поверки счётчиков
@@ -482,7 +480,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
         while (Thread.currentThread().isAlive()) {
 
-            int refMeterCount = 0;
+            int refMeterCount = 1;
 
             //Устанавливаю
             for (Meter meter : meterForTestList) {
@@ -543,7 +541,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 while (System.currentTimeMillis() < timeEnd) {
 
-                    if (refMeterCount % 6 == 0) {
+                    if (refMeterCount % 7 == 0) {
                         TestErrorTableFrameController.refreshRefMeterParameters();
                     }
 
@@ -640,7 +638,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 while (kWToTest > refMeterEnergy) {
 
-                    if (refMeterCount % 3 == 0) {
+                    if (refMeterCount % 4 == 0) {
                         TestErrorTableFrameController.refreshRefMeterParameters();
                     }
 

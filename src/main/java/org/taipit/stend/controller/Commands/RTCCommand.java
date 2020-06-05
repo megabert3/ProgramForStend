@@ -109,7 +109,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        int ErrorCommand = 0;
+        int ErrorCommand = 1;
 
         channelFlag = 4;
 
@@ -206,8 +206,6 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     @Override

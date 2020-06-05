@@ -2,7 +2,11 @@ package org.taipit.stend.controller;
 
 import org.taipit.stend.model.refMeter.ThreePhaseRefMeterParameters;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainStend {
 
@@ -14,30 +18,45 @@ public class MainStend {
 
     public static void main(String[] args) throws InterruptedException {
 
-        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
+        String text = "2.5sad(7.5)";
+        String Ib = null;
+        String Imax;
 
-        ThreePhaseRefMeterParameters refMeterParameters = new ThreePhaseRefMeterParameters();
+        Pattern ib = Pattern.compile("[\\d\\.]+\\(");
+        Pattern imax = Pattern.compile("\\(.+\\)");
 
-        String std;
+        Matcher mat = ib.matcher(text);
 
-        stendDLLCommands.setReviseMode(1);
+        while (mat.find()) {
+            Ib = mat.group();
+        }
 
-        long timeEnd;
-        long time = System.currentTimeMillis();
-        //stendDLLCommands.getUI(0, 230.0, 5, 50, 0, 0, 100, 100, "С", "1.0");
-        stendDLLCommands.getUIWithPhase(1, 230.0, 5, 50, 0, 0, 0, 0, 100, 100, "A", "1.0");
-        timeEnd = System.currentTimeMillis() - time;
-        System.out.println("Time to set command Adjust_UI " + timeEnd + " ms with RefType: " + stendDLLCommands.getTypeReferenceMeter());
+        System.out.println(Ib);
 
-
-        Thread.sleep(5000);
-
-        time = System.currentTimeMillis();
-        std = stendDLLCommands.stMeterRead();
-        timeEnd = System.currentTimeMillis() - time;
-        System.out.println("Time to set command StdMeter_Read " + timeEnd + " ms with RefType: " + stendDLLCommands.getTypeReferenceMeter());
-        System.out.println("Values returned command StdMeter_Read \n" + std);
-        stendDLLCommands.powerOf();
+//        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
+//
+//        ThreePhaseRefMeterParameters refMeterParameters = new ThreePhaseRefMeterParameters();
+//
+//        String std;
+//
+//        stendDLLCommands.setReviseMode(1);
+//
+//        long timeEnd;
+//        long time = System.currentTimeMillis();
+//        //stendDLLCommands.getUI(0, 230.0, 5, 50, 0, 0, 100, 100, "С", "1.0");
+//        stendDLLCommands.getUIWithPhase(1, 230.0, 5, 50, 0, 0, 0, 0, 100, 100, "A", "1.0");
+//        timeEnd = System.currentTimeMillis() - time;
+//        System.out.println("Time to set command Adjust_UI " + timeEnd + " ms with RefType: " + stendDLLCommands.getTypeReferenceMeter());
+//
+//
+//        Thread.sleep(5000);
+//
+//        time = System.currentTimeMillis();
+//        std = stendDLLCommands.stMeterRead();
+//        timeEnd = System.currentTimeMillis() - time;
+//        System.out.println("Time to set command StdMeter_Read " + timeEnd + " ms with RefType: " + stendDLLCommands.getTypeReferenceMeter());
+//        System.out.println("Values returned command StdMeter_Read \n" + std);
+//        stendDLLCommands.powerOf();
 
     }
 }

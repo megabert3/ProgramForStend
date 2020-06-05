@@ -161,7 +161,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        int refMeterCount = 0;
+        int refMeterCount = 1;
 
         //Выбор константы в зависимости от энергии
         if (channelFlag == 0 || channelFlag == 1) {
@@ -209,6 +209,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
+        System.out.println("После команды");
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
@@ -217,6 +218,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         Thread.sleep(3000); //stendDLLCommands.getPauseForStabization()
 
+        System.out.println("После стабилизации");
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
@@ -256,7 +258,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                 throw new InterruptedException();
             }
 
-            if (refMeterCount % 10 == 0) {
+            if (refMeterCount % 11 == 0) {
                 TestErrorTableFrameController.refreshRefMeterParameters();
             }
 
@@ -303,8 +305,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     //Метод для цикличной поверки счётчиков
@@ -314,7 +314,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        int refMeterCount = 0;
+        int refMeterCount = 1;
 
         //Выбор константы в зависимости от энергии
         if (channelFlag == 0 || channelFlag == 1) {
@@ -391,7 +391,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         while (Thread.currentThread().isAlive()) {
 
-            if (refMeterCount % 10 == 0) {
+            if (refMeterCount % 11 == 0) {
                 TestErrorTableFrameController.refreshRefMeterParameters();
             }
 
@@ -429,7 +429,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-        if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
     }
 
     //Опрашивает счётчики до нужно значения проходов
