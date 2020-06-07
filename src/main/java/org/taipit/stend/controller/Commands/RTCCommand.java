@@ -91,7 +91,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
     private int errorType;
 
     public RTCCommand(boolean threePhaseCommand, String id , String name, int pulseForRTC, double freg, int countResultTest,
-                      int errorType, double errorForFalseTest, int channelFlagForSave) {
+                      int errorType, double errorForFalseTest, int channelFlag) {
         this.threePhaseCommand = threePhaseCommand;
         this.id = id;
         this.name = name;
@@ -100,7 +100,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
         this.countResultTest = countResultTest;
         this.errorType = errorType;
         this.errorForFalseTest = errorForFalseTest;
-        this.channelFlagForSave = channelFlagForSave;
+        this.channelFlag = channelFlag;
     }
 
     @Override

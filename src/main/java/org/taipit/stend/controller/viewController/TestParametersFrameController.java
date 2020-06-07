@@ -196,20 +196,11 @@ public class TestParametersFrameController implements Frame {
                 return;
             }
 
-            StringBuilder stringBuilder = new StringBuilder();
-            Pattern pat = Pattern.compile("[0-9]+");
-            Matcher mat = pat.matcher(txtFldCurrent.getText());
-
-            while (mat.find()) {
-                stringBuilder.append(mat.group()).append(",");
-            }
-
-            String[] current = new String(stringBuilder).split(",");
-
             try {
-                Ib = Float.parseFloat(current[0]);
-                Imax = Float.parseFloat(current[1]);
-            } catch (NumberFormatException e) {
+                String[] ibImaxArr = txtFldCurrent.getText().split("\\(");
+                Ib = Float.parseFloat(ibImaxArr[0].trim());
+                Imax = Float.parseFloat(ibImaxArr[1].substring(0, ibImaxArr[1].length() - 1));
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                 e.printStackTrace();
                 ConsoleHelper.infoException("Недопустимое значение параметра");
                 txtFldCurrent.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");

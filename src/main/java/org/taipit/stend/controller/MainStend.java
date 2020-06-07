@@ -18,20 +18,16 @@ public class MainStend {
 
     public static void main(String[] args) throws InterruptedException {
 
-        String text = "2.5sad(7.5)";
-        String Ib = null;
-        String Imax;
+        String text = "2.5(7.5)";
+        String IbStr = "";
+        String ImaxStr = "";
 
-        Pattern ib = Pattern.compile("[\\d\\.]+\\(");
-        Pattern imax = Pattern.compile("\\(.+\\)");
+        double Ib;
+        double Imax;
 
-        Matcher mat = ib.matcher(text);
-
-        while (mat.find()) {
-            Ib = mat.group();
-        }
-
-        System.out.println(Ib);
+        String[] arr = text.split("\\(");
+        System.out.println(arr[0].trim());
+        System.out.println(arr[1].substring(0, arr[1].length() - 1));
 
 //        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
 //
