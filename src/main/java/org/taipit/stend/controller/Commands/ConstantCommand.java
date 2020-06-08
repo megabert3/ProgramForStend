@@ -785,15 +785,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         return null;
     }
 
-    public void setNextCommand(boolean nextCommand) {
-        this.nextCommand = nextCommand;
-    }
-
-    @Override
-    public void setInterrupt(boolean interrupt) {
-
-    }
-
     public boolean isRunTestToTime() {
         return runTestToTime;
     }

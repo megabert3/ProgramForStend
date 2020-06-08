@@ -116,23 +116,23 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         this.voltPerB = voltPerPhaseB;
         this.voltPerC = voltPerPhaseC;
 
-        //id AB;A;P
+        //"Imb;B;R;N"
         String[] arrId = id.split(";");
 
-        if (arrId[1].equals("A")) {
+        if (arrId[2].equals("A")) {
 
-            if (arrId[2].equals("P")) {
-                name = (arrId[0] + "; ImbU AP+");
+            if (arrId[3].equals("P")) {
+                name = (arrId[1] + "; ImbU AP+");
             } else {
-                name = (arrId[0] + "; ImbU AP-");
+                name = (arrId[1] + "; ImbU AP-");
             }
 
         } else {
 
-            if (arrId[2].equals("P")) {
-                name = (arrId[0] + "; ImbU RP+");
+            if (arrId[3].equals("P")) {
+                name = (arrId[1] + "; ImbU RP+");
             } else {
-                name = (arrId[0] + "; ImbU RP-");
+                name = (arrId[1] + "; ImbU RP-");
             }
         }
 
@@ -469,15 +469,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
 
     public String getCountResult() {
         return String.valueOf(countResult);
-    }
-
-    public void setInterrupt(boolean interrupt) {
-        this.interrupt = interrupt;
-    }
-
-    @Override
-    public void setNextCommand(boolean nextCommand) {
-
     }
 
     public void setPhase(int phase) {

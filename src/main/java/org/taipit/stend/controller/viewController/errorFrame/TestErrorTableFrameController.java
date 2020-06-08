@@ -418,7 +418,7 @@ public class TestErrorTableFrameController {
 
         if (event.getSource() == btnSave) {
 
-            if (blockTypeEnergyAndDirectionBtns.getValue()) {
+            if (blockTypeEnergyAndDirectionBtns.getValue() || startUnTest) {
                 ConsoleHelper.infoException("Нельзя сохранить результаты во время теста");
                 return;
             }
@@ -470,10 +470,11 @@ public class TestErrorTableFrameController {
             });
 
             txtLabFn.getScene().getWindow().hide();
+            refMeterStage.hide();
         }
 
         if (event.getSource() == btnExit) {
-            if (blockTypeEnergyAndDirectionBtns.getValue()) {
+            if (blockTypeEnergyAndDirectionBtns.getValue() || startUnTest) {
                 ConsoleHelper.infoException("Невозможно выйти во время теста");
             } else {
 
@@ -485,6 +486,7 @@ public class TestErrorTableFrameController {
                         btnSave.fire();
                     } else {
                         Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
+                        refMeterStage.close();
                         testErrorTableFrameControllerStage.close();
                     }
                 }
@@ -1989,7 +1991,7 @@ public class TestErrorTableFrameController {
             public void handle(WindowEvent event) {
                 event.consume();
 
-                if (blockTypeEnergyAndDirectionBtns.getValue()) {
+                if (blockTypeEnergyAndDirectionBtns.getValue() || startUnTest) {
                     ConsoleHelper.infoException("Нельзя выйти во время теста");
                     return;
                 }
@@ -2002,10 +2004,10 @@ public class TestErrorTableFrameController {
                         btnSave.fire();
                     } else {
                         Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
+                        refMeterStage.close();
                         testErrorTableFrameControllerStage.close();
                     }
                 }
-
             }
         });
 
@@ -2041,7 +2043,34 @@ public class TestErrorTableFrameController {
             });
 
         } else {
-            //refMeterParameters = new OnePhaseRefMeterParameters();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/refParamFrames/onePhaseStendrefParamFrame.fxml"));
+                    try {
+                        fxmlLoader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.out.println("Ошибка при загрузке окна.");
+                    }
+
+                    Stage stage = new Stage();
+                    Scene scene = new Scene(fxmlLoader.getRoot());
+                    stage.setTitle("Методики");
+                    stage.setScene(scene);
+
+                    stendRefParametersForFrame = (OnePhaseStendrefParamController) fxmlLoader.getController();
+                    stendRefParametersForFrame.initRefType(stendDLLCommands);
+                    stendRefParametersForFrame.addMovingActions();
+
+                    stage.initStyle(StageStyle.TRANSPARENT);
+
+                    refMeterStage = stage;
+
+                    stage.hide();
+                }
+            });
         }
     }
 

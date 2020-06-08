@@ -298,15 +298,6 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
     }
 
-    @Override
-    public void setInterrupt(boolean interrupt) {
-    }
-
-    @Override
-    public void setNextCommand(boolean nextCommand) {
-        this.nextCommand = nextCommand;
-    }
-
     public void setIndex(int index) {
         this.index = index;
     }

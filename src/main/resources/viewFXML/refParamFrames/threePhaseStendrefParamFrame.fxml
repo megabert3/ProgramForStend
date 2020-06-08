@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="327.0" prefWidth="623.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.errorFrame.ThreePhaseStendrefParamController">
    <children>
       <GridPane layoutX="71.0" layoutY="106.0" prefHeight="375.0" prefWidth="623.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -127,7 +126,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="100.0" text="B" GridPane.columnIndex="1">
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="100.0" text="C" GridPane.columnIndex="1">
                      <font>
                         <Font size="18.0" />
                      </font>

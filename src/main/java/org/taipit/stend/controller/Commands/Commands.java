@@ -9,10 +9,6 @@ public interface Commands {
 
     void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException;
 
-    void setInterrupt(boolean interrupt);
-
-    void setNextCommand(boolean nextCommand);
-
     void setPulse(String pulse);
 
     void setCountResult(String countResult);

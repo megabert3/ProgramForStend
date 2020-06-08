@@ -7,6 +7,8 @@ import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrame
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,11 +23,9 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
 
-    //Следующая команда ErrorCommand?
-    private boolean nextCommand;
+    private String param = "";
 
-    //Команда для прерывания метода
-    private boolean interrupt;
+    private double procentParan;
 
     //Лист с счётчиками для испытания
     private List<Meter> meterForTestList;
@@ -134,7 +134,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
     //Конструктор для создания объекта с вклатки "Влияние"
     public ErrorCommand(boolean threePhaseStendCommand, String strPhase, String param, String id, int phase, String current,
-                        double voltPer, int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
+                        double paramPer, int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
         this.threePhaseCommand = threePhaseStendCommand;
         this.id = id;
         this.phase = phase;
@@ -144,11 +144,18 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         this.iABC = iABC;
         this.cosP = cosP;
         this.channelFlag = channelFlag;
-        this.voltPer = voltPer;
+        this.param = param;
+
+        if (param.equals("U")) {
+            this.voltPer = paramPer;
+        } else if (param.equals("F")) {
+            this.voltPer = 100;
+            this.procentParan = paramPer;
+        }
 
         //47.0%Un: 0.5L; 0.01 Ib
         //A: 47.0%Un: 0.5L; 0.01 Ib
-        name = (strPhase + voltPer + "%" + param + "n; " + cosP + "; " + currentPerсent + " " + current.trim());
+        name = (strPhase + paramPer + "%" + param + "n; " + cosP + "; " + currentPerсent + " " + current.trim());
 
         currPer = Double.parseDouble(currentPerсent) * 100;
     }
@@ -180,6 +187,10 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
+        }
+
+        if (param.equals("F")) {
+            ratedFreq = ratedFreq * new BigDecimal(procentParan / 100).setScale(5, RoundingMode.HALF_UP).doubleValue();
         }
 
         stendDLLCommands.setReviseMode(1);
@@ -331,6 +342,10 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
+        }
+
+        if (param.equals("F")) {
+            ratedFreq = new BigDecimal(ratedFreq * (procentParan / 100)).setScale(5, RoundingMode.HALF_UP).doubleValue();
         }
 
         stendDLLCommands.setReviseMode(1);
@@ -522,14 +537,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
     public String getCountResult() {
         return String.valueOf(countResult);
-    }
-
-    public void setNextCommand(boolean nextCommand) {
-        this.nextCommand = nextCommand;
-    }
-
-    public void setInterrupt(boolean interrupt) {
-        this.interrupt = interrupt;
     }
 
     @Override

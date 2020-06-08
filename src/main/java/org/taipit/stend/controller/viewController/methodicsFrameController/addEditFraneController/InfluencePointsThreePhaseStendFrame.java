@@ -1586,39 +1586,39 @@ public class InfluencePointsThreePhaseStendFrame {
 
                             switch (phases) {
                                 case "A": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("IMB;A;A;P", 0, "Ib", 0, "1.0", 0,
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("Imb;A;A;P", 0, "Ib", 0, "1.0", 0,
                                             100.0, 0, 0));
                                 }break;
                                 case "B": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("IMB;B;A;P", 0, "Ib", 0, "1.0", 0,
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("Imb;B;A;P", 0, "Ib", 0, "1.0", 0,
                                             0, 100.0, 0));
                                 }break;
                                 case "C": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("IMB;C;A;P", 0, "Ib", 0, "1.0", 0,
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("Imb;C;A;P", 0, "Ib", 0, "1.0", 0,
                                             0, 0, 100.0));
                                 }break;
                                 case "AB": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("IMB;AB;A;P", 0, "Ib", 0, "1.0", 0,
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("Imb;AB;A;P", 0, "Ib", 0, "1.0", 0,
                                             100.0, 100.0, 0));
                                 }break;
                                 case "BA": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("IMB;BA;A;P", 0, "Ib", 0, "1.0", 0,
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("Imb;BA;A;P", 0, "Ib", 0, "1.0", 0,
                                             100.0, 100.0, 0));
                                 }break;
                                 case "AC": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("IMB;AC;A;P", 0, "Ib", 0, "1.0", 0,
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("Imb;AC;A;P", 0, "Ib", 0, "1.0", 0,
                                             100.0, 0, 100.0));
                                 }break;
                                 case "CA": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("IMB;CA;A;P", 0, "Ib", 0, "1.0", 0,
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("Imb;CA;A;P", 0, "Ib", 0, "1.0", 0,
                                             100.0, 0, 100.0));
                                 }break;
                                 case "CB": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("IMB;CB;A;P", 0, "Ib", 0, "1.0", 0,
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("Imb;CB;A;P", 0, "Ib", 0, "1.0", 0,
                                             0, 100.0, 100.0));
                                 }break;
                                 case "BC": {
-                                    inflListForCollumAPPls.add(new ImbalansUCommand("IMB;BC;A;P", 0, "Ib", 0, "1.0", 0,
+                                    inflListForCollumAPPls.add(new ImbalansUCommand("Imb;BC;A;P", 0, "Ib", 0, "1.0", 0,
                                             0, 100.0, 100.0));
                                 }break;
                             }
@@ -1627,13 +1627,7 @@ public class InfluencePointsThreePhaseStendFrame {
                         txtFieldInfImb.setDisable(true);
 
                     } catch (NumberFormatException e) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Невeрные данные");
-                            }
-                        });
-
+                        ConsoleHelper.infoException("Невeрные данные");
                         addTglBtnImb.setSelected(false);
                     }
 
@@ -1667,39 +1661,39 @@ public class InfluencePointsThreePhaseStendFrame {
 
                             switch (phases) {
                                 case "A": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("IMB;A;A;N", 0, "Ib", 1, "1.0", 1,
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("Imb;A;A;N", 0, "Ib", 1, "1.0", 1,
                                             100.0, 0, 0));
                                 }break;
                                 case "B": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("IMB;B;A;N", 0, "Ib", 1, "1.0", 1,
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("Imb;B;A;N", 0, "Ib", 1, "1.0", 1,
                                             0, 100.0, 0));
                                 }break;
                                 case "C": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("IMB;C;A;N", 0, "Ib", 1, "1.0", 1,
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("Imb;C;A;N", 0, "Ib", 1, "1.0", 1,
                                             0, 0, 100.0));
                                 }break;
                                 case "AB": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("IMB;AB;A;N", 0, "Ib", 1, "1.0", 1,
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("Imb;AB;A;N", 0, "Ib", 1, "1.0", 1,
                                             100.0, 100.0, 0));
                                 }break;
                                 case "BA": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("IMB;BA;A;N", 0, "Ib", 1, "1.0", 1,
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("Imb;BA;A;N", 0, "Ib", 1, "1.0", 1,
                                             100.0, 100.0, 0));
                                 }break;
                                 case "AC": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("IMB;AC;A;N", 0, "Ib", 1, "1.0", 1,
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("Imb;AC;A;N", 0, "Ib", 1, "1.0", 1,
                                             100.0, 0, 100.0));
                                 }break;
                                 case "CA": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("IMB;CA;A;N", 0, "Ib", 1, "1.0", 1,
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("Imb;CA;A;N", 0, "Ib", 1, "1.0", 1,
                                             100.0, 0, 100.0));
                                 }break;
                                 case "CB": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("IMB;CB;A;N", 0, "Ib", 1, "1.0", 1,
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("Imb;CB;A;N", 0, "Ib", 1, "1.0", 1,
                                             0, 100.0, 100.0));
                                 }break;
                                 case "BC": {
-                                    inflListForCollumAPMns.add(new ImbalansUCommand("IMB;BC;A;N", 0, "Ib", 1, "1.0", 1,
+                                    inflListForCollumAPMns.add(new ImbalansUCommand("Imb;BC;A;N", 0, "Ib", 1, "1.0", 1,
                                             0, 100.0, 100.0));
                                 }break;
                             }
@@ -1708,12 +1702,7 @@ public class InfluencePointsThreePhaseStendFrame {
                         txtFieldInfImb.setDisable(true);
 
                     } catch (NumberFormatException e) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Неверные данные");
-                            }
-                        });
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnImb.setSelected(false);
                     }
 
@@ -1747,39 +1736,39 @@ public class InfluencePointsThreePhaseStendFrame {
 
                             switch (phases) {
                                 case "A": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("IMB;A;R;P", 7, "Ib", 0, "1.0", 2,
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("Imb;A;R;P", 7, "Ib", 0, "1.0", 2,
                                             100.0, 0, 0));
                                 }break;
                                 case "B": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("IMB;B;R;P", 7, "Ib", 0, "1.0", 2,
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("Imb;B;R;P", 7, "Ib", 0, "1.0", 2,
                                             0, 100.0, 0));
                                 }break;
                                 case "C": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("IMB;C;R;P", 7, "Ib", 0, "1.0", 2,
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("Imb;C;R;P", 7, "Ib", 0, "1.0", 2,
                                             0, 0, 100.0));
                                 }break;
                                 case "AB": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("IMB;AB;R;P", 7, "Ib", 0, "1.0", 2,
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("Imb;AB;R;P", 7, "Ib", 0, "1.0", 2,
                                             100.0, 100.0, 0));
                                 }break;
                                 case "BA": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("IMB;BA;R;P", 7, "Ib", 0, "1.0", 2,
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("Imb;BA;R;P", 7, "Ib", 0, "1.0", 2,
                                             100.0, 100.0, 0));
                                 }break;
                                 case "AC": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("IMB;AC;R;P", 7, "Ib", 0, "1.0", 2,
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("Imb;AC;R;P", 7, "Ib", 0, "1.0", 2,
                                             100.0, 0, 100.0));
                                 }break;
                                 case "CA": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("IMB;CA;R;P", 7, "Ib", 0, "1.0", 2,
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("Imb;CA;R;P", 7, "Ib", 0, "1.0", 2,
                                             100.0, 0, 100.0));
                                 }break;
                                 case "CB": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("IMB;CB;R;P", 7, "Ib", 0, "1.0", 2,
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("Imb;CB;R;P", 7, "Ib", 0, "1.0", 2,
                                             0, 100.0, 100.0));
                                 }break;
                                 case "BC": {
-                                    inflListForCollumRPPls.add(new ImbalansUCommand("IMB;BC;R;P", 7, "Ib", 0, "1.0", 2,
+                                    inflListForCollumRPPls.add(new ImbalansUCommand("Imb;BC;R;P", 7, "Ib", 0, "1.0", 2,
                                             0, 100.0, 100.0));
                                 }break;
                             }
@@ -1788,12 +1777,7 @@ public class InfluencePointsThreePhaseStendFrame {
                         txtFieldInfImb.setDisable(true);
 
                     } catch (NumberFormatException e) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Неверные данные");
-                            }
-                        });
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnImb.setSelected(false);
                     }
 
@@ -1827,39 +1811,39 @@ public class InfluencePointsThreePhaseStendFrame {
 
                             switch (phases) {
                                 case "A": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("IMB;A;R;N", 7, "Ib", 1, "1.0", 3,
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("Imb;A;R;N", 7, "Ib", 1, "1.0", 3,
                                             100.0, 0, 0));
                                 }break;
                                 case "B": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("IMB;B;R;N", 7, "Ib", 1, "1.0", 3,
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("Imb;B;R;N", 7, "Ib", 1, "1.0", 3,
                                             0, 100.0, 0));
                                 }break;
                                 case "C": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("IMB;C;R;N", 7, "Ib", 1, "1.0", 3,
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("Imb;C;R;N", 7, "Ib", 1, "1.0", 3,
                                             0, 0, 100.0));
                                 }break;
                                 case "AB": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("IMB;AB;R;N", 7, "Ib", 1, "1.0", 3,
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("Imb;AB;R;N", 7, "Ib", 1, "1.0", 3,
                                             100.0, 100.0, 0));
                                 }break;
                                 case "BA": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("IMB;BA;R;N", 7, "Ib", 1, "1.0", 3,
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("Imb;BA;R;N", 7, "Ib", 1, "1.0", 3,
                                             100.0, 100.0, 0));
                                 }break;
                                 case "AC": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("IMB;AC;R;N", 7, "Ib", 1, "1.0", 3,
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("Imb;AC;R;N", 7, "Ib", 1, "1.0", 3,
                                             100.0, 0, 100.0));
                                 }break;
                                 case "CA": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("IMB;CA;R;N", 7, "Ib", 1, "1.0", 3,
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("Imb;CA;R;N", 7, "Ib", 1, "1.0", 3,
                                             100.0, 0, 100.0));
                                 }break;
                                 case "CB": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("IMB;CB;R;N", 7, "Ib", 1, "1.0", 3,
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("Imb;CB;R;N", 7, "Ib", 1, "1.0", 3,
                                             0, 100.0, 100.0));
                                 }break;
                                 case "BC": {
-                                    inflListForCollumRPMns.add(new ImbalansUCommand("IMB;BC;R;N", 7, "Ib", 1, "1.0", 3,
+                                    inflListForCollumRPMns.add(new ImbalansUCommand("Imb;BC;R;N", 7, "Ib", 1, "1.0", 3,
                                             0, 100.0, 100.0));
                                 }break;
                             }
@@ -1868,12 +1852,7 @@ public class InfluencePointsThreePhaseStendFrame {
                         txtFieldInfImb.setDisable(true);
 
                     } catch (NumberFormatException e) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Неверные данные");
-                            }
-                        });
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnImb.setSelected(false);
                     }
                 }

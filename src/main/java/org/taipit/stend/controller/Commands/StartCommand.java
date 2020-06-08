@@ -500,16 +500,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public void setInterrupt(boolean interrupt) {
-        this.interrupt = interrupt;
-    }
-
-    @Override
-    public void setNextCommand(boolean nextCommand) {
-        this.nextCommand = nextCommand;
-    }
-
-    @Override
     public void setPulse(String pulse) {
 
     }
