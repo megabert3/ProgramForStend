@@ -93,9 +93,6 @@ public class SaveResultsTestFrame {
     @FXML
     private Button btnBack;
 
-    //@FXML
-    //private Pane paneForTabView;
-
     @FXML
     private TableView<Meter> tabViewResults;
 
@@ -197,16 +194,17 @@ public class SaveResultsTestFrame {
             ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
 
             for (Meter meter : meterList) {
-                meter.setOperator(txtFldOperator.getText());
-                meter.setController(txtFldController.getText());
-                meter.setWitness(txtFldWitness.getText());
-                meter.setTemperature(txtFldTemperature.getText());
-                meter.setHumidity(txtFldHumidity.getText());
-                meter.setFactoryManufacturer(txtFldManufacturer.getText());
-                meter.setBatchNo(txtFldBatchNumb.getText());
-                meter.setVerificationDate(txtFldТMusterDate.getText());
-                meter.setLastModifiedDate(new Date().toString());
-                meter.setUnicalID(String.valueOf(System.currentTimeMillis()) + meter.getId());
+                if (meter.isSaveResults()) {
+                    meter.setOperator(txtFldOperator.getText());
+                    meter.setController(txtFldController.getText());
+                    meter.setWitness(txtFldWitness.getText());
+                    meter.setTemperature(txtFldTemperature.getText());
+                    meter.setHumidity(txtFldHumidity.getText());
+                    meter.setFactoryManufacturer(txtFldManufacturer.getText());
+                    meter.setBatchNo(txtFldBatchNumb.getText());
+                    meter.setVerificationDate(txtFldТMusterDate.getText());
+                    meter.setLastModifiedDate(new Date().toString());
+                }
             }
 
             try {
