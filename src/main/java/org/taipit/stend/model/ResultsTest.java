@@ -32,10 +32,7 @@ public class ResultsTest implements Serializable {
         listAllResults.add(meter);
     }
 
-    public void addMeterRusults(List<Meter> meterList) throws InfoExсeption {
-//        for (Meter meter : meterList) {
-//            addMeterResult(meter.getUnicalID(), meter);
-//        }
+    public void addMeterRusults(List<Meter> meterList) {
         listAllResults.addAll(meterList);
     }
 

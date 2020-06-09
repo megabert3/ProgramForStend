@@ -45,9 +45,9 @@ public class Meter implements Serializable{
     //Класс точночти реактивной энергии
     private float accuracyClassRP;
 
-    private String temperature;
+    private float temperature;
 
-    private String humidity;
+    private float humidity;
 
     private String operator;
 
@@ -90,7 +90,7 @@ public class Meter implements Serializable{
     //Константа реактивной энергии счётчика
     private String constantMeterRP;
 
-    //Серийный номер счётчика
+    //Модель счётчика
     private String modelMeter;
 
     //Результаты тестов
@@ -326,41 +326,6 @@ public class Meter implements Serializable{
         return null;
     }
 
-    //Установка результата теста
-    public Meter.CommandResult setResultsInErrorList(int index, int resultNo, String error, int energyPulseChanel) {
-        CommandResult commandResult;
-        switch (energyPulseChanel) {
-            case 0: {
-                commandResult = errorListAPPls.get(index);
-                commandResult.setLastResult(error);
-                commandResult.getResults()[resultNo] = error;
-                return commandResult;
-            }
-
-            case 1: {
-                commandResult = errorListAPMns.get(index);
-                commandResult.setLastResult(error);
-                commandResult.getResults()[resultNo] = error;
-                return commandResult;
-            }
-
-            case 2: {
-                commandResult = errorListRPPls.get(index);
-                commandResult.setLastResult(error);
-                commandResult.getResults()[resultNo] = error;
-                return commandResult;
-            }
-
-            case 3: {
-                commandResult = errorListRPMns.get(index);
-                commandResult.setLastResult(error);
-                commandResult.getResults()[resultNo] = error;
-                return commandResult;
-            }
-        }
-        return null;
-    }
-
     //окончательный вердикт
     public Boolean meterPassOrNotAlltests() {
         Boolean yesOrNo = null;
@@ -420,6 +385,34 @@ public class Meter implements Serializable{
         return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(mlS),
                 TimeUnit.MILLISECONDS.toMinutes(mlS) % TimeUnit.HOURS.toMinutes(1),
                 TimeUnit.MILLISECONDS.toSeconds(mlS) % TimeUnit.MINUTES.toSeconds(1));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Meter meter = (Meter) obj;
+
+        if (this.Un != meter.Un) return false;
+        if (this.Imax != meter.Imax) return false;
+        if (this.Ib != meter.Ib) return false;
+        if (this.accuracyClassAP != meter.accuracyClassAP) return false;
+        if (!this.modelMeter.equals(meter.modelMeter)) return false;
+        if (!this.factoryManufacturer.equals(meter.factoryManufacturer)) return false;
+        if (this.temperature != meter.temperature) return false;
+        if (this.humidity != meter.humidity) return false;
+        if (!this.operator.equals(meter.operator)) return false;
+        if (!this.controller.equals(meter.controller)) return false;
+        if (!this.witness.equals(meter.witness)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (Un + Imax + Ib + accuracyClassAP + modelMeter.hashCode() + factoryManufacturer.hashCode() +
+                        temperature + humidity + operator.hashCode() + controller.hashCode() + witness.hashCode() * 31);
     }
 
     public String getConstantMeterAP() {
@@ -702,19 +695,19 @@ public class Meter implements Serializable{
         this.constantTestRPMns = constantTestRPMns;
     }
 
-    public String getTemperature() {
+    public float getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(String temperature) {
+    public void setTemperature(float temperature) {
         this.temperature = temperature;
     }
 
-    public String getHumidity() {
+    public float getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(String humidity) {
+    public void setHumidity(float humidity) {
         this.humidity = humidity;
     }
 

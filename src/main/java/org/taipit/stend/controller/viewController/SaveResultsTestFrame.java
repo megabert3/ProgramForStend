@@ -26,7 +26,6 @@ import javafx.util.Callback;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
-import org.taipit.stend.helper.exeptions.InfoExсeption;
 import org.taipit.stend.model.ResultsTest;
 
 public class SaveResultsTestFrame {
@@ -148,9 +147,6 @@ public class SaveResultsTestFrame {
     private TableColumn<Meter, String> tabColConstantRPMns;
 
     @FXML
-    private TextField txtFldManufacturer;
-
-    @FXML
     void initialize() {
 
     }
@@ -193,25 +189,38 @@ public class SaveResultsTestFrame {
         if (event.getSource() == btnSave) {
             ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
 
+            txtFldTemperature.setStyle("");
+            txtFldHumidity.setStyle("");
+
             for (Meter meter : meterList) {
                 if (meter.isSaveResults()) {
                     meter.setOperator(txtFldOperator.getText());
                     meter.setController(txtFldController.getText());
                     meter.setWitness(txtFldWitness.getText());
-                    meter.setTemperature(txtFldTemperature.getText());
-                    meter.setHumidity(txtFldHumidity.getText());
-                    meter.setFactoryManufacturer(txtFldManufacturer.getText());
+                    try {
+                        meter.setTemperature(Float.parseFloat(txtFldTemperature.getText()));
+                    }catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        txtFldTemperature.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        ConsoleHelper.infoException("Неверные данные");
+                        return;
+                    }
+
+                    try {
+                        meter.setHumidity(Float.parseFloat(txtFldHumidity.getText()));
+                    }catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        txtFldHumidity.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        ConsoleHelper.infoException("Неверные данные");
+                        return;
+                    }
+
                     meter.setBatchNo(txtFldBatchNumb.getText());
                     meter.setVerificationDate(txtFldТMusterDate.getText());
                     meter.setLastModifiedDate(new Date().toString());
                 }
             }
-
-            try {
-                resultsTest.addMeterRusults(meterList);
-            } catch (InfoExсeption infoExсeption) {
-                infoExсeption.printStackTrace();
-            }
+            resultsTest.addMeterRusults(meterList);
 
             resultsTest.serializationResults();
 
