@@ -1,6 +1,16 @@
 package org.taipit.stend.controller;
 
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
+import org.apache.poi.ss.util.RegionUtil;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class MainStend {
@@ -11,18 +21,23 @@ public class MainStend {
                 TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
+        Workbook wb = new HSSFWorkbook();
 
-        String text = "2.5(7.5)";
-        String IbStr = "";
-        String ImaxStr = "";
+        Sheet sheet1 = wb.createSheet("Sheet1");
+        Sheet sheet2 = wb.createSheet("Sheet2");
+// Set the rows to repeat from row 4 to 5 on the first sheet.
+        sheet1.setRepeatingRows(CellRangeAddress.valueOf("4:5"));
+// Set the columns to repeat from column A to C on the second sheet
+        sheet2.setRepeatingColumns(CellRangeAddress.valueOf("A:C"));
 
-        double Ib;
-        double Imax;
+        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\a.halimov\\Desktop\\test.xls")){
+            wb.write(outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        String[] arr = text.split("\\(");
-        System.out.println(arr[0].trim());
-        System.out.println(arr[1].substring(0, arr[1].length() - 1));
+
 
 //        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
 //

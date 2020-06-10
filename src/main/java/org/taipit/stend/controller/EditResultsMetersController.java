@@ -798,8 +798,12 @@ public class EditResultsMetersController {
 
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
-
-            meter.setTemperature(result);
+            try {
+                meter.setTemperature(Float.parseFloat(result));
+            }catch (NumberFormatException e) {
+                e.printStackTrace();
+                ConsoleHelper.infoException("Неверные данные");
+            }
         });
         tabColTemperature.setStyle( "-fx-alignment: CENTER;");
 
@@ -816,7 +820,13 @@ public class EditResultsMetersController {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
-            meter.setHumidity(result);
+            try {
+                meter.setHumidity(Float.parseFloat(result));
+            }catch (NumberFormatException e) {
+                e.printStackTrace();
+                ConsoleHelper.infoException("Неверные данные");
+            }
+
         });
         tabColHumidity.setStyle( "-fx-alignment: CENTER;");
 
