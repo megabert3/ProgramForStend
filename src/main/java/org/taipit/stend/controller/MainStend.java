@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MainStend {
@@ -23,8 +25,11 @@ public class MainStend {
     }
 
     public static void main(String[] args) {
-        new ExcelReport().createExcelReport();
+        //new ExcelReport().createExcelReport();
+        List<String> list = new ArrayList<>();
 
+        list.add(5, "f");
+        System.out.println(list.get(2));
 
 
 //        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();

@@ -3,6 +3,7 @@ package org.taipit.stend.controller;
 import javafx.beans.property.SimpleStringProperty;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
+import org.taipit.stend.model.ExcelReport;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -132,10 +133,22 @@ public class Meter implements Serializable{
     private List<CommandResult> errorListRPMns = new ArrayList<>();
 
     public void createError(Commands command, int numberArrayList , String id, TestErrorTableFrameController testErrorTableFrameController) {
+        ExcelReport ex = new ExcelReport();
         switch (numberArrayList) {
             case 0: {
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
+
+                    if (id.contains("U") || id.contains("F")) {
+                        id = errorCommand.getProcentParan() + " " + errorCommand.getId();
+                    }
+
+//                    ErrorResult er = new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax());
+//
+//                    if (id.contains("U") || id.contains("F")) {
+//                        ex.addElementsInInfABC(er);
+//                    }
+
                     errorListAPPls.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
                 } else if (command instanceof CreepCommand) {
@@ -176,6 +189,11 @@ public class Meter implements Serializable{
             case 1: {
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
+
+                    if (id.contains("U") || id.contains("F")) {
+                        id = errorCommand.getProcentParan() + " " + errorCommand.getId();
+                    }
+
                     errorListAPMns.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
                 } else if (command instanceof CreepCommand) {
@@ -219,6 +237,11 @@ public class Meter implements Serializable{
             case 2: {
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
+
+                    if (id.contains("U") || id.contains("F")) {
+                        id = errorCommand.getProcentParan() + " " + errorCommand.getId();
+                    }
+
                     errorListRPPls.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
                 } else if (command instanceof CreepCommand) {
@@ -263,6 +286,11 @@ public class Meter implements Serializable{
             case 3: {
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
+
+                    if (id.contains("U") || id.contains("F")) {
+                        id = errorCommand.getProcentParan() + " " + errorCommand.getId();
+                    }
+
                     errorListRPMns.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
                 } else if (command instanceof CreepCommand) {

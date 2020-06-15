@@ -11,12 +11,112 @@ import org.taipit.stend.model.stend.ThreePhaseStend;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ExcelReport {
 
     private List<Meter> meters;
+
+    private Map<String, Map<Integer, Meter.ErrorResult>> inflABC = new TreeMap<>();
+    private Map<String, Map<Integer, Meter.ErrorResult>> infl = new TreeMap<>();
+    private Map<String, Map<Integer, Meter.ErrorResult>> ABC = new TreeMap<>();
+    private Map<String, Map<Integer, Meter.ErrorResult>> totalErrors = new TreeMap<>();
+
+    public void addElementsInInfABC(Meter.ErrorResult result, int indexMeter) {
+        //55.0 F;1;H;A;P;0.5 Ib;0.25L
+        String[] idArr = result.getId().split(";");
+        String[] procUorFandUorF = idArr[0].split(" ");
+        String[] ImaxIb = idArr[5].split(" ");
+
+        String key;
+        //F;55;A;L;0,5;Imax;0.02
+        if (idArr[6].contains("L") || idArr[6].contains("C")) {
+            key = procUorFandUorF[1] + ";" + procUorFandUorF[0] + ";" + idArr[2] + ";" + idArr[6].substring(idArr[6].length() - 1) + ";"
+                    + idArr[6].substring(0, idArr[6].length() - 1) + ";" + ImaxIb[1] + ";" + ImaxIb[0];
+        } else {
+            key = procUorFandUorF[1] + ";" + procUorFandUorF[0] + ";" + idArr[2] + ";0;"
+                    + idArr[6] + ";" + ImaxIb[1] + ";" + ImaxIb[0];
+        }
+
+        if (inflABC.get(key) != null) {
+            inflABC.get(key).put(indexMeter, result);
+        } else {
+            Map<Integer, Meter.ErrorResult> errMap = new HashMap<>();
+            errMap.put(indexMeter, result);
+            inflABC.put(key, errMap);
+        }
+    }
+
+    private void addElementsInInfl(Meter.ErrorResult result, int indexMeter) {
+        //55.0 F;1;H;A;P;0.5 Ib;0.25L
+        String[] idArr = result.getId().split(";");
+        String[] procUorFandUorF = idArr[0].split(" ");
+        String[] ImaxIb = idArr[5].split(" ");
+
+        String key;
+        //F;55;L;0,5;Imax;0.02
+        if (idArr[6].contains("L") || idArr[6].contains("C")) {
+            key = procUorFandUorF[1] + ";" + procUorFandUorF[0] + ";" + idArr[6].substring(idArr[6].length() - 1) + ";"
+                    + idArr[6].substring(0, idArr[6].length() - 1) + ";" + ImaxIb[1] + ";" + ImaxIb[0];
+        } else {
+            key = procUorFandUorF[1] + ";" + procUorFandUorF[0] + ";0;"
+                    + idArr[6] + ";" + ImaxIb[1] + ";" + ImaxIb[0];
+        }
+
+        if (infl.get(key) != null) {
+            infl.get(key).put(indexMeter, result);
+        } else {
+            Map<Integer, Meter.ErrorResult> errMap = new HashMap<>();
+            errMap.put(indexMeter, result);
+            infl.put(key, errMap);
+        }
+    }
+
+    private void addElementsInABC(Meter.ErrorResult result, int indexMeter) {
+        //1;H;A;P;0.2 Ib;0.5C
+        String[] idArr = result.getId().split(";");
+        String[] ImaxIb = idArr[4].split(" ");
+
+        String key;
+        //A;L;0,5;Imax;0.02
+        if (idArr[5].contains("L") || idArr[5].contains("C")) {
+            key = idArr[1] + ";" + idArr[5].substring(idArr[5].length() - 1) + ";"
+                    + idArr[5].substring(0, idArr[5].length() - 1) + ";" + ImaxIb[1] + ";" + ImaxIb[0];
+        } else {
+            key = idArr[1] + ";0;" + idArr[5] + ";" + ImaxIb[1] + ";" + ImaxIb[0];
+        }
+
+        if (ABC.get(key) != null) {
+            ABC.get(key).put(indexMeter, result);
+        } else {
+            Map<Integer, Meter.ErrorResult> errMap = new HashMap<>();
+            errMap.put(indexMeter, result);
+            ABC.put(key, errMap);
+        }
+    }
+
+    private void addElementsInTotalErrors(Meter.ErrorResult result, int indexMeter) {
+        //1;H;A;P;0.2 Ib;0.5C
+        String[] idArr = result.getId().split(";");
+        String[] ImaxIb = idArr[4].split(" ");
+
+        String key;
+        //L;0,5;Imax;0.02
+        if (idArr[5].contains("L") || idArr[5].contains("C")) {
+            key = idArr[5].substring(idArr[5].length() - 1) + ";"
+                    + idArr[5].substring(0, idArr[5].length() - 1) + ";" + ImaxIb[1] + ";" + ImaxIb[0];
+        } else {
+            key = "0;" + idArr[5] + ";" + ImaxIb[1] + ";" + ImaxIb[0];
+        }
+
+        if (totalErrors.get(key) != null) {
+            totalErrors.get(key).put(indexMeter, result);
+        } else {
+            Map<Integer, Meter.ErrorResult> errMap = new HashMap<>();
+            errMap.put(indexMeter, result);
+            totalErrors.put(key, errMap);
+        }
+    }
 
     public void createExcelReport() {
         Workbook wb = new HSSFWorkbook();

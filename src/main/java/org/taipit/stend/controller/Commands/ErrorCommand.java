@@ -148,6 +148,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         if (param.equals("U")) {
             this.voltPer = paramPer;
+            this.procentParan = paramPer;
         } else if (param.equals("F")) {
             this.voltPer = 100;
             this.procentParan = paramPer;
@@ -588,6 +589,14 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
     public void setCosP(String cosP) {
         this.cosP = cosP;
+    }
+
+    public double getProcentParan() {
+        return procentParan;
+    }
+
+    public double getVoltPer() {
+        return voltPer;
     }
 
     @Override
