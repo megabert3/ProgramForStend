@@ -1,8 +1,8 @@
 package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
-import org.taipit.stend.controller.StendDLLCommands;
-import org.taipit.stend.controller.ThreePhaseStend;
+import org.taipit.stend.model.stend.StendDLLCommands;
+import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 

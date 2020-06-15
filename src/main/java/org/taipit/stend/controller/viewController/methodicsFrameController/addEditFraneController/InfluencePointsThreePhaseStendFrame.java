@@ -25,9 +25,7 @@ import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.controller.Commands.ErrorCommand;
 import org.taipit.stend.controller.Commands.ImbalansUCommand;
-import org.taipit.stend.controller.OnePhaseStend;
-import org.taipit.stend.controller.StendDLLCommands;
-import org.taipit.stend.controller.ThreePhaseStend;
+import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 

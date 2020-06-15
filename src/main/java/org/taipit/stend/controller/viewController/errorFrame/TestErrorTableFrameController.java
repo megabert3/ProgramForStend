@@ -28,8 +28,8 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.Meter;
-import org.taipit.stend.controller.StendDLLCommands;
-import org.taipit.stend.controller.ThreePhaseStend;
+import org.taipit.stend.model.stend.StendDLLCommands;
+import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.SaveResultsTestFrame;
 import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
@@ -61,6 +61,8 @@ public class TestErrorTableFrameController {
     private List<Meter> listMetersForTest;
 
     private Metodic methodicForStend;
+
+    private String mode;
 
     //Список команд
     private ObservableList<Commands> commandsAPPls = FXCollections.observableArrayList(new ArrayList<>());
@@ -2358,5 +2360,9 @@ public class TestErrorTableFrameController {
 
     public static Button getStaticBtnStop() {
         return btnStopStatic;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 }

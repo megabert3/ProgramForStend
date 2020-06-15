@@ -1,4 +1,4 @@
-package org.taipit.stend.model;
+package org.taipit.stend.model.stend;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;

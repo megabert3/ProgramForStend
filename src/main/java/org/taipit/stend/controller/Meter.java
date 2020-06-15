@@ -63,6 +63,8 @@ public class Meter implements Serializable{
 
     private String lastModifiedDate;
 
+    private String testMode;
+
     //Пример: Однотарифный однофазный
     private String typeMeter;
 
@@ -405,6 +407,7 @@ public class Meter implements Serializable{
         if (!this.operator.equals(meter.operator)) return false;
         if (!this.controller.equals(meter.controller)) return false;
         if (!this.witness.equals(meter.witness)) return false;
+        if (!this.testMode.equals(meter.testMode)) return false;
 
         return true;
     }
@@ -412,7 +415,7 @@ public class Meter implements Serializable{
     @Override
     public int hashCode() {
         return (int) (Un + Imax + Ib + accuracyClassAP + modelMeter.hashCode() + factoryManufacturer.hashCode() +
-                        temperature + humidity + operator.hashCode() + controller.hashCode() + witness.hashCode() * 31);
+                        temperature + humidity + operator.hashCode() + controller.hashCode() + witness.hashCode() + testMode.hashCode() * 31);
     }
 
     public String getConstantMeterAP() {
@@ -773,6 +776,14 @@ public class Meter implements Serializable{
 
     public void setTypeMeter(String typeMeter) {
         this.typeMeter = typeMeter;
+    }
+
+    public String getTestMode() {
+        return testMode;
+    }
+
+    public void setTestMode(String testMode) {
+        this.testMode = testMode;
     }
 
     //==============================================================================================

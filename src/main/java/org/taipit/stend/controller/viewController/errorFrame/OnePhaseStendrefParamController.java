@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import org.taipit.stend.controller.StendDLLCommands;
+import org.taipit.stend.model.stend.StendDLLCommands;
 
 import java.util.Arrays;
 

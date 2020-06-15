@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.ss.util.RegionUtil;
+import org.taipit.stend.model.ExcelReport;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,99 +22,8 @@ public class MainStend {
                 TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
     }
 
-    private static Font createFontStyle(Workbook wb, int size, String fontName, boolean bold, boolean setItalic, boolean setStrikeOut) {
-        Font font = wb.createFont();
-        font.setFontHeightInPoints((short) size);
-        font.setFontName(fontName);
-        font.setItalic(setItalic);
-        font.setStrikeout(setStrikeOut);
-        font.setBold(bold);
-        return font;
-    }
-
-    private static CellStyle createCellStyle(Workbook wb, Font font, HorizontalAlignment halign, VerticalAlignment valign,
-                                      BorderStyle borderBottom, BorderStyle borderLeft, BorderStyle borderRight, BorderStyle borderTop,
-                                      short borderBottomColor, short borderLeftColor, short borderRightColor, short borderTopColor,
-                                      short fillForegroundColor) {
-
-        CellStyle cellStyle = wb.createCellStyle();
-        cellStyle.setFont(font);
-        cellStyle.setAlignment(halign);
-        cellStyle.setVerticalAlignment(valign);
-        cellStyle.setBorderBottom(borderBottom);
-        cellStyle.setBorderLeft(borderLeft);
-        cellStyle.setBorderRight(borderRight);
-        cellStyle.setBorderTop(borderTop);
-        cellStyle.setBottomBorderColor(borderBottomColor);
-        cellStyle.setLeftBorderColor(borderLeftColor);
-        cellStyle.setRightBorderColor(borderRightColor);
-        cellStyle.setTopBorderColor(borderTopColor);
-        cellStyle.setFillBackgroundColor(fillForegroundColor);
-        return cellStyle;
-    }
-
-
-    private static CellStyle createCellStyle(Workbook wb,HorizontalAlignment halign, VerticalAlignment valign,
-                                      BorderStyle borderBottom, BorderStyle borderLeft, BorderStyle borderRight, BorderStyle borderTop) {
-        CellStyle cellStyle = wb.createCellStyle();
-        cellStyle.setAlignment(halign);
-        cellStyle.setVerticalAlignment(valign);
-        cellStyle.setBorderBottom(borderBottom);
-        cellStyle.setBorderLeft(borderLeft);
-        cellStyle.setBorderRight(borderRight);
-        cellStyle.setBorderTop(borderTop);
-        return cellStyle;
-    }
-
-    private static CellStyle createCellStyle(Workbook wb,HorizontalAlignment halign, VerticalAlignment valign) {
-        CellStyle cellStyle = wb.createCellStyle();
-        cellStyle.setAlignment(halign);
-        cellStyle.setVerticalAlignment(valign);
-        return cellStyle;
-    }
-
-    private static CellStyle createCellStyle(Workbook wb, Font font, HorizontalAlignment halign, VerticalAlignment valign,
-                                      BorderStyle borderBottom, BorderStyle borderLeft, BorderStyle borderRight, BorderStyle borderTop) {
-        CellStyle cellStyle = wb.createCellStyle();
-        cellStyle.setFont(font);
-        cellStyle.setAlignment(halign);
-        cellStyle.setVerticalAlignment(valign);
-        cellStyle.setBorderBottom(borderBottom);
-        cellStyle.setBorderLeft(borderLeft);
-        cellStyle.setBorderRight(borderRight);
-        cellStyle.setBorderTop(borderTop);
-        return cellStyle;
-    }
-
-    private static CellStyle createCellStyle(Workbook wb, Font font, HorizontalAlignment halign, VerticalAlignment valign) {
-        CellStyle cellStyle = wb.createCellStyle();
-        cellStyle.setFont(font);
-        cellStyle.setAlignment(halign);
-        cellStyle.setVerticalAlignment(valign);
-        return cellStyle;
-    }
-
     public static void main(String[] args) {
-        Workbook wb = new HSSFWorkbook();
-
-        Sheet mainSheet = wb.createSheet("Результат");
-
-        Font mainFont = MainStend.createFontStyle(wb, 15, "Bauhaus 93", true, false, false);
-
-        CellStyle defaut = MainStend.createCellStyle(wb, mainFont, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
-
-        Row row = mainSheet.createRow(0);
-        Cell cell = row.createCell(0);
-        cell.setCellValue("ПРОТОКОЛ ПОВЕРКИ СЧЁТЧИКОВ");
-        cell.setCellStyle(defaut);
-
-        mainSheet.addMergedRegion(new CellRangeAddress(0, 2, 0, 25));
-
-        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\a.halimov\\Desktop\\test.xls")){
-            wb.write(outputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new ExcelReport().createExcelReport();
 
 
 

@@ -1,7 +1,7 @@
 package org.taipit.stend.model.refMeter;
 
-import org.taipit.stend.controller.StendDLLCommands;
-import org.taipit.stend.controller.ThreePhaseStend;
+import org.taipit.stend.model.stend.StendDLLCommands;
+import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.helper.ConsoleHelper;
 
 import java.util.Timer;

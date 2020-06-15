@@ -1,4 +1,4 @@
-package org.taipit.stend.controller;
+package org.taipit.stend.model.stend;
 
 
 import java.io.Serializable;

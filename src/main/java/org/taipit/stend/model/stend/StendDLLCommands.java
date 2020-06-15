@@ -1,28 +1,48 @@
-package org.taipit.stend.controller;
+package org.taipit.stend.model.stend;
 
 import com.sun.jna.Memory;
 
 import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.PointerByReference;
 import jssc.SerialPortList;
+import org.taipit.stend.controller.Meter;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
-import org.taipit.stend.model.StendDLL;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 
 public abstract class StendDLLCommands {
     private StendDLL stend = StendDLL.INSTANCE;
 
+    private Properties properties = ConsoleHelper.properties;
+
     //Порт для связи с установкой
     private int port;
 
+    private String stendModel = properties.getProperty("stendModel");
+
+    //Класс точности
+    private String stendAccuracyClass = properties.getProperty("stendAccuracyClass");
+
+    //Серийный номер
+    private String serNo = properties.getProperty("stendSerNo");
+
+    //Свидетельство о поверке
+    private String certificate = properties.getProperty("param.certificate");
+
+    //Дата последней поверки
+    private String dateLastVerification = properties.getProperty("param.dateLastVerification");
+
+    //Дата следующей поверки
+    private String dateNextVerification = properties.getProperty("param.dateNextVerification");
+
     //Тип эталонного счётчика
-    private String typeReferenceMeter = ConsoleHelper.properties.getProperty("refMeterModel");
+    private String typeReferenceMeter = properties.getProperty("refMeterModel");
 
     //Кол-во постадочных мест для счётчиков
     private int amountPlaces;
@@ -371,5 +391,29 @@ public abstract class StendDLLCommands {
 
     public String getTypeReferenceMeter() {
         return typeReferenceMeter;
+    }
+
+    public String getStendAccuracyClass() {
+        return stendAccuracyClass;
+    }
+
+    public String getSerNo() {
+        return serNo;
+    }
+
+    public String getCertificate() {
+        return certificate;
+    }
+
+    public String getDateLastVerification() {
+        return dateLastVerification;
+    }
+
+    public String getDateNextVerification() {
+        return dateNextVerification;
+    }
+
+    public String getStendModel() {
+        return stendModel;
     }
 }

@@ -10,9 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.taipit.stend.controller.OnePhaseStend;
-import org.taipit.stend.controller.StendDLLCommands;
-import org.taipit.stend.controller.ThreePhaseStend;
+import org.taipit.stend.model.stend.OnePhaseStend;
+import org.taipit.stend.model.stend.StendDLLCommands;
+import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.frameManager.Frame;
 import org.taipit.stend.model.MeterParamepersForProperty;
@@ -68,9 +68,6 @@ public class PropertiesController implements Initializable, Frame {
     private Button stendPaneSave;
 
     @FXML
-    private TextField txtFieldStendTypeList;
-
-    @FXML
     private TextField txtStendModel;
 
     @FXML
@@ -78,6 +75,15 @@ public class PropertiesController implements Initializable, Frame {
 
     @FXML
     private TextField txtFldCOMList;
+
+    @FXML
+    private TextField txtFldCertificate;
+
+    @FXML
+    private TextField txtFldDateLastVerification;
+
+    @FXML
+    private TextField txtFldDateNextVerification;
 
 //----------------------------------------------------------- passwordPane
     @FXML
@@ -121,14 +127,17 @@ public class PropertiesController implements Initializable, Frame {
                 properties.setProperty("stendType", "OnePhaseStend");
             } else properties.setProperty("stendType", "ThreePhaseStend");
 
-            properties.setProperty("stendModel", txtStendModel.getText());
-            properties.setProperty("refMeterModel", txtFidRefMetModel.getText());
-            properties.setProperty("stendAmountPlaces", standPaneAmoutPlase.getText());
-            properties.setProperty("stendSerNo",standPaneStandSerNo.getText());
-            properties.setProperty("refMeterSerNo", StendPaneRefSerNo.getText());
-            properties.setProperty("stendAccuracyClass", stendPaneStandAcrCl.getText());
-            properties.setProperty("refMeterAccuracyClass", stendPaneRefAcrCl.getText());
-            properties.setProperty("stendCOMPort", txtFldCOMList.getText());
+            properties.setProperty("stendModel", txtStendModel.getText().trim());
+            properties.setProperty("refMeterModel", txtFidRefMetModel.getText().trim());
+            properties.setProperty("stendAmountPlaces", standPaneAmoutPlase.getText().trim());
+            properties.setProperty("stendSerNo",standPaneStandSerNo.getText().trim());
+            properties.setProperty("refMeterSerNo", StendPaneRefSerNo.getText().trim());
+            properties.setProperty("stendAccuracyClass", stendPaneStandAcrCl.getText().trim());
+            properties.setProperty("refMeterAccuracyClass", stendPaneRefAcrCl.getText().trim());
+            properties.setProperty("stendCOMPort", txtFldCOMList.getText().trim());
+            properties.setProperty("param.certificate", txtFldCertificate.getText().trim());
+            properties.setProperty("param.dateLastVerification", txtFldDateLastVerification.getText());
+            properties.setProperty("param.dateNextVerification", txtFldDateNextVerification.getText());
             ConsoleHelper.saveProperties();
         }
     }
@@ -189,6 +198,9 @@ public class PropertiesController implements Initializable, Frame {
         stendPaneStandAcrCl.setText(properties.getProperty("stendAccuracyClass"));
         txtFldCOMList.setText(properties.getProperty("stendCOMPort"));
         standPaneAmoutPlase.setText(properties.getProperty("stendAmountPlaces"));
+        txtFldCertificate.setText(properties.getProperty("param.certificate"));
+        txtFldDateLastVerification.setText(properties.getProperty("param.dateLastVerification"));
+        txtFldDateNextVerification.setText(properties.getProperty("param.dateNextVerification"));
 
         stendPaneStendTypeList.getItems().addAll("Однофазная", "Трехфазная");
 

@@ -3,8 +3,6 @@ package org.taipit.stend.controller.viewController;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -27,9 +25,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Meter;
-import org.taipit.stend.controller.OnePhaseStend;
-import org.taipit.stend.controller.StendDLLCommands;
-import org.taipit.stend.controller.ThreePhaseStend;
+import org.taipit.stend.model.stend.OnePhaseStend;
+import org.taipit.stend.model.stend.StendDLLCommands;
+import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.frameManager.Frame;
@@ -259,6 +257,7 @@ public class TestParametersFrameController implements Frame {
                 meter.setAccuracyClassRP(accuracyClassRP);
                 meter.setInomImax(txtFldCurrent.getText());
                 meter.setTypeMeter(chosBxTypeMeter.getValue());
+                meter.setTestMode(chosBxPowerType.getValue());
             }
 
             if (stendDLLCommands instanceof ThreePhaseStend) {
@@ -326,6 +325,8 @@ public class TestParametersFrameController implements Frame {
             testErrorTableFrameController.setImax(Imax);
             testErrorTableFrameController.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
             testErrorTableFrameController.setTwoCircut(twoCircut);
+            testErrorTableFrameController.setMode(chosBxPowerType.getValue());
+
 
             //Установка информации в окне теста
             testErrorTableFrameController.getTxtLabUn().setText("Uн = " + Un + " В");
