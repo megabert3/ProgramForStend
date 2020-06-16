@@ -3,7 +3,6 @@ package org.taipit.stend.controller;
 import javafx.beans.property.SimpleStringProperty;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
-import org.taipit.stend.model.ExcelReport;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -103,28 +102,28 @@ public class Meter implements Serializable{
     private Boolean finalAllTestResult;
 
     //Самоход
-    private Boolean creepTest = null;
+    private CreepResult creepTest = null;
 
     //Чувствительность
-    private Boolean startTestAPPls = null;
-    private Boolean startTestAPMns = null;
-    private Boolean startTestRPPls = null;
-    private Boolean startTestRPMns = null;
+    private StartResult startTestAPPls = null;
+    private StartResult startTestAPMns = null;
+    private StartResult startTestRPPls = null;
+    private StartResult startTestRPMns = null;
 
     //Точность хода часов
-    private Boolean RTCTest = null;
+    private RTCResult RTCTest = null;
 
     //Изоляция
-    private Boolean insulationTest = null;
+    private InsulationResult insulationTest = new InsulationResult("INS");
 
     //Внешний вид
-    private Boolean appearensTest = null;
+    private AppearensResult appearensTest = new AppearensResult("APR");
 
     //Проверка счётного механизма
-    private Boolean constantTestAPPls = null;
-    private Boolean constantTestAPMns = null;
-    private Boolean constantTestRPPls = null;
-    private Boolean constantTestRPMns = null;
+    private ConstantResult constantTestAPPls = null;
+    private ConstantResult constantTestAPMns = null;
+    private ConstantResult constantTestRPPls = null;
+    private ConstantResult constantTestRPMns = null;
 
     //Лист с ошибками
     private List<CommandResult> errorListAPPls = new ArrayList<>();
@@ -133,7 +132,6 @@ public class Meter implements Serializable{
     private List<CommandResult> errorListRPMns = new ArrayList<>();
 
     public void createError(Commands command, int numberArrayList , String id, TestErrorTableFrameController testErrorTableFrameController) {
-        ExcelReport ex = new ExcelReport();
         switch (numberArrayList) {
             case 0: {
                 if (command instanceof ErrorCommand) {
@@ -142,12 +140,6 @@ public class Meter implements Serializable{
                     if (id.contains("U") || id.contains("F")) {
                         id = errorCommand.getProcentParan() + " " + errorCommand.getId();
                     }
-
-//                    ErrorResult er = new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax());
-//
-//                    if (id.contains("U") || id.contains("F")) {
-//                        ex.addElementsInInfABC(er);
-//                    }
 
                     errorListAPPls.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
@@ -622,67 +614,67 @@ public class Meter implements Serializable{
         return amountImn;
     }
 
-    public Boolean getCreepTest() {
+    public CreepResult getCreepTest() {
         return creepTest;
     }
 
-    public void setCreepTest(Boolean creepTest) {
+    public void setCreepTest(CreepResult creepTest) {
         this.creepTest = creepTest;
     }
 
-    public Boolean getStartTestAPPls() {
+    public StartResult getStartTestAPPls() {
         return startTestAPPls;
     }
 
-    public void setStartTestAPPls(Boolean startTestAPPls) {
+    public void setStartTestAPPls(StartResult startTestAPPls) {
         this.startTestAPPls = startTestAPPls;
     }
 
-    public Boolean getStartTestAPMns() {
+    public StartResult getStartTestAPMns() {
         return startTestAPMns;
     }
 
-    public void setStartTestAPMns(Boolean startTestAPMns) {
+    public void setStartTestAPMns(StartResult startTestAPMns) {
         this.startTestAPMns = startTestAPMns;
     }
 
-    public Boolean getStartTestRPPls() {
+    public StartResult getStartTestRPPls() {
         return startTestRPPls;
     }
 
-    public void setStartTestRPPls(Boolean startTestRPPls) {
+    public void setStartTestRPPls(StartResult startTestRPPls) {
         this.startTestRPPls = startTestRPPls;
     }
 
-    public Boolean getStartTestRPMns() {
+    public StartResult getStartTestRPMns() {
         return startTestRPMns;
     }
 
-    public void setStartTestRPMns(Boolean startTestRPMns) {
+    public void setStartTestRPMns(StartResult startTestRPMns) {
         this.startTestRPMns = startTestRPMns;
     }
 
-    public Boolean getRTCTest() {
+    public RTCResult getRTCTest() {
         return RTCTest;
     }
 
-    public void setRTCTest(Boolean RTCTest) {
+    public void setRTCTest(RTCResult RTCTest) {
         this.RTCTest = RTCTest;
     }
 
-    public Boolean getInsulationTest() {
+    public InsulationResult getInsulationTest() {
         return insulationTest;
     }
 
-    public void setInsulationTest(Boolean insulationTest) {
+    public void setInsulationTest(InsulationResult insulationTest) {
         this.insulationTest = insulationTest;
     }
 
-    public Boolean getAppearensTest() {
+    public AppearensResult getAppearensTest() {
         return appearensTest;
     }
 
-    public void setAppearensTest(Boolean appearensTest) {
+    public void setAppearensTest(AppearensResult appearensTest) {
         this.appearensTest = appearensTest;
     }
 
@@ -694,35 +686,35 @@ public class Meter implements Serializable{
         this.saveResults = saveResults;
     }
 
-    public Boolean getConstantTestAPPls() {
+    public ConstantResult getConstantTestAPPls() {
         return constantTestAPPls;
     }
 
-    public void setConstantTestAPPls(Boolean constantTestAPPls) {
+    public void setConstantTestAPPls(ConstantResult constantTestAPPls) {
         this.constantTestAPPls = constantTestAPPls;
     }
 
-    public Boolean getConstantTestAPMns() {
+    public ConstantResult getConstantTestAPMns() {
         return constantTestAPMns;
     }
 
-    public void setConstantTestAPMns(Boolean constantTestAPMns) {
+    public void setConstantTestAPMns(ConstantResult constantTestAPMns) {
         this.constantTestAPMns = constantTestAPMns;
     }
 
-    public Boolean getConstantTestRPPls() {
+    public ConstantResult getConstantTestRPPls() {
         return constantTestRPPls;
     }
 
-    public void setConstantTestRPPls(Boolean constantTestRPPls) {
+    public void setConstantTestRPPls(ConstantResult constantTestRPPls) {
         this.constantTestRPPls = constantTestRPPls;
     }
 
-    public Boolean getConstantTestRPMns() {
+    public ConstantResult getConstantTestRPMns() {
         return constantTestRPMns;
     }
 
-    public void setConstantTestRPMns(Boolean constantTestRPMns) {
+    public void setConstantTestRPMns(ConstantResult constantTestRPMns) {
         this.constantTestRPMns = constantTestRPMns;
     }
 
@@ -952,14 +944,14 @@ public class Meter implements Serializable{
                 super.lastResult = time + " P";
                 super.results[resultNo] = time + " P";
                 super.passTest = true;
-                creepTest = true;
+                creepTest = this;
             } else {
                 super.lastResultForTabView.setValue("F" + time + " F");
                 this.timeTheFailTest = time;
                 super.lastResult = time + " F";
                 super.results[resultNo] = time + " F";
                 super.passTest = false;
-                creepTest = false;
+                creepTest = this;
             }
         }
 
@@ -1006,13 +998,13 @@ public class Meter implements Serializable{
                 super.passTest = true;
 
                 switch (chanelFlag) {
-                    case 0: startTestAPPls = true;
+                    case 0: startTestAPPls =  this;
                         break;
-                    case 1: startTestAPMns = true;
+                    case 1: startTestAPMns = this;
                         break;
-                    case 2: startTestRPPls = true;
+                    case 2: startTestRPPls = this;
                         break;
-                    case 3: startTestRPPls = true;
+                    case 3: startTestRPPls = this;
                         break;
                 }
 
@@ -1023,13 +1015,13 @@ public class Meter implements Serializable{
                 super.passTest = false;
 
                 switch (chanelFlag) {
-                    case 0: startTestAPPls = false;
+                    case 0: startTestAPPls = this;
                         break;
-                    case 1: startTestAPMns = false;
+                    case 1: startTestAPMns = this;
                         break;
-                    case 2: startTestRPPls = false;
+                    case 2: startTestRPPls = this;
                         break;
-                    case 3: startTestRPPls = false;
+                    case 3: startTestRPPls = this;
                         break;
                 }
             }
@@ -1058,14 +1050,14 @@ public class Meter implements Serializable{
                 super.lastResult = error;
                 super.results[resultNo] = error;
                 super.passTest = true;
-                RTCTest = true;
+                RTCTest = this;
 
             } else {
                 super.lastResultForTabView.setValue("F" + error + " F");
                 super.lastResult = error;
                 super.results[resultNo] = error;
                 super.passTest = false;
-                RTCTest = false;
+                RTCTest = this;
             }
         }
 
@@ -1096,13 +1088,13 @@ public class Meter implements Serializable{
                 this.kwRefMeter = kwRefMeter;
 
                 switch (chanelFlag) {
-                    case 0: constantTestAPPls = true;
+                    case 0: constantTestAPPls = this;
                         break;
-                    case 1: constantTestAPMns = true;
+                    case 1: constantTestAPMns = this;
                         break;
-                    case 2: constantTestRPPls = true;
+                    case 2: constantTestRPPls = this;
                         break;
-                    case 3: constantTestRPMns = true;
+                    case 3: constantTestRPMns = this;
                         break;
                 }
 
@@ -1115,13 +1107,13 @@ public class Meter implements Serializable{
                 this.kwRefMeter = kwRefMeter;
 
                 switch (chanelFlag) {
-                    case 0: constantTestAPPls = false;
+                    case 0: constantTestAPPls = this;
                         break;
-                    case 1: constantTestAPMns = false;
+                    case 1: constantTestAPMns = this;
                         break;
-                    case 2: constantTestRPPls = false;
+                    case 2: constantTestRPPls = this;
                         break;
-                    case 3: constantTestRPMns = false;
+                    case 3: constantTestRPMns = this;
                         break;
                 }
             }
@@ -1155,5 +1147,21 @@ public class Meter implements Serializable{
             super.passTest = passOrNot;
         }
 
+    }
+
+    public class InsulationResult extends CommandResult implements Serializable {
+
+        InsulationResult(String id) {
+            super(id);
+            super.passTest = true;
+        }
+    }
+
+    public class AppearensResult extends CommandResult implements Serializable {
+
+        AppearensResult(String id) {
+            super(id);
+            super.passTest = true;
+        }
     }
 }

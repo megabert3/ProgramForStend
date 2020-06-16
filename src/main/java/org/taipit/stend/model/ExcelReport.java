@@ -15,12 +15,29 @@ import java.util.*;
 
 public class ExcelReport {
 
+    public ExcelReport() {
+        CRPSTAother.put("CRP", new HashMap<>());
+        CRPSTAother.put("STAAP", new HashMap<>());
+        CRPSTAother.put("STAAN", new HashMap<>());
+        CRPSTAother.put("STARP", new HashMap<>());
+        CRPSTAother.put("STARN", new HashMap<>());
+        CRPSTAother.put("RTC", new HashMap<>());
+        CRPSTAother.put("CNTAP", new HashMap<>());
+        CRPSTAother.put("CNTAN", new HashMap<>());
+        CRPSTAother.put("CNTRP", new HashMap<>());
+        CRPSTAother.put("CNTRN", new HashMap<>());
+        CRPSTAother.put("INS", new HashMap<>());
+        CRPSTAother.put("APR", new HashMap<>());
+    }
+
     private List<Meter> meters;
 
     private Map<String, Map<Integer, Meter.ErrorResult>> inflABC = new TreeMap<>();
     private Map<String, Map<Integer, Meter.ErrorResult>> infl = new TreeMap<>();
     private Map<String, Map<Integer, Meter.ErrorResult>> ABC = new TreeMap<>();
     private Map<String, Map<Integer, Meter.ErrorResult>> totalErrors = new TreeMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> CRPSTAother = new TreeMap<>();
+    private Map<String, Map<Integer, Meter.ImbUResult>> imbalans = new TreeMap<>();
 
     public void addElementsInInfABC(Meter.ErrorResult result, int indexMeter) {
         //55.0 F;1;H;A;P;0.5 Ib;0.25L
@@ -117,6 +134,64 @@ public class ExcelReport {
             totalErrors.put(key, errMap);
         }
     }
+
+    private void addElementsInCRPSTA(Meter meter, int indexMeter) {
+        //CRP Самоход
+        //STAAP Чувствтельность AP+
+        //STAAN Чувствтельность AP-
+        //STARP Чувствтельность RP+
+        //STARN Чувствтельность RP-
+        //RTC ТХЧ
+        //CNTAP Константа
+        //CNTAN Константа
+        //CNTRP Константа
+        //CNTRN Константа
+        //INS Изоляция
+        //APR Внешний вид
+
+        if (meter.getCreepTest() != null) {
+            CRPSTAother.get("CRP").put(indexMeter, meter.getCreepTest());
+        }
+
+        if (meter.getStartTestAPPls() != null) {
+            CRPSTAother.get("STAAP").put(indexMeter, meter.getStartTestAPPls());
+        }
+        if (meter.getStartTestAPMns() != null) {
+            CRPSTAother.get("STAAN").put(indexMeter, meter.getStartTestAPMns());
+        }
+        if (meter.getStartTestRPPls() != null) {
+            CRPSTAother.get("STARP").put(indexMeter, meter.getStartTestRPPls());
+        }
+        if (meter.getStartTestRPMns() != null) {
+            CRPSTAother.get("STARN").put(indexMeter, meter.getStartTestRPMns());
+        }
+
+        if (meter.getRTCTest() != null) {
+            CRPSTAother.get("RTC").put(indexMeter, meter.getRTCTest());
+        }
+
+        if (meter.getConstantTestAPPls() != null) {
+            CRPSTAother.get("CNTAP").put(indexMeter, meter.getConstantTestAPPls());
+        }
+        if (meter.getConstantTestAPMns() != null) {
+            CRPSTAother.get("CNTAN").put(indexMeter, meter.getConstantTestAPMns());
+        }
+        if (meter.getConstantTestRPPls() != null) {
+            CRPSTAother.get("CNTRP").put(indexMeter, meter.getConstantTestRPPls());
+        }
+        if (meter.getConstantTestRPMns() != null) {
+            CRPSTAother.get("CNTRN").put(indexMeter, meter.getConstantTestRPMns());
+        }
+
+        if (meter.getInsulationTest() != null) {
+            CRPSTAother.get("INS").put(indexMeter, meter.getInsulationTest());
+        }
+        if (meter.getAppearensTest() != null) {
+            CRPSTAother.get("APR").put(indexMeter, meter.getAppearensTest());
+        }
+    }
+
+
 
     public void createExcelReport() {
         Workbook wb = new HSSFWorkbook();
