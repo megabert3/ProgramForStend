@@ -305,11 +305,13 @@ public class EditResultsMetersController {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getCreepTest() == null) {
+                Meter.CreepResult creepResult = meter.getCreepTest();
+
+                if (creepResult.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getCreepTest()) {
+                } else if (creepResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getCreepTest()) {
+                } else if (!creepResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -328,12 +330,14 @@ public class EditResultsMetersController {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.CreepResult creepResultSet = meter.getCreepTest();
+
             if (result.equals(resultMass[0])) {
-                meter.setCreepTest(null);
+                creepResultSet.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setCreepTest(true);
+                creepResultSet.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setCreepTest(false);
+                creepResultSet.setPassTest(false);
             }
         });
         tabColCRPResult.setStyle( "-fx-alignment: CENTER;");
@@ -346,11 +350,13 @@ public class EditResultsMetersController {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestAPPls() == null) {
+                Meter.StartResult startResultAPPls = meter.getStartTestAPPls();
+
+                if (startResultAPPls.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestAPPls()) {
+                } else if (startResultAPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestAPPls()) {
+                } else if (!startResultAPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -386,11 +392,13 @@ public class EditResultsMetersController {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestAPMns() == null) {
+                Meter.StartResult startResultAPMns = meter.getStartTestAPMns();
+
+                if (startResultAPMns.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestAPMns()) {
+                } else if (startResultAPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestAPMns()) {
+                } else if (!startResultAPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -427,11 +435,13 @@ public class EditResultsMetersController {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestRPPls() == null) {
+                Meter.StartResult startResultRPPls = meter.getStartTestRPPls();
+
+                if (startResultRPPls.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestRPPls()) {
+                } else if (startResultRPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestRPPls()) {
+                } else if (!startResultRPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -466,11 +476,13 @@ public class EditResultsMetersController {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestRPMns() == null) {
+                Meter.StartResult startResultRPMns = meter.getStartTestRPMns();
+
+                if (startResultRPMns.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestRPMns()) {
+                } else if (startResultRPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestRPMns()) {
+                } else if (!startResultRPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -507,11 +519,13 @@ public class EditResultsMetersController {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getRTCTest() == null) {
+                Meter.RTCResult RTC = meter.getRTCTest();
+
+                if (RTC.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getRTCTest()) {
+                } else if (RTC.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getRTCTest()) {
+                } else if (!RTC.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
