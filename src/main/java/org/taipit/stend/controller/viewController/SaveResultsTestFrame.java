@@ -371,14 +371,15 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getCreepTest() == null) {
+                Meter.CreepResult creepResult = meter.getCreepTest();
+
+                if (creepResult.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getCreepTest()) {
+                } else if (creepResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getCreepTest()) {
+                } else if (!creepResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
-
                 return result;
             }
         });
@@ -395,12 +396,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.CreepResult creepResultSet = meter.getCreepTest();
+
             if (result.equals(resultMass[0])) {
-                meter.setCreepTest(null);
+                creepResultSet.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setCreepTest(true);
+                creepResultSet.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setCreepTest(false);
+                creepResultSet.setPassTest(false);
             }
         });
 
@@ -416,11 +419,13 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestAPPls() == null) {
+                Meter.StartResult startResultAPPls = meter.getStartTestAPPls();
+
+                if (startResultAPPls.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestAPPls()) {
+                } else if (startResultAPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestAPPls()) {
+                } else if (!startResultAPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -439,12 +444,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.StartResult staAPPls = meter.getStartTestAPPls();
+
             if (result.equals(resultMass[0])) {
-                meter.setStartTestAPPls(null);
+                staAPPls.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setStartTestAPPls(true);
+                staAPPls.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setStartTestAPPls(false);
+                staAPPls.setPassTest(false);
             }
         });
 
@@ -461,11 +468,13 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestAPMns() == null) {
+                Meter.StartResult startResultAPMns = meter.getStartTestAPMns();
+
+                if (startResultAPMns.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestAPMns()) {
+                } else if (startResultAPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestAPMns()) {
+                } else if (!startResultAPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -484,12 +493,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.StartResult staAPMns = meter.getStartTestAPMns();
+
             if (result.equals(resultMass[0])) {
-                meter.setStartTestAPMns(null);
+                staAPMns.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setStartTestAPMns(true);
+                staAPMns.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setStartTestAPMns(false);
+                staAPMns.setPassTest(false);
             }
         });
 
@@ -505,11 +516,13 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestRPPls() == null) {
+                Meter.StartResult startResultRPPls = meter.getStartTestRPPls();
+
+                if (startResultRPPls.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestRPPls()) {
+                } else if (startResultRPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestRPPls()) {
+                } else if (!startResultRPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -528,12 +541,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.StartResult staRPPls = meter.getStartTestRPPls();
+
             if (result.equals(resultMass[0])) {
-                meter.setStartTestRPPls(null);
+                staRPPls.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setStartTestRPPls(true);
+                staRPPls.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setStartTestRPPls(false);
+                staRPPls.setPassTest(false);
             }
         });
 
@@ -548,11 +563,13 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestRPMns() == null) {
+                Meter.StartResult startResultRPMns = meter.getStartTestRPMns();
+
+                if (startResultRPMns.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestRPMns()) {
+                } else if (startResultRPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestRPMns()) {
+                } else if (!startResultRPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -571,12 +588,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.StartResult staRPMns = meter.getStartTestRPMns();
+
             if (result.equals(resultMass[0])) {
-                meter.setStartTestRPMns(null);
+                staRPMns.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setStartTestRPMns(true);
+                staRPMns.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setStartTestRPMns(false);
+                staRPMns.setPassTest(false);
             }
         });
 
@@ -590,11 +609,13 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getRTCTest() == null) {
+                Meter.RTCResult RTC = meter.getRTCTest();
+
+                if (RTC.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getRTCTest()) {
+                } else if (RTC.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getRTCTest()) {
+                } else if (!RTC.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -613,12 +634,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.RTCResult rtcResult = meter.getRTCTest();
+
             if (result.equals(resultMass[0])) {
-                meter.setRTCTest(null);
+                rtcResult.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setRTCTest(true);
+                rtcResult.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setRTCTest(false);
+                rtcResult.setPassTest(false);
             }
         });
 
@@ -636,11 +659,13 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getConstantTestAPPls() == null) {
+                Meter.ConstantResult consAPPls = meter.getConstantTestAPPls();
+
+                if (consAPPls.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getConstantTestAPPls()) {
+                } else if (consAPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getConstantTestAPPls()) {
+                } else if (!consAPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -659,12 +684,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.ConstantResult constAPPls = meter.getConstantTestAPPls();
+
             if (result.equals(resultMass[0])) {
-                meter.setConstantTestAPPls(null);
+                constAPPls.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setConstantTestAPPls(true);
+                constAPPls.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setConstantTestAPPls(false);
+                constAPPls.setPassTest(false);
             }
         });
 
@@ -681,11 +708,13 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getConstantTestAPMns() == null) {
+                Meter.ConstantResult constAPMns = meter.getConstantTestAPMns();
+
+                if (constAPMns.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getConstantTestAPMns()) {
+                } else if (constAPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getConstantTestAPMns()) {
+                } else if (!constAPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -704,12 +733,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.ConstantResult constAPMns = meter.getConstantTestAPMns();
+
             if (result.equals(resultMass[0])) {
-                meter.setConstantTestAPMns(null);
+                constAPMns.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setConstantTestAPMns(true);
+                constAPMns.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setConstantTestAPMns(false);
+                constAPMns.setPassTest(false);
             }
         });
 
@@ -725,11 +756,13 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getConstantTestRPPls() == null) {
+                Meter.ConstantResult constRPPls = meter.getConstantTestRPPls();
+
+                if (constRPPls.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getConstantTestRPPls()) {
+                } else if (constRPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getConstantTestRPPls()) {
+                } else if (!constRPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -748,12 +781,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.ConstantResult constRPPls = meter.getConstantTestRPPls();
+
             if (result.equals(resultMass[0])) {
-                meter.setConstantTestRPPls(null);
+                constRPPls.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setConstantTestRPPls(true);
+                constRPPls.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setConstantTestRPPls(false);
+                constRPPls.setPassTest(false);
             }
         });
 
@@ -769,11 +804,13 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getConstantTestRPMns() == null) {
+                Meter.ConstantResult constRPMns = meter.getConstantTestRPMns();
+
+                if (constRPMns.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getConstantTestRPMns()) {
+                } else if (constRPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getConstantTestRPMns()) {
+                } else if (!constRPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -792,12 +829,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.ConstantResult constRPMns = meter.getConstantTestRPMns();
+
             if (result.equals(resultMass[0])) {
-                meter.setConstantTestRPMns(null);
+                constRPMns.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setConstantTestRPMns(true);
+                constRPMns.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setConstantTestRPMns(false);
+                constRPMns.setPassTest(false);
             }
         });
 
@@ -811,11 +850,13 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getInsulationTest() == null) {
+                Meter.InsulationResult insulationResult = meter.getInsulationTest();
+
+                if (insulationResult.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getInsulationTest()) {
+                } else if (insulationResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getInsulationTest()) {
+                } else if (!insulationResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -834,12 +875,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.InsulationResult insResult = meter.getInsulationTest();
+
             if (result.equals(resultMass[0])) {
-                meter.setInsulationTest(null);
+                insResult.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setInsulationTest(true);
+                insResult.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setInsulationTest(false);
+                insResult.setPassTest(false);
             }
         });
 
@@ -853,11 +896,13 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getAppearensTest() == null) {
+                Meter.AppearensResult appearensResult = meter.getAppearensTest();
+
+                if (appearensResult.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getAppearensTest()) {
+                } else if (appearensResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getAppearensTest()) {
+                } else if (!appearensResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -876,12 +921,14 @@ public class SaveResultsTestFrame {
             int row = pos.getRow();
             Meter meter = event.getTableView().getItems().get(row);
 
+            Meter.AppearensResult appearensResult = meter.getAppearensTest();
+
             if (result.equals(resultMass[0])) {
-                meter.setAppearensTest(null);
+                appearensResult.setPassTest(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setAppearensTest(true);
+                appearensResult.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setAppearensTest(false);
+                appearensResult.setPassTest(false);
             }
         });
 

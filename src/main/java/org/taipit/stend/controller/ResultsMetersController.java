@@ -248,11 +248,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getCreepTest() == null) {
+                Meter.CreepResult creepResult = meter.getCreepTest();
+
+                if (creepResult.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getCreepTest()) {
+                } else if (creepResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getCreepTest()) {
+                } else if (!creepResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -267,11 +269,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestAPPls() == null) {
+                Meter.StartResult startResultAPPls = meter.getStartTestAPPls();
+
+                if (startResultAPPls.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestAPPls()) {
+                } else if (startResultAPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestAPPls()) {
+                } else if (!startResultAPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -285,11 +289,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestAPMns() == null) {
+                Meter.StartResult startResultAPMns = meter.getStartTestAPMns();
+
+                if (startResultAPMns.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestAPMns()) {
+                } else if (startResultAPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestAPMns()) {
+                } else if (!startResultAPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -304,11 +310,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestRPPls() == null) {
+                Meter.StartResult startResultRPPls = meter.getStartTestRPPls();
+
+                if (startResultRPPls.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestRPPls()) {
+                } else if (startResultRPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestRPPls()) {
+                } else if (!startResultRPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -323,11 +331,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getStartTestRPMns() == null) {
+                Meter.StartResult startResultRPMns = meter.getStartTestRPMns();
+
+                if (startResultRPMns.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getStartTestRPMns()) {
+                } else if (startResultRPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getStartTestRPMns()) {
+                } else if (!startResultRPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -342,11 +352,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getRTCTest() == null) {
+                Meter.RTCResult RTC = meter.getRTCTest();
+
+                if (RTC.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getRTCTest()) {
+                } else if (RTC.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getRTCTest()) {
+                } else if (!RTC.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -361,11 +373,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getConstantTestAPPls() == null) {
+                Meter.ConstantResult consAPPls = meter.getConstantTestAPPls();
+
+                if (consAPPls.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getConstantTestAPPls()) {
+                } else if (consAPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getConstantTestAPPls()) {
+                } else if (!consAPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -380,11 +394,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getConstantTestAPMns() == null) {
+                Meter.ConstantResult constAPMns = meter.getConstantTestAPMns();
+
+                if (constAPMns.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getConstantTestAPMns()) {
+                } else if (constAPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getConstantTestAPMns()) {
+                } else if (!constAPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -399,11 +415,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getConstantTestRPPls() == null) {
+                Meter.ConstantResult constRPPls = meter.getConstantTestRPPls();
+
+                if (constRPPls.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getConstantTestRPPls()) {
+                } else if (constRPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getConstantTestRPPls()) {
+                } else if (!constRPPls.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -418,11 +436,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getConstantTestRPMns() == null) {
+                Meter.ConstantResult constRPMns = meter.getConstantTestRPMns();
+
+                if (constRPMns.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getConstantTestRPMns()) {
+                } else if (constRPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getConstantTestRPMns()) {
+                } else if (!constRPMns.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -437,11 +457,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getInsulationTest() == null) {
+                Meter.AppearensResult appearensResult = meter.getAppearensTest();
+
+                if (appearensResult.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getInsulationTest()) {
+                } else if (appearensResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getInsulationTest()) {
+                } else if (!appearensResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -457,11 +479,13 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getAppearensTest() == null) {
+                Meter.AppearensResult appearensResult = meter.getAppearensTest();
+
+                if (appearensResult.getPassTest() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getAppearensTest()) {
+                } else if (appearensResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getAppearensTest()) {
+                } else if (!appearensResult.getPassTest()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
