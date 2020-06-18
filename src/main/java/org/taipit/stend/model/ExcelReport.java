@@ -237,7 +237,7 @@ public class ExcelReport {
         String[] ImaxIb = idArr[5].split(" ");
 
         String key;
-        //F;55;A;L;0,5;Imax;0.02
+        //F;55;A;L;0.5;Imax;0.02
         if (idArr[6].contains("L") || idArr[6].contains("C")) {
             key = procUorFandUorF[1] + ";" + procUorFandUorF[0] + ";" + idArr[2] + ";" + idArr[6].substring(idArr[6].length() - 1) + ";"
                     + idArr[6].substring(0, idArr[6].length() - 1) + ";" + ImaxIb[1] + ";" + ImaxIb[0];
