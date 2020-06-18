@@ -16,6 +16,32 @@ import java.util.*;
 public class ExcelReport {
 
     public ExcelReport() {
+        CRPSTAother = new TreeMap<>(comparatorCRPSTAother);
+
+        inflABCAPPls = new TreeMap<>(comparatorForInflABC);
+        inflAPPls = new TreeMap<>(comparatorForInfl);
+        ABCAPPls = new TreeMap<>(comparatorForABC);
+        totalErrorAPPls = new TreeMap<>(comparatorForTotalError);
+        imbalansAPPls = new TreeMap<>();
+
+        inflABCAPMns = new TreeMap<>(comparatorForInflABC);
+        inflAPMns = new TreeMap<>(comparatorForInfl);
+        ABCAPMns = new TreeMap<>(comparatorForABC);
+        totalErrorAPMns = new TreeMap<>(comparatorForTotalError);
+        imbalansAPMns = new TreeMap<>();
+
+        inflABCRPPls = new TreeMap<>(comparatorForInflABC);
+        inflRPPls = new TreeMap<>(comparatorForInfl);
+        ABCRPPls = new TreeMap<>(comparatorForABC);
+        totalErrorRPPls = new TreeMap<>(comparatorForTotalError);
+        imbalansRPPls = new TreeMap<>();
+
+        inflABCRPMns = new TreeMap<>(comparatorForInflABC);
+        inflRPMns = new TreeMap<>(comparatorForInfl);
+        ABCRPMns = new TreeMap<>(comparatorForABC);
+        totalErrorRPMns = new TreeMap<>(comparatorForTotalError);
+        imbalansRPMns = new TreeMap<>();
+
         CRPSTAother.put("CRP", new HashMap<>());
         CRPSTAother.put("STAAP", new HashMap<>());
         CRPSTAother.put("STAAN", new HashMap<>());
@@ -28,24 +54,184 @@ public class ExcelReport {
         CRPSTAother.put("CNTRN", new HashMap<>());
         CRPSTAother.put("INS", new HashMap<>());
         CRPSTAother.put("APR", new HashMap<>());
-
-        inflABC = new TreeMap<>(comparatorForInflABC);
-        infl = new TreeMap<>(comparatorForInfl);
-        ABC = new TreeMap<>(comparatorForABC);
-
     }
 
     private List<Meter> meters;
 
-    private Map<String, Map<Integer, Meter.ErrorResult>> inflABC;
-    private Map<String, Map<Integer, Meter.ErrorResult>> infl;
-    private Map<String, Map<Integer, Meter.ErrorResult>> ABC;
-    private Map<String, Map<Integer, Meter.ErrorResult>> totalErrors = new TreeMap<>();
-    private Map<String, Map<Integer, Meter.CommandResult>> CRPSTAother = new TreeMap<>();
-    private Map<String, Map<Integer, Meter.ImbUResult>> imbalans = new TreeMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> CRPSTAother;
 
-    public void addElementsInInfABC(Meter.ErrorResult result, int indexMeter) {
-        //55.0 F;1;H;A;P;0.5 Ib;0.25L
+    private Map<String, Map<Integer, Meter.CommandResult>> inflABCAPPls;
+    private Map<String, Map<Integer, Meter.CommandResult>> inflAPPls;
+    private Map<String, Map<Integer, Meter.CommandResult>> ABCAPPls;
+    private Map<String, Map<Integer, Meter.CommandResult>> totalErrorAPPls;
+    private Map<String, Map<Integer, Meter.CommandResult>> imbalansAPPls;
+
+    private Map<String, Map<Integer, Meter.CommandResult>> inflABCAPMns;
+    private Map<String, Map<Integer, Meter.CommandResult>> inflAPMns;
+    private Map<String, Map<Integer, Meter.CommandResult>> ABCAPMns;
+    private Map<String, Map<Integer, Meter.CommandResult>> totalErrorAPMns;
+    private Map<String, Map<Integer, Meter.CommandResult>> imbalansAPMns;
+
+    private Map<String, Map<Integer, Meter.CommandResult>> inflABCRPPls;
+    private Map<String, Map<Integer, Meter.CommandResult>> inflRPPls;
+    private Map<String, Map<Integer, Meter.CommandResult>> ABCRPPls;
+    private Map<String, Map<Integer, Meter.CommandResult>> totalErrorRPPls;
+    private Map<String, Map<Integer, Meter.CommandResult>> imbalansRPPls;
+
+    private Map<String, Map<Integer, Meter.CommandResult>> inflABCRPMns;
+    private Map<String, Map<Integer, Meter.CommandResult>> inflRPMns;
+    private Map<String, Map<Integer, Meter.CommandResult>> ABCRPMns;
+    private Map<String, Map<Integer, Meter.CommandResult>> totalErrorRPMns;
+    private Map<String, Map<Integer, Meter.CommandResult>> imbalansRPMns;
+
+    private void sortAndAddMeterErrorsResult(List<Meter> meters) {
+
+        List<Meter.CommandResult> commandResultList;
+        String[] id;
+
+        for (int i = 0; i < meters.size(); i++) {
+
+            commandResultList = meters.get(i).getErrorListAPPls();
+            //Добавление точек результата из AP+
+            if (!commandResultList.isEmpty()) {
+                for (Meter.CommandResult result : commandResultList) {
+
+                    if (result instanceof Meter.ErrorResult) {
+                        id = result.getId().split(";");
+
+                        //Если с окна влияния
+                        if (id.length == 7) {
+                            //Если АБС
+                            if (!id[2].equals("H")) {
+                                addElementsInInfABC(inflABCAPPls, result, i);
+                            } else {
+                                addElementsInInfl(inflAPPls, result, i);
+                            }
+
+                        //Если не с окна влияния
+                        } else if (id.length == 6) {
+                            //Если АБС
+                            if (!id[1].equals("H")) {
+                                addElementsInABC(ABCAPPls, result, i);
+                            } else {
+                                addElementsInTotalError(totalErrorAPPls, result, i);
+                            }
+                        }
+
+                    } else if (result instanceof Meter.ImbUResult) {
+                        addElementsImb(imbalansAPPls, result, i);
+                    }
+                }
+            }
+
+            commandResultList = meters.get(i).getErrorListAPMns();
+            //Добавление точек результата из AP-
+            if (!commandResultList.isEmpty()) {
+                for (Meter.CommandResult result : commandResultList) {
+
+                    if (result instanceof Meter.ErrorResult) {
+                        id = result.getId().split(";");
+
+                        //Если с окна влияния
+                        if (id.length == 7) {
+                            //Если АБС
+                            if (!id[2].equals("H")) {
+                                addElementsInInfABC(inflABCAPMns, result, i);
+                            } else {
+                                addElementsInInfl(inflAPMns, result, i);
+                            }
+
+                            //Если не с окна влияния
+                        } else if (id.length == 6) {
+                            //Если АБС
+                            if (!id[1].equals("H")) {
+                                addElementsInABC(ABCAPMns, result, i);
+                            } else {
+                                addElementsInTotalError(totalErrorAPMns, result, i);
+                            }
+                        }
+
+                    } else if (result instanceof Meter.ImbUResult) {
+                        addElementsImb(imbalansAPMns, result, i);
+                    }
+                }
+            }
+
+            commandResultList = meters.get(i).getErrorListRPPls();
+            //Добавление точек результата из RP+
+            if (!commandResultList.isEmpty()) {
+                for (Meter.CommandResult result : commandResultList) {
+
+                    if (result instanceof Meter.ErrorResult) {
+                        id = result.getId().split(";");
+
+                        //Если с окна влияния
+                        if (id.length == 7) {
+                            //Если АБС
+                            if (!id[2].equals("H")) {
+                                addElementsInInfABC(inflABCRPPls, result, i);
+                            } else {
+                                addElementsInInfl(inflRPPls, result, i);
+                            }
+
+                            //Если не с окна влияния
+                        } else if (id.length == 6) {
+                            //Если АБС
+                            if (!id[1].equals("H")) {
+                                addElementsInABC(ABCRPPls, result, i);
+                            } else {
+                                addElementsInTotalError(totalErrorRPPls, result, i);
+                            }
+                        }
+
+                    } else if (result instanceof Meter.ImbUResult) {
+                        addElementsImb(imbalansRPPls, result, i);
+                    }
+                }
+            }
+
+            commandResultList = meters.get(i).getErrorListRPMns();
+            //Добавление точек результата из RP-
+            if (!commandResultList.isEmpty()) {
+                for (Meter.CommandResult result : commandResultList) {
+
+                    if (result instanceof Meter.ErrorResult) {
+                        id = result.getId().split(";");
+
+                        //Если с окна влияния
+                        if (id.length == 7) {
+                            //Если АБС
+                            if (!id[2].equals("H")) {
+                                addElementsInInfABC(inflABCRPMns, result, i);
+                            } else {
+                                addElementsInInfl(inflRPMns, result, i);
+                            }
+
+                            //Если не с окна влияния
+                        } else if (id.length == 6) {
+                            //Если АБС
+                            if (!id[1].equals("H")) {
+                                addElementsInABC(ABCRPMns, result, i);
+                            } else {
+                                addElementsInTotalError(totalErrorRPMns, result, i);
+                            }
+                        }
+
+                    } else if (result instanceof Meter.ImbUResult) {
+                        addElementsImb(imbalansRPMns, result, i);
+                    }
+                }
+            }
+        }
+
+        //Добавление прочих результатов
+        for (int i = 0; i < meters.size(); i++) {
+            addElementsInCRPSTA(meters.get(i), i);
+        }
+    }
+
+    private void addElementsInInfABC(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
+        //55.0 F;1;A;A;P;0.5 Ib;0.25L
         String[] idArr = result.getId().split(";");
         String[] procUorFandUorF = idArr[0].split(" ");
         String[] ImaxIb = idArr[5].split(" ");
@@ -60,16 +246,16 @@ public class ExcelReport {
                     + idArr[6] + ";" + ImaxIb[1] + ";" + ImaxIb[0];
         }
 
-        if (inflABC.get(key) != null) {
-            inflABC.get(key).put(indexMeter, result);
+        if (errorBlock.get(key) != null) {
+            errorBlock.get(key).put(indexMeter, result);
         } else {
-            Map<Integer, Meter.ErrorResult> errMap = new HashMap<>();
+            Map<Integer, Meter.CommandResult> errMap = new HashMap<>();
             errMap.put(indexMeter, result);
-            inflABC.put(key, errMap);
+            errorBlock.put(key, errMap);
         }
     }
 
-    private void addElementsInInfl(Meter.ErrorResult result, int indexMeter) {
+    private void addElementsInInfl(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
         //55.0 F;1;H;A;P;0.5 Ib;0.25L
         String[] idArr = result.getId().split(";");
         String[] procUorFandUorF = idArr[0].split(" ");
@@ -85,17 +271,17 @@ public class ExcelReport {
                     + idArr[6] + ";" + ImaxIb[1] + ";" + ImaxIb[0];
         }
 
-        if (infl.get(key) != null) {
-            infl.get(key).put(indexMeter, result);
+        if (errorBlock.get(key) != null) {
+            errorBlock.get(key).put(indexMeter, result);
         } else {
-            Map<Integer, Meter.ErrorResult> errMap = new HashMap<>();
+            Map<Integer, Meter.CommandResult> errMap = new HashMap<>();
             errMap.put(indexMeter, result);
-            infl.put(key, errMap);
+            errorBlock.put(key, errMap);
         }
     }
 
-    private void addElementsInABC(Meter.ErrorResult result, int indexMeter) {
-        //1;H;A;P;0.2 Ib;0.5C
+    private void addElementsInABC(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
+        //1;A;A;P;0.2 Ib;0.5C
         String[] idArr = result.getId().split(";");
         String[] ImaxIb = idArr[4].split(" ");
 
@@ -108,16 +294,16 @@ public class ExcelReport {
             key = idArr[1] + ";0;" + idArr[5] + ";" + ImaxIb[1] + ";" + ImaxIb[0];
         }
 
-        if (ABC.get(key) != null) {
-            ABC.get(key).put(indexMeter, result);
+        if (errorBlock.get(key) != null) {
+            errorBlock.get(key).put(indexMeter, result);
         } else {
-            Map<Integer, Meter.ErrorResult> errMap = new HashMap<>();
+            Map<Integer, Meter.CommandResult> errMap = new HashMap<>();
             errMap.put(indexMeter, result);
-            ABC.put(key, errMap);
+            errorBlock.put(key, errMap);
         }
     }
 
-    private void addElementsInTotalErrors(Meter.ErrorResult result, int indexMeter) {
+    private void addElementsInTotalError(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
         //1;H;A;P;0.2 Ib;0.5C
         String[] idArr = result.getId().split(";");
         String[] ImaxIb = idArr[4].split(" ");
@@ -131,12 +317,25 @@ public class ExcelReport {
             key = "0;" + idArr[5] + ";" + ImaxIb[1] + ";" + ImaxIb[0];
         }
 
-        if (totalErrors.get(key) != null) {
-            totalErrors.get(key).put(indexMeter, result);
+        if (errorBlock.get(key) != null) {
+            errorBlock.get(key).put(indexMeter, result);
         } else {
-            Map<Integer, Meter.ErrorResult> errMap = new HashMap<>();
+            Map<Integer, Meter.CommandResult> errMap = new HashMap<>();
             errMap.put(indexMeter, result);
-            totalErrors.put(key, errMap);
+            errorBlock.put(key, errMap);
+        }
+    }
+
+    private void addElementsImb(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
+        String[] id = result.getId().split(";");
+        String key = id[1];
+
+        if (errorBlock.get(key) != null) {
+            errorBlock.get(key).put(indexMeter, result);
+        } else {
+            Map<Integer, Meter.CommandResult> errMap = new HashMap<>();
+            errMap.put(indexMeter, result);
+            errorBlock.put(key, errMap);
         }
     }
 
@@ -690,8 +889,6 @@ public class ExcelReport {
         }
     };
 
-
-
     Comparator<String> comparatorForInfl = new Comparator<String>() {
         @Override
         public int compare(String o1, String o2) {
@@ -752,4 +949,177 @@ public class ExcelReport {
         }
     };
 
+    Comparator<String> comparatorForABC = new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            //A;L;0.5;Imax;0.02
+            String[] arrO1 = o1.split(";");
+            String[] arrO2 = o2.split(";");
+
+            if (arrO1[0].equals("A") && !arrO2[0].equals("A")) {
+                return -1;
+            } else if (!arrO1[0].equals("A") && arrO2[0].equals("A")) {
+                return 1;
+            } else if (arrO1[0].equals("B") && arrO2[0].equals("C")) {
+                return -1;
+            } else if (arrO1[0].equals("C") && arrO2[0].equals("B")) {
+                return 1;
+            } else if (arrO1[0].equals("A") && arrO2[0].equals("A") ||
+                    arrO1[0].equals("B") && arrO2[0].equals("B") ||
+                    arrO1[0].equals("C") && arrO2[0].equals("C")) {
+
+                if (arrO1[1].equals("0") && !arrO2[1].equals("0")) {
+                    return -1;
+                } else if (!arrO1[1].equals("0") && arrO2[1].equals("0")) {
+                    return 1;
+                } else if (arrO1[1].equals("L") && arrO2[1].equals("C")) {
+                    return -1;
+                } else if (arrO1[1].equals("C") && arrO2[1].equals("L")) {
+                    return 1;
+                } else if ((arrO1[1].equals("0") && arrO2[1].equals("0")) ||
+                        (arrO1[1].equals("L") && arrO2[1].equals("L")) ||
+                        (arrO1[1].equals("C") && arrO2[1].equals("C"))) {
+
+                    if (Float.parseFloat(arrO1[2]) > Float.parseFloat(arrO2[2])) {
+                        return -1;
+                    } else if (Float.parseFloat(arrO1[2]) < Float.parseFloat(arrO2[2])) {
+                        return 1;
+                    } else {
+                        if (arrO1[3].equals("Imax") && arrO2[3].equals("Ib")) {
+                            return -1;
+                        } else if (arrO1[3].equals("Ib") && arrO2[3].equals("Imax")) {
+                            return 1;
+                        } else if (arrO1[3].equals("Imax") && arrO2[3].equals("Imax")) {
+                            if (Float.parseFloat(arrO1[4]) > Float.parseFloat(arrO2[4])) {
+                                return -1;
+                            } else if (Float.parseFloat(arrO1[4]) < Float.parseFloat(arrO2[4])) {
+                                return 1;
+                            } else return 0;
+                        } else if (arrO1[3].equals("Ib") && arrO2[3].equals("Ib")) {
+                            if (Float.parseFloat(arrO1[4]) > Float.parseFloat(arrO2[4])) {
+                                return -1;
+                            } else if (Float.parseFloat(arrO1[4]) < Float.parseFloat(arrO2[4])) {
+                                return 1;
+                            } else return 0;
+                        } else return 0;
+                    }
+                } else return 0;
+            } else return 0;
+        }
+    };
+
+    Comparator<String> comparatorForTotalError = new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            //L;0,5;Imax;0.02
+            String[] arrO1 = o1.split(";");
+            String[] arrO2 = o2.split(";");
+
+            if (arrO1[0].equals("0") && !arrO2[0].equals("0")) {
+                return -1;
+            } else if (!arrO1[0].equals("0") && arrO2[0].equals("0")) {
+                return 1;
+            } else if (arrO1[0].equals("L") && arrO2[0].equals("C")) {
+                return -1;
+            } else if (arrO1[0].equals("C") && arrO2[0].equals("L")) {
+                return 1;
+            } else if ((arrO1[0].equals("0") && arrO2[0].equals("0")) ||
+                    (arrO1[0].equals("L") && arrO2[0].equals("L")) ||
+                    (arrO1[0].equals("C") && arrO2[0].equals("C"))) {
+
+                if (Float.parseFloat(arrO1[1]) > Float.parseFloat(arrO2[1])) {
+                    return -1;
+                } else if (Float.parseFloat(arrO1[1]) < Float.parseFloat(arrO2[1])) {
+                    return 1;
+                } else {
+                    if (arrO1[2].equals("Imax") && arrO2[2].equals("Ib")) {
+                        return -1;
+                    } else if (arrO1[2].equals("Ib") && arrO2[2].equals("Imax")) {
+                        return 1;
+                    } else if (arrO1[2].equals("Imax") && arrO2[2].equals("Imax")) {
+                        if (Float.parseFloat(arrO1[3]) > Float.parseFloat(arrO2[3])) {
+                            return -1;
+                        } else if (Float.parseFloat(arrO1[3]) < Float.parseFloat(arrO2[3])) {
+                            return 1;
+                        } else return 0;
+                    } else if (arrO1[2].equals("Ib") && arrO2[2].equals("Ib")) {
+                        if (Float.parseFloat(arrO1[3]) > Float.parseFloat(arrO2[3])) {
+                            return -1;
+                        } else if (Float.parseFloat(arrO1[3]) < Float.parseFloat(arrO2[3])) {
+                            return 1;
+                        } else return 0;
+                    } else return 0;
+                }
+            } else return 0;
+        }
+    };
+
+
+    Comparator<String> comparatorCRPSTAother = new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            //CRP Самоход
+            //STAAP Чувствтельность AP+
+            //STAAN Чувствтельность AP-
+            //STARP Чувствтельность RP+
+            //STARN Чувствтельность RP-
+            //RTC ТХЧ
+            //CNTAP Константа
+            //CNTAN Константа
+            //CNTRP Константа
+            //CNTRN Константа
+            //INS Изоляция
+            //APR Внешний вид
+
+            if (o1.equals("CRP") && !o2.equals("CRP")) {
+                return -1;
+            } else if (!o1.equals("CRP") && o2.equals("CRP")) {
+                return 1;
+            } else if (o1.equals("STAAP") && !o2.equals("STAAP")) {
+                return -1;
+            } else if (!o1.equals("STAAP") && o2.equals("STAAP")) {
+                return 1;
+            } else if (o1.equals("STAAN") && !o2.equals("STAAN")) {
+                return -1;
+            } else if (!o1.equals("STAAN") && o2.equals("STAAN")) {
+                return 1;
+            } else if (o1.equals("STARP") && !o2.equals("STARP")) {
+                return -1;
+            } else if (!o1.equals("STARP") && o2.equals("STARP")) {
+                return 1;
+            } else if (o1.equals("STARN") && !o2.equals("STARN")) {
+                return -1;
+            } else if (!o1.equals("STARN") && o2.equals("STARN")) {
+                return 1;
+            } else if (o1.equals("RTC") && !o2.equals("RTC")) {
+                return -1;
+            } else if (!o1.equals("RTC") && o2.equals("RTC")) {
+                return 1;
+            } else if (o1.equals("CNTAP") && !o2.equals("CNTAP")) {
+                return -1;
+            } else if (!o1.equals("CNTAP") && o2.equals("CNTAP")) {
+                return 1;
+            } else if (o1.equals("CNTAN") && !o2.equals("CNTAN")) {
+                return -1;
+            } else if (!o1.equals("CNTAN") && o2.equals("CNTAN")) {
+                return 1;
+            } else if (o1.equals("CNTRP") && !o2.equals("CNTRP")) {
+                return -1;
+            } else if (!o1.equals("CNTRP") && o2.equals("CNTRP")) {
+                return 1;
+            } else if (o1.equals("CNTRN") && !o2.equals("CNTRN")) {
+                return -1;
+            } else if (!o1.equals("CNTRN") && o2.equals("CNTRN")) {
+                return 1;
+            } else if (o1.equals("INS") && !o2.equals("INS")) {
+                return -1;
+            } else if (!o1.equals("INS") && o2.equals("INS")) {
+                return 1;
+            } else if (o1.equals("APR") && !o2.equals("APR")) {
+                return -1;
+            } else if (!o1.equals("APR") && o2.equals("APR")) {
+                return 1;
+            } else return 0;
+        }
+    };
 }
