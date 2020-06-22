@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+
 
 public class MainStend {
     public TreeMap<String, Integer> tree;
@@ -43,7 +43,22 @@ public class MainStend {
             System.out.println(elem.getKey());
 
             idElem = elem.getKey().split(";");
-            if (idElem.)
+            //if (idElem.)
+        }
+    }
+
+    public class group {
+        int firstPriority;
+        int secondPriority;
+        int thirdPriority;
+        int fourthPriority;
+        int fifthPriority;
+
+        private List<Meter.CommandResult> commandList = new ArrayList<>();
+
+        public void addErrorResultInGroup(Meter.ErrorResult result) {
+
+            if (result.getId())
         }
     }
 

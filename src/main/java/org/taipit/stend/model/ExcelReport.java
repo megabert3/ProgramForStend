@@ -84,6 +84,10 @@ public class ExcelReport {
     private Map<String, Map<Integer, Meter.CommandResult>> totalErrorRPMns;
     private Map<String, Map<Integer, Meter.CommandResult>> imbalansRPMns;
 
+    private void createAndAddGroupsInList() {
+
+    }
+
     private void sortAndAddMeterErrorsResult(List<Meter> meters) {
 
         List<Meter.CommandResult> commandResultList;
@@ -286,7 +290,7 @@ public class ExcelReport {
         String[] ImaxIb = idArr[4].split(" ");
 
         String key;
-        //A;L;0.5;Imax;0.02
+        //F;55;A;L;0.5;Imax;0.02
         if (idArr[5].contains("L") || idArr[5].contains("C")) {
             key = idArr[1] + ";" + idArr[5].substring(idArr[5].length() - 1) + ";"
                     + idArr[5].substring(0, idArr[5].length() - 1) + ";" + ImaxIb[1] + ";" + ImaxIb[0];
@@ -1122,4 +1126,45 @@ public class ExcelReport {
             } else return 0;
         }
     };
+
+    public interface Group {
+
+    }
+
+    public class InfABCGroup implements Group {
+        //F;55;A;L;0.5;Imax;0.02
+        int fOrUproc;
+        int A;
+        int B;
+        int C;
+
+    }
+
+    public class InfGroup implements Group {
+        //F;55;L;0.5;Imax;0.02
+    }
+
+    public class ABCGroup implements Group {
+        //A;L;0.5;Imax;0.02
+    }
+
+    public class TotalerrorsGroup implements Group {
+        //L;0,5;Imax;0.02
+    }
+
+    public class CRPSTAotherGroup implements Group {
+        //CRP Самоход
+        //STAAP Чувствтельность AP+
+        //STAAN Чувствтельность AP-
+        //STARP Чувствтельность RP+
+        //STARN Чувствтельность RP-
+        //RTC ТХЧ
+        //CNTAP Константа
+        //CNTAN Константа
+        //CNTRP Константа
+        //CNTRN Константа
+        //INS Изоляция
+        //APR Внешний вид
+    }
+
 }
