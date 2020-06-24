@@ -1,17 +1,7 @@
 package org.taipit.stend.controller;
 
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellUtil;
-import org.apache.poi.ss.util.RegionUtil;
 import org.taipit.stend.model.ExcelReport;
-
-import javax.annotation.processing.SupportedSourceVersion;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 
 import java.util.*;
 
@@ -20,121 +10,417 @@ public class MainStend {
     public TreeMap<String, Map> tree;
 
     public MainStend() {
-        tree = new TreeMap<>(comparatorForInflABC);
+        tree = new TreeMap<>(comparatorForTotalError);
     }
 
     public static void main(String[] args) {
         //new ExcelReport().createExcelReport();
         MainStend mainStend = new MainStend();
-        MainStend.InfABCGroup group = new InfABCGroup();
 
-        mainStend.tree.put("U;90;A;L;0.5;Imax;1.0", new HashMap());
-        mainStend.tree.put("U;90;A;L;0.5;Imax;0.9", new HashMap());
-        mainStend.tree.put("U;90;A;L;0.5;Imax;0.8", new HashMap());
-        mainStend.tree.put("U;90;A;L;0.5;Ib;1.0", new HashMap());
-        mainStend.tree.put("U;90;A;L;0.5;Ib;0.9", new HashMap());
-        mainStend.tree.put("U;90;A;L;0.5;Ib;0.8", new HashMap());
+        MainStend.TotalErrorsGroup group = mainStend.new TotalErrorsGroup();
 
+        mainStend.tree.put("L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("C;0.4;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("0;1.0;Ib;0.01", new HashMap());
+
+        for (String key : mainStend.tree.keySet()) {
+            System.out.println(key);
+        }
 
         for (Map.Entry<String, Map> map : mainStend.tree.entrySet()) {
-            System.out.println(map.getKey());
             group.putResultInGroup(map.getKey(), map.getValue());
         }
 
         group.getElements();
     }
 
-    public static class InfABCGroup {
-        //F;55;A;L;0.5;Imax;0.02
+    public class CRPSTAotherGroup {
+        //CRP Самоход
+        //STAAP Чувствтельность AP+
+        //STAAN Чувствтельность AP-
+        //STARP Чувствтельность RP+
+        //STARN Чувствтельность RP-
+        //RTC ТХЧ
+        //CNTAP Константа
+        //CNTAN Константа
+        //CNTRP Константа
+        //CNTRN Константа
+        //INS Изоляция
+        //APR Внешний вид
+    }
 
-        Map<String, Map> mainMap = new HashMap<>();
+    public class TotalErrorsGroup {
+        //L;0.5;Imax;0.02
 
-        Map<String, Map> ABC;
-        Map<String, Map> valueLC0;
-        Map<String, Map> valueCurrent;
+        private Map<String, Map> powerFactorMap;
+        private Map<String, Map> currentMap;
 
-        String UorFproc;
-        String AorBorC;
-        String powerFactor;
-        String currentProc;
+        private String PFkey;
+        private String currKey;
+
+        public TotalErrorsGroup() {
+            powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+        }
 
         public boolean putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
             String[] idResult = keyId.split(";");
-            UorFproc = idResult[1] + idResult[0] + "n";
-            AorBorC = idResult[2];
-            currentProc = idResult[6] + idResult[5];
 
-            if (idResult[3].equals("0")) {
-                powerFactor = idResult[4];
+            currKey = idResult[3] + " " + idResult[2];
+
+            if (idResult[0].equals("0")) {
+                PFkey = idResult[1];
             } else {
-                powerFactor = idResult[4] + idResult[3];
+                PFkey = idResult[1] + " " + idResult[0];
             }
 
-            //Если уже есть элементы в этой группе
-            if (mainMap.size() != 0) {
-                //Если приходящий элемент не соответствует типу основновной группы
-                if (mainMap.get(UorFproc) == null) {
-                    return false;
-                    //Если соответствует
-                } else {
-                    //Вниз по иерархии к пофазному
-                    ABC = mainMap.get(UorFproc);
-                    //Если новая фаза
-                    if (ABC.get(AorBorC) == null) {
+            if (!powerFactorMap.containsKey(PFkey)) {
+                currentMap = new TreeMap<>(comparatorForCurrent);
 
-                        valueLC0 = new HashMap<>();
-                        valueCurrent = new HashMap<>();
+                powerFactorMap.put(PFkey, currentMap);
 
-                        ABC.put(AorBorC, valueLC0);
-
-                        valueLC0.put(powerFactor, valueCurrent);
-
-                        valueCurrent.put(currentProc, commandResultMap);
-                        return true;
-
-                    } else {
-                        valueLC0 = ABC.get(AorBorC);
-
-                        if (valueLC0.get(powerFactor) == null) {
-
-                            valueCurrent = new HashMap<>();
-
-                            valueLC0.put(powerFactor, valueCurrent);
-
-                            valueCurrent.put(currentProc, commandResultMap);
-                            return true;
-
-                        } else {
-                            valueCurrent = valueLC0.get(powerFactor);
-
-                            valueCurrent.put(currentProc, commandResultMap);
-                            return true;
-                        }
-                    }
-                }
-                //Если это первый элемент приходящий в группу
+                currentMap.put(currKey, commandResultMap);
+                return true;
             } else {
-                ABC = new HashMap<>();
-                valueLC0 = new HashMap<>();
-                valueCurrent = new HashMap<>();
+                currentMap = powerFactorMap.get(PFkey);
 
-                mainMap.put(UorFproc, ABC);
-
-                ABC.put(AorBorC, valueLC0);
-
-                valueLC0.put(powerFactor, valueCurrent);
-
-                valueCurrent.put(currentProc, commandResultMap);
+                currentMap.put(currKey, commandResultMap);
                 return true;
             }
         }
 
         public void getElements() {
+            System.out.println(powerFactorMap);
             Map<String, Map> ABC;
             Map<String, Map> valueLC0;
             Map<String, Map> valueCurrent;
 
-            for (Map.Entry<String, Map> mapEntry : mainMap.entrySet()) {
+            for (Map.Entry<String, Map> mapEntry : powerFactorMap.entrySet()) {
+                System.out.println(mapEntry.getKey());
+                ABC = mapEntry.getValue();
+
+                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
+                    System.out.println("    " + abc.getKey());
+                    valueLC0 = abc.getValue();
+
+                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
+                        System.out.println("     " + asfa.getKey());
+
+                        valueCurrent = asfa.getValue();
+
+                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
+                            System.out.println("     " + asfaasdas.getKey());
+                        }
+                    }
+                }
+            }
+        }
+
+        Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+
+                if ((!o1.contains("L") && !o1.contains("C")) && (o2.contains("L") || o2.contains("C"))) {
+                    return -1;
+                } else if ((o1.contains("L") || o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
+                    return 1;
+                } else if (o1.contains("L") && o2.contains("C")) {
+                    return -1;
+                } else if (o1.contains("C") && o2.contains("L")) {
+                    return 1;
+                } else if ((!o1.contains("L") && !o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
+                    String[] pf1 = o1.split(" ");
+                    String[] pf2 = o2.split(" ");
+
+                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
+                        return 1;
+                    } else return 0;
+                } else if (o1.contains("L") & o2.contains("L") ||
+                        o1.contains("C") & o2.contains("C")) {
+                    String[] pf1 = o1.split(" ");
+                    String[] pf2 = o2.split(" ");
+
+                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
+                        return 1;
+                    } else return 0;
+                } else return 0;
+            }
+        };
+
+        Comparator<String> comparatorForCurrent = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                if (o1.contains("Imax") && o2.contains("Ib")) {
+                    return -1;
+                } else if (o1.contains("Ib") && o2.contains("Imax")) {
+                    return 1;
+                } else if (o1.contains("Imax") && o2.contains("Imax") ||
+                        o1.contains("Ib") && o2.contains("Ib")) {
+                    String[] curr1 = o1.split(" ");
+                    String[] curr2 = o2.split(" ");
+
+                    if (Float.parseFloat(curr1[0]) > Float.parseFloat(curr2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(curr1[0]) < Float.parseFloat(curr2[0])){
+                        return 1;
+                    } else return 0;
+                } else return 0;
+            }
+        };
+    }
+
+    public class ABCGroup {
+        //A;L;0.5;Imax;0.02
+
+        private Map<String, Map> ABCMap;
+        private Map<String, Map> powerFactorMap;
+        private Map<String, Map> currentMap;
+
+        private String ABCkey;
+        private String PFkey;
+        private String currKey;
+
+        public ABCGroup() {
+            ABCMap = new TreeMap<>(comparatorForABC);
+        }
+
+        public boolean putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            String[] idResult = keyId.split(";");
+
+            ABCkey = idResult[0];
+            currKey = idResult[4] + " " + idResult[3];
+
+            if (idResult[1].equals("0")) {
+                PFkey = idResult[2];
+            } else {
+                PFkey = idResult[2] + " " + idResult[1];
+            }
+
+            if (!ABCMap.containsKey(ABCkey)) {
+
+                powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+                currentMap = new TreeMap<>(comparatorForCurrent);
+
+                ABCMap.put(ABCkey, powerFactorMap);
+                powerFactorMap.put(PFkey, currentMap);
+                currentMap.put(currKey, commandResultMap);
+                return true;
+            } else {
+
+                powerFactorMap = ABCMap.get(ABCkey);
+                if (!powerFactorMap.containsKey(PFkey)) {
+
+                    currentMap = new TreeMap<>(comparatorForCurrent);
+
+                    powerFactorMap.put(PFkey, currentMap);
+                    currentMap.put(currKey, commandResultMap);
+                    return true;
+                } else {
+                    currentMap = powerFactorMap.get(PFkey);
+                    currentMap.put(currKey, commandResultMap);
+                    return true;
+                }
+            }
+        }
+
+        public void getElements() {
+            System.out.println(ABCMap);
+            Map<String, Map> ABC;
+            Map<String, Map> valueLC0;
+            Map<String, Map> valueCurrent;
+
+            for (Map.Entry<String, Map> mapEntry : ABCMap.entrySet()) {
+                System.out.println(mapEntry.getKey());
+                ABC = mapEntry.getValue();
+
+                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
+                    System.out.println(" " + abc.getKey());
+                    valueLC0 = abc.getValue();
+
+                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
+                        System.out.println("     " + asfa.getKey());
+
+                        valueCurrent = asfa.getValue();
+
+                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
+                            System.out.println("     " + asfaasdas.getKey());
+                        }
+                    }
+                }
+            }
+        }
+
+        Comparator<String> comparatorForABC = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                if (o1.equals("A") & !o2.equals("A")) {
+                    return -1;
+                } else if (!o1.equals("A") & o2.equals("A")){
+                    return 1;
+                }  else if (o1.equals("B") & o2.equals("C")) {
+                    return -1;
+                } else if (o1.equals("C") & o2.equals("B")) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        };
+
+        Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+
+                if ((!o1.contains("L") && !o1.contains("C")) && (o2.contains("L") || o2.contains("C"))) {
+                    return -1;
+                } else if ((o1.contains("L") || o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
+                    return 1;
+                } else if (o1.contains("L") && o2.contains("C")) {
+                    return -1;
+                } else if (o1.contains("C") && o2.contains("L")) {
+                    return 1;
+                } else if ((!o1.contains("L") && !o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
+                    String[] pf1 = o1.split(" ");
+                    String[] pf2 = o2.split(" ");
+
+                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
+                        return 1;
+                    } else return 0;
+                } else if (o1.contains("L") & o2.contains("L") ||
+                        o1.contains("C") & o2.contains("C")) {
+                    String[] pf1 = o1.split(" ");
+                    String[] pf2 = o2.split(" ");
+
+                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
+                        return 1;
+                    } else return 0;
+                } else return 0;
+            }
+        };
+
+        Comparator<String> comparatorForCurrent = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                if (o1.contains("Imax") && o2.contains("Ib")) {
+                    return -1;
+                } else if (o1.contains("Ib") && o2.contains("Imax")) {
+                    return 1;
+                } else if (o1.contains("Imax") && o2.contains("Imax") ||
+                        o1.contains("Ib") && o2.contains("Ib")) {
+                    String[] curr1 = o1.split(" ");
+                    String[] curr2 = o2.split(" ");
+
+                    if (Float.parseFloat(curr1[0]) > Float.parseFloat(curr2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(curr1[0]) < Float.parseFloat(curr2[0])){
+                        return 1;
+                    } else return 0;
+                } else return 0;
+            }
+        };
+    }
+
+    public class InfGroup {
+        //F;55;L;0.5;Imax;0.02
+
+        private Map<String, Map> UorFmap = new TreeMap<>();
+
+        private Map<String, Map> powerFactorMap;
+        private Map<String, Map> currentMap;
+
+        private String UorFkey;
+        private String PFkey;
+        private String currKey;
+
+        public InfGroup() {
+            powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+            currentMap = new TreeMap<>(comparatorForCurrent);
+        }
+
+        public boolean putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            String[] idResult = keyId.split(";");
+            UorFkey = idResult[1] + "% " + idResult[0] + "n";
+            currKey = idResult[5] + " " + idResult[4];
+
+            if (idResult[2].equals("0")) {
+                PFkey = idResult[3];
+            } else {
+                PFkey = idResult[3] + " " + idResult[2];
+            }
+
+            //Если это первый элемент
+            if (UorFmap.size() == 0) {
+                UorFmap.put(UorFkey, powerFactorMap);
+                powerFactorMap.put(PFkey, currentMap);
+                currentMap.put(currKey, commandResultMap);
+                return true;
+            } else {
+                //Если следующий элемент не соответствует группе
+                if (!UorFmap.containsKey(UorFkey)) {
+                    return false;
+                    //Если всё нормально, то добавляем нужный элемент в нужную мапу
+                } else {
+                    powerFactorMap = UorFmap.get(UorFkey);
+                    if (!powerFactorMap.containsKey(PFkey)) {
+
+                        currentMap = new TreeMap<>(comparatorForCurrent);
+
+                        currentMap.put(currKey, commandResultMap);
+
+                        powerFactorMap.put(PFkey, currentMap);
+                        return true;
+
+                    } else {
+                        currentMap = powerFactorMap.get(PFkey);
+                        currentMap.put(currKey, commandResultMap);
+
+                        return true;
+                    }
+                }
+            }
+        }
+
+        public void getElements() {
+            System.out.println(UorFmap);
+            Map<String, Map> ABC;
+            Map<String, Map> valueLC0;
+            Map<String, Map> valueCurrent;
+
+            for (Map.Entry<String, Map> mapEntry : UorFmap.entrySet()) {
                 System.out.println(mapEntry.getKey());
                 ABC = mapEntry.getValue();
 
@@ -154,7 +440,301 @@ public class MainStend {
                 }
             }
         }
+
+        Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+
+                if ((!o1.contains("L") && !o1.contains("C")) && (o2.contains("L") || o2.contains("C"))) {
+                    return -1;
+                } else if ((o1.contains("L") || o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
+                    return 1;
+                } else if (o1.contains("L") && o2.contains("C")) {
+                    return -1;
+                } else if (o1.contains("C") && o2.contains("L")) {
+                    return 1;
+                } else if ((!o1.contains("L") && !o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
+                    String[] pf1 = o1.split(" ");
+                    String[] pf2 = o2.split(" ");
+
+                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
+                        return 1;
+                    } else return 0;
+                } else if (o1.contains("L") & o2.contains("L") ||
+                        o1.contains("C") & o2.contains("C")) {
+                    String[] pf1 = o1.split(" ");
+                    String[] pf2 = o2.split(" ");
+
+                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
+                        return 1;
+                    } else return 0;
+                } else return 0;
+            }
+        };
+
+        Comparator<String> comparatorForCurrent = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                if (o1.contains("Imax") && o2.contains("Ib")) {
+                    return -1;
+                } else if (o1.contains("Ib") && o2.contains("Imax")) {
+                    return 1;
+                } else if (o1.contains("Imax") && o2.contains("Imax") ||
+                        o1.contains("Ib") && o2.contains("Ib")) {
+                    String[] curr1 = o1.split(" ");
+                    String[] curr2 = o2.split(" ");
+
+                    if (Float.parseFloat(curr1[0]) > Float.parseFloat(curr2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(curr1[0]) < Float.parseFloat(curr2[0])){
+                        return 1;
+                    } else return 0;
+                } else return 0;
+            }
+        };
     }
+
+    public class InfABCGroup {
+        //F;55;A;L;0.5;Imax;0.02
+
+        private Map<String, Map> UorFmap = new TreeMap<>();
+
+        private Map<String, Map> ABCMap;
+        private Map<String, Map> powerFactorMap;
+        private Map<String, Map> currentMap;
+
+
+        private String UorFkey;
+        private String ABCkey;
+        private String PFkey;
+        private String currKey;
+
+        public InfABCGroup() {
+            ABCMap = new TreeMap<>(comparatorForABC);
+            powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+            currentMap = new TreeMap<>(comparatorForCurrent);
+        }
+
+        public boolean putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            String[] idResult = keyId.split(";");
+            UorFkey = idResult[1] + idResult[0] + "n";
+            ABCkey = idResult[2];
+            currKey = idResult[6] + " " + idResult[5];
+
+            if (idResult[3].equals("0")) {
+                PFkey = idResult[4];
+            } else {
+                PFkey = idResult[4] + " " + idResult[3];
+            }
+
+            //Если это первый элемент
+            if (UorFmap.size() == 0) {
+                UorFmap.put(UorFkey, ABCMap);
+                ABCMap.put(ABCkey, powerFactorMap);
+                powerFactorMap.put(PFkey, currentMap);
+                currentMap.put(currKey, commandResultMap);
+                return true;
+            } else {
+                //Если следующий элемент не соответствует группе
+                if (!UorFmap.containsKey(UorFkey)) {
+                    return false;
+                    //Если всё нормально, то добавляем нужный элемент в нужную мапу
+                } else {
+                    ABCMap = UorFmap.get(UorFkey);
+                    if (!ABCMap.containsKey(ABCkey)) {
+
+                        powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+                        currentMap = new TreeMap<>(comparatorForCurrent);
+
+                        currentMap.put(currKey, commandResultMap);
+                        powerFactorMap.put(PFkey, currentMap);
+                        ABCMap.put(ABCkey, powerFactorMap);
+                        return true;
+                    } else {
+                        powerFactorMap = ABCMap.get(ABCkey);
+                        if (!powerFactorMap.containsKey(PFkey)) {
+
+                            currentMap = new TreeMap<>(comparatorForCurrent);
+
+                            currentMap.put(currKey, commandResultMap);
+                            powerFactorMap.put(PFkey, currentMap);
+                            return true;
+                        } else {
+                            currentMap = powerFactorMap.get(PFkey);
+                            currentMap.put(currKey, commandResultMap);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void getElements() {
+            System.out.println(UorFmap);
+            Map<String, Map> ABC;
+            Map<String, Map> valueLC0;
+            Map<String, Map> valueCurrent;
+
+            for (Map.Entry<String, Map> mapEntry : UorFmap.entrySet()) {
+                System.out.println(mapEntry.getKey());
+                ABC = mapEntry.getValue();
+
+                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
+                    System.out.println("    " + abc.getKey());
+                    valueLC0 = abc.getValue();
+
+                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
+                        System.out.println("        " + asfa.getKey());
+
+                        valueCurrent = asfa.getValue();
+
+                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
+                            System.out.println("            " + asfaasdas.getKey());
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        Comparator<String> comparatorForABC = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                if (o1.equals("A") & !o2.equals("A")) {
+                    return -1;
+                } else if (!o1.equals("A") & o2.equals("A")){
+                    return 1;
+                }  else if (o1.equals("B") & o2.equals("C")) {
+                    return -1;
+                } else if (o1.equals("C") & o2.equals("B")) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        };
+
+        Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+
+                if ((!o1.contains("L") && !o1.contains("C")) && (o2.contains("L") || o2.contains("C"))) {
+                    return -1;
+                } else if ((o1.contains("L") || o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
+                    return 1;
+                } else if (o1.contains("L") && o2.contains("C")) {
+                    return -1;
+                } else if (o1.contains("C") && o2.contains("L")) {
+                    return 1;
+                } else if ((!o1.contains("L") && !o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
+                    String[] pf1 = o1.split(" ");
+                    String[] pf2 = o2.split(" ");
+
+                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
+                        return 1;
+                    } else return 0;
+                } else if (o1.contains("L") & o2.contains("L") ||
+                        o1.contains("C") & o2.contains("C")) {
+                    String[] pf1 = o1.split(" ");
+                    String[] pf2 = o2.split(" ");
+
+                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
+                        return 1;
+                    } else return 0;
+                } else return 0;
+            }
+        };
+
+        Comparator<String> comparatorForCurrent = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                if (o1.contains("Imax") && o2.contains("Ib")) {
+                    return -1;
+                } else if (o1.contains("Ib") && o2.contains("Imax")) {
+                    return 1;
+                } else if (o1.contains("Imax") && o2.contains("Imax") ||
+                        o1.contains("Ib") && o2.contains("Ib")) {
+                    String[] curr1 = o1.split(" ");
+                    String[] curr2 = o2.split(" ");
+
+                    if (Float.parseFloat(curr1[0]) > Float.parseFloat(curr2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(curr1[0]) < Float.parseFloat(curr2[0])){
+                        return 1;
+                    } else return 0;
+                } else return 0;
+            }
+        };
+    }
+
+    Comparator<String> comparatorForInfl = new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            //F;55;L;0.5;Imax;0.02
+            String[] arrO1 = o1.split(";");
+            String[] arrO2 = o2.split(";");
+
+            if (arrO1[0].equals("U") && arrO2[0].equals("F")) {
+                return -1;
+            } else if (arrO1[0].equals("F") && arrO2[0].equals("U")) {
+                return 1;
+            } else if (arrO1[0].equals("U") && arrO2[0].equals("U") ||
+                    arrO1[0].equals("F") && arrO2[0].equals("F")) {
+                if (Float.parseFloat(arrO1[1]) > Float.parseFloat(arrO2[1])) {
+                    return -1;
+                } else if (Float.parseFloat(arrO1[1]) < Float.parseFloat(arrO2[1])) {
+                    return 1;
+                } else {
+
+                    if (arrO1[2].equals("0") && !arrO2[2].equals("0")) {
+                        return -1;
+                    } else if (!arrO1[2].equals("0") && arrO2[2].equals("0")) {
+                        return 1;
+                    } else if (arrO1[2].equals("L") && arrO2[2].equals("C")) {
+                        return -1;
+                    } else if (arrO1[2].equals("C") && arrO2[2].equals("L")) {
+                        return 1;
+                    } else if ((arrO1[2].equals("0") && arrO2[2].equals("0")) ||
+                            (arrO1[2].equals("L") && arrO2[2].equals("L")) ||
+                            (arrO1[2].equals("C") && arrO2[2].equals("C"))) {
+
+                        if (Float.parseFloat(arrO1[3]) > Float.parseFloat(arrO2[3])) {
+                            return -1;
+                        } else if (Float.parseFloat(arrO1[3]) < Float.parseFloat(arrO2[3])) {
+                            return 1;
+                        } else {
+                            if (arrO1[4].equals("Imax") && arrO2[4].equals("Ib")) {
+                                return -1;
+                            } else if (arrO1[4].equals("Ib") && arrO2[4].equals("Imax")) {
+                                return 1;
+                            } else if (arrO1[4].equals("Imax") && arrO2[4].equals("Imax")) {
+                                if (Float.parseFloat(arrO1[5]) > Float.parseFloat(arrO2[5])) {
+                                    return -1;
+                                } else if (Float.parseFloat(arrO1[5]) < Float.parseFloat(arrO2[5])) {
+                                    return 1;
+                                } else return 0;
+                            } else if (arrO1[4].equals("Ib") && arrO2[4].equals("Ib")) {
+                                if (Float.parseFloat(arrO1[5]) > Float.parseFloat(arrO2[5])) {
+                                    return -1;
+                                } else if (Float.parseFloat(arrO1[5]) < Float.parseFloat(arrO2[5])) {
+                                    return 1;
+                                } else return 0;
+                            } else return 0;
+                        }
+                    } else return 0;
+                }
+            } else return 0;
+        }
+    };
 
     Comparator<String> comparatorForInflABC = new Comparator<String>() {
         @Override
@@ -177,7 +757,7 @@ public class MainStend {
                     if (arrO1[2].equals("A") && !arrO2[2].equals("A")) {
                         return -1;
                     } else if (!arrO1[2].equals("A") && arrO2[2].equals("A")) {
-                        return  1;
+                        return 1;
                     } else if (arrO1[2].equals("B") && arrO2[2].equals("C")) {
                         return -1;
                     } else if (arrO1[2].equals("C") && arrO2[2].equals("B")) {
@@ -227,5 +807,112 @@ public class MainStend {
             } else return 0;
         }
     };
+
+    Comparator<String> comparatorForABC = new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            //A;L;0.5;Imax;0.02
+            String[] arrO1 = o1.split(";");
+            String[] arrO2 = o2.split(";");
+
+            if (arrO1[0].equals("A") && !arrO2[0].equals("A")) {
+                return -1;
+            } else if (!arrO1[0].equals("A") && arrO2[0].equals("A")) {
+                return 1;
+            } else if (arrO1[0].equals("B") && arrO2[0].equals("C")) {
+                return -1;
+            } else if (arrO1[0].equals("C") && arrO2[0].equals("B")) {
+                return 1;
+            } else if (arrO1[0].equals("A") && arrO2[0].equals("A") ||
+                    arrO1[0].equals("B") && arrO2[0].equals("B") ||
+                    arrO1[0].equals("C") && arrO2[0].equals("C")) {
+
+                if (arrO1[1].equals("0") && !arrO2[1].equals("0")) {
+                    return -1;
+                } else if (!arrO1[1].equals("0") && arrO2[1].equals("0")) {
+                    return 1;
+                } else if (arrO1[1].equals("L") && arrO2[1].equals("C")) {
+                    return -1;
+                } else if (arrO1[1].equals("C") && arrO2[1].equals("L")) {
+                    return 1;
+                } else if ((arrO1[1].equals("0") && arrO2[1].equals("0")) ||
+                        (arrO1[1].equals("L") && arrO2[1].equals("L")) ||
+                        (arrO1[1].equals("C") && arrO2[1].equals("C"))) {
+
+                    if (Float.parseFloat(arrO1[2]) > Float.parseFloat(arrO2[2])) {
+                        return -1;
+                    } else if (Float.parseFloat(arrO1[2]) < Float.parseFloat(arrO2[2])) {
+                        return 1;
+                    } else {
+                        if (arrO1[3].equals("Imax") && arrO2[3].equals("Ib")) {
+                            return -1;
+                        } else if (arrO1[3].equals("Ib") && arrO2[3].equals("Imax")) {
+                            return 1;
+                        } else if (arrO1[3].equals("Imax") && arrO2[3].equals("Imax")) {
+                            if (Float.parseFloat(arrO1[4]) > Float.parseFloat(arrO2[4])) {
+                                return -1;
+                            } else if (Float.parseFloat(arrO1[4]) < Float.parseFloat(arrO2[4])) {
+                                return 1;
+                            } else return 0;
+                        } else if (arrO1[3].equals("Ib") && arrO2[3].equals("Ib")) {
+                            if (Float.parseFloat(arrO1[4]) > Float.parseFloat(arrO2[4])) {
+                                return -1;
+                            } else if (Float.parseFloat(arrO1[4]) < Float.parseFloat(arrO2[4])) {
+                                return 1;
+                            } else return 0;
+                        } else return 0;
+                    }
+                } else return 0;
+            } else return 0;
+        }
+    };
+
+    Comparator<String> comparatorForTotalError = new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            //L;0,5;Imax;0.02
+            String[] arrO1 = o1.split(";");
+            String[] arrO2 = o2.split(";");
+
+            if (arrO1[0].equals("0") && !arrO2[0].equals("0")) {
+                return -1;
+            } else if (!arrO1[0].equals("0") && arrO2[0].equals("0")) {
+                return 1;
+            } else if (arrO1[0].equals("L") && arrO2[0].equals("C")) {
+                return -1;
+            } else if (arrO1[0].equals("C") && arrO2[0].equals("L")) {
+                return 1;
+            } else if ((arrO1[0].equals("0") && arrO2[0].equals("0")) ||
+                    (arrO1[0].equals("L") && arrO2[0].equals("L")) ||
+                    (arrO1[0].equals("C") && arrO2[0].equals("C"))) {
+
+                if (Float.parseFloat(arrO1[1]) > Float.parseFloat(arrO2[1])) {
+                    return -1;
+                } else if (Float.parseFloat(arrO1[1]) < Float.parseFloat(arrO2[1])) {
+                    return 1;
+                } else {
+                    if (arrO1[2].equals("Imax") && arrO2[2].equals("Ib")) {
+                        return -1;
+                    } else if (arrO1[2].equals("Ib") && arrO2[2].equals("Imax")) {
+                        return 1;
+                    } else if (arrO1[2].equals("Imax") && arrO2[2].equals("Imax")) {
+                        if (Float.parseFloat(arrO1[3]) > Float.parseFloat(arrO2[3])) {
+                            return -1;
+                        } else if (Float.parseFloat(arrO1[3]) < Float.parseFloat(arrO2[3])) {
+                            return 1;
+                        } else return 0;
+                    } else if (arrO1[2].equals("Ib") && arrO2[2].equals("Ib")) {
+                        if (Float.parseFloat(arrO1[3]) > Float.parseFloat(arrO2[3])) {
+                            return -1;
+                        } else if (Float.parseFloat(arrO1[3]) < Float.parseFloat(arrO2[3])) {
+                            return 1;
+                        } else return 0;
+                    } else return 0;
+                }
+            } else return 0;
+        }
+    };
 }
+
+
 
