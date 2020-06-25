@@ -1,8 +1,6 @@
 package org.taipit.stend.controller;
 
 
-import org.taipit.stend.model.ExcelReport;
-
 import java.util.*;
 
 
@@ -10,45 +8,483 @@ public class MainStend {
     public TreeMap<String, Map> tree;
 
     public MainStend() {
-        tree = new TreeMap<>(comparatorForTotalError);
+        tree = new TreeMap<>();
     }
 
     public static void main(String[] args) {
         //new ExcelReport().createExcelReport();
         MainStend mainStend = new MainStend();
 
-        MainStend.TotalErrorsGroup group = mainStend.new TotalErrorsGroup();
+        MainStend.InfABCGroup group = mainStend.new InfABCGroup();
 
-        mainStend.tree.put("L;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("L;0.5;Imax;0.01", new HashMap());
+        mainStend.tree.put("F;55;A;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;L;0.5;Imax;0.01", new HashMap());
 
-        mainStend.tree.put("L;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("L;0.5;Ib;0.01", new HashMap());
+        mainStend.tree.put("F;55;A;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;L;0.5;Ib;0.01", new HashMap());
 
-        mainStend.tree.put("L;0.4;Imax;0.02", new HashMap());
-        mainStend.tree.put("L;0.4;Imax;0.01", new HashMap());
+        mainStend.tree.put("F;55;A;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;L;0.4;Imax;0.01", new HashMap());
 
-        mainStend.tree.put("L;0.4;Ib;0.02", new HashMap());
-        mainStend.tree.put("L;0.4;Ib;0.01", new HashMap());
+        mainStend.tree.put("F;55;A;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;L;0.4;Ib;0.01", new HashMap());
 
 
-        mainStend.tree.put("C;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("C;0.5;Imax;0.01", new HashMap());
+        mainStend.tree.put("F;55;A;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;C;0.5;Imax;0.01", new HashMap());
 
-        mainStend.tree.put("C;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("C;0.5;Ib;0.01", new HashMap());
+        mainStend.tree.put("F;55;A;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;C;0.5;Ib;0.01", new HashMap());
 
-        mainStend.tree.put("C;0.4;Imax;0.02", new HashMap());
-        mainStend.tree.put("C;0.4;Imax;0.01", new HashMap());
+        mainStend.tree.put("F;55;A;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;C;0.4;Imax;0.01", new HashMap());
 
-        mainStend.tree.put("C;0.4;Ib;0.02", new HashMap());
-        mainStend.tree.put("C;0.4;Ib;0.01", new HashMap());
+        mainStend.tree.put("F;55;A;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;C;0.4;Ib;0.01", new HashMap());
 
-        mainStend.tree.put("0;1.0;Imax;0.02", new HashMap());
-        mainStend.tree.put("0;1.0;Imax;0.01", new HashMap());
 
-        mainStend.tree.put("0;1.0;Ib;0.02", new HashMap());
-        mainStend.tree.put("0;1.0;Ib;0.01", new HashMap());
+        mainStend.tree.put("F;55;A;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;A;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;A;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;A;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;A;0;0.8;Ib;0.01", new HashMap());
+
+
+
+        mainStend.tree.put("F;55;B;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;B;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;B;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;B;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;55;B;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;B;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;B;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;B;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;C;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;55;B;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;B;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;B;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;B;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;B;0;0.8;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;55;C;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;C;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;C;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;C;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;55;C;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;C;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;C;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;C;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;C;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;55;C;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;C;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;C;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;55;C;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;55;C;0;0.8;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;A;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;A;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;A;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;A;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;45;A;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;A;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;A;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;A;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;C;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;45;A;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;A;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;A;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;A;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;A;0;0.8;Ib;0.01", new HashMap());
+
+
+
+        mainStend.tree.put("F;45;B;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;B;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;B;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;B;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;45;B;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;B;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;B;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;B;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;C;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;45;B;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;B;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;B;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;B;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;B;0;0.8;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;45;C;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;C;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;C;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;C;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;45;C;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;C;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;C;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;C;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;C;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("F;45;C;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;C;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;C;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("F;45;C;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("F;45;C;0;0.8;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;55;A;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;A;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;A;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;A;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;55;A;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;A;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;A;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;A;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;C;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;55;A;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;A;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;A;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;A;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;A;0;0.8;Ib;0.01", new HashMap());
+
+
+
+        mainStend.tree.put("U;55;B;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;B;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;B;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;B;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;55;B;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;B;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;B;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;B;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;C;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;55;B;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;B;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;B;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;B;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;B;0;0.8;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;55;C;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;C;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;C;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;C;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;55;C;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;C;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;C;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;C;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;C;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;55;C;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;C;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;C;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;55;C;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;55;C;0;0.8;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;A;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;A;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;A;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;A;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;45;A;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;A;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;A;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;A;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;C;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;45;A;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;A;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;A;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;A;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;A;0;0.8;Ib;0.01", new HashMap());
+
+
+
+        mainStend.tree.put("U;45;B;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;B;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;B;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;B;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;45;B;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;B;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;B;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;B;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;C;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;45;B;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;B;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;B;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;B;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;B;0;0.8;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;45;C;L;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;L;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;C;L;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;L;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;C;L;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;L;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;C;L;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;L;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;45;C;C;0.5;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;C;0.5;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;C;C;0.5;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;C;0.5;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;C;C;0.4;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;C;0.4;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;C;C;0.4;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;C;0.4;Ib;0.01", new HashMap());
+
+
+        mainStend.tree.put("U;45;C;0;1.0;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;0;1.0;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;C;0;1.0;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;0;1.0;Ib;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;C;0;0.8;Imax;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;0;0.8;Imax;0.01", new HashMap());
+
+        mainStend.tree.put("U;45;C;0;0.8;Ib;0.02", new HashMap());
+        mainStend.tree.put("U;45;C;0;0.8;Ib;0.01", new HashMap());
 
         for (String key : mainStend.tree.keySet()) {
             System.out.println(key);
@@ -357,7 +793,7 @@ public class MainStend {
     public class InfGroup {
         //F;55;L;0.5;Imax;0.02
 
-        private Map<String, Map> UorFmap = new TreeMap<>();
+        private Map<String, Map> UorFmap;
 
         private Map<String, Map> powerFactorMap;
         private Map<String, Map> currentMap;
@@ -367,13 +803,12 @@ public class MainStend {
         private String currKey;
 
         public InfGroup() {
-            powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
-            currentMap = new TreeMap<>(comparatorForCurrent);
+            UorFmap = new TreeMap<>(comparatorForUorF);
         }
 
-        public boolean putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+        public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
             String[] idResult = keyId.split(";");
-            UorFkey = idResult[1] + "% " + idResult[0] + "n";
+            UorFkey = idResult[1] + " %" + idResult[0] + "n";
             currKey = idResult[5] + " " + idResult[4];
 
             if (idResult[2].equals("0")) {
@@ -382,34 +817,25 @@ public class MainStend {
                 PFkey = idResult[3] + " " + idResult[2];
             }
 
-            //Если это первый элемент
-            if (UorFmap.size() == 0) {
+            if (UorFmap.get(UorFkey) == null) {
+                powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+                currentMap = new TreeMap<>(comparatorForCurrent);
+
                 UorFmap.put(UorFkey, powerFactorMap);
                 powerFactorMap.put(PFkey, currentMap);
                 currentMap.put(currKey, commandResultMap);
-                return true;
             } else {
-                //Если следующий элемент не соответствует группе
-                if (!UorFmap.containsKey(UorFkey)) {
-                    return false;
-                    //Если всё нормально, то добавляем нужный элемент в нужную мапу
+                powerFactorMap = UorFmap.get(UorFkey);
+
+                if (powerFactorMap.get(PFkey) == null) {
+                    currentMap = new TreeMap<>(comparatorForCurrent);
+
+                    powerFactorMap.put(PFkey, currentMap);
+                    currentMap.put(currKey, commandResultMap);
                 } else {
-                    powerFactorMap = UorFmap.get(UorFkey);
-                    if (!powerFactorMap.containsKey(PFkey)) {
+                    currentMap = powerFactorMap.get(PFkey);
 
-                        currentMap = new TreeMap<>(comparatorForCurrent);
-
-                        currentMap.put(currKey, commandResultMap);
-
-                        powerFactorMap.put(PFkey, currentMap);
-                        return true;
-
-                    } else {
-                        currentMap = powerFactorMap.get(PFkey);
-                        currentMap.put(currKey, commandResultMap);
-
-                        return true;
-                    }
+                    currentMap.put(currKey, commandResultMap);
                 }
             }
         }
@@ -440,6 +866,27 @@ public class MainStend {
                 }
             }
         }
+
+        Comparator<String> comparatorForUorF = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                if (o1.contains("U") && o2.contains("F")) {
+                    return -1;
+                } else if (o1.contains("F") && o2.contains("U")) {
+                    return 1;
+                } else if (o1.contains("U") && o2.contains("U") ||
+                        o1.contains("F") && o2.contains("F")) {
+                    String[] arrO1 = o1.split(" ");
+                    String[] arro2 = o2.split(" ");
+
+                    if (Float.parseFloat(arrO1[0]) > Float.parseFloat(arro2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(arrO1[0]) < Float.parseFloat(arro2[0])) {
+                        return 1;
+                    } else return 0;
+                } else return 0;
+            }
+        };
 
         Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
             @Override
@@ -501,7 +948,7 @@ public class MainStend {
     public class InfABCGroup {
         //F;55;A;L;0.5;Imax;0.02
 
-        private Map<String, Map> UorFmap = new TreeMap<>();
+        private Map<String, Map> UorFmap;
 
         private Map<String, Map> ABCMap;
         private Map<String, Map> powerFactorMap;
@@ -514,14 +961,12 @@ public class MainStend {
         private String currKey;
 
         public InfABCGroup() {
-            ABCMap = new TreeMap<>(comparatorForABC);
-            powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
-            currentMap = new TreeMap<>(comparatorForCurrent);
+            UorFmap = new TreeMap<>(comparatorForUorF);
         }
 
-        public boolean putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+        public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
             String[] idResult = keyId.split(";");
-            UorFkey = idResult[1] + idResult[0] + "n";
+            UorFkey = idResult[1] + " %" + idResult[0] + "n";
             ABCkey = idResult[2];
             currKey = idResult[6] + " " + idResult[5];
 
@@ -531,43 +976,36 @@ public class MainStend {
                 PFkey = idResult[4] + " " + idResult[3];
             }
 
-            //Если это первый элемент
-            if (UorFmap.size() == 0) {
+            if (UorFmap.get(UorFkey) == null) {
+                ABCMap = new TreeMap<>(comparatorForABC);
+                powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+                currentMap = new TreeMap<>(comparatorForCurrent);
+
                 UorFmap.put(UorFkey, ABCMap);
                 ABCMap.put(ABCkey, powerFactorMap);
                 powerFactorMap.put(PFkey, currentMap);
                 currentMap.put(currKey, commandResultMap);
-                return true;
             } else {
-                //Если следующий элемент не соответствует группе
-                if (!UorFmap.containsKey(UorFkey)) {
-                    return false;
-                    //Если всё нормально, то добавляем нужный элемент в нужную мапу
-                } else {
-                    ABCMap = UorFmap.get(UorFkey);
-                    if (!ABCMap.containsKey(ABCkey)) {
+                ABCMap = UorFmap.get(UorFkey);
 
-                        powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+                if (ABCMap.get(ABCkey) == null) {
+                    powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+                    currentMap = new TreeMap<>(comparatorForCurrent);
+
+                    ABCMap.put(ABCkey, powerFactorMap);
+                    powerFactorMap.put(PFkey, currentMap);
+                    currentMap.put(currKey, commandResultMap);
+                } else {
+                    powerFactorMap = ABCMap.get(ABCkey);
+
+                    if (powerFactorMap.get(PFkey) == null) {
                         currentMap = new TreeMap<>(comparatorForCurrent);
 
-                        currentMap.put(currKey, commandResultMap);
                         powerFactorMap.put(PFkey, currentMap);
-                        ABCMap.put(ABCkey, powerFactorMap);
-                        return true;
+                        currentMap.put(currKey, commandResultMap);
                     } else {
-                        powerFactorMap = ABCMap.get(ABCkey);
-                        if (!powerFactorMap.containsKey(PFkey)) {
-
-                            currentMap = new TreeMap<>(comparatorForCurrent);
-
-                            currentMap.put(currKey, commandResultMap);
-                            powerFactorMap.put(PFkey, currentMap);
-                            return true;
-                        } else {
-                            currentMap = powerFactorMap.get(PFkey);
-                            currentMap.put(currKey, commandResultMap);
-                            return true;
-                        }
+                        currentMap = powerFactorMap.get(PFkey);
+                        currentMap.put(currKey, commandResultMap);
                     }
                 }
             }
@@ -600,7 +1038,26 @@ public class MainStend {
             }
         }
 
+        Comparator<String> comparatorForUorF = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                if (o1.contains("U") && o2.contains("F")) {
+                    return -1;
+                } else if (o1.contains("F") && o2.contains("U")) {
+                    return 1;
+                } else if (o1.contains("U") && o2.contains("U") ||
+                        o1.contains("F") && o2.contains("F")) {
+                    String[] arrO1 = o1.split(" ");
+                    String[] arro2 = o2.split(" ");
 
+                    if (Float.parseFloat(arrO1[0]) > Float.parseFloat(arro2[0])) {
+                        return -1;
+                    } else if (Float.parseFloat(arrO1[0]) < Float.parseFloat(arro2[0])) {
+                        return 1;
+                    } else return 0;
+                } else return 0;
+            }
+        };
 
         Comparator<String> comparatorForABC = new Comparator<String>() {
             @Override
