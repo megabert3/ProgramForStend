@@ -426,7 +426,7 @@ public class ExcelReport {
 
         createHeadInformation(wb, mainSheet, testMeter, stendDLLCommands);
 
-        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\bert1\\Desktop\\test.xls")){
+        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\a.halimov\\Desktop\\test.xls")){
             wb.write(outputStream);
         } catch (IOException e) {
             e.printStackTrace();

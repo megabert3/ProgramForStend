@@ -102,16 +102,16 @@ public class Meter implements Serializable{
     private Boolean finalAllTestResult;
 
     //Самоход
-    private CreepResult creepTest = null;
+    private CreepResult creepTest = new CreepResult("ddsg", "0", "0");
 
     //Чувствительность
-    private StartResult startTestAPPls = null;
-    private StartResult startTestAPMns = null;
-    private StartResult startTestRPPls = null;
-    private StartResult startTestRPMns = null;
+    private StartResult startTestAPPls = new StartResult("fds", "0", "0");
+    private StartResult startTestAPMns = new StartResult("fds", "0", "0");
+    private StartResult startTestRPPls = new StartResult("fds", "0", "0");
+    private StartResult startTestRPMns = new StartResult("fds", "0", "0");
 
     //Точность хода часов
-    private RTCResult RTCTest = null;
+    private RTCResult RTCTest = new RTCResult("das", "0", "0", 2);
 
     //Изоляция
     private InsulationResult insulationTest = new InsulationResult("INS");
@@ -120,10 +120,10 @@ public class Meter implements Serializable{
     private AppearensResult appearensTest = new AppearensResult("APR");
 
     //Проверка счётного механизма
-    private ConstantResult constantTestAPPls = null;
-    private ConstantResult constantTestAPMns = null;
-    private ConstantResult constantTestRPPls = null;
-    private ConstantResult constantTestRPMns = null;
+    private ConstantResult constantTestAPPls = new ConstantResult("", "0", "0");
+    private ConstantResult constantTestAPMns = new ConstantResult("", "0", "0");
+    private ConstantResult constantTestRPPls = new ConstantResult("", "0", "0");
+    private ConstantResult constantTestRPMns = new ConstantResult("", "0", "0");
 
     //Лист с ошибками
     private List<CommandResult> errorListAPPls = new ArrayList<>();
@@ -718,16 +718,16 @@ public class Meter implements Serializable{
         this.constantTestRPMns = constantTestRPMns;
     }
 
-    public float getTemperature() {
-        return temperature;
+    public String getTemperature() {
+        return String.valueOf(temperature);
     }
 
     public void setTemperature(float temperature) {
         this.temperature = temperature;
     }
 
-    public float getHumidity() {
-        return humidity;
+    public String getHumidity() {
+        return String.valueOf(humidity);
     }
 
     public void setHumidity(float humidity) {

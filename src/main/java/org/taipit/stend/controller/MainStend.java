@@ -1,6 +1,8 @@
 package org.taipit.stend.controller;
 
 
+import org.taipit.stend.model.ExcelReport;
+
 import java.util.*;
 
 
@@ -12,7 +14,7 @@ public class MainStend {
     }
 
     public static void main(String[] args) {
-        //new ExcelReport().createExcelReport();
+        new ExcelReport().createExcelReport();
         MainStend mainStend = new MainStend();
 
         MainStend.InfABCGroup group = mainStend.new InfABCGroup();
