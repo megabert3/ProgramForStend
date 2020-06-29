@@ -16,79 +16,218 @@ import java.util.*;
 public class ExcelReport {
 
     public ExcelReport() {
-        CRPSTAother = new TreeMap<>(comparatorCRPSTAother);
 
-        inflABCAPPls = new TreeMap<>(comparatorForInflABC);
-        inflAPPls = new TreeMap<>(comparatorForInfl);
-        ABCAPPls = new TreeMap<>(comparatorForABC);
-        totalErrorAPPls = new TreeMap<>(comparatorForTotalError);
-        imbalansAPPls = new TreeMap<>();
-
-        inflABCAPMns = new TreeMap<>(comparatorForInflABC);
-        inflAPMns = new TreeMap<>(comparatorForInfl);
-        ABCAPMns = new TreeMap<>(comparatorForABC);
-        totalErrorAPMns = new TreeMap<>(comparatorForTotalError);
-        imbalansAPMns = new TreeMap<>();
-
-        inflABCRPPls = new TreeMap<>(comparatorForInflABC);
-        inflRPPls = new TreeMap<>(comparatorForInfl);
-        ABCRPPls = new TreeMap<>(comparatorForABC);
-        totalErrorRPPls = new TreeMap<>(comparatorForTotalError);
-        imbalansRPPls = new TreeMap<>();
-
-        inflABCRPMns = new TreeMap<>(comparatorForInflABC);
-        inflRPMns = new TreeMap<>(comparatorForInfl);
-        ABCRPMns = new TreeMap<>(comparatorForABC);
-        totalErrorRPMns = new TreeMap<>(comparatorForTotalError);
-        imbalansRPMns = new TreeMap<>();
-
-        CRPSTAother.put("CRP", new HashMap<>());
-        CRPSTAother.put("STAAP", new HashMap<>());
-        CRPSTAother.put("STAAN", new HashMap<>());
-        CRPSTAother.put("STARP", new HashMap<>());
-        CRPSTAother.put("STARN", new HashMap<>());
-        CRPSTAother.put("RTC", new HashMap<>());
-        CRPSTAother.put("CNTAP", new HashMap<>());
-        CRPSTAother.put("CNTAN", new HashMap<>());
-        CRPSTAother.put("CNTRP", new HashMap<>());
-        CRPSTAother.put("CNTRN", new HashMap<>());
-        CRPSTAother.put("INS", new HashMap<>());
-        CRPSTAother.put("APR", new HashMap<>());
+        errCRPSTAother.put("CRP", new HashMap<>());
+        errCRPSTAother.put("STAAP", new HashMap<>());
+        errCRPSTAother.put("STAAN", new HashMap<>());
+        errCRPSTAother.put("STARP", new HashMap<>());
+        errCRPSTAother.put("STARN", new HashMap<>());
+        errCRPSTAother.put("RTC", new HashMap<>());
+        errCRPSTAother.put("CNTAP", new HashMap<>());
+        errCRPSTAother.put("CNTAN", new HashMap<>());
+        errCRPSTAother.put("CNTRP", new HashMap<>());
+        errCRPSTAother.put("CNTRN", new HashMap<>());
+        errCRPSTAother.put("INS", new HashMap<>());
+        errCRPSTAother.put("APR", new HashMap<>());
     }
 
     private List<Meter> meters;
 
-    private Map<String, Map<Integer, Meter.CommandResult>> CRPSTAother;
+    private Map<String, Map<Integer, Meter.CommandResult>> errCRPSTAother = new HashMap<>();
 
-    private Map<String, Map<Integer, Meter.CommandResult>> inflABCAPPls;
-    private Map<String, Map<Integer, Meter.CommandResult>> inflAPPls;
-    private Map<String, Map<Integer, Meter.CommandResult>> ABCAPPls;
-    private Map<String, Map<Integer, Meter.CommandResult>> totalErrorAPPls;
-    private Map<String, Map<Integer, Meter.CommandResult>> imbalansAPPls;
+    private Map<String, Map<Integer, Meter.CommandResult>> errInflABCAPPls = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errInflAPPls = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errABCAPPls = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errTotalErrorAPPls = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errImbalansAPPls = new HashMap<>();
 
-    private Map<String, Map<Integer, Meter.CommandResult>> inflABCAPMns;
-    private Map<String, Map<Integer, Meter.CommandResult>> inflAPMns;
-    private Map<String, Map<Integer, Meter.CommandResult>> ABCAPMns;
-    private Map<String, Map<Integer, Meter.CommandResult>> totalErrorAPMns;
-    private Map<String, Map<Integer, Meter.CommandResult>> imbalansAPMns;
+    private Map<String, Map<Integer, Meter.CommandResult>> errInflABCAPMns = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errInflAPMns = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errABCAPMns = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errTotalErrorAPMns = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errImbalansAPMns = new HashMap<>();
 
-    private Map<String, Map<Integer, Meter.CommandResult>> inflABCRPPls;
-    private Map<String, Map<Integer, Meter.CommandResult>> inflRPPls;
-    private Map<String, Map<Integer, Meter.CommandResult>> ABCRPPls;
-    private Map<String, Map<Integer, Meter.CommandResult>> totalErrorRPPls;
-    private Map<String, Map<Integer, Meter.CommandResult>> imbalansRPPls;
+    private Map<String, Map<Integer, Meter.CommandResult>> errInflABCRPPls = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errInflRPPls = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errABCRPPls = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errTotalErrorRPPls = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errImbalansRPPls = new HashMap<>();
 
-    private Map<String, Map<Integer, Meter.CommandResult>> inflABCRPMns;
-    private Map<String, Map<Integer, Meter.CommandResult>> inflRPMns;
-    private Map<String, Map<Integer, Meter.CommandResult>> ABCRPMns;
-    private Map<String, Map<Integer, Meter.CommandResult>> totalErrorRPMns;
-    private Map<String, Map<Integer, Meter.CommandResult>> imbalansRPMns;
+    private Map<String, Map<Integer, Meter.CommandResult>> errInflABCRPMns = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errInflRPMns = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errABCRPMns = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errTotalErrorRPMns = new HashMap<>();
+    private Map<String, Map<Integer, Meter.CommandResult>> errImbalansRPMns = new HashMap<>();
 
-    private void createAndAddGroupsInList() {
 
+    private Group CRPSTAother = new CRPSTAotherGroup();
+
+    private Group inflABCAPPls = new InfABCGroup();
+    private Group inflAPPls = new InfGroup();
+    private Group ABCAPPls = new ABCGroup();
+    private Group totalErrorAPPls = new TotalErrorsGroup();
+    private Group imbalansAPPls = new ImbalansUGroup();
+
+    private Group inflABCAPMns = new CRPSTAotherGroup();
+    private Group inflAPMns = new InfGroup();
+    private Group ABCAPMns = new ABCGroup();
+    private Group totalErrorAPMns = new TotalErrorsGroup();
+    private Group imbalansAPMns = new ImbalansUGroup();
+
+    private Group inflABCRPPls = new InfABCGroup();
+    private Group inflRPPls = new InfGroup();
+    private Group ABCRPPls = new ABCGroup();
+    private Group totalErrorRPPls = new TotalErrorsGroup();
+    private Group imbalansRPPls = new ImbalansUGroup();
+
+    private Group inflABCRPMns = new InfABCGroup();
+    private Group inflRPMns = new InfGroup();
+    private Group ABCRPMns = new ABCGroup();
+    private Group totalErrorRPMns = new TotalErrorsGroup();
+    private Group imbalansRPMns = new ImbalansUGroup();
+
+    private void addErrorsInGroups(List<Meter> meters) {
+        addMeterErrorsResult(meters);
+
+        if (errCRPSTAother.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errCRPSTAother.entrySet()) {
+                CRPSTAother.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        //Добавление в группу результатов AP+
+        if (errInflABCAPPls.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errInflABCAPPls.entrySet()) {
+                inflABCAPPls.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errInflAPPls.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errInflAPPls.entrySet()) {
+                inflAPPls.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errABCAPPls.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errABCAPPls.entrySet()) {
+                ABCAPPls.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errTotalErrorAPPls.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errTotalErrorAPPls.entrySet()) {
+                totalErrorAPPls.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+
+        if (errImbalansAPPls.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errImbalansAPPls.entrySet()) {
+                imbalansAPPls.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+
+        //Добавление в группу результатов AP-
+        if (errInflABCAPMns.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errInflABCAPMns.entrySet()) {
+                inflABCAPMns.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errInflAPMns.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errInflAPMns.entrySet()) {
+                inflAPMns.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errABCAPMns.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errABCAPMns.entrySet()) {
+                ABCAPMns.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errTotalErrorAPMns.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errTotalErrorAPMns.entrySet()) {
+                totalErrorAPMns.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+
+        if (errImbalansAPMns.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errImbalansAPMns.entrySet()) {
+                imbalansAPMns.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+
+        //Добавление в группу результатов RP+
+        if (errInflABCRPPls.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errInflABCRPPls.entrySet()) {
+                inflABCRPPls.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errInflRPPls.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errInflRPPls.entrySet()) {
+                inflRPPls.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errABCRPPls.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errABCRPPls.entrySet()) {
+                ABCRPPls.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errTotalErrorRPPls.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errTotalErrorRPPls.entrySet()) {
+                totalErrorRPPls.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+
+        if (errImbalansRPPls.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errImbalansRPPls.entrySet()) {
+                imbalansRPPls.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+
+        //Добавление в группу результатов RP-
+        if (errInflABCRPMns.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errInflABCRPMns.entrySet()) {
+                inflABCRPMns.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errInflRPMns.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errInflRPMns.entrySet()) {
+                inflRPMns.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errABCRPMns.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errABCRPMns.entrySet()) {
+                ABCRPMns.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+        if (errTotalErrorRPMns.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errTotalErrorRPMns.entrySet()) {
+                totalErrorRPMns.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
+
+
+        if (errImbalansRPMns.size() != 0) {
+            for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errImbalansRPMns.entrySet()) {
+                imbalansRPMns.putResultInGroup(map.getKey(), map.getValue());
+            }
+        }
     }
 
-    private void sortAndAddMeterErrorsResult(List<Meter> meters) {
+    private void addMeterErrorsResult(List<Meter> meters) {
 
         List<Meter.CommandResult> commandResultList;
         String[] id;
@@ -107,23 +246,23 @@ public class ExcelReport {
                         if (id.length == 7) {
                             //Если АБС
                             if (!id[2].equals("H")) {
-                                addElementsInInfABC(inflABCAPPls, result, i);
+                                addElementsInInfABC(errInflABCAPPls, result, i);
                             } else {
-                                addElementsInInfl(inflAPPls, result, i);
+                                addElementsInInfl(errInflAPPls, result, i);
                             }
 
                         //Если не с окна влияния
                         } else if (id.length == 6) {
                             //Если АБС
                             if (!id[1].equals("H")) {
-                                addElementsInABC(ABCAPPls, result, i);
+                                addElementsInABC(errABCAPPls, result, i);
                             } else {
-                                addElementsInTotalError(totalErrorAPPls, result, i);
+                                addElementsInTotalError(errTotalErrorAPPls, result, i);
                             }
                         }
 
                     } else if (result instanceof Meter.ImbUResult) {
-                        addElementsImb(imbalansAPPls, result, i);
+                        addElementsImb(errImbalansAPPls, result, i);
                     }
                 }
             }
@@ -140,23 +279,23 @@ public class ExcelReport {
                         if (id.length == 7) {
                             //Если АБС
                             if (!id[2].equals("H")) {
-                                addElementsInInfABC(inflABCAPMns, result, i);
+                                addElementsInInfABC(errInflABCAPMns, result, i);
                             } else {
-                                addElementsInInfl(inflAPMns, result, i);
+                                addElementsInInfl(errInflAPMns, result, i);
                             }
 
                             //Если не с окна влияния
                         } else if (id.length == 6) {
                             //Если АБС
                             if (!id[1].equals("H")) {
-                                addElementsInABC(ABCAPMns, result, i);
+                                addElementsInABC(errABCAPMns, result, i);
                             } else {
-                                addElementsInTotalError(totalErrorAPMns, result, i);
+                                addElementsInTotalError(errTotalErrorAPMns, result, i);
                             }
                         }
 
                     } else if (result instanceof Meter.ImbUResult) {
-                        addElementsImb(imbalansAPMns, result, i);
+                        addElementsImb(errImbalansAPMns, result, i);
                     }
                 }
             }
@@ -173,23 +312,23 @@ public class ExcelReport {
                         if (id.length == 7) {
                             //Если АБС
                             if (!id[2].equals("H")) {
-                                addElementsInInfABC(inflABCRPPls, result, i);
+                                addElementsInInfABC(errInflABCRPPls, result, i);
                             } else {
-                                addElementsInInfl(inflRPPls, result, i);
+                                addElementsInInfl(errInflRPPls, result, i);
                             }
 
                             //Если не с окна влияния
                         } else if (id.length == 6) {
                             //Если АБС
                             if (!id[1].equals("H")) {
-                                addElementsInABC(ABCRPPls, result, i);
+                                addElementsInABC(errABCRPPls, result, i);
                             } else {
-                                addElementsInTotalError(totalErrorRPPls, result, i);
+                                addElementsInTotalError(errTotalErrorRPPls, result, i);
                             }
                         }
 
                     } else if (result instanceof Meter.ImbUResult) {
-                        addElementsImb(imbalansRPPls, result, i);
+                        addElementsImb(errImbalansRPPls, result, i);
                     }
                 }
             }
@@ -206,23 +345,23 @@ public class ExcelReport {
                         if (id.length == 7) {
                             //Если АБС
                             if (!id[2].equals("H")) {
-                                addElementsInInfABC(inflABCRPMns, result, i);
+                                addElementsInInfABC(errInflABCRPMns, result, i);
                             } else {
-                                addElementsInInfl(inflRPMns, result, i);
+                                addElementsInInfl(errInflRPMns, result, i);
                             }
 
                             //Если не с окна влияния
                         } else if (id.length == 6) {
                             //Если АБС
                             if (!id[1].equals("H")) {
-                                addElementsInABC(ABCRPMns, result, i);
+                                addElementsInABC(errABCRPMns, result, i);
                             } else {
-                                addElementsInTotalError(totalErrorRPMns, result, i);
+                                addElementsInTotalError(errTotalErrorRPMns, result, i);
                             }
                         }
 
                     } else if (result instanceof Meter.ImbUResult) {
-                        addElementsImb(imbalansRPMns, result, i);
+                        addElementsImb(errImbalansRPMns, result, i);
                     }
                 }
             }
@@ -358,44 +497,44 @@ public class ExcelReport {
         //APR Внешний вид
 
         if (meter.getCreepTest() != null) {
-            CRPSTAother.get("CRP").put(indexMeter, meter.getCreepTest());
+            errCRPSTAother.get("CRP").put(indexMeter, meter.getCreepTest());
         }
 
         if (meter.getStartTestAPPls() != null) {
-            CRPSTAother.get("STAAP").put(indexMeter, meter.getStartTestAPPls());
+            errCRPSTAother.get("STAAP").put(indexMeter, meter.getStartTestAPPls());
         }
         if (meter.getStartTestAPMns() != null) {
-            CRPSTAother.get("STAAN").put(indexMeter, meter.getStartTestAPMns());
+            errCRPSTAother.get("STAAN").put(indexMeter, meter.getStartTestAPMns());
         }
         if (meter.getStartTestRPPls() != null) {
-            CRPSTAother.get("STARP").put(indexMeter, meter.getStartTestRPPls());
+            errCRPSTAother.get("STARP").put(indexMeter, meter.getStartTestRPPls());
         }
         if (meter.getStartTestRPMns() != null) {
-            CRPSTAother.get("STARN").put(indexMeter, meter.getStartTestRPMns());
+            errCRPSTAother.get("STARN").put(indexMeter, meter.getStartTestRPMns());
         }
 
         if (meter.getRTCTest() != null) {
-            CRPSTAother.get("RTC").put(indexMeter, meter.getRTCTest());
+            errCRPSTAother.get("RTC").put(indexMeter, meter.getRTCTest());
         }
 
         if (meter.getConstantTestAPPls() != null) {
-            CRPSTAother.get("CNTAP").put(indexMeter, meter.getConstantTestAPPls());
+            errCRPSTAother.get("CNTAP").put(indexMeter, meter.getConstantTestAPPls());
         }
         if (meter.getConstantTestAPMns() != null) {
-            CRPSTAother.get("CNTAN").put(indexMeter, meter.getConstantTestAPMns());
+            errCRPSTAother.get("CNTAN").put(indexMeter, meter.getConstantTestAPMns());
         }
         if (meter.getConstantTestRPPls() != null) {
-            CRPSTAother.get("CNTRP").put(indexMeter, meter.getConstantTestRPPls());
+            errCRPSTAother.get("CNTRP").put(indexMeter, meter.getConstantTestRPPls());
         }
         if (meter.getConstantTestRPMns() != null) {
-            CRPSTAother.get("CNTRN").put(indexMeter, meter.getConstantTestRPMns());
+            errCRPSTAother.get("CNTRN").put(indexMeter, meter.getConstantTestRPMns());
         }
 
         if (meter.getInsulationTest() != null) {
-            CRPSTAother.get("INS").put(indexMeter, meter.getInsulationTest());
+            errCRPSTAother.get("INS").put(indexMeter, meter.getInsulationTest());
         }
         if (meter.getAppearensTest() != null) {
-            CRPSTAother.get("APR").put(indexMeter, meter.getAppearensTest());
+            errCRPSTAother.get("APR").put(indexMeter, meter.getAppearensTest());
         }
     }
 
@@ -819,247 +958,481 @@ public class ExcelReport {
         return cellStyle;
     }
 
-    //Компараторы
+    public interface Group {
+        void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap);
+    }
 
-    Comparator<String> comparatorForInflABC = new Comparator<String>() {
-        @Override
-        public int compare(String o1, String o2) {
-            //F;55;A;L;0.5;Imax;0.02
-            String[] arrO1 = o1.split(";");
-            String[] arrO2 = o2.split(";");
+    public class CRPSTAotherGroup implements Group {
+        //CRP Самоход
+        //STAAP Чувствтельность AP+
+        //STAAN Чувствтельность AP-
+        //STARP Чувствтельность RP+
+        //STARN Чувствтельность RP-
+        //RTC ТХЧ
+        //CNTAP Константа
+        //CNTAN Константа
+        //CNTRP Константа
+        //CNTRN Константа
+        //INS Изоляция
+        //APR Внешний вид
 
-            if (arrO1[0].equals("U") && arrO2[0].equals("F")) {
-                return -1;
-            } else if (arrO1[0].equals("F") && arrO2[0].equals("U")) {
-                return 1;
-            } else if (arrO1[0].equals("U") && arrO2[0].equals("U") ||
-                    arrO1[0].equals("F") && arrO2[0].equals("F")) {
-                if (Float.parseFloat(arrO1[1]) > Float.parseFloat(arrO2[1])) {
-                    return -1;
-                } else if (Float.parseFloat(arrO1[1]) < Float.parseFloat(arrO2[1])) {
-                    return 1;
-                } else {
-                    if (arrO1[2].equals("A") && !arrO2[2].equals("A")) {
-                        return -1;
-                    } else if (!arrO1[2].equals("A") && arrO2[2].equals("A")) {
-                        return  1;
-                    } else if (arrO1[2].equals("B") && arrO2[2].equals("C")) {
-                        return -1;
-                    } else if (arrO1[2].equals("C") && arrO2[2].equals("B")) {
-                        return 1;
-                    } else if (arrO1[2].equals("A") && arrO2[2].equals("A") ||
-                            arrO1[2].equals("B") && arrO2[2].equals("B") ||
-                            arrO1[2].equals("C") && arrO2[2].equals("C")) {
+        private Map<String, Map> mainMap = new TreeMap<>(comparatorForCRPSTA);
 
-                        if (arrO1[3].equals("0") && !arrO2[3].equals("0")) {
-                            return -1;
-                        } else if (!arrO1[3].equals("0") && arrO2[3].equals("0")) {
-                            return 1;
-                        } else if (arrO1[3].equals("L") && arrO2[3].equals("C")) {
-                            return -1;
-                        } else if (arrO1[3].equals("C") && arrO2[3].equals("L")) {
-                            return 1;
-                        } else if ((arrO1[3].equals("0") && arrO2[3].equals("0")) ||
-                                (arrO1[3].equals("L") && arrO2[3].equals("L")) ||
-                                (arrO1[3].equals("C") && arrO2[3].equals("C"))) {
-
-                            if (Float.parseFloat(arrO1[4]) > Float.parseFloat(arrO2[4])) {
-                                return -1;
-                            } else if (Float.parseFloat(arrO1[4]) < Float.parseFloat(arrO2[4])) {
-                                return 1;
-                            } else {
-                                if (arrO1[5].equals("Imax") && arrO2[5].equals("Ib")) {
-                                    return -1;
-                                } else if (arrO1[5].equals("Ib") && arrO2[5].equals("Imax")) {
-                                    return 1;
-                                } else if (arrO1[5].equals("Imax") && arrO2[5].equals("Imax")) {
-                                    if (Float.parseFloat(arrO1[6]) > Float.parseFloat(arrO2[6])) {
-                                        return -1;
-                                    } else if (Float.parseFloat(arrO1[6]) < Float.parseFloat(arrO2[6])) {
-                                        return 1;
-                                    } else return 0;
-                                } else if (arrO1[5].equals("Ib") && arrO2[5].equals("Ib")) {
-                                    if (Float.parseFloat(arrO1[6]) > Float.parseFloat(arrO2[6])) {
-                                        return -1;
-                                    } else if (Float.parseFloat(arrO1[6]) < Float.parseFloat(arrO2[6])) {
-                                        return 1;
-                                    } else return 0;
-                                } else return 0;
-                            }
-                        } else return 0;
-                    } else return 0;
-                }
-            } else return 0;
+        public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            mainMap.put(keyId, commandResultMap);
         }
-    };
 
-    Comparator<String> comparatorForInfl = new Comparator<String>() {
-        @Override
-        public int compare(String o1, String o2) {
-            //F;55;L;0.5;Imax;0.02
-            String[] arrO1 = o1.split(";");
-            String[] arrO2 = o2.split(";");
+        public void getElements() {
+            for (String str : mainMap.keySet()) {
+                System.out.println(str);
+            }
+        }
+    }
 
-            if (arrO1[0].equals("U") && arrO2[0].equals("F")) {
-                return -1;
-            } else if (arrO1[0].equals("F") && arrO2[0].equals("U")) {
-                return 1;
-            } else if (arrO1[0].equals("U") && arrO2[0].equals("U") ||
-                    arrO1[0].equals("F") && arrO2[0].equals("F")) {
-                if (Float.parseFloat(arrO1[1]) > Float.parseFloat(arrO2[1])) {
-                    return -1;
-                } else if (Float.parseFloat(arrO1[1]) < Float.parseFloat(arrO2[1])) {
-                    return 1;
-                } else {
+    public class TotalErrorsGroup implements Group {
+        //L;0.5;Imax;0.02
 
-                    if (arrO1[2].equals("0") && !arrO2[2].equals("0")) {
-                        return -1;
-                    } else if (!arrO1[2].equals("0") && arrO2[2].equals("0")) {
-                        return 1;
-                    } else if (arrO1[2].equals("L") && arrO2[2].equals("C")) {
-                        return -1;
-                    } else if (arrO1[2].equals("C") && arrO2[2].equals("L")) {
-                        return 1;
-                    } else if ((arrO1[2].equals("0") && arrO2[2].equals("0")) ||
-                            (arrO1[2].equals("L") && arrO2[2].equals("L")) ||
-                            (arrO1[2].equals("C") && arrO2[2].equals("C"))) {
+        private Map<String, Map> powerFactorMap;
+        private Map<String, Map> currentMap;
 
-                        if (Float.parseFloat(arrO1[3]) > Float.parseFloat(arrO2[3])) {
-                            return -1;
-                        } else if (Float.parseFloat(arrO1[3]) < Float.parseFloat(arrO2[3])) {
-                            return 1;
-                        } else {
-                            if (arrO1[4].equals("Imax") && arrO2[4].equals("Ib")) {
-                                return -1;
-                            } else if (arrO1[4].equals("Ib") && arrO2[4].equals("Imax")) {
-                                return 1;
-                            } else if (arrO1[4].equals("Imax") && arrO2[4].equals("Imax")) {
-                                if (Float.parseFloat(arrO1[5]) > Float.parseFloat(arrO2[5])) {
-                                    return -1;
-                                } else if (Float.parseFloat(arrO1[5]) < Float.parseFloat(arrO2[5])) {
-                                    return 1;
-                                } else return 0;
-                            } else if (arrO1[4].equals("Ib") && arrO2[4].equals("Ib")) {
-                                if (Float.parseFloat(arrO1[5]) > Float.parseFloat(arrO2[5])) {
-                                    return -1;
-                                } else if (Float.parseFloat(arrO1[5]) < Float.parseFloat(arrO2[5])) {
-                                    return 1;
-                                } else return 0;
-                            } else return 0;
+        private String PFkey;
+        private String currKey;
+
+        public TotalErrorsGroup() {
+            powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+        }
+
+        public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            String[] idResult = keyId.split(";");
+
+            currKey = idResult[3] + " " + idResult[2];
+
+            if (idResult[0].equals("0")) {
+                PFkey = idResult[1];
+            } else {
+                PFkey = idResult[1] + " " + idResult[0];
+            }
+
+            if (!powerFactorMap.containsKey(PFkey)) {
+                currentMap = new TreeMap<>(comparatorForCurrent);
+
+                powerFactorMap.put(PFkey, currentMap);
+
+                currentMap.put(currKey, commandResultMap);
+            } else {
+                currentMap = powerFactorMap.get(PFkey);
+
+                currentMap.put(currKey, commandResultMap);
+            }
+
+        }
+
+        public void getElements() {
+            System.out.println(powerFactorMap);
+            Map<String, Map> ABC;
+            Map<String, Map> valueLC0;
+            Map<String, Map> valueCurrent;
+
+            for (Map.Entry<String, Map> mapEntry : powerFactorMap.entrySet()) {
+                System.out.println(mapEntry.getKey());
+                ABC = mapEntry.getValue();
+
+                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
+                    System.out.println("    " + abc.getKey());
+                    valueLC0 = abc.getValue();
+
+                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
+                        System.out.println("     " + asfa.getKey());
+
+                        valueCurrent = asfa.getValue();
+
+                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
+                            System.out.println("     " + asfaasdas.getKey());
                         }
-                    } else return 0;
+                    }
                 }
-            } else return 0;
+            }
         }
-    };
+    }
 
-    Comparator<String> comparatorForABC = new Comparator<String>() {
+    public class ABCGroup  implements Group{
+        //A;L;0.5;Imax;0.02
+
+        private Map<String, Map> ABCMap;
+        private Map<String, Map> powerFactorMap;
+        private Map<String, Map> currentMap;
+
+        private String ABCkey;
+        private String PFkey;
+        private String currKey;
+
+        public ABCGroup() {
+            ABCMap = new TreeMap<>(comparatorForABC);
+        }
+
+        public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            String[] idResult = keyId.split(";");
+
+            ABCkey = idResult[0];
+            currKey = idResult[4] + " " + idResult[3];
+
+            if (idResult[1].equals("0")) {
+                PFkey = idResult[2];
+            } else {
+                PFkey = idResult[2] + " " + idResult[1];
+            }
+
+            if (!ABCMap.containsKey(ABCkey)) {
+
+                powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+                currentMap = new TreeMap<>(comparatorForCurrent);
+
+                ABCMap.put(ABCkey, powerFactorMap);
+                powerFactorMap.put(PFkey, currentMap);
+                currentMap.put(currKey, commandResultMap);
+            } else {
+
+                powerFactorMap = ABCMap.get(ABCkey);
+                if (!powerFactorMap.containsKey(PFkey)) {
+
+                    currentMap = new TreeMap<>(comparatorForCurrent);
+
+                    powerFactorMap.put(PFkey, currentMap);
+                    currentMap.put(currKey, commandResultMap);
+                } else {
+                    currentMap = powerFactorMap.get(PFkey);
+                    currentMap.put(currKey, commandResultMap);
+                }
+            }
+        }
+
+        public void getElements() {
+            System.out.println(ABCMap);
+            Map<String, Map> ABC;
+            Map<String, Map> valueLC0;
+            Map<String, Map> valueCurrent;
+
+            for (Map.Entry<String, Map> mapEntry : ABCMap.entrySet()) {
+                System.out.println(mapEntry.getKey());
+                ABC = mapEntry.getValue();
+
+                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
+                    System.out.println(" " + abc.getKey());
+                    valueLC0 = abc.getValue();
+
+                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
+                        System.out.println("     " + asfa.getKey());
+
+                        valueCurrent = asfa.getValue();
+
+                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
+                            System.out.println("     " + asfaasdas.getKey());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public class InfGroup implements Group {
+        //F;55;L;0.5;Imax;0.02
+
+        private Map<String, Map> UorFmap;
+
+        private Map<String, Map> powerFactorMap;
+        private Map<String, Map> currentMap;
+
+        private String UorFkey;
+        private String PFkey;
+        private String currKey;
+
+        public InfGroup() {
+            UorFmap = new TreeMap<>(comparatorForUorF);
+        }
+
+        public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            String[] idResult = keyId.split(";");
+            UorFkey = idResult[1] + " %" + idResult[0] + "n";
+            currKey = idResult[5] + " " + idResult[4];
+
+            if (idResult[2].equals("0")) {
+                PFkey = idResult[3];
+            } else {
+                PFkey = idResult[3] + " " + idResult[2];
+            }
+
+            if (UorFmap.get(UorFkey) == null) {
+                powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+                currentMap = new TreeMap<>(comparatorForCurrent);
+
+                UorFmap.put(UorFkey, powerFactorMap);
+                powerFactorMap.put(PFkey, currentMap);
+                currentMap.put(currKey, commandResultMap);
+            } else {
+                powerFactorMap = UorFmap.get(UorFkey);
+
+                if (powerFactorMap.get(PFkey) == null) {
+                    currentMap = new TreeMap<>(comparatorForCurrent);
+
+                    powerFactorMap.put(PFkey, currentMap);
+                    currentMap.put(currKey, commandResultMap);
+                } else {
+                    currentMap = powerFactorMap.get(PFkey);
+
+                    currentMap.put(currKey, commandResultMap);
+                }
+            }
+        }
+
+        public void getElements() {
+            System.out.println(UorFmap);
+            Map<String, Map> ABC;
+            Map<String, Map> valueLC0;
+            Map<String, Map> valueCurrent;
+
+            for (Map.Entry<String, Map> mapEntry : UorFmap.entrySet()) {
+                System.out.println(mapEntry.getKey());
+                ABC = mapEntry.getValue();
+
+                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
+                    System.out.println("    " + abc.getKey());
+                    valueLC0 = abc.getValue();
+
+                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
+                        System.out.println("        " + asfa.getKey());
+
+                        valueCurrent = asfa.getValue();
+
+                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
+                            System.out.println("            " + asfaasdas.getKey());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public class InfABCGroup implements Group {
+        //F;55;A;L;0.5;Imax;0.02
+
+        private Map<String, Map> UorFmap;
+
+        private Map<String, Map> ABCMap;
+        private Map<String, Map> powerFactorMap;
+        private Map<String, Map> currentMap;
+
+
+        private String UorFkey;
+        private String ABCkey;
+        private String PFkey;
+        private String currKey;
+
+        public InfABCGroup() {
+            UorFmap = new TreeMap<>(comparatorForUorF);
+        }
+
+        public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            String[] idResult = keyId.split(";");
+            UorFkey = idResult[1] + " %" + idResult[0] + "n";
+            ABCkey = idResult[2];
+            currKey = idResult[6] + " " + idResult[5];
+
+            if (idResult[3].equals("0")) {
+                PFkey = idResult[4];
+            } else {
+                PFkey = idResult[4] + " " + idResult[3];
+            }
+
+            if (UorFmap.get(UorFkey) == null) {
+                ABCMap = new TreeMap<>(comparatorForABC);
+                powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+                currentMap = new TreeMap<>(comparatorForCurrent);
+
+                UorFmap.put(UorFkey, ABCMap);
+                ABCMap.put(ABCkey, powerFactorMap);
+                powerFactorMap.put(PFkey, currentMap);
+                currentMap.put(currKey, commandResultMap);
+            } else {
+                ABCMap = UorFmap.get(UorFkey);
+
+                if (ABCMap.get(ABCkey) == null) {
+                    powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+                    currentMap = new TreeMap<>(comparatorForCurrent);
+
+                    ABCMap.put(ABCkey, powerFactorMap);
+                    powerFactorMap.put(PFkey, currentMap);
+                    currentMap.put(currKey, commandResultMap);
+                } else {
+                    powerFactorMap = ABCMap.get(ABCkey);
+
+                    if (powerFactorMap.get(PFkey) == null) {
+                        currentMap = new TreeMap<>(comparatorForCurrent);
+
+                        powerFactorMap.put(PFkey, currentMap);
+                        currentMap.put(currKey, commandResultMap);
+                    } else {
+                        currentMap = powerFactorMap.get(PFkey);
+                        currentMap.put(currKey, commandResultMap);
+                    }
+                }
+            }
+        }
+
+        public void getElements() {
+            System.out.println(UorFmap);
+            Map<String, Map> ABC;
+            Map<String, Map> valueLC0;
+            Map<String, Map> valueCurrent;
+
+            for (Map.Entry<String, Map> mapEntry : UorFmap.entrySet()) {
+                System.out.println(mapEntry.getKey());
+                ABC = mapEntry.getValue();
+
+                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
+                    System.out.println("    " + abc.getKey());
+                    valueLC0 = abc.getValue();
+
+                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
+                        System.out.println("        " + asfa.getKey());
+
+                        valueCurrent = asfa.getValue();
+
+                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
+                            System.out.println("            " + asfaasdas.getKey());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public class ImbalansUGroup implements Group{
+        //A
+        //B
+        //C
+        //AB
+        //AC
+
+        private Map<String, Map> UorFmap;
+
+        private Map<String, Map> ABCMap;
+        private Map<String, Map> powerFactorMap;
+        private Map<String, Map> currentMap;
+
+        private String UorFkey;
+        private String ABCkey;
+        private String PFkey;
+        private String currKey;
+
+        public ImbalansUGroup() {
+            UorFmap = new TreeMap<>(Imbalans);
+        }
+
+        public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+
+        }
+
+        public void getElements() {
+
+        }
+    }
+
+
+    private Comparator<String> comparatorForUorF = new Comparator<String>() {
         @Override
         public int compare(String o1, String o2) {
-            //A;L;0.5;Imax;0.02
-            String[] arrO1 = o1.split(";");
-            String[] arrO2 = o2.split(";");
-
-            if (arrO1[0].equals("A") && !arrO2[0].equals("A")) {
+            if (o1.contains("U") && o2.contains("F")) {
                 return -1;
-            } else if (!arrO1[0].equals("A") && arrO2[0].equals("A")) {
+            } else if (o1.contains("F") && o2.contains("U")) {
                 return 1;
-            } else if (arrO1[0].equals("B") && arrO2[0].equals("C")) {
-                return -1;
-            } else if (arrO1[0].equals("C") && arrO2[0].equals("B")) {
-                return 1;
-            } else if (arrO1[0].equals("A") && arrO2[0].equals("A") ||
-                    arrO1[0].equals("B") && arrO2[0].equals("B") ||
-                    arrO1[0].equals("C") && arrO2[0].equals("C")) {
+            } else if (o1.contains("U") && o2.contains("U") ||
+                    o1.contains("F") && o2.contains("F")) {
+                String[] arrO1 = o1.split(" ");
+                String[] arro2 = o2.split(" ");
 
-                if (arrO1[1].equals("0") && !arrO2[1].equals("0")) {
+                if (Float.parseFloat(arrO1[0]) > Float.parseFloat(arro2[0])) {
                     return -1;
-                } else if (!arrO1[1].equals("0") && arrO2[1].equals("0")) {
+                } else if (Float.parseFloat(arrO1[0]) < Float.parseFloat(arro2[0])) {
                     return 1;
-                } else if (arrO1[1].equals("L") && arrO2[1].equals("C")) {
-                    return -1;
-                } else if (arrO1[1].equals("C") && arrO2[1].equals("L")) {
-                    return 1;
-                } else if ((arrO1[1].equals("0") && arrO2[1].equals("0")) ||
-                        (arrO1[1].equals("L") && arrO2[1].equals("L")) ||
-                        (arrO1[1].equals("C") && arrO2[1].equals("C"))) {
-
-                    if (Float.parseFloat(arrO1[2]) > Float.parseFloat(arrO2[2])) {
-                        return -1;
-                    } else if (Float.parseFloat(arrO1[2]) < Float.parseFloat(arrO2[2])) {
-                        return 1;
-                    } else {
-                        if (arrO1[3].equals("Imax") && arrO2[3].equals("Ib")) {
-                            return -1;
-                        } else if (arrO1[3].equals("Ib") && arrO2[3].equals("Imax")) {
-                            return 1;
-                        } else if (arrO1[3].equals("Imax") && arrO2[3].equals("Imax")) {
-                            if (Float.parseFloat(arrO1[4]) > Float.parseFloat(arrO2[4])) {
-                                return -1;
-                            } else if (Float.parseFloat(arrO1[4]) < Float.parseFloat(arrO2[4])) {
-                                return 1;
-                            } else return 0;
-                        } else if (arrO1[3].equals("Ib") && arrO2[3].equals("Ib")) {
-                            if (Float.parseFloat(arrO1[4]) > Float.parseFloat(arrO2[4])) {
-                                return -1;
-                            } else if (Float.parseFloat(arrO1[4]) < Float.parseFloat(arrO2[4])) {
-                                return 1;
-                            } else return 0;
-                        } else return 0;
-                    }
                 } else return 0;
             } else return 0;
         }
     };
 
-    Comparator<String> comparatorForTotalError = new Comparator<String>() {
+    private Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
         @Override
         public int compare(String o1, String o2) {
-            //L;0,5;Imax;0.02
-            String[] arrO1 = o1.split(";");
-            String[] arrO2 = o2.split(";");
 
-            if (arrO1[0].equals("0") && !arrO2[0].equals("0")) {
+            if ((!o1.contains("L") && !o1.contains("C")) && (o2.contains("L") || o2.contains("C"))) {
                 return -1;
-            } else if (!arrO1[0].equals("0") && arrO2[0].equals("0")) {
+            } else if ((o1.contains("L") || o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
                 return 1;
-            } else if (arrO1[0].equals("L") && arrO2[0].equals("C")) {
+            } else if (o1.contains("L") && o2.contains("C")) {
                 return -1;
-            } else if (arrO1[0].equals("C") && arrO2[0].equals("L")) {
+            } else if (o1.contains("C") && o2.contains("L")) {
                 return 1;
-            } else if ((arrO1[0].equals("0") && arrO2[0].equals("0")) ||
-                    (arrO1[0].equals("L") && arrO2[0].equals("L")) ||
-                    (arrO1[0].equals("C") && arrO2[0].equals("C"))) {
+            } else if ((!o1.contains("L") && !o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
+                String[] pf1 = o1.split(" ");
+                String[] pf2 = o2.split(" ");
 
-                if (Float.parseFloat(arrO1[1]) > Float.parseFloat(arrO2[1])) {
+                if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
                     return -1;
-                } else if (Float.parseFloat(arrO1[1]) < Float.parseFloat(arrO2[1])) {
+                } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
                     return 1;
-                } else {
-                    if (arrO1[2].equals("Imax") && arrO2[2].equals("Ib")) {
-                        return -1;
-                    } else if (arrO1[2].equals("Ib") && arrO2[2].equals("Imax")) {
-                        return 1;
-                    } else if (arrO1[2].equals("Imax") && arrO2[2].equals("Imax")) {
-                        if (Float.parseFloat(arrO1[3]) > Float.parseFloat(arrO2[3])) {
-                            return -1;
-                        } else if (Float.parseFloat(arrO1[3]) < Float.parseFloat(arrO2[3])) {
-                            return 1;
-                        } else return 0;
-                    } else if (arrO1[2].equals("Ib") && arrO2[2].equals("Ib")) {
-                        if (Float.parseFloat(arrO1[3]) > Float.parseFloat(arrO2[3])) {
-                            return -1;
-                        } else if (Float.parseFloat(arrO1[3]) < Float.parseFloat(arrO2[3])) {
-                            return 1;
-                        } else return 0;
-                    } else return 0;
-                }
+                } else return 0;
+            } else if (o1.contains("L") & o2.contains("L") ||
+                    o1.contains("C") & o2.contains("C")) {
+                String[] pf1 = o1.split(" ");
+                String[] pf2 = o2.split(" ");
+
+                if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
+                    return -1;
+                } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
+                    return 1;
+                } else return 0;
             } else return 0;
         }
     };
 
+    private Comparator<String> comparatorForCurrent = new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            if (o1.contains("Imax") && o2.contains("Ib")) {
+                return -1;
+            } else if (o1.contains("Ib") && o2.contains("Imax")) {
+                return 1;
+            } else if (o1.contains("Imax") && o2.contains("Imax") ||
+                    o1.contains("Ib") && o2.contains("Ib")) {
+                String[] curr1 = o1.split(" ");
+                String[] curr2 = o2.split(" ");
 
-    Comparator<String> comparatorCRPSTAother = new Comparator<String>() {
+                if (Float.parseFloat(curr1[0]) > Float.parseFloat(curr2[0])) {
+                    return -1;
+                } else if (Float.parseFloat(curr1[0]) < Float.parseFloat(curr2[0])){
+                    return 1;
+                } else return 0;
+            } else return 0;
+        }
+    };
+
+    private Comparator<String> comparatorForABC = new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            if (o1.equals("A") & !o2.equals("A")) {
+                return -1;
+            } else if (!o1.equals("A") & o2.equals("A")){
+                return 1;
+            }  else if (o1.equals("B") & o2.equals("C")) {
+                return -1;
+            } else if (o1.equals("C") & o2.equals("B")) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    };
+
+    private Comparator<String> comparatorForCRPSTA = new Comparator<String>() {
         @Override
         public int compare(String o1, String o2) {
             //CRP Самоход
@@ -1127,620 +1500,16 @@ public class ExcelReport {
         }
     };
 
-    public interface Group {
-
-    }
-
-    public class InfABCGroup implements Group{
-        //F;55;A;L;0.5;Imax;0.02
-
-        private Map<String, Map> UorFmap = new TreeMap<>();
-
-        private Map<String, Map> ABCMap;
-        private Map<String, Map> powerFactorMap;
-        private Map<String, Map> currentMap;
-
-
-        private String UorFkey;
-        private String ABCkey;
-        private String PFkey;
-        private String currKey;
-
-        public InfABCGroup() {
-            ABCMap = new TreeMap<>(comparatorForABC);
-            powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
-            currentMap = new TreeMap<>(comparatorForCurrent);
+    private Comparator<String> Imbalans = new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            if (o1.equals("A") && !o2.equals("A")) {
+                return -1;
+            } else if (o1.equals("B") && !o2.equals("B")) {
+                return -1;
+            } else if (o1.equals("C") && o2.equals("C")) {
+                return -1;
+            } else return 0;
         }
-
-        public boolean putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
-            String[] idResult = keyId.split(";");
-            UorFkey = idResult[1] + "% " + idResult[0] + "n";
-            ABCkey = idResult[2];
-            currKey = idResult[6] + " " + idResult[5];
-
-            if (idResult[3].equals("0")) {
-                PFkey = idResult[4];
-            } else {
-                PFkey = idResult[4] + " " + idResult[3];
-            }
-
-            //Если это первый элемент
-            if (UorFmap.size() == 0) {
-                UorFmap.put(UorFkey, ABCMap);
-                ABCMap.put(ABCkey, powerFactorMap);
-                powerFactorMap.put(PFkey, currentMap);
-                currentMap.put(currKey, commandResultMap);
-                return true;
-            } else {
-                //Если следующий элемент не соответствует группе
-                if (!UorFmap.containsKey(UorFkey)) {
-                    return false;
-                    //Если всё нормально, то добавляем нужный элемент в нужную мапу
-                } else {
-                    ABCMap = UorFmap.get(UorFkey);
-                    if (!ABCMap.containsKey(ABCkey)) {
-
-                        powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
-                        currentMap = new TreeMap<>(comparatorForCurrent);
-
-                        currentMap.put(currKey, commandResultMap);
-                        powerFactorMap.put(PFkey, currentMap);
-                        ABCMap.put(ABCkey, powerFactorMap);
-                        return true;
-                    } else {
-                        powerFactorMap = ABCMap.get(ABCkey);
-                        if (!powerFactorMap.containsKey(PFkey)) {
-
-                            currentMap = new TreeMap<>(comparatorForCurrent);
-
-                            currentMap.put(currKey, commandResultMap);
-                            powerFactorMap.put(PFkey, currentMap);
-                            return true;
-                        } else {
-                            currentMap = powerFactorMap.get(PFkey);
-                            currentMap.put(currKey, commandResultMap);
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        public void getElements() {
-            System.out.println(UorFmap);
-            Map<String, Map> ABC;
-            Map<String, Map> valueLC0;
-            Map<String, Map> valueCurrent;
-
-            for (Map.Entry<String, Map> mapEntry : UorFmap.entrySet()) {
-                System.out.println(mapEntry.getKey());
-                ABC = mapEntry.getValue();
-
-                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
-                    System.out.println("    " + abc.getKey());
-                    valueLC0 = abc.getValue();
-
-                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
-                        System.out.println("        " + asfa.getKey());
-
-                        valueCurrent = asfa.getValue();
-
-                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
-                            System.out.println("            " + asfaasdas.getKey());
-                        }
-                    }
-                }
-            }
-        }
-
-        Comparator<String> comparatorForABC = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                if (o1.equals("A") & !o2.equals("A")) {
-                    return -1;
-                } else if (!o1.equals("A") & o2.equals("A")){
-                    return 1;
-                }  else if (o1.equals("B") & o2.equals("C")) {
-                    return -1;
-                } else if (o1.equals("C") & o2.equals("B")) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-        };
-
-        Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-
-                if ((!o1.contains("L") && !o1.contains("C")) && (o2.contains("L") || o2.contains("C"))) {
-                    return -1;
-                } else if ((o1.contains("L") || o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
-                    return 1;
-                } else if (o1.contains("L") && o2.contains("C")) {
-                    return -1;
-                } else if (o1.contains("C") && o2.contains("L")) {
-                    return 1;
-                } else if ((!o1.contains("L") && !o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
-                    String[] pf1 = o1.split(" ");
-                    String[] pf2 = o2.split(" ");
-
-                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
-                        return 1;
-                    } else return 0;
-                } else if (o1.contains("L") & o2.contains("L") ||
-                        o1.contains("C") & o2.contains("C")) {
-                    String[] pf1 = o1.split(" ");
-                    String[] pf2 = o2.split(" ");
-
-                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
-                        return 1;
-                    } else return 0;
-                } else return 0;
-            }
-        };
-
-        Comparator<String> comparatorForCurrent = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                if (o1.contains("Imax") && o2.contains("Ib")) {
-                    return -1;
-                } else if (o1.contains("Ib") && o2.contains("Imax")) {
-                    return 1;
-                } else if (o1.contains("Imax") && o2.contains("Imax") ||
-                        o1.contains("Ib") && o2.contains("Ib")) {
-                    String[] curr1 = o1.split(" ");
-                    String[] curr2 = o2.split(" ");
-
-                    if (Float.parseFloat(curr1[0]) > Float.parseFloat(curr2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(curr1[0]) < Float.parseFloat(curr2[0])){
-                        return 1;
-                    } else return 0;
-                } else return 0;
-            }
-        };
-    }
-
-    public class InfGroup implements Group{
-        //F;55;L;0.5;Imax;0.02
-
-        private Map<String, Map> UorFmap = new TreeMap<>();
-
-        private Map<String, Map> powerFactorMap;
-        private Map<String, Map> currentMap;
-
-        private String UorFkey;
-        private String PFkey;
-        private String currKey;
-
-        public InfGroup() {
-            powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
-            currentMap = new TreeMap<>(comparatorForCurrent);
-        }
-
-        public boolean putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
-            String[] idResult = keyId.split(";");
-            UorFkey = idResult[1] + "% " + idResult[0] + "n";
-            currKey = idResult[5] + " " + idResult[4];
-
-            if (idResult[2].equals("0")) {
-                PFkey = idResult[3];
-            } else {
-                PFkey = idResult[3] + " " + idResult[2];
-            }
-
-            //Если это первый элемент
-            if (UorFmap.size() == 0) {
-                UorFmap.put(UorFkey, powerFactorMap);
-                powerFactorMap.put(PFkey, currentMap);
-                currentMap.put(currKey, commandResultMap);
-                return true;
-            } else {
-                //Если следующий элемент не соответствует группе
-                if (!UorFmap.containsKey(UorFkey)) {
-                    return false;
-                    //Если всё нормально, то добавляем нужный элемент в нужную мапу
-                } else {
-                    powerFactorMap = UorFmap.get(UorFkey);
-                    if (!powerFactorMap.containsKey(PFkey)) {
-
-                        currentMap = new TreeMap<>(comparatorForCurrent);
-
-                        currentMap.put(currKey, commandResultMap);
-
-                        powerFactorMap.put(PFkey, currentMap);
-                        return true;
-
-                    } else {
-                        currentMap = powerFactorMap.get(PFkey);
-                        currentMap.put(currKey, commandResultMap);
-
-                        return true;
-                    }
-                }
-            }
-        }
-
-        public void getElements() {
-            System.out.println(UorFmap);
-            Map<String, Map> ABC;
-            Map<String, Map> valueLC0;
-            Map<String, Map> valueCurrent;
-
-            for (Map.Entry<String, Map> mapEntry : UorFmap.entrySet()) {
-                System.out.println(mapEntry.getKey());
-                ABC = mapEntry.getValue();
-
-                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
-                    System.out.println("    " + abc.getKey());
-                    valueLC0 = abc.getValue();
-
-                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
-                        System.out.println("        " + asfa.getKey());
-
-                        valueCurrent = asfa.getValue();
-
-                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
-                            System.out.println("            " + asfaasdas.getKey());
-                        }
-                    }
-                }
-            }
-        }
-
-        Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-
-                if ((!o1.contains("L") && !o1.contains("C")) && (o2.contains("L") || o2.contains("C"))) {
-                    return -1;
-                } else if ((o1.contains("L") || o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
-                    return 1;
-                } else if (o1.contains("L") && o2.contains("C")) {
-                    return -1;
-                } else if (o1.contains("C") && o2.contains("L")) {
-                    return 1;
-                } else if ((!o1.contains("L") && !o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
-                    String[] pf1 = o1.split(" ");
-                    String[] pf2 = o2.split(" ");
-
-                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
-                        return 1;
-                    } else return 0;
-                } else if (o1.contains("L") & o2.contains("L") ||
-                        o1.contains("C") & o2.contains("C")) {
-                    String[] pf1 = o1.split(" ");
-                    String[] pf2 = o2.split(" ");
-
-                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
-                        return 1;
-                    } else return 0;
-                } else return 0;
-            }
-        };
-
-        Comparator<String> comparatorForCurrent = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                if (o1.contains("Imax") && o2.contains("Ib")) {
-                    return -1;
-                } else if (o1.contains("Ib") && o2.contains("Imax")) {
-                    return 1;
-                } else if (o1.contains("Imax") && o2.contains("Imax") ||
-                        o1.contains("Ib") && o2.contains("Ib")) {
-                    String[] curr1 = o1.split(" ");
-                    String[] curr2 = o2.split(" ");
-
-                    if (Float.parseFloat(curr1[0]) > Float.parseFloat(curr2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(curr1[0]) < Float.parseFloat(curr2[0])){
-                        return 1;
-                    } else return 0;
-                } else return 0;
-            }
-        };
-    }
-
-    public class ABCGroup implements Group{
-        //A;L;0.5;Imax;0.02
-
-        private Map<String, Map> ABCMap;
-        private Map<String, Map> powerFactorMap;
-        private Map<String, Map> currentMap;
-
-        private String ABCkey;
-        private String PFkey;
-        private String currKey;
-
-        public ABCGroup() {
-            ABCMap = new TreeMap<>(comparatorForABC);
-        }
-
-        public boolean putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
-            String[] idResult = keyId.split(";");
-
-            ABCkey = idResult[0];
-            currKey = idResult[4] + " " + idResult[3];
-
-            if (idResult[1].equals("0")) {
-                PFkey = idResult[2];
-            } else {
-                PFkey = idResult[2] + " " + idResult[1];
-            }
-
-            if (!ABCMap.containsKey(ABCkey)) {
-
-                powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
-                currentMap = new TreeMap<>(comparatorForCurrent);
-
-                ABCMap.put(ABCkey, powerFactorMap);
-                powerFactorMap.put(PFkey, currentMap);
-                currentMap.put(currKey, commandResultMap);
-                return true;
-            } else {
-
-                powerFactorMap = ABCMap.get(ABCkey);
-                if (!powerFactorMap.containsKey(PFkey)) {
-
-                    currentMap = new TreeMap<>(comparatorForCurrent);
-
-                    powerFactorMap.put(PFkey, currentMap);
-                    currentMap.put(currKey, commandResultMap);
-                    return true;
-                } else {
-                    currentMap = powerFactorMap.get(PFkey);
-                    currentMap.put(currKey, commandResultMap);
-                    return true;
-                }
-            }
-        }
-
-        public void getElements() {
-            System.out.println(ABCMap);
-            Map<String, Map> ABC;
-            Map<String, Map> valueLC0;
-            Map<String, Map> valueCurrent;
-
-            for (Map.Entry<String, Map> mapEntry : ABCMap.entrySet()) {
-                System.out.println(mapEntry.getKey());
-                ABC = mapEntry.getValue();
-
-                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
-                    System.out.println(" " + abc.getKey());
-                    valueLC0 = abc.getValue();
-
-                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
-                        System.out.println("     " + asfa.getKey());
-
-                        valueCurrent = asfa.getValue();
-
-                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
-                            System.out.println("     " + asfaasdas.getKey());
-                        }
-                    }
-                }
-            }
-        }
-
-        Comparator<String> comparatorForABC = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                if (o1.equals("A") & !o2.equals("A")) {
-                    return -1;
-                } else if (!o1.equals("A") & o2.equals("A")){
-                    return 1;
-                }  else if (o1.equals("B") & o2.equals("C")) {
-                    return -1;
-                } else if (o1.equals("C") & o2.equals("B")) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-        };
-
-        Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-
-                if ((!o1.contains("L") && !o1.contains("C")) && (o2.contains("L") || o2.contains("C"))) {
-                    return -1;
-                } else if ((o1.contains("L") || o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
-                    return 1;
-                } else if (o1.contains("L") && o2.contains("C")) {
-                    return -1;
-                } else if (o1.contains("C") && o2.contains("L")) {
-                    return 1;
-                } else if ((!o1.contains("L") && !o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
-                    String[] pf1 = o1.split(" ");
-                    String[] pf2 = o2.split(" ");
-
-                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
-                        return 1;
-                    } else return 0;
-                } else if (o1.contains("L") & o2.contains("L") ||
-                        o1.contains("C") & o2.contains("C")) {
-                    String[] pf1 = o1.split(" ");
-                    String[] pf2 = o2.split(" ");
-
-                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
-                        return 1;
-                    } else return 0;
-                } else return 0;
-            }
-        };
-
-        Comparator<String> comparatorForCurrent = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                if (o1.contains("Imax") && o2.contains("Ib")) {
-                    return -1;
-                } else if (o1.contains("Ib") && o2.contains("Imax")) {
-                    return 1;
-                } else if (o1.contains("Imax") && o2.contains("Imax") ||
-                        o1.contains("Ib") && o2.contains("Ib")) {
-                    String[] curr1 = o1.split(" ");
-                    String[] curr2 = o2.split(" ");
-
-                    if (Float.parseFloat(curr1[0]) > Float.parseFloat(curr2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(curr1[0]) < Float.parseFloat(curr2[0])){
-                        return 1;
-                    } else return 0;
-                } else return 0;
-            }
-        };
-    }
-
-    public class TotalErrorsGroup implements Group {
-        //L;0.5;Imax;0.02
-
-        private Map<String, Map> powerFactorMap;
-        private Map<String, Map> currentMap;
-
-        private String PFkey;
-        private String currKey;
-
-        public TotalErrorsGroup() {
-            powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
-        }
-
-        public boolean putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
-            String[] idResult = keyId.split(";");
-
-            currKey = idResult[3] + " " + idResult[2];
-
-            if (idResult[0].equals("0")) {
-                PFkey = idResult[1];
-            } else {
-                PFkey = idResult[1] + " " + idResult[0];
-            }
-
-            if (!powerFactorMap.containsKey(PFkey)) {
-                currentMap = new TreeMap<>(comparatorForCurrent);
-
-                powerFactorMap.put(PFkey, currentMap);
-
-                currentMap.put(currKey, commandResultMap);
-                return true;
-            } else {
-                currentMap = powerFactorMap.get(PFkey);
-
-                currentMap.put(currKey, commandResultMap);
-                return true;
-            }
-        }
-
-        public void getElements() {
-            System.out.println(powerFactorMap);
-            Map<String, Map> ABC;
-            Map<String, Map> valueLC0;
-            Map<String, Map> valueCurrent;
-
-            for (Map.Entry<String, Map> mapEntry : powerFactorMap.entrySet()) {
-                System.out.println(mapEntry.getKey());
-                ABC = mapEntry.getValue();
-
-                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
-                    System.out.println("    " + abc.getKey());
-                    valueLC0 = abc.getValue();
-
-                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
-                        System.out.println("     " + asfa.getKey());
-
-                        valueCurrent = asfa.getValue();
-
-                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
-                            System.out.println("     " + asfaasdas.getKey());
-                        }
-                    }
-                }
-            }
-        }
-
-        Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-
-                if ((!o1.contains("L") && !o1.contains("C")) && (o2.contains("L") || o2.contains("C"))) {
-                    return -1;
-                } else if ((o1.contains("L") || o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
-                    return 1;
-                } else if (o1.contains("L") && o2.contains("C")) {
-                    return -1;
-                } else if (o1.contains("C") && o2.contains("L")) {
-                    return 1;
-                } else if ((!o1.contains("L") && !o1.contains("C")) && (!o2.contains("L") && !o2.contains("C"))) {
-                    String[] pf1 = o1.split(" ");
-                    String[] pf2 = o2.split(" ");
-
-                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
-                        return 1;
-                    } else return 0;
-                } else if (o1.contains("L") & o2.contains("L") ||
-                        o1.contains("C") & o2.contains("C")) {
-                    String[] pf1 = o1.split(" ");
-                    String[] pf2 = o2.split(" ");
-
-                    if (Float.parseFloat(pf1[0]) > Float.parseFloat(pf2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(pf1[0]) < Float.parseFloat(pf2[0])) {
-                        return 1;
-                    } else return 0;
-                } else return 0;
-            }
-        };
-
-        Comparator<String> comparatorForCurrent = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                if (o1.contains("Imax") && o2.contains("Ib")) {
-                    return -1;
-                } else if (o1.contains("Ib") && o2.contains("Imax")) {
-                    return 1;
-                } else if (o1.contains("Imax") && o2.contains("Imax") ||
-                        o1.contains("Ib") && o2.contains("Ib")) {
-                    String[] curr1 = o1.split(" ");
-                    String[] curr2 = o2.split(" ");
-
-                    if (Float.parseFloat(curr1[0]) > Float.parseFloat(curr2[0])) {
-                        return -1;
-                    } else if (Float.parseFloat(curr1[0]) < Float.parseFloat(curr2[0])){
-                        return 1;
-                    } else return 0;
-                } else return 0;
-            }
-        };
-    }
-
-    public class CRPSTAotherGroup implements Group {
-        //CRP Самоход
-        //STAAP Чувствтельность AP+
-        //STAAN Чувствтельность AP-
-        //STARP Чувствтельность RP+
-        //STARN Чувствтельность RP-
-        //RTC ТХЧ
-        //CNTAP Константа
-        //CNTAN Константа
-        //CNTRP Константа
-        //CNTRN Константа
-        //INS Изоляция
-        //APR Внешний вид
-    }
+    };
 }
