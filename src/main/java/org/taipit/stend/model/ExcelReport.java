@@ -1215,6 +1215,9 @@ public class ExcelReport {
     public class InfABCGroup implements Group {
         //F;55;A;L;0.5;Imax;0.02
 
+        private int totalElements;
+
+        //Мапы с погрешностями
         private Map<String, Map> UorFmap;
 
         private Map<String, Map> ABCMap;
@@ -1232,6 +1235,8 @@ public class ExcelReport {
         }
 
         public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            totalElements++;
+
             String[] idResult = keyId.split(";");
             UorFkey = idResult[1] + " %" + idResult[0] + "n";
             ABCkey = idResult[2];
@@ -1252,6 +1257,7 @@ public class ExcelReport {
                 ABCMap.put(ABCkey, powerFactorMap);
                 powerFactorMap.put(PFkey, currentMap);
                 currentMap.put(currKey, commandResultMap);
+
             } else {
                 ABCMap = UorFmap.get(UorFkey);
 
@@ -1273,6 +1279,39 @@ public class ExcelReport {
                     } else {
                         currentMap = powerFactorMap.get(PFkey);
                         currentMap.put(currKey, commandResultMap);
+                    }
+                }
+            }
+        }
+
+        public void print() {
+
+            if (totalElements == 0) return;
+
+            Map<String, Integer> UorFCount;
+            Map<String, Integer> ABCCount;
+            Map<String, Integer> PFCount;
+
+            Map<String, Map> ABCmap;
+            Map<String, Map> PFmap;
+
+            for (Map.Entry<String, Map> UorFmap : UorFmap.entrySet()) {
+                UorFCount = new HashMap<>();
+                ABCCount = new HashMap<>();
+                PFCount = new HashMap<>();
+
+                UorFCount.put(UorFmap.getKey(), 0);
+
+                ABCmap = UorFmap.getValue();
+
+                for (Map.Entry<String, Map> mapABC : ABCmap.entrySet()) {
+                    ABCCount.put(mapABC.getKey(), 0);
+
+                    PFmap = mapABC.getValue();
+
+                    for (Map.Entry<String, Map> mapPF : PFmap.entrySet()) {
+                        PFCount.put(mapPF.getKey(), mapPF:);
+
                     }
                 }
             }
