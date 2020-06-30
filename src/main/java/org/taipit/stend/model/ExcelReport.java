@@ -15,6 +15,18 @@ import java.util.*;
 
 public class ExcelReport {
 
+    private final String SHEET_NAME = "Результат";
+    private Workbook wb = new HSSFWorkbook();
+    private Sheet mainSheet = wb.createSheet(SHEET_NAME);
+
+    private Font Bauhaus_15_Bold = createFontStyle(wb, 15, "Calisto MT", true, false, false);
+    private Font Calibri_11_BoldItalic = createFontStyle(wb, 11, "Calibri", true, true, false);
+    private Font Bauhaus_12_Bold = createFontStyle(wb, 12, "Bauhaus 93", true, false, false);
+    private Font Calibri_11_Bold = createFontStyle(wb, 11, "Calibri", true, false, false);
+
+    private CellStyle leftCenter = ExcelReport.createCellStyle(wb, HorizontalAlignment.LEFT, VerticalAlignment.CENTER);
+    private CellStyle centerCenter = ExcelReport.createCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
+
     public ExcelReport() {
 
         errCRPSTAother.put("CRP", new HashMap<>());
@@ -539,9 +551,6 @@ public class ExcelReport {
     }
 
     public void createExcelReport() {
-        Workbook wb = new HSSFWorkbook();
-        Sheet mainSheet = wb.createSheet("Результат");
-
         Meter testMeter = new Meter();
         testMeter.setUn(230);
         testMeter.setIb(5);
@@ -583,15 +592,6 @@ public class ExcelReport {
         final String TXTG6 = "Свидетельсто о поверке:";
         final String TXTM5 = "Дата поверки:";
         final String TXTM6 = "Дата след. поверки:";
-
-
-        Font Bauhaus_15_Bold = createFontStyle(wb, 15, "Calisto MT", true, false, false);
-        Font Calibri_11_BoldItalic = createFontStyle(wb, 11, "Calibri", true, true, false);
-        Font Bauhaus_12_Bold = createFontStyle(wb, 12, "Bauhaus 93", true, false, false);
-        Font Calibri_11_Bold = createFontStyle(wb, 11, "Calibri", true, false, false);
-
-        CellStyle leftCenter = ExcelReport.createCellStyle(wb, HorizontalAlignment.LEFT, VerticalAlignment.CENTER);
-        CellStyle centerCenter = ExcelReport.createCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
 
         CellRangeAddress headRegion = CellRangeAddress.valueOf("A1:Z3");
         CellStyle cellStyle = ExcelReport.createCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
@@ -821,6 +821,19 @@ public class ExcelReport {
 
         createMergeZone("P18:R18", sheet.getRow(17).createCell(15), meter.getController(), centerCenter,
                 Calibri_11_Bold, sheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+    }
+
+    private void createMergeZone(int firstRow, int lastRow, int firsColumn, int lastColumn, Cell cell, String cellText, CellStyle style, Font font, Sheet sheet,
+                                 BorderStyle bottom, BorderStyle right, BorderStyle left, BorderStyle top) {
+        CellRangeAddress cellAddresses = new CellRangeAddress(firstRow, lastRow, firsColumn, lastColumn);
+        style.setFont(font);
+        cell.setCellStyle(style);
+        cell.setCellValue(cellText);
+        RegionUtil.setBorderBottom(bottom, cellAddresses, sheet);
+        RegionUtil.setBorderRight(right, cellAddresses, sheet);
+        RegionUtil.setBorderLeft(left, cellAddresses, sheet);
+        RegionUtil.setBorderTop(top, cellAddresses, sheet);
+        sheet.addMergedRegion(cellAddresses);
     }
 
     private void createMergeZone(String address, Cell cell, String cellText, CellStyle style, Font font, Sheet sheet,
@@ -1215,6 +1228,7 @@ public class ExcelReport {
     public class InfABCGroup implements Group {
         //F;55;A;L;0.5;Imax;0.02
 
+        //Количество элементов в каждой группе
         private int totalElements;
 
         //Мапы с погрешностями
@@ -1223,7 +1237,6 @@ public class ExcelReport {
         private Map<String, Map> ABCMap;
         private Map<String, Map> powerFactorMap;
         private Map<String, Map> currentMap;
-
 
         private String UorFkey;
         private String ABCkey;
@@ -1284,36 +1297,67 @@ public class ExcelReport {
             }
         }
 
-        public void print() {
+        public void print(int row, int cell, Workbook wb, Sheet sheet) {
 
             if (totalElements == 0) return;
 
             Map<String, Integer> UorFCount;
             Map<String, Integer> ABCCount;
+
+            List<Map<String, Integer>> PFlist = new ArrayList<>();
             Map<String, Integer> PFCount;
 
             Map<String, Map> ABCmap;
             Map<String, Map> PFmap;
 
+            String UorFKey;
+            String ABCKey;
+            String PFKey;
+
+            for (int i = row; i <= row + meters.size() + 4; i++) {
+                sheet.createRow(i);
+            }
+
             for (Map.Entry<String, Map> UorFmap : UorFmap.entrySet()) {
                 UorFCount = new HashMap<>();
                 ABCCount = new HashMap<>();
                 PFCount = new HashMap<>();
+                PFlist = new ArrayList<>();
 
-                UorFCount.put(UorFmap.getKey(), 0);
+                UorFKey = UorFmap.getKey();
+
+                UorFCount.put(UorFKey, 0);
 
                 ABCmap = UorFmap.getValue();
 
                 for (Map.Entry<String, Map> mapABC : ABCmap.entrySet()) {
-                    ABCCount.put(mapABC.getKey(), 0);
+                    ABCKey = mapABC.getKey();
+
+                    ABCCount.put(ABCKey, 0);
 
                     PFmap = mapABC.getValue();
 
                     for (Map.Entry<String, Map> mapPF : PFmap.entrySet()) {
-                        PFCount.put(mapPF.getKey(), mapPF:);
+                        PFKey = mapPF.getKey();
 
+                        int size = mapPF.getValue().size();
+
+                        PFCount.put(PFKey, size);
+                        ABCCount.put(ABCKey, ABCCount.get(ABCKey) + size);
+                        UorFCount.put(UorFKey, UorFCount.get(UorFKey) + size);
+                        PFlist.add(PFCount);
+                        PFCount = new HashMap<>();
                     }
                 }
+
+
+                System.out.println(UorFCount);
+                System.out.println(ABCCount);
+                System.out.println(PFlist);
+
+                System.out.println(totalElements);
+
+                createMergeZone();
             }
         }
 
