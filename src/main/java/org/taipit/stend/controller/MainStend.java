@@ -1,6 +1,9 @@
 package org.taipit.stend.controller;
 
 import org.apache.commons.collections4.MultiMapUtils;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.taipit.stend.model.ExcelReport;
 
 import java.util.*;
 
@@ -13,8 +16,8 @@ public class MainStend {
     }
 
     public static void main(String[] args) {
-        //new ExcelReport().createExcelReport();
-        MainStend mainStend = new MainStend();
+        new ExcelReport().createExcelReport();
+        //MainStend mainStend = new MainStend();
 
         //CRP Самоход
         //STAAP Чувствтельность AP+
@@ -29,172 +32,172 @@ public class MainStend {
         //INS Изоляция
         //APR Внешний вид
 
-        MainStend.InfABCGroup group = mainStend.new InfABCGroup();
+        //MainStend.InfABCGroup group = mainStend.new InfABCGroup();
 
-        mainStend.tree.put("F;55;A;L;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;A;L;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;A;L;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;A;L;0.5;Ib;0.01", new HashMap());
+//        mainStend.tree.put("F;55;A;L;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;A;L;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;A;L;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;A;L;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;A;L;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;A;L;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;A;L;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;A;L;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;A;C;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;A;C;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;A;C;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;A;C;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;A;C;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;A;C;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;A;C;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;A;C;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;A;0;1.0;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;A;0;1.0;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;A;0;1.0;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;A;0;1.0;Ib;0.01", new HashMap());
+//
+//
+//        mainStend.tree.put("F;55;B;L;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;B;L;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;B;L;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;B;L;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;B;L;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;B;L;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;B;L;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;B;L;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;B;C;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;B;C;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;B;C;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;B;C;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;B;C;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;B;C;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;B;C;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;B;C;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;B;0;1.0;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;B;0;1.0;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;B;0;1.0;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;B;0;1.0;Ib;0.01", new HashMap());
+//
+//
+//        mainStend.tree.put("F;55;C;L;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;C;L;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;C;L;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;C;L;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;C;L;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;C;L;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;C;L;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;C;L;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;C;C;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;C;C;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;C;C;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;C;C;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;C;C;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;C;C;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;C;C;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;C;C;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("F;55;C;0;1.0;Imax;0.02", new HashMap());
+//        mainStend.tree.put("F;55;C;0;1.0;Imax;0.01", new HashMap());
+//        mainStend.tree.put("F;55;C;0;1.0;Ib;0.02", new HashMap());
+//        mainStend.tree.put("F;55;C;0;1.0;Ib;0.01", new HashMap());
+//
+//
+//
+//
+//        mainStend.tree.put("U;55;A;L;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;A;L;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;A;L;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;A;L;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;A;L;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;A;L;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;A;L;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;A;L;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;A;C;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;A;C;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;A;C;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;A;C;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;A;C;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;A;C;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;A;C;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;A;C;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;A;0;1.0;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;A;0;1.0;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;A;0;1.0;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;A;0;1.0;Ib;0.01", new HashMap());
+//
+//
+//        mainStend.tree.put("U;55;B;L;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;B;L;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;B;L;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;B;L;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;B;L;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;B;L;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;B;L;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;B;L;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;B;C;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;B;C;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;B;C;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;B;C;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;B;C;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;B;C;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;B;C;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;B;C;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;B;0;1.0;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;B;0;1.0;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;B;0;1.0;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;B;0;1.0;Ib;0.01", new HashMap());
+//
+//
+//        mainStend.tree.put("U;55;C;L;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;C;L;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;C;L;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;C;L;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;C;L;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;C;L;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;C;L;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;C;L;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;C;C;0.5;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;C;C;0.5;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;C;C;0.5;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;C;C;0.5;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;C;C;0.25;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;C;C;0.25;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;C;C;0.25;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;C;C;0.25;Ib;0.01", new HashMap());
+//
+//        mainStend.tree.put("U;55;C;0;1.0;Imax;0.02", new HashMap());
+//        mainStend.tree.put("U;55;C;0;1.0;Imax;0.01", new HashMap());
+//        mainStend.tree.put("U;55;C;0;1.0;Ib;0.02", new HashMap());
+//        mainStend.tree.put("U;55;C;0;1.0;Ib;0.01", new HashMap());
+//
+//        for (Map.Entry<String, Map> map : mainStend.tree.entrySet()) {
+//            group.putResultInGroup(map.getKey(), map.getValue());
+//        }
 
-        mainStend.tree.put("F;55;A;L;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;A;L;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;A;L;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;A;L;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("F;55;A;C;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;A;C;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;A;C;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;A;C;0.5;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("F;55;A;C;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;A;C;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;A;C;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;A;C;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("F;55;A;0;1.0;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;A;0;1.0;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;A;0;1.0;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;A;0;1.0;Ib;0.01", new HashMap());
-
-
-        mainStend.tree.put("F;55;B;L;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;B;L;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;B;L;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;B;L;0.5;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("F;55;B;L;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;B;L;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;B;L;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;B;L;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("F;55;B;C;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;B;C;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;B;C;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;B;C;0.5;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("F;55;B;C;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;B;C;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;B;C;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;B;C;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("F;55;B;0;1.0;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;B;0;1.0;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;B;0;1.0;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;B;0;1.0;Ib;0.01", new HashMap());
-
-
-        mainStend.tree.put("F;55;C;L;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;C;L;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;C;L;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;C;L;0.5;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("F;55;C;L;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;C;L;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;C;L;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;C;L;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("F;55;C;C;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;C;C;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;C;C;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;C;C;0.5;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("F;55;C;C;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;C;C;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;C;C;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;C;C;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("F;55;C;0;1.0;Imax;0.02", new HashMap());
-        mainStend.tree.put("F;55;C;0;1.0;Imax;0.01", new HashMap());
-        mainStend.tree.put("F;55;C;0;1.0;Ib;0.02", new HashMap());
-        mainStend.tree.put("F;55;C;0;1.0;Ib;0.01", new HashMap());
-
-
-
-
-        mainStend.tree.put("U;55;A;L;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;A;L;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;A;L;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;A;L;0.5;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;A;L;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;A;L;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;A;L;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;A;L;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;A;C;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;A;C;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;A;C;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;A;C;0.5;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;A;C;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;A;C;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;A;C;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;A;C;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;A;0;1.0;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;A;0;1.0;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;A;0;1.0;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;A;0;1.0;Ib;0.01", new HashMap());
-
-
-        mainStend.tree.put("U;55;B;L;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;B;L;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;B;L;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;B;L;0.5;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;B;L;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;B;L;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;B;L;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;B;L;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;B;C;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;B;C;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;B;C;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;B;C;0.5;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;B;C;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;B;C;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;B;C;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;B;C;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;B;0;1.0;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;B;0;1.0;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;B;0;1.0;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;B;0;1.0;Ib;0.01", new HashMap());
-
-
-        mainStend.tree.put("U;55;C;L;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;C;L;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;C;L;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;C;L;0.5;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;C;L;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;C;L;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;C;L;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;C;L;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;C;C;0.5;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;C;C;0.5;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;C;C;0.5;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;C;C;0.5;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;C;C;0.25;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;C;C;0.25;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;C;C;0.25;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;C;C;0.25;Ib;0.01", new HashMap());
-
-        mainStend.tree.put("U;55;C;0;1.0;Imax;0.02", new HashMap());
-        mainStend.tree.put("U;55;C;0;1.0;Imax;0.01", new HashMap());
-        mainStend.tree.put("U;55;C;0;1.0;Ib;0.02", new HashMap());
-        mainStend.tree.put("U;55;C;0;1.0;Ib;0.01", new HashMap());
-
-        for (Map.Entry<String, Map> map : mainStend.tree.entrySet()) {
-            group.putResultInGroup(map.getKey(), map.getValue());
-        }
-
-        group.getElements();
-
-        group.print();
+//        group.getElements();
+//
+//        group.print();
     }
 
     public class CRPSTAotherGroup {
@@ -523,11 +526,15 @@ public class MainStend {
 
             if (totalElements == 0) return;
 
-            Map<String, Integer> UorFCount;
-            Map<String, Integer> ABCCount;
+            int printIndexUorF = 0;
+            int printIndexABC = 0;
+            int printIndex = 0;
 
-            List<Map<String, Integer>> PFlist = new ArrayList<>();
-            Map<String, Integer> PFCount;
+            Map<String, Integer> UorFCount = new TreeMap<>(comparatorForUorF);
+            Map<String, Integer> ABCCount =  new TreeMap<>(comparatorForABC);
+            Map<String, Map<String, Integer>> PFmapCount = new TreeMap<>(comparatorForABC);
+
+            Map<String, Integer> PFcount;
 
             Map<String, Map> ABCmap;
             Map<String, Map> PFmap;
@@ -537,10 +544,6 @@ public class MainStend {
             String PFKey;
 
             for (Map.Entry<String, Map> UorFmap : UorFmap.entrySet()) {
-                UorFCount = new HashMap<>();
-                ABCCount = new HashMap<>();
-                PFCount = new HashMap<>();
-                PFlist = new ArrayList<>();
 
                 UorFKey = UorFmap.getKey();
 
@@ -553,28 +556,21 @@ public class MainStend {
 
                     ABCCount.put(ABCKey, 0);
 
+                    PFcount = new TreeMap<>(comparatorForPowerFactor);
+
+                    PFmapCount.put(ABCKey, PFcount);
+
                     PFmap = mapABC.getValue();
 
                     for (Map.Entry<String, Map> mapPF : PFmap.entrySet()) {
                         PFKey = mapPF.getKey();
 
-                        int size = mapPF.getValue().size();
-
-                        PFCount.put(PFKey, size);
-                        ABCCount.put(ABCKey, ABCCount.get(ABCKey) + size);
-                        UorFCount.put(UorFKey, UorFCount.get(UorFKey) + size);
-                        PFlist.add(PFCount);
-                        PFCount = new HashMap<>();
+                        PFcount.put(PFKey, mapPF.getValue().size());
+                        ABCCount.put(ABCKey, ABCCount.get(ABCKey) + mapPF.getValue().size());
+                        UorFCount.put(UorFKey, UorFCount.get(UorFKey) + mapPF.getValue().size());
                     }
                 }
-
-                System.out.println(UorFCount);
-                System.out.println(ABCCount);
-                System.out.println(PFlist);
-
-                System.out.println(totalElements);
             }
-
         }
 
         public void getElements() {

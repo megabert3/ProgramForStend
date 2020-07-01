@@ -551,6 +551,7 @@ public class ExcelReport {
     }
 
     public void createExcelReport() {
+
         Meter testMeter = new Meter();
         testMeter.setUn(230);
         testMeter.setIb(5);
@@ -574,7 +575,7 @@ public class ExcelReport {
 
         createHeadInformation(wb, mainSheet, testMeter, stendDLLCommands);
 
-        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\a.halimov\\Desktop\\test.xls")){
+        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\bert1\\Desktop\\test.xls")){
             wb.write(outputStream);
         } catch (IOException e) {
             e.printStackTrace();
@@ -582,6 +583,11 @@ public class ExcelReport {
     }
 
     private void createHeadInformation(Workbook wb, Sheet sheet, Meter meter, StendDLLCommands stendDLLCommands) {
+
+        for (int i = 0; i < 500; i++) {
+            sheet.createRow(i);
+        }
+
         final String MAIN_REPORT_NAME = "ПРОТОКОЛ ПОВЕРКИ СЧЁТЧИКОВ " + meter.getModelMeter();
 
         final String FACILITY = "Поверочная установка";
@@ -821,6 +827,176 @@ public class ExcelReport {
 
         createMergeZone("P18:R18", sheet.getRow(17).createCell(15), meter.getController(), centerCenter,
                 Calibri_11_Bold, sheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+
+        //TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        InfABCGroup group = new InfABCGroup();
+
+        HashMap<String, HashMap> tree = new HashMap<>();
+
+        tree.put("F;55;A;L;0.5;Imax;0.02", new HashMap());
+        tree.put("F;55;A;L;0.5;Imax;0.01", new HashMap());
+        tree.put("F;55;A;L;0.5;Ib;0.02", new HashMap());
+        tree.put("F;55;A;L;0.5;Ib;0.01", new HashMap());
+
+        tree.put("F;55;A;L;0.25;Imax;0.02", new HashMap());
+        tree.put("F;55;A;L;0.25;Imax;0.01", new HashMap());
+        tree.put("F;55;A;L;0.25;Ib;0.02", new HashMap());
+        tree.put("F;55;A;L;0.25;Ib;0.01", new HashMap());
+
+        tree.put("F;55;A;C;0.5;Imax;0.02", new HashMap());
+        tree.put("F;55;A;C;0.5;Imax;0.01", new HashMap());
+        tree.put("F;55;A;C;0.5;Ib;0.02", new HashMap());
+        tree.put("F;55;A;C;0.5;Ib;0.01", new HashMap());
+
+        tree.put("F;55;A;C;0.25;Imax;0.02", new HashMap());
+        tree.put("F;55;A;C;0.25;Imax;0.01", new HashMap());
+        tree.put("F;55;A;C;0.25;Ib;0.02", new HashMap());
+        tree.put("F;55;A;C;0.25;Ib;0.01", new HashMap());
+
+        tree.put("F;55;A;0;1.0;Imax;0.02", new HashMap());
+        tree.put("F;55;A;0;1.0;Imax;0.01", new HashMap());
+        tree.put("F;55;A;0;1.0;Ib;0.02", new HashMap());
+        tree.put("F;55;A;0;1.0;Ib;0.01", new HashMap());
+
+
+        tree.put("F;55;B;L;0.5;Imax;0.02", new HashMap());
+        tree.put("F;55;B;L;0.5;Imax;0.01", new HashMap());
+        tree.put("F;55;B;L;0.5;Ib;0.02", new HashMap());
+        tree.put("F;55;B;L;0.5;Ib;0.01", new HashMap());
+
+        tree.put("F;55;B;L;0.25;Imax;0.02", new HashMap());
+        tree.put("F;55;B;L;0.25;Imax;0.01", new HashMap());
+        tree.put("F;55;B;L;0.25;Ib;0.02", new HashMap());
+        tree.put("F;55;B;L;0.25;Ib;0.01", new HashMap());
+
+        tree.put("F;55;B;C;0.5;Imax;0.02", new HashMap());
+        tree.put("F;55;B;C;0.5;Imax;0.01", new HashMap());
+        tree.put("F;55;B;C;0.5;Ib;0.02", new HashMap());
+        tree.put("F;55;B;C;0.5;Ib;0.01", new HashMap());
+
+        tree.put("F;55;B;C;0.25;Imax;0.02", new HashMap());
+        tree.put("F;55;B;C;0.25;Imax;0.01", new HashMap());
+        tree.put("F;55;B;C;0.25;Ib;0.02", new HashMap());
+        tree.put("F;55;B;C;0.25;Ib;0.01", new HashMap());
+
+        tree.put("F;55;B;0;1.0;Imax;0.02", new HashMap());
+        tree.put("F;55;B;0;1.0;Imax;0.01", new HashMap());
+        tree.put("F;55;B;0;1.0;Ib;0.02", new HashMap());
+        tree.put("F;55;B;0;1.0;Ib;0.01", new HashMap());
+
+
+        tree.put("F;55;C;L;0.5;Imax;0.02", new HashMap());
+        tree.put("F;55;C;L;0.5;Imax;0.01", new HashMap());
+        tree.put("F;55;C;L;0.5;Ib;0.02", new HashMap());
+        tree.put("F;55;C;L;0.5;Ib;0.01", new HashMap());
+
+        tree.put("F;55;C;L;0.25;Imax;0.02", new HashMap());
+        tree.put("F;55;C;L;0.25;Imax;0.01", new HashMap());
+        tree.put("F;55;C;L;0.25;Ib;0.02", new HashMap());
+        tree.put("F;55;C;L;0.25;Ib;0.01", new HashMap());
+
+        tree.put("F;55;C;C;0.5;Imax;0.02", new HashMap());
+        tree.put("F;55;C;C;0.5;Imax;0.01", new HashMap());
+        tree.put("F;55;C;C;0.5;Ib;0.02", new HashMap());
+        tree.put("F;55;C;C;0.5;Ib;0.01", new HashMap());
+
+        tree.put("F;55;C;C;0.25;Imax;0.02", new HashMap());
+        tree.put("F;55;C;C;0.25;Imax;0.01", new HashMap());
+        tree.put("F;55;C;C;0.25;Ib;0.02", new HashMap());
+        tree.put("F;55;C;C;0.25;Ib;0.01", new HashMap());
+
+        tree.put("F;55;C;0;1.0;Imax;0.02", new HashMap());
+        tree.put("F;55;C;0;1.0;Imax;0.01", new HashMap());
+        tree.put("F;55;C;0;1.0;Ib;0.02", new HashMap());
+        tree.put("F;55;C;0;1.0;Ib;0.01", new HashMap());
+
+
+
+
+        tree.put("U;55;A;L;0.5;Imax;0.02", new HashMap());
+        tree.put("U;55;A;L;0.5;Imax;0.01", new HashMap());
+        tree.put("U;55;A;L;0.5;Ib;0.02", new HashMap());
+        tree.put("U;55;A;L;0.5;Ib;0.01", new HashMap());
+
+        tree.put("U;55;A;L;0.25;Imax;0.02", new HashMap());
+        tree.put("U;55;A;L;0.25;Imax;0.01", new HashMap());
+        tree.put("U;55;A;L;0.25;Ib;0.02", new HashMap());
+        tree.put("U;55;A;L;0.25;Ib;0.01", new HashMap());
+
+        tree.put("U;55;A;C;0.5;Imax;0.02", new HashMap());
+        tree.put("U;55;A;C;0.5;Imax;0.01", new HashMap());
+        tree.put("U;55;A;C;0.5;Ib;0.02", new HashMap());
+        tree.put("U;55;A;C;0.5;Ib;0.01", new HashMap());
+
+        tree.put("U;55;A;C;0.25;Imax;0.02", new HashMap());
+        tree.put("U;55;A;C;0.25;Imax;0.01", new HashMap());
+        tree.put("U;55;A;C;0.25;Ib;0.02", new HashMap());
+        tree.put("U;55;A;C;0.25;Ib;0.01", new HashMap());
+
+        tree.put("U;55;A;0;1.0;Imax;0.02", new HashMap());
+        tree.put("U;55;A;0;1.0;Imax;0.01", new HashMap());
+        tree.put("U;55;A;0;1.0;Ib;0.02", new HashMap());
+        tree.put("U;55;A;0;1.0;Ib;0.01", new HashMap());
+
+
+        tree.put("U;55;B;L;0.5;Imax;0.02", new HashMap());
+        tree.put("U;55;B;L;0.5;Imax;0.01", new HashMap());
+        tree.put("U;55;B;L;0.5;Ib;0.02", new HashMap());
+        tree.put("U;55;B;L;0.5;Ib;0.01", new HashMap());
+
+        tree.put("U;55;B;L;0.25;Imax;0.02", new HashMap());
+        tree.put("U;55;B;L;0.25;Imax;0.01", new HashMap());
+        tree.put("U;55;B;L;0.25;Ib;0.02", new HashMap());
+        tree.put("U;55;B;L;0.25;Ib;0.01", new HashMap());
+
+        tree.put("U;55;B;C;0.5;Imax;0.02", new HashMap());
+        tree.put("U;55;B;C;0.5;Imax;0.01", new HashMap());
+        tree.put("U;55;B;C;0.5;Ib;0.02", new HashMap());
+        tree.put("U;55;B;C;0.5;Ib;0.01", new HashMap());
+
+        tree.put("U;55;B;C;0.25;Imax;0.02", new HashMap());
+        tree.put("U;55;B;C;0.25;Imax;0.01", new HashMap());
+        tree.put("U;55;B;C;0.25;Ib;0.02", new HashMap());
+        tree.put("U;55;B;C;0.25;Ib;0.01", new HashMap());
+
+        tree.put("U;55;B;0;1.0;Imax;0.02", new HashMap());
+        tree.put("U;55;B;0;1.0;Imax;0.01", new HashMap());
+        tree.put("U;55;B;0;1.0;Ib;0.02", new HashMap());
+        tree.put("U;55;B;0;1.0;Ib;0.01", new HashMap());
+
+
+        tree.put("U;55;C;L;0.5;Imax;0.02", new HashMap());
+        tree.put("U;55;C;L;0.5;Imax;0.01", new HashMap());
+        tree.put("U;55;C;L;0.5;Ib;0.02", new HashMap());
+        tree.put("U;55;C;L;0.5;Ib;0.01", new HashMap());
+
+        tree.put("U;55;C;L;0.25;Imax;0.02", new HashMap());
+        tree.put("U;55;C;L;0.25;Imax;0.01", new HashMap());
+        tree.put("U;55;C;L;0.25;Ib;0.02", new HashMap());
+        tree.put("U;55;C;L;0.25;Ib;0.01", new HashMap());
+
+        tree.put("U;55;C;C;0.5;Imax;0.02", new HashMap());
+        tree.put("U;55;C;C;0.5;Imax;0.01", new HashMap());
+        tree.put("U;55;C;C;0.5;Ib;0.02", new HashMap());
+        tree.put("U;55;C;C;0.5;Ib;0.01", new HashMap());
+
+        tree.put("U;55;C;C;0.25;Imax;0.02", new HashMap());
+        tree.put("U;55;C;C;0.25;Imax;0.01", new HashMap());
+        tree.put("U;55;C;C;0.25;Ib;0.02", new HashMap());
+        tree.put("U;55;C;C;0.25;Ib;0.01", new HashMap());
+
+        tree.put("U;55;C;0;1.0;Imax;0.02", new HashMap());
+        tree.put("U;55;C;0;1.0;Imax;0.01", new HashMap());
+        tree.put("U;55;C;0;1.0;Ib;0.02", new HashMap());
+        tree.put("U;55;C;0;1.0;Ib;0.01", new HashMap());
+
+        for (Map.Entry<String, HashMap> map : tree.entrySet()) {
+            group.putResultInGroup(map.getKey(), map.getValue());
+        }
+
+        group.print(50, 10);
     }
 
     private void createMergeZone(int firstRow, int lastRow, int firsColumn, int lastColumn, Cell cell, String cellText, CellStyle style, Font font, Sheet sheet,
@@ -1231,6 +1407,14 @@ public class ExcelReport {
         //Количество элементов в каждой группе
         private int totalElements;
 
+        private Map<String, List<Map<String, Integer>>> mainCountMap = new HashMap<>();
+
+        private List<Map<String, Integer>> groupCountList;
+
+        private Map<String, Integer> UorFCount;
+        private Map<String, Integer> ABCCount;
+        private Map<String, Integer> PFCount;
+
         //Мапы с погрешностями
         private Map<String, Map> UorFmap;
 
@@ -1271,8 +1455,29 @@ public class ExcelReport {
                 powerFactorMap.put(PFkey, currentMap);
                 currentMap.put(currKey, commandResultMap);
 
+                //Инициализирую мапы для подсчёта
+                groupCountList = new ArrayList<>();
+                UorFCount = new HashMap<>();
+                ABCCount = new HashMap<>();
+                PFCount = new HashMap<>();
+
+                UorFCount.put(UorFkey, 1);
+                ABCCount.put(ABCkey, 1);
+                PFCount.put(PFkey, 1);
+
+                groupCountList.add(UorFCount);
+                groupCountList.add(ABCCount);
+                groupCountList.add(PFCount);
+
+                mainCountMap.put(UorFkey, groupCountList);
+
             } else {
                 ABCMap = UorFmap.get(UorFkey);
+
+                groupCountList = mainCountMap.get(UorFkey);
+                UorFCount = groupCountList.get(0);
+                ABCCount = groupCountList.get(1);
+                PFCount = groupCountList.get(2);
 
                 if (ABCMap.get(ABCkey) == null) {
                     powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
@@ -1281,6 +1486,9 @@ public class ExcelReport {
                     ABCMap.put(ABCkey, powerFactorMap);
                     powerFactorMap.put(PFkey, currentMap);
                     currentMap.put(currKey, commandResultMap);
+
+                    UorFCount.put(UorFkey, UorFCount.get(UorFkey) + 1);
+                    ABCCount.put(ABCkey, 0);
                 } else {
                     powerFactorMap = ABCMap.get(ABCkey);
 
@@ -1297,15 +1505,21 @@ public class ExcelReport {
             }
         }
 
-        public void print(int row, int cell, Workbook wb, Sheet sheet) {
+        public void print(int row, int cell) {
 
             if (totalElements == 0) return;
 
-            Map<String, Integer> UorFCount;
-            Map<String, Integer> ABCCount;
+            int printIndexUorF = cell;
+            int printIndexABC = cell;
+            int printIndexPF = cell;
 
-            List<Map<String, Integer>> PFlist = new ArrayList<>();
-            Map<String, Integer> PFCount;
+            int rowIndex;
+
+            Map<String, Integer> UorFCount = new TreeMap<>(comparatorForUorF);
+            Map<String, Integer> ABCCount = new TreeMap<>(comparatorForABC);
+            Map<String, Map<String, Integer>> PFmapCount = new TreeMap<>(comparatorForABC);
+
+            Map<String, Integer> PFcount;
 
             Map<String, Map> ABCmap;
             Map<String, Map> PFmap;
@@ -1314,15 +1528,7 @@ public class ExcelReport {
             String ABCKey;
             String PFKey;
 
-            for (int i = row; i <= row + meters.size() + 4; i++) {
-                sheet.createRow(i);
-            }
-
             for (Map.Entry<String, Map> UorFmap : UorFmap.entrySet()) {
-                UorFCount = new HashMap<>();
-                ABCCount = new HashMap<>();
-                PFCount = new HashMap<>();
-                PFlist = new ArrayList<>();
 
                 UorFKey = UorFmap.getKey();
 
@@ -1335,29 +1541,54 @@ public class ExcelReport {
 
                     ABCCount.put(ABCKey, 0);
 
+                    PFcount = new TreeMap<>(comparatorForPowerFactor);
+
+                    PFmapCount.put(ABCKey, PFcount);
+
                     PFmap = mapABC.getValue();
 
                     for (Map.Entry<String, Map> mapPF : PFmap.entrySet()) {
                         PFKey = mapPF.getKey();
 
-                        int size = mapPF.getValue().size();
-
-                        PFCount.put(PFKey, size);
-                        ABCCount.put(ABCKey, ABCCount.get(ABCKey) + size);
-                        UorFCount.put(UorFKey, UorFCount.get(UorFKey) + size);
-                        PFlist.add(PFCount);
-                        PFCount = new HashMap<>();
+                        PFcount.put(PFKey, mapPF.getValue().size());
+                        ABCCount.put(ABCKey, ABCCount.get(ABCKey) + mapPF.getValue().size());
+                        UorFCount.put(UorFKey, UorFCount.get(UorFKey) + mapPF.getValue().size());
                     }
                 }
 
+                //Создаю заголовок для UorF
+                rowIndex = row;
+                Cell cellUorF = mainSheet.getRow(rowIndex).createCell(printIndexUorF);
 
-                System.out.println(UorFCount);
-                System.out.println(ABCCount);
-                System.out.println(PFlist);
+                createMergeZone(rowIndex, rowIndex, printIndexUorF, printIndexUorF + UorFCount.get(UorFKey), cellUorF, UorFKey, centerCenter, Calibri_11_Bold,
+                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+                printIndexUorF += UorFCount.get(UorFKey);
 
-                System.out.println(totalElements);
+                //Создаю заголовок ABC
+                rowIndex++;
 
-                createMergeZone();
+                for (Map.Entry<String, Integer> map : ABCCount.entrySet()) {
+                    Cell cellABC = mainSheet.getRow(rowIndex).createCell(printIndexABC);
+
+                    createMergeZone(rowIndex, rowIndex, printIndexABC,printIndexABC + map.getValue(), cellABC, map.getKey(), centerCenter, Calibri_11_Bold,
+                            mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                    printIndexABC += map.getValue();
+                }
+
+                //Создаю заголовок для PF
+                rowIndex++;
+
+                for (Map<String, Integer> map : PFmapCount.values()) {
+                    for (Map.Entry<String, Integer> PF : map.entrySet()) {
+                        Cell cellPF = mainSheet.getRow(rowIndex).createCell(printIndexPF);
+
+                        createMergeZone(rowIndex, rowIndex, printIndexPF, printIndexPF + PF.getValue(), cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
+                                mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                        printIndexPF += PF.getValue();
+                    }
+                }
             }
         }
 
