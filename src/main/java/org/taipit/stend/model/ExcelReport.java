@@ -605,7 +605,7 @@ public class ExcelReport {
 
         createHeadInformation(wb, mainSheet, testMeter, stendDLLCommands);
 
-        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\a.halimov\\Desktop\\test.xls")){
+        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\bert1\\Desktop\\test.xls")){
             wb.write(outputStream);
         } catch (IOException e) {
             e.printStackTrace();
@@ -1439,10 +1439,6 @@ public class ExcelReport {
                     }
                 }
 
-//                System.out.println(UorFCount);
-//                System.out.println(ABCCount);
-//                System.out.println(PFmapCount);
-
                 //Создаю заголовок для UorF
                 rowIndex = row;
                 Cell cellUorF = mainSheet.getRow(rowIndex).createCell(printIndexUorF);
@@ -1482,6 +1478,9 @@ public class ExcelReport {
             int rowIndexForCurrent = row + 3;
             int cellIndexForCurrent = cell;
 
+            int startPrintErrorRow = row + 4;
+            int startPrintErrorCell = cell;
+
             Map<String, Map> helpMap;
             for (Map mapValuesUorF : UorFmap.values()) {
                 helpMap = mapValuesUorF;
@@ -1490,9 +1489,8 @@ public class ExcelReport {
                     for (Map mapPFValuePF : helpMap.values()) {
                         helpMap = mapPFValuePF;
                         for (Map.Entry<String, Map> mapCurrentValue : helpMap.entrySet()) {
-                            int rowToStartAddErr = row + 4;
 
-                            Comment comment = createCellComment(wb, mainSheet, rowIndexForCurrent, cellIndexForCurrent, 3, 2, );
+                            //Comment comment = createCellComment(wb, mainSheet, rowIndexForCurrent, cellIndexForCurrent, 3, 2, );
 
                             Cell cellCurrent = mainSheet.getRow(rowIndexForCurrent).createCell(cellIndexForCurrent);
 
@@ -1503,16 +1501,32 @@ public class ExcelReport {
                             Map<Integer, Meter.ErrorResult> errorMap = mapCurrentValue.getValue();
 
                             for (int i = 0; i < meters.size(); i++) {
-                                if (errorMap.get(i)  == null) {
+                                if (errorMap.get(i) != null) {
+                                    Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
 
+                                    Meter.ErrorResult result = errorMap.get(i);
+
+                                    if (!result.isPassTest()) {
+                                        cellCurrentError.setCellStyle(centerCenterThinRed);
+                                    } else {
+                                        cellCurrentError.setCellStyle(centerCenterThin);
+                                    }
+                                    cellCurrentError.setCellValue(result.getLastResult());
                                 }
                             }
 
+                            startPrintErrorCell++;
                             cellIndexForCurrent++;
                         }
                     }
                 }
             }
+
+            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, totalElements);
+            RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, mainSheet);
         }
 
         public void getElements() {

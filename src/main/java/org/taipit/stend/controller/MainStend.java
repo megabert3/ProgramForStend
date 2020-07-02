@@ -25,37 +25,6 @@ public class MainStend {
     public static void main(String[] args) throws IOException {
         new ExcelReport().createExcelReport();
 
-        Workbook wb = new XSSFWorkbook(); //or new HSSFWorkbook();
-        CreationHelper factory = wb.getCreationHelper();
-        Sheet sheet = wb.createSheet();
-        Row row   = sheet.createRow(3);
-        Cell cell = row.createCell(5);
-        cell.setCellValue("F4");
-        Drawing drawing = sheet.createDrawingPatriarch();
-// When the comment box is visible, have it show in a 1x3 space
-        ClientAnchor anchor = factory.createClientAnchor();
-        anchor.setCol1(cell.getColumnIndex());
-        anchor.setCol2(cell.getColumnIndex()+1);
-        anchor.setRow1(row.getRowNum());
-        anchor.setRow2(row.getRowNum()+3);
-// Create the comment and set the text+author
-        Comment comment = drawing.createCellComment(anchor);
-        RichTextString str = factory.createRichTextString("Hello, World!");
-        comment.setString(str);
-        comment.setAuthor("Apache POI");
-// Assign the comment to the cell
-        cell.setCellComment(comment);
-        String fname = "C:\\Users\\a.halimov\\Desktop\\test1.xls";
-        if(wb instanceof XSSFWorkbook) fname += "x";
-        try (OutputStream out = new FileOutputStream(fname)) {
-            wb.write(out);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        wb.close();
-
 //        //1;A;A;P;0.2 Ib;0.5C
 //        List<Meter> meterList = new ArrayList<>();
 //
