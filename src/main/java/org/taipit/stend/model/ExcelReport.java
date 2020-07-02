@@ -11,6 +11,8 @@ import org.taipit.stend.model.stend.ThreePhaseStend;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 public class ExcelReport {
@@ -23,9 +25,37 @@ public class ExcelReport {
     private Font Calibri_11_BoldItalic = createFontStyle(wb, 11, "Calibri", true, true, false);
     private Font Bauhaus_12_Bold = createFontStyle(wb, 12, "Bauhaus 93", true, false, false);
     private Font Calibri_11_Bold = createFontStyle(wb, 11, "Calibri", true, false, false);
+    //Красный текст
+    private Font Calibri_11_Red = createFontStyle(wb, 11, "Calibri", IndexedColors.RED.getIndex(), false, false, false);
 
-    private CellStyle leftCenter = ExcelReport.createCellStyle(wb, HorizontalAlignment.LEFT, VerticalAlignment.CENTER);
-    private CellStyle centerCenter = ExcelReport.createCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
+    //Чёрный
+    private Font Calibri_11 = createFontStyle(wb, 11, "Calibri", false, false, false);
+
+    private CellStyle leftCenter = createCellStyle(wb, HorizontalAlignment.LEFT, VerticalAlignment.CENTER);
+    private CellStyle centerCenter = createCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
+
+    //Жирные края ориентация по центру
+    private CellStyle centerCenterBold = createCellStyle(wb, Calibri_11_Bold, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+    //Все края тонкие
+    private CellStyle centerCenterThin = createCellStyle(wb, Calibri_11, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
+
+    //Все края тонкие текст красный
+    private CellStyle centerCenterThinRed = createCellStyle(wb, Calibri_11_Red, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
+
+    //Левый край жирный
+    private CellStyle centerCenterLeftBold = createCellStyle(wb, Calibri_11, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.THIN, BorderStyle.MEDIUM, BorderStyle.THIN, BorderStyle.THIN);
+    //Правый край жирный
+    private CellStyle centerCenterRightBold = createCellStyle(wb, Calibri_11, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.MEDIUM, BorderStyle.THIN);
+    //Нижний край жирный
+    private CellStyle centerCenterBottomBold = createCellStyle(wb, Calibri_11, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.MEDIUM, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
+
+    //Левый край жирный текст красный
+    private CellStyle centerCenterLeftBoldRed = createCellStyle(wb, Calibri_11_Red, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.THIN, BorderStyle.MEDIUM, BorderStyle.THIN, BorderStyle.THIN);
+    //Правый край жирный текст красный
+    private CellStyle centerCenterRightBoldRed = createCellStyle(wb, Calibri_11_Red, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.MEDIUM, BorderStyle.THIN);
+    //Нижний край жирный  текст красный
+    private CellStyle centerCenterBottomBoldRed = createCellStyle(wb, Calibri_11_Red, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.MEDIUM, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
 
     public ExcelReport() {
 
@@ -436,7 +466,7 @@ public class ExcelReport {
     }
 
     private void addElementsInABC(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
-        //1;A;A;P;0.2 Ib;0.5C
+        //55.0 F;1;A;A;P;0.2 Ib;0.5C
         String[] idArr = result.getId().split(";");
         String[] ImaxIb = idArr[4].split(" ");
 
@@ -575,7 +605,7 @@ public class ExcelReport {
 
         createHeadInformation(wb, mainSheet, testMeter, stendDLLCommands);
 
-        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\bert1\\Desktop\\test.xls")){
+        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\a.halimov\\Desktop\\test.xls")){
             wb.write(outputStream);
         } catch (IOException e) {
             e.printStackTrace();
@@ -830,173 +860,9 @@ public class ExcelReport {
 
 
         //TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        InfABCGroup group = new InfABCGroup();
-
-        HashMap<String, HashMap> tree = new HashMap<>();
-
-        tree.put("F;55;A;L;0.5;Imax;0.02", new HashMap());
-        tree.put("F;55;A;L;0.5;Imax;0.01", new HashMap());
-        tree.put("F;55;A;L;0.5;Ib;0.02", new HashMap());
-        tree.put("F;55;A;L;0.5;Ib;0.01", new HashMap());
-
-        tree.put("F;55;A;L;0.25;Imax;0.02", new HashMap());
-        tree.put("F;55;A;L;0.25;Imax;0.01", new HashMap());
-        tree.put("F;55;A;L;0.25;Ib;0.02", new HashMap());
-        tree.put("F;55;A;L;0.25;Ib;0.01", new HashMap());
-
-        tree.put("F;55;A;C;0.5;Imax;0.02", new HashMap());
-        tree.put("F;55;A;C;0.5;Imax;0.01", new HashMap());
-        tree.put("F;55;A;C;0.5;Ib;0.02", new HashMap());
-        tree.put("F;55;A;C;0.5;Ib;0.01", new HashMap());
-
-        tree.put("F;55;A;C;0.25;Imax;0.02", new HashMap());
-        tree.put("F;55;A;C;0.25;Imax;0.01", new HashMap());
-        tree.put("F;55;A;C;0.25;Ib;0.02", new HashMap());
-        tree.put("F;55;A;C;0.25;Ib;0.01", new HashMap());
-
-        tree.put("F;55;A;0;1.0;Imax;0.02", new HashMap());
-        tree.put("F;55;A;0;1.0;Imax;0.01", new HashMap());
-        tree.put("F;55;A;0;1.0;Ib;0.02", new HashMap());
-        tree.put("F;55;A;0;1.0;Ib;0.01", new HashMap());
-
-
-        tree.put("F;55;B;L;0.5;Imax;0.02", new HashMap());
-        tree.put("F;55;B;L;0.5;Imax;0.01", new HashMap());
-        tree.put("F;55;B;L;0.5;Ib;0.02", new HashMap());
-        tree.put("F;55;B;L;0.5;Ib;0.01", new HashMap());
-
-        tree.put("F;55;B;L;0.25;Imax;0.02", new HashMap());
-        tree.put("F;55;B;L;0.25;Imax;0.01", new HashMap());
-        tree.put("F;55;B;L;0.25;Ib;0.02", new HashMap());
-        tree.put("F;55;B;L;0.25;Ib;0.01", new HashMap());
-
-        tree.put("F;55;B;C;0.5;Imax;0.02", new HashMap());
-        tree.put("F;55;B;C;0.5;Imax;0.01", new HashMap());
-        tree.put("F;55;B;C;0.5;Ib;0.02", new HashMap());
-        tree.put("F;55;B;C;0.5;Ib;0.01", new HashMap());
-
-        tree.put("F;55;B;C;0.25;Imax;0.02", new HashMap());
-        tree.put("F;55;B;C;0.25;Imax;0.01", new HashMap());
-        tree.put("F;55;B;C;0.25;Ib;0.02", new HashMap());
-        tree.put("F;55;B;C;0.25;Ib;0.01", new HashMap());
-
-        tree.put("F;55;B;0;1.0;Imax;0.02", new HashMap());
-        tree.put("F;55;B;0;1.0;Imax;0.01", new HashMap());
-        tree.put("F;55;B;0;1.0;Ib;0.02", new HashMap());
-        tree.put("F;55;B;0;1.0;Ib;0.01", new HashMap());
-
-
-        tree.put("F;55;C;L;0.5;Imax;0.02", new HashMap());
-        tree.put("F;55;C;L;0.5;Imax;0.01", new HashMap());
-        tree.put("F;55;C;L;0.5;Ib;0.02", new HashMap());
-        tree.put("F;55;C;L;0.5;Ib;0.01", new HashMap());
-
-        tree.put("F;55;C;L;0.25;Imax;0.02", new HashMap());
-        tree.put("F;55;C;L;0.25;Imax;0.01", new HashMap());
-        tree.put("F;55;C;L;0.25;Ib;0.02", new HashMap());
-        tree.put("F;55;C;L;0.25;Ib;0.01", new HashMap());
-
-        tree.put("F;55;C;C;0.5;Imax;0.02", new HashMap());
-        tree.put("F;55;C;C;0.5;Imax;0.01", new HashMap());
-        tree.put("F;55;C;C;0.5;Ib;0.02", new HashMap());
-        tree.put("F;55;C;C;0.5;Ib;0.01", new HashMap());
-
-        tree.put("F;55;C;C;0.25;Imax;0.02", new HashMap());
-        tree.put("F;55;C;C;0.25;Imax;0.01", new HashMap());
-        tree.put("F;55;C;C;0.25;Ib;0.02", new HashMap());
-        tree.put("F;55;C;C;0.25;Ib;0.01", new HashMap());
-
-        tree.put("F;55;C;0;1.0;Imax;0.02", new HashMap());
-        tree.put("F;55;C;0;1.0;Imax;0.01", new HashMap());
-        tree.put("F;55;C;0;1.0;Ib;0.02", new HashMap());
-        tree.put("F;55;C;0;1.0;Ib;0.01", new HashMap());
-
-
-
-
-        tree.put("U;55;A;L;0.5;Imax;0.02", new HashMap());
-        tree.put("U;55;A;L;0.5;Imax;0.01", new HashMap());
-        tree.put("U;55;A;L;0.5;Ib;0.02", new HashMap());
-        tree.put("U;55;A;L;0.5;Ib;0.01", new HashMap());
-
-        tree.put("U;55;A;L;0.25;Imax;0.02", new HashMap());
-        tree.put("U;55;A;L;0.25;Imax;0.01", new HashMap());
-        tree.put("U;55;A;L;0.25;Ib;0.02", new HashMap());
-        tree.put("U;55;A;L;0.25;Ib;0.01", new HashMap());
-
-        tree.put("U;55;A;C;0.5;Imax;0.02", new HashMap());
-        tree.put("U;55;A;C;0.5;Imax;0.01", new HashMap());
-        tree.put("U;55;A;C;0.5;Ib;0.02", new HashMap());
-        tree.put("U;55;A;C;0.5;Ib;0.01", new HashMap());
-
-        tree.put("U;55;A;C;0.25;Imax;0.02", new HashMap());
-        tree.put("U;55;A;C;0.25;Imax;0.01", new HashMap());
-        tree.put("U;55;A;C;0.25;Ib;0.02", new HashMap());
-        tree.put("U;55;A;C;0.25;Ib;0.01", new HashMap());
-
-        tree.put("U;55;A;0;1.0;Imax;0.02", new HashMap());
-        tree.put("U;55;A;0;1.0;Imax;0.01", new HashMap());
-        tree.put("U;55;A;0;1.0;Ib;0.02", new HashMap());
-        tree.put("U;55;A;0;1.0;Ib;0.01", new HashMap());
-
-
-        tree.put("U;55;B;L;0.5;Imax;0.02", new HashMap());
-        tree.put("U;55;B;L;0.5;Imax;0.01", new HashMap());
-        tree.put("U;55;B;L;0.5;Ib;0.02", new HashMap());
-        tree.put("U;55;B;L;0.5;Ib;0.01", new HashMap());
-
-        tree.put("U;55;B;L;0.25;Imax;0.02", new HashMap());
-        tree.put("U;55;B;L;0.25;Imax;0.01", new HashMap());
-        tree.put("U;55;B;L;0.25;Ib;0.02", new HashMap());
-        tree.put("U;55;B;L;0.25;Ib;0.01", new HashMap());
-
-        tree.put("U;55;B;C;0.5;Imax;0.02", new HashMap());
-        tree.put("U;55;B;C;0.5;Imax;0.01", new HashMap());
-        tree.put("U;55;B;C;0.5;Ib;0.02", new HashMap());
-        tree.put("U;55;B;C;0.5;Ib;0.01", new HashMap());
-
-        tree.put("U;55;B;C;0.25;Imax;0.02", new HashMap());
-        tree.put("U;55;B;C;0.25;Imax;0.01", new HashMap());
-        tree.put("U;55;B;C;0.25;Ib;0.02", new HashMap());
-        tree.put("U;55;B;C;0.25;Ib;0.01", new HashMap());
-
-        tree.put("U;55;B;0;1.0;Imax;0.02", new HashMap());
-        tree.put("U;55;B;0;1.0;Imax;0.01", new HashMap());
-        tree.put("U;55;B;0;1.0;Ib;0.02", new HashMap());
-        tree.put("U;55;B;0;1.0;Ib;0.01", new HashMap());
-
-
-        tree.put("U;55;C;L;0.5;Imax;0.02", new HashMap());
-        tree.put("U;55;C;L;0.5;Imax;0.01", new HashMap());
-        tree.put("U;55;C;L;0.5;Ib;0.02", new HashMap());
-        tree.put("U;55;C;L;0.5;Ib;0.01", new HashMap());
-
-        tree.put("U;55;C;L;0.25;Imax;0.02", new HashMap());
-        tree.put("U;55;C;L;0.25;Imax;0.01", new HashMap());
-        tree.put("U;55;C;L;0.25;Ib;0.02", new HashMap());
-        tree.put("U;55;C;L;0.25;Ib;0.01", new HashMap());
-
-        tree.put("U;55;C;C;0.5;Imax;0.02", new HashMap());
-        tree.put("U;55;C;C;0.5;Imax;0.01", new HashMap());
-        tree.put("U;55;C;C;0.5;Ib;0.02", new HashMap());
-        tree.put("U;55;C;C;0.5;Ib;0.01", new HashMap());
-
-        tree.put("U;55;C;C;0.25;Imax;0.02", new HashMap());
-        tree.put("U;55;C;C;0.25;Imax;0.01", new HashMap());
-        tree.put("U;55;C;C;0.25;Ib;0.02", new HashMap());
-        tree.put("U;55;C;C;0.25;Ib;0.01", new HashMap());
-
-        tree.put("U;55;C;0;1.0;Imax;0.02", new HashMap());
-        tree.put("U;55;C;0;1.0;Imax;0.01", new HashMap());
-        tree.put("U;55;C;0;1.0;Ib;0.02", new HashMap());
-        tree.put("U;55;C;0;1.0;Ib;0.01", new HashMap());
-
-        for (Map.Entry<String, HashMap> map : tree.entrySet()) {
-            group.putResultInGroup(map.getKey(), map.getValue());
-        }
-
-        group.print(50, 10);
+        createTestErrorForInfABC();
+        addErrorsInGroups(meters);
+        inflABCAPPls.print(20, 1);
     }
 
     private void createMergeZone(int firstRow, int lastRow, int firsColumn, int lastColumn, Cell cell, String cellText, CellStyle style, Font font, Sheet sheet,
@@ -1076,6 +942,17 @@ public class ExcelReport {
         return font;
     }
 
+    private static Font createFontStyle(Workbook wb, int size, String fontName, int color, boolean bold, boolean setItalic, boolean setStrikeOut) {
+        Font font = wb.createFont();
+        font.setFontHeightInPoints((short) size);
+        font.setFontName(fontName);
+        font.setColor((short) color);
+        font.setItalic(setItalic);
+        font.setStrikeout(setStrikeOut);
+        font.setBold(bold);
+        return font;
+    }
+
     private static CellStyle createCellStyle(Workbook wb, Font font, HorizontalAlignment halign, VerticalAlignment valign,
                                              BorderStyle borderBottom, BorderStyle borderLeft, BorderStyle borderRight, BorderStyle borderTop,
                                              short borderBottomColor, short borderLeftColor, short borderRightColor, short borderTopColor,
@@ -1096,7 +973,6 @@ public class ExcelReport {
         cellStyle.setFillBackgroundColor(fillForegroundColor);
         return cellStyle;
     }
-
 
     private static CellStyle createCellStyle(Workbook wb,HorizontalAlignment halign, VerticalAlignment valign,
                                              BorderStyle borderBottom, BorderStyle borderLeft, BorderStyle borderRight, BorderStyle borderTop) {
@@ -1147,8 +1023,26 @@ public class ExcelReport {
         return cellStyle;
     }
 
+    private static Comment createCellComment(Workbook wb, Sheet sheet, int cellInd, int rowInd, int commentSizeColl, int commentSizeRow, String txtComment) {
+        CreationHelper factory = wb.getCreationHelper();
+        Drawing drawing = sheet.createDrawingPatriarch();
+
+        ClientAnchor anchor = factory.createClientAnchor();
+        anchor.setCol1(cellInd);
+        anchor.setCol2(cellInd + commentSizeColl);
+        anchor.setRow1(rowInd);
+        anchor.setRow2(rowInd + commentSizeRow);
+
+        Comment comment = drawing.createCellComment(anchor);
+        RichTextString str = factory.createRichTextString(txtComment);
+        comment.setString(str);
+        return comment;
+    }
+
     public interface Group {
         void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap);
+
+        void print(int row, int cell);
     }
 
     public class CRPSTAotherGroup implements Group {
@@ -1169,6 +1063,11 @@ public class ExcelReport {
 
         public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
             mainMap.put(keyId, commandResultMap);
+        }
+
+        @Override
+        public void print(int row, int cell) {
+
         }
 
         public void getElements() {
@@ -1213,6 +1112,11 @@ public class ExcelReport {
 
                 currentMap.put(currKey, commandResultMap);
             }
+
+        }
+
+        @Override
+        public void print(int row, int cell) {
 
         }
 
@@ -1295,6 +1199,11 @@ public class ExcelReport {
             }
         }
 
+        @Override
+        public void print(int row, int cell) {
+
+        }
+
         public void getElements() {
             System.out.println(ABCMap);
             Map<String, Map> ABC;
@@ -1373,6 +1282,11 @@ public class ExcelReport {
             }
         }
 
+        @Override
+        public void print(int row, int cell) {
+
+        }
+
         public void getElements() {
             System.out.println(UorFmap);
             Map<String, Map> ABC;
@@ -1407,14 +1321,6 @@ public class ExcelReport {
         //Количество элементов в каждой группе
         private int totalElements;
 
-        private Map<String, List<Map<String, Integer>>> mainCountMap = new HashMap<>();
-
-        private List<Map<String, Integer>> groupCountList;
-
-        private Map<String, Integer> UorFCount;
-        private Map<String, Integer> ABCCount;
-        private Map<String, Integer> PFCount;
-
         //Мапы с погрешностями
         private Map<String, Map> UorFmap;
 
@@ -1427,12 +1333,10 @@ public class ExcelReport {
         private String PFkey;
         private String currKey;
 
-        public InfABCGroup() {
-            UorFmap = new TreeMap<>(comparatorForUorF);
-        }
-
         public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
             totalElements++;
+
+            if (UorFmap == null) UorFmap = new TreeMap<>(comparatorForUorF);
 
             String[] idResult = keyId.split(";");
             UorFkey = idResult[1] + " %" + idResult[0] + "n";
@@ -1455,29 +1359,8 @@ public class ExcelReport {
                 powerFactorMap.put(PFkey, currentMap);
                 currentMap.put(currKey, commandResultMap);
 
-                //Инициализирую мапы для подсчёта
-                groupCountList = new ArrayList<>();
-                UorFCount = new HashMap<>();
-                ABCCount = new HashMap<>();
-                PFCount = new HashMap<>();
-
-                UorFCount.put(UorFkey, 1);
-                ABCCount.put(ABCkey, 1);
-                PFCount.put(PFkey, 1);
-
-                groupCountList.add(UorFCount);
-                groupCountList.add(ABCCount);
-                groupCountList.add(PFCount);
-
-                mainCountMap.put(UorFkey, groupCountList);
-
             } else {
                 ABCMap = UorFmap.get(UorFkey);
-
-                groupCountList = mainCountMap.get(UorFkey);
-                UorFCount = groupCountList.get(0);
-                ABCCount = groupCountList.get(1);
-                PFCount = groupCountList.get(2);
 
                 if (ABCMap.get(ABCkey) == null) {
                     powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
@@ -1487,8 +1370,6 @@ public class ExcelReport {
                     powerFactorMap.put(PFkey, currentMap);
                     currentMap.put(currKey, commandResultMap);
 
-                    UorFCount.put(UorFkey, UorFCount.get(UorFkey) + 1);
-                    ABCCount.put(ABCkey, 0);
                 } else {
                     powerFactorMap = ABCMap.get(ABCkey);
 
@@ -1528,6 +1409,8 @@ public class ExcelReport {
             String ABCKey;
             String PFKey;
 
+            System.out.println(UorFmap);
+
             for (Map.Entry<String, Map> UorFmap : UorFmap.entrySet()) {
 
                 UorFKey = UorFmap.getKey();
@@ -1556,11 +1439,15 @@ public class ExcelReport {
                     }
                 }
 
+//                System.out.println(UorFCount);
+//                System.out.println(ABCCount);
+//                System.out.println(PFmapCount);
+
                 //Создаю заголовок для UorF
                 rowIndex = row;
                 Cell cellUorF = mainSheet.getRow(rowIndex).createCell(printIndexUorF);
 
-                createMergeZone(rowIndex, rowIndex, printIndexUorF, printIndexUorF + UorFCount.get(UorFKey), cellUorF, UorFKey, centerCenter, Calibri_11_Bold,
+                createMergeZone(rowIndex, rowIndex, printIndexUorF, printIndexUorF + UorFCount.get(UorFKey) - 1, cellUorF, UorFKey, centerCenter, Calibri_11_Bold,
                         mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
                 printIndexUorF += UorFCount.get(UorFKey);
 
@@ -1570,7 +1457,7 @@ public class ExcelReport {
                 for (Map.Entry<String, Integer> map : ABCCount.entrySet()) {
                     Cell cellABC = mainSheet.getRow(rowIndex).createCell(printIndexABC);
 
-                    createMergeZone(rowIndex, rowIndex, printIndexABC,printIndexABC + map.getValue(), cellABC, map.getKey(), centerCenter, Calibri_11_Bold,
+                    createMergeZone(rowIndex, rowIndex, printIndexABC,printIndexABC + map.getValue() - 1, cellABC, map.getKey(), centerCenter, Calibri_11_Bold,
                             mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
 
                     printIndexABC += map.getValue();
@@ -1583,10 +1470,46 @@ public class ExcelReport {
                     for (Map.Entry<String, Integer> PF : map.entrySet()) {
                         Cell cellPF = mainSheet.getRow(rowIndex).createCell(printIndexPF);
 
-                        createMergeZone(rowIndex, rowIndex, printIndexPF, printIndexPF + PF.getValue(), cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
+                        createMergeZone(rowIndex, rowIndex, printIndexPF, printIndexPF + PF.getValue() - 1, cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
                                 mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
 
                         printIndexPF += PF.getValue();
+                    }
+                }
+            }
+
+            //Создаю заголовки токов и вывожу погрешности
+            int rowIndexForCurrent = row + 3;
+            int cellIndexForCurrent = cell;
+
+            Map<String, Map> helpMap;
+            for (Map mapValuesUorF : UorFmap.values()) {
+                helpMap = mapValuesUorF;
+                for (Map mapValuesABC : helpMap.values()) {
+                    helpMap = mapValuesABC;
+                    for (Map mapPFValuePF : helpMap.values()) {
+                        helpMap = mapPFValuePF;
+                        for (Map.Entry<String, Map> mapCurrentValue : helpMap.entrySet()) {
+                            int rowToStartAddErr = row + 4;
+
+                            Comment comment = createCellComment(wb, mainSheet, rowIndexForCurrent, cellIndexForCurrent, 3, 2, );
+
+                            Cell cellCurrent = mainSheet.getRow(rowIndexForCurrent).createCell(cellIndexForCurrent);
+
+                            cellCurrent.setCellStyle(centerCenterBold);
+
+                            cellCurrent.setCellValue(mapCurrentValue.getKey());
+
+                            Map<Integer, Meter.ErrorResult> errorMap = mapCurrentValue.getValue();
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                if (errorMap.get(i)  == null) {
+
+                                }
+                            }
+
+                            cellIndexForCurrent++;
+                        }
                     }
                 }
             }
@@ -1643,6 +1566,11 @@ public class ExcelReport {
         }
 
         public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+
+        }
+
+        @Override
+        public void print(int row, int cell) {
 
         }
 
@@ -1826,4 +1754,146 @@ public class ExcelReport {
             } else return 0;
         }
     };
+
+    private void createTestErrorForInfABC() {
+        //1;A;A;P;0.2 Ib;0.5C
+        meters = new ArrayList<>();
+
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+
+        for (Meter meter : meters) {
+            List<Meter.CommandResult> errorList = meter.getErrorListAPPls();
+            //55.0 U;1;A;A;P;0.2 Ib;0.5C
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Ib;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Imax;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Imax;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Ib;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Imax;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Imax;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Ib;1.0", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Imax;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Imax;1.0", "-1", "1"));
+
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Ib;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Ib;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Imax;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Imax;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Ib;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Ib;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Imax;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Imax;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Ib;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Ib;1.0", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Imax;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Imax;1.0", "-1", "1"));
+
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Ib;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Ib;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Imax;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Imax;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Ib;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Ib;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Imax;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Imax;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Ib;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Ib;1.0", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Imax;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Imax;1.0", "-1", "1"));
+
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Ib;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Ib;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Imax;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Imax;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Ib;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Ib;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Imax;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Imax;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Ib;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Ib;1.0", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Imax;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Imax;1.0", "-1", "1"));
+
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Ib;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Ib;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Imax;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Imax;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Ib;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Ib;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Imax;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Imax;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Ib;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Ib;1.0", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Imax;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Imax;1.0", "-1", "1"));
+
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Ib;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Ib;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Imax;0.5C", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Imax;0.5C", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Ib;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Ib;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Imax;0.5L", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Imax;0.5L", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Ib;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Ib;1.0", "-1", "1"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Imax;1.0", "-1", "1"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Imax;1.0", "-1", "1"));
+
+            for (Meter.CommandResult result : errorList) {
+
+                double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
+//                System.out.println(x);
+//                System.out.println();
+
+                if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
+                    result.setPassTest(false);
+                } else {
+                    result.setPassTest(true);
+                }
+
+                result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+            }
+        }
+    }
 }

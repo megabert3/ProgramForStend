@@ -907,7 +907,7 @@ public class Meter implements Serializable{
     //Класс для записи результата исполнения ErrorCommnad
     public class ErrorResult extends CommandResult implements Serializable {
 
-        ErrorResult(String id, String minError, String maxError) {
+        public ErrorResult(String id, String minError, String maxError) {
             super(id);
             super.minError = minError;
             super.maxError = maxError;
