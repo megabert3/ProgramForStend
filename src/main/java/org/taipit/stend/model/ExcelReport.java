@@ -605,7 +605,7 @@ public class ExcelReport {
 
         createHeadInformation(wb, mainSheet, testMeter, stendDLLCommands);
 
-        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\bert1\\Desktop\\test.xls")){
+        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\a.halimov\\Desktop\\test.xls")){
             wb.write(outputStream);
         } catch (IOException e) {
             e.printStackTrace();
@@ -1235,6 +1235,9 @@ public class ExcelReport {
     public class InfGroup implements Group {
         //F;55;L;0.5;Imax;0.02
 
+        //Количество элементов в группе
+        private int totalElements;
+
         private Map<String, Map> UorFmap;
 
         private Map<String, Map> powerFactorMap;
@@ -1244,11 +1247,13 @@ public class ExcelReport {
         private String PFkey;
         private String currKey;
 
-        public InfGroup() {
-            UorFmap = new TreeMap<>(comparatorForUorF);
-        }
-
         public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            totalElements++;
+
+            if (UorFmap == null) {
+                UorFmap = new TreeMap<>(comparatorForUorF);
+            }
+
             String[] idResult = keyId.split(";");
             UorFkey = idResult[1] + " %" + idResult[0] + "n";
             currKey = idResult[5] + " " + idResult[4];
@@ -1284,7 +1289,192 @@ public class ExcelReport {
 
         @Override
         public void print(int row, int cell) {
+            if (totalElements == 0) return;
 
+            int printIndexUorF = cell;
+            int printIndexPF = cell;
+
+            int rowIndex;
+
+            Map<String, Integer> UorFCount = new TreeMap<>(comparatorForUorF);
+            Map<String, Integer> PFcount = new TreeMap<>(comparatorForPowerFactor);
+
+            Map<String, Map> PFmap;
+
+            String UorFKey;
+            String PFKey;
+
+            System.out.println(UorFmap);
+
+            for (Map.Entry<String, Map> UorFmap : UorFmap.entrySet()) {
+                UorFKey = UorFmap.getKey();
+
+                UorFCount.put(UorFKey, 0);
+
+                PFmap = UorFmap.getValue();
+
+                for (Map.Entry<String, Map> mapPF : PFmap.entrySet()) {
+                    PFKey = mapPF.getKey();
+
+                    PFcount.put(PFKey, mapPF.getValue().size());
+                    UorFCount.put(UorFKey, UorFCount.get(UorFKey) + mapPF.getValue().size());
+                }
+
+
+
+                //Создаю заголовок для UorF
+                rowIndex = row;
+                Cell cellUorF = mainSheet.getRow(rowIndex).createCell(printIndexUorF);
+
+                createMergeZone(rowIndex, rowIndex, printIndexUorF, printIndexUorF + UorFCount.get(UorFKey) - 1, cellUorF, UorFKey, centerCenter, Calibri_11_Bold,
+                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+                printIndexUorF += UorFCount.get(UorFKey);
+
+                //Создаю заголовок для PF
+                rowIndex++;
+
+                for ()
+
+                for (Map<String, Integer> map : PFmapCount.values()) {
+                    for (Map.Entry<String, Integer> PF : map.entrySet()) {
+                        Cell cellPF = mainSheet.getRow(rowIndex).createCell(printIndexPF);
+
+                        createMergeZone(rowIndex, rowIndex, printIndexPF, printIndexPF + PF.getValue() - 1, cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
+                                mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                        printIndexPF += PF.getValue();
+                    }
+                }
+            }
+
+
+
+            for (Map.Entry<String, Map> UorFmap : UorFmap.entrySet()) {
+
+                UorFKey = UorFmap.getKey();
+
+                UorFCount.put(UorFKey, 0);
+
+                ABCmap = UorFmap.getValue();
+
+                for (Map.Entry<String, Map> mapABC : ABCmap.entrySet()) {
+                    ABCKey = mapABC.getKey();
+
+                    ABCCount.put(ABCKey, 0);
+
+                    PFcount = new TreeMap<>(comparatorForPowerFactor);
+
+                    PFmapCount.put(ABCKey, PFcount);
+
+                    PFmap = mapABC.getValue();
+
+                    for (Map.Entry<String, Map> mapPF : PFmap.entrySet()) {
+                        PFKey = mapPF.getKey();
+
+                        PFcount.put(PFKey, mapPF.getValue().size());
+                        ABCCount.put(ABCKey, ABCCount.get(ABCKey) + mapPF.getValue().size());
+                        UorFCount.put(UorFKey, UorFCount.get(UorFKey) + mapPF.getValue().size());
+                    }
+                }
+
+                //Создаю заголовок для UorF
+                rowIndex = row;
+                Cell cellUorF = mainSheet.getRow(rowIndex).createCell(printIndexUorF);
+
+                createMergeZone(rowIndex, rowIndex, printIndexUorF, printIndexUorF + UorFCount.get(UorFKey) - 1, cellUorF, UorFKey, centerCenter, Calibri_11_Bold,
+                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+                printIndexUorF += UorFCount.get(UorFKey);
+
+                //Создаю заголовок ABC
+                rowIndex++;
+
+                for (Map.Entry<String, Integer> map : ABCCount.entrySet()) {
+                    Cell cellABC = mainSheet.getRow(rowIndex).createCell(printIndexABC);
+
+                    createMergeZone(rowIndex, rowIndex, printIndexABC,printIndexABC + map.getValue() - 1, cellABC, map.getKey(), centerCenter, Calibri_11_Bold,
+                            mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                    printIndexABC += map.getValue();
+                }
+
+                //Создаю заголовок для PF
+                rowIndex++;
+
+                for (Map<String, Integer> map : PFmapCount.values()) {
+                    for (Map.Entry<String, Integer> PF : map.entrySet()) {
+                        Cell cellPF = mainSheet.getRow(rowIndex).createCell(printIndexPF);
+
+                        createMergeZone(rowIndex, rowIndex, printIndexPF, printIndexPF + PF.getValue() - 1, cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
+                                mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                        printIndexPF += PF.getValue();
+                    }
+                }
+            }
+
+            //Создаю заголовки токов и вывожу погрешности
+            int rowIndexForCurrent = row + 3;
+            int cellIndexForCurrent = cell;
+
+            int startPrintErrorRow = row + 4;
+            int startPrintErrorCell = cell;
+
+            Map<String, Map> helpMap;
+            for (Map mapValuesUorF : UorFmap.values()) {
+                helpMap = mapValuesUorF;
+                for (Map mapValuesABC : helpMap.values()) {
+                    helpMap = mapValuesABC;
+                    for (Map mapPFValuePF : helpMap.values()) {
+                        helpMap = mapPFValuePF;
+                        for (Map.Entry<String, Map> mapCurrentValue : helpMap.entrySet()) {
+
+                            boolean addComment = false;
+
+                            Cell cellCurrent = mainSheet.getRow(rowIndexForCurrent).createCell(cellIndexForCurrent);
+
+                            cellCurrent.setCellStyle(centerCenterBold);
+
+                            cellCurrent.setCellValue(mapCurrentValue.getKey());
+
+                            Map<Integer, Meter.ErrorResult> errorMap = mapCurrentValue.getValue();
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                if (errorMap.get(i) != null) {
+
+                                    Meter.ErrorResult result = errorMap.get(i);
+
+                                    //Добавляю коммент
+                                    if (!addComment) {
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndexForCurrent, cellIndexForCurrent, 2, 3,
+                                                "Emin: " + result.getMinError() + "\n" + "Emax: " + result.getMaxError());
+                                        cellCurrent.setCellComment(comment);
+
+                                        addComment = true;
+                                    }
+
+                                    Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
+
+                                    if (!result.isPassTest()) {
+                                        cellCurrentError.setCellStyle(centerCenterThinRed);
+                                    } else {
+                                        cellCurrentError.setCellStyle(centerCenterThin);
+                                    }
+                                    cellCurrentError.setCellValue(result.getLastResult());
+                                }
+                            }
+
+                            startPrintErrorCell++;
+                            cellIndexForCurrent++;
+                        }
+                    }
+                }
+            }
+
+            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, totalElements);
+            RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, mainSheet);
         }
 
         public void getElements() {
@@ -1318,7 +1508,7 @@ public class ExcelReport {
     public class InfABCGroup implements Group {
         //F;55;A;L;0.5;Imax;0.02
 
-        //Количество элементов в каждой группе
+        //Количество элементов в группе
         private int totalElements;
 
         //Мапы с погрешностями
@@ -1490,7 +1680,7 @@ public class ExcelReport {
                         helpMap = mapPFValuePF;
                         for (Map.Entry<String, Map> mapCurrentValue : helpMap.entrySet()) {
 
-                            //Comment comment = createCellComment(wb, mainSheet, rowIndexForCurrent, cellIndexForCurrent, 3, 2, );
+                            boolean addComment = false;
 
                             Cell cellCurrent = mainSheet.getRow(rowIndexForCurrent).createCell(cellIndexForCurrent);
 
@@ -1502,9 +1692,19 @@ public class ExcelReport {
 
                             for (int i = 0; i < meters.size(); i++) {
                                 if (errorMap.get(i) != null) {
-                                    Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
 
                                     Meter.ErrorResult result = errorMap.get(i);
+
+                                    //Добавляю коммент
+                                    if (!addComment) {
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndexForCurrent, cellIndexForCurrent, 2, 3,
+                                                "Emin: " + result.getMinError() + "\n" + "Emax: " + result.getMaxError());
+                                        cellCurrent.setCellComment(comment);
+
+                                        addComment = true;
+                                    }
+
+                                    Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
 
                                     if (!result.isPassTest()) {
                                         cellCurrentError.setCellStyle(centerCenterThinRed);
@@ -1773,6 +1973,22 @@ public class ExcelReport {
         //1;A;A;P;0.2 Ib;0.5C
         meters = new ArrayList<>();
 
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
+        meters.add(new Meter());
         meters.add(new Meter());
         meters.add(new Meter());
         meters.add(new Meter());
