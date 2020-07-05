@@ -97,21 +97,33 @@ public class Meter implements Serializable{
 
     //Результаты тестов
     //-----------------------------------------------------------------------
+    //CRP Самоход
+    //STAAP Чувствтельность AP+
+    //STAAN Чувствтельность AP-
+    //STARP Чувствтельность RP+
+    //STARN Чувствтельность RP-
+    //RTC ТХЧ
+    //CNTAP Константа
+    //CNTAN Константа
+    //CNTRP Константа
+    //CNTRN Константа
+    //INS Изоляция
+    //APR Внешний вид
 
     //Общий результат
     private Boolean finalAllTestResult;
 
     //Самоход
-    private CreepResult creepTest = new CreepResult("ddsg", "0", "0");
+    private CreepResult creepTest = new CreepResult("CRP", "", "");
 
     //Чувствительность
-    private StartResult startTestAPPls = new StartResult("fds", "0", "0");
-    private StartResult startTestAPMns = new StartResult("fds", "0", "0");
-    private StartResult startTestRPPls = new StartResult("fds", "0", "0");
-    private StartResult startTestRPMns = new StartResult("fds", "0", "0");
+    private StartResult startTestAPPls = new StartResult("STAAP", "", "");
+    private StartResult startTestAPMns = new StartResult("STAAN", "", "");
+    private StartResult startTestRPPls = new StartResult("STARP", "", "");
+    private StartResult startTestRPMns = new StartResult("STARN", "", "");
 
     //Точность хода часов
-    private RTCResult RTCTest = new RTCResult("das", "0", "0", 2);
+    private RTCResult RTCTest = new RTCResult("RTC", "", "", "", "", "");
 
     //Изоляция
     private InsulationResult insulationTest = new InsulationResult("INS");
@@ -120,10 +132,10 @@ public class Meter implements Serializable{
     private AppearensResult appearensTest = new AppearensResult("APR");
 
     //Проверка счётного механизма
-    private ConstantResult constantTestAPPls = new ConstantResult("", "0", "0");
-    private ConstantResult constantTestAPMns = new ConstantResult("", "0", "0");
-    private ConstantResult constantTestRPPls = new ConstantResult("", "0", "0");
-    private ConstantResult constantTestRPMns = new ConstantResult("", "0", "0");
+    private ConstantResult constantTestAPPls = new ConstantResult("CNTAP", "", "");
+    private ConstantResult constantTestAPMns = new ConstantResult("CNTAN", "", "");
+    private ConstantResult constantTestRPPls = new ConstantResult("CNTRP", "", "");
+    private ConstantResult constantTestRPMns = new ConstantResult("CNTRN", "", "");
 
     //Лист с ошибками
     private List<CommandResult> errorListAPPls = new ArrayList<>();
@@ -165,7 +177,8 @@ public class Meter implements Serializable{
 
                 } else if (command instanceof RTCCommand) {
                     RTCCommand rtcCommand = (RTCCommand) command;
-                    errorListAPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), rtcCommand.getFreg()));
+                    errorListAPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
+                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC())));
 
                 } else if (command instanceof ConstantCommand) {
                     ConstantCommand constantCommand = (ConstantCommand) command;
@@ -212,7 +225,8 @@ public class Meter implements Serializable{
                 } else if (command instanceof RTCCommand) {
 
                     RTCCommand rtcCommand = (RTCCommand) command;
-                    errorListAPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), rtcCommand.getFreg()));
+                    errorListAPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
+                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC())));
 
                 } else if (command instanceof ConstantCommand) {
 
@@ -261,7 +275,8 @@ public class Meter implements Serializable{
                 } else if (command instanceof RTCCommand) {
 
                     RTCCommand rtcCommand = (RTCCommand) command;
-                    errorListRPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), rtcCommand.getFreg()));
+                    errorListRPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
+                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC())));
 
                 } else if (command instanceof ConstantCommand) {
 
@@ -310,7 +325,8 @@ public class Meter implements Serializable{
                 } else if (command instanceof RTCCommand) {
 
                     RTCCommand rtcCommand = (RTCCommand) command;
-                    errorListRPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), rtcCommand.getFreg()));
+                    errorListRPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
+                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC())));
 
                 } else if (command instanceof ConstantCommand) {
 
@@ -925,7 +941,7 @@ public class Meter implements Serializable{
     public class CreepResult extends CommandResult implements Serializable {
 
         //Время провала теста
-        private String timeTheFailTest;
+        private String timeTheFailTest = "";
 
         private String timeTheTest;
 
@@ -955,6 +971,14 @@ public class Meter implements Serializable{
             }
         }
 
+        public void setMaxPulse(String maxPulse) {
+            this.maxPulse = maxPulse;
+        }
+
+        public void setTimeTheTest(String timeTheTest) {
+            this.timeTheTest = timeTheTest;
+        }
+
         public String getTimeTheFailTest() {
             return timeTheFailTest;
         }
@@ -976,7 +1000,7 @@ public class Meter implements Serializable{
     public class StartResult extends CommandResult implements Serializable {
 
         //Время прохождения теста
-        private String timeThePassTest;
+        private String timeThePassTest = "";
 
         private String timeTheTest;
 
@@ -1027,21 +1051,44 @@ public class Meter implements Serializable{
             }
         }
 
+        public void setMaxPulse(String maxPulse) {
+            this.maxPulse = maxPulse;
+        }
+
+        public void setTimeTheTest(String timeTheTest) {
+            this.timeTheTest = timeTheTest;
+        }
+
+        public String getTimeThePassTest() {
+            return timeThePassTest;
+        }
+
         public String getTimeTheTest() {
             return timeTheTest;
+        }
+
+
+        public String getMaxPulse() {
+            return maxPulse;
         }
     }
 
     //Класс для записи результата исполнения StartCommnad
     public class RTCResult extends CommandResult implements Serializable {
 
-        double freg;
+        String freg;
 
-        RTCResult(String id, String emin, String emax, double freg) {
+        String amoutMeash;
+
+        String timeMeash;
+
+        RTCResult(String id, String emin, String emax, String freg, String amoutMeash, String timeMeash) {
             super(id);
             super.minError = emin;
             super.maxError = emax;
             this.freg = freg;
+            this.amoutMeash = amoutMeash;
+            this.timeMeash = timeMeash;
         }
 
         public void setResultRTCCommand(String error, int resultNo, boolean passOrNot) {
@@ -1061,16 +1108,36 @@ public class Meter implements Serializable{
             }
         }
 
-        public double getFreg() {
+        public String getFreg() {
             return freg;
+        }
+
+        public String getAmoutMeash() {
+            return amoutMeash;
+        }
+
+        public String getTimeMeash() {
+            return timeMeash;
+        }
+
+        public void setFreg(String freg) {
+            this.freg = freg;
+        }
+
+        public void setAmoutMeash(String amoutMeash) {
+            this.amoutMeash = amoutMeash;
+        }
+
+        public void setTimeMeash(String timeMeash) {
+            this.timeMeash = timeMeash;
         }
     }
 
     public class ConstantResult extends CommandResult implements Serializable {
 
-        private String kwMeter;
+        private String kwMeter = "";
 
-        private String kwRefMeter;
+        private String kwRefMeter = "";
 
         ConstantResult(String id, String emin, String emax) {
             super(id);
@@ -1121,6 +1188,10 @@ public class Meter implements Serializable{
 
         public String getKwMeter() {
             return kwMeter;
+        }
+
+        public void setKwRefMeter(String kwRefMeter) {
+            this.kwRefMeter = kwRefMeter;
         }
 
         public void setKwMeter(String kwMeter) {

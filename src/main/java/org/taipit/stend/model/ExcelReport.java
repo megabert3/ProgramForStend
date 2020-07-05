@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.taipit.stend.controller.Meter;
+import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 
@@ -16,6 +17,8 @@ import java.math.RoundingMode;
 import java.util.*;
 
 public class ExcelReport {
+
+    private String[] resultName;
 
     private final String SHEET_NAME = "Результат";
     private Workbook wb = new HSSFWorkbook();
@@ -58,6 +61,8 @@ public class ExcelReport {
     private CellStyle centerCenterBottomBoldRed = createCellStyle(wb, Calibri_11_Red, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.MEDIUM, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
 
     public ExcelReport() {
+        // 0 - НЕ ПРОВОДИЛОСЬ; 1 - ГОДЕН; 2 - ПРОВАЛИЛ
+        resultName = ConsoleHelper.properties.getProperty("restMeterResults").split(", ");
 
         errCRPSTAother.put("CRP", new HashMap<>());
         errCRPSTAother.put("STAAP", new HashMap<>());
@@ -466,7 +471,7 @@ public class ExcelReport {
     }
 
     private void addElementsInABC(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
-        //55.0 F;1;A;A;P;0.2 Ib;0.5C
+        //1;A;A;P;0.2 Ib;0.5C
         String[] idArr = result.getId().split(";");
         String[] ImaxIb = idArr[4].split(" ");
 
@@ -605,7 +610,7 @@ public class ExcelReport {
 
         createHeadInformation(wb, mainSheet, testMeter, stendDLLCommands);
 
-        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\a.halimov\\Desktop\\test.xls")){
+        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\bert1\\Desktop\\test.xls")){
             wb.write(outputStream);
         } catch (IOException e) {
             e.printStackTrace();
@@ -860,9 +865,18 @@ public class ExcelReport {
 
 
         //TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        int row = 20;
         createTestErrorForInfABC();
+        createTestErrorForInf();
+        createTestErrorForABC();
+        createTestError();
+        createCRPSTAError();
         addErrorsInGroups(meters);
-        inflABCAPPls.print(20, 1);
+        inflABCAPPls.print(row, 1);
+        inflAPPls.print(row + meters.size() + 6, 1);
+        ABCAPPls.print(row + meters.size() + 6 + meters.size() + 6, 1);
+        totalErrorAPPls.print(row + meters.size() + 6 + meters.size() + 6 + meters.size() + 6, 1);
+        CRPSTAother.print(row + meters.size() + 6 + meters.size() + 6 + meters.size() + 6 + meters.size() + 6, 1);
     }
 
     private void createMergeZone(int firstRow, int lastRow, int firsColumn, int lastColumn, Cell cell, String cellText, CellStyle style, Font font, Sheet sheet,
@@ -1059,15 +1073,803 @@ public class ExcelReport {
         //INS Изоляция
         //APR Внешний вид
 
-        private Map<String, Map> mainMap = new TreeMap<>(comparatorForCRPSTA);
+        int amountElements;
+
+        private Map<String, Map> mainMap;
 
         public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            amountElements++;
+
+            if (mainMap == null) {
+                mainMap = new TreeMap<>(comparatorForCRPSTA);
+            }
             mainMap.put(keyId, commandResultMap);
         }
 
         @Override
         public void print(int row, int cell) {
+            final String CREEP = "Самоход";
+            final String STAAP_PLS = "Чувствительность А.Э.+";
+            final String STAAP_MNS = "Чувствительность А.Э.-";
+            final String STARP_PLS = "Чувствительность Р.Э.+";
+            final String STARP_MNS = "Чувствительность Р.Э.-";
+            final String RTC = "ТХЧ";
+            final String CNTAP_PLS = "Константа А.Э.+";
+            final String CNTAP_MNS = "Константа А.Э.-";
+            final String CNTRP_PLS = "Константа Р.Э.+";
+            final String CNTRP_MNS = "Константа Р.Э.-";
+            final String INS = "Изоляция";
+            final String APR = "Внешний вид";
 
+            int printCellIndex = cell;
+            int printRowIndex = row;
+            String key;
+
+            for (Map.Entry<String, Map> crpSta : mainMap.entrySet()) {
+                boolean containsResult = false;
+
+                key = crpSta.getKey();
+                Map<Integer, Meter.CommandResult> commandResultMap = crpSta.getValue();
+
+                for (Meter.CommandResult result : commandResultMap.values()) {
+                    if (result.getPassTest() != null) {
+                        containsResult = true;
+                        break;
+                    }
+                }
+
+                if (containsResult) {
+                    //CRP Самоход
+                    //STAAP Чувствтельность AP+
+                    //STAAN Чувствтельность AP-
+                    //STARP Чувствтельность RP+
+                    //STARN Чувствтельность RP-
+                    //RTC ТХЧ
+                    //CNTAP Константа
+                    //CNTAN Константа
+                    //CNTRN Константа
+                    //CNTRP Константа
+                    //INS Изоляция
+                    //APR Внешний вид
+                    switch (key) {
+                        case "CRP": {
+                            //Создаю заголовок для Самохода
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, CREEP, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            boolean addComment = false;
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.CreepResult result = (Meter.CreepResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null) {
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        //Добавляю коммент к полю самоход
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 3,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 4, 2,
+                                                "Время провала теста: " + result.getTimeTheTest());
+
+                                        cellCRPSTAError.setCellComment(comment);
+
+                                    } else if (result.isPassTest()) {
+                                        //Добавляю коммент к полю самоход
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 3,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+
+                        case "STAAP": {
+                            //Создаю заголовок для Чувтсвительности AP+
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, STAAP_PLS, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            boolean addComment = false;
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.StartResult result = (Meter.StartResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        //Добавляю коммент к полю самоход
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 4,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                    } else if (result.isPassTest()) {
+                                        //Добавляю коммент к полю самоход
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 3,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 4, 2,
+                                                "Время прохождения теста: " + result.getTimeThePassTest());
+
+                                        cellCRPSTAError.setCellComment(comment);
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+
+                        case "STAAN": {
+                            //Создаю заголовок для Чувтсвительности AP-
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, STAAP_MNS, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            boolean addComment = false;
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.StartResult result = (Meter.StartResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        //Добавляю коммент к полю самоход
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 3,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                    } else if (result.isPassTest()) {
+                                        //Добавляю коммент к полю самоход
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 3,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 4, 2,
+                                                "Время прохождения теста: " + result.getTimeThePassTest());
+
+                                        cellCRPSTAError.setCellComment(comment);
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+
+                        case "STARP": {
+                            //Создаю заголовок для Чувтсвительности RP+
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, STARP_PLS, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            boolean addComment = false;
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.StartResult result = (Meter.StartResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        //Добавляю коммент к полю самоход
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 3,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                    } else if (result.isPassTest()) {
+                                        //Добавляю коммент к полю самоход
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 3,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 4, 2,
+                                                "Время прохождения теста: " + result.getTimeThePassTest());
+
+                                        cellCRPSTAError.setCellComment(comment);
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+
+                        case "STARN": {
+                            //Создаю заголовок для Чувтсвительности RP-
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, STARP_MNS, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            boolean addComment = false;
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.StartResult result = (Meter.StartResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        //Добавляю коммент к полю самоход
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 3,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                    } else if (result.isPassTest()) {
+                                        //Добавляю коммент к полю самоход
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 3,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 4, 2,
+                                                "Время прохождения теста: " + result.getTimeThePassTest());
+
+                                        cellCRPSTAError.setCellComment(comment);
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+
+                        case "RTC": {
+                            //Создаю заголовок для Точности хода часов
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, RTC, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            boolean addComment = false;
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.RTCResult result = (Meter.RTCResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    }  else if (!result.isPassTest()) {
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 5,
+                                                    "Частота: " + result.getFreg() + " Гц" + "\n"
+                                                            + "Количество измерений: " + result.getAmoutMeash() + "\n"
+                                                            + "Время измерения: " + result.getTimeMeash() + " c" + "\n"
+                                                            + "Emin: " + result.getMinError() + "\n"
+                                                            + "Emax: " + result.getMaxError());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 3, 2,
+                                                "Погрешность : " + result.getLastResult());
+
+                                        cellCRPSTAError.setCellComment(comment);
+
+                                    } else if (result.isPassTest()) {
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 5,
+                                                    "Частота: " + result.getFreg() + " Гц" + "\n"
+                                                            + "Количество измерений: " + result.getAmoutMeash() + "\n"
+                                                            + "Время измерения: " + result.getTimeMeash() + " c" + "\n"
+                                                            + "Emin: " + result.getMinError() + "\n"
+                                                            + "Emax: " + result.getMaxError());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 3, 2,
+                                                "Погрешность : " + result.getLastResult());
+
+                                        cellCRPSTAError.setCellComment(comment);
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+
+                        case "CNTAP": {
+                            //Создаю заголовок для теста Константы
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, CNTAP_PLS, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            boolean addComment = false;
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.ConstantResult result = (Meter.ConstantResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 2, 3,
+                                                    "Emin: " + result.getMinError() + "\n" +
+                                                    "Emax: " + result.getMaxError());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 6, 3,
+                                                "Погрешность : " + result.getLastResult() + "\n" +
+                                                            "Количество поданной энергии: " + result.getKwRefMeter() + "\n" +
+                                                            "Количество посчитанной счётчиком энергии: " + result.getKwMeter());
+
+                                        cellCRPSTAError.setCellComment(comment);
+
+                                    } else if (result.isPassTest()) {
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 2, 3,
+                                                    "Emin: " + result.getMinError() + "\n" +
+                                                            "Emax: " + result.getMaxError());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 6, 3,
+                                                "Погрешность : " + result.getLastResult() + "\n" +
+                                                        "Количество поданной энергии: " + result.getKwRefMeter() + "\n" +
+                                                        "Количество посчитанной счётчиком энергии: " + result.getKwMeter());
+
+                                        cellCRPSTAError.setCellComment(comment);
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+
+                        case "CNTAN": {
+                            //Создаю заголовок для теста Константы
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, CNTAP_MNS, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            boolean addComment = false;
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.ConstantResult result = (Meter.ConstantResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 2, 3,
+                                                    "Emin: " + result.getMinError() + "\n" +
+                                                            "Emax: " + result.getMaxError());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 6, 3,
+                                                "Погрешность : " + result.getLastResult() + "\n" +
+                                                        "Количество поданной энергии: " + result.getKwRefMeter() + "\n" +
+                                                        "Количество посчитанной счётчиком энергии: " + result.getKwMeter());
+
+                                        cellCRPSTAError.setCellComment(comment);
+
+                                    } else if (result.isPassTest()) {
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 2, 3,
+                                                    "Emin: " + result.getMinError() + "\n" +
+                                                            "Emax: " + result.getMaxError());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 6, 3,
+                                                "Погрешность : " + result.getLastResult() + "\n" +
+                                                        "Количество поданной энергии: " + result.getKwRefMeter() + "\n" +
+                                                        "Количество посчитанной счётчиком энергии: " + result.getKwMeter());
+
+                                        cellCRPSTAError.setCellComment(comment);
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+
+                        case "CNTRP": {
+                            //Создаю заголовок для теста Константы
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, CNTRP_PLS, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            boolean addComment = false;
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.ConstantResult result = (Meter.ConstantResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 2, 3,
+                                                    "Emin: " + result.getMinError() + "\n" +
+                                                            "Emax: " + result.getMaxError());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 6, 3,
+                                                "Погрешность : " + result.getLastResult() + "\n" +
+                                                        "Количество поданной энергии: " + result.getKwRefMeter() + "\n" +
+                                                        "Количество посчитанной счётчиком энергии: " + result.getKwMeter());
+
+                                        cellCRPSTAError.setCellComment(comment);
+
+                                    } else if (result.isPassTest()) {
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 2, 3,
+                                                    "Emin: " + result.getMinError() + "\n" +
+                                                            "Emax: " + result.getMaxError());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 6, 3,
+                                                "Погрешность : " + result.getLastResult() + "\n" +
+                                                        "Количество поданной энергии: " + result.getKwRefMeter() + "\n" +
+                                                        "Количество посчитанной счётчиком энергии: " + result.getKwMeter());
+
+                                        cellCRPSTAError.setCellComment(comment);
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+
+                        case "CNTRN": {
+                            //Создаю заголовок для теста Константы
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, CNTRP_MNS, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            boolean addComment = false;
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.ConstantResult result = (Meter.ConstantResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 2, 3,
+                                                    "Emin: " + result.getMinError() + "\n" +
+                                                            "Emax: " + result.getMaxError());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 6, 3,
+                                                "Погрешность : " + result.getLastResult() + "\n" +
+                                                        "Количество поданной энергии: " + result.getKwRefMeter() + "\n" +
+                                                        "Количество посчитанной счётчиком энергии: " + result.getKwMeter());
+
+                                        cellCRPSTAError.setCellComment(comment);
+
+                                    } else if (result.isPassTest()) {
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 2, 3,
+                                                    "Emin: " + result.getMinError() + "\n" +
+                                                            "Emax: " + result.getMaxError());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 6, 3,
+                                                "Погрешность : " + result.getLastResult() + "\n" +
+                                                        "Количество поданной энергии: " + result.getKwRefMeter() + "\n" +
+                                                        "Количество посчитанной счётчиком энергии: " + result.getKwMeter());
+
+                                        cellCRPSTAError.setCellComment(comment);
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+
+                        case "INS": {
+                            //Создаю заголовок для теста Константы
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, INS, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.InsulationResult result = (Meter.InsulationResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                    } else if (result.isPassTest()) {
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+
+                        case "APR": {
+                            //Создаю заголовок для теста Константы
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex, cellCRPSTA, APR, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    Meter.AppearensResult result = (Meter.AppearensResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                    } else if (result.isPassTest()) {
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+                                    }
+                                }
+                            }
+
+                            printCellIndex++;
+                        } break;
+                    }
+                }
+            }
+            CellRangeAddress region = new CellRangeAddress(row + 2, row + 2 + meters.size() - 1, cell, printCellIndex - 1);
+            RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, mainSheet);
         }
 
         public void getElements() {
@@ -1079,6 +1881,7 @@ public class ExcelReport {
 
     public class TotalErrorsGroup implements Group {
         //L;0.5;Imax;0.02
+        int totalElements;
 
         private Map<String, Map> powerFactorMap;
         private Map<String, Map> currentMap;
@@ -1086,11 +1889,13 @@ public class ExcelReport {
         private String PFkey;
         private String currKey;
 
-        public TotalErrorsGroup() {
-            powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
-        }
-
         public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            totalElements++;
+
+            if (powerFactorMap == null) {
+                powerFactorMap = new TreeMap<>(comparatorForPowerFactor);
+            }
+
             String[] idResult = keyId.split(";");
 
             currKey = idResult[3] + " " + idResult[2];
@@ -1117,7 +1922,96 @@ public class ExcelReport {
 
         @Override
         public void print(int row, int cell) {
+            if (totalElements == 0) return;
 
+            int printIndexPF = cell;
+
+            int rowIndex;
+
+            Map<String, Integer> PFcount = new TreeMap<>(comparatorForPowerFactor);
+
+            String PFKey;
+
+            System.out.println(powerFactorMap);
+
+            for (Map.Entry<String, Map> mapPF : powerFactorMap.entrySet()) {
+
+                PFKey = mapPF.getKey();
+
+                PFcount.put(PFKey, mapPF.getValue().size());
+            }
+
+            //Создаю заголовок для PF
+            rowIndex = row;
+
+            for (Map.Entry<String, Integer> PF : PFcount.entrySet()) {
+                Cell cellPF = mainSheet.getRow(rowIndex).createCell(printIndexPF);
+
+                createMergeZone(rowIndex, rowIndex, printIndexPF, printIndexPF + PF.getValue() - 1, cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
+                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                printIndexPF += PF.getValue();
+            }
+
+            //Создаю заголовки токов и вывожу погрешности
+            int rowIndexForCurrent = row + 1;
+            int cellIndexForCurrent = cell;
+
+            int startPrintErrorRow = row + 2;
+            int startPrintErrorCell = cell;
+
+            Map<String, Map> helpMap;
+            for (Map mapPFValuePF : powerFactorMap.values()) {
+                helpMap = mapPFValuePF;
+                for (Map.Entry<String, Map> mapCurrentValue : helpMap.entrySet()) {
+
+                    boolean addComment = false;
+
+                    Cell cellCurrent = mainSheet.getRow(rowIndexForCurrent).createCell(cellIndexForCurrent);
+
+                    cellCurrent.setCellStyle(centerCenterBold);
+
+                    cellCurrent.setCellValue(mapCurrentValue.getKey());
+
+                    Map<Integer, Meter.ErrorResult> errorMap = mapCurrentValue.getValue();
+
+                    for (int i = 0; i < meters.size(); i++) {
+                        if (errorMap.get(i) != null) {
+
+                            Meter.ErrorResult result = errorMap.get(i);
+
+                            System.out.println(result.getLastResult() + " " + result.getId());
+
+                            //Добавляю коммент
+                            if (!addComment) {
+                                Comment comment = createCellComment(wb, mainSheet, rowIndexForCurrent, cellIndexForCurrent, 2, 3,
+                                        "Emin: " + result.getMinError() + "\n" + "Emax: " + result.getMaxError());
+                                cellCurrent.setCellComment(comment);
+
+                                addComment = true;
+                            }
+
+                            Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
+
+                            if (!result.isPassTest()) {
+                                cellCurrentError.setCellStyle(centerCenterThinRed);
+                            } else {
+                                cellCurrentError.setCellStyle(centerCenterThin);
+                            }
+                            cellCurrentError.setCellValue(result.getLastResult());
+                        }
+                    }
+
+                    startPrintErrorCell++;
+                    cellIndexForCurrent++;
+                }
+            }
+
+            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, totalElements);
+            RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, mainSheet);
         }
 
         public void getElements() {
@@ -1151,6 +2045,8 @@ public class ExcelReport {
     public class ABCGroup  implements Group{
         //A;L;0.5;Imax;0.02
 
+        int totalElements;
+
         private Map<String, Map> ABCMap;
         private Map<String, Map> powerFactorMap;
         private Map<String, Map> currentMap;
@@ -1159,11 +2055,13 @@ public class ExcelReport {
         private String PFkey;
         private String currKey;
 
-        public ABCGroup() {
-            ABCMap = new TreeMap<>(comparatorForABC);
-        }
-
         public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
+            totalElements++;
+
+            if (ABCMap == null) {
+                ABCMap = new TreeMap<>();
+            }
+
             String[] idResult = keyId.split(";");
 
             ABCkey = idResult[0];
@@ -1201,7 +2099,132 @@ public class ExcelReport {
 
         @Override
         public void print(int row, int cell) {
+            if (totalElements == 0) return;
 
+            int printIndexABC = cell;
+            int printIndexPF = cell;
+
+            int rowIndex;
+
+            Map<String, Integer> ABCCount = new TreeMap<>(comparatorForABC);
+            Map<String, Map<String, Integer>> PFmapCount = new TreeMap<>(comparatorForABC);
+
+            Map<String, Integer> PFcount;
+
+            Map<String, Map> PFmap;
+
+            String ABCKey;
+            String PFKey;
+
+            System.out.println(ABCMap);
+
+            for (Map.Entry<String, Map> mapABC : ABCMap.entrySet()) {
+                ABCKey = mapABC.getKey();
+
+                ABCCount.put(ABCKey, 0);
+
+                PFcount = new TreeMap<>(comparatorForPowerFactor);
+
+                PFmapCount.put(ABCKey, PFcount);
+
+                PFmap = mapABC.getValue();
+
+                for (Map.Entry<String, Map> mapPF : PFmap.entrySet()) {
+                    PFKey = mapPF.getKey();
+
+                    PFcount.put(PFKey, mapPF.getValue().size());
+                    ABCCount.put(ABCKey, ABCCount.get(ABCKey) + mapPF.getValue().size());
+                }
+            }
+
+            //Создаю заголовок ABC
+            rowIndex = row;
+
+            for (Map.Entry<String, Integer> map : ABCCount.entrySet()) {
+                Cell cellABC = mainSheet.getRow(rowIndex).createCell(printIndexABC);
+
+                createMergeZone(rowIndex, rowIndex, printIndexABC,printIndexABC + map.getValue() - 1, cellABC, map.getKey(), centerCenter, Calibri_11_Bold,
+                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                printIndexABC += map.getValue();
+            }
+
+            //Создаю заголовок для PF
+            rowIndex++;
+
+            for (Map<String, Integer> map : PFmapCount.values()) {
+                for (Map.Entry<String, Integer> PF : map.entrySet()) {
+                    Cell cellPF = mainSheet.getRow(rowIndex).createCell(printIndexPF);
+
+                    createMergeZone(rowIndex, rowIndex, printIndexPF, printIndexPF + PF.getValue() - 1, cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
+                            mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                    printIndexPF += PF.getValue();
+                }
+            }
+
+            //Создаю заголовки токов и вывожу погрешности
+            int rowIndexForCurrent = row + 2;
+            int cellIndexForCurrent = cell;
+
+            int startPrintErrorRow = row + 3;
+            int startPrintErrorCell = cell;
+
+            Map<String, Map> helpMap;
+            for (Map mapValuesABC : ABCMap.values()) {
+                helpMap = mapValuesABC;
+                for (Map mapPFValuePF : helpMap.values()) {
+                    helpMap = mapPFValuePF;
+                    for (Map.Entry<String, Map> mapCurrentValue : helpMap.entrySet()) {
+
+                        boolean addComment = false;
+
+                        Cell cellCurrent = mainSheet.getRow(rowIndexForCurrent).createCell(cellIndexForCurrent);
+
+                        cellCurrent.setCellStyle(centerCenterBold);
+
+                        cellCurrent.setCellValue(mapCurrentValue.getKey());
+
+                        Map<Integer, Meter.ErrorResult> errorMap = mapCurrentValue.getValue();
+
+                        for (int i = 0; i < meters.size(); i++) {
+                            if (errorMap.get(i) != null) {
+
+                                Meter.ErrorResult result = errorMap.get(i);
+
+                                System.out.println(result.getLastResult() + " " + result.getId());
+
+                                //Добавляю коммент
+                                if (!addComment) {
+                                    Comment comment = createCellComment(wb, mainSheet, rowIndexForCurrent, cellIndexForCurrent, 2, 3,
+                                            "Emin: " + result.getMinError() + "\n" + "Emax: " + result.getMaxError());
+                                    cellCurrent.setCellComment(comment);
+
+                                    addComment = true;
+                                }
+
+                                Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
+
+                                if (!result.isPassTest()) {
+                                    cellCurrentError.setCellStyle(centerCenterThinRed);
+                                } else {
+                                    cellCurrentError.setCellStyle(centerCenterThin);
+                                }
+                                cellCurrentError.setCellValue(result.getLastResult());
+                            }
+                        }
+
+                        startPrintErrorCell++;
+                        cellIndexForCurrent++;
+                    }
+                }
+            }
+
+            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, totalElements);
+            RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
+            RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, mainSheet);
         }
 
         public void getElements() {
@@ -1320,8 +2343,6 @@ public class ExcelReport {
                     UorFCount.put(UorFKey, UorFCount.get(UorFKey) + mapPF.getValue().size());
                 }
 
-
-
                 //Создаю заголовок для UorF
                 rowIndex = row;
                 Cell cellUorF = mainSheet.getRow(rowIndex).createCell(printIndexUorF);
@@ -1333,139 +2354,68 @@ public class ExcelReport {
                 //Создаю заголовок для PF
                 rowIndex++;
 
-                for ()
+                for (Map.Entry<String, Integer> PF : PFcount.entrySet()) {
+                    Cell cellPF = mainSheet.getRow(rowIndex).createCell(printIndexPF);
 
-                for (Map<String, Integer> map : PFmapCount.values()) {
-                    for (Map.Entry<String, Integer> PF : map.entrySet()) {
-                        Cell cellPF = mainSheet.getRow(rowIndex).createCell(printIndexPF);
-
-                        createMergeZone(rowIndex, rowIndex, printIndexPF, printIndexPF + PF.getValue() - 1, cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
-                                mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
-
-                        printIndexPF += PF.getValue();
-                    }
-                }
-            }
-
-
-
-            for (Map.Entry<String, Map> UorFmap : UorFmap.entrySet()) {
-
-                UorFKey = UorFmap.getKey();
-
-                UorFCount.put(UorFKey, 0);
-
-                ABCmap = UorFmap.getValue();
-
-                for (Map.Entry<String, Map> mapABC : ABCmap.entrySet()) {
-                    ABCKey = mapABC.getKey();
-
-                    ABCCount.put(ABCKey, 0);
-
-                    PFcount = new TreeMap<>(comparatorForPowerFactor);
-
-                    PFmapCount.put(ABCKey, PFcount);
-
-                    PFmap = mapABC.getValue();
-
-                    for (Map.Entry<String, Map> mapPF : PFmap.entrySet()) {
-                        PFKey = mapPF.getKey();
-
-                        PFcount.put(PFKey, mapPF.getValue().size());
-                        ABCCount.put(ABCKey, ABCCount.get(ABCKey) + mapPF.getValue().size());
-                        UorFCount.put(UorFKey, UorFCount.get(UorFKey) + mapPF.getValue().size());
-                    }
-                }
-
-                //Создаю заголовок для UorF
-                rowIndex = row;
-                Cell cellUorF = mainSheet.getRow(rowIndex).createCell(printIndexUorF);
-
-                createMergeZone(rowIndex, rowIndex, printIndexUorF, printIndexUorF + UorFCount.get(UorFKey) - 1, cellUorF, UorFKey, centerCenter, Calibri_11_Bold,
-                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
-                printIndexUorF += UorFCount.get(UorFKey);
-
-                //Создаю заголовок ABC
-                rowIndex++;
-
-                for (Map.Entry<String, Integer> map : ABCCount.entrySet()) {
-                    Cell cellABC = mainSheet.getRow(rowIndex).createCell(printIndexABC);
-
-                    createMergeZone(rowIndex, rowIndex, printIndexABC,printIndexABC + map.getValue() - 1, cellABC, map.getKey(), centerCenter, Calibri_11_Bold,
+                    createMergeZone(rowIndex, rowIndex, printIndexPF, printIndexPF + PF.getValue() - 1, cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
                             mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
 
-                    printIndexABC += map.getValue();
-                }
-
-                //Создаю заголовок для PF
-                rowIndex++;
-
-                for (Map<String, Integer> map : PFmapCount.values()) {
-                    for (Map.Entry<String, Integer> PF : map.entrySet()) {
-                        Cell cellPF = mainSheet.getRow(rowIndex).createCell(printIndexPF);
-
-                        createMergeZone(rowIndex, rowIndex, printIndexPF, printIndexPF + PF.getValue() - 1, cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
-                                mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
-
-                        printIndexPF += PF.getValue();
-                    }
+                    printIndexPF += PF.getValue();
                 }
             }
 
+
             //Создаю заголовки токов и вывожу погрешности
-            int rowIndexForCurrent = row + 3;
+            int rowIndexForCurrent = row + 2;
             int cellIndexForCurrent = cell;
 
-            int startPrintErrorRow = row + 4;
+            int startPrintErrorRow = row + 3;
             int startPrintErrorCell = cell;
 
             Map<String, Map> helpMap;
             for (Map mapValuesUorF : UorFmap.values()) {
                 helpMap = mapValuesUorF;
-                for (Map mapValuesABC : helpMap.values()) {
-                    helpMap = mapValuesABC;
-                    for (Map mapPFValuePF : helpMap.values()) {
-                        helpMap = mapPFValuePF;
-                        for (Map.Entry<String, Map> mapCurrentValue : helpMap.entrySet()) {
+                for (Map mapPFValuePF : helpMap.values()) {
+                    helpMap = mapPFValuePF;
+                    for (Map.Entry<String, Map> mapCurrentValue : helpMap.entrySet()) {
 
-                            boolean addComment = false;
+                        boolean addComment = false;
 
-                            Cell cellCurrent = mainSheet.getRow(rowIndexForCurrent).createCell(cellIndexForCurrent);
+                        Cell cellCurrent = mainSheet.getRow(rowIndexForCurrent).createCell(cellIndexForCurrent);
 
-                            cellCurrent.setCellStyle(centerCenterBold);
+                        cellCurrent.setCellStyle(centerCenterBold);
 
-                            cellCurrent.setCellValue(mapCurrentValue.getKey());
+                        cellCurrent.setCellValue(mapCurrentValue.getKey());
 
-                            Map<Integer, Meter.ErrorResult> errorMap = mapCurrentValue.getValue();
+                        Map<Integer, Meter.ErrorResult> errorMap = mapCurrentValue.getValue();
 
-                            for (int i = 0; i < meters.size(); i++) {
-                                if (errorMap.get(i) != null) {
+                        for (int i = 0; i < meters.size(); i++) {
+                            if (errorMap.get(i) != null) {
 
-                                    Meter.ErrorResult result = errorMap.get(i);
+                                Meter.ErrorResult result = errorMap.get(i);
 
-                                    //Добавляю коммент
-                                    if (!addComment) {
-                                        Comment comment = createCellComment(wb, mainSheet, rowIndexForCurrent, cellIndexForCurrent, 2, 3,
-                                                "Emin: " + result.getMinError() + "\n" + "Emax: " + result.getMaxError());
-                                        cellCurrent.setCellComment(comment);
+                                //Добавляю коммент
+                                if (!addComment) {
+                                    Comment comment = createCellComment(wb, mainSheet, rowIndexForCurrent, cellIndexForCurrent, 2, 3,
+                                            "Emin: " + result.getMinError() + "\n" + "Emax: " + result.getMaxError());
+                                    cellCurrent.setCellComment(comment);
 
-                                        addComment = true;
-                                    }
-
-                                    Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
-
-                                    if (!result.isPassTest()) {
-                                        cellCurrentError.setCellStyle(centerCenterThinRed);
-                                    } else {
-                                        cellCurrentError.setCellStyle(centerCenterThin);
-                                    }
-                                    cellCurrentError.setCellValue(result.getLastResult());
+                                    addComment = true;
                                 }
-                            }
 
-                            startPrintErrorCell++;
-                            cellIndexForCurrent++;
+                                Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
+
+                                if (!result.isPassTest()) {
+                                    cellCurrentError.setCellStyle(centerCenterThinRed);
+                                } else {
+                                    cellCurrentError.setCellStyle(centerCenterThin);
+                                }
+                                cellCurrentError.setCellValue(result.getLastResult());
+                            }
                         }
+
+                        startPrintErrorCell++;
+                        cellIndexForCurrent++;
                     }
                 }
             }
@@ -1979,19 +2929,6 @@ public class ExcelReport {
         meters.add(new Meter());
         meters.add(new Meter());
         meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
 
         for (Meter meter : meters) {
             List<Meter.CommandResult> errorList = meter.getErrorListAPPls();
@@ -2113,8 +3050,6 @@ public class ExcelReport {
             for (Meter.CommandResult result : errorList) {
 
                 double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
-//                System.out.println(x);
-//                System.out.println();
 
                 if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
                     result.setPassTest(false);
@@ -2123,6 +3058,325 @@ public class ExcelReport {
                 }
 
                 result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+            }
+        }
+    }
+
+    private void createTestErrorForInf() {
+        //1;H;A;P;0.2 Ib;0.5C
+        for (Meter meter : meters) {
+            List<Meter.CommandResult> errorList = meter.getErrorListAPPls();
+            //55.0 U;1;A;A;P;0.2 Ib;0.5C
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Ib;1.0", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Ib;1.0", "-2", "2"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Imax;1.0", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Imax;1.0", "-2", "2"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Ib;0.5L", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Ib;0.5L", "-2", "2"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Imax;0.5L", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Imax;0.5L", "-2", "2"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Ib;0.5C", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Ib;0.5C", "-2", "2"));
+
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Imax;0.5C", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Imax;0.5C", "-2", "2"));
+
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Ib;1.0", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Ib;1.0", "-2", "2"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Imax;1.0", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Imax;1.0", "-2", "2"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Ib;0.5L", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Ib;0.5L", "-2", "2"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Imax;0.5L", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Imax;0.5L", "-2", "2"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Ib;0.5C", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Ib;0.5C", "-2", "2"));
+
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Imax;0.5C", "-2", "2"));
+            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Imax;0.5C", "-2", "2"));
+
+            for (Meter.CommandResult result : errorList) {
+
+                double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
+
+                if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
+                    result.setPassTest(false);
+                } else {
+                    result.setPassTest(true);
+                }
+
+                result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+            }
+        }
+    }
+
+
+    private void createTestErrorForABC() {
+        //1;A;A;P;0.2 Ib;0.5C
+        for (Meter meter : meters) {
+            List<Meter.CommandResult> errorList = meter.getErrorListAPPls();
+
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Ib;1.0", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Ib;1.0", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Imax;1.0", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Imax;1.0", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Ib;0.5L", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Ib;0.5L", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Imax;0.5L", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Imax;0.5L", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Ib;0.5C", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Ib;0.5C", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Imax;0.5C", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Imax;0.5C", "-3", "3"));
+
+
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Ib;1.0", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Ib;1.0", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Imax;1.0", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Imax;1.0", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Ib;0.5L", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Ib;0.5L", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Imax;0.5L", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Imax;0.5L", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Ib;0.5C", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Ib;0.5C", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Imax;0.5C", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Imax;0.5C", "-3", "3"));
+
+
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Ib;1.0", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Ib;1.0", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Imax;1.0", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Imax;1.0", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Ib;0.5L", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Ib;0.5L", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Imax;0.5L", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Imax;0.5L", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Ib;0.5C", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Ib;0.5C", "-3", "3"));
+
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Imax;0.5C", "-3", "3"));
+            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Imax;0.5C", "-3", "3"));
+
+            for (Meter.CommandResult result : errorList) {
+
+                double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
+
+                if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
+                    result.setPassTest(false);
+                } else {
+                    result.setPassTest(true);
+                }
+
+                result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+            }
+        }
+    }
+
+    private void createTestError() {
+        //1;H;A;P;0.2 Ib;0.5C
+        for (Meter meter : meters) {
+            List<Meter.CommandResult> errorList = meter.getErrorListAPPls();
+
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Ib;1.0", "-4", "4"));
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Ib;1.0", "-4", "4"));
+
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Imax;1.0", "-4", "4"));
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Imax;1.0", "-4", "4"));
+
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Ib;0.5L", "-4", "4"));
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Ib;0.5L", "-4", "4"));
+
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Imax;0.5L", "-4", "4"));
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Imax;0.5L", "-4", "4"));
+
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Ib;0.5C", "-4", "4"));
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Ib;0.5C", "-4", "4"));
+
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Imax;0.5C", "-4", "4"));
+            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Imax;0.5C", "-4", "4"));
+
+            for (Meter.CommandResult result : errorList) {
+
+                double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
+
+                if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
+                    result.setPassTest(false);
+                } else {
+                    result.setPassTest(true);
+                }
+
+                result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+            }
+        }
+    }
+
+    private void createCRPSTAError() {
+
+        for (int i = 0; i < meters.size(); i++) {
+            Meter meter = meters.get(i);
+            if (i == 2) {
+                Meter.CreepResult CRP = meter.getCreepTest();
+                CRP.setResultCreepCommand("11:11:11", 0, false);
+                CRP.setTimeTheTest("11:11:11");
+                CRP.setMaxPulse("2");
+                CRP.setPassTest(null);
+
+                Meter.StartResult STAAPPls = meter.getStartTestAPPls();
+                STAAPPls.setResultStartCommand("1:1:1", 0, false, 0);
+                STAAPPls.setTimeTheTest("22:22:22");
+                STAAPPls.setMaxPulse("2");
+                STAAPPls.setPassTest(null);
+
+                Meter.StartResult STAAPMns = meter.getStartTestAPMns();
+                STAAPMns.setResultStartCommand("2:2:2", 0, false, 1);
+                STAAPMns.setTimeTheTest("33:33:33");
+                STAAPMns.setMaxPulse("2");
+                STAAPMns.setPassTest(null);
+
+                Meter.StartResult STARPPls = meter.getStartTestRPPls();
+                STARPPls.setResultStartCommand("3:3:3", 0, false, 2);
+                STARPPls.setTimeTheTest("33:33:33");
+                STARPPls.setMaxPulse("2");
+                STARPPls.setPassTest(null);
+
+                Meter.StartResult STARPMns = meter.getStartTestRPMns();
+                STARPMns.setResultStartCommand("4:4:4", 0, false, 3);
+                STARPMns.setTimeTheTest("44:44:44");
+                STARPMns.setMaxPulse("2");
+                STARPMns.setPassTest(null);
+
+                Meter.RTCResult RTC = meter.getRTCTest();
+                RTC.setAmoutMeash("2");
+                RTC.setFreg("1.0");
+                RTC.setTimeMeash("30");
+                RTC.setPassTest(null);
+                RTC.setMinError("-0.000006");
+                RTC.setMaxError("0.000006");
+                RTC.setLastResult("1.000000");
+
+                Meter.ConstantResult CNTAPPls = meter.getConstantTestAPPls();
+                CNTAPPls.setMaxError("1.5");
+                CNTAPPls.setMinError("-1.5");
+                CNTAPPls.setLastResult("0.1");
+                CNTAPPls.setPassTest(null);
+                CNTAPPls.setKwMeter("1.231");
+                CNTAPPls.setKwRefMeter("1.342");
+
+                Meter.ConstantResult CNTAPMns = meter.getConstantTestAPMns();
+                CNTAPMns.setMaxError("1.5");
+                CNTAPMns.setMinError("-1.5");
+                CNTAPMns.setLastResult("0.1");
+                CNTAPMns.setPassTest(null);
+                CNTAPMns.setKwMeter("1.231");
+                CNTAPMns.setKwRefMeter("1.342");
+
+                Meter.ConstantResult CNTRPPls = meter.getConstantTestRPPls();
+                CNTRPPls.setMaxError("1.5");
+                CNTRPPls.setMinError("-1.5");
+                CNTRPPls.setLastResult("0.1");
+                CNTRPPls.setPassTest(null);
+                CNTRPPls.setKwMeter("1.231");
+                CNTRPPls.setKwRefMeter("1.342");
+
+                Meter.ConstantResult CNTRPMns = meter.getConstantTestRPMns();
+                CNTRPMns.setMaxError("1.5");
+                CNTRPMns.setMinError("-1.5");
+                CNTRPMns.setLastResult("0.1");
+                CNTRPMns.setPassTest(null);
+                CNTRPMns.setKwMeter("1.231");
+                CNTRPMns.setKwRefMeter("1.342");
+            } else {
+
+                Meter.CreepResult CRP = meter.getCreepTest();
+                CRP.setResultCreepCommand("11:11:11", 0, true);
+                CRP.setTimeTheTest("11:11:11");
+                CRP.setMaxPulse("2");
+
+                Meter.StartResult STAAPPls = meter.getStartTestAPPls();
+                STAAPPls.setResultStartCommand("1:1:1", 0, false, 0);
+                STAAPPls.setTimeTheTest("22:22:22");
+                STAAPPls.setMaxPulse("2");
+
+                Meter.StartResult STAAPMns = meter.getStartTestAPMns();
+                STAAPMns.setResultStartCommand("2:2:2", 0, true, 1);
+                STAAPMns.setTimeTheTest("33:33:33");
+                STAAPMns.setMaxPulse("2");
+
+                Meter.StartResult STARPPls = meter.getStartTestRPPls();
+                STARPPls.setResultStartCommand("3:3:3", 0, true, 2);
+                STARPPls.setTimeTheTest("33:33:33");
+                STARPPls.setMaxPulse("2");
+
+                Meter.StartResult STARPMns = meter.getStartTestRPMns();
+                STARPMns.setResultStartCommand("4:4:4", 0, false, 3);
+                STARPMns.setTimeTheTest("44:44:44");
+                STARPMns.setMaxPulse("2");
+
+                Meter.RTCResult RTC = meter.getRTCTest();
+                RTC.setAmoutMeash("2");
+                RTC.setFreg("1.0");
+                RTC.setTimeMeash("30");
+                RTC.setPassTest(true);
+                RTC.setMinError("-0.000006");
+                RTC.setMaxError("0.000006");
+                RTC.setLastResult("1.000000");
+
+                Meter.ConstantResult CNTAPPls = meter.getConstantTestAPPls();
+                CNTAPPls.setMaxError("1.5");
+                CNTAPPls.setMinError("-1.5");
+                CNTAPPls.setLastResult("0.1");
+                CNTAPPls.setPassTest(true);
+                CNTAPPls.setKwMeter("1.231");
+                CNTAPPls.setKwRefMeter("1.342");
+
+                Meter.ConstantResult CNTAPMns = meter.getConstantTestAPMns();
+                CNTAPMns.setMaxError("1.5");
+                CNTAPMns.setMinError("-1.5");
+                CNTAPMns.setLastResult("0.1");
+                CNTAPMns.setPassTest(false);
+                CNTAPMns.setKwMeter("1.231");
+                CNTAPMns.setKwRefMeter("1.342");
+
+                Meter.ConstantResult CNTRPPls = meter.getConstantTestRPPls();
+                CNTRPPls.setMaxError("1.5");
+                CNTRPPls.setMinError("-1.5");
+                CNTRPPls.setLastResult("0.1");
+                CNTRPPls.setPassTest(false);
+                CNTRPPls.setKwMeter("1.231");
+                CNTRPPls.setKwRefMeter("1.342");
+
+                Meter.ConstantResult CNTRPMns = meter.getConstantTestRPMns();
+                CNTRPMns.setMaxError("1.5");
+                CNTRPMns.setMinError("-1.5");
+                CNTRPMns.setLastResult("0.1");
+                CNTRPMns.setPassTest(true);
+                CNTRPMns.setKwMeter("1.231");
+                CNTRPMns.setKwRefMeter("1.342");
             }
         }
     }
