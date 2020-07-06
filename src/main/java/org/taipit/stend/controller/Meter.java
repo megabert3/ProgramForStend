@@ -788,13 +788,13 @@ public class Meter implements Serializable{
         //Идентификатор команды
         private String id;
 
-        private String lastResult;
+        private String lastResult = "";
 
         //Верхняя граница погрешности
-        private String maxError;
+        private String maxError = "";
 
         //Нижняя граница погрешности
-        private String minError;
+        private String minError = "";
 
         //Погрешность в диапазоне (прошла тест или нет)
         private Boolean passTest = null;

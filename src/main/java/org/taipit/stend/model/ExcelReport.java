@@ -2,6 +2,7 @@ package org.taipit.stend.model;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.taipit.stend.controller.Meter;
@@ -9,16 +10,21 @@ import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 
+import java.awt.*;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.List;
 
 public class ExcelReport {
 
     private String[] resultName;
+
+    private String filePath = "C:\\Users\\bert1\\Desktop\\test.xls";
 
     private final String SHEET_NAME = "Результат";
     private Workbook wb = new HSSFWorkbook();
@@ -601,8 +607,20 @@ public class ExcelReport {
 
         createHeadInformation(wb, mainSheet, testMeter, stendDLLCommands);
 
-        try (OutputStream outputStream = new FileOutputStream("C:\\Users\\a.halimov\\Desktop\\test.xls")){
+        try (OutputStream outputStream = new FileOutputStream(filePath)){
             wb.write(outputStream);
+
+            Desktop desktop = null;
+            if (Desktop.isDesktopSupported()) {
+                desktop = Desktop.getDesktop();
+
+                try {
+                    desktop.open(new File(filePath));
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -2841,7 +2859,7 @@ public class ExcelReport {
                 printIndexCellABC++;
             }
 
-            CellRangeAddress region = new CellRangeAddress(row + 1, row + meters.size() - 1, cell, totalElements);
+            CellRangeAddress region = new CellRangeAddress(row + 1, row + meters.size(), cell, totalElements);
             RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
@@ -3025,11 +3043,19 @@ public class ExcelReport {
         public int compare(String o1, String o2) {
             if (o1.equals("A") && !o2.equals("A")) {
                 return -1;
+            } else if (!o1.equals("A") && o2.equals("A")) {
+                return 1;
             } else if (o1.equals("B") && !o2.equals("B")) {
                 return -1;
-            } else if (o1.equals("C") && o2.equals("C")) {
+            } else if (!o1.equals("B") && o2.equals("B")) {
+                return 1;
+            } else if (o1.equals("C") && !o2.equals("C")) {
                 return -1;
-            } else return 0;
+            } else if (!o1.equals("C") && o2.equals("C")) {
+                return 1;
+            } else {
+                return 1;
+            }
         }
     };
 
