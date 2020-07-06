@@ -238,7 +238,8 @@ public class SaveResultsTestFrame {
 
         //Устанавливаю значения общего результата теста
         for (Meter meter : meterList) {
-            meter.setFinalAllTestResult(meter.meterPassOrNotAlltests());
+            Meter.TotalResult totalResult = meter.getTotalResultObject();
+            meter.setTotalResult(totalResult.calculateTotalResult());
         }
 
         //Установка чек боксов и добавление к ним слушателя
@@ -327,11 +328,11 @@ public class SaveResultsTestFrame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getFinalAllTestResult() == null) {
+                if (meter.getTotalResult() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getFinalAllTestResult()) {
+                } else if (meter.getTotalResult()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getFinalAllTestResult()) {
+                } else if (!meter.getTotalResult()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -352,11 +353,11 @@ public class SaveResultsTestFrame {
             Meter meter = event.getTableView().getItems().get(row);
 
             if (result.equals(resultMass[0])) {
-                meter.setFinalAllTestResult(null);
+                meter.setTotalResult(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setFinalAllTestResult(true);
+                meter.setTotalResult(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setFinalAllTestResult(false);
+                meter.setTotalResult(false);
             }
         });
 

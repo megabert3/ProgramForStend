@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.taipit.stend.helper.ConsoleHelper;
@@ -248,11 +247,11 @@ public class EditResultsMetersController {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getFinalAllTestResult() == null) {
+                if (meter.getTotalResult() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getFinalAllTestResult()) {
+                } else if (meter.getTotalResult()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getFinalAllTestResult()) {
+                } else if (!meter.getTotalResult()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
@@ -273,11 +272,11 @@ public class EditResultsMetersController {
             Meter meter = event.getTableView().getItems().get(row);
 
             if (result.equals(resultMass[0])) {
-                meter.setFinalAllTestResult(null);
+                meter.setTotalResult(null);
             } else if (result.equals(resultMass[1])) {
-                meter.setFinalAllTestResult(true);
+                meter.setTotalResult(true);
             } else if (result.equals(resultMass[2])) {
-                meter.setFinalAllTestResult(false);
+                meter.setTotalResult(false);
             }
         });
         tabColResultVerification.setStyle( "-fx-alignment: CENTER;");

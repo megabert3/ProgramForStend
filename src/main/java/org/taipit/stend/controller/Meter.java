@@ -111,7 +111,7 @@ public class Meter implements Serializable{
     //APR Внешний вид
 
     //Общий результат
-    private Boolean finalAllTestResult;
+    private Meter.TotalResult totalResult = new Meter.TotalResult("T");
 
     //Самоход
     private CreepResult creepTest = new CreepResult("CRP", "", "");
@@ -362,60 +362,6 @@ public class Meter implements Serializable{
             }
         }
         return null;
-    }
-
-    //окончательный вердикт
-    public Boolean meterPassOrNotAlltests() {
-        Boolean yesOrNo = null;
-
-        if (!errorListAPPls.isEmpty()) {
-            for (CommandResult commandResult : errorListAPPls) {
-                if (commandResult.isPassTest() != null) {
-                    if (!commandResult.isPassTest()) {
-                        return false;
-                    } else {
-                        yesOrNo = true;
-                    }
-                }
-            }
-        }
-
-        if (!errorListAPMns.isEmpty()) {
-            for (CommandResult commandResult : errorListAPMns) {
-                if (commandResult.isPassTest() != null) {
-                    if (!commandResult.isPassTest()) {
-                        return false;
-                    } else {
-                        yesOrNo = true;
-                    }
-                }
-            }
-        }
-
-        if (!errorListRPPls.isEmpty()) {
-            for (CommandResult commandResult : errorListRPPls) {
-                if (commandResult.isPassTest() != null) {
-                    if (!commandResult.isPassTest()) {
-                        return false;
-                    } else {
-                        yesOrNo = true;
-                    }
-                }
-            }
-        }
-
-        if (!errorListRPMns.isEmpty()) {
-            for (CommandResult commandResult : errorListRPMns) {
-                if (commandResult.isPassTest() != null) {
-                    if (!commandResult.isPassTest()) {
-                        return false;
-                    } else {
-                        yesOrNo = true;
-                    }
-                }
-            }
-        }
-        return yesOrNo;
     }
 
     //Переводит миллисекунды в формат hh:mm:ss
@@ -766,12 +712,13 @@ public class Meter implements Serializable{
         this.factoryManufacturer = factoryManufacturer;
     }
 
-    public Boolean getFinalAllTestResult() {
-        return finalAllTestResult;
+    public Boolean getTotalResult() {
+
+        return totalResult.getPassTest();
     }
 
-    public void setFinalAllTestResult(Boolean finalAllTestResult) {
-        this.finalAllTestResult = finalAllTestResult;
+    public void setTotalResult(Boolean totalResult) {
+        this.totalResult.setPassTest(totalResult);
     }
 
     public String getUnicalID() {
@@ -820,6 +767,10 @@ public class Meter implements Serializable{
 
     public void setTestMode(String testMode) {
         this.testMode = testMode;
+    }
+
+    public Meter.TotalResult getTotalResultObject() {
+        return totalResult;
     }
 
     //==============================================================================================
@@ -1028,7 +979,7 @@ public class Meter implements Serializable{
                         break;
                     case 2: startTestRPPls = this;
                         break;
-                    case 3: startTestRPPls = this;
+                    case 3: startTestRPMns = this;
                         break;
                 }
 
@@ -1045,7 +996,7 @@ public class Meter implements Serializable{
                         break;
                     case 2: startTestRPPls = this;
                         break;
-                    case 3: startTestRPPls = this;
+                    case 3: startTestRPMns = this;
                         break;
                 }
             }
@@ -1073,7 +1024,7 @@ public class Meter implements Serializable{
         }
     }
 
-    //Класс для записи результата исполнения StartCommnad
+    //Класс для записи результата исполнения RTCCommand
     public class RTCResult extends CommandResult implements Serializable {
 
         String freg;
@@ -1233,6 +1184,106 @@ public class Meter implements Serializable{
         AppearensResult(String id) {
             super(id);
             super.passTest = true;
+        }
+    }
+
+    public class TotalResult extends CommandResult implements Serializable {
+
+        TotalResult(String id) {
+            super(id);
+            super.passTest = null;
+        }
+
+        public Boolean calculateTotalResult() {
+            Boolean result = null;
+
+            if (!creepTest.isPassTest()) return false;
+            else result = true;
+
+            if (!startTestAPPls.isPassTest()) return false;
+            else result = true;
+            if (!startTestAPMns.isPassTest()) return false;
+            else result = true;
+            if (!startTestRPPls.isPassTest()) return false;
+            else result = true;
+            if (!startTestRPMns.isPassTest()) return false;
+            else result = true;
+
+            if (!RTCTest.isPassTest()) return false;
+            else result = true;
+
+            if (!insulationTest.isPassTest()) return false;
+            else result = true;
+
+            if (!appearensTest.isPassTest()) return false;
+            else result = true;
+
+            if (!constantTestAPPls.isPassTest()) return false;
+            else result = true;
+            if (!constantTestAPMns.isPassTest()) return false;
+            else result = true;
+            if (!constantTestRPPls.isPassTest()) return false;
+            else result = true;
+            if (!constantTestRPMns.isPassTest()) return false;
+            else result = true;
+
+            if (errorListAPPls.size() != 0) {
+                for (Meter.CommandResult errResult : errorListAPPls) {
+                    if (errResult instanceof ErrorResult) {
+                        if (errResult.getPassTest() != null) {
+                            if (!errResult.isPassTest()) {
+                                return false;
+                            } else {
+                                result = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (errorListAPMns.size() != 0) {
+                for (Meter.CommandResult errResult : errorListAPMns) {
+                    if (errResult instanceof ErrorResult) {
+                        if (errResult.getPassTest() != null) {
+                            if (!errResult.isPassTest()) {
+                                return false;
+                            } else {
+                                result = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (errorListRPPls.size() != 0) {
+                for (Meter.CommandResult errResult : errorListRPPls) {
+                    if (errResult instanceof ErrorResult) {
+                        if (errResult.getPassTest() != null) {
+                            if (!errResult.isPassTest()) {
+                                return false;
+                            } else {
+                                result = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (errorListRPMns.size() != 0) {
+                for (Meter.CommandResult errResult : errorListRPMns) {
+                    if (errResult instanceof ErrorResult) {
+                        if (errResult.getPassTest() != null) {
+                            if (!errResult.isPassTest()) {
+                                return false;
+                            } else {
+                                result = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

@@ -1,11 +1,9 @@
 package org.taipit.stend.controller;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -226,11 +224,11 @@ public class ResultsMetersController implements Frame {
 
                 SimpleStringProperty result = null;
 
-                if (meter.getFinalAllTestResult() == null) {
+                if (meter.getTotalResult() == null) {
                     result = new SimpleStringProperty(resultMass[0]);
-                } else if (meter.getFinalAllTestResult()) {
+                } else if (meter.getTotalResult()) {
                     result = new SimpleStringProperty(resultMass[1]);
-                } else if (!meter.getFinalAllTestResult()) {
+                } else if (!meter.getTotalResult()) {
                     result = new SimpleStringProperty(resultMass[2]);
                 }
                 return result;
