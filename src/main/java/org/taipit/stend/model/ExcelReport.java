@@ -24,7 +24,9 @@ public class ExcelReport {
 
     private String[] resultName;
 
-    private String filePath = "C:\\Users\\bert1\\Desktop\\test.xls";
+    private String filePath = "C:\\Users\\a.halimov\\Desktop\\test.xls";
+
+    private final String SER_NO_NAME = "Серийный номер";
 
     private final String SHEET_NAME = "Результат";
     private Workbook wb = new HSSFWorkbook();
@@ -610,7 +612,7 @@ public class ExcelReport {
         try (OutputStream outputStream = new FileOutputStream(filePath)){
             wb.write(outputStream);
 
-            Desktop desktop = null;
+            Desktop desktop;
             if (Desktop.isDesktopSupported()) {
                 desktop = Desktop.getDesktop();
 
@@ -882,12 +884,37 @@ public class ExcelReport {
         createCRPSTAError();
         createImbError();
         addErrorsInGroups(meters);
-        inflABCAPPls.print(row, 1);
-        inflAPPls.print(row + meters.size() + 6, 1);
-        ABCAPPls.print(row + meters.size() + 6 + meters.size() + 6, 1);
-        totalErrorAPPls.print(row + meters.size() + 6 + meters.size() + 6 + meters.size() + 6, 1);
-        CRPSTAother.print(row + meters.size() + 6 + meters.size() + 6 + meters.size() + 6 + meters.size() + 6, 1);
-        imbalansAPPls.print(row + meters.size() + 6 + meters.size() + 6 + meters.size() + 6 + meters.size() + 6 + meters.size() + 6, 1);
+
+        int cell  = 1;
+        int startRow = row;
+
+        CRPSTAother.print(row, cell);
+        System.out.println(CRPSTAother.getAmountCell());
+
+        startRow += CRPSTAother.getAmountRow() + 2;
+
+        totalErrorAPPls.print(startRow, cell);
+        System.out.println(totalErrorAPPls.getAmountCell());
+
+        startRow += totalErrorAPPls.getAmountRow() + 2;
+
+        ABCAPPls.print(startRow, cell);
+        System.out.println(ABCAPPls.getAmountCell());
+
+        startRow += ABCAPPls.getAmountRow() + 2;
+
+        inflAPPls.print(startRow, cell);
+        System.out.println(inflAPPls.getAmountCell());
+
+        startRow += inflAPPls.getAmountRow() + 2;
+
+        inflABCAPPls.print(startRow, cell);
+        System.out.println(inflABCAPPls.getAmountCell());
+
+        startRow += inflABCAPPls.getAmountRow() + 2;
+
+        imbalansAPPls.print(startRow, cell);
+        System.out.println(imbalansAPPls.getAmountCell());
     }
 
     private void createMergeZone(int firstRow, int lastRow, int firsColumn, int lastColumn, Cell cell, String cellText, CellStyle style, Font font, Sheet sheet,
@@ -1078,6 +1105,9 @@ public class ExcelReport {
         void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap);
 
         void print(int row, int cell);
+
+        int getAmountCell();
+        int getAmountRow();
     }
 
     public class CRPSTAotherGroup implements Group {
@@ -1095,6 +1125,9 @@ public class ExcelReport {
         //APR Внешний вид
 
         int amountElements;
+
+        int amountCell;
+        int amountRow;
 
         private Map<String, Map> mainMap;
 
@@ -1126,7 +1159,25 @@ public class ExcelReport {
 
             int printCellIndex = cell;
             int printRowIndex = row;
+
             String key;
+
+            //Создаю колонку с серийными номерами счётчиков
+            Cell cellSerNo = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex + 1, cellSerNo, SER_NO_NAME, centerCenter, Calibri_11_Bold,
+                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+            for (int i = 0; i < meters.size(); i++) {
+                int printRow = row + 2 + i;
+
+                Cell cellMeterSerNo = mainSheet.getRow(printRow).createCell(printCellIndex);
+
+                createMergeZone(printRow, printRow, printCellIndex, printCellIndex + 1, cellMeterSerNo, meters.get(i).getSerNoMeter(), centerCenterThin, Calibri_11,
+                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+            }
+
+            printCellIndex += 2;
 
             for (Map.Entry<String, Map> crpSta : mainMap.entrySet()) {
                 boolean containsResult = false;
@@ -1955,18 +2006,31 @@ public class ExcelReport {
                                     }
                                 }
                             }
-
-                            printCellIndex += 2;
                         } break;
                     }
                 }
             }
 
-            CellRangeAddress region = new CellRangeAddress(row + 2, row + 2 + meters.size() - 1, cell, printCellIndex - 1);
+            CellRangeAddress region = new CellRangeAddress(row + 2, row + 1 + meters.size(), cell, printCellIndex + 1);
             RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, mainSheet);
+
+            amountCell = printCellIndex + 2;
+            amountRow = meters.size() + 2;
+        }
+
+        public int getAmountCell() {
+            return amountCell;
+        }
+
+        public int getAmountRow() {
+            return amountRow;
+        }
+
+        public int getAmountElements() {
+            return amountElements;
         }
 
         public void getElements() {
@@ -1979,6 +2043,9 @@ public class ExcelReport {
     public class TotalErrorsGroup implements Group {
         //L;0.5;Imax;0.02
         int totalElements;
+
+        int amountCell;
+        int amountRow;
 
         private Map<String, Map> powerFactorMap;
         private Map<String, Map> currentMap;
@@ -2021,9 +2088,26 @@ public class ExcelReport {
         public void print(int row, int cell) {
             if (totalElements == 0) return;
 
-            int printIndexPF = cell;
+            int startPrintCellIndex = cell;
 
             int rowIndex;
+
+            //Создаю колонку с серийными номерами счётчиков
+            Cell cellSerNo = mainSheet.getRow(row).createCell(startPrintCellIndex);
+
+            createMergeZone(row, row + 1, startPrintCellIndex, startPrintCellIndex + 1, cellSerNo, SER_NO_NAME, centerCenter, Calibri_11_Bold,
+                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+            for (int i = 0; i < meters.size(); i++) {
+                int printRow = row + 2 + i;
+
+                Cell cellMeterSerNo = mainSheet.getRow(printRow).createCell(startPrintCellIndex);
+
+                createMergeZone(printRow, printRow, startPrintCellIndex, startPrintCellIndex + 1, cellMeterSerNo, meters.get(i).getSerNoMeter(), centerCenterThin, Calibri_11,
+                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+            }
+
+            startPrintCellIndex += 2;
 
             Map<String, Integer> PFcount = new TreeMap<>(comparatorForPowerFactor);
 
@@ -2040,20 +2124,20 @@ public class ExcelReport {
             rowIndex = row;
 
             for (Map.Entry<String, Integer> PF : PFcount.entrySet()) {
-                Cell cellPF = mainSheet.getRow(rowIndex).createCell(printIndexPF);
+                Cell cellPF = mainSheet.getRow(rowIndex).createCell(startPrintCellIndex);
 
-                createMergeZone(rowIndex, rowIndex, printIndexPF, printIndexPF + PF.getValue() - 1, cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
+                createMergeZone(rowIndex, rowIndex, startPrintCellIndex, startPrintCellIndex + PF.getValue() - 1, cellPF, PF.getKey(), centerCenter, Calibri_11_Bold,
                         mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
 
-                printIndexPF += PF.getValue();
+                startPrintCellIndex += PF.getValue();
             }
 
             //Создаю заголовки токов и вывожу погрешности
             int rowIndexForCurrent = row + 1;
-            int cellIndexForCurrent = cell;
+            int cellIndexForCurrent = cell + 2;
 
             int startPrintErrorRow = row + 2;
-            int startPrintErrorCell = cell;
+            int startPrintErrorCell = cell + 2;
 
             Map<String, Map> helpMap;
             for (Map mapPFValuePF : powerFactorMap.values()) {
@@ -2100,38 +2184,23 @@ public class ExcelReport {
                 }
             }
 
-            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, totalElements);
+            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, cell + totalElements + 2  - 1);
             RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, mainSheet);
+
+
+            amountCell = totalElements + 2;
+            amountRow = meters.size() + 2;
         }
 
-        public void getElements() {
-            System.out.println(powerFactorMap);
-            Map<String, Map> ABC;
-            Map<String, Map> valueLC0;
-            Map<String, Map> valueCurrent;
+        public int getAmountCell() {
+            return amountCell;
+        }
 
-            for (Map.Entry<String, Map> mapEntry : powerFactorMap.entrySet()) {
-                System.out.println(mapEntry.getKey());
-                ABC = mapEntry.getValue();
-
-                for (Map.Entry<String, Map> abc : ABC.entrySet()) {
-                    System.out.println("    " + abc.getKey());
-                    valueLC0 = abc.getValue();
-
-                    for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
-                        System.out.println("     " + asfa.getKey());
-
-                        valueCurrent = asfa.getValue();
-
-                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
-                            System.out.println("     " + asfaasdas.getKey());
-                        }
-                    }
-                }
-            }
+        public int getAmountRow() {
+            return amountRow;
         }
     }
 
@@ -2139,6 +2208,9 @@ public class ExcelReport {
         //A;L;0.5;Imax;0.02
 
         int totalElements;
+
+        int amountCell;
+        int amountRow;
 
         private Map<String, Map> ABCMap;
         private Map<String, Map> powerFactorMap;
@@ -2194,8 +2266,8 @@ public class ExcelReport {
         public void print(int row, int cell) {
             if (totalElements == 0) return;
 
-            int printIndexABC = cell;
-            int printIndexPF = cell;
+            int printIndexABC = cell + 2;
+            int printIndexPF = cell + 2;
 
             int rowIndex;
 
@@ -2208,6 +2280,21 @@ public class ExcelReport {
 
             String ABCKey;
             String PFKey;
+
+            //Создаю колонку с серийными номерами счётчиков
+            Cell cellSerNo = mainSheet.getRow(row).createCell(cell);
+
+            createMergeZone(row, row + 2, cell, cell + 1, cellSerNo, SER_NO_NAME, centerCenter, Calibri_11_Bold,
+                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+            for (int i = 0; i < meters.size(); i++) {
+                int printRow = row + 3 + i;
+
+                Cell cellMeterSerNo = mainSheet.getRow(printRow).createCell(cell);
+
+                createMergeZone(printRow, printRow, cell, cell + 1, cellMeterSerNo, meters.get(i).getSerNoMeter(), centerCenterThin, Calibri_11,
+                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+            }
 
             for (Map.Entry<String, Map> mapABC : ABCMap.entrySet()) {
                 ABCKey = mapABC.getKey();
@@ -2256,10 +2343,10 @@ public class ExcelReport {
 
             //Создаю заголовки токов и вывожу погрешности
             int rowIndexForCurrent = row + 2;
-            int cellIndexForCurrent = cell;
+            int cellIndexForCurrent = cell + 2;
 
             int startPrintErrorRow = row + 3;
-            int startPrintErrorCell = cell;
+            int startPrintErrorCell = cell + 2;
 
             Map<String, Map> helpMap;
             for (Map mapValuesABC : ABCMap.values()) {
@@ -2309,11 +2396,24 @@ public class ExcelReport {
                 }
             }
 
-            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, totalElements);
+            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, cell + totalElements - 1 + 2);
             RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, mainSheet);
+
+            amountCell = totalElements + 2;
+            amountRow = meters.size() + 3;
+        }
+
+        @Override
+        public int getAmountCell() {
+            return amountCell;
+        }
+
+        @Override
+        public int getAmountRow() {
+            return amountRow;
         }
 
         public void getElements() {
@@ -2349,6 +2449,9 @@ public class ExcelReport {
 
         //Количество элементов в группе
         private int totalElements;
+
+        int amountCell;
+        int amountRow;
 
         private Map<String, Map> UorFmap;
 
@@ -2416,6 +2519,24 @@ public class ExcelReport {
             String UorFKey;
             String PFKey;
 
+            //Создаю колонку с серийными номерами счётчиков
+            Cell cellSerNo = mainSheet.getRow(row).createCell(cell);
+
+            createMergeZone(row, row + 2, cell, cell + 1, cellSerNo, SER_NO_NAME, centerCenter, Calibri_11_Bold,
+                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+            for (int i = 0; i < meters.size(); i++) {
+                int printRow = row + 3 + i;
+
+                Cell cellMeterSerNo = mainSheet.getRow(printRow).createCell(cell);
+
+                createMergeZone(printRow, printRow, cell, cell + 1, cellMeterSerNo, meters.get(i).getSerNoMeter(), centerCenterThin, Calibri_11,
+                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+            }
+
+            printIndexUorF += 2;
+            printIndexPF += 2;
+
             for (Map.Entry<String, Map> UorFmap : UorFmap.entrySet()) {
                 UorFKey = UorFmap.getKey();
 
@@ -2451,13 +2572,12 @@ public class ExcelReport {
                 }
             }
 
-
             //Создаю заголовки токов и вывожу погрешности
             int rowIndexForCurrent = row + 2;
-            int cellIndexForCurrent = cell;
+            int cellIndexForCurrent = cell + 2;
 
             int startPrintErrorRow = row + 3;
-            int startPrintErrorCell = cell;
+            int startPrintErrorCell = cell + 2;
 
             Map<String, Map> helpMap;
             for (Map mapValuesUorF : UorFmap.values()) {
@@ -2507,11 +2627,14 @@ public class ExcelReport {
                 }
             }
 
-            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, totalElements);
+            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, cell + totalElements - 1 + 2);
             RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, mainSheet);
+
+            amountCell = totalElements + 2;
+            amountRow = meters.size() + 3;
         }
 
         public void getElements() {
@@ -2540,6 +2663,14 @@ public class ExcelReport {
                 }
             }
         }
+
+        public int getAmountCell() {
+            return amountCell;
+        }
+
+        public int getAmountRow() {
+            return amountRow;
+        }
     }
 
     public class InfABCGroup implements Group {
@@ -2547,6 +2678,9 @@ public class ExcelReport {
 
         //Количество элементов в группе
         private int totalElements;
+
+        int amountCell;
+        int amountRow;
 
         //Мапы с погрешностями
         private Map<String, Map> UorFmap;
@@ -2617,9 +2751,9 @@ public class ExcelReport {
 
             if (totalElements == 0) return;
 
-            int printIndexUorF = cell;
-            int printIndexABC = cell;
-            int printIndexPF = cell;
+            int printIndexUorF = cell + 2;
+            int printIndexABC = cell + 2;
+            int printIndexPF = cell + 2;
 
             int rowIndex;
 
@@ -2635,6 +2769,21 @@ public class ExcelReport {
             String UorFKey;
             String ABCKey;
             String PFKey;
+
+            //Создаю колонку с серийными номерами счётчиков
+            Cell cellSerNo = mainSheet.getRow(row).createCell(cell);
+
+            createMergeZone(row, row + 3, cell, cell + 1, cellSerNo, SER_NO_NAME, centerCenter, Calibri_11_Bold,
+                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+            for (int i = 0; i < meters.size(); i++) {
+                int printRow = row + 4 + i;
+
+                Cell cellMeterSerNo = mainSheet.getRow(printRow).createCell(cell);
+
+                createMergeZone(printRow, printRow, cell, cell + 1, cellMeterSerNo, meters.get(i).getSerNoMeter(), centerCenterThin, Calibri_11,
+                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+            }
 
             for (Map.Entry<String, Map> UorFmap : UorFmap.entrySet()) {
 
@@ -2701,10 +2850,10 @@ public class ExcelReport {
 
             //Создаю заголовки токов и вывожу погрешности
             int rowIndexForCurrent = row + 3;
-            int cellIndexForCurrent = cell;
+            int cellIndexForCurrent = cell + 2;
 
             int startPrintErrorRow = row + 4;
-            int startPrintErrorCell = cell;
+            int startPrintErrorCell = cell + 2;
 
             Map<String, Map> helpMap;
             for (Map mapValuesUorF : UorFmap.values()) {
@@ -2757,11 +2906,14 @@ public class ExcelReport {
                 }
             }
 
-            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, totalElements);
+            CellRangeAddress region = new CellRangeAddress(startPrintErrorRow, startPrintErrorRow + meters.size() - 1, cell, cell + totalElements - 1 + 2);
             RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, mainSheet);
+
+            amountCell = totalElements + 2;
+            amountRow = meters.size() + 4;
         }
 
         public void getElements() {
@@ -2790,6 +2942,14 @@ public class ExcelReport {
                 }
             }
         }
+
+        public int getAmountCell() {
+            return amountCell;
+        }
+
+        public int getAmountRow() {
+            return amountRow;
+        }
     }
 
     public class ImbalansUGroup implements Group{
@@ -2800,6 +2960,10 @@ public class ExcelReport {
         //AC
 
         int totalElements;
+
+        int amountCell;
+        int amountRow;
+
         private Map<String, Map> imbalansMap;
 
 
@@ -2822,6 +2986,23 @@ public class ExcelReport {
 
             //Создаю заголовок для значений Imb
             rowIndex = row;
+
+            //Создаю колонку с серийными номерами счётчиков
+            Cell cellSerNo = mainSheet.getRow(row).createCell(cell);
+
+            createMergeZone(row, row, printIndexCellABC, printIndexCellABC + 1, cellSerNo, SER_NO_NAME, centerCenter, Calibri_11_Bold,
+                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+            for (int i = 0; i < meters.size(); i++) {
+                int printRow = row + 1 + i;
+
+                Cell cellMeterSerNo = mainSheet.getRow(printRow).createCell(printIndexCellABC);
+
+                createMergeZone(printRow, printRow, printIndexCellABC, printIndexCellABC + 1, cellMeterSerNo, meters.get(i).getSerNoMeter(), centerCenterThin, Calibri_11,
+                        mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+            }
+
+            printIndexCellABC += 2;
 
             for (Map.Entry<String, Map> ABCImb : imbalansMap.entrySet()) {
                 boolean addComment = false;
@@ -2859,11 +3040,22 @@ public class ExcelReport {
                 printIndexCellABC++;
             }
 
-            CellRangeAddress region = new CellRangeAddress(row + 1, row + meters.size(), cell, totalElements);
+            CellRangeAddress region = new CellRangeAddress(row + 1, row + meters.size(), cell, cell + totalElements - 1 + 2);
             RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, mainSheet);
+
+            amountCell = totalElements + 2;
+            amountRow = meters.size() + 1;
+        }
+
+        public int getAmountCell() {
+            return amountCell;
+        }
+
+        public int getAmountRow() {
+            return amountRow;
         }
 
         public void getElements() {
@@ -3062,13 +3254,11 @@ public class ExcelReport {
     private void createTestErrorForInfABC() {
         //1;A;A;P;0.2 Ib;0.5C
         meters = new ArrayList<>();
-
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
-        meters.add(new Meter());
+        for (int i = 0; i < 6; i++) {
+            Meter meter = new Meter();
+            meter.setSerNoMeter("00000000000000" + i);
+            meters.add(meter);
+        }
 
         for (Meter meter : meters) {
             List<Meter.CommandResult> errorList = meter.getErrorListAPPls();
