@@ -1197,35 +1197,66 @@ public class Meter implements Serializable{
         public Boolean calculateTotalResult() {
             Boolean result = null;
 
-            if (!creepTest.isPassTest()) return false;
-            else result = true;
+            if (creepTest.getPassTest() != null) {
+                if (!creepTest.isPassTest()) {
+                    return false;
+                } else result = true;
+            }
 
-            if (!startTestAPPls.isPassTest()) return false;
-            else result = true;
-            if (!startTestAPMns.isPassTest()) return false;
-            else result = true;
-            if (!startTestRPPls.isPassTest()) return false;
-            else result = true;
-            if (!startTestRPMns.isPassTest()) return false;
-            else result = true;
+            if (startTestAPPls.getPassTest() != null) {
+                if (!startTestAPPls.isPassTest()) return false;
+                else result = true;
+            }
 
-            if (!RTCTest.isPassTest()) return false;
-            else result = true;
+            if (startTestAPMns.getPassTest() != null) {
+                if (!startTestAPMns.isPassTest()) return false;
+                else result = true;
+            }
 
-            if (!insulationTest.isPassTest()) return false;
-            else result = true;
+            if (startTestRPPls.getPassTest() != null) {
+                if (!startTestRPPls.isPassTest()) return false;
+                else result = true;
+            }
 
-            if (!appearensTest.isPassTest()) return false;
-            else result = true;
+            if (startTestRPMns.getPassTest() != null) {
+                if (!startTestRPMns.isPassTest()) return false;
+                else result = true;
+            }
 
-            if (!constantTestAPPls.isPassTest()) return false;
-            else result = true;
-            if (!constantTestAPMns.isPassTest()) return false;
-            else result = true;
-            if (!constantTestRPPls.isPassTest()) return false;
-            else result = true;
-            if (!constantTestRPMns.isPassTest()) return false;
-            else result = true;
+            if (RTCTest.getPassTest() != null) {
+                if (!RTCTest.isPassTest()) return false;
+                else result = true;
+            }
+
+            if (insulationTest.getPassTest() != null) {
+                if (!insulationTest.isPassTest()) return false;
+                else result = true;
+            }
+
+            if (appearensTest.getPassTest() != null) {
+                if (!appearensTest.isPassTest()) return false;
+                else result = true;
+            }
+
+            if (constantTestAPPls.getPassTest() != null) {
+                if (!constantTestAPPls.isPassTest()) return false;
+                else result = true;
+            }
+
+            if (constantTestAPMns.getPassTest() != null) {
+                if (!constantTestAPMns.isPassTest()) return false;
+                else result = true;
+            }
+
+            if (constantTestRPPls.getPassTest() != null) {
+                if (!constantTestRPPls.isPassTest()) return false;
+                else result = true;
+            }
+
+            if (constantTestRPMns.getPassTest() != null) {
+                if (!constantTestRPMns.isPassTest()) return false;
+                else result = true;
+            }
 
             if (errorListAPPls.size() != 0) {
                 for (Meter.CommandResult errResult : errorListAPPls) {

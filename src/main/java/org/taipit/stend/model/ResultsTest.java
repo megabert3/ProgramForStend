@@ -1,7 +1,6 @@
 package org.taipit.stend.model;
 
 import org.taipit.stend.controller.Meter;
-import org.taipit.stend.helper.exeptions.InfoExсeption;
 
 import java.io.*;
 import java.util.ArrayList;

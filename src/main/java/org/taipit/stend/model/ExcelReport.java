@@ -33,6 +33,7 @@ public class ExcelReport {
     private Sheet mainSheet = wb.createSheet(SHEET_NAME);
 
     private Font Bauhaus_15_Bold = createFontStyle(wb, 15, "Calisto MT", true, false, false);
+    private Font Bauhaus_14_Bold = createFontStyle(wb, 14, "Bauhaus 93", true, false, false);
     private Font Calibri_11_BoldItalic = createFontStyle(wb, 11, "Calibri", true, true, false);
     private Font Bauhaus_12_Bold = createFontStyle(wb, 12, "Bauhaus 93", true, false, false);
     private Font Calibri_11_Bold = createFontStyle(wb, 11, "Calibri", true, false, false);
@@ -885,36 +886,51 @@ public class ExcelReport {
         createImbError();
         addErrorsInGroups(meters);
 
+        boolean headAPPls = false;
+        boolean headAPMns = false;
+        boolean headRPPls = false;
+        boolean headRPMns = false;
+
         int cell  = 1;
         int startRow = row;
 
-        CRPSTAother.print(row, cell);
-        System.out.println(CRPSTAother.getAmountCell());
+        if (CRPSTAother.getTotalElements() != 0) {
+            CRPSTAother.print(row, cell);
 
-        startRow += CRPSTAother.getAmountRow() + 2;
+            startRow += CRPSTAother.getAmountRow() + 2;
+        }
 
-        totalErrorAPPls.print(startRow, cell);
-        System.out.println(totalErrorAPPls.getAmountCell());
+        if (totalErrorAPPls.getTotalElements() != 0) {
+            if (!headAPPls) {
+                printHeadAPPls(cell, startRow);
+            }
+            totalErrorAPPls.print(startRow, cell);
 
-        startRow += totalErrorAPPls.getAmountRow() + 2;
+            startRow += totalErrorAPPls.getAmountRow() + 2;
+        }
 
         ABCAPPls.print(startRow, cell);
-        System.out.println(ABCAPPls.getAmountCell());
 
         startRow += ABCAPPls.getAmountRow() + 2;
 
         inflAPPls.print(startRow, cell);
-        System.out.println(inflAPPls.getAmountCell());
 
         startRow += inflAPPls.getAmountRow() + 2;
 
         inflABCAPPls.print(startRow, cell);
-        System.out.println(inflABCAPPls.getAmountCell());
 
         startRow += inflABCAPPls.getAmountRow() + 2;
 
         imbalansAPPls.print(startRow, cell);
-        System.out.println(imbalansAPPls.getAmountCell());
+    }
+
+    private void printHeadAPPls(int indexCell, int indexRow) {
+        String headName = "Активная энергия в прямом направлении тока";
+        Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
+
+        createMergeZone(indexRow, indexRow + 1, indexCell, indexCell + 28, cell, headName, leftCenter, Bauhaus_14_Bold, mainSheet,
+                BorderStyle);
+
     }
 
     private void createMergeZone(int firstRow, int lastRow, int firsColumn, int lastColumn, Cell cell, String cellText, CellStyle style, Font font, Sheet sheet,
@@ -1108,6 +1124,8 @@ public class ExcelReport {
 
         int getAmountCell();
         int getAmountRow();
+
+        int getTotalElements();
     }
 
     public class CRPSTAotherGroup implements Group {
@@ -1124,7 +1142,7 @@ public class ExcelReport {
         //INS Изоляция
         //APR Внешний вид
 
-        int amountElements;
+        int totalElements;
 
         int amountCell;
         int amountRow;
@@ -1132,7 +1150,7 @@ public class ExcelReport {
         private Map<String, Map> mainMap;
 
         public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
-            amountElements++;
+            totalElements++;
 
             if (mainMap == null) {
                 mainMap = new TreeMap<>(comparatorForCRPSTA);
@@ -2029,8 +2047,8 @@ public class ExcelReport {
             return amountRow;
         }
 
-        public int getAmountElements() {
-            return amountElements;
+        public int getTotalElements() {
+            return totalElements;
         }
 
         public void getElements() {
@@ -2201,6 +2219,11 @@ public class ExcelReport {
 
         public int getAmountRow() {
             return amountRow;
+        }
+
+        @Override
+        public int getTotalElements() {
+            return totalElements;
         }
     }
 
@@ -2404,6 +2427,7 @@ public class ExcelReport {
 
             amountCell = totalElements + 2;
             amountRow = meters.size() + 3;
+
         }
 
         @Override
@@ -2414,6 +2438,11 @@ public class ExcelReport {
         @Override
         public int getAmountRow() {
             return amountRow;
+        }
+
+        @Override
+        public int getTotalElements() {
+            return totalElements;
         }
 
         public void getElements() {
@@ -2670,6 +2699,11 @@ public class ExcelReport {
 
         public int getAmountRow() {
             return amountRow;
+        }
+
+        @Override
+        public int getTotalElements() {
+            return totalElements;
         }
     }
 
@@ -2950,6 +2984,11 @@ public class ExcelReport {
         public int getAmountRow() {
             return amountRow;
         }
+
+        @Override
+        public int getTotalElements() {
+            return totalElements;
+        }
     }
 
     public class ImbalansUGroup implements Group{
@@ -3059,7 +3098,11 @@ public class ExcelReport {
         }
 
         public void getElements() {
+        }
 
+        @Override
+        public int getTotalElements() {
+            return totalElements;
         }
     }
 
