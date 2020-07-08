@@ -24,7 +24,7 @@ public class ExcelReport {
 
     private String[] resultName;
 
-    private String filePath = "C:\\Users\\a.halimov\\Desktop\\test.xls";
+    private String filePath = "C:\\Users\\bert1\\Desktop\\test.xls";
 
     private final String SER_NO_NAME = "Серийный номер";
 
@@ -74,7 +74,7 @@ public class ExcelReport {
         errCRPSTAother.put("T", new HashMap<>());
     }
 
-    private List<Meter> meters;
+    private List<Meter> meters = new ArrayList<>();
 
     private Map<String, Map<Integer, Meter.CommandResult>> errCRPSTAother = new HashMap<>();
 
@@ -111,7 +111,7 @@ public class ExcelReport {
     private Group totalErrorAPPls = new TotalErrorsGroup();
     private Group imbalansAPPls = new ImbalansUGroup();
 
-    private Group inflABCAPMns = new CRPSTAotherGroup();
+    private Group inflABCAPMns = new InfABCGroup();
     private Group inflAPMns = new InfGroup();
     private Group ABCAPMns = new ABCGroup();
     private Group totalErrorAPMns = new TotalErrorsGroup();
@@ -631,7 +631,7 @@ public class ExcelReport {
 
     private void createHeadInformation(Workbook wb, Sheet sheet, Meter meter, StendDLLCommands stendDLLCommands) {
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 1000; i++) {
             sheet.createRow(i);
         }
 
@@ -877,60 +877,386 @@ public class ExcelReport {
 
 
         //TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        int row = 20;
-        createTestErrorForInfABC();
-        createTestErrorForInf();
-        createTestErrorForABC();
-        createTestError();
+        for (int i = 0; i < 3; i++) {
+            Meter meter1 = new Meter();
+            meter1.setSerNoMeter("00000000000" + i);
+            meters.add(meter1);
+        }
+
         createCRPSTAError();
-        createImbError();
+
+        for (Meter meter1 : meters) {
+            createTestErrorForInfABC(meter1.getErrorListAPPls());
+            createTestErrorForInf(meter1.getErrorListAPPls());
+            createTestErrorForABC(meter1.getErrorListAPPls());
+            createTestError(meter1.getErrorListAPPls());
+            createImbError(meter1.getErrorListAPPls());
+        }
+
+        for (Meter meter1 : meters) {
+            createTestErrorForInfABC(meter1.getErrorListAPMns());
+            createTestErrorForInf(meter1.getErrorListAPMns());
+            createTestErrorForABC(meter1.getErrorListAPMns());
+            createTestError(meter1.getErrorListAPMns());
+            createImbError(meter1.getErrorListAPMns());
+        }
+
+        for (Meter meter1 : meters) {
+            createTestErrorForInfABC(meter1.getErrorListRPPls());
+            createTestErrorForInf(meter1.getErrorListRPPls());
+            createTestErrorForABC(meter1.getErrorListRPPls());
+            createTestError(meter1.getErrorListRPPls());
+            createImbError(meter1.getErrorListRPPls());
+        }
+
+        for (Meter meter1 : meters) {
+            createTestErrorForInfABC(meter1.getErrorListRPMns());
+            createTestErrorForInf(meter1.getErrorListRPMns());
+            createTestErrorForABC(meter1.getErrorListRPMns());
+            createTestError(meter1.getErrorListRPMns());
+            createImbError(meter1.getErrorListRPMns());
+        }
+
         addErrorsInGroups(meters);
+
+        printAllErros(0, 20);
+    }
+
+    private void printAllErros(int startCell, int startRow) {
+        int indexCell = startCell;
+        int indexRow = startRow;
 
         boolean headAPPls = false;
         boolean headAPMns = false;
         boolean headRPPls = false;
         boolean headRPMns = false;
 
-        int cell  = 1;
-        int startRow = row;
-
         if (CRPSTAother.getTotalElements() != 0) {
-            CRPSTAother.print(row, cell);
+            CRPSTAother.print(indexRow, indexCell);
 
-            startRow += CRPSTAother.getAmountRow() + 2;
+            indexRow += CRPSTAother.getAmountRow() + 2;
         }
 
+        //Вывожу погрешность AP+
         if (totalErrorAPPls.getTotalElements() != 0) {
             if (!headAPPls) {
-                printHeadAPPls(cell, startRow);
+                indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в прямом направлении");
+                indexRow++;
+                headAPPls = true;
             }
-            totalErrorAPPls.print(startRow, cell);
 
-            startRow += totalErrorAPPls.getAmountRow() + 2;
+            indexRow += printTotalErrorHead(indexRow, indexCell);
+            totalErrorAPPls.print(indexRow, indexCell);
+
+            indexRow += totalErrorAPPls.getAmountRow() + 2;
         }
 
-        ABCAPPls.print(startRow, cell);
+        if (ABCAPPls.getTotalElements() != 0) {
+            if (!headAPPls) {
+                indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в прямом направлении");
+                indexRow++;
+                headAPPls = true;
+            }
 
-        startRow += ABCAPPls.getAmountRow() + 2;
+            indexRow += printABCErrorHead(indexRow, indexCell);
+            ABCAPPls.print(indexRow, indexCell);
 
-        inflAPPls.print(startRow, cell);
+            indexRow += ABCAPPls.getAmountRow() + 2;
+        }
 
-        startRow += inflAPPls.getAmountRow() + 2;
+        if (inflAPPls.getTotalElements() != 0) {
+            if (!headAPPls) {
+                indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в прямом направлении");
+                indexRow++;
+                headAPPls = true;
+            }
 
-        inflABCAPPls.print(startRow, cell);
+            indexRow += printInfErrorHead(indexRow, indexCell);
+            inflAPPls.print(indexRow, indexCell);
 
-        startRow += inflABCAPPls.getAmountRow() + 2;
+            indexRow += inflAPPls.getAmountRow() + 2;
+        }
 
-        imbalansAPPls.print(startRow, cell);
+        if (inflABCAPPls.getTotalElements() != 0) {
+            if (!headAPPls) {
+                indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в прямом направлении");
+                indexRow++;
+                headAPPls = true;
+            }
+
+            indexRow += printInfABCErrorHead(indexRow, indexCell);
+            inflABCAPPls.print(indexRow, indexCell);
+
+            indexRow += inflABCAPPls.getAmountRow() + 2;
+        }
+
+        if (imbalansAPPls.getTotalElements() != 0) {
+            if (!headAPPls) {
+                indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в прямом направлении");
+                indexRow++;
+                headAPPls = true;
+            }
+            indexRow += printImbErrorHead(indexRow, indexCell);
+            imbalansAPPls.print(indexRow, indexCell);
+            indexRow += imbalansAPPls.getAmountRow() + 2;
+        }
+
+        if (headAPPls) {
+            indexRow += 3;
+        }
+
+        //Вывожу погрешность AP-
+        if (totalErrorAPMns.getTotalElements() != 0) {
+            if (!headAPMns) {
+                indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в обратном направлении");
+                indexRow++;
+                headAPMns = true;
+            }
+
+            indexRow += printTotalErrorHead(indexRow, indexCell);
+            totalErrorAPMns.print(indexRow, indexCell);
+
+            indexRow += totalErrorAPMns.getAmountRow() + 2;
+        }
+
+        if (ABCAPMns.getTotalElements() != 0) {
+            if (!headAPMns) {
+                indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в обратном направлении");
+                indexRow++;
+                headAPMns = true;
+            }
+
+            indexRow += printABCErrorHead(indexRow, indexCell);
+            ABCAPMns.print(indexRow, indexCell);
+
+            indexRow += ABCAPMns.getAmountRow() + 2;
+        }
+
+        if (inflAPMns.getTotalElements() != 0) {
+            if (!headAPMns) {
+                indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в обратном направлении");
+                indexRow++;
+                headAPMns = true;
+            }
+
+            indexRow += printInfErrorHead(indexRow, indexCell);
+            inflAPMns.print(indexRow, indexCell);
+
+            indexRow += inflAPMns.getAmountRow() + 2;
+        }
+
+        if (inflABCAPMns.getTotalElements() != 0) {
+            if (!headAPMns) {
+                indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в обратном направлении");
+                indexRow++;
+                headAPMns = true;
+            }
+
+            indexRow += printInfABCErrorHead(indexRow, indexCell);
+            inflABCAPMns.print(indexRow, indexCell);
+
+            indexRow += inflABCAPMns.getAmountRow() + 2;
+        }
+
+        if (imbalansAPMns.getTotalElements() != 0) {
+            if (!headAPMns) {
+                indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в обратном направлении");
+                indexRow++;
+                headAPMns = true;
+            }
+            indexRow += printImbErrorHead(indexRow, indexCell);
+            imbalansAPMns.print(indexRow, indexCell);
+            indexRow += imbalansAPMns.getAmountRow() + 2;
+        }
+
+        if (headAPMns) {
+            indexRow += 3;
+        }
+
+        //Вывожу погрешность RP+
+        if (totalErrorRPPls.getTotalElements() != 0) {
+            if (!headRPPls) {
+                indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в прямом направлении");
+                indexRow++;
+                headRPPls = true;
+            }
+
+            indexRow += printTotalErrorHead(indexRow, indexCell);
+            totalErrorRPPls.print(indexRow, indexCell);
+
+            indexRow += totalErrorRPPls.getAmountRow() + 2;
+        }
+
+        if (ABCRPPls.getTotalElements() != 0) {
+            if (!headRPPls) {
+                indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в прямом направлении");
+                indexRow++;
+                headRPPls = true;
+            }
+
+            indexRow += printABCErrorHead(indexRow, indexCell);
+            ABCRPPls.print(indexRow, indexCell);
+
+            indexRow += ABCRPPls.getAmountRow() + 2;
+        }
+
+        if (inflRPPls.getTotalElements() != 0) {
+            if (!headRPPls) {
+                indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в прямом направлении");
+                indexRow++;
+                headRPPls = true;
+            }
+
+            indexRow += printInfErrorHead(indexRow, indexCell);
+            inflRPPls.print(indexRow, indexCell);
+
+            indexRow += inflRPPls.getAmountRow() + 2;
+        }
+
+        if (inflABCRPPls.getTotalElements() != 0) {
+            if (!headRPPls) {
+                indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в прямом направлении");
+                indexRow++;
+                headRPPls = true;
+            }
+
+            indexRow += printInfABCErrorHead(indexRow, indexCell);
+            inflABCRPPls.print(indexRow, indexCell);
+
+            indexRow += inflABCRPPls.getAmountRow() + 2;
+        }
+
+        if (imbalansRPPls.getTotalElements() != 0) {
+            if (!headRPPls) {
+                indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в прямом направлении");
+                indexRow++;
+                headRPPls = true;
+            }
+            indexRow += printImbErrorHead(indexRow, indexCell);
+            imbalansRPPls.print(indexRow, indexCell);
+            indexRow += imbalansRPPls.getAmountRow() + 2;
+        }
+
+        if (headRPPls) {
+            indexRow += 3;
+        }
+
+        //Вывожу погрешность RP-
+        if (totalErrorRPMns.getTotalElements() != 0) {
+            if (!headRPMns) {
+                indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в обратном направлении");
+                indexRow++;
+                headRPMns = true;
+            }
+
+            indexRow += printTotalErrorHead(indexRow, indexCell);
+            totalErrorRPMns.print(indexRow, indexCell);
+
+            indexRow += totalErrorRPMns.getAmountRow() + 2;
+        }
+
+        if (ABCRPMns.getTotalElements() != 0) {
+            if (!headRPMns) {
+                indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в обратном направлении");
+                indexRow++;
+                headRPMns = true;
+            }
+
+            indexRow += printABCErrorHead(indexRow, indexCell);
+            ABCRPMns.print(indexRow, indexCell);
+
+            indexRow += ABCRPMns.getAmountRow() + 2;
+        }
+
+        if (inflRPMns.getTotalElements() != 0) {
+            if (!headRPMns) {
+                indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в обратном направлении");
+                indexRow++;
+                headRPMns = true;
+            }
+
+            indexRow += printInfErrorHead(indexRow, indexCell);
+            inflRPMns.print(indexRow, indexCell);
+
+            indexRow += inflRPMns.getAmountRow() + 2;
+        }
+
+        if (inflABCRPMns.getTotalElements() != 0) {
+            if (!headRPMns) {
+                indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в обратном направлении");
+                indexRow++;
+                headRPMns = true;
+            }
+
+            indexRow += printInfABCErrorHead(indexRow, indexCell);
+            inflABCRPMns.print(indexRow, indexCell);
+
+            indexRow += inflABCRPMns.getAmountRow() + 2;
+        }
+
+        if (imbalansRPMns.getTotalElements() != 0) {
+            if (!headRPMns) {
+                indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в обратном направлении");
+                indexRow++;
+                headRPMns = true;
+            }
+            indexRow += printImbErrorHead(indexRow, indexCell);
+            imbalansRPMns.print(indexRow, indexCell);
+        }
     }
 
-    private void printHeadAPPls(int indexCell, int indexRow) {
-        String headName = "Активная энергия в прямом направлении тока";
+    private int printHeadPower(int indexCell, int indexRow, String headName) {
         Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
 
         createMergeZone(indexRow, indexRow + 1, indexCell, indexCell + 28, cell, headName, leftCenter, Bauhaus_14_Bold, mainSheet,
-                BorderStyle);
+                BorderStyle.DASH_DOT, BorderStyle.NONE, BorderStyle.NONE, BorderStyle.DASH_DOT);
 
+        return 2;
+    }
+
+    private int printTotalErrorHead(int indexRow, int indexCell) {
+        Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
+
+        createMergeZone(indexRow, indexRow, indexCell, indexCell + 4, cell, "Общая погрешность", leftCenter, Bauhaus_12_Bold, mainSheet,
+                BorderStyle.NONE, BorderStyle.NONE, BorderStyle.NONE, BorderStyle.NONE);
+
+        return 1;
+    }
+
+    private int printABCErrorHead(int indexRow, int indexCell) {
+        Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
+
+        createMergeZone(indexRow, indexRow, indexCell, indexCell + 4, cell, "Пофазная погрешность", leftCenter, Bauhaus_12_Bold, mainSheet,
+                BorderStyle.NONE, BorderStyle.NONE, BorderStyle.NONE, BorderStyle.NONE);
+
+        return 1;
+    }
+
+    private int printInfErrorHead(int indexRow, int indexCell) {
+        Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
+
+        createMergeZone(indexRow, indexRow, indexCell, indexCell + 4, cell, "Погрешность влияния", leftCenter, Bauhaus_12_Bold, mainSheet,
+                BorderStyle.NONE, BorderStyle.NONE, BorderStyle.NONE, BorderStyle.NONE);
+
+        return 1;
+    }
+
+    private int printInfABCErrorHead(int indexRow, int indexCell) {
+        Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
+
+        createMergeZone(indexRow, indexRow, indexCell, indexCell + 7, cell, "Пофазная погрешность влияния", leftCenter, Bauhaus_12_Bold, mainSheet,
+                BorderStyle.NONE, BorderStyle.NONE, BorderStyle.NONE, BorderStyle.NONE);
+
+        return 1;
+    }
+
+    private int printImbErrorHead(int indexRow, int indexCell) {
+        Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
+
+        createMergeZone(indexRow, indexRow, indexCell, indexCell + 6, cell, "Имбаланс напряжений", leftCenter, Bauhaus_12_Bold, mainSheet,
+                BorderStyle.NONE, BorderStyle.NONE, BorderStyle.NONE, BorderStyle.NONE);
+
+        return 1;
     }
 
     private void createMergeZone(int firstRow, int lastRow, int firsColumn, int lastColumn, Cell cell, String cellText, CellStyle style, Font font, Sheet sheet,
@@ -3294,19 +3620,11 @@ public class ExcelReport {
         }
     };
 
-    private void createTestErrorForInfABC() {
+    private void createTestErrorForInfABC(List<Meter.CommandResult> errorList) {
         //1;A;A;P;0.2 Ib;0.5C
-        meters = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            Meter meter = new Meter();
-            meter.setSerNoMeter("00000000000000" + i);
-            meters.add(meter);
-        }
 
         for (Meter meter : meters) {
-            List<Meter.CommandResult> errorList = meter.getErrorListAPPls();
             //55.0 U;1;A;A;P;0.2 Ib;0.5C
-
             errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;0.5C", "-1", "1"));
             errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Ib;0.5C", "-1", "1"));
 
@@ -3435,10 +3753,9 @@ public class ExcelReport {
         }
     }
 
-    private void createTestErrorForInf() {
+    private void createTestErrorForInf(List<Meter.CommandResult> errorList) {
         //1;H;A;P;0.2 Ib;0.5C
         for (Meter meter : meters) {
-            List<Meter.CommandResult> errorList = meter.getErrorListAPPls();
             //55.0 U;1;A;A;P;0.2 Ib;0.5C
 
             errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Ib;1.0", "-2", "2"));
@@ -3494,10 +3811,9 @@ public class ExcelReport {
     }
 
 
-    private void createTestErrorForABC() {
+    private void createTestErrorForABC(List<Meter.CommandResult> errorList) {
         //1;A;A;P;0.2 Ib;0.5C
         for (Meter meter : meters) {
-            List<Meter.CommandResult> errorList = meter.getErrorListAPPls();
 
             errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Ib;1.0", "-3", "3"));
             errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Ib;1.0", "-3", "3"));
@@ -3570,10 +3886,9 @@ public class ExcelReport {
         }
     }
 
-    private void createTestError() {
+    private void createTestError(List<Meter.CommandResult> errorList) {
         //1;H;A;P;0.2 Ib;0.5C
         for (Meter meter : meters) {
-            List<Meter.CommandResult> errorList = meter.getErrorListAPPls();
 
             errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Ib;1.0", "-4", "4"));
             errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Ib;1.0", "-4", "4"));
@@ -3608,10 +3923,9 @@ public class ExcelReport {
         }
     }
 
-    private void createImbError() {
+    private void createImbError(List<Meter.CommandResult> errorList) {
         //"Imb;A;A;P"
         for (Meter meter : meters) {
-            List<Meter.CommandResult> errorList = meter.getErrorListAPPls();
 
             errorList.add(meter.new ImbUResult("Imb;A;A;P", "-5", "5"));
             errorList.add(meter.new ImbUResult("Imb;B;A;P", "-5", "5"));
