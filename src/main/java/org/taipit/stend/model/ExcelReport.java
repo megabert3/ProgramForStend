@@ -1427,7 +1427,7 @@ public class ExcelReport {
         return cellStyle;
     }
 
-    private static Comment createCellComment(Workbook wb, Sheet sheet, int cellInd, int rowInd, int commentSizeColl, int commentSizeRow, String txtComment) {
+    private static Comment createCellComment(Workbook wb, Sheet sheet, int rowInd, int cellInd, int commentSizeColl, int commentSizeRow, String txtComment) {
         CreationHelper factory = wb.getCreationHelper();
         Drawing drawing = sheet.createDrawingPatriarch();
 
@@ -3625,7 +3625,10 @@ public class ExcelReport {
 
         for (Meter meter : meters) {
             //55.0 U;1;A;A;P;0.2 Ib;0.5C
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;0.5C", "-1", "1"));
+            Meter.ErrorResult err = meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;0.5C", "-1", "1");
+            err.setPassTest(null);
+            errorList.add(err);
+
             errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Ib;0.5C", "-1", "1"));
 
             errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Imax;0.5C", "-1", "1"));
@@ -3738,18 +3741,18 @@ public class ExcelReport {
             errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Imax;1.0", "-1", "1"));
             errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Imax;1.0", "-1", "1"));
 
-            for (Meter.CommandResult result : errorList) {
-
-                double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
-
-                if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
-                    result.setPassTest(false);
-                } else {
-                    result.setPassTest(true);
-                }
-
-                result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
-            }
+//            for (Meter.CommandResult result : errorList) {
+//
+//                double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
+//
+//                if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
+//                    result.setPassTest(false);
+//                } else {
+//                    result.setPassTest(true);
+//                }
+//
+//                result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+//            }
         }
     }
 
