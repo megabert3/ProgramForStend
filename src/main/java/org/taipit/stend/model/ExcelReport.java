@@ -24,7 +24,7 @@ public class ExcelReport {
 
     private String[] resultName;
 
-    private String filePath = "C:\\Users\\bert1\\Desktop\\test.xls";
+    private String filePath = "C:\\Users\\a.halimov\\Desktop\\test.xls";
 
     private final String SER_NO_NAME = "Серийный номер";
 
@@ -631,7 +631,7 @@ public class ExcelReport {
 
     private void createHeadInformation(Workbook wb, Sheet sheet, Meter meter, StendDLLCommands stendDLLCommands) {
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1200; i++) {
             sheet.createRow(i);
         }
 
@@ -877,7 +877,7 @@ public class ExcelReport {
 
 
         //TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 48; i++) {
             Meter meter1 = new Meter();
             meter1.setSerNoMeter("00000000000" + i);
             meters.add(meter1);
@@ -886,35 +886,35 @@ public class ExcelReport {
         createCRPSTAError();
 
         for (Meter meter1 : meters) {
-            createTestErrorForInfABC(meter1.getErrorListAPPls());
-            createTestErrorForInf(meter1.getErrorListAPPls());
-            createTestErrorForABC(meter1.getErrorListAPPls());
-            createTestError(meter1.getErrorListAPPls());
-            createImbError(meter1.getErrorListAPPls());
+            createTestErrorForInfABC(meter1, meter1.getErrorListAPPls());
+            createTestErrorForInf(meter1, meter1.getErrorListAPPls());
+            createTestErrorForABC(meter1, meter1.getErrorListAPPls());
+            createTestError(meter1, meter1.getErrorListAPPls());
+            createImbError(meter1, meter1.getErrorListAPPls());
         }
 
         for (Meter meter1 : meters) {
-            createTestErrorForInfABC(meter1.getErrorListAPMns());
-            createTestErrorForInf(meter1.getErrorListAPMns());
-            createTestErrorForABC(meter1.getErrorListAPMns());
-            createTestError(meter1.getErrorListAPMns());
-            createImbError(meter1.getErrorListAPMns());
+            createTestErrorForInfABC(meter1, meter1.getErrorListAPMns());
+            createTestErrorForInf(meter1, meter1.getErrorListAPMns());
+            createTestErrorForABC(meter1, meter1.getErrorListAPMns());
+            createTestError(meter1, meter1.getErrorListAPMns());
+            createImbError(meter1, meter1.getErrorListAPMns());
         }
 
         for (Meter meter1 : meters) {
-            createTestErrorForInfABC(meter1.getErrorListRPPls());
-            createTestErrorForInf(meter1.getErrorListRPPls());
-            createTestErrorForABC(meter1.getErrorListRPPls());
-            createTestError(meter1.getErrorListRPPls());
-            createImbError(meter1.getErrorListRPPls());
+            createTestErrorForInfABC(meter1, meter1.getErrorListRPPls());
+            createTestErrorForInf(meter1, meter1.getErrorListRPPls());
+            createTestErrorForABC(meter1, meter1.getErrorListRPPls());
+            createTestError(meter1, meter1.getErrorListRPPls());
+            createImbError(meter1, meter1.getErrorListRPPls());
         }
 
         for (Meter meter1 : meters) {
-            createTestErrorForInfABC(meter1.getErrorListRPMns());
-            createTestErrorForInf(meter1.getErrorListRPMns());
-            createTestErrorForABC(meter1.getErrorListRPMns());
-            createTestError(meter1.getErrorListRPMns());
-            createImbError(meter1.getErrorListRPMns());
+            createTestErrorForInfABC(meter1, meter1.getErrorListRPMns());
+            createTestErrorForInf(meter1, meter1.getErrorListRPMns());
+            createTestErrorForABC(meter1, meter1.getErrorListRPMns());
+            createTestError(meter1, meter1.getErrorListRPMns());
+            createImbError(meter1, meter1.getErrorListRPMns());
         }
 
         addErrorsInGroups(meters);
@@ -2514,10 +2514,10 @@ public class ExcelReport {
 
                             Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
 
-                            if (!result.isPassTest()) {
-                                cellCurrentError.setCellStyle(centerCenterThinRed);
-                            } else {
+                            if (result.getPassTest() == null || result.isPassTest()) {
                                 cellCurrentError.setCellStyle(centerCenterThin);
+                            } else {
+                                cellCurrentError.setCellStyle(centerCenterThinRed);
                             }
                             cellCurrentError.setCellValue(result.getLastResult());
                         }
@@ -2730,10 +2730,10 @@ public class ExcelReport {
 
                                 Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
 
-                                if (!result.isPassTest()) {
-                                    cellCurrentError.setCellStyle(centerCenterThinRed);
-                                } else {
+                                if (result.getPassTest() == null || result.isPassTest()) {
                                     cellCurrentError.setCellStyle(centerCenterThin);
+                                } else {
+                                    cellCurrentError.setCellStyle(centerCenterThinRed);
                                 }
                                 cellCurrentError.setCellValue(result.getLastResult());
                             }
@@ -2967,10 +2967,10 @@ public class ExcelReport {
 
                                 Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
 
-                                if (!result.isPassTest()) {
-                                    cellCurrentError.setCellStyle(centerCenterThinRed);
-                                } else {
+                                if (result.getPassTest() == null || result.isPassTest()) {
                                     cellCurrentError.setCellStyle(centerCenterThin);
+                                } else {
+                                    cellCurrentError.setCellStyle(centerCenterThinRed);
                                 }
                                 cellCurrentError.setCellValue(result.getLastResult());
                             }
@@ -3250,10 +3250,10 @@ public class ExcelReport {
 
                                     Cell cellCurrentError = mainSheet.getRow(startPrintErrorRow + i).createCell(startPrintErrorCell);
 
-                                    if (!result.isPassTest()) {
-                                        cellCurrentError.setCellStyle(centerCenterThinRed);
-                                    } else {
+                                    if (result.getPassTest() == null || result.isPassTest()) {
                                         cellCurrentError.setCellStyle(centerCenterThin);
+                                    } else {
+                                        cellCurrentError.setCellStyle(centerCenterThinRed);
                                     }
                                     cellCurrentError.setCellValue(result.getLastResult());
                                 }
@@ -3394,10 +3394,10 @@ public class ExcelReport {
 
                         Cell cellImbError = mainSheet.getRow(startRow).createCell(printIndexCellABC);
 
-                        if (!result.isPassTest()) {
-                            cellImbError.setCellStyle(centerCenterThinRed);
-                        } else {
+                        if (result.getPassTest() == null || result.isPassTest()) {
                             cellImbError.setCellStyle(centerCenterThin);
+                        } else {
+                            cellImbError.setCellStyle(centerCenterThinRed);
                         }
                         cellImbError.setCellValue(result.getLastResult());
                     }
@@ -3620,336 +3620,324 @@ public class ExcelReport {
         }
     };
 
-    private void createTestErrorForInfABC(List<Meter.CommandResult> errorList) {
+    private void createTestErrorForInfABC(Meter meter, List<Meter.CommandResult> errorList) {
         //1;A;A;P;0.2 Ib;0.5C
 
-        for (Meter meter : meters) {
-            //55.0 U;1;A;A;P;0.2 Ib;0.5C
-            Meter.ErrorResult err = meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;0.5C", "-1", "1");
-            err.setPassTest(null);
-            errorList.add(err);
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Ib;0.5C", "-1", "1"));
+        //55.0 U;1;A;A;P;0.2 Ib;0.5C
+        Meter.ErrorResult err = meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;0.5C", "-1", "1");
+        errorList.add(err);
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Imax;0.5C", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Imax;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Ib;0.5C", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Ib;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Imax;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Imax;0.5C", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Imax;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Imax;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Ib;0.5L", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Ib;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Imax;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Imax;0.5L", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Imax;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Imax;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Ib;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Ib;1.0", "-1", "1"));
 
-
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Ib;0.5C", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Ib;0.5C", "-1", "1"));
-
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Imax;0.5C", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Imax;0.5C", "-1", "1"));
-
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Ib;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Ib;0.5L", "-1", "1"));
-
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Imax;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Imax;0.5L", "-1", "1"));
-
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Ib;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Ib;1.0", "-1", "1"));
-
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Imax;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Imax;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.2 Imax;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;A;A;P;0.1 Imax;1.0", "-1", "1"));
 
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Ib;0.5C", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Ib;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Ib;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Ib;0.5C", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Imax;0.5C", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Imax;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Imax;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Imax;0.5C", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Ib;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Ib;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Ib;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Ib;0.5L", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Imax;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Imax;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Imax;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Imax;0.5L", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Ib;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Ib;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Ib;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Ib;1.0", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Imax;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Imax;1.0", "-1", "1"));
-
-
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Ib;0.5C", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Ib;0.5C", "-1", "1"));
-
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Imax;0.5C", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Imax;0.5C", "-1", "1"));
-
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Ib;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Ib;0.5L", "-1", "1"));
-
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Imax;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Imax;0.5L", "-1", "1"));
-
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Ib;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Ib;1.0", "-1", "1"));
-
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Imax;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Imax;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.2 Imax;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;B;A;P;0.1 Imax;1.0", "-1", "1"));
 
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Ib;0.5C", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Ib;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Ib;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Ib;0.5C", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Imax;0.5C", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Imax;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Imax;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Imax;0.5C", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Ib;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Ib;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Ib;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Ib;0.5L", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Imax;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Imax;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Imax;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Imax;0.5L", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Ib;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Ib;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Ib;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Ib;1.0", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Imax;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Imax;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.2 Imax;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;C;A;P;0.1 Imax;1.0", "-1", "1"));
 
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Ib;0.5C", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Ib;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Ib;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Ib;0.5C", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Imax;0.5C", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Imax;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Imax;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Imax;0.5C", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Ib;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Ib;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Ib;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Ib;0.5L", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Imax;0.5L", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Imax;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Imax;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Imax;0.5L", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Ib;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Ib;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Ib;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Ib;1.0", "-1", "1"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Imax;1.0", "-1", "1"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Imax;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.2 Imax;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;A;A;P;0.1 Imax;1.0", "-1", "1"));
 
-//            for (Meter.CommandResult result : errorList) {
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Ib;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Ib;0.5C", "-1", "1"));
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Imax;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Imax;0.5C", "-1", "1"));
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Ib;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Ib;0.5L", "-1", "1"));
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Imax;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Imax;0.5L", "-1", "1"));
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Ib;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Ib;1.0", "-1", "1"));
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.2 Imax;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;B;A;P;0.1 Imax;1.0", "-1", "1"));
+
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Ib;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Ib;0.5C", "-1", "1"));
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Imax;0.5C", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Imax;0.5C", "-1", "1"));
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Ib;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Ib;0.5L", "-1", "1"));
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Imax;0.5L", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Imax;0.5L", "-1", "1"));
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Ib;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Ib;1.0", "-1", "1"));
+
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.2 Imax;1.0", "-1", "1"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;C;A;P;0.1 Imax;1.0", "-1", "1"));
+
+//        for (Meter.CommandResult result : errorList) {
 //
-//                double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
+//            double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
 //
-//                if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
-//                    result.setPassTest(false);
-//                } else {
-//                    result.setPassTest(true);
-//                }
-//
-//                result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+//            if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
+//                result.setPassTest(false);
+//            } else {
+//                result.setPassTest(true);
 //            }
-        }
+//
+//            result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+//        }
     }
 
-    private void createTestErrorForInf(List<Meter.CommandResult> errorList) {
-        //1;H;A;P;0.2 Ib;0.5C
-        for (Meter meter : meters) {
-            //55.0 U;1;A;A;P;0.2 Ib;0.5C
+    private void createTestErrorForInf(Meter meter, List<Meter.CommandResult> errorList) {
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Ib;1.0", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Ib;1.0", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Ib;1.0", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Ib;1.0", "-2", "2"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Imax;1.0", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Imax;1.0", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Imax;1.0", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Imax;1.0", "-2", "2"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Ib;0.5L", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Ib;0.5L", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Ib;0.5L", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Ib;0.5L", "-2", "2"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Imax;0.5L", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Imax;0.5L", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Imax;0.5L", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Imax;0.5L", "-2", "2"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Ib;0.5C", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Ib;0.5C", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Ib;0.5C", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Ib;0.5C", "-2", "2"));
 
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Imax;0.5C", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Imax;0.5C", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.2 Imax;0.5C", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 F;1;H;A;P;0.1 Imax;0.5C", "-2", "2"));
 
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Ib;1.0", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Ib;1.0", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Ib;1.0", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Ib;1.0", "-2", "2"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Imax;1.0", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Imax;1.0", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Imax;1.0", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Imax;1.0", "-2", "2"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Ib;0.5L", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Ib;0.5L", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Ib;0.5L", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Ib;0.5L", "-2", "2"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Imax;0.5L", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Imax;0.5L", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Imax;0.5L", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Imax;0.5L", "-2", "2"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Ib;0.5C", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Ib;0.5C", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Ib;0.5C", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Ib;0.5C", "-2", "2"));
 
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Imax;0.5C", "-2", "2"));
-            errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Imax;0.5C", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.2 Imax;0.5C", "-2", "2"));
+        errorList.add(meter.new ErrorResult("55.0 U;1;H;A;P;0.1 Imax;0.5C", "-2", "2"));
 
-            for (Meter.CommandResult result : errorList) {
-
-                double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
-
-                if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
-                    result.setPassTest(false);
-                } else {
-                    result.setPassTest(true);
-                }
-
-                result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
-            }
-        }
+//        for (Meter.CommandResult result : errorList) {
+//
+//            double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
+//
+//            if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
+//                result.setPassTest(false);
+//            } else {
+//                result.setPassTest(true);
+//            }
+//
+//            result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+//        }
     }
 
 
-    private void createTestErrorForABC(List<Meter.CommandResult> errorList) {
+    private void createTestErrorForABC(Meter meter, List<Meter.CommandResult> errorList) {
         //1;A;A;P;0.2 Ib;0.5C
-        for (Meter meter : meters) {
 
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Ib;1.0", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Ib;1.0", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Ib;1.0", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Ib;1.0", "-3", "3"));
 
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Imax;1.0", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Imax;1.0", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Imax;1.0", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Imax;1.0", "-3", "3"));
 
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Ib;0.5L", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Ib;0.5L", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Ib;0.5L", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Ib;0.5L", "-3", "3"));
 
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Imax;0.5L", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Imax;0.5L", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Imax;0.5L", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Imax;0.5L", "-3", "3"));
 
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Ib;0.5C", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Ib;0.5C", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Ib;0.5C", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Ib;0.5C", "-3", "3"));
 
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Imax;0.5C", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Imax;0.5C", "-3", "3"));
-
-
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Ib;1.0", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Ib;1.0", "-3", "3"));
-
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Imax;1.0", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Imax;1.0", "-3", "3"));
-
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Ib;0.5L", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Ib;0.5L", "-3", "3"));
-
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Imax;0.5L", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Imax;0.5L", "-3", "3"));
-
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Ib;0.5C", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Ib;0.5C", "-3", "3"));
-
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Imax;0.5C", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Imax;0.5C", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.2 Imax;0.5C", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;A;A;P;0.1 Imax;0.5C", "-3", "3"));
 
 
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Ib;1.0", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Ib;1.0", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Ib;1.0", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Ib;1.0", "-3", "3"));
 
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Imax;1.0", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Imax;1.0", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Imax;1.0", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Imax;1.0", "-3", "3"));
 
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Ib;0.5L", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Ib;0.5L", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Ib;0.5L", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Ib;0.5L", "-3", "3"));
 
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Imax;0.5L", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Imax;0.5L", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Imax;0.5L", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Imax;0.5L", "-3", "3"));
 
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Ib;0.5C", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Ib;0.5C", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Ib;0.5C", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Ib;0.5C", "-3", "3"));
 
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Imax;0.5C", "-3", "3"));
-            errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Imax;0.5C", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.2 Imax;0.5C", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;B;A;P;0.1 Imax;0.5C", "-3", "3"));
 
-            for (Meter.CommandResult result : errorList) {
 
-                double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Ib;1.0", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Ib;1.0", "-3", "3"));
 
-                if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
-                    result.setPassTest(false);
-                } else {
-                    result.setPassTest(true);
-                }
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Imax;1.0", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Imax;1.0", "-3", "3"));
 
-                result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
-            }
-        }
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Ib;0.5L", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Ib;0.5L", "-3", "3"));
+
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Imax;0.5L", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Imax;0.5L", "-3", "3"));
+
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Ib;0.5C", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Ib;0.5C", "-3", "3"));
+
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.2 Imax;0.5C", "-3", "3"));
+        errorList.add(meter.new ErrorResult("1;C;A;P;0.1 Imax;0.5C", "-3", "3"));
+
+//        for (Meter.CommandResult result : errorList) {
+//
+//            double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
+//
+//            if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
+//                result.setPassTest(false);
+//            } else {
+//                result.setPassTest(true);
+//            }
+//
+//            result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+//        }
     }
 
-    private void createTestError(List<Meter.CommandResult> errorList) {
+    private void createTestError(Meter meter, List<Meter.CommandResult> errorList) {
         //1;H;A;P;0.2 Ib;0.5C
-        for (Meter meter : meters) {
 
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Ib;1.0", "-4", "4"));
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Ib;1.0", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Ib;1.0", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Ib;1.0", "-4", "4"));
 
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Imax;1.0", "-4", "4"));
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Imax;1.0", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Imax;1.0", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Imax;1.0", "-4", "4"));
 
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Ib;0.5L", "-4", "4"));
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Ib;0.5L", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Ib;0.5L", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Ib;0.5L", "-4", "4"));
 
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Imax;0.5L", "-4", "4"));
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Imax;0.5L", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Imax;0.5L", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Imax;0.5L", "-4", "4"));
 
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Ib;0.5C", "-4", "4"));
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Ib;0.5C", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Ib;0.5C", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Ib;0.5C", "-4", "4"));
 
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Imax;0.5C", "-4", "4"));
-            errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Imax;0.5C", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.2 Imax;0.5C", "-4", "4"));
+        errorList.add(meter.new ErrorResult("1;H;A;P;0.1 Imax;0.5C", "-4", "4"));
 
-            for (Meter.CommandResult result : errorList) {
-
-                double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
-
-                if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
-                    result.setPassTest(false);
-                } else {
-                    result.setPassTest(true);
-                }
-
-                result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
-            }
-        }
+//        for (Meter.CommandResult result : errorList) {
+//
+//            double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
+//
+//            if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
+//                result.setPassTest(false);
+//            } else {
+//                result.setPassTest(true);
+//            }
+//
+//            result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+//        }
     }
 
-    private void createImbError(List<Meter.CommandResult> errorList) {
+    private void createImbError(Meter meter, List<Meter.CommandResult> errorList) {
         //"Imb;A;A;P"
-        for (Meter meter : meters) {
 
-            errorList.add(meter.new ImbUResult("Imb;A;A;P", "-5", "5"));
-            errorList.add(meter.new ImbUResult("Imb;B;A;P", "-5", "5"));
-            errorList.add(meter.new ImbUResult("Imb;C;A;P", "-5", "5"));
-            errorList.add(meter.new ImbUResult("Imb;AB;A;P", "-5", "5"));
-            errorList.add(meter.new ImbUResult("Imb;AC;A;P", "-5", "5"));
-            errorList.add(meter.new ImbUResult("Imb;CB;A;P", "-5", "5"));
+        errorList.add(meter.new ImbUResult("Imb;A;A;P", "-5", "5"));
+        errorList.add(meter.new ImbUResult("Imb;B;A;P", "-5", "5"));
+        errorList.add(meter.new ImbUResult("Imb;C;A;P", "-5", "5"));
+        errorList.add(meter.new ImbUResult("Imb;AB;A;P", "-5", "5"));
+        errorList.add(meter.new ImbUResult("Imb;AC;A;P", "-5", "5"));
+        errorList.add(meter.new ImbUResult("Imb;CB;A;P", "-5", "5"));
 
-            for (Meter.CommandResult result : errorList) {
-
-                double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
-
-                if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
-                    result.setPassTest(false);
-                } else {
-                    result.setPassTest(true);
-                }
-
-                result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
-            }
-        }
+//        for (Meter.CommandResult result : errorList) {
+//
+//            double x = (Math.random() * ((Float.parseFloat(result.getMaxError()) - Float.parseFloat(result.getMinError())) + 1)) + Float.parseFloat(result.getMinError());
+//
+//            if (x < Float.parseFloat(result.getMinError()) || x > Float.parseFloat(result.getMaxError())) {
+//                result.setPassTest(false);
+//            } else {
+//                result.setPassTest(true);
+//            }
+//
+//            result.setLastResult(new BigDecimal(x).setScale(3, RoundingMode.HALF_UP).toString());
+//        }
     }
 
     private void createCRPSTAError() {
