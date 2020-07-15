@@ -91,7 +91,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
     private Button BtnGoToStartTest;
 
     @FXML
-    private TableView<Metodic> viewPointTable = new TableView<>();
+    private TableView<Metodic> viewPointTable;
 
     @FXML
     private TableColumn<Metodic, String> tabClMethodics;
@@ -367,6 +367,8 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
     //Инициирует список методик
     private void initMethodicListName() {
+        tabClMethodics.setMinWidth(268);
+
         tabClMethodics.setCellValueFactory(new PropertyValueFactory<>("metodicName"));
 
         tabClMethodics.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -377,12 +379,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
             String newImpulseValue = event.getNewValue();
 
             if (newImpulseValue.trim().isEmpty()) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        ConsoleHelper.infoException("Название не должно быть пустым");
-                    }
-                });
+                ConsoleHelper.infoException("Поле \"Название\" не должно быть пустым");
 
                 viewPointTable.refresh();
                 return;
@@ -400,12 +397,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
             }catch (InfoExсeption e) {
                 e.printStackTrace();
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        ConsoleHelper.infoException("Методика с таким именем уже существует");
-                    }
-                });
+                ConsoleHelper.infoException("Методика с таким именем уже существует");
 
                 viewPointTable.refresh();
             }

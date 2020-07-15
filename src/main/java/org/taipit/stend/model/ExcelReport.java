@@ -24,7 +24,7 @@ public class ExcelReport {
 
     private String[] resultName;
 
-    private String filePath = "C:\\Users\\a.halimov\\Desktop\\test.xls";
+    private String filePath = "C:\\Users\\bert1\\Desktop\\test.xls";
 
     private final String SER_NO_NAME = "Серийный номер";
 
