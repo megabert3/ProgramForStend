@@ -29,7 +29,6 @@ import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class InfluencePointsThreePhaseStendFrame {
@@ -69,7 +68,7 @@ public class InfluencePointsThreePhaseStendFrame {
     private ObservableList<Commands> inflListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> inflListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
 
-    //листы с точками после сохранения
+    //Листы с точками после сохранения
     private List<Commands> saveInflListForCollumAPPls = new ArrayList<>();
     private List<Commands> saveInflListForCollumAPMns = new ArrayList<>();
     private List<Commands> saveInflListForCollumRPPls = new ArrayList<>();
@@ -432,7 +431,7 @@ public class InfluencePointsThreePhaseStendFrame {
     public void myInitInflFrame(MethodicForThreePhaseStend methodicForThreePhaseStend) {
         this.methodicForThreePhaseStend = methodicForThreePhaseStend;
 
-        intitInflFields(methodicForThreePhaseStend);
+        initInflFields(methodicForThreePhaseStend);
 
         APPlus.fire();
 
@@ -1918,7 +1917,9 @@ public class InfluencePointsThreePhaseStendFrame {
             InflUAllPhasePane.toFront();
             gridPaneUAllPhase.toFront();
 
+            setVisibleSelectedGridPane(gridPaneUAllPhase);
         }
+
         if (event.getSource() == selectInfFAllPhaseTgl) {
             selectInfUAllPhaseTgl.setSelected(false);
             selectInfFAllPhaseTgl.setSelected(true);
@@ -1928,6 +1929,7 @@ public class InfluencePointsThreePhaseStendFrame {
             InflFAllPhasePane.toFront();
             gridPaneFAllPhase.toFront();
 
+            setVisibleSelectedGridPane(gridPaneFAllPhase);
         }
 
         if (event.getSource() == selectInfUPhaseATgl) {
@@ -1939,6 +1941,7 @@ public class InfluencePointsThreePhaseStendFrame {
             InflUPhaseAPane.toFront();
             gridPaneUPhaseA.toFront();
 
+            setVisibleSelectedGridPane(gridPaneUPhaseA);
         }
         if (event.getSource() == selectInfFPhaseATgl) {
             selectInfUPhaseATgl.setSelected(false);
@@ -1948,6 +1951,8 @@ public class InfluencePointsThreePhaseStendFrame {
 
             InflFPhaseAPane.toFront();
             gridPaneFPhaseA.toFront();
+
+            setVisibleSelectedGridPane(gridPaneFPhaseA);
         }
 
         if (event.getSource() == selectInfUPhaseBTgl) {
@@ -1959,6 +1964,8 @@ public class InfluencePointsThreePhaseStendFrame {
             InflUPhaseBPane.toFront();
             gridPaneUPhaseB.toFront();
 
+            setVisibleSelectedGridPane(gridPaneUPhaseB);
+
         }
         if (event.getSource() == selectInfFPhaseBTgl) {
             selectInfUPhaseBTgl.setSelected(false);
@@ -1968,6 +1975,8 @@ public class InfluencePointsThreePhaseStendFrame {
 
             InflFPhaseBPane.toFront();
             gridPaneFPhaseB.toFront();
+
+            setVisibleSelectedGridPane(gridPaneFPhaseB);
         }
 
         if (event.getSource() == selectInfUPhaseCTgl) {
@@ -1978,6 +1987,8 @@ public class InfluencePointsThreePhaseStendFrame {
 
             InflUPhaseCPane.toFront();
             gridPaneUPhaseC.toFront();
+
+            setVisibleSelectedGridPane(gridPaneUPhaseC);
         }
 
         if (event.getSource() == selectInfFPhaseCTgl) {
@@ -1988,6 +1999,8 @@ public class InfluencePointsThreePhaseStendFrame {
 
             InflFPhaseCPane.toFront();
             gridPaneFPhaseC.toFront();
+
+            setVisibleSelectedGridPane(gridPaneFPhaseC);
         }
 
         if (event.getSource() == selectInfInb) {
@@ -2135,7 +2148,7 @@ public class InfluencePointsThreePhaseStendFrame {
     }
 
     //Инициализация полей влияния
-    private void intitInflFields(MethodicForThreePhaseStend methodicForThreePhaseStend) {
+    private void initInflFields(MethodicForThreePhaseStend methodicForThreePhaseStend) {
         inflListForCollumAPPls = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumAPPls());
         inflListForCollumAPMns = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumAPMns());
         inflListForCollumRPPls = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumRPPls());
@@ -2265,8 +2278,6 @@ public class InfluencePointsThreePhaseStendFrame {
         mainScrollPane.setContent(stackPaneForGridPane);
 
         mainAnchorPane.getChildren().add(mainScrollPane);
-
-        //stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
 
         mainScrollPane.setContent(stackPaneForGridPane);
     }
@@ -3080,6 +3091,16 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+    private void setVisibleSelectedGridPane(GridPane gridPane) {
+        for (GridPane gridPane1 : gridPanesEnergyAndPhase) {
+            if (gridPane1.equals(gridPane)) {
+                gridPane.setVisible(true);
+            } else {
+                gridPane1.setVisible(false);
+            }
+        }
+    }
+
     //Удаляет старые GridPane и инициализирует новые после смены напрявления или типа энергии
     private void removeOldGrPnAndSetIDGridPanesForAPPls() {
         stackPaneForGridPane.getChildren().clear();
@@ -3103,6 +3124,16 @@ public class InfluencePointsThreePhaseStendFrame {
         gridPaneFPhaseA.setId("F;1;A;A;P");
         gridPaneFPhaseB.setId("F;1;B;A;P");
         gridPaneFPhaseC.setId("F;1;C;A;P");
+
+        gridPaneUAllPhase.setVisible(true);
+        gridPaneUPhaseA.setVisible(false);
+        gridPaneUPhaseB.setVisible(false);
+        gridPaneUPhaseC.setVisible(false);
+
+        gridPaneFAllPhase.setVisible(false);
+        gridPaneFPhaseA.setVisible(false);
+        gridPaneFPhaseB.setVisible(false);
+        gridPaneFPhaseC.setVisible(false);
 
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
@@ -3140,6 +3171,16 @@ public class InfluencePointsThreePhaseStendFrame {
         gridPaneFPhaseB.setId("F;1;B;A;N");
         gridPaneFPhaseC.setId("F;1;C;A;N");
 
+        gridPaneUAllPhase.setVisible(true);
+        gridPaneUPhaseA.setVisible(false);
+        gridPaneUPhaseB.setVisible(false);
+        gridPaneUPhaseC.setVisible(false);
+
+        gridPaneFAllPhase.setVisible(false);
+        gridPaneFPhaseA.setVisible(false);
+        gridPaneFPhaseB.setVisible(false);
+        gridPaneFPhaseC.setVisible(false);
+
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
                 gridPaneUPhaseA,
@@ -3176,6 +3217,16 @@ public class InfluencePointsThreePhaseStendFrame {
         gridPaneFPhaseB.setId("F;1;B;R;P");
         gridPaneFPhaseC.setId("F;1;C;R;P");
 
+        gridPaneUAllPhase.setVisible(true);
+        gridPaneUPhaseA.setVisible(false);
+        gridPaneUPhaseB.setVisible(false);
+        gridPaneUPhaseC.setVisible(false);
+
+        gridPaneFAllPhase.setVisible(false);
+        gridPaneFPhaseA.setVisible(false);
+        gridPaneFPhaseB.setVisible(false);
+        gridPaneFPhaseC.setVisible(false);
+
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
                 gridPaneUPhaseA,
@@ -3211,6 +3262,16 @@ public class InfluencePointsThreePhaseStendFrame {
         gridPaneFPhaseA.setId("F;1;A;R;N");
         gridPaneFPhaseB.setId("F;1;B;R;N");
         gridPaneFPhaseC.setId("F;1;C;R;N");
+
+        gridPaneUAllPhase.setVisible(true);
+        gridPaneUPhaseA.setVisible(false);
+        gridPaneUPhaseB.setVisible(false);
+        gridPaneUPhaseC.setVisible(false);
+
+        gridPaneFAllPhase.setVisible(false);
+        gridPaneFPhaseA.setVisible(false);
+        gridPaneFPhaseB.setVisible(false);
+        gridPaneFPhaseC.setVisible(false);
 
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
@@ -3775,6 +3836,15 @@ public class InfluencePointsThreePhaseStendFrame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
+                try {
+                    Float.parseFloat(newImpulseValue);
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
+                    event.getTableView().refresh();
+                    return;
+                }
+
                 command.setEmax(newImpulseValue);
 
             });
@@ -3786,6 +3856,15 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
+
+                try {
+                    Float.parseFloat(newImpulseValue);
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
+                    event.getTableView().refresh();
+                    return;
+                }
 
                 command.setEmin(newImpulseValue);
 
@@ -3799,6 +3878,15 @@ public class InfluencePointsThreePhaseStendFrame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
+                try {
+                    Float.parseFloat(newImpulseValue);
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
+                    event.getTableView().refresh();
+                    return;
+                }
+
                 command.setPulse(newImpulseValue);
 
             });
@@ -3810,6 +3898,15 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
+
+                try {
+                    Float.parseFloat(newImpulseValue);
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
+                    event.getTableView().refresh();
+                    return;
+                }
 
                 ((ErrorCommand) command).setCountResult(newImpulseValue);
 

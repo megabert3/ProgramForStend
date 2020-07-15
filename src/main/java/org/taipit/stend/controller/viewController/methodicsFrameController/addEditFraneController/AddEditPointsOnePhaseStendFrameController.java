@@ -1084,7 +1084,19 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
-                ((ErrorCommand) command).setEmax(newImpulseValue);
+                if (command instanceof ErrorCommand) {
+                    try {
+                        Float.parseFloat(newImpulseValue);
+                    }catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
+                        event.getTableView().refresh();
+                        return;
+                    }
+                    ((ErrorCommand) command).setEmax(newImpulseValue);
+                } else {
+                    event.getTableView().refresh();
+                }
             });
 
             mapTableColumn.get(i).get(2).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
@@ -1095,7 +1107,19 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
-                ((ErrorCommand) command).setEmin(newImpulseValue);
+                if (command instanceof ErrorCommand) {
+                    try {
+                        Float.parseFloat(newImpulseValue);
+                    }catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
+                        event.getTableView().refresh();
+                        return;
+                    }
+                    ((ErrorCommand) command).setEmin(newImpulseValue);
+                } else {
+                    event.getTableView().refresh();
+                }
             });
 
             mapTableColumn.get(i).get(3).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
@@ -1106,7 +1130,19 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
-                ((ErrorCommand) command).setPulse(newImpulseValue);
+                if (command instanceof ErrorCommand) {
+                    try {
+                        Float.parseFloat(newImpulseValue);
+                    }catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
+                        event.getTableView().refresh();
+                        return;
+                    }
+                    ((ErrorCommand) command).setPulse(newImpulseValue);
+                } else {
+                    event.getTableView().refresh();
+                }
             });
 
             mapTableColumn.get(i).get(4).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
@@ -1117,7 +1153,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
-                ((ErrorCommand) command).setCountResult(newImpulseValue);
+                if (command instanceof ErrorCommand) {
+                    ((ErrorCommand) command).setCountResult(newImpulseValue);
+                }
             });
         }
 

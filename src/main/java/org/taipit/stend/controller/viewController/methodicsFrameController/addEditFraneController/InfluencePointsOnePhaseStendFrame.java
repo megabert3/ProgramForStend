@@ -1235,6 +1235,7 @@ public class InfluencePointsOnePhaseStendFrame {
             InflUAllPhasePane.toFront();
             gridPaneUAllPhase.toFront();
 
+            setVisibleSelectedGridPane(gridPaneUAllPhase);
         }
         if (event.getSource() == selectInfFAllPhaseTgl) {
             selectInfUAllPhaseTgl.setSelected(false);
@@ -1243,6 +1244,7 @@ public class InfluencePointsOnePhaseStendFrame {
             InflFAllPhasePane.toFront();
             gridPaneFAllPhase.toFront();
 
+            setVisibleSelectedGridPane(gridPaneFAllPhase);
         }
 
         if (event.getSource() == selectInfUPhaseATgl) {
@@ -1252,6 +1254,7 @@ public class InfluencePointsOnePhaseStendFrame {
             InflUPhaseAPane.toFront();
             gridPaneUPhaseA.toFront();
 
+            setVisibleSelectedGridPane(gridPaneUPhaseA);
         }
         if (event.getSource() == selectInfFPhaseATgl) {
             selectInfUPhaseATgl.setSelected(false);
@@ -1259,6 +1262,8 @@ public class InfluencePointsOnePhaseStendFrame {
 
             InflFPhaseAPane.toFront();
             gridPaneFPhaseA.toFront();
+
+            setVisibleSelectedGridPane(gridPaneFPhaseA);
         }
 
         if (event.getSource() == selectInfUPhaseBTgl) {
@@ -1268,6 +1273,7 @@ public class InfluencePointsOnePhaseStendFrame {
             InflUPhaseBPane.toFront();
             gridPaneUPhaseB.toFront();
 
+            setVisibleSelectedGridPane(gridPaneUPhaseB);
         }
         if (event.getSource() == selectInfFPhaseBTgl) {
             selectInfUPhaseBTgl.setSelected(false);
@@ -1275,8 +1281,11 @@ public class InfluencePointsOnePhaseStendFrame {
 
             InflFPhaseBPane.toFront();
             gridPaneFPhaseB.toFront();
+
+            setVisibleSelectedGridPane(gridPaneFPhaseB);
         }
 
+        //На всякий
         if (event.getSource() == selectInfUPhaseCTgl) {
             selectInfUPhaseCTgl.setSelected(true);
             selectInfFPhaseCTgl.setSelected(false);
@@ -2137,6 +2146,16 @@ public class InfluencePointsOnePhaseStendFrame {
         }
     }
 
+    private void setVisibleSelectedGridPane(GridPane gridPane) {
+        for (GridPane gridPane1 : gridPanesEnergyAndPhase) {
+            if (gridPane1.equals(gridPane)) {
+                gridPane.setVisible(true);
+            } else {
+                gridPane1.setVisible(false);
+            }
+        }
+    }
+
     //Удаляет старые GridPane и инициализирует новые после смены напрявления или типа энергии
     private void removeOldGrPnAndSetIDGridPanesForAPPls() {
         stackPaneForGridPane.getChildren().clear();
@@ -2156,6 +2175,14 @@ public class InfluencePointsOnePhaseStendFrame {
         gridPaneFAllPhase.setId("F;0;H;A;P");
         gridPaneFPhaseA.setId("F;0;A;A;P");
         gridPaneFPhaseB.setId("F;0;B;A;P");
+
+        gridPaneUAllPhase.setVisible(true);
+        gridPaneUPhaseA.setVisible(false);
+        gridPaneUPhaseB.setVisible(false);
+
+        gridPaneFAllPhase.setVisible(false);
+        gridPaneFPhaseA.setVisible(false);
+        gridPaneFPhaseB.setVisible(false);
 
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
@@ -2187,6 +2214,14 @@ public class InfluencePointsOnePhaseStendFrame {
         gridPaneFPhaseA.setId("F;0;A;A;N");
         gridPaneFPhaseB.setId("F;0;B;A;N");
 
+        gridPaneUAllPhase.setVisible(true);
+        gridPaneUPhaseA.setVisible(false);
+        gridPaneUPhaseB.setVisible(false);
+
+        gridPaneFAllPhase.setVisible(false);
+        gridPaneFPhaseA.setVisible(false);
+        gridPaneFPhaseB.setVisible(false);
+
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
                 gridPaneUPhaseA,
@@ -2217,6 +2252,14 @@ public class InfluencePointsOnePhaseStendFrame {
         gridPaneFPhaseA.setId("F;7;A;R;P");
         gridPaneFPhaseB.setId("F;7;B;R;P");
 
+        gridPaneUAllPhase.setVisible(true);
+        gridPaneUPhaseA.setVisible(false);
+        gridPaneUPhaseB.setVisible(false);
+
+        gridPaneFAllPhase.setVisible(false);
+        gridPaneFPhaseA.setVisible(false);
+        gridPaneFPhaseB.setVisible(false);
+
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
                 gridPaneUPhaseA,
@@ -2246,6 +2289,14 @@ public class InfluencePointsOnePhaseStendFrame {
         gridPaneFAllPhase.setId("F;7;H;R;N");
         gridPaneFPhaseA.setId("F;7;A;R;N");
         gridPaneFPhaseB.setId("F;7;B;R;N");
+
+        gridPaneUAllPhase.setVisible(true);
+        gridPaneUPhaseA.setVisible(false);
+        gridPaneUPhaseB.setVisible(false);
+
+        gridPaneFAllPhase.setVisible(false);
+        gridPaneFPhaseA.setVisible(false);
+        gridPaneFPhaseB.setVisible(false);
 
         gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneUAllPhase,
@@ -2738,6 +2789,15 @@ public class InfluencePointsOnePhaseStendFrame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
+                try {
+                    Float.parseFloat(newImpulseValue);
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
+                    event.getTableView().refresh();
+                    return;
+                }
+
                 command.setEmax(newImpulseValue);
 
             });
@@ -2749,6 +2809,15 @@ public class InfluencePointsOnePhaseStendFrame {
 
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
+
+                try {
+                    Float.parseFloat(newImpulseValue);
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
+                    event.getTableView().refresh();
+                    return;
+                }
 
                 command.setEmin(newImpulseValue);
 
@@ -2762,6 +2831,15 @@ public class InfluencePointsOnePhaseStendFrame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
+                try {
+                    Float.parseFloat(newImpulseValue);
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
+                    event.getTableView().refresh();
+                    return;
+                }
+
                 command.setPulse(newImpulseValue);
 
             });
@@ -2773,6 +2851,15 @@ public class InfluencePointsOnePhaseStendFrame {
 
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
+
+                try {
+                    Float.parseFloat(newImpulseValue);
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
+                    event.getTableView().refresh();
+                    return;
+                }
 
                 ((ErrorCommand) command).setCountResult(newImpulseValue);
 
