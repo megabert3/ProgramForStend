@@ -9,10 +9,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="718.0" prefWidth="1239.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.SaveResultsTestFrame">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="718.0" prefWidth="1340.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.SaveResultsTestFrame">
    <children>
       <Pane prefHeight="140.0" prefWidth="1239.0" style="-fx-background-color: #393939;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Pane layoutX="39.0" layoutY="597.0" AnchorPane.bottomAnchor="21.0" AnchorPane.rightAnchor="23.0">
+      <Pane layoutX="14.0" layoutY="586.0" prefHeight="100.0" prefWidth="1320.0" AnchorPane.bottomAnchor="32.0" AnchorPane.rightAnchor="6.0">
          <children>
             <ComboBox fx:id="chosBxOperator" layoutX="80.0" prefWidth="150.0" />
             <ComboBox fx:id="chosBxController" layoutX="80.0" layoutY="37.0" prefWidth="150.0" />
@@ -31,11 +31,12 @@
             <TextField fx:id="txtFldOperator" layoutX="80.0" prefHeight="25.0" prefWidth="125.0" />
             <TextField fx:id="txtFldController" layoutX="80.0" layoutY="37.0" prefHeight="25.0" prefWidth="125.0" />
             <TextField fx:id="txtFldWitness" layoutX="80.0" layoutY="75.0" prefHeight="25.0" prefWidth="125.0" />
-            <Pane layoutX="780.0" layoutY="13.0">
+            <Pane layoutX="759.0" layoutY="12.0" prefHeight="75.0" prefWidth="549.0">
                <children>
                   <Button fx:id="btnBack" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Вернуться" />
                   <Button fx:id="btnSave" layoutX="139.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Сохранить" />
-                  <Button fx:id="btnCancel" layoutX="278.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Отмена" />
+                  <Button fx:id="btnCancel" layoutX="428.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Отмена" />
+                  <Button fx:id="saveAndPrint" layoutX="279.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Сохранить и вывести отчёт" textAlignment="CENTER" wrapText="true" />
                </children>
             </Pane>
          </children>

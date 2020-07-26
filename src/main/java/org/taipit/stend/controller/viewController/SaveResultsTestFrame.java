@@ -26,6 +26,7 @@ import javafx.util.Callback;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.model.ExcelReport;
 import org.taipit.stend.model.ResultsTest;
 
 public class SaveResultsTestFrame {
@@ -88,6 +89,9 @@ public class SaveResultsTestFrame {
 
     @FXML
     private Button btnCancel;
+
+    @FXML
+    private Button saveAndPrint;
 
     @FXML
     private Button btnBack;
@@ -188,6 +192,7 @@ public class SaveResultsTestFrame {
 
         if (event.getSource() == btnSave) {
             ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
+            List<Meter> helpList = new ArrayList<>();
 
             txtFldTemperature.setStyle("");
             txtFldHumidity.setStyle("");
@@ -218,9 +223,63 @@ public class SaveResultsTestFrame {
                     meter.setBatchNo(txtFldBatchNumb.getText());
                     meter.setVerificationDate(txtFldТMusterDate.getText());
                     meter.setLastModifiedDate(new Date().toString());
+                    helpList.add(meter);
                 }
             }
-            resultsTest.addMeterRusults(meterList);
+
+            resultsTest.addMeterRusults(helpList);
+
+            resultsTest.serializationResults();
+
+            Stage stageTestErrorTable = (Stage) testErrorTableFrameController.getTxtLabDate().getScene().getWindow();
+            stageTestErrorTable.close();
+
+            Stage stageSaveResultTest = (Stage) txtFldWitness.getScene().getWindow();
+            stageSaveResultTest.close();
+        }
+
+        if (event.getSource() == saveAndPrint) {
+            ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
+            List<Meter> helpList = new ArrayList<>();
+
+            for (Meter meter : meterList) {
+                if (meter.isSaveResults()) {
+                    meter.setOperator(txtFldOperator.getText());
+                    meter.setController(txtFldController.getText());
+                    meter.setWitness(txtFldWitness.getText());
+                    try {
+                        meter.setTemperature(Float.parseFloat(txtFldTemperature.getText()));
+                    }catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        txtFldTemperature.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        ConsoleHelper.infoException("Неверные данные");
+                        return;
+                    }
+
+                    try {
+                        meter.setHumidity(Float.parseFloat(txtFldHumidity.getText()));
+                    }catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        txtFldHumidity.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        ConsoleHelper.infoException("Неверные данные");
+                        return;
+                    }
+
+                    meter.setBatchNo(txtFldBatchNumb.getText());
+                    meter.setVerificationDate(txtFldТMusterDate.getText());
+                    meter.setLastModifiedDate(new Date().toString());
+
+                    helpList.add(meter);
+                }
+            }
+
+            ExcelReport excelReport = new ExcelReport();
+
+            if (excelReport.createExcelReport(helpList)) {
+                excelReport.openExcelReport();
+            } else return;
+
+            resultsTest.addMeterRusults(helpList);
 
             resultsTest.serializationResults();
 

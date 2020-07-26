@@ -15,7 +15,7 @@
 
 <AnchorPane fx:id="mainAnchorPane" prefHeight="735.0" prefWidth="836.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController">
    <children>
-      <Pane prefHeight="125.0" prefWidth="830.0" style="-fx-background-color: #303030;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Pane prefHeight="125.0" prefWidth="830.0" style="-fx-background-color: #393939;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <AnchorPane fx:id="paneWithEdits" layoutX="20.0" layoutY="20.0" prefHeight="707.0" prefWidth="816.0" AnchorPane.bottomAnchor="8.0" AnchorPane.topAnchor="20.0">
          <children>
             <Button id="button" fx:id="copyMetBtn" alignment="TOP_LEFT" layoutY="153.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="29.0" prefWidth="120.0" stylesheets="@../../styleCSS/buttonCenterLeft.css" text="Копировать">
@@ -34,22 +34,25 @@
                      </image></ImageView>
                </graphic>
             </Button>
-            <Button fx:id="BtnGoToStartTest" layoutX="626.0" layoutY="643.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="40.0" prefWidth="150.0" text="Перейти к тесту" AnchorPane.bottomAnchor="24.0">
+            <Button id="button" fx:id="btnGoToStartTest" layoutX="611.0" layoutY="647.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="40.0" prefWidth="150.0" stylesheets="@../../styleCSS/buttonStyle.css" text="Перейти к тесту" AnchorPane.bottomAnchor="20.0">
                <graphic>
-                  <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../image/addEditMetodic/forward_arrow_48px.png" />
+                     </image></ImageView>
                </graphic>
             </Button>
-            <TableView fx:id="viewPointTable" layoutX="139.0" layoutY="63.0" prefHeight="500.0" prefWidth="270.0" stylesheets="@../../styleCSS/tableViewStyle.css" AnchorPane.bottomAnchor="97.0" AnchorPane.topAnchor="63.0">
+            <TableView fx:id="viewPointTable" layoutX="139.0" layoutY="63.0" minHeight="500.0" minWidth="270.0" prefHeight="500.0" prefWidth="270.0" stylesheets="@../../styleCSS/tableViewStyle.css" AnchorPane.bottomAnchor="97.0" AnchorPane.topAnchor="63.0">
                <columns>
-                  <TableColumn fx:id="tabClMethodics" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" text="Методики" />
+                  <TableColumn fx:id="tabClMethodics" maxWidth="-1.0" minWidth="-1.0" prefWidth="269.0" text="Методики" />
                </columns>
             </TableView>
             <StackPane layoutX="441.0" layoutY="63.0" maxHeight="1.7976931348623157E308" prefHeight="500.0" prefWidth="320.0" AnchorPane.bottomAnchor="97.0" AnchorPane.topAnchor="63.0">
                <children>
-                  <ListView fx:id="ListViewAPMns" prefHeight="500.0" prefWidth="250.0" />
-                  <ListView fx:id="ListViewAPPls" prefHeight="500.0" prefWidth="330.0" />
-                  <ListView fx:id="ListViewRPPls" prefHeight="500.0" prefWidth="330.0" />
-                  <ListView fx:id="ListViewRPMns" prefHeight="500.0" prefWidth="330.0" />
+                  <ListView fx:id="ListViewAPMns" prefHeight="500.0" prefWidth="250.0" stylesheets="@../../styleCSS/listViewStyle.css" />
+                  <ListView fx:id="ListViewAPPls" prefHeight="500.0" prefWidth="330.0" stylesheets="@../../styleCSS/listViewStyle.css" />
+                  <ListView fx:id="ListViewRPPls" prefHeight="500.0" prefWidth="330.0" stylesheets="@../../styleCSS/listViewStyle.css" />
+                  <ListView fx:id="ListViewRPMns" prefHeight="500.0" prefWidth="330.0" stylesheets="@../../styleCSS/listViewStyle.css" />
                </children>
             </StackPane>
             <Button id="button" fx:id="editMetBtn" alignment="TOP_LEFT" layoutY="108.0" mnemonicParsing="false" onAction="#actinonForMethodicsFrame" prefHeight="29.0" prefWidth="120.0" stylesheets="@../../styleCSS/buttonCenterLeft.css" text="Редактировать">
@@ -68,10 +71,10 @@
                      </image></ImageView>
                </graphic>
             </Button>
-            <ToggleButton fx:id="tglBtnAPPls" layoutX="441.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@../../styleCSS/buttonCenterLeft.css" text="A.P.+" />
-            <ToggleButton fx:id="tglBtnAPMns" layoutX="521.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" text="A.P.-" />
-            <ToggleButton fx:id="tglBtnRPPls" layoutX="601.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" text="R.P.+" />
-            <ToggleButton fx:id="tglBtnRPMns" layoutX="681.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" text="R.P.-" />
+            <ToggleButton fx:id="tglBtnAPPls" layoutX="441.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="A.P.+" />
+            <ToggleButton fx:id="tglBtnAPMns" layoutX="521.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="A.P.-" />
+            <ToggleButton fx:id="tglBtnRPPls" layoutX="601.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="R.P.+" />
+            <ToggleButton fx:id="tglBtnRPMns" layoutX="681.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="R.P.-" />
             <Label layoutX="139.0" text="Методики" textFill="WHITE" />
             <Label layoutX="441.0" text="Точки испытания" textFill="WHITE" />
          </children>

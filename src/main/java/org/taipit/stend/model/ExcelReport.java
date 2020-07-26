@@ -15,8 +15,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 import java.util.List;
 
@@ -72,6 +70,43 @@ public class ExcelReport {
         errCRPSTAother.put("INS", new HashMap<>());
         errCRPSTAother.put("APR", new HashMap<>());
         errCRPSTAother.put("T", new HashMap<>());
+
+//        for (int i = 0; i < 10; i++) {
+//            Meter meter = new Meter();
+//            meter.setSerNoMeter("00000000" + i);
+//            meters.add(meter);
+//        }
+//
+//        createCRPSTAError();
+//
+//        for (Meter meter : meters) {
+//            createImbError(meter, meter.getErrorListAPPls());
+//            createImbError(meter, meter.getErrorListAPMns());
+//            createImbError(meter, meter.getErrorListRPPls());
+//            createImbError(meter, meter.getErrorListRPMns());
+//
+//            createTestErrorForABC(meter, meter.getErrorListAPPls());
+//            createTestErrorForABC(meter, meter.getErrorListAPMns());
+//            createTestErrorForABC(meter, meter.getErrorListRPPls());
+//            createTestErrorForABC(meter, meter.getErrorListRPMns());
+//
+//            createTestErrorForInfABC(meter, meter.getErrorListAPPls());
+//            createTestErrorForInfABC(meter, meter.getErrorListAPMns());
+//            createTestErrorForInfABC(meter, meter.getErrorListRPPls());
+//            createTestErrorForInfABC(meter, meter.getErrorListRPMns());
+//
+//            createTestErrorForInf(meter, meter.getErrorListAPPls());
+//            createTestErrorForInf(meter, meter.getErrorListAPMns());
+//            createTestErrorForInf(meter, meter.getErrorListRPPls());
+//            createTestErrorForInf(meter, meter.getErrorListRPMns());
+//
+//            createTestError(meter, meter.getErrorListAPPls());
+//            createTestError(meter, meter.getErrorListAPMns());
+//            createTestError(meter, meter.getErrorListRPPls());
+//            createTestError(meter, meter.getErrorListRPMns());
+//        }
+//
+//        createExcelReport(meters);
     }
 
     private List<Meter> meters = new ArrayList<>();
@@ -585,47 +620,45 @@ public class ExcelReport {
         }
     }
 
-    public void createExcelReport() {
+    public boolean createExcelReport(List<Meter> meterList) {
 
-        Meter testMeter = new Meter();
-        testMeter.setUn(230);
-        testMeter.setIb(5);
-        testMeter.setImax(60);
-        testMeter.setFn(50);
-        testMeter.setAccuracyClassAP(1);
-        testMeter.setAccuracyClassRP(2);
-        testMeter.setConstantMeterAP("3200");
-        testMeter.setConstantMeterAP("3200");
-        testMeter.setTemperature(24);
-        testMeter.setHumidity(64);
-        testMeter.setFactoryManufacturer("Тайпит ИП");
-        testMeter.setVerificationDate(new Date().toString());
-        testMeter.setController("Чубака");
-        testMeter.setOperator("Дарт Вейдер");
-        testMeter.setWitness("Принцесса Лея");
-        testMeter.setModelMeter("НЕВА 303 1S0");
-        testMeter.setTestMode("3P4W");
+        if (meterList.isEmpty()) return false;
+
+        for (Meter meter : meterList) {
+            if (!meterList.get(0).myEquals(meter)) {
+                ConsoleHelper.infoException("Выбранные счётчики\n не с одной навески");
+                return false;
+            }
+        }
+
+        meters = meterList;
 
         StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
 
-        createHeadInformation(wb, mainSheet, testMeter, stendDLLCommands);
+        createHeadInformation(wb, mainSheet, meterList.get(0), stendDLLCommands);
+
+        addErrorsInGroups(meters);
+
+        printAllErros(0, 20);
 
         try (OutputStream outputStream = new FileOutputStream(filePath)){
             wb.write(outputStream);
-
-            Desktop desktop;
-            if (Desktop.isDesktopSupported()) {
-                desktop = Desktop.getDesktop();
-
-                try {
-                    desktop.open(new File(filePath));
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-            }
-
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    public void openExcelReport() {
+        Desktop desktop;
+        if (Desktop.isDesktopSupported()) {
+            desktop = Desktop.getDesktop();
+            try {
+                desktop.open(new File(filePath));
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
         }
     }
 
@@ -876,50 +909,47 @@ public class ExcelReport {
                 Calibri_11_Bold, sheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
 
 
-        //TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        for (int i = 0; i < 48; i++) {
-            Meter meter1 = new Meter();
-            meter1.setSerNoMeter("00000000000" + i);
-            meters.add(meter1);
-        }
-
-        createCRPSTAError();
-
-        for (Meter meter1 : meters) {
-            createTestErrorForInfABC(meter1, meter1.getErrorListAPPls());
-            createTestErrorForInf(meter1, meter1.getErrorListAPPls());
-            createTestErrorForABC(meter1, meter1.getErrorListAPPls());
-            createTestError(meter1, meter1.getErrorListAPPls());
-            createImbError(meter1, meter1.getErrorListAPPls());
-        }
-
-        for (Meter meter1 : meters) {
-            createTestErrorForInfABC(meter1, meter1.getErrorListAPMns());
-            createTestErrorForInf(meter1, meter1.getErrorListAPMns());
-            createTestErrorForABC(meter1, meter1.getErrorListAPMns());
-            createTestError(meter1, meter1.getErrorListAPMns());
-            createImbError(meter1, meter1.getErrorListAPMns());
-        }
-
-        for (Meter meter1 : meters) {
-            createTestErrorForInfABC(meter1, meter1.getErrorListRPPls());
-            createTestErrorForInf(meter1, meter1.getErrorListRPPls());
-            createTestErrorForABC(meter1, meter1.getErrorListRPPls());
-            createTestError(meter1, meter1.getErrorListRPPls());
-            createImbError(meter1, meter1.getErrorListRPPls());
-        }
-
-        for (Meter meter1 : meters) {
-            createTestErrorForInfABC(meter1, meter1.getErrorListRPMns());
-            createTestErrorForInf(meter1, meter1.getErrorListRPMns());
-            createTestErrorForABC(meter1, meter1.getErrorListRPMns());
-            createTestError(meter1, meter1.getErrorListRPMns());
-            createImbError(meter1, meter1.getErrorListRPMns());
-        }
-
-        addErrorsInGroups(meters);
-
-        printAllErros(0, 20);
+//        //TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//        for (int i = 0; i < 48; i++) {
+//            Meter meter1 = new Meter();
+//            meter1.setSerNoMeter("00000000000" + i);
+//            meters.add(meter1);
+//        }
+//
+//        createCRPSTAError();
+//
+//        for (Meter meter1 : meters) {
+//            createTestErrorForInfABC(meter1, meter1.getErrorListAPPls());
+//            createTestErrorForInf(meter1, meter1.getErrorListAPPls());
+//            createTestErrorForABC(meter1, meter1.getErrorListAPPls());
+//            createTestError(meter1, meter1.getErrorListAPPls());
+//            createImbError(meter1, meter1.getErrorListAPPls());
+//        }
+//
+//        for (Meter meter1 : meters) {
+//            createTestErrorForInfABC(meter1, meter1.getErrorListAPMns());
+//            createTestErrorForInf(meter1, meter1.getErrorListAPMns());
+//            createTestErrorForABC(meter1, meter1.getErrorListAPMns());
+//            createTestError(meter1, meter1.getErrorListAPMns());
+//            createImbError(meter1, meter1.getErrorListAPMns());
+//        }
+//
+//        for (Meter meter1 : meters) {
+//            createTestErrorForInfABC(meter1, meter1.getErrorListRPPls());
+//            createTestErrorForInf(meter1, meter1.getErrorListRPPls());
+//            createTestErrorForABC(meter1, meter1.getErrorListRPPls());
+//            createTestError(meter1, meter1.getErrorListRPPls());
+//            createImbError(meter1, meter1.getErrorListRPPls());
+//        }
+//
+//        for (Meter meter1 : meters) {
+//            createTestErrorForInfABC(meter1, meter1.getErrorListRPMns());
+//            createTestErrorForInf(meter1, meter1.getErrorListRPMns());
+//            createTestErrorForABC(meter1, meter1.getErrorListRPMns());
+//            createTestError(meter1, meter1.getErrorListRPMns());
+//            createImbError(meter1, meter1.getErrorListRPMns());
+//        }
+//
     }
 
     private void printAllErros(int startCell, int startRow) {
@@ -1006,6 +1036,8 @@ public class ExcelReport {
         }
 
         //Вывожу погрешность AP-
+        System.out.println(indexCell);
+        System.out.println(indexRow);
         if (totalErrorAPMns.getTotalElements() != 0) {
             if (!headAPMns) {
                 indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в обратном направлении");
@@ -1269,7 +1301,11 @@ public class ExcelReport {
         RegionUtil.setBorderRight(right, cellAddresses, sheet);
         RegionUtil.setBorderLeft(left, cellAddresses, sheet);
         RegionUtil.setBorderTop(top, cellAddresses, sheet);
-        sheet.addMergedRegion(cellAddresses);
+        try {
+            sheet.addMergedRegion(cellAddresses);
+        }catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     private void createMergeZone(int firstRow, int lastRow, int firsColumn, int lastColumn, Sheet sheet,

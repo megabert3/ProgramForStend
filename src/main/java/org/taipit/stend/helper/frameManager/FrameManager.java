@@ -131,7 +131,7 @@ public class FrameManager {
 
                     Parent root = fxmlLoader.getRoot();
                     Stage stage = new Stage();
-                    stage.setTitle("Настройки");
+                    stage.setTitle("Результат");
                     stage.setScene(new Scene(root));
 
                     stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -183,5 +183,13 @@ public class FrameManager {
                 }
             }
         }
+    }
+
+    public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {
+        this.methodicsAddEditDeleteFrameController = methodicsAddEditDeleteFrameController;
+    }
+
+    public MethodicsAddEditDeleteFrameController getMethodicsAddEditDeleteFrameController() {
+        return methodicsAddEditDeleteFrameController;
     }
 }

@@ -1,52 +1,18 @@
 
-.table-view:focused {
-    -fx-background-color: transparent;
+.list-cell {
+    -fx-text-fill: black; /* 5 */
 }
 
-.table-row-cell:odd {
+.list-cell: odd {
     -fx-background-color: #EBEBEB;
-    -fx-background-insets: 0, 0 0 1 0;
 }
+.list-cell: even {
+ -fx-background-color: #E0E0E0;
+ }
 
-.table-row-cell:even {
-    -fx-background-color: #E0E0E0;
-    -fx-background-insets: 0, 0 0 1 0;
-}
-
-.table-view .column-header-background{
-    -fx-background-color: #95999D;
-}
-
-.table-view .column-header-background .label{
-    -fx-background-color: transparent;
-    -fx-text-fill: white;
-}
-
-.table-view .column-header {
-    -fx-background-color: transparent;
-}
-
-.table-view .table-cell{
-    -fx-text-fill: black;
-}
-
-
-.table-row-cell{
-    -fx-background-color: -fx-table-cell-border-color #000000;
-    -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em; /* 0 */
-}
-
-/*Цвет выбранной строки*/
-.table-row-cell:selected {
+.list-cell: focused {
     -fx-background-color: #FDC76A;
-    -fx-background-insets: 0;
-    -fx-background-radius: 1;
-}
-
-/*Цвет текста выбранной строки*/
-.table-row-cell:selected .text {
-    -fx-fill: black;
+    -fx-text-fill: black;
 }
 
 /*Скрол бары*/

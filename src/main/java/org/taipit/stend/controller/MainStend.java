@@ -25,7 +25,7 @@ public class MainStend {
     }
 
     public static void main(String[] args) throws IOException {
-        new ExcelReport().createExcelReport();
+        new ExcelReport().openExcelReport();
 
 //        //1;A;A;P;0.2 Ib;0.5C
 //        List<Meter> meterList = new ArrayList<>();

@@ -31,6 +31,7 @@ import org.taipit.stend.controller.viewController.methodicsFrameController.addEd
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 import org.taipit.stend.helper.frameManager.Frame;
+import org.taipit.stend.helper.frameManager.FrameManager;
 import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
 import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
@@ -88,7 +89,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
     private ToggleButton tglBtnRPMns;
 
     @FXML
-    private Button BtnGoToStartTest;
+    private Button btnGoToStartTest;
 
     @FXML
     private TableView<Metodic> viewPointTable;
@@ -362,6 +363,16 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
             yesOrNoFrameController.setMethodicsAddEditDeleteFrameController(this);
 
             stage.show();
+        }
+
+        if (event.getSource() == btnGoToStartTest) {
+
+            FrameManager frameManager = FrameManager.frameManagerInstance();
+            frameManager.getFrame(FrameManager.FrameType.PARAMTEST);
+
+            frameManager.getMethodicsAddEditDeleteFrameController().getStage().close();
+            frameManager.setMethodicsAddEditDeleteFrameController(null);
+
         }
     }
 
