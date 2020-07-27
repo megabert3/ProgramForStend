@@ -5,16 +5,14 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 
@@ -22,38 +20,69 @@ public class ExcelReport {
 
     private String[] resultName;
 
-    private String filePath = "C:\\Users\\bert1\\Desktop\\test.xls";
+    private String filePath = ConsoleHelper.properties.getProperty("printReportPath");
 
     private final String SER_NO_NAME = "Серийный номер";
 
     private final String SHEET_NAME = "Результат";
-    private Workbook wb = new HSSFWorkbook();
-    private Sheet mainSheet = wb.createSheet(SHEET_NAME);
+    private Workbook wb;
+    private Sheet mainSheet;
 
-    private Font Bauhaus_15_Bold = createFontStyle(wb, 15, "Calisto MT", true, false, false);
-    private Font Bauhaus_14_Bold = createFontStyle(wb, 14, "Bauhaus 93", true, false, false);
-    private Font Calibri_11_BoldItalic = createFontStyle(wb, 11, "Calibri", true, true, false);
-    private Font Bauhaus_12_Bold = createFontStyle(wb, 12, "Bauhaus 93", true, false, false);
-    private Font Calibri_11_Bold = createFontStyle(wb, 11, "Calibri", true, false, false);
+    private Font Bauhaus_15_Bold;
+    private Font Bauhaus_14_Bold;
+    private Font Calibri_11_BoldItalic;
+    private Font Bauhaus_12_Bold;
+    private Font Calibri_11_Bold;
     //Красный текст
-    private Font Calibri_11_Red = createFontStyle(wb, 11, "Calibri", IndexedColors.RED.getIndex(), false, false, false);
+    private Font Calibri_11_Red;
 
     //Чёрный
-    private Font Calibri_11 = createFontStyle(wb, 11, "Calibri", false, false, false);
+    private Font Calibri_11;
 
-    private CellStyle leftCenter = createCellStyle(wb, HorizontalAlignment.LEFT, VerticalAlignment.CENTER);
-    private CellStyle centerCenter = createCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
+    private CellStyle leftCenter;
+    private CellStyle centerCenter;
 
     //Жирные края ориентация по центру
-    private CellStyle centerCenterBold = createCellStyle(wb, Calibri_11_Bold, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+    private CellStyle centerCenterBold;
 
     //Все края тонкие
-    private CellStyle centerCenterThin = createCellStyle(wb, Calibri_11, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
+    private CellStyle centerCenterThin;
 
     //Все края тонкие текст красный
-    private CellStyle centerCenterThinRed = createCellStyle(wb, Calibri_11_Red, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
+    private CellStyle centerCenterThinRed;
 
     public ExcelReport() {
+        if (ConsoleHelper.properties.getProperty("reportType").equals("HSSF")) {
+            wb = new HSSFWorkbook();
+        } else {
+            wb = new XSSFWorkbook();
+        }
+
+        mainSheet = wb.createSheet(SHEET_NAME);
+
+        Bauhaus_15_Bold = createFontStyle(wb, 15, "Calisto MT", true, false, false);
+        Bauhaus_14_Bold = createFontStyle(wb, 14, "Bauhaus 93", true, false, false);
+        Calibri_11_BoldItalic = createFontStyle(wb, 11, "Calibri", true, true, false);
+        Bauhaus_12_Bold = createFontStyle(wb, 12, "Bauhaus 93", true, false, false);
+        Calibri_11_Bold = createFontStyle(wb, 11, "Calibri", true, false, false);
+        //Красный текст
+        Calibri_11_Red = createFontStyle(wb, 11, "Calibri", IndexedColors.RED.getIndex(), false, false, false);
+
+        //Чёрный
+        Calibri_11 = createFontStyle(wb, 11, "Calibri", false, false, false);
+
+        leftCenter = createCellStyle(wb, HorizontalAlignment.LEFT, VerticalAlignment.CENTER);
+        centerCenter = createCellStyle(wb, HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
+
+        //Жирные края ориентация по центру
+        centerCenterBold = createCellStyle(wb, Calibri_11_Bold, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+        //Все края тонкие
+        centerCenterThin = createCellStyle(wb, Calibri_11, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
+
+        //Все края тонкие текст красный
+        centerCenterThinRed = createCellStyle(wb, Calibri_11_Red, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
+
         // 0 - НЕ ПРОВОДИЛОСЬ; 1 - ГОДЕН; 2 - ПРОВАЛИЛ
         resultName = ConsoleHelper.properties.getProperty("restMeterResults").split(", ");
 
@@ -641,8 +670,38 @@ public class ExcelReport {
 
         printAllErros(0, 20);
 
+        File file = new File(filePath);
+
+        if (file.isDirectory()) {
+            if (ConsoleHelper.properties.getProperty("reportType").equals("HSSF")) {
+                file = new File(filePath + "report.xls");
+            } else {
+                file = new File(filePath + "reports.xlsx");
+            }
+        } else if (file.isFile()) {
+
+        }
+
+        if () {
+            Boolean answer = ConsoleHelper.yesOrNoFrame("Путь к файлу", "Программе не удалось найти указанный путь,\nЖелаете указать новый путь для сохранения?");
+
+            if (answer != null) {
+                if (answer) {
+                    DirectoryChooser directoryChooser = new DirectoryChooser();
+
+                    File file = directoryChooser.getInitialDirectory();
+
+
+                } else {
+
+                }
+            }
+        }
+
+        System.out.println(filePath);
         try (OutputStream outputStream = new FileOutputStream(filePath)){
             wb.write(outputStream);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -22,6 +22,7 @@ import javafx.util.Callback;
 import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.frameManager.Frame;
+import org.taipit.stend.model.ExcelReport;
 import org.taipit.stend.model.ResultsTest;
 
 public class ResultsMetersController implements Frame {
@@ -39,6 +40,9 @@ public class ResultsMetersController implements Frame {
 
     @FXML
     private Button btnDelete;
+
+    @FXML
+    private Button btnPrintResult;
 
     @FXML
     private TableView<Meter> tabViewResults;
@@ -150,8 +154,10 @@ public class ResultsMetersController implements Frame {
         if (event.getSource() == btnEdit) {
             List<Meter> listSelectedMeters = new ArrayList<>();
 
+            ResultsTest results = ResultsTest.getResultsTestInstance();
+
             for (Integer index : tabViewResults.getSelectionModel().getSelectedIndices()) {
-                listSelectedMeters.add(ResultsTest.getResultsTestInstance().getListAllResults().get(index));
+                listSelectedMeters.add(results.getListAllResults().get(index));
             }
 
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -178,7 +184,7 @@ public class ResultsMetersController implements Frame {
 
         if (event.getSource() == btnDelete) {
             if (ResultsTest.getResultsTestInstance().getListAllResults().isEmpty()) {
-                System.out.println("Нет результата.");
+                ConsoleHelper.infoException("Нет результатов");
                 return;
             }
 
@@ -203,6 +209,22 @@ public class ResultsMetersController implements Frame {
             stage.setScene(new Scene(root));
             stage.showAndWait();
             tabViewResults.getItems().setAll(FXCollections.observableArrayList(resultsTest.getListAllResults()));
+        }
+
+        if (event.getSource() == btnPrintResult) {
+            List<Meter> listSelectedMeters = new ArrayList<>();
+
+            ResultsTest results = ResultsTest.getResultsTestInstance();
+
+            for (Integer index : tabViewResults.getSelectionModel().getSelectedIndices()) {
+                listSelectedMeters.add(results.getListAllResults().get(index));
+            }
+
+            ExcelReport excelReport = new ExcelReport();
+
+            if (excelReport.createExcelReport(listSelectedMeters)) {
+                excelReport.openExcelReport();
+            }
         }
     }
 
