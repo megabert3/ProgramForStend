@@ -1,5 +1,6 @@
 package org.taipit.stend.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -43,6 +45,9 @@ public class ResultsMetersController implements Frame {
 
     @FXML
     private Button btnPrintResult;
+
+    @FXML
+    private Button btnDrirectoryChooser;
 
     @FXML
     private TableView<Meter> tabViewResults;
@@ -222,8 +227,21 @@ public class ResultsMetersController implements Frame {
 
             ExcelReport excelReport = new ExcelReport();
 
-            if (excelReport.createExcelReport(listSelectedMeters)) {
+            if (excelReport.createExcelReport(listSelectedMeters, btnPrintResult.getScene().getWindow())) {
                 excelReport.openExcelReport();
+            }
+        }
+
+        if (event.getSource() == btnDrirectoryChooser) {
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("Путь сохранения отчёта");
+
+            File newFile = directoryChooser.showDialog(btnDrirectoryChooser.getScene().getWindow());
+
+            if (newFile != null) {
+                ConsoleHelper.properties.setProperty("printReportPath", newFile.getAbsolutePath());
+
+                ConsoleHelper.saveProperties();
             }
         }
     }

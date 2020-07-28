@@ -1,5 +1,7 @@
 package org.taipit.stend.model;
 
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Window;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
@@ -21,6 +23,7 @@ public class ExcelReport {
     private String[] resultName;
 
     private String filePath = ConsoleHelper.properties.getProperty("printReportPath");
+    private File file;
 
     private final String SER_NO_NAME = "Серийный номер";
 
@@ -649,7 +652,7 @@ public class ExcelReport {
         }
     }
 
-    public boolean createExcelReport(List<Meter> meterList) {
+    public boolean createExcelReport(List<Meter> meterList, Window window) {
 
         if (meterList.isEmpty()) return false;
 
@@ -670,40 +673,39 @@ public class ExcelReport {
 
         printAllErros(0, 20);
 
-        File file = new File(filePath);
+        file = new File(filePath);
 
-        if (file.isDirectory()) {
-            if (ConsoleHelper.properties.getProperty("reportType").equals("HSSF")) {
-                file = new File(filePath + "report.xls");
-            } else {
-                file = new File(filePath + "reports.xlsx");
+        if (!file.isDirectory()) {
+            ConsoleHelper.infoException("Неверно указан путь сохранения файла");
+
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("Путь сохранения отчёта");
+
+            File newFile = directoryChooser.showDialog(window);
+
+            if (newFile != null) {
+                ConsoleHelper.properties.setProperty("printReportPath", newFile.getAbsolutePath());
+
+                ConsoleHelper.saveProperties();
             }
-        } else if (file.isFile()) {
-
+            return false;
         }
 
-        if () {
-            Boolean answer = ConsoleHelper.yesOrNoFrame("Путь к файлу", "Программе не удалось найти указанный путь,\nЖелаете указать новый путь для сохранения?");
-
-            if (answer != null) {
-                if (answer) {
-                    DirectoryChooser directoryChooser = new DirectoryChooser();
-
-                    File file = directoryChooser.getInitialDirectory();
-
-
-                } else {
-
-                }
-            }
+        if (ConsoleHelper.properties.getProperty("reportType").equals("HSSF")) {
+            file = new File(filePath + "\\\\" + "report.xls");
+        } else {
+            file = new File(filePath + "\\\\" + "report.xlsx");
         }
 
-        System.out.println(filePath);
-        try (OutputStream outputStream = new FileOutputStream(filePath)){
+        try (OutputStream outputStream = new FileOutputStream(file.getAbsolutePath())) {
             wb.write(outputStream);
-
+        }catch (FileNotFoundException e) {
+            ConsoleHelper.infoException("Необходимо закрыть файл отчёта");
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
+            ConsoleHelper.infoException("Ошибка вывода отчёта");
+            return false;
         }
 
         return true;
@@ -714,7 +716,7 @@ public class ExcelReport {
         if (Desktop.isDesktopSupported()) {
             desktop = Desktop.getDesktop();
             try {
-                desktop.open(new File(filePath));
+                desktop.open(file);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
@@ -1095,8 +1097,6 @@ public class ExcelReport {
         }
 
         //Вывожу погрешность AP-
-        System.out.println(indexCell);
-        System.out.println(indexRow);
         if (totalErrorAPMns.getTotalElements() != 0) {
             if (!headAPMns) {
                 indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в обратном направлении");
@@ -1362,8 +1362,8 @@ public class ExcelReport {
         RegionUtil.setBorderTop(top, cellAddresses, sheet);
         try {
             sheet.addMergedRegion(cellAddresses);
-        }catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        }catch (IllegalArgumentException ignore) {
+
         }
     }
 

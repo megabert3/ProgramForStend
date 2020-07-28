@@ -275,8 +275,8 @@ public class SaveResultsTestFrame {
 
             ExcelReport excelReport = new ExcelReport();
 
-            if (excelReport.createExcelReport(helpList)) {
-                //excelReport.openExcelReport();
+            if (excelReport.createExcelReport(helpList, saveAndPrint.getScene().getWindow())) {
+                excelReport.openExcelReport();
             } else return;
 
             resultsTest.addMeterRusults(helpList);
