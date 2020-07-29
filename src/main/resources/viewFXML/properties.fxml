@@ -24,7 +24,7 @@
    <children>
       <AnchorPane prefHeight="418.0" style="-fx-background-color: #303030;">
          <children>
-            <VBox prefHeight="418.0" prefWidth="263.0">
+            <VBox fx:id="vBoxBtn" prefHeight="418.0" prefWidth="263.0">
                <children>
                   <ToggleButton fx:id="stendBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" text="Параметры стенда">
                      <graphic>
@@ -35,7 +35,7 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="demoBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" text="Параметры счётчиков">
+                  <ToggleButton fx:id="meterParanBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" text="Параметры счётчиков">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -68,7 +68,7 @@
       </AnchorPane>
       <AnchorPane layoutX="263.0" prefHeight="418.0" prefWidth="536.0">
          <children>
-            <StackPane prefHeight="418.0" prefWidth="536.0">
+            <StackPane fx:id="mainStackPane" prefHeight="418.0" prefWidth="536.0">
                <children>
                   <AnchorPane fx:id="parametersPane" style="-fx-background-color: #6A6A6A;">
                      <children>
@@ -190,11 +190,6 @@
                         </GridPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="LinksPane" style="-fx-background-color: #6A6A6A;">
-                     <children>
-                        <TextField layoutX="194.0" layoutY="93.0" />
-                     </children>
-                  </AnchorPane>
                   <AnchorPane fx:id="passwordPane" style="-fx-background-color: #6A6A6A;">
                      <children>
                         <GridPane layoutX="58.0" layoutY="61.0" prefHeight="148.0" prefWidth="420.0">
@@ -227,7 +222,7 @@
                         </Button>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="LinksPane" style="-fx-background-color: #6A6A6A;">
+                  <AnchorPane fx:id="linksPane" style="-fx-background-color: #6A6A6A;">
                      <children>
                         <GridPane layoutX="58.0" layoutY="61.0" prefHeight="148.0" prefWidth="420.0">
                            <columnConstraints>

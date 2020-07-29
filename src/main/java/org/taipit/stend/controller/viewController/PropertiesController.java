@@ -6,9 +6,13 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -29,18 +33,24 @@ import java.util.*;
 
 public class PropertiesController implements Initializable, Frame {
 
+    @FXML
+    private StackPane mainStackPane;
+
+    @FXML
+    private VBox vBoxBtn;
+
 //----------------------------------------------------------- Menu
     @FXML
-    private Button passwordBtn;
+    private ToggleButton passwordBtn;
 
     @FXML
-    private Button stendBtn;
+    private ToggleButton stendBtn;
 
     @FXML
-    private Button demoBtn;
+    private ToggleButton meterParanBtn;
 
     @FXML
-    private Button linksBtn;
+    private ToggleButton linksBtn;
 
 //----------------------------------------------------------- stendPane
     @FXML
@@ -134,6 +144,9 @@ public class PropertiesController implements Initializable, Frame {
 
 //----------------------------------------------------------- linksPane
     @FXML
+    private AnchorPane linksPane;
+
+    @FXML
     private TextField txtFldPathSerNoMeter;
 
     @FXML
@@ -145,8 +158,6 @@ public class PropertiesController implements Initializable, Frame {
     @FXML
     private Button btnPathReport;
 
-    @FXML
-    private Button linkPaneSave;
 
     private Properties properties = ConsoleHelper.properties;
 
@@ -155,6 +166,7 @@ public class PropertiesController implements Initializable, Frame {
         setParamWithPropFile();
         initMeterParameterPane();
         initLinksPane();
+        stendBtn.fire();
     }
 
     @FXML
@@ -272,19 +284,52 @@ public class PropertiesController implements Initializable, Frame {
     @FXML
     void handleClicks(ActionEvent event) {
 
-        //Переключение на вкладку Пароль
-        if (event.getSource() == passwordBtn) {
-            passwordPane.toFront();
-        }
-
         //Переключение на вкладку Установка
         if (event.getSource() == stendBtn) {
-            stendPane.toFront();
+            if (stendBtn.isSelected()) {
+                stendBtn.setSelected(true);
+                meterParanBtn.setSelected(false);
+                passwordBtn.setSelected(false);
+                linksBtn.setSelected(false);
+
+                getPane(stendPane);
+            }
         }
 
-        //Переключение на вкладку Демо
-        if (event.getSource() == demoBtn) {
-            parametersPane.toFront();
+        //Переключение на вкладку Параметры счётчиков
+        if (event.getSource() == meterParanBtn) {
+            if (meterParanBtn.isSelected()) {
+                stendBtn.setSelected(false);
+                meterParanBtn.setSelected(true);
+                passwordBtn.setSelected(false);
+                linksBtn.setSelected(false);
+
+                getPane(parametersPane);
+            }
+        }
+
+        //Переключение на вкладку Пароль
+        if (event.getSource() == passwordBtn) {
+            if (passwordBtn.isSelected()) {
+                stendBtn.setSelected(false);
+                meterParanBtn.setSelected(false);
+                passwordBtn.setSelected(true);
+                linksBtn.setSelected(false);
+
+                getPane(passwordPane);
+            }
+        }
+
+        //Переключение на вкладку Ссылки
+        if (event.getSource() == linksBtn) {
+            if (linksBtn.isSelected()) {
+                stendBtn.setSelected(false);
+                meterParanBtn.setSelected(false);
+                passwordBtn.setSelected(false);
+                linksBtn.setSelected(true);
+
+                getPane(linksPane);
+            }
         }
     }
 
@@ -324,6 +369,17 @@ public class PropertiesController implements Initializable, Frame {
                 txtFldPathSerNoMeter.setText(file.getAbsolutePath());
             } else {
                 txtFldPathSerNoMeter.setText(properties.getProperty("testParamFrame.fileForSerNo"));
+            }
+        }
+    }
+
+    private void getPane(Pane pane) {
+
+        for (Node framePane : mainStackPane.getChildren()) {
+
+            if (pane.equals(framePane)) {
+                pane.toFront();
+                break;
             }
         }
     }
