@@ -4,10 +4,12 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,16 +18,15 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="798.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.PropertiesController">
    <children>
-      <AnchorPane layoutY="-8.0" style="-fx-background-color: #303030;">
+      <AnchorPane prefHeight="418.0" style="-fx-background-color: #303030;">
          <children>
-            <VBox layoutY="8.0" prefHeight="418.0" prefWidth="263.0">
+            <VBox prefHeight="418.0" prefWidth="263.0">
                <children>
-                  <Button fx:id="passwordBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/buttonStyle.css" text="Пароль">
+                  <ToggleButton fx:id="stendBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" text="Параметры стенда">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -33,8 +34,8 @@
                            </image>
                         </ImageView>
                      </graphic>
-                  </Button>
-                  <Button fx:id="stendBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/buttonStyle.css" text="Параметры установки">
+                  </ToggleButton>
+                  <ToggleButton fx:id="demoBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" text="Параметры счётчиков">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -42,8 +43,8 @@
                            </image>
                         </ImageView>
                      </graphic>
-                  </Button>
-                  <Button fx:id="demoBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/buttonStyle.css" text="Параметры счётчиков">
+                  </ToggleButton>
+                  <ToggleButton fx:id="passwordBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" text="Пароль">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -51,7 +52,16 @@
                            </image>
                         </ImageView>
                      </graphic>
-                  </Button>
+                  </ToggleButton>
+                  <ToggleButton fx:id="linksBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" text="Ссылки">
+                     <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/settingsFrame/lock_32.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
                </children>
             </VBox>
          </children>
@@ -60,25 +70,6 @@
          <children>
             <StackPane prefHeight="418.0" prefWidth="536.0">
                <children>
-                  <AnchorPane fx:id="passwordPane" style="-fx-background-color: #6A6A6A;">
-                     <children>
-                        <GridPane prefHeight="418.0" prefWidth="536.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Label text="Пароль" GridPane.halignment="CENTER">
-                                 <font>
-                                    <Font size="39.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </GridPane>
-                     </children>
-                  </AnchorPane>
                   <AnchorPane fx:id="parametersPane" style="-fx-background-color: #6A6A6A;">
                      <children>
                         <SplitPane dividerPositions="0.4851694915254237" layoutX="31.0" layoutY="29.0" prefHeight="301.0" prefWidth="474.0">
@@ -195,6 +186,67 @@
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text=" Серийный №" wrappingWidth="121.36067199707031" GridPane.rowIndex="2" />
                               <ComboBox fx:id="stendPaneRefMetModel" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <TextField fx:id="txtFidRefMetModel" maxHeight="27.0" maxWidth="95.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="LinksPane" style="-fx-background-color: #6A6A6A;">
+                     <children>
+                        <TextField layoutX="194.0" layoutY="93.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="passwordPane" style="-fx-background-color: #6A6A6A;">
+                     <children>
+                        <GridPane layoutX="58.0" layoutY="61.0" prefHeight="148.0" prefWidth="420.0">
+                          <columnConstraints>
+                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="0.0" prefWidth="0.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Старый пароль" textFill="WHITE" />
+                              <Label text="Новый пароль" textFill="WHITE" GridPane.rowIndex="1" />
+                              <Label text="Повторите новый пароль" textFill="WHITE" GridPane.rowIndex="2" />
+                              <PasswordField fx:id="passFldOldPass" GridPane.columnIndex="1" />
+                              <PasswordField fx:id="passFldNewPass" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <PasswordField fx:id="passFldRepeatNewPass" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                        <Button fx:id="passPaneSave" layoutX="178.0" layoutY="332.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#passPaneActionEvent" prefHeight="38.0" prefWidth="180.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить">
+                           <graphic>
+                              <ImageView fitHeight="23.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../image/settingsFrame/icons8_save_32.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="LinksPane" style="-fx-background-color: #6A6A6A;">
+                     <children>
+                        <GridPane layoutX="58.0" layoutY="61.0" prefHeight="148.0" prefWidth="420.0">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="401.0" minWidth="0.0" prefWidth="396.0" />
+                              <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="24.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Файл с номерами счётчиков" textFill="WHITE" />
+                              <Label text="Путь сохранения отчёта" textFill="WHITE" GridPane.rowIndex="2" />
+                              <TextField fx:id="txtFldPathSerNoMeter" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtFldPathReport" GridPane.rowIndex="3" />
+                              <Button fx:id="btnPathSerNoMeter" mnemonicParsing="false" onAction="#linksPaneActionEvent" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button fx:id="btnPathReport" mnemonicParsing="false" onAction="#linksPaneActionEvent" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
                      </children>

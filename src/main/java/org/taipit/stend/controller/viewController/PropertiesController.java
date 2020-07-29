@@ -9,6 +9,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.taipit.stend.model.stend.OnePhaseStend;
 import org.taipit.stend.model.stend.StendDLLCommands;
@@ -18,7 +20,11 @@ import org.taipit.stend.helper.frameManager.Frame;
 import org.taipit.stend.model.MeterParamepersForProperty;
 import org.taipit.stend.model.MeterParameter;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.File;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class PropertiesController implements Initializable, Frame {
@@ -32,6 +38,9 @@ public class PropertiesController implements Initializable, Frame {
 
     @FXML
     private Button demoBtn;
+
+    @FXML
+    private Button linksBtn;
 
 //----------------------------------------------------------- stendPane
     @FXML
@@ -89,6 +98,18 @@ public class PropertiesController implements Initializable, Frame {
     @FXML
     private AnchorPane passwordPane;
 
+    @FXML
+    private Button passPaneSave;
+
+    @FXML
+    private TextField passFldOldPass;
+
+    @FXML
+    private TextField passFldNewPass;
+
+    @FXML
+    private TextField passFldRepeatNewPass;
+
 //----------------------------------------------------------- ParametersPane
     @FXML
     private AnchorPane parametersPane;
@@ -111,13 +132,29 @@ public class PropertiesController implements Initializable, Frame {
     @FXML
     private Button btnAddParameter;
 
-    private Properties properties = ConsoleHelper.properties;
+//----------------------------------------------------------- linksPane
+    @FXML
+    private TextField txtFldPathSerNoMeter;
 
+    @FXML
+    private TextField txtFldPathReport;
+
+    @FXML
+    private Button btnPathSerNoMeter;
+
+    @FXML
+    private Button btnPathReport;
+
+    @FXML
+    private Button linkPaneSave;
+
+    private Properties properties = ConsoleHelper.properties;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setParamWithPropFile();
         initMeterParameterPane();
+        initLinksPane();
     }
 
     @FXML
@@ -141,6 +178,67 @@ public class PropertiesController implements Initializable, Frame {
             ConsoleHelper.saveProperties();
         }
     }
+
+    @FXML
+    private void passPaneActionEvent(ActionEvent event) {
+
+        if (event.getSource() == passPaneSave) {
+            passFldNewPass.setStyle("");
+            passFldRepeatNewPass.setStyle("");
+            passFldOldPass.setStyle("");
+
+            if (properties.getProperty("config").isEmpty()) {
+
+                if (passFldNewPass.getText().equals(passFldRepeatNewPass.getText())) {
+                    try {
+                        MessageDigest digester = MessageDigest.getInstance("SHA-512");
+
+                        //Генерирую хэш из пароля
+                        String digest = DatatypeConverter.printHexBinary(digester.digest(passFldNewPass.getText().getBytes()));
+
+                        //Сохраняю его в пропертиес
+                        properties.setProperty("config", digest);
+                        ConsoleHelper.saveProperties();
+                        ConsoleHelper.infoException("Пароль успешно установлен");
+                    } catch (NoSuchAlgorithmException ignore) {
+                    }
+                } else {
+                    ConsoleHelper.infoException("Пароли не совпадают");
+                    passFldNewPass.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    passFldRepeatNewPass.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                }
+            } else {
+                try {
+                    MessageDigest digester = MessageDigest.getInstance("SHA-512");
+
+                    //Генерирую хэш из пароля
+                    String digest = DatatypeConverter.printHexBinary(digester.digest(passFldOldPass.getText().getBytes()));
+
+                    if (digest.equals(properties.getProperty("config"))) {
+                        if (passFldNewPass.getText().equals(passFldRepeatNewPass.getText())) {
+
+                            //Генерирую хэш из пароля
+                            String digest1 = DatatypeConverter.printHexBinary(digester.digest(passFldNewPass.getText().getBytes()));
+
+                            //Сохраняю его в пропертиес
+                            properties.setProperty("config", digest1);
+                            ConsoleHelper.saveProperties();
+                            ConsoleHelper.infoException("Пароль успешно установлен");
+
+                        } else {
+                            ConsoleHelper.infoException("Пароли не совпадают");
+                            passFldNewPass.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            passFldRepeatNewPass.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        }
+                    } else {
+                        ConsoleHelper.infoException("Неверный пароль");
+                        passFldOldPass.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    }
+                } catch (NoSuchAlgorithmException ignore) {}
+            }
+        }
+    }
+
     @FXML
     private void parameterPaneActionEvent(ActionEvent event) {
         if (event.getSource() == btnAddParameter) {
@@ -187,6 +285,46 @@ public class PropertiesController implements Initializable, Frame {
         //Переключение на вкладку Демо
         if (event.getSource() == demoBtn) {
             parametersPane.toFront();
+        }
+    }
+
+    @FXML
+    private void linksPaneActionEvent(ActionEvent event) {
+        if (event.getSource() == btnPathReport) {
+
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("Путь сохранения отчёта");
+
+            File newFile = directoryChooser.showDialog(btnPathReport.getScene().getWindow());
+
+            if (newFile != null) {
+                properties.setProperty("printReportPath", newFile.getAbsolutePath());
+                ConsoleHelper.saveProperties();
+                txtFldPathReport.setText(newFile.getAbsolutePath());
+            } else {
+                txtFldPathReport.setText(properties.getProperty("printReportPath"));
+            }
+        }
+
+        if (event.getSource() == btnPathSerNoMeter) {
+            FileChooser fileChooser = new FileChooser();
+
+            fileChooser.setTitle("Выбор файла");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Все файлы", "*.*"),
+                    new FileChooser.ExtensionFilter("Текстовые файлы", "*.txt", "*.doc")
+            );
+
+            File file = fileChooser.showOpenDialog(btnPathSerNoMeter.getScene().getWindow());
+
+            if (file != null) {
+                properties.setProperty("testParamFrame.fileForSerNo", file.getAbsolutePath());
+                ConsoleHelper.saveProperties();
+
+                txtFldPathSerNoMeter.setText(file.getAbsolutePath());
+            } else {
+                txtFldPathSerNoMeter.setText(properties.getProperty("testParamFrame.fileForSerNo"));
+            }
         }
     }
 
@@ -288,6 +426,11 @@ public class PropertiesController implements Initializable, Frame {
                 listViewParameters.setItems(FXCollections.observableArrayList(c.getList().get(0).getParameterValues()));
             }
         });
+    }
+
+    private void initLinksPane() {
+        txtFldPathSerNoMeter.setText(properties.getProperty("testParamFrame.fileForSerNo"));
+        txtFldPathReport.setText(properties.getProperty("printReportPath"));
     }
 
     @Override
