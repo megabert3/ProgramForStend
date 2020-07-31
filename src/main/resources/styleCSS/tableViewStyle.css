@@ -50,61 +50,62 @@
 }
 
 /*Скрол бары*/
-
 .scroll-bar:horizontal .increment-button .increment-arrow ,
-.scroll-bar:vertical .increment-button .increment-arrow {
+.scroll-bar:vertical .increment-button .increment-arrow,
+.scroll-bar:horizontal .decrement-button .decrement-arrow ,
+.scroll-bar:vertical .decrement-button .decrement-arrow {
+    /*-fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
 
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;*/
 }
 
-.increment-button ,
-.decrement-button {
-    -fx-background-color:transparent;
-	/*-fx-border-color:derive(gray,80%);*/
-	-fx-padding:3px;
+.scroll-bar:horizontal .increment-button ,
+.scroll-bar:vertical .increment-button ,
+.scroll-bar:horizontal .decrement-button ,
+.scroll-bar:vertical .decrement-button {
+    /*-fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;*/
 }
 
 .scroll-bar:horizontal .track ,
 .scroll-bar:vertical .track {
      -fx-background-color: #E9E9E9;
-	 /*-fx-border-color:derive(gray,80%);*/
-	 -fx-background-radius: 0em;
-	 -fx-min-height: 0;
-     -fx-pref-height: 3;
-     -fx-max-height: 5;
+     -fx-border-color:transparent;
+     -fx-background-radius: 0em;
+     -fx-border-radius:0em;
 }
 
-.scroll-bar:horizontal .thumb,
+.scroll-bar:horizontal .thumb ,
 .scroll-bar:vertical .thumb {
     -fx-background-color: #95999D;
-	-fx-background-insets: 0, 0, 0, 0;
-	-fx-background-radius: 0em;
-	-fx-opacity: 0.4;
-	-fx-min-height: 0;
-    -fx-pref-height: 3;
-    -fx-max-height: 5;
+    -fx-opacity: 0.4;
+    -fx-background-radius: 0em;
+    -fx-border-radius:0em;
 }
 
-/*.scroll-bar:horizontal:hover .track ,
-.scroll-bar:horizontal:pressed .track ,
-.scroll-bar:vertical:hover .track,
-.scroll-bar:vertical:pressed .track{
-     -fx-background-color: derive(#434343,20%);
+.scroll-bar:horizontal .track-background ,
+.scroll-bar:vertical .track-background {
+    -fx-background-color: transparent;
+    /*-fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
 
-	 -fx-opacity: 0.2;
-	 -fx-background-radius: 0em;
-} */
+    -fx-min-height: 0;
+    -fx-pref-height: 0;s
+    -fx-max-height: 0;*/
+}
 
 .scroll-bar .thumb:hover,
 .scroll-bar .thumb:pressed{
     -fx-background-color: #95999D;
     -fx-opacity: 0.6;
 }
-
-/*
-.increment-button:hover,
-.decrement-button:hover {
-    -fx-background-color:derive(gray,100%);
-	-fx-border-color:derive(gray,80%);
-	-fx-padding:10px;
-}
-*/
