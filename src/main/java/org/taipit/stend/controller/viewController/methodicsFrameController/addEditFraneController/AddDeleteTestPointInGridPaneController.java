@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -43,6 +44,8 @@ public class AddDeleteTestPointInGridPaneController {
             String[] first = o1.split(" ");
             String[] second = o2.split(" ");
 
+            System.out.println(Arrays.toString(first));
+            System.out.println(Arrays.toString(second));
             if (first[1].compareTo(second[1]) == 0) {
                 if (Float.parseFloat(first[0]) > Float.parseFloat(second[0])) {
                     return -1;

@@ -39,6 +39,8 @@ public class PropertiesController implements Initializable, Frame {
     @FXML
     private VBox vBoxBtn;
 
+    private ToggleGroup toggleGroup = new ToggleGroup();
+
 //----------------------------------------------------------- Menu
     @FXML
     private ToggleButton passwordBtn;
@@ -128,7 +130,7 @@ public class PropertiesController implements Initializable, Frame {
     private TableView<MeterParameter> tabViewParameters;
 
     @FXML
-    private TableColumn<MeterParameter, String> tabColParameters;
+    private TableColumn<MeterParameter, String> tabColParameters = new TableColumn<>("Параметры");
 
     @FXML
     private ListView<String> listViewParameters;
@@ -163,6 +165,11 @@ public class PropertiesController implements Initializable, Frame {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        stendBtn.setToggleGroup(toggleGroup);
+        meterParanBtn.setToggleGroup(toggleGroup);
+        passwordBtn.setToggleGroup(toggleGroup);
+        linksBtn.setToggleGroup(toggleGroup);
+
         setParamWithPropFile();
         initMeterParameterPane();
         initLinksPane();
@@ -287,48 +294,28 @@ public class PropertiesController implements Initializable, Frame {
         //Переключение на вкладку Установка
         if (event.getSource() == stendBtn) {
             if (stendBtn.isSelected()) {
-                stendBtn.setSelected(true);
-                meterParanBtn.setSelected(false);
-                passwordBtn.setSelected(false);
-                linksBtn.setSelected(false);
-
-                getPane(stendPane);
+                stendPane.toFront();
             }
         }
 
         //Переключение на вкладку Параметры счётчиков
         if (event.getSource() == meterParanBtn) {
             if (meterParanBtn.isSelected()) {
-                stendBtn.setSelected(false);
-                meterParanBtn.setSelected(true);
-                passwordBtn.setSelected(false);
-                linksBtn.setSelected(false);
-
-                getPane(parametersPane);
+                parametersPane.toFront();
             }
         }
 
         //Переключение на вкладку Пароль
         if (event.getSource() == passwordBtn) {
             if (passwordBtn.isSelected()) {
-                stendBtn.setSelected(false);
-                meterParanBtn.setSelected(false);
-                passwordBtn.setSelected(true);
-                linksBtn.setSelected(false);
-
-                getPane(passwordPane);
+                passwordPane.toFront();
             }
         }
 
         //Переключение на вкладку Ссылки
         if (event.getSource() == linksBtn) {
             if (linksBtn.isSelected()) {
-                stendBtn.setSelected(false);
-                meterParanBtn.setSelected(false);
-                passwordBtn.setSelected(false);
-                linksBtn.setSelected(true);
-
-                getPane(linksPane);
+                linksPane.toFront();
             }
         }
     }
@@ -369,17 +356,6 @@ public class PropertiesController implements Initializable, Frame {
                 txtFldPathSerNoMeter.setText(file.getAbsolutePath());
             } else {
                 txtFldPathSerNoMeter.setText(properties.getProperty("testParamFrame.fileForSerNo"));
-            }
-        }
-    }
-
-    private void getPane(Pane pane) {
-
-        for (Node framePane : mainStackPane.getChildren()) {
-
-            if (pane.equals(framePane)) {
-                pane.toFront();
-                break;
             }
         }
     }
@@ -482,6 +458,10 @@ public class PropertiesController implements Initializable, Frame {
                 listViewParameters.setItems(FXCollections.observableArrayList(c.getList().get(0).getParameterValues()));
             }
         });
+
+        tabColParameters.setPrefWidth(tabViewParameters.getPrefWidth() - 2);
+
+        tabViewParameters.getColumns().add(tabColParameters);
     }
 
     private void initLinksPane() {
