@@ -44,8 +44,6 @@ public class AddDeleteTestPointInGridPaneController {
             String[] first = o1.split(" ");
             String[] second = o2.split(" ");
 
-            System.out.println(Arrays.toString(first));
-            System.out.println(Arrays.toString(second));
             if (first[1].compareTo(second[1]) == 0) {
                 if (Float.parseFloat(first[0]) > Float.parseFloat(second[0])) {
                     return -1;

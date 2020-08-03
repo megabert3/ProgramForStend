@@ -1,60 +1,3 @@
-.table-view:focused {
-    /*-fx-background-color: transparent;*/
-    -fx-focus-color: transparent;
-}
-
-.table-row-cell:odd {
-    -fx-background-color: #EBEBEB;
-    -fx-background-insets: 0, 0 0 1 0;
-}
-
-.table-row-cell:even {
-    -fx-background-color: #E0E0E0;
-    -fx-background-insets: 0, 0 0 1 0;
-}
-
-.table-view .column-header-background{
-    -fx-background-color: #95999D;
-}
-
-.table-view .column-header-background .label{
-    -fx-background-color: transparent;
-    -fx-text-fill: white;
-}
-
-.table-view .column-header {
-    -fx-background-color: transparent;
-}
-
-.table-view .table-cell{
-    -fx-text-fill: black;
-}
-
-.table-row-cell{
-    -fx-background-color: #000000;
-    -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em;
-}
-
-/*Цвет выбранной строки*/
-.table-row-cell:selected {
-    -fx-background-color: #0096C9;
-    -fx-background-insets: 0;
-    -fx-background-radius: 1;
-}
-
-/*Цвет текста выбранной строки*/
-.table-row-cell:selected .text {
-    -fx-fill: white;
-}
-
-/*Текстовое поле при редактировании*/
-.text-field-table-cell .text-field {
-   -fx-padding: 0;
-   -fx-border-color:black;
-   -fx-background-color: #FFFFFF;
-}
-
 /*------------------------------------------------------------------------
 /*Скрол бары*/
 *{
@@ -157,7 +100,7 @@
     -fx-max-height: maxHeight;
 
     -fx-background-color: #95999D;
-    -fx-opacity: 0.4;
+    -fx-opacity: 0.3;
     -fx-background-radius: 0em;
     -fx-border-radius:0em;
 }

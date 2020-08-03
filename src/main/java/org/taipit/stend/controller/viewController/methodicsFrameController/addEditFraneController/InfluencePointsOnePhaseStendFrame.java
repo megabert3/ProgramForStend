@@ -1512,6 +1512,12 @@ public class InfluencePointsOnePhaseStendFrame {
         mainScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         mainScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         mainScrollPane.setStyle("-fx-background: #6A6A6A;");
+
+        String cssAdress = getClass().getClassLoader().getResource("styleCSS/scrollPane.css").toString();
+        if (cssAdress != null) {
+            mainScrollPane.getStylesheets().add(cssAdress);
+        }
+
         mainScrollPane.setContent(stackPaneForGridPane);
 
         mainAnchorPane.getChildren().add(mainScrollPane);
@@ -3172,5 +3178,13 @@ public class InfluencePointsOnePhaseStendFrame {
         viewPointTableAPMns.setItems(inflListForCollumAPMns);
         viewPointTableRPPls.setItems(inflListForCollumRPPls);
         viewPointTableRPMns.setItems(inflListForCollumRPMns);
+
+        String cssAdress = getClass().getClassLoader().getResource("styleCSS/tableViewStyle.css").toString();
+        if (cssAdress != null) {
+            viewPointTableAPPls.getStylesheets().add(cssAdress);
+            viewPointTableAPMns.getStylesheets().add(cssAdress);
+            viewPointTableRPPls.getStylesheets().add(cssAdress);
+            viewPointTableRPMns.getStylesheets().add(cssAdress);
+        }
     }
 }

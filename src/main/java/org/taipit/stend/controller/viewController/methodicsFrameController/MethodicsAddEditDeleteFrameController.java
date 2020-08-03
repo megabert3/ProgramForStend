@@ -95,7 +95,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
     private TableView<Metodic> viewPointTable;
 
     @FXML
-    private TableColumn<Metodic, String> tabClMethodics = new TableColumn<>("Методики");
+    private TableColumn<Metodic, String> tabClMethodics;
 
     @FXML
     private ListView<String> ListViewAPPls;
@@ -341,6 +341,11 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         //Если нажата кнопка "Удалить"
         if (event.getSource() == deleteMetBtn) {
 
+            if (focusedMetodic == null) {
+                ConsoleHelper.infoException("Выберите методику, которую желаете удалить");
+                return;
+            }
+
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/viewFXML/yesOrNoFrame.fxml"));
             try {
@@ -378,7 +383,6 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
     //Инициирует список методик
     private void initMethodicListName() {
-        tabClMethodics.setPrefWidth(viewPointTable.getPrefWidth() - 5);
 
         tabClMethodics.setCellValueFactory(new PropertyValueFactory<>("metodicName"));
 
@@ -414,7 +418,6 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
             }
         });
 
-        viewPointTable.getColumns().add(tabClMethodics);
         viewPointTable.setEditable(true);
         viewPointTable.setItems(metodicsNameList);
 

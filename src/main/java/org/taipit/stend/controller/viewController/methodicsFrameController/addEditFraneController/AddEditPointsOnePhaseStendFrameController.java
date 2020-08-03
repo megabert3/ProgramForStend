@@ -737,6 +737,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
         mainScrollPane.setStyle("-fx-background: #6A6A6A;");
 
+        String cssAdress = getClass().getClassLoader().getResource("styleCSS/scrollPane.css").toString();
+        if (cssAdress != null) {
+            mainScrollPane.getStylesheets().add(cssAdress);
+        }
+
         mainScrollPane.setContent(stackPaneForGridPane);
 
         mainAnchorPane.getChildren().add(mainScrollPane);
@@ -1412,6 +1417,14 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         viewPointTableAPMns.setItems(testListForCollumAPMns);
         viewPointTableRPPls.setItems(testListForCollumRPPls);
         viewPointTableRPMns.setItems(testListForCollumRPMns);
+
+        String cssAdress = getClass().getClassLoader().getResource("styleCSS/tableViewStyle.css").toString();
+        if (cssAdress != null) {
+            viewPointTableAPPls.getStylesheets().add(cssAdress);
+            viewPointTableAPMns.getStylesheets().add(cssAdress);
+            viewPointTableRPPls.getStylesheets().add(cssAdress);
+            viewPointTableRPMns.getStylesheets().add(cssAdress);
+        }
     }
 
     //========== Всё для инициализации уже созданной методики (нажата кнопка редактирование) ============

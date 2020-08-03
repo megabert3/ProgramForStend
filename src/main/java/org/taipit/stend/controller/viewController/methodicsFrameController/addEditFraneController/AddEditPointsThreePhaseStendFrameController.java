@@ -744,6 +744,11 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
         mainScrollPane.setStyle("-fx-background: #6A6A6A;");
 
+        String cssAdress = getClass().getClassLoader().getResource("styleCSS/scrollPane.css").toString();
+        if (cssAdress != null) {
+            mainScrollPane.getStylesheets().add(cssAdress);
+        }
+
         mainScrollPane.setContent(stackPaneForGridPane);
 
         mainAnchorPane.getChildren().add(mainScrollPane);
@@ -820,6 +825,11 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 for (int y = 0; y < powerFactor.size(); y++) {
                     //Устанавливаю CheckBox в нужную и соответствующую ячейку
                     checkBox = new CheckBox();
+
+                    String cssAdress = getClass().getClassLoader().getResource("styleCSS/checkBox.css").toString();
+                    if (cssAdress != null) {
+                        checkBox.getStylesheets().add(cssAdress);
+                    }
 
                     checkBox.setId(gridPane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
 
@@ -1186,7 +1196,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 TableRow<Commands> row = new TableRow<>();
 
                 row.setOnDragDetected(event -> {
-                    if (! row.isEmpty()) {
+                    if (!row.isEmpty()) {
                         Integer index = row.getIndex();
                         Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                         db.setDragView(row.snapshot(null, null));
@@ -1432,6 +1442,14 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         viewPointTableAPMns.setItems(testListForCollumAPMns);
         viewPointTableRPPls.setItems(testListForCollumRPPls);
         viewPointTableRPMns.setItems(testListForCollumRPMns);
+
+        String cssAdress = getClass().getClassLoader().getResource("styleCSS/tableViewStyle.css").toString();
+        if (cssAdress != null) {
+            viewPointTableAPPls.getStylesheets().add(cssAdress);
+            viewPointTableAPMns.getStylesheets().add(cssAdress);
+            viewPointTableRPPls.getStylesheets().add(cssAdress);
+            viewPointTableRPMns.getStylesheets().add(cssAdress);
+        }
     }
 
     //========== Всё для инициализации уже созданной методики (нажата кнопка редактирование) ============
