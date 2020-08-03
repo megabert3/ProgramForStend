@@ -705,6 +705,8 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
         initTableView();
 
+        APPlus.fire();
+
         radBtnConstEnergyAPPls.setToggleGroup(radioBtnGroupAPPls);
         radBtnConstTimeAPPls.setToggleGroup(radioBtnGroupAPPls);
         radBtnConstTimeAPPls.setSelected(true);
@@ -721,15 +723,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         radBtnConstTimeRPMns.setToggleGroup(radioBtnGroupRPMns);
         radBtnConstTimeRPMns.setSelected(true);
 
-        APPlus.setSelected(true);
-        allPhaseBtn.setSelected(true);
-        APPlusCRPSTA.setSelected(true);
-        APPlsPane.toFront();
-        paneCRPAPPls.toFront();
-
         initCoiseBoxParamForRTC();
-        gridPaneAllPhaseAPPlus.toFront();
-        viewPointTableAPPls.toFront();
     }
 
 //================Всё чтоё связанно с инициализацией грид пайн ======================
@@ -776,7 +770,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         gridPanePhaseCRPMinus.setId("5;C;R;N");
 
 
-        gridPanesEnergyAndPhase= Arrays.asList(
+        gridPanesEnergyAndPhase = Arrays.asList(
                 gridPaneAllPhaseAPPlus,
                 gridPanePhaseAAPPlus,
                 gridPanePhaseBAPPlus,
@@ -814,19 +808,20 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     }
 
     private void setCheckBoxAndLabelInGridPane() {
+
+        String cssAdress = getClass().getClassLoader().getResource("styleCSS/checkBox.css").toString();
+
+        CheckBox checkBox;
+
         for (GridPane gridPane : gridPanesEnergyAndPhase) {
 
             gridPane.setGridLinesVisible(true);
-            gridPane.setStyle("-fx-background: #6A6A6A;");
-
-            CheckBox checkBox;
 
             for (int x = 0; x < current.size(); x++) {
                 for (int y = 0; y < powerFactor.size(); y++) {
                     //Устанавливаю CheckBox в нужную и соответствующую ячейку
                     checkBox = new CheckBox();
 
-                    String cssAdress = getClass().getClassLoader().getResource("styleCSS/checkBox.css").toString();
                     if (cssAdress != null) {
                         checkBox.getStylesheets().add(cssAdress);
                     }
@@ -2096,7 +2091,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
         createScrollPanesForGridPaneWithoutSquare();
 
-        gridPaneAllPhaseAPPlus.toFront();
+        APPlus.fire();
 
         if (mainScrollPane.getSkin() == null || scrollPaneForPowerFactor.getSkin() == null || scrollPaneForCurrent.getSkin() == null) {
             mainScrollPane.skinProperty().addListener(new ChangeListener<Skin<?>>() {
@@ -4515,6 +4510,13 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     }
 
     private void gridPaneToFront(GridPane pane) {
+        for (GridPane gridPane : gridPanesEnergyAndPhase) {
+            if (pane.equals(gridPane)) {
+                gridPane.setVisible(true);
+            } else {
+                gridPane.setVisible(false);
+            }
+        }
         pane.toFront();
     }
 

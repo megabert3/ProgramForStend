@@ -89,22 +89,22 @@
             </VBox>
             <HBox fx:id="hBoxForDirectionTgBtn" alignment="TOP_RIGHT" prefHeight="35.0" prefWidth="750.0" style="-fx-background-color: #6A6A6A;">
                <children>
-                  <ToggleButton fx:id="APPlus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="A.P. +">
+                  <ToggleButton fx:id="APPlus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" stylesheets="@../../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="A.P. +">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="APMinus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="A.P. -">
+                  <ToggleButton fx:id="APMinus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" stylesheets="@../../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="A.P. -">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="RPPlus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="R.P.+">
+                  <ToggleButton fx:id="RPPlus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" stylesheets="@../../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="R.P.+">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="RPMinus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="R.P.-">
+                  <ToggleButton fx:id="RPMinus" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" stylesheets="@../../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="R.P.-">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
@@ -122,22 +122,22 @@
          <children>
             <HBox alignment="TOP_RIGHT" prefHeight="35.0" prefWidth="750.0" style="-fx-background-color: #6A6A6A;">
                <children>
-                  <ToggleButton fx:id="APPlusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="A.P. +">
+                  <ToggleButton fx:id="APPlusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" stylesheets="@../../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="A.P. +">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="APMinusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="A.P. -">
+                  <ToggleButton fx:id="APMinusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" stylesheets="@../../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="A.P. -">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="RPPlusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="R.P.+">
+                  <ToggleButton fx:id="RPPlusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" stylesheets="@../../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="R.P.+">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="RPMinusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" text="R.P.-">
+                  <ToggleButton fx:id="RPMinusCRPSTA" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="46.0" prefWidth="108.0" stylesheets="@../../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="R.P.-">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>

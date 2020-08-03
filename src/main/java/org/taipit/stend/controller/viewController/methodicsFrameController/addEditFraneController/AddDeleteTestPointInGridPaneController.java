@@ -93,7 +93,6 @@ public class AddDeleteTestPointInGridPaneController {
 
     @FXML
     void initialize() {
-
         chBoxPowerFactor.getItems().addAll(powerFactorCoef);
         chBoxPowerFactor.setValue(chBoxPowerFactor.getItems().get(0));
 

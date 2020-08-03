@@ -698,6 +698,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
         initTableView();
 
+        APPlus.fire();
+
         radBtnConstEnergyAPPls.setToggleGroup(radioBtnGroupAPPls);
         radBtnConstTimeAPPls.setToggleGroup(radioBtnGroupAPPls);
         radBtnConstTimeAPPls.setSelected(true);
@@ -2032,7 +2034,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
         createScrollPanesForGridPaneWithoutSquare();
 
-        gridPaneOnePhaseAPPlus.toFront();
+        APPlus.fire();
 
         if (mainScrollPane.getSkin() == null || scrollPaneForPowerFactor.getSkin() == null || scrollPaneForCurrent.getSkin() == null) {
             mainScrollPane.skinProperty().addListener(new ChangeListener<Skin<?>>() {
@@ -4442,6 +4444,13 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     }
 
     private void gridPaneToFront(GridPane pane) {
+        for (GridPane gridPane : gridPanesEnergyAndPhase) {
+            if (pane.equals(gridPane)) {
+                gridPane.setVisible(true);
+            } else {
+                gridPane.setVisible(false);
+            }
+        }
         pane.toFront();
     }
 
