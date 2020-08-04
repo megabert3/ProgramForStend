@@ -1,0 +1,23 @@
+.toggle-button {
+    -fx-text-fill: white;
+    -fx-background-color: #2E2E2E;
+    -fx-border-color: white;
+    -fx-border-width: 0.1;
+    -fx-background-radius: 0,0,0,0;
+    -fx-opacity: 0.8;
+}
+
+.toggle-button:hover {
+    -fx-background-color: #393939;
+    -fx-background-radius: 0,0,0,0;
+    -fx-opacity: 0.9;
+}
+
+.toggle-button:selected {
+    -fx-text-fill: black;
+    -fx-background-color: #FFC723;
+    -fx-border-color: black;
+    -fx-border-width: 0.1;
+    -fx-background-radius: 0,0,0,0;
+    -fx-opacity: 1.0;
+}

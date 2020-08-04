@@ -736,7 +736,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         mainScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         mainScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
-        mainScrollPane.setStyle("-fx-background: #6A6A6A;");
+        mainScrollPane.setStyle("-fx-background: #797979;");
 
         String cssAdress = getClass().getClassLoader().getResource("styleCSS/scrollPane.css").toString();
         if (cssAdress != null) {
@@ -809,7 +809,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     private void setCheckBoxAndLabelInGridPane() {
 
-        String cssAdress = getClass().getClassLoader().getResource("styleCSS/checkBox.css").toString();
+        String cssAdress = getClass().getClassLoader().getResource("styleCSS/addDeleteEditPointsFrame/checkBox.css").toString();
 
         CheckBox checkBox;
 
@@ -830,11 +830,18 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     GridPane.setColumnIndex(checkBox, x + 1);
                     GridPane.setRowIndex(checkBox, y + 1);
+
                     GridPane.setHalignment(checkBox, HPos.CENTER);
                     GridPane.setValignment(checkBox, VPos.CENTER);
 
                     gridPane.getChildren().add(checkBox);
                 }
+            }
+        }
+
+        for (GridPane gridPane : gridPanesEnergyAndPhase) {
+            for (Node node : gridPane.getChildren()) {
+                //if ()
             }
         }
     }

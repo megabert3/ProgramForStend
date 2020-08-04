@@ -1,0 +1,55 @@
+.check-box: determinate: hover {
+    -fx-background-color: transparent;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: grey;
+}
+
+.check-box: determinate {
+    -fx-background-color: transparent;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+
+    -fx-padding: 13 13 13 13;
+
+    -fx-min-width: 0;
+    -fx-pref-width: 42;
+    -fx-max-width: 42;
+
+    -fx-min-height: 0;
+    -fx-pref-height: 20;
+    -fx-max-height: 20;
+}
+
+.check-box .box {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+
+    -fx-min-width: 0;
+    -fx-pref-width: 13;
+    -fx-max-width: 20;
+
+    -fx-min-height: 0;
+    -fx-pref-height: 13;
+    -fx-max-height: 20;
+}
+
+.check-box:selected .mark {
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #FFC723;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    /*-fx-border-color: black;*/
+}

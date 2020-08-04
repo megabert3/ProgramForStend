@@ -820,6 +820,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                     checkBox.setId(gridPane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
 
+
                     GridPane.setColumnIndex(checkBox, x + 1);
                     GridPane.setRowIndex(checkBox, y + 1);
                     GridPane.setHalignment(checkBox, HPos.CENTER);
