@@ -7,7 +7,11 @@
     -fx-opacity: 1.0;
 }
 
-.radio-button .radio .dot: selected {
-    -fx-background: #FFC723;
+
+.radio-button: selected .radio  .dot {
     -fx-background-color: #FFC723;
+}
+/*
+.radio-button .radio .dot: selected {
+    -fx-background-color: #393939;
 }

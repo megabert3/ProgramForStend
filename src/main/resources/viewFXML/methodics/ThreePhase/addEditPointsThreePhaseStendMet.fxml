@@ -218,10 +218,10 @@
                         </StackPane>
                         <VBox prefHeight="220.0" prefWidth="150.0" style="-fx-background-color: #303030;">
                            <children>
-                              <ToggleButton id="default" fx:id="CRPTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Самоход" />
-                              <ToggleButton id="default" fx:id="STATogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Чувствительность" />
-                              <ToggleButton id="default" fx:id="RTCTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Т.Х.Ч" />
-                              <ToggleButton id="default" fx:id="ConstTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Константа" />
+                              <ToggleButton id="defaultYellow" fx:id="CRPTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Самоход" />
+                              <ToggleButton id="defaultYellow" fx:id="STATogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Чувствительность" />
+                              <ToggleButton id="defaultYellow" fx:id="RTCTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Т.Х.Ч" />
+                              <ToggleButton id="defaultYellow" fx:id="ConstTogBtnRPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Константа" />
                            </children>
                         </VBox>
                      </children>
@@ -230,10 +230,10 @@
                      <children>
                         <VBox prefHeight="220.0" prefWidth="150.0" style="-fx-background-color: #303030;">
                            <children>
-                              <ToggleButton id="default" fx:id="CRPTogBtnRPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Самоход" />
-                              <ToggleButton id="default" fx:id="STATogBtnRPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Чувствительность" />
-                              <ToggleButton id="default" fx:id="RTCTogBtnRPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Т.Х.Ч" />
-                              <ToggleButton id="default" fx:id="ConstTogBtnRPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Константа" />
+                              <ToggleButton id="defaultYellow" fx:id="CRPTogBtnRPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Самоход" />
+                              <ToggleButton id="defaultYellow" fx:id="STATogBtnRPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Чувствительность" />
+                              <ToggleButton id="defaultYellow" fx:id="RTCTogBtnRPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Т.Х.Ч" />
+                              <ToggleButton id="defaultYellow" fx:id="ConstTogBtnRPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Константа" />
                            </children>
                         </VBox>
                         <StackPane layoutX="150.0" prefHeight="220.0" prefWidth="600.0">
@@ -378,10 +378,10 @@
                         </StackPane>
                         <VBox prefHeight="220.0" prefWidth="150.0" style="-fx-background-color: #303030;">
                            <children>
-                              <ToggleButton id="default" fx:id="CRPTogBtnAPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Самоход" />
-                              <ToggleButton id="default" fx:id="STATogBtnAPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Чувствительность" />
-                              <ToggleButton id="default" fx:id="RTCTogBtnAPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Т.Х.Ч" />
-                              <ToggleButton id="default" fx:id="ConstTogBtnAPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Константа" />
+                              <ToggleButton id="defaultYellow" fx:id="CRPTogBtnAPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Самоход" />
+                              <ToggleButton id="defaultYellow" fx:id="STATogBtnAPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Чувствительность" />
+                              <ToggleButton id="defaultYellow" fx:id="RTCTogBtnAPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Т.Х.Ч" />
+                              <ToggleButton id="defaultYellow" fx:id="ConstTogBtnAPMns" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Константа" />
                            </children>
                         </VBox>
                      </children>
@@ -390,10 +390,10 @@
                      <children>
                         <VBox prefHeight="220.0" prefWidth="150.0" style="-fx-background-color: #303030;">
                            <children>
-                              <ToggleButton id="default" fx:id="CRPTogBtnAPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Самоход" />
-                              <ToggleButton id="default" fx:id="STATogBtnAPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Чувствительность" />
-                              <ToggleButton id="default" fx:id="RTCTogBtnAPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Т.Х.Ч" />
-                              <ToggleButton id="default" fx:id="ConstTogBtnAPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Константа" />
+                              <ToggleButton id="defaultYellow" fx:id="CRPTogBtnAPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Самоход" />
+                              <ToggleButton id="defaultYellow" fx:id="STATogBtnAPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Чувствительность" />
+                              <ToggleButton id="defaultYellow" fx:id="RTCTogBtnAPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Т.Х.Ч" />
+                              <ToggleButton id="defaultYellow" fx:id="ConstTogBtnAPPls" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Константа" />
                            </children>
                         </VBox>
                         <StackPane layoutX="150.0" prefHeight="220.0" prefWidth="600.0">
@@ -477,6 +477,6 @@
          </children>
       </Pane>
       <Button fx:id="influenceBtn" layoutX="627.0" layoutY="432.0" mnemonicParsing="false" onAction="#influenceAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/button.css" text="Тест влияния" />
-      <ToggleButton id="default" fx:id="parametersBtn" layoutX="464.0" layoutY="432.0" mnemonicParsing="false" onAction="#parametersAction" prefHeight="40.0" prefWidth="143.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Параметры" />
+      <ToggleButton id="defaultYellow" fx:id="parametersBtn" layoutX="464.0" layoutY="432.0" mnemonicParsing="false" onAction="#parametersAction" prefHeight="40.0" prefWidth="143.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Параметры" />
    </children>
 </AnchorPane>

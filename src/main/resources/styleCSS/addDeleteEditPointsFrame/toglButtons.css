@@ -4,17 +4,17 @@
     -fx-border-color: white;
     -fx-border-width: 0.1;
     -fx-background-radius: 0,0,0,0;
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.9;
 }
 
 #default: hover {
     -fx-background-color : #3A84C3;
-    -fx-opacity: 0.8;
+    -fx-opacity: 1.0;
 }
 
 #default: selected {
     -fx-background-color : #3A84C3;
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.9;
 }
 
 #default: selected: hover {
@@ -29,17 +29,17 @@
     -fx-border-color: white;
     -fx-border-width: 0.1;
     -fx-background-radius: 0,0,0,0;
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.9;
 }
 
 #yellow: hover {
-    -fx-background-color : #FFC723;
-    -fx-opacity: 0.8;
+    -fx-background-color : #E3AC06;
+    -fx-opacity: 1.0;
 }
 
 #yellow: selected {
     -fx-background-color : #E3AC06;
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.9;
 }
 
 #yellow: selected: hover {
@@ -50,21 +50,21 @@
 
 #green {
     -fx-background-color: #2E2E2E;
-        -fx-text-fill: white;
-        -fx-border-color: white;
-        -fx-border-width: 0.1;
-        -fx-background-radius: 0,0,0,0;
-        -fx-opacity: 0.8;
+    -fx-text-fill: white;
+    -fx-border-color: white;
+    -fx-border-width: 0.1;
+    -fx-background-radius: 0,0,0,0;
+    -fx-opacity: 0.9;
 }
 
 #green: hover {
     -fx-background-color : #4DA94C;
-    -fx-opacity: 0.8;
+    -fx-opacity: 1.0;
 }
 
 #green: selected {
     -fx-background-color : #4DA94C;
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.9;
 }
 
 #green: selected: hover {
@@ -79,20 +79,45 @@
     -fx-border-color: white;
     -fx-border-width: 0.1;
     -fx-background-radius: 0,0,0,0;
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.9;
 }
 
 #red: hover {
     -fx-background-color : #C8322D;
-    -fx-opacity: 0.8;
+    -fx-opacity: 1.0;
 }
 
 #red: selected {
     -fx-background-color : #C8322D;
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.9;
 }
 
 #red: selected: hover {
     -fx-background-color : #C8322D;
+    -fx-opacity: 1.0;
+}
+
+#defaultYellow {
+    -fx-background-color: #2E2E2E;
+    -fx-text-fill: white;
+    -fx-border-color: white;
+    -fx-border-width: 0.1;
+    -fx-background-radius: 0,0,0,0;
+    -fx-opacity: 0.9;
+}
+
+#defaultYellow: hover {
+    -fx-background-color: #393939;
+    -fx-opacity: 1.0;
+}
+
+#defaultYellow: selected {
+    -fx-background-color : #3A84C3;
+    -fx-opacity: 0.9;
+}
+
+#defaultYellow: selected: hover {
+    -fx-background-color : #3A84C3;
+    -fx-text-fill: white;
     -fx-opacity: 1.0;
 }

@@ -837,12 +837,6 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }
             }
         }
-
-        for (GridPane gridPane : gridPanesEnergyAndPhase) {
-            for (Node node : gridPane.getChildren()) {
-                //if ()
-            }
-        }
     }
 
     public void addListenerToCheckBoxes() {
@@ -909,8 +903,11 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         btnAddDeleteTestPoints.setText("Точки");
         btnAddDeleteTestPoints.setMinHeight(0);
         btnAddDeleteTestPoints.setPrefSize(fillSquare.getPrefWidth(), fillSquare.getPrefHeight());
-        btnAddDeleteTestPoints.setStyle("-fx-background-color: #B8B8B8;" +
-                "-fx-background-insets: 0, 0 0 0 0;");
+
+        String cssAdress = getClass().getClassLoader().getResource("styleCSS/addDeleteEditPointsFrame/buttonSetParam.css").toString();
+        if (cssAdress != null) {
+            btnAddDeleteTestPoints.getStylesheets().add(cssAdress);
+        }
 
         fillSquare.getChildren().add(btnAddDeleteTestPoints);
     }
