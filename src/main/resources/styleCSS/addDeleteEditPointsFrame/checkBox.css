@@ -2,7 +2,7 @@
     -fx-background-color: transparent;
     -fx-border-radius: 0;
     -fx-background-radius: 0;
-    -fx-background-color: grey;
+    -fx-background-color: gray;
 }
 
 .check-box: determinate {
@@ -29,11 +29,11 @@
     -fx-background-radius: 0;
 
     -fx-min-width: 0;
-    -fx-pref-width: 13;
+    -fx-pref-width: 14;
     -fx-max-width: 20;
 
     -fx-min-height: 0;
-    -fx-pref-height: 13;
+    -fx-pref-height: 14;
     -fx-max-height: 20;
 }
 
@@ -48,8 +48,10 @@
 }
 
 .check-box:selected .box {
-    -fx-background-color: #FFC723;
+    -fx-background-color: #FFBC47;
+    -fx-opacity: 1.0;
     -fx-border-radius: 10;
+    -fx-border-width: 0.5;
     -fx-background-radius: 10;
-    /*-fx-border-color: black;*/
+    -fx-border-color: #292929;
 }

@@ -9,10 +9,15 @@
 
 #default: hover {
     -fx-background-color : #3A84C3;
-    -fx-opacity: 0.9;
+    -fx-opacity: 0.8;
 }
 
 #default: selected {
+    -fx-background-color : #3A84C3;
+    -fx-opacity: 0.8;
+}
+
+#default: selected: hover {
     -fx-background-color : #3A84C3;
     -fx-opacity: 1.0;
 }
@@ -29,10 +34,15 @@
 
 #yellow: hover {
     -fx-background-color : #FFC723;
-    -fx-opacity: 0.9;
+    -fx-opacity: 0.8;
 }
 
 #yellow: selected {
+    -fx-background-color : #E3AC06;
+    -fx-opacity: 0.8;
+}
+
+#yellow: selected: hover {
     -fx-background-color : #E3AC06;
     -fx-opacity: 1.0;
 }
@@ -49,10 +59,15 @@
 
 #green: hover {
     -fx-background-color : #4DA94C;
-    -fx-opacity: 0.9;
+    -fx-opacity: 0.8;
 }
 
 #green: selected {
+    -fx-background-color : #4DA94C;
+    -fx-opacity: 0.8;
+}
+
+#green: selected: hover {
     -fx-background-color : #4DA94C;
     -fx-opacity: 1.0;
 }
@@ -60,37 +75,24 @@
 
 #red {
     -fx-background-color: #2E2E2E;
-        -fx-text-fill: white;
-        -fx-border-color: white;
-        -fx-border-width: 0.1;
-        -fx-background-radius: 0,0,0,0;
-        -fx-opacity: 0.8;
-}
-
-#red: hover {
-    -fx-background-color : #C8322D;
-    -fx-opacity: 0.9;
-}
-
-#red: selected {
-    -fx-background-color : #C8322D;
-    -fx-opacity: 1.0;
-}
-/*.toggle-button {
-    -fx-background-color: #FFC107;;
+    -fx-text-fill: white;
+    -fx-border-color: white;
     -fx-border-width: 0.1;
     -fx-background-radius: 0,0,0,0;
     -fx-opacity: 0.8;
 }
 
-.toggle-button:selected {
-    -fx-background-color: #FFC723;
-    -fx-background-radius: 0,0,0,0;
-    -fx-opacity: 1.0;
+#red: hover {
+    -fx-background-color : #C8322D;
+    -fx-opacity: 0.8;
 }
 
-.toggle-button:hover {
-    -fx-background-color: #FFC723;
-    -fx-background-radius: 0,0,0,0;
-    -fx-opacity: 0.9;
-}*/
+#red: selected {
+    -fx-background-color : #C8322D;
+    -fx-opacity: 0.8;
+}
+
+#red: selected: hover {
+    -fx-background-color : #C8322D;
+    -fx-opacity: 1.0;
+}

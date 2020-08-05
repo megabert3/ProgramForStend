@@ -1,0 +1,13 @@
+.radio-button .radio {
+    -fx-background-color: #393939;
+    -fx-opacity: 0.9;
+}
+
+.radio-button .radio: hover{
+    -fx-opacity: 1.0;
+}
+
+.radio-button .radio .dot: selected {
+    -fx-background: #FFC723;
+    -fx-background-color: #FFC723;
+}

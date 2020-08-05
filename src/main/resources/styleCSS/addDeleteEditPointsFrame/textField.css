@@ -1,0 +1,19 @@
+.text-field {
+    -fx-background-color: #393939;
+    -fx-background-radius: 0;
+    -fx-border-color: grey;
+    -fx-border-radius: 0;
+    -fx-border-width: 0.4;
+    -fx-text-fill: white;
+    -fx-highlight-fill: #FFC723;
+    -fx-highlight-text-fill: black;
+}
+
+.text-field .text {
+    -fx-background-color: #292929;
+}
+
+.text-field:focused {
+    /*-fx-border-color: linear-gradient(from 25% 25% to 100% 100%, white, yellow);*/
+    -fx-border-color: #FFD65C;
+}
