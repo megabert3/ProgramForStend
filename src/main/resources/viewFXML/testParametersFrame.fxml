@@ -7,6 +7,10 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="608.0" prefWidth="1288.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.TestParametersFrameController">
@@ -23,31 +27,82 @@
             <TableColumn fx:id="tabColManufacturer" prefWidth="122.0" text="Производитель" />
          </columns>
       </TableView>
-      <Text fill="WHITE" layoutX="354.0" layoutY="510.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Напряжение, В" />
-      <Text fill="WHITE" layoutX="363.0" layoutY="541.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ток, А" />
-      <Text fill="WHITE" layoutX="577.0" layoutY="546.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности Р.Э." />
-      <Text fill="WHITE" layoutX="578.0" layoutY="497.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности А.Э." />
-      <Text fill="WHITE" layoutX="960.0" layoutY="497.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Методика" />
-      <Text fill="WHITE" layoutX="365.0" layoutY="574.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Частота, Гц" />
-      <Text fill="WHITE" layoutX="714.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип изм. элем." />
-      <Button fx:id="btnNumbersMe" layoutX="847.0" layoutY="501.94921875" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="75.0" prefWidth="94.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/button.css" text="Номера" />
-      <Text fill="WHITE" layoutX="714.0" layoutY="566.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип сети" />
-      <Button fx:id="btnStartTest" layoutX="1125.0" layoutY="504.94921875" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="68.0" prefWidth="112.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/button.css" text="Начать тест" />
-      <ComboBox fx:id="chosBxUnom" layoutX="452.0" layoutY="489.94921875" prefHeight="25.0" prefWidth="85.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-      <TextField fx:id="txtFldUnom" layoutX="452.0" layoutY="490.94921875" prefHeight="25.0" prefWidth="61.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
-      <ComboBox fx:id="chosBxAccuracyAP" layoutX="579.0" layoutY="501.94921875" prefHeight="25.0" prefWidth="97.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-      <TextField fx:id="txtFldAccuracyAP" layoutX="579.0" layoutY="502.94921875" maxHeight="27.0" prefHeight="23.0" prefWidth="68.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
-      <ComboBox fx:id="chosBxAccuracyRP" layoutX="579.0" layoutY="550.94921875" prefHeight="25.0" prefWidth="97.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-      <ComboBox fx:id="chosBxCurrent" layoutX="452.0" layoutY="523.94921875" prefHeight="25.0" prefWidth="85.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-      <ComboBox fx:id="chosBxtypeOfMeasuringElement" layoutX="714.0" layoutY="524.94921875" prefHeight="25.0" prefWidth="117.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-      <ComboBox fx:id="chosBxPowerType" layoutX="715.0" layoutY="569.94921875" prefHeight="25.0" prefWidth="115.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-      <ComboBox fx:id="chosBxFrg" layoutX="452.0" layoutY="556.94921875" prefHeight="25.0" prefWidth="85.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-      <TextField fx:id="txtFldAccuracyRP" layoutX="579.0" layoutY="551.94921875" maxHeight="10.0" prefHeight="23.0" prefWidth="68.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
-      <TextField fx:id="txtFldCurrent" layoutX="452.0" layoutY="524.94921875" prefHeight="25.0" prefWidth="61.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
-      <TextField fx:id="txtFldFrg" layoutX="452.0" layoutY="557.94921875" prefHeight="25.0" prefWidth="61.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
-      <ComboBox fx:id="chosBxMetodics" layoutX="960.0" layoutY="501.94921875" prefHeight="28.0" prefWidth="152.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-      <ComboBox fx:id="chosBxTypeMeter" layoutX="714.0" layoutY="478.94921875" prefHeight="25.0" prefWidth="117.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-      <Text fill="WHITE" layoutX="714.0" layoutY="475.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип счётчика" />
-      <CheckBox fx:id="twoCircutChcBox" alignment="CENTER_RIGHT" layoutX="978.0" layoutY="551.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Две токовые цепи" textFill="WHITE" />
+      <GridPane layoutX="88.0" layoutY="548.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="18.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="5.0" prefWidth="30.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="5.0" prefWidth="40.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="112.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="5.0" prefWidth="40.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="175.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="5.0" prefWidth="20.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="100.0" minWidth="5.0" prefWidth="50.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="225.0" minWidth="10.0" prefWidth="225.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="60.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="135.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Pane prefHeight="135.0" prefWidth="100.0" GridPane.columnIndex="3">
+               <children>
+                  <Text fill="WHITE" layoutX="1.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Напряжение, В" />
+                  <Text fill="WHITE" layoutX="1.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ток, А" />
+                  <ComboBox fx:id="chosBxUnom" layoutY="16.0" prefHeight="27.0" prefWidth="100.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+                  <TextField fx:id="txtFldUnom" layoutY="16.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+                  <ComboBox fx:id="chosBxCurrent" layoutY="62.0" prefHeight="27.0" prefWidth="100.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+                  <TextField fx:id="txtFldCurrent" layoutY="62.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+               </children>
+            </Pane>
+            <Pane maxHeight="135.0" prefHeight="135.0" prefWidth="175.0" GridPane.columnIndex="7">
+               <children>
+                  <Text fill="WHITE" layoutX="1.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип измерительного элемента" />
+                  <ComboBox fx:id="chosBxtypeOfMeasuringElement" layoutY="62.0" prefHeight="27.0" prefWidth="175.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+                  <ComboBox fx:id="chosBxTypeMeter" layoutY="16.0" prefHeight="27.0" prefWidth="175.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+                  <Text fill="WHITE" layoutX="1.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип счётчика" />
+               </children>
+            </Pane>
+            <Pane prefHeight="135.0" prefWidth="112.0" GridPane.columnIndex="5">
+               <children>
+                  <Text fill="WHITE" layoutX="1.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности Р.Э." />
+                  <Text fill="WHITE" layoutX="1.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности А.Э." />
+                  <ComboBox fx:id="chosBxAccuracyAP" layoutY="16.0" prefHeight="27.0" prefWidth="112.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+                  <TextField fx:id="txtFldAccuracyAP" layoutY="16.0" maxHeight="27.0" prefHeight="27.0" prefWidth="83.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+                  <ComboBox fx:id="chosBxAccuracyRP" layoutY="62.0" prefHeight="27.0" prefWidth="112.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+                  <TextField fx:id="txtFldAccuracyRP" layoutY="62.0" maxHeight="27.0" prefHeight="27.0" prefWidth="83.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+               </children>
+            </Pane>
+            <Pane GridPane.columnIndex="9">
+               <children>
+                  <Button fx:id="btnNumbersMe" layoutY="16.0" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="73.0" prefWidth="94.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/button.css" text="Номера" />
+               </children>
+            </Pane>
+            <Pane maxHeight="135.0" maxWidth="225.0" prefHeight="135.0" prefWidth="225.0" GridPane.columnIndex="11">
+               <children>
+                  <Text fill="WHITE" layoutX="1.0" layoutY="-4.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Методика" y="16.0" />
+                  <ComboBox fx:id="chosBxMetodics" layoutY="16.0" prefHeight="28.0" prefWidth="225.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+                  <CheckBox fx:id="twoCircutChcBox" alignment="TOP_LEFT" layoutX="144.0" layoutY="67.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" text="Две токовые цепи" textFill="WHITE" />
+                  <Text fill="WHITE" layoutX="1.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип сети" />
+                  <ComboBox fx:id="chosBxPowerType" layoutY="62.0" prefHeight="27.0" prefWidth="130.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+               </children>
+            </Pane>
+            <Pane GridPane.columnIndex="13">
+               <children>
+                  <Button fx:id="btnStartTest" layoutY="16.0" maxHeight="80.0" maxWidth="130.0" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="80.0" prefWidth="130.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/button.css" text="Начать тест" />
+               </children>
+            </Pane>
+            <Pane maxHeight="130.0" minHeight="100.0" GridPane.columnIndex="1">
+               <children>
+                  <Text fill="WHITE" layoutX="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Частота, Гц" y="13.0" />
+                  <ComboBox fx:id="chosBxFrg" layoutY="16.0" prefHeight="27.0" prefWidth="100.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+                  <TextField fx:id="txtFldFrg" layoutY="16.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+               </children>
+            </Pane>
+         </children>
+      </GridPane>
    </children>
 </AnchorPane>
