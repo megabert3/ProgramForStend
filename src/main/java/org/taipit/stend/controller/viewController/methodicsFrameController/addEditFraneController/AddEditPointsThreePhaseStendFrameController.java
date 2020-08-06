@@ -1438,14 +1438,6 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         viewPointTableAPMns.setItems(testListForCollumAPMns);
         viewPointTableRPPls.setItems(testListForCollumRPPls);
         viewPointTableRPMns.setItems(testListForCollumRPMns);
-
-        String cssAdress = getClass().getClassLoader().getResource("styleCSS/tableViewStyle.css").toString();
-        if (cssAdress != null) {
-            viewPointTableAPPls.getStylesheets().add(cssAdress);
-            viewPointTableAPMns.getStylesheets().add(cssAdress);
-            viewPointTableRPPls.getStylesheets().add(cssAdress);
-            viewPointTableRPMns.getStylesheets().add(cssAdress);
-        }
     }
 
     //========== Всё для инициализации уже созданной методики (нажата кнопка редактирование) ============

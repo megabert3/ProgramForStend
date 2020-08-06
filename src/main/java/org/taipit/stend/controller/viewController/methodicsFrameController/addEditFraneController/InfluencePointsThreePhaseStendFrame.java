@@ -2274,7 +2274,7 @@ public class InfluencePointsThreePhaseStendFrame {
         mainScrollPane.setLayoutY(116);
         mainScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         mainScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        mainScrollPane.setStyle("-fx-background: #6A6A6A;");
+        mainScrollPane.setStyle("-fx-background: #858585;");
 
         String cssAdress = getClass().getClassLoader().getResource("styleCSS/scrollPane.css").toString();
         if (cssAdress != null) {
@@ -2329,9 +2329,9 @@ public class InfluencePointsThreePhaseStendFrame {
         //Curr
         scrollPaneForCurrent.setMinHeight(0);
         scrollPaneForCurrent.setPrefHeight(24);
-        scrollPaneForCurrent.setStyle("-fx-background: #FFC107;" +
+        scrollPaneForCurrent.setStyle("-fx-background: #B8B8B8;" +
                 "-fx-background-insets: 0, 0 1 1 0;" +
-                "-fx-background-color: #FFC107;");
+                "-fx-background-color: #B8B8B8;");
 
         scrollPaneForCurrent.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPaneForCurrent.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -2344,9 +2344,9 @@ public class InfluencePointsThreePhaseStendFrame {
         //PF
         scrollPaneForPowerFactor.setMinWidth(0);
         scrollPaneForPowerFactor.setPrefWidth(50);
-        scrollPaneForPowerFactor.setStyle("-fx-background: #FFC107;" +
+        scrollPaneForPowerFactor.setStyle("-fx-background: #B8B8B8;" +
                 "-fx-background-insets: 0, 0 1 1 0;" +
-                "-fx-background-color: #FFC107;");
+                "-fx-background-color: #B8B8B8;");
 
         scrollPaneForPowerFactor.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPaneForPowerFactor.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -2361,7 +2361,7 @@ public class InfluencePointsThreePhaseStendFrame {
 
         //Закрывающий квадрат
         fillSquare.toFront();
-        fillSquare.setStyle("-fx-background-color: #FFC107;");
+        fillSquare.setStyle("-fx-background-color: #B8B8B8;");
         fillSquare.setPrefHeight(23);
         fillSquare.setPrefWidth(50);
         fillSquare.setLayoutX(136);
@@ -3309,7 +3309,11 @@ public class InfluencePointsThreePhaseStendFrame {
 
     //Добавляет соответствующий checkBox в соответствующий узел
     private void addCheckBoxesInGridPane() {
+
+        String cssAdress = getClass().getClassLoader().getResource("styleCSS/addDeleteEditPointsFrame/checkBox.css").toString();
+
         CheckBox checkBox;
+
         for (GridPane gridPane : gridPanesEnergyAndPhase) {
 
             for (int x = 0; x < current.size(); x++) {
@@ -3317,6 +3321,10 @@ public class InfluencePointsThreePhaseStendFrame {
 
                     checkBox = new CheckBox();
                     checkBox.setId(gridPane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
+
+                    if (cssAdress != null) {
+                        checkBox.getStylesheets().add(cssAdress);
+                    }
 
                     GridPane.setColumnIndex(checkBox, x + 1);
                     GridPane.setRowIndex(checkBox, y + 1);

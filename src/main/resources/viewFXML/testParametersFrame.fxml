@@ -7,13 +7,12 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="611.0" prefWidth="955.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.TestParametersFrameController">
+<AnchorPane prefHeight="608.0" prefWidth="1288.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.TestParametersFrameController">
    <children>
       <AnchorPane prefHeight="113.0" prefWidth="955.0" style="-fx-background-color: #393939;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <TableView fx:id="tabVParamMeters" layoutX="19.0" layoutY="44.0" prefHeight="412.0" prefWidth="918.0" AnchorPane.bottomAnchor="155.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="44.0">
+      <TableView fx:id="tabVParamMeters" layoutX="19.0" layoutY="44.0" prefHeight="412.0" prefWidth="918.0" stylesheets="@../styleCSS/tableViewStyle.css" AnchorPane.bottomAnchor="155.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="44.0">
          <columns>
             <TableColumn fx:id="tabColMeterDis" maxWidth="30.0" prefWidth="29.0" />
             <TableColumn fx:id="tabColIdMeter" prefWidth="38.0" text="№" />
@@ -24,35 +23,31 @@
             <TableColumn fx:id="tabColManufacturer" prefWidth="122.0" text="Производитель" />
          </columns>
       </TableView>
-      <Pane layoutX="32.0" layoutY="469.0" prefHeight="146.0" prefWidth="892.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="31.0">
-         <children>
-            <Text fill="WHITE" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Напряжение, В" />
-            <Text fill="WHITE" layoutX="-2.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ток, А" />
-            <Text fill="WHITE" layoutX="212.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности Р.Э." />
-            <Text fill="WHITE" layoutX="213.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности А.Э." />
-            <Text fill="WHITE" layoutX="595.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Методика" />
-            <Text fill="WHITE" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Частота, Гц" />
-            <Text fill="WHITE" layoutX="349.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип изм. элем." />
-            <Button fx:id="btnNumbersMe" layoutX="482.0" layoutY="39.94921875" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="75.0" prefWidth="94.0" text="Номера" />
-            <Text fill="WHITE" layoutX="349.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип сети" />
-            <Button fx:id="btnStartTest" layoutX="760.0" layoutY="42.94921875" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="68.0" prefWidth="112.0" text="Начать тест" />
-            <ComboBox fx:id="chosBxUnom" layoutX="87.0" layoutY="27.94921875" prefHeight="25.0" prefWidth="85.0" />
-            <TextField fx:id="txtFldUnom" layoutX="87.0" layoutY="27.94921875" prefHeight="26.0" prefWidth="61.0" />
-            <ComboBox fx:id="chosBxAccuracyAP" layoutX="214.0" layoutY="39.94921875" prefHeight="25.0" prefWidth="94.0" />
-            <TextField fx:id="txtFldAccuracyAP" layoutX="214.0" layoutY="39.94921875" prefHeight="26.0" prefWidth="73.0" />
-            <ComboBox fx:id="chosBxAccuracyRP" layoutX="214.0" layoutY="88.94921875" prefHeight="25.0" prefWidth="97.0" />
-            <ComboBox fx:id="chosBxCurrent" layoutX="87.0" layoutY="61.94921875" prefHeight="25.0" prefWidth="85.0" />
-            <ComboBox fx:id="chosBxtypeOfMeasuringElement" layoutX="349.0" layoutY="62.94921875" prefHeight="25.0" prefWidth="117.0" />
-            <ComboBox fx:id="chosBxPowerType" layoutX="350.0" layoutY="107.94921875" prefHeight="25.0" prefWidth="115.0" />
-            <ComboBox fx:id="chosBxFrg" layoutX="87.0" layoutY="94.94921875" prefHeight="25.0" prefWidth="85.0" />
-            <TextField fx:id="txtFldAccuracyRP" layoutX="213.0" layoutY="88.94921875" prefHeight="26.0" prefWidth="77.0" />
-            <TextField fx:id="txtFldCurrent" layoutX="87.0" layoutY="61.94921875" prefHeight="26.0" prefWidth="61.0" />
-            <TextField fx:id="txtFldFrg" layoutX="87.0" layoutY="94.94921875" prefHeight="26.0" prefWidth="61.0" />
-            <ComboBox fx:id="chosBxMetodics" layoutX="595.0" layoutY="39.94921875" prefHeight="28.0" prefWidth="152.0" />
-            <ComboBox fx:id="chosBxTypeMeter" layoutX="349.0" layoutY="16.94921875" prefHeight="25.0" prefWidth="117.0" />
-            <Text fill="WHITE" layoutX="349.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип счётчика" />
-            <CheckBox fx:id="twoCircutChcBox" alignment="CENTER_RIGHT" layoutX="613.0" layoutY="89.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Две токовые цепи" textFill="WHITE" />
-         </children>
-      </Pane>
+      <Text fill="WHITE" layoutX="354.0" layoutY="510.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Напряжение, В" />
+      <Text fill="WHITE" layoutX="363.0" layoutY="541.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ток, А" />
+      <Text fill="WHITE" layoutX="577.0" layoutY="546.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности Р.Э." />
+      <Text fill="WHITE" layoutX="578.0" layoutY="497.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности А.Э." />
+      <Text fill="WHITE" layoutX="960.0" layoutY="497.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Методика" />
+      <Text fill="WHITE" layoutX="365.0" layoutY="574.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Частота, Гц" />
+      <Text fill="WHITE" layoutX="714.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип изм. элем." />
+      <Button fx:id="btnNumbersMe" layoutX="847.0" layoutY="501.94921875" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="75.0" prefWidth="94.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/button.css" text="Номера" />
+      <Text fill="WHITE" layoutX="714.0" layoutY="566.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип сети" />
+      <Button fx:id="btnStartTest" layoutX="1125.0" layoutY="504.94921875" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="68.0" prefWidth="112.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/button.css" text="Начать тест" />
+      <ComboBox fx:id="chosBxUnom" layoutX="452.0" layoutY="489.94921875" prefHeight="25.0" prefWidth="85.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+      <TextField fx:id="txtFldUnom" layoutX="452.0" layoutY="490.94921875" prefHeight="25.0" prefWidth="61.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+      <ComboBox fx:id="chosBxAccuracyAP" layoutX="579.0" layoutY="501.94921875" prefHeight="25.0" prefWidth="97.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+      <TextField fx:id="txtFldAccuracyAP" layoutX="579.0" layoutY="502.94921875" maxHeight="27.0" prefHeight="23.0" prefWidth="68.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+      <ComboBox fx:id="chosBxAccuracyRP" layoutX="579.0" layoutY="550.94921875" prefHeight="25.0" prefWidth="97.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+      <ComboBox fx:id="chosBxCurrent" layoutX="452.0" layoutY="523.94921875" prefHeight="25.0" prefWidth="85.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+      <ComboBox fx:id="chosBxtypeOfMeasuringElement" layoutX="714.0" layoutY="524.94921875" prefHeight="25.0" prefWidth="117.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+      <ComboBox fx:id="chosBxPowerType" layoutX="715.0" layoutY="569.94921875" prefHeight="25.0" prefWidth="115.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+      <ComboBox fx:id="chosBxFrg" layoutX="452.0" layoutY="556.94921875" prefHeight="25.0" prefWidth="85.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+      <TextField fx:id="txtFldAccuracyRP" layoutX="579.0" layoutY="551.94921875" maxHeight="10.0" prefHeight="23.0" prefWidth="68.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+      <TextField fx:id="txtFldCurrent" layoutX="452.0" layoutY="524.94921875" prefHeight="25.0" prefWidth="61.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+      <TextField fx:id="txtFldFrg" layoutX="452.0" layoutY="557.94921875" prefHeight="25.0" prefWidth="61.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+      <ComboBox fx:id="chosBxMetodics" layoutX="960.0" layoutY="501.94921875" prefHeight="28.0" prefWidth="152.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+      <ComboBox fx:id="chosBxTypeMeter" layoutX="714.0" layoutY="478.94921875" prefHeight="25.0" prefWidth="117.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+      <Text fill="WHITE" layoutX="714.0" layoutY="475.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип счётчика" />
+      <CheckBox fx:id="twoCircutChcBox" alignment="CENTER_RIGHT" layoutX="978.0" layoutY="551.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Две токовые цепи" textFill="WHITE" />
    </children>
 </AnchorPane>

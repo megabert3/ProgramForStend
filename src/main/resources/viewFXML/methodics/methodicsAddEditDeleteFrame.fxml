@@ -70,10 +70,10 @@
                      </image></ImageView>
                </graphic>
             </Button>
-            <ToggleButton fx:id="tglBtnAPPls" layoutX="441.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="A.P.+" />
-            <ToggleButton fx:id="tglBtnAPMns" layoutX="521.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="A.P.-" />
-            <ToggleButton fx:id="tglBtnRPPls" layoutX="601.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="R.P.+" />
-            <ToggleButton fx:id="tglBtnRPMns" layoutX="681.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@../../styleCSS/tglBtn.AddEditDeleteMetodic.css" text="R.P.-" />
+            <ToggleButton fx:id="tglBtnAPPls" layoutX="441.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@/styleCSS/tglBtn.AddEditDeleteMetodic.css" text="A.P.+" />
+            <ToggleButton fx:id="tglBtnAPMns" layoutX="521.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@/styleCSS/tglBtn.AddEditDeleteMetodic.css" text="A.P.-" />
+            <ToggleButton fx:id="tglBtnRPPls" layoutX="601.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@/styleCSS/tglBtn.AddEditDeleteMetodic.css" text="R.P.+" />
+            <ToggleButton fx:id="tglBtnRPMns" layoutX="681.0" layoutY="33.0" mnemonicParsing="false" onAction="#tglBtnsEnegyViewAction" prefHeight="29.0" prefWidth="80.0" stylesheets="@/styleCSS/tglBtn.AddEditDeleteMetodic.css" text="R.P.-" />
             <Label layoutX="139.0" text="Методики" textFill="WHITE" />
             <Label layoutX="441.0" text="Точки испытания" textFill="WHITE" />
          </children>
