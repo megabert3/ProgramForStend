@@ -21,6 +21,7 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -53,6 +54,12 @@ public class TestParametersFrameController implements Frame {
     private File fileMetersNo = new File(properties.getProperty("testParamFrame.fileForSerNo"));
 
     private boolean twoCircut;
+
+    @FXML
+    private CheckBox checkBoxOnOffMeterChBox;
+
+    @FXML
+    private Pane checkBoxPaneOnOff;
 
     @FXML
     private CheckBox twoCircutChcBox;
@@ -232,17 +239,26 @@ public class TestParametersFrameController implements Frame {
                 typeCircuitThreePhase = true;
             }
 
+            //Проверяю есть ли хоть один выбранный счётчик
+            boolean selectMeter = false;
+            for (Meter meter : metersList) {
+                if (meter.isActiveSeat()) {
+                    selectMeter = true;
+                    break;
+                }
+            }
+
+            if (!selectMeter) {
+                ConsoleHelper.infoException("Должен быть выбран хотя бы один счётчик");
+                return;
+            }
+
             //Оставляем только выделенные счётчики
             for (int i = 0; i < metersList.size(); i++) {
                 if (!metersList.get(i).isActiveSeat()) {
                     metersList.remove(i);
                     i--;
                 }
-            }
-
-            if (metersList.isEmpty()) {
-                ConsoleHelper.infoException("Должен быть выбран хотя бы один счётчик");
-                return;
             }
 
             //Передаю установленные параметры всем счётчикам
@@ -639,6 +655,17 @@ public class TestParametersFrameController implements Frame {
         });
         chosBxAccuracyRP.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             txtFldAccuracyRP.setText(newValue);
+        });
+
+        checkBoxPaneOnOff.toFront();
+        checkBoxOnOffMeterChBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                for (Meter meter : metersList) {
+                    meter.setActiveSeat(newValue);
+                }
+                tabVParamMeters.refresh();
+            }
         });
 
         if (stendDLLCommands instanceof ThreePhaseStend) {

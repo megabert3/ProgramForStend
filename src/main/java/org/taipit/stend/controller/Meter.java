@@ -69,7 +69,7 @@ public class Meter implements Serializable{
     private String typeMeter;
 
     //Установлен ли счётчик на посадочное место
-    private boolean activeSeat = true;
+    private boolean activeSeat = false;
 
     //Записать результаты в базу
     private boolean saveResults = true;

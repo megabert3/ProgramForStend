@@ -42,9 +42,10 @@
 
 /*Цвет выбранной строки*/
 .table-row-cell: selected {
-    -fx-background-color: #0096C9;
+    /*-fx-background-color: #0096C9;*/
+    -fx-background-color: #393939;
     -fx-background-insets: 0;
-    -fx-background-radius: 1;
+    -fx-background-radius: 0;
 }
 
 /*Цвет текста выбранной строки*/
@@ -57,6 +58,8 @@
    -fx-padding: 0;
    -fx-border-color: black;
    -fx-background-color: #FFFFFF;
+   -fx-highlight-fill: #FFC723;
+   -fx-highlight-text-fill: black;
 }
 
 .table-view: row-selection > .placeholder {
@@ -199,10 +202,9 @@
 /*Check box style*/
 
 .check-box: determinate: hover {
-    -fx-background-color: transparent;
     -fx-border-radius: 0;
     -fx-background-radius: 0;
-    -fx-background-color: gray;
+    -fx-background-color: #B8B8B8;
 }
 
 .check-box: determinate {
@@ -210,30 +212,29 @@
     -fx-border-radius: 0;
     -fx-background-radius: 0;
 
-    -fx-padding: 13 13 13 13;
+    -fx-padding: 4 4 4 4;
 
-    -fx-min-width: 0;
+    /*-fx-min-width: 0;
     -fx-pref-width: 42;
     -fx-max-width: 42;
 
     -fx-min-height: 0;
     -fx-pref-height: 20;
-    -fx-max-height: 20;
+    -fx-max-height: 20;*/
 }
 
 .check-box .box {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-
-    -fx-border-radius: 0;
-    -fx-background-radius: 0;
-
+    -fx-border-color: gray;
+    -fx-border-width: 2;
+    -fx-border-radius: 4;
+    -fx-background-color: gray;
+    -fx-background-radius: 4;
     -fx-min-width: 0;
-    -fx-pref-width: 14;
+    -fx-pref-width: 15;
     -fx-max-width: 20;
 
     -fx-min-height: 0;
-    -fx-pref-height: 14;
+    -fx-pref-height: 15;
     -fx-max-height: 20;
 }
 
@@ -248,12 +249,8 @@
 }
 
 .check-box: selected .box {
-    -fx-background-color: #FFBC47;
-    -fx-opacity: 1.0;
-    -fx-border-radius: 10;
-    -fx-border-width: 0.5;
-    -fx-background-radius: 10;
-    -fx-border-color: #292929;
+    -fx-background-color: #FFC723;
+    -fx-background-radius: 4;
 }
 
 /*--------------------------------------------------------------------
@@ -269,13 +266,13 @@
 }
 
 .combo-box .arrow-button {
-    -fx-border-color: gray;
+    -fx-border-color: transparent;
     -fx-border-radius: 0;
 }
 
 .combo-box .arrow-button .arrow {
     -fx-background-color: #FFC723;
-    -fx-border-color: gray;
+    -fx-border-color: #FFC723;
     -fx-border-radius: 0;
 }
 
