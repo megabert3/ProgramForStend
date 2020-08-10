@@ -16,17 +16,21 @@
 }
 
 #buttonRed {
-    -fx-background-color : #FFC107;
+    -fx-background-color : #2E2E2E;
+    -fx-text-fill: white;
     -fx-background-radius: 0;
+    -fx-opacity: 0.8;
 }
 
 #buttonRed: hover {
-    -fx-background-color : #FFC723;
+    -fx-background-color : #3A84C3;
+    -fx-opacity: 0.9;
 }
 
 #buttonRed: pressed {
     -fx-background-color : #C8322D;
     -fx-text-fill: white;
+    -fx-opacity: 1.0;
 }
 
 #buttonRed: disabled {

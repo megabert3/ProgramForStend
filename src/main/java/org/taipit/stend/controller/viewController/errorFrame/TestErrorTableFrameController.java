@@ -204,7 +204,7 @@ public class TestErrorTableFrameController {
     private Button btnSave;
 
     @FXML
-    private TableView<Commands> tabViewTestPoints;
+    private TableView<Commands> tabViewTestPoints = new TableView<>();
 
     @FXML
     private Pane checBoxePane;
@@ -966,6 +966,7 @@ public class TestErrorTableFrameController {
         checkBoxDisableAll.setSelected(true);
     }
 
+    //Инициализирую таблицу с командами
     private void setTabColTestPoints(List<Commands> commandsList) {
         tabColTestPoints.setCellValueFactory(new PropertyValueFactory<>("name"));
         tabColTestPoints.setSortable(false);
@@ -2179,20 +2180,27 @@ public class TestErrorTableFrameController {
         //AP+
         verticalBarCommands = (ScrollBar) tabViewTestPoints.lookup(".scroll-bar:vertical");
 
-        for (int i = tabViewErrorsList.size() - 1; i > 0; i--) {
+        for (int i = 0; i < tabViewErrorsList.size(); i++) {
             verticalBarErrorsFirst = (ScrollBar) tabViewErrorsList.get(i).lookup(".scroll-bar:vertical");
-            verticalBarErrorsSecond = (ScrollBar) tabViewErrorsList.get(i - 1).lookup(".scroll-bar:vertical");
+            //verticalBarErrorsSecond = (ScrollBar) tabViewErrorsList.get(i - 1).lookup(".scroll-bar:vertical");
 
-            bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
-
-            ScrollBar finalVerticalBarErrors1 = verticalBarErrorsFirst;
-            verticalBarCommands.valueProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    finalVerticalBarErrors1.valueProperty().setValue(newValue);
-                }
-            });
+            bindScrolls(verticalBarCommands, verticalBarErrorsFirst);
         }
+
+//        for (int i = tabViewErrorsList.size() - 1; i > 0; i--) {
+//            verticalBarErrorsFirst = (ScrollBar) tabViewErrorsList.get(i).lookup(".scroll-bar:vertical");
+//            verticalBarErrorsSecond = (ScrollBar) tabViewErrorsList.get(i - 1).lookup(".scroll-bar:vertical");
+//
+//            bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
+//
+//            ScrollBar finalVerticalBarErrors1 = verticalBarErrorsFirst;
+//            verticalBarCommands.valueProperty().addListener(new ChangeListener<Number>() {
+//                @Override
+//                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//                    finalVerticalBarErrors1.valueProperty().setValue(newValue);
+//                }
+//            });
+//        }
     }
 
     //Делает проверку и привязывает скроллы друг к другу
