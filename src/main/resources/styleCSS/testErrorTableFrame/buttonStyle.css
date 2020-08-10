@@ -10,3 +10,25 @@
 .button: pressed {
     -fx-background-color : #E3AC06;
 }
+
+.button: disabled {
+    -fx-background-color : #474747;
+}
+
+#buttonRed {
+    -fx-background-color : #FFC107;
+    -fx-background-radius: 0;
+}
+
+#buttonRed: hover {
+    -fx-background-color : #FFC723;
+}
+
+#buttonRed: pressed {
+    -fx-background-color : #C8322D;
+    -fx-text-fill: white;
+}
+
+#buttonRed: disabled {
+    -fx-background-color : #474747;
+}
