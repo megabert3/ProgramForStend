@@ -291,10 +291,10 @@ public class TestErrorTableFrameController {
 
         selectedCommand = tabViewTestPoints.getSelectionModel().getSelectedItems();
 
-        String styleCommandTableView = getClass().getClassLoader().getResource("styleCSS/testErrorTableFrame/tableViewCommands.css").toString();
-        if (styleCommandTableView != null) {
-            tabViewTestPoints.getStylesheets().add(styleCommandTableView);
-        }
+//        String styleCommandTableView = getClass().getClassLoader().getResource("styleCSS/testErrorTableFrame/tableViewCommands.css").toString();
+//        if (styleCommandTableView != null) {
+//            tabViewTestPoints.getStylesheets().add(styleCommandTableView);
+//        }
 
         blockBtns.addListener(new ChangeListener<Boolean>() {
             @Override
@@ -2153,10 +2153,10 @@ public class TestErrorTableFrameController {
 
         TableView<Meter.CommandResult> tableView = new TableView<>();
 
-        String styleErrorTableView = getClass().getClassLoader().getResource("styleCSS/testErrorTableFrame/tableViewErrors.css").toString();
-        if (styleErrorTableView != null) {
-            tableView.getStylesheets().add(styleErrorTableView);
-        }
+//        String styleErrorTableView = getClass().getClassLoader().getResource("styleCSS/testErrorTableFrame/tableViewErrors.css").toString();
+//        if (styleErrorTableView != null) {
+//            tableView.getStylesheets().add(styleErrorTableView);
+//        }
 
         TableColumn<Meter.CommandResult, String> column = new TableColumn<>("Место " + listMetersForTest.get(index).getId());
         column.setStyle("-fx-alignment: CENTER;");
