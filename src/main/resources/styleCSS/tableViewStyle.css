@@ -5,12 +5,12 @@
 
 .table-row-cell: odd {
     -fx-background-color: #EBEBEB;
-    -fx-background-insets: 0, 0 0 1 0;
+    -fx-background-insets: 0, 0 0 0 0;
 }
 
 .table-row-cell: even {
     -fx-background-color: #E0E0E0;
-    -fx-background-insets: 0, 0 0 1 0;
+    -fx-background-insets: 0, 0 0 0 0;
 }
 
 .table-view .column-header-background {
@@ -24,28 +24,31 @@
 .table-view .column-header-background .label {
     -fx-background-color: transparent;
     -fx-text-fill: white;
+    -fx-border-width: 0.3;
+    -fx-border-color: #474747;
 }
 
 .table-view .column-header {
     -fx-background-color: #95999D;
 }
 
-.table-view .table-cell{
+.table-view .table-cell {
     -fx-text-fill: black;
 }
 
-.table-row-cell{
+.table-row-cell {
     -fx-background-color: #000000;
-    -fx-background-insets: 0, 0 0 1 0;
+    -fx-background-insets: 0, 0 0 0 0;
     -fx-padding: 0.0em;
 }
 
 /*Цвет выбранной строки*/
 .table-row-cell: selected {
     /*-fx-background-color: #0096C9;*/
-    -fx-background-color: #393939;
+    -fx-background-color: #8A8F93;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
+    -fx-padding: 0.0em;;
 }
 
 /*Цвет текста выбранной строки*/
@@ -65,12 +68,10 @@
 .table-view: row-selection > .placeholder {
     -fx-background-color: #EBEBEB;
 }
-/*
+
 .table-view: row-selection > .column-resize-line {
-    -fx-background-color: green;
-    -fx-background: green;
+    -fx-background-color: #FFBC47;
 }
-*/
 
 /*------------------------------------------------------------------------
 /*Скрол бары*/
@@ -200,62 +201,26 @@
 
 /*---------------------------------------------------------------------/*
 /*Check box style*/
-
-.check-box: determinate: hover {
-    -fx-border-radius: 0;
-    -fx-background-radius: 0;
-    -fx-background-color: #B8B8B8;
-}
-
 .check-box: determinate {
     -fx-background-color: transparent;
     -fx-border-radius: 0;
     -fx-background-radius: 0;
-
-    -fx-padding: 4 4 4 4;
-
-    /*-fx-min-width: 0;
-    -fx-pref-width: 42;
-    -fx-max-width: 42;
-
-    -fx-min-height: 0;
-    -fx-pref-height: 20;
-    -fx-max-height: 20;*/
 }
 
 .check-box .box {
-    -fx-border-color: gray;
-    -fx-border-width: 2;
-    -fx-border-radius: 4;
-    -fx-background-color: gray;
-    -fx-background-radius: 4;
-    -fx-min-width: 0;
-    -fx-pref-width: 15;
-    -fx-max-width: 20;
-
-    -fx-min-height: 0;
-    -fx-pref-height: 15;
-    -fx-max-height: 20;
+    -fx-background-color: #FFC107;
 }
 
 .check-box:selected .mark {
-    -fx-min-width: 0;
-    -fx-pref-width: 0;
-    -fx-max-width: 0;
-
-    -fx-min-height: 0;
-    -fx-pref-height: 0;
-    -fx-max-height: 0;
+    -fx-background-color: gray;
 }
 
 .check-box: selected .box {
-    -fx-background-color: #FFC723;
-    -fx-background-radius: 4;
+    -fx-background-color: #FFC107;
 }
 
 /*--------------------------------------------------------------------
 /*ComboBox*/
-
 .combo-box {
     -fx-background-color: #393939;
     -fx-background-radius: 0;

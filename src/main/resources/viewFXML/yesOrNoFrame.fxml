@@ -12,7 +12,7 @@
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../image/saveChangeFrame/checked_32.png" />
+                  <Image url="@../image/yesOrNoFrame/checked_32.png" />
                </image>
             </ImageView>
          </graphic>
@@ -22,7 +22,7 @@
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../image/saveChangeFrame/cancel_32.png" />
+                  <Image url="@../image/yesOrNoFrame/cancel_32.png" />
                </image>
             </ImageView>
          </graphic>

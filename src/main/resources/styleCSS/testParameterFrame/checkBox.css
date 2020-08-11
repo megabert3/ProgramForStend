@@ -1,51 +1,17 @@
-.check-box: determinate: hover {
-    -fx-border-radius: 0;
-    -fx-background-radius: 0;
-    -fx-background-color: #B8B8B8;
-}
-
 .check-box: determinate {
     -fx-background-color: transparent;
     -fx-border-radius: 0;
     -fx-background-radius: 0;
-
-    -fx-padding: 0 0 0 0;
-
-    /*-fx-min-width: 0;
-    -fx-pref-width: 42;
-    -fx-max-width: 42;
-
-    -fx-min-height: 0;
-    -fx-pref-height: 20;
-    -fx-max-height: 20;*/
 }
 
 .check-box .box {
-    -fx-border-color: gray;
-    -fx-border-width: 2;
-    -fx-border-radius: 4;
-    -fx-background-color: gray;
-    -fx-background-radius: 4;
-    -fx-min-width: 0;
-    -fx-pref-width: 15;
-    -fx-max-width: 20;
-
-    -fx-min-height: 0;
-    -fx-pref-height: 15;
-    -fx-max-height: 20;
+    -fx-background-color: #FFC107;
 }
 
 .check-box:selected .mark {
-    -fx-min-width: 0;
-    -fx-pref-width: 0;
-    -fx-max-width: 0;
-
-    -fx-min-height: 0;
-    -fx-pref-height: 0;
-    -fx-max-height: 0;
+    -fx-background-color: gray;
 }
 
 .check-box: selected .box {
-    -fx-background-color: #FFC723;
-    -fx-background-radius: 4;
+    -fx-background-color: #FFC107;
 }

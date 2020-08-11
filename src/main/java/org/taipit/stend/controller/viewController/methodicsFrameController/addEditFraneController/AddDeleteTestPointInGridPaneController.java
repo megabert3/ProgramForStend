@@ -6,10 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
@@ -71,7 +68,7 @@ public class AddDeleteTestPointInGridPaneController {
     private Button btnAddPowerFactor;
 
     @FXML
-    private ChoiceBox<String> chBoxPowerFactor;
+    private ComboBox<String> chBoxPowerFactor;
 
     @FXML
     private Button btnDeletePowerFactor;
@@ -80,7 +77,7 @@ public class AddDeleteTestPointInGridPaneController {
     private TextField txtFldCurrent;
 
     @FXML
-    private ChoiceBox<String> chBoxCurrent;
+    private ComboBox<String> chBoxCurrent;
 
     @FXML
     private Button btnAddCurrent;

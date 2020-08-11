@@ -157,9 +157,9 @@
                                     <Label layoutX="13.0" layoutY="87.0" text="Напряжение, % Uном" textFill="WHITE" />
                                     <Label layoutX="68.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
                                     <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldCRPUProcRPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="115" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldTimeCRPRPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldCRPAmtImpRPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldCRPUProcRPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="115" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldTimeCRPRPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldCRPAmtImpRPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnCRPRPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <ToggleButton fx:id="addTglBtnCRPRPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить ГОСТ" />
                                  </children>
@@ -171,13 +171,13 @@
                                     <Label layoutX="60.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
                                     <Label layoutX="26.0" layoutY="130.0" text="Диапазон ошибки" textFill="WHITE" />
                                     <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldRngERPPls" layoutX="131.0" layoutY="126.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFldRTCAmtMshRPPls" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldRngERPPls" layoutX="131.0" layoutY="126.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFldRTCAmtMshRPPls" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnRTCRPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <Label layoutX="356.0" layoutY="130.0" text="Время вычисления" textFill="WHITE" />
-                                    <TextField fx:id="txtFldRTCTimeMshRPPls" layoutX="465.0" layoutY="126.0" prefHeight="25.0" prefWidth="70.0" promptText="30" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <ComboBox fx:id="ChcBxRTCErrRPPls" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-                                    <TextField fx:id="txtFldRTCFrqRPPls" layoutX="256.0" layoutY="170.0" prefHeight="25.0" prefWidth="108.0" promptText="1.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFldRTCTimeMshRPPls" layoutX="465.0" layoutY="126.0" prefHeight="25.0" prefWidth="70.0" promptText="30" stylesheets="@/styleCSS/textField.css" />
+                                    <ComboBox fx:id="ChcBxRTCErrRPPls" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/comboBox.css" />
+                                    <TextField fx:id="txtFldRTCFrqRPPls" layoutX="256.0" layoutY="170.0" prefHeight="25.0" prefWidth="108.0" promptText="1.0" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="190.0" layoutY="174.0" text="Частота, Гц" textFill="WHITE" />
                                  </children>
                               </Pane>
@@ -188,13 +188,13 @@
                                     <Label layoutX="402.0" layoutY="81.0" text="Ошибка, %" textFill="WHITE" />
                                     <Label layoutX="17.0" layoutY="145.0" text="Энергия, kW * h" textFill="WHITE" />
                                     <Label layoutX="66.0" layoutY="81.0" text="Время" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldConsErRPPls" layoutX="466.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="1.5" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldEngConstRPPls" layoutX="132.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="1.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldConstTimeRPPls" layoutX="132.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsErRPPls" layoutX="466.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="1.5" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldEngConstRPPls" layoutX="132.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="1.0" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldConstTimeRPPls" layoutX="132.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnConstRPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                    <TextField fx:id="txtFieldConsProcURPPls" layoutX="305.0" layoutY="77.0" prefHeight="25.0" prefWidth="70.0" promptText="100" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsProcURPPls" layoutX="305.0" layoutY="77.0" prefHeight="25.0" prefWidth="70.0" promptText="100" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="271.0" layoutY="81.0" text="Un, %" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldConsProcIRPPls" layoutX="305.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" promptText="600" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsProcIRPPls" layoutX="305.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" promptText="600" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="275.0" layoutY="145.0" text="Ib, %" textFill="WHITE" />
                                     <RadioButton fx:id="radBtnConstTimeRPPls" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/styleCSS/addDeleteEditPointsFrame/radioBtn.css" />
                                     <RadioButton fx:id="radBtnConstEnergyRPPls" layoutX="110.0" layoutY="144.0" mnemonicParsing="false" stylesheets="@/styleCSS/addDeleteEditPointsFrame/radioBtn.css" />
@@ -207,9 +207,9 @@
                                     <Label layoutX="101.0" layoutY="87.0" text="Ток, A" textFill="WHITE" />
                                     <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
                                     <Label layoutX="283.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldSTAIProcRPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="0.02" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldTimeSRARPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldSTAAmtImpRPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldSTAIProcRPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="0.02" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldTimeSRARPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldSTAAmtImpRPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnSTARPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <ToggleButton fx:id="addTglBtnSTARPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить ГОСТ" />
                                  </children>
@@ -245,13 +245,13 @@
                                     <Label layoutX="60.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
                                     <Label layoutX="26.0" layoutY="130.0" text="Диапазон ошибки" textFill="WHITE" />
                                     <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldRngERPMns" layoutX="131.0" layoutY="126.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFldRTCAmtMshRPMns" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldRngERPMns" layoutX="131.0" layoutY="126.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFldRTCAmtMshRPMns" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnRTCRPMns" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <Label layoutX="356.0" layoutY="130.0" text="Время вычисления" textFill="WHITE" />
-                                    <TextField fx:id="txtFldRTCTimeMshRPMns" layoutX="465.0" layoutY="126.0" prefHeight="25.0" prefWidth="70.0" promptText="30" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <ComboBox fx:id="ChcBxRTCErrRPMns" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-                                    <TextField fx:id="txtFldRTCFrqRPMns" layoutX="256.0" layoutY="170.0" prefHeight="25.0" prefWidth="108.0" promptText="1.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFldRTCTimeMshRPMns" layoutX="465.0" layoutY="126.0" prefHeight="25.0" prefWidth="70.0" promptText="30" stylesheets="@/styleCSS/textField.css" />
+                                    <ComboBox fx:id="ChcBxRTCErrRPMns" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/comboBox.css" />
+                                    <TextField fx:id="txtFldRTCFrqRPMns" layoutX="256.0" layoutY="170.0" prefHeight="25.0" prefWidth="108.0" promptText="1.0" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="190.0" layoutY="174.0" text="Частота, Гц" textFill="WHITE" />
                                  </children>
                               </Pane>
@@ -262,13 +262,13 @@
                                     <Label layoutX="402.0" layoutY="81.0" text="Ошибка, %" textFill="WHITE" />
                                     <Label layoutX="17.0" layoutY="145.0" text="Энергия, kW * h" textFill="WHITE" />
                                     <Label layoutX="66.0" layoutY="81.0" text="Время" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldConsErRPMns" layoutX="466.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="1.5" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldEngConstRPMns" layoutX="132.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="1.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldConstTimeRPMns" layoutX="132.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsErRPMns" layoutX="466.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="1.5" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldEngConstRPMns" layoutX="132.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="1.0" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldConstTimeRPMns" layoutX="132.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnConstRPMns" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                    <TextField fx:id="txtFieldConsProcURPMns" layoutX="305.0" layoutY="77.0" prefHeight="25.0" prefWidth="70.0" promptText="100" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsProcURPMns" layoutX="305.0" layoutY="77.0" prefHeight="25.0" prefWidth="70.0" promptText="100" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="271.0" layoutY="81.0" text="Un, %" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldConsProcIRPMns" layoutX="305.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" promptText="600" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsProcIRPMns" layoutX="305.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" promptText="600" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="275.0" layoutY="145.0" text="Ib, %" textFill="WHITE" />
                                     <RadioButton fx:id="radBtnConstTimeRPMns" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/styleCSS/addDeleteEditPointsFrame/radioBtn.css" />
                                     <RadioButton fx:id="radBtnConstEnergyRPMns" layoutX="110.0" layoutY="144.0" mnemonicParsing="false" stylesheets="@/styleCSS/addDeleteEditPointsFrame/radioBtn.css" />
@@ -281,9 +281,9 @@
                                     <Label layoutX="100.0" layoutY="87.0" text="Ток, А" textFill="WHITE" />
                                     <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
                                     <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldSTAIProcRPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="0.02" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldTimeSRARPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldSTAAmtImpRPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldSTAIProcRPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="0.02" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldTimeSRARPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldSTAAmtImpRPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnSTARPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <ToggleButton fx:id="addTglBtnSTARPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добвить ГОСТ" />
                                  </children>
@@ -295,9 +295,9 @@
                                     <Label layoutX="13.0" layoutY="87.0" text="Напряжение, % Uном" textFill="WHITE" />
                                     <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
                                     <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldCRPUProcRPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="115" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldTimeCRPRPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldCRPAmtImpRPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldCRPUProcRPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="115" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldTimeCRPRPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldCRPAmtImpRPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnCRPRPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <ToggleButton fx:id="addTglBtnCRPRPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить ГОСТ" />
                                  </children>
@@ -317,13 +317,13 @@
                                     <Label layoutX="402.0" layoutY="81.0" text="Ошибка, %" textFill="WHITE" />
                                     <Label layoutX="17.0" layoutY="145.0" text="Энергия, kW * h" textFill="WHITE" />
                                     <Label layoutX="66.0" layoutY="81.0" text="Время" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldConsErAPMns" layoutX="466.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="1.5" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldEngConstAPMns" layoutX="132.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="1.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldConstTimeAPMns" layoutX="132.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsErAPMns" layoutX="466.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="1.5" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldEngConstAPMns" layoutX="132.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="1.0" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldConstTimeAPMns" layoutX="132.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnConstAPMns" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                    <TextField fx:id="txtFieldConsProcUAPMns" layoutX="305.0" layoutY="77.0" prefHeight="25.0" prefWidth="70.0" promptText="100" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsProcUAPMns" layoutX="305.0" layoutY="77.0" prefHeight="25.0" prefWidth="70.0" promptText="100" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="271.0" layoutY="81.0" text="Un, %" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldConsProcIAPMns" layoutX="305.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" promptText="600" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsProcIAPMns" layoutX="305.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" promptText="600" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="275.0" layoutY="145.0" text="Ib, %" textFill="WHITE" />
                                     <RadioButton fx:id="radBtnConstTimeAPMns" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/styleCSS/addDeleteEditPointsFrame/radioBtn.css" />
                                     <RadioButton fx:id="radBtnConstEnergyAPMns" layoutX="110.0" layoutY="144.0" mnemonicParsing="false" stylesheets="@/styleCSS/addDeleteEditPointsFrame/radioBtn.css" />
@@ -336,13 +336,13 @@
                                     <Label layoutX="60.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
                                     <Label layoutX="26.0" layoutY="130.0" text="Диапазон ошибки" textFill="WHITE" />
                                     <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldRngEAPMns" layoutX="131.0" layoutY="126.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFldRTCAmtMshAPMns" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldRngEAPMns" layoutX="131.0" layoutY="126.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFldRTCAmtMshAPMns" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnRTCAPMns" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <Label layoutX="356.0" layoutY="130.0" text="Время вычисления" textFill="WHITE" />
-                                    <TextField fx:id="txtFldRTCTimeMshAPMns" layoutX="465.0" layoutY="126.0" prefHeight="25.0" prefWidth="70.0" promptText="30" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <ComboBox fx:id="ChcBxRTCErrAPMns" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-                                    <TextField fx:id="txtFldRTCFrqAPMns" layoutX="256.0" layoutY="170.0" prefHeight="25.0" prefWidth="108.0" promptText="1.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFldRTCTimeMshAPMns" layoutX="465.0" layoutY="126.0" prefHeight="25.0" prefWidth="70.0" promptText="30" stylesheets="@/styleCSS/textField.css" />
+                                    <ComboBox fx:id="ChcBxRTCErrAPMns" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/comboBox.css" />
+                                    <TextField fx:id="txtFldRTCFrqAPMns" layoutX="256.0" layoutY="170.0" prefHeight="25.0" prefWidth="108.0" promptText="1.0" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="190.0" layoutY="174.0" text="Частота, Гц" textFill="WHITE" />
                                  </children>
                               </Pane>
@@ -353,9 +353,9 @@
                                     <Label layoutX="13.0" layoutY="87.0" text="Напряжение, % Uном" textFill="WHITE" />
                                     <Label layoutX="67.0" layoutY="146.0" text="Время теста" textFill="WHITE" />
                                     <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldCRPUProcAPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="115" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldTimeCRPAPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldCRPAmtImpAPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldCRPUProcAPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="115" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldTimeCRPAPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldCRPAmtImpAPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnCRPAPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <ToggleButton fx:id="addTglBtnCRPAPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить ГОСТ" />
                                  </children>
@@ -367,9 +367,9 @@
                                     <Label layoutX="100.0" layoutY="87.0" text="Ток, A" textFill="WHITE" />
                                     <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
                                     <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldSTAIProcAPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="0.02" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldTimeSRAAPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldSTAAmtImpAPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldSTAIProcAPMns" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="0.02" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldTimeSRAAPMns" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldSTAAmtImpAPMns" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnSTAAPMns" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <ToggleButton fx:id="addTglBtnSTAAPMnsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить ГОСТ" />
                                  </children>
@@ -405,13 +405,13 @@
                                     <Label layoutX="402.0" layoutY="81.0" text="Ошибка, %" textFill="WHITE" />
                                     <Label layoutX="17.0" layoutY="145.0" text="Энергия, kW * h" textFill="WHITE" />
                                     <Label layoutX="66.0" layoutY="81.0" text="Время" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldConsErAPPls" layoutX="466.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="1.5" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldEngConstAPPls" layoutX="132.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="1.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldConstTimeAPPls" layoutX="132.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsErAPPls" layoutX="466.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="1.5" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldEngConstAPPls" layoutX="132.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="1.0" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldConstTimeAPPls" layoutX="132.0" layoutY="77.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnConstAPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                    <TextField fx:id="txtFieldConsProcUAPPls" layoutX="305.0" layoutY="77.0" prefHeight="25.0" prefWidth="70.0" promptText="100" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsProcUAPPls" layoutX="305.0" layoutY="77.0" prefHeight="25.0" prefWidth="70.0" promptText="100" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="271.0" layoutY="81.0" text="Un, %" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldConsProcIAPPls" layoutX="305.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" promptText="600" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldConsProcIAPPls" layoutX="305.0" layoutY="141.0" prefHeight="25.0" prefWidth="70.0" promptText="600" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="275.0" layoutY="145.0" text="Ib, %" textFill="WHITE" />
                                     <RadioButton fx:id="radBtnConstTimeAPPls" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/styleCSS/addDeleteEditPointsFrame/radioBtn.css" />
                                     <RadioButton fx:id="radBtnConstEnergyAPPls" layoutX="110.0" layoutY="144.0" mnemonicParsing="false" stylesheets="@/styleCSS/addDeleteEditPointsFrame/radioBtn.css" />
@@ -424,9 +424,9 @@
                                     <Label layoutX="100.0" layoutY="87.0" text="Ток, А" textFill="WHITE" />
                                     <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
                                     <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldSTAIProcAPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="0.02" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldTimeSRAAPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldSTAAmtImpAPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldSTAIProcAPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="0.02" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldTimeSRAAPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldSTAAmtImpAPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnSTAAPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefHeight="25.0" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <ToggleButton fx:id="addTglBtnSTAAPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить ГОСТ" />
                                  </children>
@@ -438,13 +438,13 @@
                                     <Label layoutX="60.0" layoutY="87.0" text="Тип ошибки" textFill="WHITE" />
                                     <Label layoutX="26.0" layoutY="130.0" text="Диапазон ошибки" textFill="WHITE" />
                                     <Label layoutX="326.0" layoutY="87.0" text="Количество вычислений" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldRngEAPPls" layoutX="131.0" layoutY="126.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFldRTCAmtMshAPPls" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldRngEAPPls" layoutX="131.0" layoutY="126.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFldRTCAmtMshAPPls" layoutX="465.0" layoutY="83.0" prefHeight="25.0" prefWidth="70.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnRTCAPPls" layoutX="496.0" layoutY="181.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="90.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <Label layoutX="356.0" layoutY="130.0" text="Время вычисления" textFill="WHITE" />
-                                    <TextField fx:id="txtFldRTCTimeMshAPPls" layoutX="465.0" layoutY="126.0" prefHeight="25.0" prefWidth="70.0" promptText="30" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <ComboBox fx:id="ChcBxRTCErrAPPls" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-                                    <TextField fx:id="txtFldRTCFrqAPPls" layoutX="256.0" layoutY="170.0" prefHeight="25.0" prefWidth="108.0" promptText="1.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFldRTCTimeMshAPPls" layoutX="465.0" layoutY="126.0" prefHeight="25.0" prefWidth="70.0" promptText="30" stylesheets="@/styleCSS/textField.css" />
+                                    <ComboBox fx:id="ChcBxRTCErrAPPls" layoutX="131.0" layoutY="83.0" prefHeight="25.0" prefWidth="108.0" stylesheets="@/styleCSS/comboBox.css" />
+                                    <TextField fx:id="txtFldRTCFrqAPPls" layoutX="256.0" layoutY="170.0" prefHeight="25.0" prefWidth="108.0" promptText="1.0" stylesheets="@/styleCSS/textField.css" />
                                     <Label layoutX="190.0" layoutY="174.0" text="Частота, Гц" textFill="WHITE" />
                                  </children>
                               </Pane>
@@ -455,9 +455,9 @@
                                     <Label layoutX="14.0" layoutY="87.0" text="Напряжение, % Uном" textFill="WHITE" />
                                     <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
                                     <Label layoutX="283.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
-                                    <TextField fx:id="txtFieldCRPUProcAPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="115" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldTimeCRPAPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
-                                    <TextField fx:id="txtFieldCRPAmtImpAPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldCRPUProcAPPls" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="115" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldTimeCRPAPPls" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
+                                    <TextField fx:id="txtFieldCRPAmtImpAPPls" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="2" stylesheets="@/styleCSS/textField.css" />
                                     <ToggleButton fx:id="addTglBtnCRPAPPls" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
                                     <ToggleButton fx:id="addTglBtnCRPAPPlsGOST" layoutX="483.0" layoutY="150.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить ГОСТ" />
                                  </children>

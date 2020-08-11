@@ -79,7 +79,7 @@ public class ConsoleHelper {
         yesOrNo = null;
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/yesOrNoFrameTEST.fxml"));
+        fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/yesOrNoFrameDialog.fxml"));
         try {
             fxmlLoader.load();
         } catch (IOException e) {
@@ -106,7 +106,7 @@ public class ConsoleHelper {
         yesOrNo = null;
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/yesOrNoFrameTEST.fxml"));
+        fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/yesOrNoFrameDialog.fxml"));
         try {
             fxmlLoader.load();
         } catch (IOException e) {

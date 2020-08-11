@@ -11,16 +11,16 @@
       <Pane prefHeight="140.0" prefWidth="1239.0" style="-fx-background-color: #393939;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
       <Pane layoutX="688.0" layoutY="667.0" prefHeight="42.0" prefWidth="536.0">
          <children>
-            <Button fx:id="btnEdit" layoutX="386.0" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="150.0" text="Редактировать" />
-            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="150.0" text="Удалить" />
-            <Button fx:id="btnPrintResult" layoutX="176.0" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="150.0" text="Отчёт" />
-            <Button fx:id="btnDrirectoryChooser" layoutX="326.0" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="36.0" />
+            <Button fx:id="btnEdit" layoutX="386.0" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="150.0" stylesheets="@../styleCSS/buttonStyle.css" text="Редактировать" />
+            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="150.0" stylesheets="@../styleCSS/buttonStyle.css" text="Удалить" />
+            <Button fx:id="btnPrintResult" layoutX="176.0" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="150.0" stylesheets="@../styleCSS/buttonStyle.css" text="Отчёт" />
+            <Button id="button" fx:id="btnDrirectoryChooser" layoutX="326.0" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="36.0" stylesheets="@../styleCSS/buttonStyle.css" />
          </children>
       </Pane>
-      <TableView fx:id="tabViewResults" editable="true" layoutX="14.0" layoutY="47.0" prefHeight="600.0" prefWidth="1210.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="47.0">
+      <TableView fx:id="tabViewResults" editable="true" layoutX="14.0" layoutY="47.0" prefHeight="600.0" prefWidth="1210.0" stylesheets="@../styleCSS/tableViewStyle.css" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="47.0">
         <columns>
             <TableColumn fx:id="tabColPosition" editable="false" prefWidth="56.0" sortable="false" text="Позиция" />
-            <TableColumn fx:id="tabColSerNo" prefWidth="120.0" sortable="false" text="Серийный номер" />
+            <TableColumn fx:id="tabColSerNo" prefWidth="200.0" sortable="false" text="Серийный номер" />
             <TableColumn fx:id="tabColMeterModel" prefWidth="200.0" sortable="false" text="Модель счётчика" />
             <TableColumn fx:id="tabColResultVerification" prefWidth="120.0" sortable="false" text="Результат поверки" />
             <TableColumn fx:id="tabColDate" prefWidth="130.0" sortable="false" text="Дата" />

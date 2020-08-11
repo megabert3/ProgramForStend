@@ -25,38 +25,38 @@
          <children>
             <VBox fx:id="vBoxBtn" prefHeight="418.0" prefWidth="263.0">
                <children>
-                  <ToggleButton fx:id="stendBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" text="Параметры стенда">
+                  <ToggleButton fx:id="stendBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/propertiesFrame/toglBtn.css" text="Параметры стенда">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../image/settingsFrame/lock_32.png" />
+                              <Image url="@../image/settingsFrame/stendParam.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="meterParanBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" text="Параметры счётчиков">
+                  <ToggleButton fx:id="meterParanBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/propertiesFrame/toglBtn.css" text="Параметры счётчиков">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../image/settingsFrame/lock_32.png" />
+                              <Image url="@../image/settingsFrame/metersParamico_32.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="passwordBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" text="Пароль">
+                  <ToggleButton fx:id="passwordBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/propertiesFrame/toglBtn.css" text="Пароль">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../image/settingsFrame/lock_32.png" />
+                              <Image url="@../image/settingsFrame/password_32.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="linksBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" text="Ссылки">
+                  <ToggleButton fx:id="linksBtn" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="60.0" prefWidth="264.0" stylesheets="@../styleCSS/propertiesFrame/toglBtn.css" text="Ссылки">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../image/settingsFrame/lock_32.png" />
+                              <Image url="@../image/settingsFrame/link.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -90,8 +90,8 @@
                           </rowConstraints>
                            <children>
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="COM порт для связи" />
-                              <ComboBox fx:id="standPaneCOMList" prefWidth="100.0" GridPane.columnIndex="1" />
-                              <TextField fx:id="txtFldCOMList" maxHeight="27.0" maxWidth="73.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" GridPane.columnIndex="1" />
+                              <ComboBox fx:id="standPaneCOMList" prefWidth="100.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" />
+                              <TextField fx:id="txtFldCOMList" maxHeight="27.0" maxWidth="73.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                         <Button layoutX="59.0" layoutY="361.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="38.0" prefWidth="180.0" stylesheets="@../styleCSS/buttonStyle.css" text="Автопоиск">
@@ -122,19 +122,19 @@
                            <children>
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип" wrappingWidth="60.185546875" GridPane.rowIndex="1" />
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Модель" GridPane.rowIndex="2" />
-                              <TextField fx:id="standPaneAmoutPlase" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="standPaneAmoutPlase" alignment="CENTER" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Серийный №" GridPane.rowIndex="4" />
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности" GridPane.rowIndex="5" />
-                              <TextField fx:id="standPaneStandSerNo" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <TextField fx:id="stendPaneStandAcrCl" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <TextField fx:id="standPaneStandSerNo" alignment="CENTER" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <TextField fx:id="stendPaneStandAcrCl" alignment="CENTER" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Количество мест" GridPane.rowIndex="3" />
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Установка" textAlignment="CENTER" wrappingWidth="246.3802032470703" />
-                              <ComboBox fx:id="stendPaneStendTypeList" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <ComboBox fx:id="stendPaneStendModel" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <TextField fx:id="txtStendModel" maxHeight="27.0" maxWidth="95.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <TextField fx:id="txtFldCertificate" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <TextField fx:id="txtFldDateLastVerification" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                              <TextField fx:id="txtFldDateNextVerification" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                              <ComboBox fx:id="stendPaneStendTypeList" prefHeight="25.0" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <ComboBox fx:id="stendPaneStendModel" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="txtStendModel" maxHeight="27.0" maxWidth="95.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="txtFldCertificate" alignment="CENTER" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <TextField fx:id="txtFldDateLastVerification" alignment="CENTER" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <TextField fx:id="txtFldDateNextVerification" alignment="CENTER" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Свидетельство №" GridPane.rowIndex="6" />
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата поверки" GridPane.rowIndex="7" />
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Дата след. поверки" GridPane.rowIndex="8" />
@@ -143,7 +143,7 @@
                         <GridPane layoutX="280.0" layoutY="38.0" prefHeight="237.0" prefWidth="226.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -154,12 +154,12 @@
                            <children>
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text=" Образцовый счётчик" textAlignment="CENTER" wrappingWidth="242.185546875" GridPane.valignment="TOP" />
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text=" Модель" wrappingWidth="81.30338287353516" GridPane.rowIndex="1" />
-                              <TextField fx:id="StendPaneRefSerNo" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="StendPaneRefSerNo" alignment="CENTER" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text=" Класс точности" wrappingWidth="120.41796112060547" GridPane.rowIndex="3" />
-                              <TextField fx:id="stendPaneRefAcrCl" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="stendPaneRefAcrCl" alignment="CENTER" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text=" Серийный №" wrappingWidth="121.36067199707031" GridPane.rowIndex="2" />
-                              <ComboBox fx:id="stendPaneRefMetModel" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField fx:id="txtFidRefMetModel" maxHeight="27.0" maxWidth="95.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-radius: 0;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <ComboBox fx:id="stendPaneRefMetModel" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtFidRefMetModel" maxHeight="27.0" maxWidth="95.0" minHeight="0.0" minWidth="0.0" prefHeight="27.0" prefWidth="86.0" style="-fx-background-radius: 0;" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </children>
@@ -180,9 +180,9 @@
                               <Label text="Старый пароль" textFill="WHITE" />
                               <Label text="Новый пароль" textFill="WHITE" GridPane.rowIndex="1" />
                               <Label text="Повторите новый пароль" textFill="WHITE" GridPane.rowIndex="2" />
-                              <PasswordField fx:id="passFldOldPass" GridPane.columnIndex="1" />
-                              <PasswordField fx:id="passFldNewPass" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <PasswordField fx:id="passFldRepeatNewPass" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <PasswordField fx:id="passFldOldPass" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" />
+                              <PasswordField fx:id="passFldNewPass" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <PasswordField fx:id="passFldRepeatNewPass" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                         <Button fx:id="passPaneSave" layoutX="178.0" layoutY="332.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#passPaneActionEvent" prefHeight="38.0" prefWidth="180.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить">
@@ -194,6 +194,27 @@
                               </ImageView>
                            </graphic>
                         </Button>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="parametersPane" style="-fx-background-color: #6A6A6A;">
+                     <children>
+                        <SplitPane dividerPositions="0.4851694915254237" layoutX="31.0" layoutY="29.0" prefHeight="301.0" prefWidth="474.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <TableView fx:id="tabViewParameters" layoutX="-3.0" layoutY="61.0" prefHeight="315.0" prefWidth="226.0" stylesheets="@../styleCSS/tableViewStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <ListView fx:id="listViewParameters" layoutX="11.0" layoutY="60.0" prefHeight="315.0" prefWidth="240.0" stylesheets="@../styleCSS/listViewStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                        <TextField fx:id="txtFldParameters" layoutX="181.0" layoutY="344.0" prefHeight="25.0" prefWidth="226.0" stylesheets="@../styleCSS/textField.css" />
+                        <Button fx:id="btnAddParameter" layoutX="417.0" layoutY="344.0" mnemonicParsing="false" onAction="#parameterPaneActionEvent" prefHeight="25.0" prefWidth="84.0" stylesheets="@../styleCSS/buttonStyle.css" text="Добавить" />
+                        <Button fx:id="btnDeleteParameter" layoutX="417.0" layoutY="379.0" mnemonicParsing="false" onAction="#parameterPaneActionEvent" prefHeight="25.0" prefWidth="84.0" stylesheets="@../styleCSS/buttonStyle.css" text="Удалить" />
                      </children>
                   </AnchorPane>
                   <AnchorPane fx:id="linksPane" style="-fx-background-color: #6A6A6A;">
@@ -212,33 +233,12 @@
                            <children>
                               <Label text="Файл с номерами счётчиков" textFill="WHITE" />
                               <Label text="Путь сохранения отчёта" textFill="WHITE" GridPane.rowIndex="2" />
-                              <TextField fx:id="txtFldPathSerNoMeter" GridPane.rowIndex="1" />
-                              <TextField fx:id="txtFldPathReport" GridPane.rowIndex="3" />
-                              <Button fx:id="btnPathSerNoMeter" mnemonicParsing="false" onAction="#linksPaneActionEvent" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Button fx:id="btnPathReport" mnemonicParsing="false" onAction="#linksPaneActionEvent" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="txtFldPathSerNoMeter" stylesheets="@../styleCSS/textField.css" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtFldPathReport" stylesheets="@../styleCSS/textField.css" GridPane.rowIndex="3" />
+                              <Button fx:id="btnPathSerNoMeter" mnemonicParsing="false" onAction="#linksPaneActionEvent" stylesheets="@../styleCSS/buttonStyle.css" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button fx:id="btnPathReport" mnemonicParsing="false" onAction="#linksPaneActionEvent" stylesheets="@../styleCSS/buttonStyle.css" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="parametersPane" style="-fx-background-color: #6A6A6A;">
-                     <children>
-                        <SplitPane dividerPositions="0.4851694915254237" layoutX="31.0" layoutY="29.0" prefHeight="301.0" prefWidth="474.0">
-                          <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                 <children>
-                                    <TableView fx:id="tabViewParameters" layoutX="-3.0" layoutY="61.0" prefHeight="315.0" prefWidth="226.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                 </children>
-                              </AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                 <children>
-                                    <ListView fx:id="listViewParameters" layoutX="11.0" layoutY="60.0" prefHeight="315.0" prefWidth="240.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                 </children>
-                              </AnchorPane>
-                          </items>
-                        </SplitPane>
-                        <TextField fx:id="txtFldParameters" layoutX="181.0" layoutY="344.0" prefHeight="25.0" prefWidth="226.0" />
-                        <Button fx:id="btnAddParameter" layoutX="417.0" layoutY="344.0" mnemonicParsing="false" onAction="#parameterPaneActionEvent" prefHeight="25.0" prefWidth="84.0" text="Добавить" />
-                        <Button fx:id="btnDeleteParameter" layoutX="417.0" layoutY="379.0" mnemonicParsing="false" onAction="#parameterPaneActionEvent" prefHeight="25.0" prefWidth="84.0" text="Удалить" />
                      </children>
                   </AnchorPane>
                </children>

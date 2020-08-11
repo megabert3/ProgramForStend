@@ -63,7 +63,7 @@
                                     <Label layoutX="76.0" layoutY="49.0" text="Влияние напряжения, %" textFill="WHITE" />
                                     <Label fx:id="directLabPhaseAU" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
                                     <ToggleButton fx:id="addTglBtnInfUPhaseA" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                    <TextField fx:id="txtFieldInfUPhaseA" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldInfUPhaseA" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/textField.css" />
                                  </children>
                               </Pane>
                               <Pane fx:id="InflFPhaseAPane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
@@ -71,7 +71,7 @@
                                     <Label layoutX="76.0" layoutY="49.0" text="Влияние частоты, %" textFill="WHITE" />
                                     <Label fx:id="directLabPhaseAF" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
                                     <ToggleButton fx:id="addTglBtnInfFPhaseA" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                    <TextField fx:id="txtFieldInfFPhaseA" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldInfFPhaseA" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/textField.css" />
                                  </children>
                               </Pane>
                            </children>
@@ -93,7 +93,7 @@
                                     <Label layoutX="76.0" layoutY="49.0" text="Влияние напряжения, %" textFill="WHITE" />
                                     <Label fx:id="directLabPhaseBU" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
                                     <ToggleButton fx:id="addTglBtnInfUPhaseB" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                    <TextField fx:id="txtFieldInfUPhaseB" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldInfUPhaseB" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/textField.css" />
                                  </children>
                               </Pane>
                               <Pane fx:id="InflFPhaseBPane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
@@ -101,7 +101,7 @@
                                     <Label layoutX="76.0" layoutY="49.0" text="Влияние частоты, %" textFill="WHITE" />
                                     <Label fx:id="directLabPhaseBF" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
                                     <ToggleButton fx:id="addTglBtnInfFPhaseB" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                    <TextField fx:id="txtFieldInfFPhaseB" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldInfFPhaseB" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/textField.css" />
                                  </children>
                               </Pane>
                            </children>
@@ -123,7 +123,7 @@
                                     <Label layoutX="76.0" layoutY="49.0" text="Влияние напряжения, %" textFill="WHITE" />
                                     <Label fx:id="directLabPhaseCU" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
                                     <ToggleButton fx:id="addTglBtnInfUPhaseC" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                    <TextField fx:id="txtFieldInfUPhaseC" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldInfUPhaseC" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/textField.css" />
                                  </children>
                               </Pane>
                               <Pane fx:id="InflFPhaseCPane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
@@ -131,7 +131,7 @@
                                     <Label layoutX="76.0" layoutY="49.0" text="Влияние частоты, %" textFill="WHITE" />
                                     <Label fx:id="directLabPhaseCF" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
                                     <ToggleButton fx:id="addTglBtnInfFPhaseC" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                    <TextField fx:id="txtFieldInfFPhaseC" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                    <TextField fx:id="txtFieldInfFPhaseC" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/textField.css" />
                                  </children>
                               </Pane>
                            </children>
@@ -153,7 +153,7 @@
                                                 <Label layoutX="76.0" layoutY="49.0" text="Влияние частоты, %" textFill="WHITE" />
                                                 <Label fx:id="directLabAllPhaseF" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
                                                 <ToggleButton fx:id="addTglBtnInfFAllPhase" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                                <TextField fx:id="txtFieldInfFAllPhase" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                                <TextField fx:id="txtFieldInfFAllPhase" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/textField.css" />
                                             </children>
                                         </Pane>
                                         <Pane fx:id="InflUAllPhasePane" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
@@ -161,7 +161,7 @@
                                                 <Label layoutX="76.0" layoutY="49.0" text="Влияние напряжения, %" textFill="WHITE" />
                                                 <Label fx:id="directLabAllPhaseU" layoutX="171.0" layoutY="14.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
                                                 <ToggleButton fx:id="addTglBtnInfUAllPhase" layoutX="488.0" layoutY="70.0" mnemonicParsing="false" onAction="#addInfluenceTests" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
-                                                <TextField fx:id="txtFieldInfUAllPhase" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/textField.css" />
+                                                <TextField fx:id="txtFieldInfUAllPhase" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/textField.css" />
                                             </children>
                                         </Pane>
                                     </children>

@@ -52,17 +52,17 @@
                <children>
                   <Text fill="WHITE" layoutX="1.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Напряжение, В" />
                   <Text fill="WHITE" layoutX="1.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ток, А" />
-                  <ComboBox fx:id="chosBxUnom" layoutY="16.0" prefHeight="27.0" prefWidth="100.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-                  <TextField fx:id="txtFldUnom" layoutY="16.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
-                  <ComboBox fx:id="chosBxCurrent" layoutY="62.0" prefHeight="27.0" prefWidth="100.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-                  <TextField fx:id="txtFldCurrent" layoutY="62.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+                  <ComboBox fx:id="chosBxUnom" layoutY="16.0" prefHeight="27.0" prefWidth="100.0" stylesheets="@../styleCSS/comboBox.css" />
+                  <TextField fx:id="txtFldUnom" layoutY="16.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../styleCSS/textField.css" />
+                  <ComboBox fx:id="chosBxCurrent" layoutY="62.0" prefHeight="27.0" prefWidth="100.0" stylesheets="@../styleCSS/comboBox.css" />
+                  <TextField fx:id="txtFldCurrent" layoutY="62.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../styleCSS/textField.css" />
                </children>
             </Pane>
             <Pane maxHeight="135.0" prefHeight="135.0" prefWidth="175.0" GridPane.columnIndex="7">
                <children>
                   <Text fill="WHITE" layoutX="1.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип измерительного элемента" />
-                  <ComboBox fx:id="chosBxtypeOfMeasuringElement" layoutY="62.0" prefHeight="27.0" prefWidth="175.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-                  <ComboBox fx:id="chosBxTypeMeter" layoutY="16.0" prefHeight="27.0" prefWidth="175.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+                  <ComboBox fx:id="chosBxtypeOfMeasuringElement" layoutY="62.0" prefHeight="27.0" prefWidth="175.0" stylesheets="@../styleCSS/comboBox.css" />
+                  <ComboBox fx:id="chosBxTypeMeter" layoutY="16.0" prefHeight="27.0" prefWidth="175.0" stylesheets="@../styleCSS/comboBox.css" />
                   <Text fill="WHITE" layoutX="1.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип счётчика" />
                </children>
             </Pane>
@@ -70,10 +70,10 @@
                <children>
                   <Text fill="WHITE" layoutX="1.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности Р.Э." />
                   <Text fill="WHITE" layoutX="1.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности А.Э." />
-                  <ComboBox fx:id="chosBxAccuracyAP" layoutY="16.0" prefHeight="27.0" prefWidth="112.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-                  <TextField fx:id="txtFldAccuracyAP" layoutY="16.0" maxHeight="27.0" prefHeight="27.0" prefWidth="83.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
-                  <ComboBox fx:id="chosBxAccuracyRP" layoutY="62.0" prefHeight="27.0" prefWidth="112.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-                  <TextField fx:id="txtFldAccuracyRP" layoutY="62.0" maxHeight="27.0" prefHeight="27.0" prefWidth="83.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+                  <ComboBox fx:id="chosBxAccuracyAP" layoutY="16.0" prefHeight="27.0" prefWidth="112.0" stylesheets="@../styleCSS/comboBox.css" />
+                  <TextField fx:id="txtFldAccuracyAP" layoutY="16.0" maxHeight="27.0" prefHeight="27.0" prefWidth="83.0" stylesheets="@../styleCSS/textField.css" />
+                  <ComboBox fx:id="chosBxAccuracyRP" layoutY="62.0" prefHeight="27.0" prefWidth="112.0" stylesheets="@../styleCSS/comboBox.css" />
+                  <TextField fx:id="txtFldAccuracyRP" layoutY="62.0" maxHeight="27.0" prefHeight="27.0" prefWidth="83.0" stylesheets="@../styleCSS/textField.css" />
                </children>
             </Pane>
             <Pane GridPane.columnIndex="9">
@@ -84,10 +84,10 @@
             <Pane maxHeight="135.0" maxWidth="225.0" prefHeight="135.0" prefWidth="225.0" GridPane.columnIndex="11">
                <children>
                   <Text fill="WHITE" layoutX="1.0" layoutY="-4.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Методика" y="16.0" />
-                  <ComboBox fx:id="chosBxMetodics" layoutY="16.0" prefHeight="28.0" prefWidth="225.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+                  <ComboBox fx:id="chosBxMetodics" layoutY="16.0" prefHeight="28.0" prefWidth="225.0" stylesheets="@../styleCSS/comboBox.css" />
                   <CheckBox fx:id="twoCircutChcBox" alignment="TOP_LEFT" layoutX="144.0" layoutY="67.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" text="Две токовые цепи" textFill="WHITE" />
                   <Text fill="WHITE" layoutX="1.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип сети" />
-                  <ComboBox fx:id="chosBxPowerType" layoutY="62.0" prefHeight="27.0" prefWidth="130.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
+                  <ComboBox fx:id="chosBxPowerType" layoutY="62.0" prefHeight="27.0" prefWidth="130.0" stylesheets="@../styleCSS/comboBox.css" />
                </children>
             </Pane>
             <Pane prefWidth="110.0" GridPane.columnIndex="13">
@@ -98,15 +98,15 @@
             <Pane maxHeight="130.0" minHeight="100.0" GridPane.columnIndex="1">
                <children>
                   <Text fill="WHITE" layoutX="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Частота, Гц" y="13.0" />
-                  <ComboBox fx:id="chosBxFrg" layoutY="16.0" prefHeight="27.0" prefWidth="100.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/comboBox.css" />
-                  <TextField fx:id="txtFldFrg" layoutY="16.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/textField.css" />
+                  <ComboBox fx:id="chosBxFrg" layoutY="16.0" prefHeight="27.0" prefWidth="100.0" stylesheets="@../styleCSS/comboBox.css" />
+                  <TextField fx:id="txtFldFrg" layoutY="16.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../styleCSS/textField.css" />
                </children>
             </Pane>
          </children>
       </GridPane>
       <Pane fx:id="checkBoxPaneOnOff" layoutX="20.0" layoutY="45.0" prefHeight="23.0" prefWidth="30.0">
          <children>
-            <CheckBox fx:id="checkBoxOnOffMeterChBox" layoutX="4.0" layoutY="3.0" mnemonicParsing="false" stylesheets="@../styleCSS/testParameterFrame/checkBox.css" />
+            <CheckBox fx:id="checkBoxOnOffMeterChBox" layoutX="6.0" layoutY="3.0" mnemonicParsing="false" stylesheets="@../styleCSS/testParameterFrame/checkBox.css" />
          </children>
       </Pane>
    </children>

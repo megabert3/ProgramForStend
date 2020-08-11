@@ -14,38 +14,38 @@
       <Pane prefHeight="140.0" prefWidth="1239.0" style="-fx-background-color: #393939;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <Pane layoutX="14.0" layoutY="586.0" prefHeight="100.0" prefWidth="1320.0" AnchorPane.bottomAnchor="32.0" AnchorPane.rightAnchor="6.0">
          <children>
-            <ComboBox fx:id="chosBxOperator" layoutX="80.0" prefWidth="150.0" />
-            <ComboBox fx:id="chosBxController" layoutX="80.0" layoutY="37.0" prefWidth="150.0" />
-            <ComboBox fx:id="chosBxWitness" layoutX="80.0" layoutY="75.0" prefWidth="150.0" />
+            <ComboBox fx:id="chosBxOperator" layoutX="80.0" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" />
+            <ComboBox fx:id="chosBxController" layoutX="80.0" layoutY="37.0" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" />
+            <ComboBox fx:id="chosBxWitness" layoutX="80.0" layoutY="75.0" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" />
             <Label layoutY="4.0" text="Оператор" textFill="WHITE" />
             <Label layoutY="41.0" text="Контролёр" textFill="WHITE" />
             <Label layoutY="79.0" text="Поверитель" textFill="WHITE" />
             <Label layoutX="264.0" layoutY="4.0" text="Номер партии" textFill="WHITE" />
-            <TextField fx:id="txtFldBatchNumb" layoutX="359.0" prefHeight="25.0" prefWidth="125.0" />
+            <TextField fx:id="txtFldBatchNumb" layoutX="359.0" prefHeight="25.0" prefWidth="125.0" stylesheets="@../styleCSS/textField.css" />
             <Label layoutX="264.0" layoutY="41.0" text="Дата поверки" textFill="WHITE" />
-            <TextField fx:id="txtFldТMusterDate" layoutX="359.0" layoutY="37.0" prefHeight="25.0" prefWidth="125.0" />
+            <TextField fx:id="txtFldТMusterDate" layoutX="359.0" layoutY="37.0" prefHeight="25.0" prefWidth="125.0" stylesheets="@../styleCSS/textField.css" />
             <Label layoutX="527.0" layoutY="4.0" text="Температура" textFill="WHITE" />
             <Label layoutX="529.0" layoutY="41.0" text="Влажность" textFill="WHITE" />
-            <TextField fx:id="txtFldTemperature" layoutX="608.0" prefHeight="25.0" prefWidth="91.0" />
-            <TextField fx:id="txtFldHumidity" layoutX="608.0" layoutY="37.0" prefHeight="25.0" prefWidth="91.0" />
-            <TextField fx:id="txtFldOperator" layoutX="80.0" prefHeight="25.0" prefWidth="125.0" />
-            <TextField fx:id="txtFldController" layoutX="80.0" layoutY="37.0" prefHeight="25.0" prefWidth="125.0" />
-            <TextField fx:id="txtFldWitness" layoutX="80.0" layoutY="75.0" prefHeight="25.0" prefWidth="125.0" />
+            <TextField fx:id="txtFldTemperature" layoutX="608.0" prefHeight="25.0" prefWidth="91.0" stylesheets="@../styleCSS/textField.css" />
+            <TextField fx:id="txtFldHumidity" layoutX="608.0" layoutY="37.0" prefHeight="25.0" prefWidth="91.0" stylesheets="@../styleCSS/textField.css" />
+            <TextField fx:id="txtFldOperator" layoutX="80.0" prefHeight="25.0" prefWidth="125.0" stylesheets="@../styleCSS/textField.css" />
+            <TextField fx:id="txtFldController" layoutX="80.0" layoutY="37.0" prefHeight="25.0" prefWidth="125.0" stylesheets="@../styleCSS/textField.css" />
+            <TextField fx:id="txtFldWitness" layoutX="80.0" layoutY="75.0" prefHeight="25.0" prefWidth="125.0" stylesheets="@../styleCSS/textField.css" />
             <Pane layoutX="759.0" layoutY="12.0" prefHeight="75.0" prefWidth="549.0">
                <children>
-                  <Button fx:id="btnBack" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Вернуться" />
-                  <Button fx:id="btnSave" layoutX="139.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Сохранить" />
-                  <Button fx:id="btnCancel" layoutX="428.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Отмена" />
-                  <Button fx:id="saveAndPrint" layoutX="279.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" text="Сохранить и вывести отчёт" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnBack" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Вернуться" />
+                  <Button fx:id="btnSave" layoutX="139.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить" />
+                  <Button fx:id="btnCancel" layoutX="428.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Отмена" />
+                  <Button fx:id="saveAndPrint" layoutX="279.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить и вывести отчёт" textAlignment="CENTER" wrapText="true" />
                </children>
             </Pane>
          </children>
       </Pane>
-      <TableView fx:id="tabViewResults" editable="true" layoutX="14.0" layoutY="47.0" prefHeight="510.0" prefWidth="1209.0" AnchorPane.bottomAnchor="161.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="47.0">
+      <TableView fx:id="tabViewResults" editable="true" layoutX="14.0" layoutY="47.0" prefHeight="510.0" prefWidth="1209.0" stylesheets="@../styleCSS/tableViewStyle.css" AnchorPane.bottomAnchor="161.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="47.0">
         <columns>
           <TableColumn fx:id="tabColChBxSelectOrNot" prefWidth="30.0" sortable="false" />
-            <TableColumn fx:id="tabColPosition" editable="false" prefWidth="56.0" sortable="false" text="Позиция" />
-            <TableColumn fx:id="tabColSerNo" prefWidth="120.0" sortable="false" text="Серийный номер" />
+            <TableColumn fx:id="tabColPosition" editable="false" prefWidth="65.0" sortable="false" text="Позиция" />
+            <TableColumn fx:id="tabColSerNo" prefWidth="200.0" sortable="false" text="Серийный номер" />
             <TableColumn fx:id="tabColMeterModel" prefWidth="200.0" sortable="false" text="Модель счётчика" />
             <TableColumn fx:id="tabColResultVerification" prefWidth="120.0" sortable="false" text="Результат поверки" />
             <TableColumn fx:id="tabColCRPResult" prefWidth="120.0" sortable="false" text="Самоход" />

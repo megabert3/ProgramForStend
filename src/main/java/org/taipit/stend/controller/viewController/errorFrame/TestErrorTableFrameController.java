@@ -2153,17 +2153,16 @@ public class TestErrorTableFrameController {
 
         TableView<Meter.CommandResult> tableView = new TableView<>();
 
-//        String styleErrorTableView = getClass().getClassLoader().getResource("styleCSS/testErrorTableFrame/tableViewErrors.css").toString();
-//        if (styleErrorTableView != null) {
-//            tableView.getStylesheets().add(styleErrorTableView);
-//        }
+        String styleErrorTableView = getClass().getClassLoader().getResource("styleCSS/testErrorTableFrame/tableViewErrors.css").toString();
+        if (styleErrorTableView != null) {
+            tableView.getStylesheets().add(styleErrorTableView);
+        }
 
         TableColumn<Meter.CommandResult, String> column = new TableColumn<>("Место " + listMetersForTest.get(index).getId());
         column.setStyle("-fx-alignment: CENTER;");
         column.setCellValueFactory(new PropertyValueFactory<>("lastResultForTabView"));
         column.setSortable(false);
         column.setCellFactory(cellFactoryEndTest);
-        tableView.getStylesheets().add(String.valueOf(getClass().getClassLoader().getResource("styleCSS/hideScrollBars.css")));
         tableView.getColumns().add(column);
         tableView.setPlaceholder(new Label("Нет точек"));
         paneErrors.getChildren().add(tableView);
@@ -2180,27 +2179,20 @@ public class TestErrorTableFrameController {
         //AP+
         verticalBarCommands = (ScrollBar) tabViewTestPoints.lookup(".scroll-bar:vertical");
 
-        for (int i = 0; i < tabViewErrorsList.size(); i++) {
+        for (int i = tabViewErrorsList.size() - 1; i > 0; i--) {
             verticalBarErrorsFirst = (ScrollBar) tabViewErrorsList.get(i).lookup(".scroll-bar:vertical");
-            //verticalBarErrorsSecond = (ScrollBar) tabViewErrorsList.get(i - 1).lookup(".scroll-bar:vertical");
+            verticalBarErrorsSecond = (ScrollBar) tabViewErrorsList.get(i - 1).lookup(".scroll-bar:vertical");
 
-            bindScrolls(verticalBarCommands, verticalBarErrorsFirst);
+            bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
+
+            ScrollBar finalVerticalBarErrors1 = verticalBarErrorsFirst;
+            verticalBarCommands.valueProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    finalVerticalBarErrors1.valueProperty().setValue(newValue);
+                }
+            });
         }
-
-//        for (int i = tabViewErrorsList.size() - 1; i > 0; i--) {
-//            verticalBarErrorsFirst = (ScrollBar) tabViewErrorsList.get(i).lookup(".scroll-bar:vertical");
-//            verticalBarErrorsSecond = (ScrollBar) tabViewErrorsList.get(i - 1).lookup(".scroll-bar:vertical");
-//
-//            bindScrolls(verticalBarErrorsFirst, verticalBarErrorsSecond);
-//
-//            ScrollBar finalVerticalBarErrors1 = verticalBarErrorsFirst;
-//            verticalBarCommands.valueProperty().addListener(new ChangeListener<Number>() {
-//                @Override
-//                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//                    finalVerticalBarErrors1.valueProperty().setValue(newValue);
-//                }
-//            });
-//        }
     }
 
     //Делает проверку и привязывает скроллы друг к другу

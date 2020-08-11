@@ -1,0 +1,25 @@
+#yes {
+    -fx-background-color : #FFC107;
+    -fx-background-radius: 0;
+}
+
+#yes:hover {
+    -fx-background-color : #FFC723;
+}
+
+#yes:pressed {
+    -fx-background-color : #4DA94C;
+}
+
+#no {
+    -fx-background-color : #FFC107;
+    -fx-background-radius: 0;
+}
+
+#no: hover {
+    -fx-background-color : #FFC723;
+}
+
+#no: pressed {
+    -fx-background-color : #C8322D;
+}
