@@ -6,6 +6,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
@@ -33,10 +35,38 @@
             <TextField fx:id="txtFldWitness" layoutX="80.0" layoutY="75.0" prefHeight="25.0" prefWidth="125.0" stylesheets="@../styleCSS/textField.css" />
             <Pane layoutX="759.0" layoutY="12.0" prefHeight="75.0" prefWidth="549.0">
                <children>
-                  <Button fx:id="btnBack" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Вернуться" />
-                  <Button fx:id="btnSave" layoutX="139.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить" />
-                  <Button fx:id="btnCancel" layoutX="428.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Отмена" />
-                  <Button fx:id="saveAndPrint" layoutX="279.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить и вывести отчёт" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnBack" contentDisplay="TOP" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Вернуться">
+                     <graphic>
+                        <ImageView fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/saveResultFrame/return.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="btnSave" contentDisplay="TOP" layoutX="139.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить">
+                     <graphic>
+                        <ImageView fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/saveResultFrame/save.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="btnCancel" contentDisplay="TOP" layoutX="428.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Отмена">
+                     <graphic>
+                        <ImageView fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/saveResultFrame/cancel.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="saveAndPrint" contentDisplay="TOP" layoutX="279.0" mnemonicParsing="false" onAction="#backSaveCancelActions" prefHeight="75.0" prefWidth="119.0" stylesheets="@../styleCSS/buttonStyle.css" text="Отчёт" textAlignment="CENTER" wrapText="true">
+                     <graphic>
+                        <ImageView fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/saveResultFrame/report.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
                </children>
             </Pane>
          </children>

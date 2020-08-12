@@ -6,6 +6,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -78,21 +80,35 @@
             </Pane>
             <Pane GridPane.columnIndex="9">
                <children>
-                  <Button fx:id="btnNumbersMe" layoutY="16.0" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="73.0" prefWidth="94.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/button.css" text="Номера" />
+                  <Button fx:id="btnNumbersMe" contentDisplay="TOP" layoutY="16.0" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="73.0" prefWidth="94.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/button.css" text="Номера">
+                     <graphic>
+                        <ImageView fitHeight="44.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/testParamFrame/barcode.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
                </children>
             </Pane>
             <Pane maxHeight="135.0" maxWidth="225.0" prefHeight="135.0" prefWidth="225.0" GridPane.columnIndex="11">
                <children>
                   <Text fill="WHITE" layoutX="1.0" layoutY="-4.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Методика" y="16.0" />
                   <ComboBox fx:id="chosBxMetodics" layoutY="16.0" prefHeight="28.0" prefWidth="225.0" stylesheets="@../styleCSS/comboBox.css" />
-                  <CheckBox fx:id="twoCircutChcBox" alignment="TOP_LEFT" layoutX="144.0" layoutY="67.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" text="Две токовые цепи" textFill="WHITE" />
+                  <CheckBox fx:id="twoCircutChcBox" alignment="TOP_LEFT" layoutX="144.0" layoutY="67.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" stylesheets="@../styleCSS/checkBox.css" text="Две токовые цепи" textFill="WHITE" />
                   <Text fill="WHITE" layoutX="1.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип сети" />
                   <ComboBox fx:id="chosBxPowerType" layoutY="62.0" prefHeight="27.0" prefWidth="130.0" stylesheets="@../styleCSS/comboBox.css" />
                </children>
             </Pane>
             <Pane prefWidth="110.0" GridPane.columnIndex="13">
                <children>
-                  <Button fx:id="btnStartTest" layoutY="16.0" maxHeight="80.0" maxWidth="130.0" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="73.0" prefWidth="110.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/button.css" text="Начать тест" />
+                  <Button fx:id="btnStartTest" contentDisplay="TOP" layoutY="16.0" maxHeight="80.0" maxWidth="130.0" mnemonicParsing="false" onAction="#buttonActionTestFrame" prefHeight="73.0" prefWidth="110.0" stylesheets="@../styleCSS/addDeleteEditPointsFrame/button.css" text="Начать тест">
+                     <graphic>
+                        <ImageView fitHeight="42.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/testParamFrame/play.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
                </children>
             </Pane>
             <Pane maxHeight="130.0" minHeight="100.0" GridPane.columnIndex="1">
@@ -106,7 +122,7 @@
       </GridPane>
       <Pane fx:id="checkBoxPaneOnOff" layoutX="20.0" layoutY="45.0" prefHeight="23.0" prefWidth="30.0">
          <children>
-            <CheckBox fx:id="checkBoxOnOffMeterChBox" layoutX="6.0" layoutY="3.0" mnemonicParsing="false" stylesheets="@../styleCSS/testParameterFrame/checkBox.css" />
+            <CheckBox fx:id="checkBoxOnOffMeterChBox" layoutX="6.0" layoutY="3.0" mnemonicParsing="false" stylesheets="@../styleCSS/checkBox.css" />
          </children>
       </Pane>
    </children>

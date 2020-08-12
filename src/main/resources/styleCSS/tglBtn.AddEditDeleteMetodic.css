@@ -1,6 +1,7 @@
 .toggle-button {
-    -fx-background-color: #FFC107;;
-    -fx-border-width: 0.1;
+    -fx-background-color: #393939;
+    -fx-border-width: 0.5;
+    -fx-border-color: gray;
     -fx-background-radius: 0,0,0,0;
     -fx-opacity: 0.8;
 }
@@ -9,10 +10,11 @@
     -fx-background-color: #FFC723;
     -fx-background-radius: 0,0,0,0;
     -fx-opacity: 1.0;
+    -fx-text-fill: black;
 }
 
 .toggle-button:hover {
-    -fx-background-color: #FFC723;
+    -fx-background-color: #3A84C3;
     -fx-background-radius: 0,0,0,0;
     -fx-opacity: 0.9;
 }

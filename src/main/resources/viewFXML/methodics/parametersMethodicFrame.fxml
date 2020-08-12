@@ -15,32 +15,32 @@
       <Text fill="WHITE" layoutX="254.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Класс точности А.Э." />
       <Text fill="WHITE" layoutX="41.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Частота, Гц" />
       <Text fill="WHITE" layoutX="390.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип изм. элем." />
-      <ComboBox fx:id="chosBxUnom" layoutX="128.0" layoutY="64.0" prefHeight="25.0" prefWidth="85.0" />
-      <TextField fx:id="txtFldUnom" layoutX="128.0" layoutY="64.0" prefHeight="26.0" prefWidth="61.0" />
-      <ComboBox fx:id="chosBxAccuracyAP" layoutX="255.0" layoutY="76.0" prefHeight="25.0" prefWidth="94.0" />
-      <TextField fx:id="txtFldAccuracyAP" layoutX="255.0" layoutY="76.0" prefHeight="26.0" prefWidth="73.0" />
-      <ComboBox fx:id="chosBxAccuracyRP" layoutX="255.0" layoutY="125.0" prefHeight="25.0" prefWidth="97.0" />
-      <ComboBox fx:id="chosBxCurrent" layoutX="128.0" layoutY="98.0" prefHeight="25.0" prefWidth="85.0" />
-      <ComboBox fx:id="chosBxtypeOfMeasuringElement" layoutX="390.0" layoutY="125.0" prefHeight="25.0" prefWidth="117.0" />
-      <ComboBox fx:id="chosBxFrg" layoutX="128.0" layoutY="131.0" prefHeight="25.0" prefWidth="85.0" />
-      <TextField fx:id="txtFldAccuracyRP" layoutX="254.0" layoutY="125.0" prefHeight="26.0" prefWidth="77.0" />
-      <TextField fx:id="txtFldCurrent" layoutX="128.0" layoutY="98.0" prefHeight="26.0" prefWidth="61.0" />
-      <TextField fx:id="txtFldFrg" layoutX="128.0" layoutY="131.0" prefHeight="26.0" prefWidth="61.0" />
-      <ComboBox fx:id="chosBxTypeMeter" layoutX="390.0" layoutY="76.0" prefHeight="25.0" prefWidth="117.0" />
+      <ComboBox fx:id="chosBxUnom" layoutX="128.0" layoutY="64.0" prefHeight="25.0" prefWidth="85.0" stylesheets="@/styleCSS/comboBox.css" />
+      <TextField fx:id="txtFldUnom" layoutX="128.0" layoutY="64.0" prefHeight="26.0" prefWidth="61.0" stylesheets="@/styleCSS/textField.css" />
+      <ComboBox fx:id="chosBxAccuracyAP" layoutX="255.0" layoutY="76.0" prefHeight="25.0" prefWidth="100.0" stylesheets="@/styleCSS/comboBox.css" />
+      <TextField fx:id="txtFldAccuracyAP" layoutX="255.0" layoutY="76.0" prefHeight="26.0" prefWidth="75.0" stylesheets="@/styleCSS/textField.css" />
+      <ComboBox fx:id="chosBxAccuracyRP" layoutX="255.0" layoutY="125.0" prefHeight="25.0" prefWidth="100.0" stylesheets="@/styleCSS/comboBox.css" />
+      <ComboBox fx:id="chosBxCurrent" layoutX="128.0" layoutY="98.0" prefHeight="25.0" prefWidth="85.0" stylesheets="@/styleCSS/comboBox.css" />
+      <ComboBox fx:id="chosBxtypeOfMeasuringElement" layoutX="390.0" layoutY="125.0" prefHeight="25.0" prefWidth="117.0" stylesheets="@/styleCSS/comboBox.css" />
+      <ComboBox fx:id="chosBxFrg" layoutX="128.0" layoutY="131.0" prefHeight="25.0" prefWidth="85.0" stylesheets="@/styleCSS/comboBox.css" />
+      <TextField fx:id="txtFldAccuracyRP" layoutX="254.0" layoutY="125.0" prefHeight="26.0" prefWidth="75.0" stylesheets="@/styleCSS/textField.css" />
+      <TextField fx:id="txtFldCurrent" layoutX="128.0" layoutY="98.0" prefHeight="26.0" prefWidth="61.0" stylesheets="@/styleCSS/textField.css" />
+      <TextField fx:id="txtFldFrg" layoutX="128.0" layoutY="131.0" prefHeight="26.0" prefWidth="61.0" stylesheets="@/styleCSS/textField.css" />
+      <ComboBox fx:id="chosBxTypeMeter" layoutX="390.0" layoutY="76.0" prefHeight="25.0" prefWidth="117.0" stylesheets="@/styleCSS/comboBox.css" />
       <Text fill="WHITE" layoutX="390.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Тип счётчика" />
-      <ComboBox fx:id="chosBxConstantMeterAP" layoutX="543.0" layoutY="76.0" prefHeight="25.0" prefWidth="106.0" />
-      <TextField fx:id="txtFldConstantMeterAP" layoutX="543.0" layoutY="76.0" prefHeight="26.0" prefWidth="85.0" />
-      <ComboBox fx:id="chosBxConstantMeterRP" layoutX="543.0" layoutY="125.0" prefHeight="25.0" prefWidth="106.0" />
-      <TextField fx:id="txtFldConstantMeterRP" layoutX="543.0" layoutY="125.0" prefHeight="26.0" prefWidth="85.0" />
+      <ComboBox fx:id="chosBxConstantMeterAP" layoutX="543.0" layoutY="76.0" prefHeight="25.0" prefWidth="110.0" stylesheets="@/styleCSS/comboBox.css" />
+      <TextField fx:id="txtFldConstantMeterAP" layoutX="543.0" layoutY="76.0" prefHeight="26.0" prefWidth="85.0" stylesheets="@/styleCSS/textField.css" />
+      <ComboBox fx:id="chosBxConstantMeterRP" layoutX="543.0" layoutY="125.0" prefHeight="25.0" prefWidth="110.0" stylesheets="@/styleCSS/comboBox.css" />
+      <TextField fx:id="txtFldConstantMeterRP" layoutX="543.0" layoutY="125.0" prefHeight="26.0" prefWidth="85.0" stylesheets="@/styleCSS/textField.css" />
       <Text fill="WHITE" layoutX="543.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Постоянная А.Э." />
       <Text fill="WHITE" layoutX="543.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Постоянная Р.Э." />
-      <ComboBox fx:id="chosBxMeterManufacturer" layoutX="677.0" layoutY="76.0" prefHeight="25.0" prefWidth="176.0" />
-      <TextField fx:id="txtFldMeterManufacturer" layoutX="677.0" layoutY="76.0" prefHeight="26.0" prefWidth="155.0" />
-      <ComboBox fx:id="chosBxMeterModel" layoutX="677.0" layoutY="125.0" prefHeight="25.0" prefWidth="176.0" />
-      <TextField fx:id="txtFldMeterModel" layoutX="677.0" layoutY="125.0" prefHeight="26.0" prefWidth="155.0" />
+      <ComboBox fx:id="chosBxMeterManufacturer" layoutX="677.0" layoutY="76.0" prefHeight="25.0" prefWidth="180.0" stylesheets="@/styleCSS/comboBox.css" />
+      <TextField fx:id="txtFldMeterManufacturer" layoutX="677.0" layoutY="76.0" prefHeight="26.0" prefWidth="155.0" stylesheets="@/styleCSS/textField.css" />
+      <ComboBox fx:id="chosBxMeterModel" layoutX="677.0" layoutY="125.0" prefHeight="25.0" prefWidth="180.0" stylesheets="@/styleCSS/comboBox.css" />
+      <TextField fx:id="txtFldMeterModel" layoutX="677.0" layoutY="125.0" prefHeight="26.0" prefWidth="155.0" stylesheets="@/styleCSS/textField.css" />
       <Text fill="WHITE" layoutX="677.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Завод изготовитель" />
       <Text fill="WHITE" layoutX="677.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Модель счётчика" />
-      <ToggleButton fx:id="tglBtnSetPatemeters" layoutX="707.0" layoutY="189.0" mnemonicParsing="false" onAction="#setParametersAction" prefHeight="25.0" prefWidth="146.0" text="Установить параметры" />
-      <CheckBox fx:id="circutChkBx" layoutX="518.0" layoutY="193.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefWidth="129.0" text="Две токовые цепи" textFill="WHITE" />
+      <ToggleButton id="defaultYellow" fx:id="tglBtnSetPatemeters" layoutX="707.0" layoutY="189.0" mnemonicParsing="false" onAction="#setParametersAction" prefHeight="25.0" prefWidth="146.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Установить параметры" />
+      <CheckBox fx:id="circutChkBx" layoutX="518.0" layoutY="193.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefWidth="129.0" stylesheets="@/styleCSS/checkBox.css" text="Две токовые цепи" textFill="WHITE" />
    </children>
 </AnchorPane>

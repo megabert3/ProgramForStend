@@ -3,21 +3,18 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="723.0" prefWidth="1239.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.ResultsMetersController">
    <children>
       <Pane prefHeight="140.0" prefWidth="1239.0" style="-fx-background-color: #393939;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <Pane layoutX="688.0" layoutY="667.0" prefHeight="42.0" prefWidth="536.0">
-         <children>
-            <Button fx:id="btnEdit" layoutX="386.0" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="150.0" stylesheets="@../styleCSS/buttonStyle.css" text="Редактировать" />
-            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="150.0" stylesheets="@../styleCSS/buttonStyle.css" text="Удалить" />
-            <Button fx:id="btnPrintResult" layoutX="176.0" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="150.0" stylesheets="@../styleCSS/buttonStyle.css" text="Отчёт" />
-            <Button id="button" fx:id="btnDrirectoryChooser" layoutX="326.0" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="42.0" prefWidth="36.0" stylesheets="@../styleCSS/buttonStyle.css" />
-         </children>
-      </Pane>
-      <TableView fx:id="tabViewResults" editable="true" layoutX="14.0" layoutY="47.0" prefHeight="600.0" prefWidth="1210.0" stylesheets="@../styleCSS/tableViewStyle.css" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="47.0">
+      <TableView fx:id="tabViewResults" editable="true" layoutX="14.0" layoutY="47.0" prefHeight="600.0" prefWidth="1210.0" stylesheets="@../styleCSS/tableViewStyle.css" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="47.0">
         <columns>
             <TableColumn fx:id="tabColPosition" editable="false" prefWidth="56.0" sortable="false" text="Позиция" />
             <TableColumn fx:id="tabColSerNo" prefWidth="200.0" sortable="false" text="Серийный номер" />
@@ -65,5 +62,54 @@
 
               </columns>
       </TableView>
+      <GridPane layoutX="677.0" layoutY="659.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="677.0" AnchorPane.rightAnchor="15.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="10.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="35.0" minWidth="10.0" prefWidth="25.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="2.0" minWidth="2.0" prefWidth="2.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="35.0" minWidth="10.0" prefWidth="35.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="35.0" minWidth="25.0" prefWidth="25.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="45.0" prefWidth="150.0" stylesheets="@../styleCSS/buttonStyle.css" text="Удалить" GridPane.columnIndex="1">
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/resultFrame/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="btnPrintResult" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="45.0" prefWidth="150.0" stylesheets="@../styleCSS/buttonStyle.css" text="Отчёт" GridPane.columnIndex="3">
+               <graphic>
+                  <ImageView fitHeight="33.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/resultFrame/report.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button id="button" fx:id="btnDrirectoryChooser" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="45.0" prefWidth="35.0" stylesheets="@../styleCSS/buttonStyle.css" GridPane.columnIndex="5">
+               <graphic>
+                  <ImageView fitHeight="21.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/resultFrame/link.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#editDeleteAction" prefHeight="45.0" prefWidth="182.0" stylesheets="@../styleCSS/buttonStyle.css" text="Редактировать" GridPane.columnIndex="7">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/resultFrame/edit.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+         </children>
+      </GridPane>
    </children>
 </AnchorPane>

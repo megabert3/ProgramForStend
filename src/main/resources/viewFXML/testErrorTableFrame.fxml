@@ -7,6 +7,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -48,10 +50,10 @@
             <Pane fx:id="paneErrors" style="-fx-background-color: #6A6A6A;" />
         </items>
       </SplitPane>
-      <ToggleButton fx:id="refMeterParam" layoutX="1119.0" layoutY="8.0" mnemonicParsing="false" onAction="#refMeterParamAction" prefHeight="25.0" prefWidth="117.0" stylesheets="@../styleCSS/testErrorTableFrame/toglBtn.css" text="Эталоный счётчик" AnchorPane.rightAnchor="41.0" AnchorPane.topAnchor="8.0" />
+      <ToggleButton fx:id="refMeterParam" layoutX="1116.0" layoutY="8.0" mnemonicParsing="false" onAction="#refMeterParamAction" prefHeight="25.0" prefWidth="120.0" stylesheets="@../styleCSS/testErrorTableFrame/toglBtn.css" text="Эталоный счётчик" AnchorPane.rightAnchor="41.0" AnchorPane.topAnchor="8.0" />
       <Pane fx:id="checBoxePane" layoutX="36.0" layoutY="36.0" maxHeight="25.0" maxWidth="30.0" minHeight="25.0" minWidth="30.0" prefHeight="25.0" prefWidth="30.0">
          <children>
-            <CheckBox fx:id="checkBoxDisableAll" layoutX="7.0" layoutY="4.0" mnemonicParsing="false" onAction="#checBoxAllDisAction" stylesheets="@../styleCSS/testParameterFrame/checkBox.css" />
+            <CheckBox fx:id="checkBoxDisableAll" layoutX="7.0" layoutY="4.0" mnemonicParsing="false" onAction="#checBoxAllDisAction" stylesheets="@../styleCSS/checkBox.css" />
          </children>
       </Pane>
       <GridPane layoutX="1016.0" layoutY="765.0" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="1016.0" AnchorPane.rightAnchor="41.0">
@@ -65,8 +67,22 @@
           <RowConstraints minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#actionEventSaveExit" prefHeight="70.0" prefWidth="100.0" stylesheets="@../styleCSS/testErrorTableFrame/buttonStyle.css" text="Сохранить" GridPane.columnIndex="1" />
-            <Button fx:id="btnExit" mnemonicParsing="false" onAction="#actionEventSaveExit" prefHeight="70.0" prefWidth="100.0" stylesheets="@../styleCSS/testErrorTableFrame/buttonStyle.css" text="Выйти" GridPane.columnIndex="3" />
+            <Button fx:id="btnSave" contentDisplay="TOP" mnemonicParsing="false" onAction="#actionEventSaveExit" prefHeight="70.0" prefWidth="100.0" stylesheets="@../styleCSS/testErrorTableFrame/buttonStyle.css" text="Сохранить" GridPane.columnIndex="1">
+               <graphic>
+                  <ImageView fitHeight="42.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/testErrorFrame/save.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="btnExit" contentDisplay="TOP" mnemonicParsing="false" onAction="#actionEventSaveExit" prefHeight="70.0" prefWidth="100.0" stylesheets="@../styleCSS/testErrorTableFrame/buttonStyle.css" text="Выйти" GridPane.columnIndex="3">
+               <graphic>
+                  <ImageView fitHeight="42.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/testErrorFrame/exit.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
          </children>
       </GridPane>
       <AnchorPane fx:id="buttonPane" layoutX="527.0" layoutY="765.0" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="527.0" AnchorPane.rightAnchor="278.0">
@@ -87,10 +103,38 @@
                 <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ToggleButton fx:id="tglBtnAuto" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" stylesheets="@../styleCSS/testErrorTableFrame/toglBtn.css" text="Автомати ческий" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" />
-                  <ToggleButton fx:id="tglBtnManualMode" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" stylesheets="@../styleCSS/testErrorTableFrame/toglBtn.css" text="Ручной режим" GridPane.columnIndex="3" />
-                  <ToggleButton fx:id="tglBtnUnom" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" stylesheets="@../styleCSS/testErrorTableFrame/toglBtn.css" text="Напряжение" GridPane.columnIndex="5" />
-                  <Button id="buttonRed" fx:id="btnStop" mnemonicParsing="false" prefHeight="70.0" prefWidth="108.0" stylesheets="@../styleCSS/testErrorTableFrame/buttonStyle.css" text="Остановка теста" GridPane.columnIndex="7" />
+                  <ToggleButton fx:id="tglBtnAuto" contentDisplay="TOP" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" stylesheets="@../styleCSS/testErrorTableFrame/toglBtn.css" text="Автоматический" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1">
+                     <graphic>
+                        <ImageView fitHeight="42.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/testErrorFrame/start.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></ToggleButton>
+                  <ToggleButton fx:id="tglBtnManualMode" contentDisplay="TOP" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" stylesheets="@../styleCSS/testErrorTableFrame/toglBtn.css" text="Ручной режим" GridPane.columnIndex="3">
+                     <graphic>
+                        <ImageView fitHeight="42.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/testErrorFrame/restart.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></ToggleButton>
+                  <ToggleButton fx:id="tglBtnUnom" contentDisplay="TOP" mnemonicParsing="false" onAction="#actionEventTestControl" prefHeight="70.0" prefWidth="108.0" stylesheets="@../styleCSS/testErrorTableFrame/toglBtn.css" text="Напряжение" GridPane.columnIndex="5">
+                     <graphic>
+                        <ImageView fitHeight="42.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/testErrorFrame/voltage_2.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></ToggleButton>
+                  <Button id="buttonRed" fx:id="btnStop" contentDisplay="TOP" mnemonicParsing="false" prefHeight="70.0" prefWidth="108.0" stylesheets="@../styleCSS/testErrorTableFrame/buttonStyle.css" text="Остановка теста" GridPane.columnIndex="7">
+                     <graphic>
+                        <ImageView fitHeight="42.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/testErrorFrame/stop_1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
                </children>
             </GridPane>
          </children>
