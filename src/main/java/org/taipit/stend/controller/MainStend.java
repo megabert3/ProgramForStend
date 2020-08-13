@@ -1,23 +1,52 @@
 package org.taipit.stend.controller;
 
-import javax.crypto.*;
-import javax.xml.bind.DatatypeConverter;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import org.taipit.stend.model.stend.StendDLLCommands;
+import org.taipit.stend.model.stend.ThreePhaseStend;
+import sun.awt.windows.ThemeReader;
+
+import java.math.BigDecimal;
+
 
 public class MainStend {
 
-    public static void main(String[] args) throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException {
-        try {
-            MessageDigest digester = MessageDigest.getInstance("SHA-512");
-            byte[] input = "%32342  DSAFJH ,IO'P[Secret string".getBytes();
-            byte[] digest = digester.digest(input);
-            System.out.println(DatatypeConverter.printHexBinary("%32342  DSAFJH ,IO'P[Secret string".getBytes()));
-            String str = DatatypeConverter.printHexBinary(digest);
-            System.out.println(str);
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(e);
+    public static void main(String[] args) throws InterruptedException {
+
+        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
+
+        int channelFlag = 1;
+
+        stendDLLCommands.setReviseMode(1);
+
+        stendDLLCommands.getUIWithPhase(1, 230, 0, 0, 0, 0,
+                100, 100, 100, 0, "H", "1.0");
+
+        Thread.sleep(5000);
+
+        if (!stendDLLCommands.setRefClock(1)) {
+            System.out.println("Нет блока ТХЧ");
         }
+
+        for (int i = 1; i <= 3; i++) {
+            stendDLLCommands.setPulseChannel(i, channelFlag);
+        }
+
+        for (int i = 1; i <= 3; i++) {
+            stendDLLCommands.clockErrorStart(i, 1, 10);
+        }
+
+        int i = 0;
+
+        while (i < 160) {
+
+            for (int j = 1; j <= 3; j++) {
+                System.out.println(stendDLLCommands.clockErrorRead(1, 1, j));
+            }
+
+            i++;
+            Thread.sleep(300);
+        }
+
+        stendDLLCommands.errorClear();
+        stendDLLCommands.powerOf();
     }
 }

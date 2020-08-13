@@ -291,11 +291,6 @@ public class TestErrorTableFrameController {
 
         selectedCommand = tabViewTestPoints.getSelectionModel().getSelectedItems();
 
-//        String styleCommandTableView = getClass().getClassLoader().getResource("styleCSS/testErrorTableFrame/tableViewCommands.css").toString();
-//        if (styleCommandTableView != null) {
-//            tabViewTestPoints.getStylesheets().add(styleCommandTableView);
-//        }
-
         blockBtns.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {

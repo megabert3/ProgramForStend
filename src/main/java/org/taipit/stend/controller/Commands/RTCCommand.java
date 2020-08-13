@@ -7,6 +7,9 @@ import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrame
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class RTCCommand implements Commands, Serializable, Cloneable {
@@ -52,7 +55,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
     //Напряжение на фазе C
     private double voltPerC;
 
-    private double voltPer;
+    private double voltPer = 100;
 
     //Процен от тока
     private double currPer;
@@ -100,7 +103,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
         this.countResultTest = countResultTest;
         this.errorType = errorType;
         this.errorForFalseTest = errorForFalseTest;
-        this.channelFlag = channelFlag;
+        this.channelFlagForSave = channelFlag;
     }
 
     @Override
@@ -108,8 +111,6 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
-
-        int ErrorCommand = 1;
 
         channelFlag = 4;
 
@@ -135,6 +136,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
+        //Время стабилизации
         Thread.sleep(5000);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
@@ -151,12 +153,12 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        for (Meter meter : meterList) {
-            stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC);
-        }
+        //Преобразую время в миллисекунды
+        BigDecimal timeTestInMls = new BigDecimal((pulseForRTC * freg) * 1000).setScale(0, BigDecimal.ROUND_UP);
 
         int count = 0;
         Meter.RTCResult rtcCommand;
+        String resultStr;
         double result;
 
         while (count < countResultTest) {
@@ -165,7 +167,11 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                 throw new InterruptedException();
             }
 
-            Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 100));
+            for (Meter meter : meterList) {
+                stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC);
+            }
+
+            Thread.sleep(timeTestInMls.longValue() + 20);
 
             for (Meter meter : meterList) {
 
@@ -173,22 +179,30 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                     throw new InterruptedException();
                 }
 
-                try {
-                    rtcCommand = (Meter.RTCResult) meter.returnResultCommand(index, channelFlag);
+                rtcCommand = (Meter.RTCResult) meter.returnResultCommand(index, channelFlagForSave);
 
+                resultStr = stendDLLCommands.clockErrorRead(freg, errorType, meter.getId());
+
+                double doublr = Double.parseDouble(resultStr) - freg;
+
+                String string = Double.toString(doublr);
+                System.out.println(string);
+                System.out.println(Double.toString(doublr));
+
+                if (!resultStr.isEmpty()) {
                     if (errorType == 0) {
 
-                        result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId())) - freg;
+                        result = Double.parseDouble(resultStr) - freg;
 
                         if (result > errorForFalseTest || result < -errorForFalseTest) {
-                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, false);
+                            rtcCommand.setResultRTCCommand(Double.toString(result), count, false);
                         } else {
-                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, true);
+                            rtcCommand.setResultRTCCommand(Double.toString(result), count, true);
                         }
 
                     } else if (errorType == 1){
 
-                        result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId()));
+                        result = Double.parseDouble(resultStr);
 
                         if (result > errorForFalseTest || result < -errorForFalseTest) {
                             rtcCommand.setResultRTCCommand(String.valueOf(result), count, false);
@@ -197,9 +211,6 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                         }
 
                     }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                    System.out.println("Пустая строчка");
                 }
             }
             count++;
