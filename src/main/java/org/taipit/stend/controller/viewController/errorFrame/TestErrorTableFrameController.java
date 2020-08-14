@@ -2134,11 +2134,11 @@ public class TestErrorTableFrameController {
 
                                     } else if (firstSymbol == 'P') {
                                         setText(item.substring(1));
-                                        setTextFill(Color.BLUE);
+                                        setTextFill(Color.rgb(0, 105, 201));
 
                                     } else if (firstSymbol == 'F') {
                                         setText(item.substring(1));
-                                        setTextFill(Color.RED);
+                                        setTextFill(Color.rgb(245, 0, 0));
                                     }
                                 }
                             }

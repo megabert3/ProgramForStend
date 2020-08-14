@@ -6,9 +6,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="157.0" prefWidth="390.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.YesOrNoFrameController">
+<AnchorPane maxHeight="157.0" maxWidth="390.0" minHeight="157.0" minWidth="390.0" prefHeight="157.0" prefWidth="390.0" style="-fx-background-color: #393939;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.YesOrNoFrameController">
    <children>
-      <Button fx:id="yesBtn" layoutX="31.0" layoutY="96.0" mnemonicParsing="false" onAction="#yesOrNoAction" prefHeight="38.0" prefWidth="114.0" stylesheets="@../styleCSS/buttonStyle.css" text="Да">
+      <Button id="yes" fx:id="yesBtn" layoutX="31.0" layoutY="96.0" mnemonicParsing="false" onAction="#yesOrNoAction" prefHeight="38.0" prefWidth="114.0" stylesheets="@../styleCSS/yesOrNoFrame/buttonStyle.css" text="Да">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -17,8 +17,8 @@
             </ImageView>
          </graphic>
       </Button>
-      <Label fx:id="questionTxt" layoutX="184.0" layoutY="46.0" text="Сохранить параметры?" textFill="WHITE" />
-      <Button fx:id="noBtn" layoutX="248.0" layoutY="96.0" mnemonicParsing="false" onAction="#yesOrNoAction" prefHeight="38.0" prefWidth="114.0" stylesheets="@../styleCSS/buttonStyle.css" text="Нет" AnchorPane.rightAnchor="28.0">
+      <Label fx:id="questionTxt" layoutX="141.0" layoutY="46.0" text="Сохранить параметры?" textFill="WHITE" />
+      <Button id="no" fx:id="noBtn" layoutX="248.0" layoutY="96.0" mnemonicParsing="false" onAction="#yesOrNoAction" prefHeight="38.0" prefWidth="114.0" stylesheets="@../styleCSS/yesOrNoFrame/buttonStyle.css" text="Нет" AnchorPane.rightAnchor="28.0">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -27,6 +27,9 @@
             </ImageView>
          </graphic>
       </Button>
-      <ImageView fitHeight="84.0" fitWidth="92.0" layoutX="42.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="69.0" fitWidth="82.0" layoutX="54.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/yesOrNoFrame/question.png" />
+         </image></ImageView>
    </children>
 </AnchorPane>

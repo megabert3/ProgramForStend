@@ -8,9 +8,8 @@ import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.util.List;
+import java.util.Locale;
 
 public class RTCCommand implements Commands, Serializable, Cloneable {
 
@@ -171,7 +170,9 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                 stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC);
             }
 
-            Thread.sleep(timeTestInMls.longValue() + 20);
+            System.out.println(timeTestInMls.longValue() + 500);
+
+            Thread.sleep(timeTestInMls.longValue() + 500);
 
             for (Meter meter : meterList) {
 
@@ -183,21 +184,15 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
                 resultStr = stendDLLCommands.clockErrorRead(freg, errorType, meter.getId());
 
-                double doublr = Double.parseDouble(resultStr) - freg;
-
-                String string = Double.toString(doublr);
-                System.out.println(string);
-                System.out.println(Double.toString(doublr));
-
                 if (!resultStr.isEmpty()) {
                     if (errorType == 0) {
 
                         result = Double.parseDouble(resultStr) - freg;
 
                         if (result > errorForFalseTest || result < -errorForFalseTest) {
-                            rtcCommand.setResultRTCCommand(Double.toString(result), count, false);
+                            rtcCommand.setResultRTCCommand(String.format(Locale.ROOT,"%.7f", result), count, false);
                         } else {
-                            rtcCommand.setResultRTCCommand(Double.toString(result), count, true);
+                            rtcCommand.setResultRTCCommand(String.format(Locale.ROOT, "%.7f", result), count, true);
                         }
 
                     } else if (errorType == 1){
@@ -205,9 +200,9 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                         result = Double.parseDouble(resultStr);
 
                         if (result > errorForFalseTest || result < -errorForFalseTest) {
-                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, false);
+                            rtcCommand.setResultRTCCommand(String.format(Locale.ROOT, "%.2f", result), count, false);
                         } else {
-                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, true);
+                            rtcCommand.setResultRTCCommand(String.format(Locale.ROOT, "%.2f", result), count, true);
                         }
 
                     }
@@ -225,21 +220,34 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        if (stendDLLCommands instanceof ThreePhaseStend) {
-            if (!threePhaseCommand) {
-                iABC = "C";
-            }
-        }
+        channelFlag = 4;
 
         stendDLLCommands.setReviseMode(1);
 
-        if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, 0.0, 0, 0,
-                100.0, 0.0, iABC, "1.0")) throw new ConnectForStendExeption();
+        if (stendDLLCommands instanceof ThreePhaseStend) {
+            if (!threePhaseCommand) {
+                iABC = "C";
+                voltPerC = voltPer;
+                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            } else {
+                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            }
+        } else {
+            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+        }
 
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
+        //Время стабилизации
         Thread.sleep(5000);
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -253,17 +261,27 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        for (Meter meter : meterList) {
-            stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC);
-        }
+        //Преобразую время в миллисекунды
+        BigDecimal timeTestInMls = new BigDecimal((pulseForRTC * freg) * 1000).setScale(0, BigDecimal.ROUND_UP);
 
         int count = 0;
         Meter.RTCResult rtcCommand;
+        String resultStr;
         double result;
 
-        while (!Thread.currentThread().isInterrupted()) {
+        while (Thread.currentThread().isAlive()) {
 
-            Thread.sleep((pulseForRTC * 1000) + (pulseForRTC * 200));
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
+            for (Meter meter : meterList) {
+                stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC);
+            }
+
+            System.out.println(timeTestInMls.longValue() + 500);
+
+            Thread.sleep(timeTestInMls.longValue() + 500);
 
             for (Meter meter : meterList) {
 
@@ -271,42 +289,39 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                     throw new InterruptedException();
                 }
 
-                try {
-                    rtcCommand = (Meter.RTCResult) meter.returnResultCommand(index, channelFlag);
+                rtcCommand = (Meter.RTCResult) meter.returnResultCommand(index, channelFlagForSave);
 
+                resultStr = stendDLLCommands.clockErrorRead(freg, errorType, meter.getId());
+
+                if (!resultStr.isEmpty()) {
                     if (errorType == 0) {
 
-                        result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId())) - freg;
+                        result = Double.parseDouble(resultStr) - freg;
 
                         if (result > errorForFalseTest || result < -errorForFalseTest) {
-                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, false);
+                            rtcCommand.setResultRTCCommand(String.format(Locale.ROOT,"%.7f", result), count, false);
                         } else {
-                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, true);
+                            rtcCommand.setResultRTCCommand(String.format(Locale.ROOT, "%.7f", result), count, true);
                         }
 
                     } else if (errorType == 1){
 
-                        result = Double.parseDouble(stendDLLCommands.clockErrorRead(freg, errorType, meter.getId()));
+                        result = Double.parseDouble(resultStr);
 
                         if (result > errorForFalseTest || result < -errorForFalseTest) {
-                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, false);
+                            rtcCommand.setResultRTCCommand(String.format(Locale.ROOT, "%.2f", result), count, false);
                         } else {
-                            rtcCommand.setResultRTCCommand(String.valueOf(result), count, true);
+                            rtcCommand.setResultRTCCommand(String.format(Locale.ROOT, "%.2f", result), count, true);
                         }
 
                     }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                    System.out.println("Пустая строчка");
                 }
             }
-            count++;
         }
 
         if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
 
         if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
-
     }
 
     public void setIndex(int index) {

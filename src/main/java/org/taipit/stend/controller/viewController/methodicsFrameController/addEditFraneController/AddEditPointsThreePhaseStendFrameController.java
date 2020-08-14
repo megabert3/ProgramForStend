@@ -2287,7 +2287,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldCRPUProcAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldCRPUProcAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPAPPls.setSelected(false);
                     return;
                 }
@@ -2307,7 +2307,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (mins > 59) {
                         ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                        txtFieldTimeCRPAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeCRPAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnCRPAPPls.setSelected(false);
                         return;
                     }
@@ -2317,7 +2317,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (sek > 59) {
                         ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                        txtFieldTimeCRPAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeCRPAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnCRPAPPls.setSelected(false);
                         return;
                     }
@@ -2327,7 +2327,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldTimeCRPAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldTimeCRPAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPAPPls.setSelected(false);
                     return;
                 }
@@ -2339,7 +2339,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldCRPAmtImpAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldCRPAmtImpAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPAPPls.setSelected(false);
                     return;
                 }
@@ -2415,7 +2415,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldCRPUProcAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldCRPUProcAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPAPMns.setSelected(false);
                     return;
                 }
@@ -2435,7 +2435,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (mins > 59) {
                         ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                        txtFieldTimeCRPAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeCRPAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnCRPAPMns.setSelected(false);
                         return;
                     }
@@ -2445,7 +2445,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (sek > 59) {
                         ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                        txtFieldTimeCRPAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeCRPAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnCRPAPMns.setSelected(false);
                         return;
                     }
@@ -2455,7 +2455,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldTimeCRPAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldTimeCRPAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPAPMns.setSelected(false);
                     return;
                 }
@@ -2466,7 +2466,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldCRPAmtImpAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldCRPAmtImpAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPAPMns.setSelected(false);
                     return;
                 }
@@ -2543,7 +2543,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldCRPUProcRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldCRPUProcRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPRPPls.setSelected(false);
                     return;
                 }
@@ -2563,7 +2563,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (mins > 59) {
                         ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                        txtFieldTimeCRPRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeCRPRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnCRPRPPls.setSelected(false);
                         return;
                     }
@@ -2573,7 +2573,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (sek > 59) {
                         ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                        txtFieldTimeCRPRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeCRPRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnCRPRPPls.setSelected(false);
                         return;
                     }
@@ -2583,7 +2583,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldTimeCRPRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldTimeCRPRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPRPPls.setSelected(false);
                     return;
                 }
@@ -2594,7 +2594,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldCRPAmtImpRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldCRPAmtImpRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPRPPls.setSelected(false);
                     return;
                 }
@@ -2670,7 +2670,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldCRPUProcRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldCRPUProcRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPRPMns.setSelected(false);
                     return;
                 }
@@ -2690,7 +2690,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (mins > 59) {
                         ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                        txtFieldTimeCRPRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeCRPRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnCRPRPMns.setSelected(false);
                         return;
                     }
@@ -2700,7 +2700,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (sek > 59) {
                         ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                        txtFieldTimeCRPRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeCRPRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnCRPRPMns.setSelected(false);
                         return;
                     }
@@ -2710,7 +2710,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldTimeCRPRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldTimeCRPRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPRPMns.setSelected(false);
                     return;
                 }
@@ -2721,7 +2721,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldCRPAmtImpRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldCRPAmtImpRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnCRPRPMns.setSelected(false);
                     return;
                 }
@@ -2799,7 +2799,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldSTAIProcAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldSTAIProcAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTAAPPls.setSelected(false);
                     return;
                 }
@@ -2818,7 +2818,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (mins < 0) throw new NumberFormatException();
                     if (mins > 59) {
                         ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                        txtFieldTimeSRAAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeSRAAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnSTAAPPls.setSelected(false);
                         return;
                     }
@@ -2827,7 +2827,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (sek < 0) throw new NumberFormatException();
                     if (sek > 59) {
                         ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                        txtFieldTimeSRAAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeSRAAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnSTAAPPls.setSelected(false);
                         return;
                     }
@@ -2837,7 +2837,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldTimeSRAAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldTimeSRAAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTAAPPls.setSelected(false);
                     return;
                 }
@@ -2848,7 +2848,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldSTAAmtImpAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldSTAAmtImpAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTAAPPls.setSelected(false);
                     return;
                 }
@@ -2925,7 +2925,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldSTAIProcAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldSTAIProcAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTAAPMns.setSelected(false);
                     return;
                 }
@@ -2944,7 +2944,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (mins < 0) throw new NumberFormatException();
                     if (mins > 59) {
                         ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                        txtFieldTimeSRAAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeSRAAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnSTAAPMns.setSelected(false);
                         return;
                     }
@@ -2953,7 +2953,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (sek < 0) throw new NumberFormatException();
                     if (sek > 59) {
                         ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                        txtFieldTimeSRAAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeSRAAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnSTAAPMns.setSelected(false);
                         return;
                     }
@@ -2963,7 +2963,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldTimeSRAAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldTimeSRAAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTAAPMns.setSelected(false);
                     return;
                 }
@@ -2974,7 +2974,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldSTAAmtImpAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldSTAAmtImpAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTAAPMns.setSelected(false);
                     return;
                 }
@@ -3049,7 +3049,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldSTAIProcRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldSTAIProcRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTARPPls.setSelected(false);
                     return;
                 }
@@ -3068,7 +3068,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (mins < 0) throw new NumberFormatException();
                     if (mins > 59) {
                         ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                        txtFieldTimeSRARPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeSRARPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnSTARPPls.setSelected(false);
                         return;
                     }
@@ -3077,7 +3077,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (sek < 0) throw new NumberFormatException();
                     if (sek > 59) {
                         ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                        txtFieldTimeSRARPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeSRARPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnSTARPPls.setSelected(false);
                         return;
                     }
@@ -3087,7 +3087,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldTimeSRARPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldTimeSRARPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTARPPls.setSelected(false);
                     return;
                 }
@@ -3098,7 +3098,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldSTAAmtImpRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldSTAAmtImpRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTARPPls.setSelected(false);
                     return;
                 }
@@ -3173,7 +3173,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldSTAIProcRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldSTAIProcRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTARPMns.setSelected(false);
                     return;
                 }
@@ -3192,7 +3192,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (mins < 0) throw new NumberFormatException();
                     if (mins > 59) {
                         ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                        txtFieldTimeSRARPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeSRARPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnSTARPMns.setSelected(false);
                         return;
                     }
@@ -3201,7 +3201,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (sek < 0) throw new NumberFormatException();
                     if (sek > 59) {
                         ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                        txtFieldTimeSRARPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldTimeSRARPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnSTARPMns.setSelected(false);
                         return;
                     }
@@ -3211,7 +3211,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldTimeSRARPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldTimeSRARPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTARPMns.setSelected(false);
                     return;
                 }
@@ -3222,7 +3222,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldSTAAmtImpRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldSTAAmtImpRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnSTARPMns.setSelected(false);
                     return;
                 }
@@ -3301,7 +3301,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldRngEAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldRngEAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPPls.setSelected(false);
                     return;
                 }
@@ -3312,7 +3312,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCFrqAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCFrqAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPPls.setSelected(false);
                     return;
                 }
@@ -3323,7 +3323,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCAmtMshAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCAmtMshAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPPls.setSelected(false);
                     return;
                 }
@@ -3334,7 +3334,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCTimeMshAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCTimeMshAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPPls.setSelected(false);
                     return;
                 }
@@ -3398,7 +3398,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldRngEAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldRngEAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPMns.setSelected(false);
                     return;
                 }
@@ -3409,7 +3409,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCFrqAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCFrqAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPMns.setSelected(false);
                     return;
                 }
@@ -3420,7 +3420,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCAmtMshAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCAmtMshAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPMns.setSelected(false);
                     return;
                 }
@@ -3431,7 +3431,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCTimeMshAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCTimeMshAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCAPMns.setSelected(false);
                     return;
                 }
@@ -3495,7 +3495,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldRngERPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldRngERPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPPls.setSelected(false);
                     return;
                 }
@@ -3506,7 +3506,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCFrqRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCFrqRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPPls.setSelected(false);
                     return;
                 }
@@ -3517,7 +3517,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCAmtMshRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCAmtMshRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPPls.setSelected(false);
                     return;
                 }
@@ -3528,7 +3528,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCTimeMshRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCTimeMshRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPPls.setSelected(false);
                     return;
                 }
@@ -3592,7 +3592,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldRngERPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldRngERPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPMns.setSelected(false);
                     return;
                 }
@@ -3603,7 +3603,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCFrqRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCFrqRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPMns.setSelected(false);
                     return;
                 }
@@ -3614,7 +3614,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCAmtMshRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCAmtMshRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPMns.setSelected(false);
                     return;
                 }
@@ -3625,7 +3625,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFldRTCTimeMshRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFldRTCTimeMshRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnRTCRPMns.setSelected(false);
                     return;
                 }
@@ -3689,7 +3689,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (Uproc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsProcUAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsProcUAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstAPPls.setSelected(false);
                     return;
                 }
@@ -3699,7 +3699,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (IbProc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsProcIAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsProcIAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstAPPls.setSelected(false);
                     return;
                 }
@@ -3709,7 +3709,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (errorRange < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsErAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsErAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstAPPls.setSelected(false);
                     return;
                 }
@@ -3720,7 +3720,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (arrTime.length != 3 || arrTime[0].trim().length() > 2 || arrTime[1].trim().length() > 2 || arrTime[2].trim().length() > 2) {
                         ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
-                        txtFieldConstTimeAPPls.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        txtFieldConstTimeAPPls.setStyle("-fx-border-color: red ;  -fx-focus-color: red ;");
                         addTglBtnConstAPPls.setSelected(false);
                         return;
                     }
@@ -3735,7 +3735,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (mins > 59) {
                             ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                            txtFieldConstTimeAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstAPPls.setSelected(false);
                             return;
                         }
@@ -3745,7 +3745,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (sec > 59) {
                             ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                            txtFieldConstTimeAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstAPPls.setSelected(false);
                             return;
                         }
@@ -3754,14 +3754,14 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (timeTestToMill < 60000) {
                             ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
-                            txtFieldConstTimeAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstAPPls.setSelected(false);
                             return;
                         }
 
                     }catch (NumberFormatException e) {
                         ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
-                        txtFieldConstTimeAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldConstTimeAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstAPPls.setSelected(false);
                         return;
                     }
@@ -3775,14 +3775,14 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         testEnergy = Double.parseDouble(txtFieldEngConstAPPls.getText());
                     }catch (NumberFormatException e) {
                         ConsoleHelper.infoException("Неверные данные");
-                        txtFieldEngConstAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldEngConstAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstAPPls.setSelected(false);
                         return;
                     }
 
                     if (testEnergy < 0.1) {
                         ConsoleHelper.infoException("Неверные данные\nэнергия не должна быть меньше 0.1кВ");
-                        txtFieldEngConstAPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldEngConstAPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstAPPls.setSelected(false);
                         return;
                     }
@@ -3844,7 +3844,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (Uproc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsProcUAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsProcUAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstAPMns.setSelected(false);
                     return;
                 }
@@ -3854,7 +3854,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (IbProc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsProcIAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsProcIAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstAPMns.setSelected(false);
                     return;
                 }
@@ -3864,7 +3864,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (errorRange < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsErAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsErAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstAPMns.setSelected(false);
                     return;
                 }
@@ -3875,7 +3875,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (arrTime.length != 3 || arrTime[0].trim().length() > 2 || arrTime[1].trim().length() > 2 || arrTime[2].trim().length() > 2) {
                         ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
-                        txtFieldConstTimeAPMns.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        txtFieldConstTimeAPMns.setStyle("-fx-border-color: red ;  -fx-focus-color: red ;");
                         addTglBtnConstAPMns.setSelected(false);
                         return;
                     }
@@ -3890,7 +3890,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (mins > 59) {
                             ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                            txtFieldConstTimeAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstAPMns.setSelected(false);
                             return;
                         }
@@ -3900,7 +3900,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (sec > 59) {
                             ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                            txtFieldConstTimeAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstAPMns.setSelected(false);
                             return;
                         }
@@ -3909,14 +3909,14 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (timeTestToMill < 60000) {
                             ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
-                            txtFieldConstTimeAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstAPMns.setSelected(false);
                             return;
                         }
 
                     }catch (NumberFormatException e) {
                         ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
-                        txtFieldConstTimeAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldConstTimeAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstAPMns.setSelected(false);
                         return;
                     }
@@ -3930,14 +3930,14 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         testEnergy = Double.parseDouble(txtFieldEngConstAPMns.getText());
                     } catch (NumberFormatException e) {
                         ConsoleHelper.infoException("Неверные данные");
-                        txtFieldEngConstAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldEngConstAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstAPMns.setSelected(false);
                         return;
                     }
 
                     if (testEnergy < 0.1) {
                         ConsoleHelper.infoException("Неверные данные\nэнергия не должна быть меньше 0.1кВ");
-                        txtFieldEngConstAPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldEngConstAPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstAPMns.setSelected(false);
                         return;
                     }
@@ -3999,7 +3999,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (Uproc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsProcURPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsProcURPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstRPPls.setSelected(false);
                     return;
                 }
@@ -4009,7 +4009,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (IbProc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsProcIRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsProcIRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstRPPls.setSelected(false);
                     return;
                 }
@@ -4019,7 +4019,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (errorRange < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsErRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsErRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstRPPls.setSelected(false);
                     return;
                 }
@@ -4030,7 +4030,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (arrTime.length != 3 || arrTime[0].trim().length() > 2 || arrTime[1].trim().length() > 2 || arrTime[2].trim().length() > 2) {
                         ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
-                        txtFieldConstTimeRPPls.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        txtFieldConstTimeRPPls.setStyle("-fx-border-color: red ;  -fx-focus-color: red ;");
                         addTglBtnConstRPPls.setSelected(false);
                         return;
                     }
@@ -4045,7 +4045,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (mins > 59) {
                             ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                            txtFieldConstTimeRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstRPPls.setSelected(false);
                             return;
                         }
@@ -4055,7 +4055,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (sec > 59) {
                             ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                            txtFieldConstTimeRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstRPPls.setSelected(false);
                             return;
                         }
@@ -4064,14 +4064,14 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (timeTestToMill < 60000) {
                             ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
-                            txtFieldConstTimeRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstRPPls.setSelected(false);
                             return;
                         }
 
                     }catch (NumberFormatException e) {
                         ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
-                        txtFieldConstTimeRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldConstTimeRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstRPPls.setSelected(false);
                         return;
                     }
@@ -4086,14 +4086,14 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         testEnergy = Double.parseDouble(txtFieldEngConstRPPls.getText());
                     }catch (NumberFormatException e) {
                         ConsoleHelper.infoException("Неверные данные");
-                        txtFieldEngConstRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldEngConstRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstRPPls.setSelected(false);
                         return;
                     }
 
                     if (testEnergy < 0.1) {
                         ConsoleHelper.infoException("Неверные данные\nэнергия не должна быть меньше 0.1кВ");
-                        txtFieldEngConstRPPls.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldEngConstRPPls.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstRPPls.setSelected(false);
                         return;
                     }
@@ -4155,7 +4155,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (Uproc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsProcURPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsProcURPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstRPMns.setSelected(false);
                     return;
                 }
@@ -4165,7 +4165,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (IbProc < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsProcIRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsProcIRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstRPMns.setSelected(false);
                     return;
                 }
@@ -4175,7 +4175,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     if (errorRange < 0) throw new NumberFormatException();
                 }catch (NumberFormatException e) {
                     ConsoleHelper.infoException("Неверные данные");
-                    txtFieldConsErRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    txtFieldConsErRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                     addTglBtnConstRPMns.setSelected(false);
                     return;
                 }
@@ -4186,7 +4186,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                     if (arrTime.length != 3 || arrTime[0].trim().length() > 2 || arrTime[1].trim().length() > 2 || arrTime[2].trim().length() > 2) {
                         ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
-                        txtFieldConstTimeRPMns.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                        txtFieldConstTimeRPMns.setStyle("-fx-border-color: red ;  -fx-focus-color: red ;");
                         addTglBtnConstRPMns.setSelected(false);
                         return;
                     }
@@ -4201,7 +4201,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (mins > 59) {
                             ConsoleHelper.infoException("Количество минут не может быть больше 59");
-                            txtFieldConstTimeRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstRPMns.setSelected(false);
                             return;
                         }
@@ -4211,7 +4211,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (sec > 59) {
                             ConsoleHelper.infoException("Количество секунд не может быть больше 59");
-                            txtFieldConstTimeRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstRPMns.setSelected(false);
                             return;
                         }
@@ -4220,14 +4220,14 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
                         if (timeTestToMill < 60000) {
                             ConsoleHelper.infoException("Время теста не должно быть меньше:\n60 секунд");
-                            txtFieldConstTimeRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            txtFieldConstTimeRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                             addTglBtnConstRPMns.setSelected(false);
                             return;
                         }
 
                     }catch (NumberFormatException e) {
                         ConsoleHelper.infoException("Неверные данные\nДолжен быть формат: чч:мм:cc");
-                        txtFieldConstTimeRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldConstTimeRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstRPMns.setSelected(false);
                         return;
                     }
@@ -4241,14 +4241,14 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         testEnergy = Double.parseDouble(txtFieldEngConstRPMns.getText());
                     }catch (NumberFormatException e) {
                         ConsoleHelper.infoException("Неверные данные");
-                        txtFieldEngConstRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldEngConstRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstRPMns.setSelected(false);
                         return;
                     }
 
                     if (testEnergy < 0.1) {
                         ConsoleHelper.infoException("Неверные данные\nэнергия не должна быть меньше 0.1кВ");
-                        txtFieldEngConstRPMns.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        txtFieldEngConstRPMns.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                         addTglBtnConstRPMns.setSelected(false);
                         return;
                     }

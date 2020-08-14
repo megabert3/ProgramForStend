@@ -249,7 +249,7 @@ public class TestParametersFrameController implements Frame {
             }
 
             if (!selectMeter) {
-                ConsoleHelper.infoException("Должен быть выбран хотя бы один счётчик");
+                ConsoleHelper.infoException("Должен быть выбран хотя бы\nодин счётчик");
                 return;
             }
 
@@ -890,6 +890,7 @@ public class TestParametersFrameController implements Frame {
         try {
             for (int i = 0; i < metersList.size(); i++) {
                 metersList.get(i).setSerNoMeter(listNo.get(i));
+                metersList.get(i).setActiveSeat(true);
             }
         }catch (IndexOutOfBoundsException e) {
             e.printStackTrace();

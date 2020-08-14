@@ -100,6 +100,8 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         this.userTimeTest = userTimeTest;
         this.pulseValue = pulseValue;
         this.voltPer = voltPer;
+        this.ratedCurr = 60;
+        this.currPer = 100;
     }
 
     public CreepCommand(boolean threePhaseCommand, boolean gostTest, String name, String id,  int channelFlag) {

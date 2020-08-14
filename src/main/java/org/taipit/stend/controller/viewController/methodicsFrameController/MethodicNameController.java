@@ -85,7 +85,7 @@ public class MethodicNameController {
 
                 }catch (InfoExсeption | CloneNotSupportedException e) {
                     e.printStackTrace();
-                    labelInfo.setText("Методика с таким именем уже существует");
+                    ConsoleHelper.infoException("Методика с таким именем уже существует");
                 }
 
             //Если нажата кнопка "Добавить"
@@ -94,12 +94,7 @@ public class MethodicNameController {
                     name = nameField.getText().trim();
 
                     if (name.isEmpty()) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Поле \"Название методики\" не должно быть пустым");
-                            }
-                        });
+                        ConsoleHelper.infoException("Поле \"Название методики\"\nне должно быть пустым");
                         return;
                     }
 
@@ -170,7 +165,7 @@ public class MethodicNameController {
                     stageMetodicName.close();
 
                 } catch (InfoExсeption e) {
-                    labelInfo.setText("Методика с таким именем уже существует");
+                    ConsoleHelper.infoException("Методика с таким именем уже существует");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.taipit.stend.controller.viewController.ExceptionFrameController;
-import org.taipit.stend.controller.viewController.YesOrNoFrameControllerTEST;
+import org.taipit.stend.controller.viewController.YesOrNoFrameControllerDialog;
 
 import java.io.*;
 import java.util.Properties;
@@ -74,6 +74,32 @@ public class ConsoleHelper {
         });
     }
 
+    public static void infoException(String title, String mess) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/exceptionFrame.fxml"));
+                try {
+                    fxmlLoader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                ExceptionFrameController exceptionFrameController = fxmlLoader.getController();
+                exceptionFrameController.getLabel().setText(mess);
+
+                Parent root = fxmlLoader.getRoot();
+                Stage stage = new Stage();
+                stage.setTitle(title);
+                stage.setScene(new Scene(root));
+                stage.initModality(Modality.APPLICATION_MODAL);
+
+                stage.show();
+            }
+        });
+    }
+
     public static Boolean yesOrNoFrame(String title, String textQuestion, double x, double y) {
 
         yesOrNo = null;
@@ -86,7 +112,7 @@ public class ConsoleHelper {
             e.printStackTrace();
         }
 
-        YesOrNoFrameControllerTEST yesOrNoFrameController = fxmlLoader.getController();
+        YesOrNoFrameControllerDialog yesOrNoFrameController = fxmlLoader.getController();
         yesOrNoFrameController.getQuestionTxt().setText(textQuestion);
         yesOrNoFrameController.getQuestionTxt().setLayoutX(x);
         yesOrNoFrameController.getQuestionTxt().setLayoutY(y);
@@ -113,10 +139,8 @@ public class ConsoleHelper {
             e.printStackTrace();
         }
 
-        YesOrNoFrameControllerTEST yesOrNoFrameController = fxmlLoader.getController();
+        YesOrNoFrameControllerDialog yesOrNoFrameController = fxmlLoader.getController();
         yesOrNoFrameController.getQuestionTxt().setText(textQuestion);
-        yesOrNoFrameController.getQuestionTxt().setLayoutX(165);
-        yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
 
         Parent root = fxmlLoader.getRoot();
         Stage stage = new Stage();

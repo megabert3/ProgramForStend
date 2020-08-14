@@ -5,10 +5,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="150.0" prefWidth="340.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.methodicsFrameController.MethodicNameController">
+<AnchorPane prefHeight="150.0" prefWidth="340.0" style="-fx-background-color: #303030;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.methodicsFrameController.MethodicNameController">
    <children>
-      <TextField fx:id="nameField" layoutX="87.0" layoutY="61.0" prefHeight="29.0" prefWidth="176.0" />
-      <Button fx:id="acceptNameBtn" layoutX="128.0" layoutY="105.0" mnemonicParsing="false" onAction="#actinonForNameFrame" prefHeight="25.0" prefWidth="95.0" text="Принять" />
-      <Label fx:id="labelInfo" layoutX="98.0" layoutY="25.0" text="Введите название методики" />
+      <TextField fx:id="nameField" layoutX="87.0" layoutY="61.0" prefHeight="29.0" prefWidth="176.0" stylesheets="@/styleCSS/textField.css" />
+      <Button fx:id="acceptNameBtn" layoutX="128.0" layoutY="105.0" mnemonicParsing="false" onAction="#actinonForNameFrame" prefHeight="25.0" prefWidth="95.0" stylesheets="@/styleCSS/buttonStyle.css" text="Принять" />
+      <Label fx:id="labelInfo" layoutX="98.0" layoutY="25.0" text="Введите название методики" textFill="WHITE" />
    </children>
 </AnchorPane>

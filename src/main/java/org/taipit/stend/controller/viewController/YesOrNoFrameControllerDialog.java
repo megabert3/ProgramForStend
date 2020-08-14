@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.taipit.stend.helper.ConsoleHelper;
 
-public class YesOrNoFrameControllerTEST {
+public class YesOrNoFrameControllerDialog {
 
     @FXML
     private Button yesBtn;

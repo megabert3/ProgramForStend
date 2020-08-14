@@ -195,6 +195,7 @@ public class PropertiesController implements Initializable, Frame {
             properties.setProperty("param.dateLastVerification", txtFldDateLastVerification.getText());
             properties.setProperty("param.dateNextVerification", txtFldDateNextVerification.getText());
             ConsoleHelper.saveProperties();
+            ConsoleHelper.infoException("Информация", "Параметры успешно сохранены");
         }
     }
 

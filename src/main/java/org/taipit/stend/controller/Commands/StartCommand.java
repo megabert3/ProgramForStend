@@ -171,7 +171,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
         setDefTestResults(channelFlag, index);
 
-        stendDLLCommands.setReviseMode(1);
+        //stendDLLCommands.setReviseMode(1);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {

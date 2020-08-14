@@ -30,7 +30,6 @@
 }
 
 .table-view .table-cell{
-    -fx-text-fill: black;
 }
 
 .table-row-cell{
@@ -42,14 +41,13 @@
 /*Цвет выбранной строки*/
 .table-row-cell: selected {
     /*-fx-background-color: #0096C9;*/
-    -fx-background-color: #8A8F93;
+    -fx-background-color: #B5B7BA;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
 }
 
 /*Цвет текста выбранной строки*/
 .table-row-cell: selected .text {
-    -fx-fill: white;
 }
 
 /*Текстовое поле при редактировании*/

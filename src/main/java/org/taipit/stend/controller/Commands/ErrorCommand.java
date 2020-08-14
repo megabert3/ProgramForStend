@@ -195,7 +195,9 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         }
 
         stendDLLCommands.setReviseMode(1);
+        stendDLLCommands.setRefClock(0);
 
+        long time = System.currentTimeMillis();
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
                 iABC = "C";
@@ -218,10 +220,11 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             }
         }
 
+        System.out.println(System.currentTimeMillis() - time);
+
         //Разблокирую интерфейc кнопок
         TestErrorTableFrameController.blockBtns.setValue(false);
 
-        System.out.println("После команды");
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
@@ -350,6 +353,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         }
 
         stendDLLCommands.setReviseMode(1);
+        stendDLLCommands.setRefClock(0);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
