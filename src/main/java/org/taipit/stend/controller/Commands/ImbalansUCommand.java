@@ -474,6 +474,48 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         this.phase = phase;
     }
 
+    public double getVoltPer() {
+        return voltPer;
+    }
+
+    public double getCurrPer() {
+        return currPer;
+    }
+
+    @Override
+    public double getRatedVolt() {
+        return ratedVolt;
+    }
+
+    @Override
+    public double getVoltPerA() {
+        return voltPerA;
+    }
+
+    @Override
+    public double getVoltPerB() {
+        return voltPerB;
+    }
+
+    @Override
+    public double getVoltPerC() {
+        return voltPerC;
+    }
+
+    @Override
+    public double getRatedCurr() {
+        return ratedCurr;
+    }
+
+    @Override
+    public String getiABC() {
+        return iABC;
+    }
+
+    public boolean isThreePhaseCommand() {
+        return true;
+    }
+
     @Override
     public String toString() {
         if (iABC.equals("H")) {

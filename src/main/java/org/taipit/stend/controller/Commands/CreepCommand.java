@@ -1,6 +1,7 @@
 package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
+import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
@@ -157,8 +158,15 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
-                iABC = "C";
-                voltPerC = voltPer;
+
+                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+                switch (iABC) {
+                    case "A": voltPerA = voltPer; break;
+                    case "B": voltPerB = voltPer; break;
+                    case "C": voltPerC = voltPer; break;
+                }
+
                 if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                         voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             } else {
@@ -287,8 +295,15 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
-                iABC = "C";
-                voltPerC = voltPer;
+
+                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+                switch (iABC) {
+                    case "A": voltPerA = voltPer; break;
+                    case "B": voltPerB = voltPer; break;
+                    case "C": voltPerC = voltPer; break;
+                }
+
                 if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                         voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             } else {
@@ -449,10 +464,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         return pulseValue;
     }
 
-    public double getVoltPer() {
-        return voltPer;
-    }
-
     public long getUserTimeTest() {
         return userTimeTest;
     }
@@ -506,10 +517,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         return id;
     }
 
-    public double getRatedVolt() {
-        return ratedVolt;
-    }
-
     public void setiABC(String iABC) {
         this.iABC = iABC;
     }
@@ -550,8 +557,50 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         return channelFlag;
     }
 
+    public double getVoltPer() {
+        return voltPer;
+    }
+
+    public double getCurrPer() {
+        return currPer;
+    }
+
+    @Override
+    public double getRatedVolt() {
+        return ratedVolt;
+    }
+
+    @Override
+    public double getVoltPerA() {
+        return voltPerA;
+    }
+
+    @Override
+    public double getVoltPerB() {
+        return voltPerB;
+    }
+
+    @Override
+    public double getVoltPerC() {
+        return voltPerC;
+    }
+
+    @Override
+    public double getRatedCurr() {
+        return ratedCurr;
+    }
+
+    @Override
+    public String getiABC() {
+        return iABC;
+    }
+
     @Override
     public Commands clone() throws CloneNotSupportedException {
         return (Commands) super.clone();
+    }
+
+    public boolean isThreePhaseCommand() {
+        return threePhaseCommand;
     }
 }

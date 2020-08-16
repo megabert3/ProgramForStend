@@ -29,4 +29,23 @@ public interface Commands {
     void setPhase(int phase);
 
     Commands clone() throws CloneNotSupportedException;
+
+    boolean isThreePhaseCommand();
+
+    //Параметры
+    String getiABC();
+
+    double getRatedVolt();
+
+    double getRatedCurr();
+
+    double getVoltPerA();
+
+    double getVoltPerB();
+
+    double getVoltPerC();
+
+    double getCurrPer();
+
+    double getVoltPer();
 }

@@ -185,8 +185,15 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
-                iABC = "C";
-                voltPerC = voltPer;
+
+                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+                switch (iABC) {
+                    case "A": voltPerA = voltPer; break;
+                    case "B": voltPerB = voltPer; break;
+                    case "C": voltPerC = voltPer; break;
+                }
+
                 if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             } else {
@@ -244,8 +251,15 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 if (!threePhaseCommand) {
-                    iABC = "C";
-                    voltPerC = voltPer;
+
+                    iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+                    switch (iABC) {
+                        case "A": voltPerA = voltPer; break;
+                        case "B": voltPerB = voltPer; break;
+                        case "C": voltPerC = voltPer; break;
+                    }
+
                     if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                             voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
                 } else {
@@ -342,8 +356,15 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 if (!threePhaseCommand) {
-                    iABC = "C";
-                    voltPerC = voltPer;
+
+                    iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+                    switch (iABC) {
+                        case "A": voltPerA = voltPer; break;
+                        case "B": voltPerB = voltPer; break;
+                        case "C": voltPerC = voltPer; break;
+                    }
+
                     if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                             voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
                 } else {
@@ -452,8 +473,15 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
-                iABC = "C";
-                voltPerC = voltPer;
+
+                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+                switch (iABC) {
+                    case "A": voltPerA = voltPer; break;
+                    case "B": voltPerB = voltPer; break;
+                    case "C": voltPerC = voltPer; break;
+                }
+
                 if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             } else {
@@ -515,8 +543,15 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 if (stendDLLCommands instanceof ThreePhaseStend) {
                     if (!threePhaseCommand) {
-                        iABC = "C";
-                        voltPerC = voltPer;
+
+                        iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+                        switch (iABC) {
+                            case "A": voltPerA = voltPer; break;
+                            case "B": voltPerB = voltPer; break;
+                            case "C": voltPerC = voltPer; break;
+                        }
+
                         if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                                 voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
                     } else {
@@ -612,8 +647,15 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 if (stendDLLCommands instanceof ThreePhaseStend) {
                     if (!threePhaseCommand) {
-                        iABC = "C";
-                        voltPerC = voltPer;
+
+                        iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+                        switch (iABC) {
+                            case "A": voltPerA = voltPer; break;
+                            case "B": voltPerB = voltPer; break;
+                            case "C": voltPerC = voltPer; break;
+                        }
+
                         if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                                 voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
                     } else {
@@ -692,8 +734,15 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 if (!threePhaseCommand) {
-                    iABC = "C";
-                    voltPerC = voltPer;
+
+                    iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+                    switch (iABC) {
+                        case "A": voltPerA = voltPer; break;
+                        case "B": voltPerB = voltPer; break;
+                        case "C": voltPerC = voltPer; break;
+                    }
+
                     if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                             voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
                 } else {
@@ -797,14 +846,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         return kWToTest;
     }
 
-    public double getVoltPer() {
-        return voltPer;
-    }
-
-    public double getCurrPer() {
-        return currPer;
-    }
-
     public double getEmaxProc() {
         return emaxProc;
     }
@@ -829,8 +870,50 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         this.ratedCurr = ratedCurr;
     }
 
+    public double getVoltPer() {
+        return voltPer;
+    }
+
+    public double getCurrPer() {
+        return currPer;
+    }
+
+    @Override
+    public double getRatedVolt() {
+        return ratedVolt;
+    }
+
+    @Override
+    public double getVoltPerA() {
+        return voltPerA;
+    }
+
+    @Override
+    public double getVoltPerB() {
+        return voltPerB;
+    }
+
+    @Override
+    public double getVoltPerC() {
+        return voltPerC;
+    }
+
+    @Override
+    public double getRatedCurr() {
+        return ratedCurr;
+    }
+
+    @Override
+    public String getiABC() {
+        return iABC;
+    }
+
     @Override
     public Commands clone() throws CloneNotSupportedException {
         return (Commands) super.clone();
+    }
+
+    public boolean isThreePhaseCommand() {
+        return threePhaseCommand;
     }
 }

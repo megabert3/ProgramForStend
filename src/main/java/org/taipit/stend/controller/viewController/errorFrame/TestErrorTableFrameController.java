@@ -2014,6 +2014,7 @@ public class TestErrorTableFrameController {
             }
         });
 
+        //Загрузка окна с параметрами этелонного счётчика
         if (stendDLLCommands instanceof ThreePhaseStend) {
 
             Platform.runLater(new Runnable() {
@@ -2030,7 +2031,6 @@ public class TestErrorTableFrameController {
 
                     Stage stage = new Stage();
                     Scene scene = new Scene(fxmlLoader.getRoot());
-                    stage.setTitle("Методики");
                     stage.setScene(scene);
 
                     stendRefParametersForFrame = (ThreePhaseStendrefParamController) fxmlLoader.getController();
@@ -2077,8 +2077,12 @@ public class TestErrorTableFrameController {
         }
     }
 
-    public static void refreshRefMeterParameters() {
+    public static void refreshRefMeterParameters() throws InterruptedException {
         stendRefParametersForFrame.readParameters();
+    }
+
+    public static void transferParam(Commands command) {
+        stendRefParametersForFrame.transferParameters(command);
     }
 
     //Добавляет объект resultError к каждому счётчику необходимому для теста

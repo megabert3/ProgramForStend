@@ -1,6 +1,7 @@
 package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
+import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
@@ -37,7 +38,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
     private double emax = 1.0;
 
     //Кол-во импульсов для расчёта ошибки
-    private int pulse = 20;
+    private int pulse = 5;
 
     //Имя точки для отображения в таблице
     private String name;
@@ -200,8 +201,15 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         long time = System.currentTimeMillis();
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
-                iABC = "C";
-                voltPerC = voltPer;
+
+                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+                switch (iABC) {
+                    case "A": voltPerA = voltPer; break;
+                    case "B": voltPerB = voltPer; break;
+                    case "C": voltPerC = voltPer; break;
+                }
+
                 if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                         voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             } else {
@@ -357,8 +365,15 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
-                iABC = "C";
-                voltPerC = voltPer;
+
+                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+                switch (iABC) {
+                    case "A": voltPerA = voltPer; break;
+                    case "B": voltPerB = voltPer; break;
+                    case "C": voltPerC = voltPer; break;
+                }
+
                 if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                         voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             } else {
@@ -599,12 +614,44 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         return procentParan;
     }
 
+    @Override
+    public Commands clone() throws CloneNotSupportedException {
+        return (Commands) super.clone();
+    }
+
+    public String getiABC() {
+        return iABC;
+    }
+
+    public double getRatedVolt() {
+        return ratedVolt;
+    }
+
+    public double getRatedCurr() {
+        return ratedCurr;
+    }
+
+    public double getVoltPerA() {
+        return voltPerA;
+    }
+
+    public double getVoltPerB() {
+        return voltPerB;
+    }
+
+    public double getVoltPerC() {
+        return voltPerC;
+    }
+
+    public double getCurrPer() {
+        return currPer;
+    }
+
     public double getVoltPer() {
         return voltPer;
     }
 
-    @Override
-    public Commands clone() throws CloneNotSupportedException {
-        return (Commands) super.clone();
+    public boolean isThreePhaseCommand() {
+        return threePhaseCommand;
     }
 }
