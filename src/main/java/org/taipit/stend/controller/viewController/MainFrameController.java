@@ -2,17 +2,9 @@ package org.taipit.stend.controller.viewController;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
-import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
-import org.taipit.stend.helper.frameManager.Frame;
+import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.frameManager.FrameManager;
-
-import java.io.IOException;
-
 
 public class MainFrameController {
 
@@ -31,10 +23,26 @@ public class MainFrameController {
     @FXML
     void mainFrameHandleClicks(ActionEvent event) {
         if (event.getSource() == mainFramePropertiesBtn) {
+
+            //Пароль
+            if (!ConsoleHelper.properties.getProperty("config").isEmpty()) {
+                if (!ConsoleHelper.passwordFrame()) {
+                    return;
+                }
+            }
+
             FrameManager.frameManagerInstance().getFrame(FrameManager.FrameType.PROPERTIES);
         }
 
         if(event.getSource() == mainFrameMethodicsBtn) {
+
+            //Пароль
+            if (!ConsoleHelper.properties.getProperty("config").isEmpty()) {
+                if (!ConsoleHelper.passwordFrame()) {
+                    return;
+                }
+            }
+
             FrameManager.frameManagerInstance().getFrame(FrameManager.FrameType.METHODIC);
         }
 

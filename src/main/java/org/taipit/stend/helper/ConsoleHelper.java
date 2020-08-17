@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.taipit.stend.controller.Commands.Commands;
+import org.taipit.stend.controller.PasswordFrameController;
 import org.taipit.stend.controller.viewController.ExceptionFrameController;
 import org.taipit.stend.controller.viewController.YesOrNoFrameControllerDialog;
 
@@ -16,6 +18,7 @@ public class ConsoleHelper {
 
     //Для диалогового окна да или нет
     private static Boolean yesOrNo;
+    private static boolean password = false;
 
     //Директроия с файлом пропертиес
     private static final String dir = ".\\src\\main\\resources\\stendProperties.properties";
@@ -29,7 +32,7 @@ public class ConsoleHelper {
         try {
             initProperties.load(new FileInputStream(new File(dir).getCanonicalPath()));
         } catch (IOException e) {
-            System.out.println("Указанный файл properties не найден");
+            ConsoleHelper.infoException("Указанный файл properties не найден");
             e.printStackTrace();
         }
         return initProperties;
@@ -169,6 +172,34 @@ public class ConsoleHelper {
         return fxmlLoader.getController();
     }
 
+    public static Boolean passwordFrame() {
+        password = false;
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(ConsoleHelper.class.getResource("/viewFXML/passwordFrame.fxml"));
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            exceptionLoadFrame();
+            e.printStackTrace();
+        }
+
+        Parent root = fxmlLoader.getRoot();
+        Stage stage = new Stage();
+        stage.setTitle("Пароль");
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+
+        return password;
+    }
+
+    public static void exceptionLoadFrame() {
+        infoException("Ошибка при загрузке окна\n" +
+                "проверьте целостность файлов программы\n" +
+                "или попробуйте снова");
+    }
+
 
     public static void getMessage(String mess) {
         System.out.println(mess);
@@ -180,5 +211,9 @@ public class ConsoleHelper {
 
     public static void setYesOrNo(Boolean yesOrNo) {
         ConsoleHelper.yesOrNo = yesOrNo;
+    }
+
+    public static void setPassword(boolean password) {
+        ConsoleHelper.password = password;
     }
 }

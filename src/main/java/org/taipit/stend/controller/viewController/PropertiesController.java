@@ -266,6 +266,11 @@ public class PropertiesController implements Initializable, Frame {
 
             if (properties.getProperty("config").isEmpty()) {
 
+                if (passFldNewPass.getText().isEmpty() && passFldRepeatNewPass.getText().isEmpty()) {
+                    ConsoleHelper.infoException("Пароль успешно установлен");
+                    return;
+                }
+
                 if (passFldNewPass.getText().equals(passFldRepeatNewPass.getText())) {
                     try {
                         MessageDigest digester = MessageDigest.getInstance("SHA-512");
@@ -292,6 +297,15 @@ public class PropertiesController implements Initializable, Frame {
                     String digest = DatatypeConverter.printHexBinary(digester.digest(passFldOldPass.getText().getBytes()));
 
                     if (digest.equals(properties.getProperty("config"))) {
+
+                        //Если поля нового пароля пустые
+                        if (passFldNewPass.getText().isEmpty() && passFldRepeatNewPass.getText().isEmpty()) {
+                            properties.setProperty("config", "");
+                            ConsoleHelper.saveProperties();
+                            ConsoleHelper.infoException("Пароль успешно установлен");
+                            return;
+                        }
+
                         if (passFldNewPass.getText().equals(passFldRepeatNewPass.getText())) {
 
                             //Генерирую хэш из пароля
