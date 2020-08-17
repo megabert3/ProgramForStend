@@ -170,6 +170,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setReviseMode(1);
 
+        TestErrorTableFrameController.transferParam(this);
 
         if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
@@ -296,6 +297,8 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         }
 
         stendDLLCommands.setReviseMode(1);
+
+        TestErrorTableFrameController.transferParam(this);
 
         if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();

@@ -169,7 +169,6 @@ public class ExcelReport {
     private Map<String, Map<Integer, Meter.CommandResult>> errTotalErrorRPMns = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errImbalansRPMns = new HashMap<>();
 
-
     private Group CRPSTAother = new CRPSTAotherGroup();
 
     private Group inflABCAPPls = new InfABCGroup();

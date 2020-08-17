@@ -156,6 +156,8 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setReviseMode(1);
 
+        TestErrorTableFrameController.transferParam(this);
+
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -292,6 +294,8 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         Meter.CreepResult creepResult;
 
         stendDLLCommands.setReviseMode(1);
+
+        TestErrorTableFrameController.transferParam(this);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {

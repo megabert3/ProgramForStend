@@ -198,6 +198,8 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.setReviseMode(1);
         stendDLLCommands.setRefClock(0);
 
+        TestErrorTableFrameController.transferParam(this);
+
         long time = System.currentTimeMillis();
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
@@ -362,6 +364,8 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setReviseMode(1);
         stendDLLCommands.setRefClock(0);
+
+        TestErrorTableFrameController.transferParam(this);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {

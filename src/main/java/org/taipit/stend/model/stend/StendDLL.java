@@ -327,5 +327,4 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
     boolean Set_NoRevise(boolean b);
 
     boolean Power_Revise();
-
 }

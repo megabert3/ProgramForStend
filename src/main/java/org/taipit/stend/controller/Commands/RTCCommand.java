@@ -116,6 +116,8 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setReviseMode(1);
 
+        TestErrorTableFrameController.transferParam(this);
+
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -231,6 +233,8 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
         channelFlag = 4;
 
         stendDLLCommands.setReviseMode(1);
+
+        TestErrorTableFrameController.transferParam(this);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {

@@ -1,6 +1,7 @@
 package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
+import org.taipit.stend.controller.viewController.errorFrame.refMeter.ThreePhaseStendRefParamController;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
@@ -193,10 +194,17 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     case "B": voltPerB = voltPer; break;
                     case "C": voltPerC = voltPer; break;
                 }
+                //Передаю необходимые параметры для эталонного счётчика
+                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
+                        voltPerA * ratedVolt, voltPerB * ratedVolt, voltPerC * ratedVolt, 0.0, 0.0, 0.0);
 
                 if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             } else {
+                //Передаю необходимые параметры для эталонного счётчика
+                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
+                        voltPer * ratedVolt, voltPer * ratedVolt, voltPer * ratedVolt, 0.0, 0.0, 0.0);
+
                 if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             }
@@ -248,6 +256,9 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     } else timer.cancel();
                 }
             };
+
+            //Передаю параметры, необходимые должны быть выставлены
+            TestErrorTableFrameController.transferParam(this);
 
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 if (!threePhaseCommand) {
@@ -353,6 +364,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             };
 
             double refMeterEnergy = 0;
+
+            TestErrorTableFrameController.transferParam(this);
 
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 if (!threePhaseCommand) {
@@ -482,9 +495,18 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     case "C": voltPerC = voltPer; break;
                 }
 
+                //Передаю необходимые параметры для эталонного счётчика
+                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
+                        voltPerA * ratedVolt, voltPerB * ratedVolt, voltPerC * ratedVolt, 0.0, 0.0, 0.0);
+
                 if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             } else {
+
+                //Передаю необходимые параметры для эталонного счётчика
+                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
+                        voltPer * ratedVolt, voltPer * ratedVolt, voltPer * ratedVolt, 0.0, 0.0, 0.0);
+
                 if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
             }
@@ -540,6 +562,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         } else timer.cancel();
                     }
                 };
+
+                TestErrorTableFrameController.transferParam(this);
 
                 if (stendDLLCommands instanceof ThreePhaseStend) {
                     if (!threePhaseCommand) {
@@ -645,6 +669,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     }
                 };
 
+                TestErrorTableFrameController.transferParam(this);
+
                 if (stendDLLCommands instanceof ThreePhaseStend) {
                     if (!threePhaseCommand) {
 
@@ -731,6 +757,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             }
 
             countResult++;
+
+            TestErrorTableFrameController.transferParam(this);
 
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 if (!threePhaseCommand) {

@@ -1,4 +1,4 @@
-package org.taipit.stend.controller.viewController.errorFrame;
+package org.taipit.stend.controller.viewController.errorFrame.refMeter;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -6,12 +6,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.model.stend.StendDLLCommands;
 
 import java.util.Arrays;
 
 
-public class OnePhaseStendrefParamController implements StendRefParametersForFrame {
+public class OnePhaseStendRefParamController implements StendRefParametersForFrame {
 
     private StendDLLCommands stendDLLCommands;
 
@@ -93,6 +94,11 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
         }
     }
 
+    @Override
+    public void transferParameters(Commands command) {
+
+    }
+
     public void addMovingActions() {
         Stage thisStage = (Stage) txtFldU.getScene().getWindow();
 
@@ -112,5 +118,10 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
                 thisStage.setY(event.getScreenY() + yOffset);
             }
         });
+    }
+
+    @Override
+    public StendRefParametersForFrame getStendRefParametersForFrame() {
+        return this;
     }
 }

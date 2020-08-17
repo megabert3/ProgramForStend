@@ -28,6 +28,9 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.Meter;
+import org.taipit.stend.controller.viewController.errorFrame.refMeter.OnePhaseStendRefParamController;
+import org.taipit.stend.controller.viewController.errorFrame.refMeter.StendRefParametersForFrame;
+import org.taipit.stend.controller.viewController.errorFrame.refMeter.ThreePhaseStendRefParamController;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.SaveResultsTestFrame;
@@ -2033,7 +2036,7 @@ public class TestErrorTableFrameController {
                     Scene scene = new Scene(fxmlLoader.getRoot());
                     stage.setScene(scene);
 
-                    stendRefParametersForFrame = (ThreePhaseStendrefParamController) fxmlLoader.getController();
+                    stendRefParametersForFrame = (ThreePhaseStendRefParamController) fxmlLoader.getController();
                     stendRefParametersForFrame.initRefType(stendDLLCommands);
                     stendRefParametersForFrame.addMovingActions();
 
@@ -2063,7 +2066,7 @@ public class TestErrorTableFrameController {
                     stage.setTitle("Методики");
                     stage.setScene(scene);
 
-                    stendRefParametersForFrame = (OnePhaseStendrefParamController) fxmlLoader.getController();
+                    stendRefParametersForFrame = (OnePhaseStendRefParamController) fxmlLoader.getController();
                     stendRefParametersForFrame.initRefType(stendDLLCommands);
                     stendRefParametersForFrame.addMovingActions();
 
@@ -2083,6 +2086,10 @@ public class TestErrorTableFrameController {
 
     public static void transferParam(Commands command) {
         stendRefParametersForFrame.transferParameters(command);
+    }
+
+    public static StendRefParametersForFrame getRefMeterController() {
+        return stendRefParametersForFrame.getStendRefParametersForFrame();
     }
 
     //Добавляет объект resultError к каждому счётчику необходимому для теста

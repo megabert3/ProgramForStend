@@ -3,10 +3,12 @@ package org.taipit.stend.controller;
 import javafx.beans.property.SimpleStringProperty;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
+import org.taipit.stend.helper.ConsoleHelper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class Meter implements Serializable{
@@ -14,6 +16,150 @@ public class Meter implements Serializable{
      * Для восстановления результатов прошлого теста, при создании
      * новых объектов CommandResult сравнивать хэш код со старыми результатами и если что возвращать старый результат
      */
+
+    public Meter() {
+        Properties properties = ConsoleHelper.properties;
+        String result;
+
+        totalResult = new Meter.TotalResult("T");
+
+        creepTest = new CreepResult("CRP", "", "");
+
+        startTestAPPls = new StartResult("STAAP", "", "");
+        startTestAPMns = new StartResult("STAAN", "", "");
+        startTestRPPls = new StartResult("STARP", "", "");
+        startTestRPMns = new StartResult("STARN", "", "");
+
+        RTCTest = new RTCResult("RTC", "", "", "", "", "");
+
+        insulationTest = new InsulationResult("INS");
+
+        appearensTest = new AppearensResult("APR");
+
+        constantTestAPPls = new ConstantResult("CNTAP", "", "");
+        constantTestAPMns = new ConstantResult("CNTAN", "", "");
+        constantTestRPPls = new ConstantResult("CNTRP", "", "");
+        constantTestRPMns = new ConstantResult("CNTRN", "", "");
+
+        relayTest = new RelayResult("RLY", "", "");
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxCreep");
+        if (result.equals("N")) {
+            creepTest.setPassTest(null);
+        } else if (result.equals("T")) {
+            creepTest.setPassTest(true);
+        } else {
+            creepTest.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxSTA_APPls");
+        if (result.equals("N")) {
+            startTestAPPls.setPassTest(null);
+        } else if (result.equals("T")) {
+            startTestAPPls.setPassTest(true);
+        } else {
+            startTestAPPls.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxSTA_APMns");
+        if (result.equals("N")) {
+            startTestAPMns.setPassTest(null);
+        } else if (result.equals("T")) {
+            startTestAPMns.setPassTest(true);
+        } else {
+            startTestAPMns.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxSTA_RPPls");
+        if (result.equals("N")) {
+            startTestRPPls.setPassTest(null);
+        } else if (result.equals("T")) {
+            startTestRPPls.setPassTest(true);
+        } else {
+            startTestRPPls.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxSTA_RPMns");
+        if (result.equals("N")) {
+            startTestRPMns.setPassTest(null);
+        } else if (result.equals("T")) {
+            startTestRPMns.setPassTest(true);
+        } else {
+            startTestRPMns.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxRTC");
+        if (result.equals("N")) {
+            RTCTest.setPassTest(null);
+        } else if (result.equals("T")) {
+            RTCTest.setPassTest(true);
+        } else {
+            RTCTest.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxConst_APPls");
+        if (result.equals("N")) {
+            constantTestAPPls.setPassTest(null);
+        } else if (result.equals("T")) {
+            constantTestAPPls.setPassTest(true);
+        } else {
+            constantTestAPPls.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxConst_APMns");
+        if (result.equals("N")) {
+            constantTestAPMns.setPassTest(null);
+        } else if (result.equals("T")) {
+            constantTestAPMns.setPassTest(true);
+        } else {
+            constantTestAPMns.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxConst_RPPls");
+        if (result.equals("N")) {
+            constantTestRPPls.setPassTest(null);
+        } else if (result.equals("T")) {
+            constantTestRPPls.setPassTest(true);
+        } else {
+            constantTestRPPls.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxConst_RPMns");
+        if (result.equals("N")) {
+            constantTestRPMns.setPassTest(null);
+        } else if (result.equals("T")) {
+            constantTestRPMns.setPassTest(true);
+        } else {
+            constantTestRPMns.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxInsulation");
+        if (result.equals("N")) {
+            insulationTest.setPassTest(null);
+        } else if (result.equals("T")) {
+            insulationTest.setPassTest(true);
+        } else {
+            insulationTest.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxAppearance");
+        if (result.equals("N")) {
+            appearensTest.setPassTest(null);
+        } else if (result.equals("T")) {
+            appearensTest.setPassTest(true);
+        } else {
+            appearensTest.setPassTest(false);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxRelay");
+        if (result.equals("N")) {
+            relayTest.setPassTest(null);
+        } else if (result.equals("T")) {
+            relayTest.setPassTest(true);
+        } else {
+            relayTest.setPassTest(false);
+        }
+    }
 
     private int id;
 
@@ -136,6 +282,9 @@ public class Meter implements Serializable{
     private ConstantResult constantTestAPMns = new ConstantResult("CNTAN", "", "");
     private ConstantResult constantTestRPPls = new ConstantResult("CNTRP", "", "");
     private ConstantResult constantTestRPMns = new ConstantResult("CNTRN", "", "");
+
+    //Реле
+    private RelayResult relayTest = new RelayResult("RLY", "", "");
 
     //Лист с ошибками
     private List<CommandResult> errorListAPPls = new ArrayList<>();
@@ -821,10 +970,6 @@ public class Meter implements Serializable{
             return passTest;
         }
 
-        public void setPassTest(boolean passTest) {
-            this.passTest = passTest;
-        }
-
         public String getLastResultForTabView() {
             return lastResultForTabView.get();
         }
@@ -1174,7 +1319,6 @@ public class Meter implements Serializable{
 
         InsulationResult(String id) {
             super(id);
-            super.passTest = true;
         }
     }
 
@@ -1182,7 +1326,64 @@ public class Meter implements Serializable{
 
         AppearensResult(String id) {
             super(id);
-            super.passTest = true;
+        }
+    }
+
+    public class RelayResult extends CommandResult implements Serializable {
+
+        //Время провала теста
+        private String timeTheFailTest = "";
+
+        private String timeTheTest;
+
+        private String maxPulse;
+
+        RelayResult(String id, String timeTheTest, String maxPulse) {
+            super(id);
+            this.timeTheTest = timeTheTest;
+            this.maxPulse = maxPulse;
+            super.lastResultForTabView.setValue("N" + timeTheTest);
+        }
+
+        public void setResultRelayCommand(String time, int resultNo, boolean passOrNot) {
+            if (passOrNot) {
+                super.lastResultForTabView.setValue("P" + time + " P");
+                super.lastResult = time + " P";
+                super.results[resultNo] = time + " P";
+                super.passTest = true;
+                relayTest = this;
+            } else {
+                super.lastResultForTabView.setValue("F" + time + " F");
+                this.timeTheFailTest = time;
+                super.lastResult = time + " F";
+                super.results[resultNo] = time + " F";
+                super.passTest = false;
+                relayTest = this;
+            }
+        }
+
+        public void setMaxPulse(String maxPulse) {
+            this.maxPulse = maxPulse;
+        }
+
+        public void setTimeTheTest(String timeTheTest) {
+            this.timeTheTest = timeTheTest;
+        }
+
+        public String getTimeTheFailTest() {
+            return timeTheFailTest;
+        }
+
+        public void setTimeTheFailTest(String timeTheFailTest) {
+            this.timeTheFailTest = timeTheFailTest;
+        }
+
+        public String getTimeTheTest() {
+            return timeTheTest;
+        }
+
+        public String getMaxPulse() {
+            return maxPulse;
         }
     }
 
@@ -1254,6 +1455,11 @@ public class Meter implements Serializable{
 
             if (constantTestRPMns.getPassTest() != null) {
                 if (!constantTestRPMns.isPassTest()) return false;
+                else result = true;
+            }
+
+            if (relayTest.getPassTest() != null) {
+                if (!relayTest.isPassTest()) return false;
                 else result = true;
             }
 

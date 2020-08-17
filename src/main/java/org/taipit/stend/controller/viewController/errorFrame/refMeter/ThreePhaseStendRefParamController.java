@@ -1,4 +1,4 @@
-package org.taipit.stend.controller.viewController.errorFrame;
+package org.taipit.stend.controller.viewController.errorFrame.refMeter;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -8,15 +8,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.controller.Commands.ImbalansUCommand;
+import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 
 import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
-public class ThreePhaseStendrefParamController implements StendRefParametersForFrame {
+public class ThreePhaseStendRefParamController implements StendRefParametersForFrame {
 
     private StendDLLCommands stendDLLCommands;
 
@@ -38,23 +37,6 @@ public class ThreePhaseStendrefParamController implements StendRefParametersForF
     private boolean Ia;
     private boolean Ib;
     private boolean Ic;
-
-    //Диапазон в который должно уложиться значения параметров
-    private double maxCurrPhaseA;
-    private double maxCurrPhaseB;
-    private double maxCurrPhaseC;
-
-    private double minCurrPhaseA;
-    private double minCurrPhaseB;
-    private double minCurrPhaseC;
-
-    private double maxUPhaseA;
-    private double maxUPhaseB;
-    private double maxUPhaseC;
-
-    private double minUPhaseA;
-    private double minUPhaseB;
-    private double minUPhaseC;
 
     private double xOffset;
 
@@ -143,10 +125,6 @@ public class ThreePhaseStendrefParamController implements StendRefParametersForF
 
     @FXML
     private TextField txtFldUbUc;
-
-    private Timer timer;
-
-    private TimerTask timerTask;
 
     @FXML
     void initialize() {
@@ -346,10 +324,16 @@ public class ThreePhaseStendrefParamController implements StendRefParametersForF
             this.Ib = false;
             this.Ic = false;
 
-            TestErrorTableFrameController.getStaticBtnStop().fire();
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
+
+            TestErrorTableFrameController.blockBtns.setValue(false);
+
             throw new InterruptedException(stringBuilder.toString());
         }
     }
+
+
 
     @Override
     public void transferParameters(Commands command) {
@@ -370,8 +354,8 @@ public class ThreePhaseStendrefParamController implements StendRefParametersForF
         } else {
 
             if (command.isThreePhaseCommand()) {
-                current = command.getRatedCurr() * command.getCurrPer();
-                U = command.getRatedVolt() * command.getRatedVolt();
+                current = command.getRatedCurr() * (command.getCurrPer() / 100);
+                U = command.getRatedVolt() * (command.getVoltPer() / 100);
 
                 UPhaseA = U;
                 UPhaseB = U;
@@ -439,6 +423,16 @@ public class ThreePhaseStendrefParamController implements StendRefParametersForF
         }
     }
 
+    public void transferParameters(Double Ua, Double Ub, Double Uc, Double Ia, Double Ib, Double Ic) {
+        UPhaseA = Ua;
+        UPhaseB = Ub;
+        UPhaseC = Uc;
+
+        currPhaseA = Ia;
+        currPhaseB = Ib;
+        currPhaseC = Ic;
+    }
+
     public void addMovingActions() {
         Stage thisStage = (Stage) txtFldUA.getScene().getWindow();
 
@@ -458,5 +452,10 @@ public class ThreePhaseStendrefParamController implements StendRefParametersForF
                 thisStage.setY(event.getScreenY() + yOffset);
             }
         });
+    }
+
+    @Override
+    public StendRefParametersForFrame getStendRefParametersForFrame() {
+        return this;
     }
 }

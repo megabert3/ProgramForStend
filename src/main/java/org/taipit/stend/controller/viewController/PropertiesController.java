@@ -160,6 +160,61 @@ public class PropertiesController implements Initializable, Frame {
     @FXML
     private Button btnPathReport;
 
+//----------------------------------------------------------- reportPane
+    @FXML
+    private ToggleButton reportBtn;
+
+    @FXML
+    private AnchorPane reportPane;
+
+    @FXML
+    private ComboBox<String> cmbBxCreep;
+
+    @FXML
+    private ComboBox<String> cmbBxRTC;
+
+    @FXML
+    private ComboBox<String> cmbBxSTA_APPls;
+
+    @FXML
+    private ComboBox<String> cmbBxSTA_APMns;
+
+    @FXML
+    private ComboBox<String> cmbBxSTA_RPPls;
+
+    @FXML
+    private ComboBox<String> cmbBxSTA_RPMns;
+
+    @FXML
+    private ComboBox<String> cmbBxConst_APPls;
+
+    @FXML
+    private ComboBox<String> cmbBxConst_APMns;
+
+    @FXML
+    private ComboBox<String> cmbBxConst_RPPls;
+
+    @FXML
+    private ComboBox<String> cmbBxConst_RPMns;
+
+    @FXML
+    private ComboBox<String> cmbBxRelay;
+
+    @FXML
+    private ComboBox<String> cmbBxAppearance;
+
+    @FXML
+    private ComboBox<String> cmbBxInsulation;
+
+    @FXML
+    private RadioButton radBtnFormat97XLS;
+
+    @FXML
+    private RadioButton radBtnFormat2007XLSX;
+
+    @FXML
+    private Button reportSave;
+
 
     private Properties properties = ConsoleHelper.properties;
 
@@ -169,10 +224,12 @@ public class PropertiesController implements Initializable, Frame {
         meterParanBtn.setToggleGroup(toggleGroup);
         passwordBtn.setToggleGroup(toggleGroup);
         linksBtn.setToggleGroup(toggleGroup);
+        reportBtn.setToggleGroup(toggleGroup);
 
         setParamWithPropFile();
         initMeterParameterPane();
         initLinksPane();
+        initReporPane();
         stendBtn.fire();
     }
 
@@ -224,8 +281,8 @@ public class PropertiesController implements Initializable, Frame {
                     }
                 } else {
                     ConsoleHelper.infoException("Пароли не совпадают");
-                    passFldNewPass.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
-                    passFldRepeatNewPass.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                    passFldNewPass.setStyle("-fx-border-color: red; -fx-focus-color: red;");
+                    passFldRepeatNewPass.setStyle("-fx-border-color: red; -fx-focus-color: red;");
                 }
             } else {
                 try {
@@ -247,15 +304,22 @@ public class PropertiesController implements Initializable, Frame {
 
                         } else {
                             ConsoleHelper.infoException("Пароли не совпадают");
-                            passFldNewPass.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
-                            passFldRepeatNewPass.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                            passFldNewPass.setStyle("-fx-border-color: red; -fx-focus-color: red ;");
+                            passFldRepeatNewPass.setStyle("-fx-border-color: red; -fx-focus-color: red ;");
                         }
                     } else {
                         ConsoleHelper.infoException("Неверный пароль");
-                        passFldOldPass.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        passFldOldPass.setStyle("-fx-border-color: red; -fx-focus-color: red ;");
                     }
                 } catch (NoSuchAlgorithmException ignore) {}
             }
+        }
+    }
+
+    @FXML
+    private void reportPaneActionEvent(ActionEvent event) {
+        if (event.getSource() == reportSave) {
+            saveAcrionInReportPane();
         }
     }
 
@@ -291,7 +355,6 @@ public class PropertiesController implements Initializable, Frame {
 
     @FXML
     void handleClicks(ActionEvent event) {
-
         //Переключение на вкладку Установка
         if (event.getSource() == stendBtn) {
             if (stendBtn.isSelected()) {
@@ -317,6 +380,12 @@ public class PropertiesController implements Initializable, Frame {
         if (event.getSource() == linksBtn) {
             if (linksBtn.isSelected()) {
                 linksPane.toFront();
+            }
+        }
+
+        if (event.getSource() == reportBtn) {
+            if (reportBtn.isSelected()) {
+                reportPane.toFront();
             }
         }
     }
@@ -468,6 +537,272 @@ public class PropertiesController implements Initializable, Frame {
     private void initLinksPane() {
         txtFldPathSerNoMeter.setText(properties.getProperty("testParamFrame.fileForSerNo"));
         txtFldPathReport.setText(properties.getProperty("printReportPath"));
+    }
+
+    private void initReporPane() {
+        String[] info = {"НЕ ПРОВОДИЛОСЬ", "ГОДЕН", "ПРОВАЛИЛ"};
+        String result;
+
+        cmbBxRTC.getItems().addAll(info);
+        cmbBxSTA_APPls.getItems().addAll(info);
+        cmbBxSTA_APMns.getItems().addAll(info);
+        cmbBxSTA_RPPls.getItems().addAll(info);
+        cmbBxSTA_RPMns.getItems().addAll(info);
+        cmbBxConst_APPls.getItems().addAll(info);
+        cmbBxConst_APMns.getItems().addAll(info);
+        cmbBxConst_RPPls.getItems().addAll(info);
+        cmbBxConst_RPMns.getItems().addAll(info);
+        cmbBxRelay.getItems().addAll(info);
+        cmbBxAppearance.getItems().addAll(info);
+        cmbBxInsulation.getItems().addAll(info);
+        cmbBxCreep.getItems().addAll(info);
+
+        ToggleGroup tg = new ToggleGroup();
+
+        radBtnFormat97XLS.setToggleGroup(tg);
+        radBtnFormat2007XLSX.setToggleGroup(tg);
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxCreep");
+        if (result.equals("N")) {
+            cmbBxCreep.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxCreep.setValue(info[1]);
+        } else {
+            cmbBxCreep.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxRTC");
+        if (result.equals("N")) {
+            cmbBxRTC.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxRTC.setValue(info[1]);
+        } else {
+            cmbBxRTC.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxSTA_APPls");
+        if (result.equals("N")) {
+            cmbBxSTA_APPls.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxSTA_APPls.setValue(info[1]);
+        } else {
+            cmbBxSTA_APPls.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxSTA_APMns");
+        if (result.equals("N")) {
+            cmbBxSTA_APMns.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxSTA_APMns.setValue(info[1]);
+        } else {
+            cmbBxSTA_APMns.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxSTA_RPPls");
+        if (result.equals("N")) {
+            cmbBxSTA_RPPls.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxSTA_RPPls.setValue(info[1]);
+        } else {
+            cmbBxSTA_RPPls.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxSTA_RPMns");
+        if (result.equals("N")) {
+            cmbBxSTA_RPMns.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxSTA_RPMns.setValue(info[1]);
+        } else {
+            cmbBxSTA_RPMns.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxConst_APPls");
+        if (result.equals("N")) {
+            cmbBxConst_APPls.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxConst_APPls.setValue(info[1]);
+        } else {
+            cmbBxConst_APPls.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxConst_APMns");
+        if (result.equals("N")) {
+            cmbBxConst_APMns.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxConst_APMns.setValue(info[1]);
+        } else {
+            cmbBxConst_APMns.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxConst_RPPls");
+        if (result.equals("N")) {
+            cmbBxConst_RPPls.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxConst_RPPls.setValue(info[1]);
+        } else {
+            cmbBxConst_RPPls.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxConst_RPMns");
+        if (result.equals("N")) {
+            cmbBxConst_RPMns.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxConst_RPMns.setValue(info[1]);
+        } else {
+            cmbBxConst_RPMns.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxRelay");
+        if (result.equals("N")) {
+            cmbBxRelay.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxRelay.setValue(info[1]);
+        } else {
+            cmbBxRelay.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxAppearance");
+        if (result.equals("N")) {
+            cmbBxAppearance.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxAppearance.setValue(info[1]);
+        } else {
+            cmbBxAppearance.setValue(info[2]);
+        }
+
+        result = properties.getProperty("propertiesController.reportPane.cmbBxInsulation");
+        if (result.equals("N")) {
+            cmbBxInsulation.setValue(info[0]);
+        } else if (result.equals("T")) {
+            cmbBxInsulation.setValue(info[1]);
+        } else {
+            cmbBxInsulation.setValue(info[2]);
+        }
+
+        result = properties.getProperty("reportType");
+        if (result.equals("HSSF")) {
+            radBtnFormat97XLS.setSelected(true);
+        } else {
+            radBtnFormat2007XLSX.setSelected(true);
+        }
+    }
+
+    private void saveAcrionInReportPane() {
+        String[] info = {"НЕ ПРОВОДИЛОСЬ", "ГОДЕН", "ПРОВАЛИЛ"};
+
+        if (cmbBxCreep.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxCreep", "N");
+        } else if (cmbBxCreep.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxCreep", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxCreep", "F");
+        }
+
+        if (cmbBxRTC.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxRTC", "N");
+        } else if (cmbBxCreep.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxRTC", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxRTC", "F");
+        }
+
+        if (cmbBxSTA_APPls.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_APPls", "N");
+        } else if (cmbBxSTA_APPls.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_APPls", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_APPls", "F");
+        }
+
+        if (cmbBxSTA_APMns.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_APMns", "N");
+        } else if (cmbBxSTA_APMns.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_APMns", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_APMns", "F");
+        }
+
+        if (cmbBxSTA_RPPls.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_RPPls", "N");
+        } else if (cmbBxSTA_RPPls.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_RPPls", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_RPPls", "F");
+        }
+
+        if (cmbBxSTA_RPMns.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_RPMns", "N");
+        } else if (cmbBxSTA_RPMns.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_RPMns", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxSTA_RPMns", "F");
+        }
+
+        if (cmbBxConst_APPls.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_APPls", "N");
+        } else if (cmbBxConst_APPls.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_APPls", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_APPls", "F");
+        }
+
+        if (cmbBxConst_APMns.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_APMns", "N");
+        } else if (cmbBxConst_APMns.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_APMns", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_APMns", "F");
+        }
+
+        if (cmbBxConst_RPPls.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_RPPls", "N");
+        } else if (cmbBxConst_RPPls.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_RPPls", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_RPPls", "F");
+        }
+
+        if (cmbBxConst_RPMns.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_RPMns", "N");
+        } else if (cmbBxConst_RPMns.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_RPMns", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxConst_RPMns", "F");
+        }
+
+        if (cmbBxRelay.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxRelay", "N");
+        } else if (cmbBxRelay.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxRelay", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxRelay", "F");
+        }
+
+        if (cmbBxAppearance.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxAppearance", "N");
+        } else if (cmbBxAppearance.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxAppearance", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxAppearance", "F");
+        }
+
+        if (cmbBxInsulation.getValue().equals(info[0])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxInsulation", "N");
+        } else if (cmbBxInsulation.getValue().equals(info[1])) {
+            properties.setProperty("propertiesController.reportPane.cmbBxInsulation", "T");
+        } else {
+            properties.setProperty("propertiesController.reportPane.cmbBxInsulation", "F");
+        }
+
+        if (radBtnFormat97XLS.isSelected()) {
+            properties.setProperty("reportType", "HSSF");
+        } else {
+            properties.setProperty("reportType", "XSSF");
+        }
+
+        ConsoleHelper.saveProperties();
+
+        ConsoleHelper.infoException("Информация", "Параметры успешно сохранены");
     }
 
     @Override

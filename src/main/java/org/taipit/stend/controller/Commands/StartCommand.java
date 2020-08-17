@@ -172,7 +172,9 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
         setDefTestResults(channelFlag, index);
 
-        //stendDLLCommands.setReviseMode(1);
+        stendDLLCommands.setReviseMode(1);
+
+        TestErrorTableFrameController.transferParam(this);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
@@ -315,6 +317,8 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
         stendDLLCommands.setReviseMode(1);
+
+        TestErrorTableFrameController.transferParam(this);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
