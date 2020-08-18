@@ -3,11 +3,12 @@ package org.taipit.stend.model.stend;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.ptr.DoubleByReference;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 
 public interface StendDLL extends Library {
-    StendDLL INSTANCE = (StendDLL) Native.loadLibrary(("hscom.dll"), StendDLL.class);
+    StendDLL INSTANCE = (StendDLL) Native.load(("hscom.dll"), StendDLL.class);
 
 //--------------------------------------------------------------------------- Adjust_UI
 // Включить напряжение и ток
@@ -319,7 +320,9 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 // Закрыть порт
     boolean Dll_Port_Close(PointerByReference close);
 
+
     //Мод для включения малых токов
+    //Если не выставляются малые токи, то необходимов выставлять либо 0 либо 3
     boolean Set_ReviseMode(int mode);
 
     boolean Set_ReviseTime(int time);
@@ -327,4 +330,12 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
     boolean Set_NoRevise(boolean b);
 
     boolean Power_Revise();
+
+//--------------------------------------------------------------------------- Count_Start
+    boolean Count_Start(int Meter_No,
+                        int Dev_Port);
+//--------------------------------------------------------------------------- Count_Read
+    boolean Count_Read(IntByReference MPulse,
+                       int Meter_No,
+                       int Dev_Port);
 }

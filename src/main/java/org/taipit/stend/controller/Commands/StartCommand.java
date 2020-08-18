@@ -169,9 +169,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         startCommandResult = initStartCommandResult();
 
-        //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-        setDefTestResults(channelFlag, index);
-
         stendDLLCommands.setReviseMode(1);
 
         TestErrorTableFrameController.transferParam(this);
@@ -207,10 +204,13 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
+        //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
+        setDefTestResults(channelFlag, index);
+
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
 
-        timer.schedule(timerTask, 0, 350);
+        timer.schedule(timerTask, 0, 275);
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -235,18 +235,10 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                     meter = meterList.get(mapResult.getKey() - 1);
                     startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
 
-                    if (stendDLLCommands.crpstaResult(mapResult.getKey())) {
+                    if (stendDLLCommands.countRead(mapResult.getKey()) > pulseValue) {
 
-                        meter.setAmountImn(meter.getAmountImn() + 1);
-
-                        if (meter.getAmountImn() >= pulseValue) {
-                            startCommandResult.put(mapResult.getKey(), true);
-                            startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
-                        } else {
-                            stendDLLCommands.crpstaClear(mapResult.getKey());
-
-                            stendDLLCommands.crpstaStart(mapResult.getKey());
-                        }
+                        startCommandResult.put(mapResult.getKey(), true);
+                        startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
                     }
                 }
             }
@@ -258,6 +250,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         //Выставляю результат теста счётчиков, которые не прошли тест
         for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
             if (!mapResult.getValue()) {
+                //Для остановки таймера
                 mapResult.setValue(true);
                 startResult = (Meter.StartResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
                 startResult.setResultStartCommand(startResult.getTimeTheTest(), countResult, false, channelFlag);
@@ -368,7 +361,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
             startCommandResult = initStartCommandResult();
 
-            timer.schedule(timerTask, 0, 350);
+            timer.schedule(timerTask, 0, 275);
 
             while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
 
@@ -388,20 +381,12 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
                     if (!mapResult.getValue()) {
                         meter = meterList.get(mapResult.getKey() - 1);
-                        if (stendDLLCommands.crpstaResult(mapResult.getKey())) {
+                        startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
 
-                            meter.setAmountImn(meter.getAmountImn() + 1);
+                        if (stendDLLCommands.countRead(mapResult.getKey()) > pulseValue) {
 
-                            if (meter.getAmountImn() >= pulseValue) {
-                                startCommandResult.put(mapResult.getKey(), true);
-
-                                startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
-                                startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
-                            } else {
-                                stendDLLCommands.crpstaClear(mapResult.getKey());
-
-                                stendDLLCommands.crpstaStart(mapResult.getKey());
-                            }
+                            startCommandResult.put(mapResult.getKey(), true);
+                            startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
                         }
                     }
                 }
@@ -440,7 +425,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             startResult.setPassTest(null);
             startResult.setLastResult("");
             meter.setAmountImn(0);
-            stendDLLCommands.crpstaStart(meter.getId());
+            stendDLLCommands.countStart(meter.getId());
         }
     }
 

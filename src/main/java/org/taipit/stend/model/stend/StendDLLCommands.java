@@ -3,6 +3,7 @@ package org.taipit.stend.model.stend;
 import com.sun.jna.Memory;
 
 import com.sun.jna.ptr.DoubleByReference;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import jssc.SerialPortList;
 import org.taipit.stend.controller.Meter;
@@ -372,6 +373,22 @@ public abstract class StendDLLCommands {
         return pointer.getValue().getString(0, "ASCII");
     }
 
+    public boolean countStart(int meterNo) {
+        return stend.Count_Start(meterNo, port);
+    }
+
+    public int countRead(int meterNo) {
+        IntByReference pointer = new IntByReference();
+        stend.Count_Read(pointer, meterNo, port);
+        return pointer.getValue();
+    }
+
+//    public boolean countRead(int pulse,int meterNo) {
+//        boolean b = stend.Count_Read(pulse, meterNo, port);
+//        System.out.println(b);
+//        return b;
+//    }
+
     public boolean setReviseMode(int mode) {
         return stend.Set_ReviseMode(mode);
     }
@@ -416,4 +433,5 @@ public abstract class StendDLLCommands {
     public String getStendModel() {
         return stendModel;
     }
+
 }

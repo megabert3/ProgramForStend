@@ -147,7 +147,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         //Номер измерения
         int countResult = 1;
-        Meter meter;
         Meter.CreepResult creepResult;
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
@@ -199,7 +198,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
 
-        timer.schedule(timerTask, 0, 300);
+        timer.schedule(timerTask, 0, 275);
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -222,23 +221,13 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
                 }
 
                 if (mapResult.getValue()) {
-                    meter = meterList.get(mapResult.getKey() - 1);
+                    if (stendDLLCommands.countRead(mapResult.getKey()) > pulseValue) {
 
-                    if (stendDLLCommands.crpstaResult(mapResult.getKey())) {
+                        creepCommandResult.put(mapResult.getKey(), false);
 
-                        meter.setAmountImn(meter.getAmountImn() + 1);
+                        creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
 
-                        if (meter.getAmountImn() >= pulseValue) {
-                            creepCommandResult.put(mapResult.getKey(), false);
-
-                            creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
-
-                            creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
-                        } else {
-                            stendDLLCommands.crpstaClear(mapResult.getKey());
-
-                            stendDLLCommands.crpstaStart(mapResult.getKey());
-                        }
+                        creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
                     }
                 }
             }
@@ -346,7 +335,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
             timer = new Timer(true);
 
-            timer.schedule(timerTask, 0, 350);
+            timer.schedule(timerTask, 0, 275);
 
             while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
@@ -365,21 +354,14 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
                     }
 
                     if (mapResult.getValue()) {
-                        meter = meterList.get(mapResult.getKey() - 1);
-                        creepResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
 
-                        if (stendDLLCommands.crpstaResult(mapResult.getKey())) {
+                        if (stendDLLCommands.countRead(mapResult.getKey()) > pulseValue) {
 
-                            meter.setAmountImn(meter.getAmountImn() + 1);
+                            creepCommandResult.put(mapResult.getKey(), false);
 
-                            if (meter.getAmountImn() >= pulseValue) {
-                                creepCommandResult.put(mapResult.getKey(), false);
-                                creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
-                            } else {
-                                stendDLLCommands.crpstaClear(mapResult.getKey());
+                            creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
 
-                                stendDLLCommands.crpstaStart(mapResult.getKey());
-                            }
+                            creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
                         }
                     }
                 }
@@ -397,10 +379,12 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
+            //Время на подумать оставить результаты или нет
+            Thread.sleep(5000);
+
             countResult++;
         }
     }
-
 
     private HashMap<Integer, Boolean> initCreepCommandResult() {
         HashMap<Integer, Boolean> init = new HashMap<>(meterList.size());
@@ -418,7 +402,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
             creepResult.setPassTest(null);
             creepResult.setLastResult("");
             meter.setAmountImn(0);
-            stendDLLCommands.crpstaStart(meter.getId());
+            stendDLLCommands.countStart(meter.getId());
         }
     }
 

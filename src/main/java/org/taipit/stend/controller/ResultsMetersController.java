@@ -157,6 +157,12 @@ public class ResultsMetersController implements Frame {
     @FXML
     void editDeleteAction(ActionEvent event) {
         if (event.getSource() == btnEdit) {
+            if (!ConsoleHelper.properties.getProperty("config").isEmpty()) {
+                if (!ConsoleHelper.passwordFrame()) {
+                    return;
+                }
+            }
+
             List<Meter> listSelectedMeters = new ArrayList<>();
 
             ResultsTest results = ResultsTest.getResultsTestInstance();
@@ -188,6 +194,12 @@ public class ResultsMetersController implements Frame {
         }
 
         if (event.getSource() == btnDelete) {
+            if (!ConsoleHelper.properties.getProperty("config").isEmpty()) {
+                if (!ConsoleHelper.passwordFrame()) {
+                    return;
+                }
+            }
+
             if (ResultsTest.getResultsTestInstance().getListAllResults().isEmpty()) {
                 ConsoleHelper.infoException("Нет результатов");
                 return;
@@ -204,7 +216,7 @@ public class ResultsMetersController implements Frame {
             YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
             yesOrNoFrameController.setResultsMeters(true);
             yesOrNoFrameController.setListIndexces(tabViewResults.getSelectionModel().getSelectedIndices());
-            yesOrNoFrameController.getQuestionTxt().setText("Вы уверены, что хотите удалить выбранные записи?");
+            yesOrNoFrameController.getQuestionTxt().setText("Вы уверены, что хотите удалить\nвыбранные записи?");
             yesOrNoFrameController.getQuestionTxt().setLayoutX(165);
             yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
 

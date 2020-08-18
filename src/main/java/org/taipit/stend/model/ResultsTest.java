@@ -25,12 +25,6 @@ public class ResultsTest implements Serializable {
         return resultsTestInstance;
     }
 
-    public void addMeterResult(/*String unicalId,*/ Meter meter) {
-//        if (mapAllResults.containsKey(unicalId)) throw new InfoExсeption("Данный ключ уже существует: " + meter.getUnicalID());
-//        mapAllResults.put(unicalId, meter);
-        listAllResults.add(meter);
-    }
-
     public void addMeterRusults(List<Meter> meterList) {
         listAllResults.addAll(meterList);
     }

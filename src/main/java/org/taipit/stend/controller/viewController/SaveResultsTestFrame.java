@@ -35,6 +35,8 @@ public class SaveResultsTestFrame {
 
     private Properties properties = ConsoleHelper.properties;
 
+    private boolean password;
+
     private String[] resultMass = properties.getProperty("restMeterResults").split(", ");
 
     private String[] meterModel = properties.getProperty("meterModels").split(", ");
@@ -152,7 +154,11 @@ public class SaveResultsTestFrame {
 
     @FXML
     void initialize() {
-
+        if (properties.getProperty("config").isEmpty()) {
+            password = false;
+        } else {
+            password = true;
+        }
     }
 
     @FXML
@@ -338,6 +344,11 @@ public class SaveResultsTestFrame {
         tabColSerNo.setCellFactory(TextFieldTableCell.<Meter>forTableColumn());
         tabColSerNo.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
 
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String newSerNo = event.getNewValue();
@@ -367,6 +378,11 @@ public class SaveResultsTestFrame {
         tabColMeterModel.setCellFactory(ComboBoxTableCell.forTableColumn(meterModelList));
 
         tabColMeterModel.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String newModel = event.getNewValue();
@@ -404,6 +420,12 @@ public class SaveResultsTestFrame {
         tabColResultVerification.setCellFactory(ComboBoxTableCell.forTableColumn(finalResult));
 
         tabColResultVerification.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -449,6 +471,11 @@ public class SaveResultsTestFrame {
         tabColCRPResult.setCellFactory(ComboBoxTableCell.forTableColumn(creepResult));
 
         tabColCRPResult.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -497,6 +524,11 @@ public class SaveResultsTestFrame {
         tabColStartAPPls.setCellFactory(ComboBoxTableCell.forTableColumn(startResultAPPls));
 
         tabColStartAPPls.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -546,6 +578,11 @@ public class SaveResultsTestFrame {
         tabColStartAPMns.setCellFactory(ComboBoxTableCell.forTableColumn(startResultAPMns));
 
         tabColStartAPMns.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -594,6 +631,11 @@ public class SaveResultsTestFrame {
         tabColStartRPPls.setCellFactory(ComboBoxTableCell.forTableColumn(startResultRPPls));
 
         tabColStartRPPls.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -641,6 +683,11 @@ public class SaveResultsTestFrame {
         tabColStartRPMns.setCellFactory(ComboBoxTableCell.forTableColumn(startResultRPMns));
 
         tabColStartRPMns.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -687,6 +734,11 @@ public class SaveResultsTestFrame {
         tabColRTCResult.setCellFactory(ComboBoxTableCell.forTableColumn(RTCResult));
 
         tabColRTCResult.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -737,6 +789,11 @@ public class SaveResultsTestFrame {
         tabColConstantAPPls.setCellFactory(ComboBoxTableCell.forTableColumn(constantResultAPPls));
 
         tabColConstantAPPls.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -786,6 +843,11 @@ public class SaveResultsTestFrame {
         tabColConstantAPMns.setCellFactory(ComboBoxTableCell.forTableColumn(constantResultAPMns));
 
         tabColConstantAPMns.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -834,6 +896,11 @@ public class SaveResultsTestFrame {
         tabColConstantRPPls.setCellFactory(ComboBoxTableCell.forTableColumn(constantResultRPPls));
 
         tabColConstantRPPls.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -882,6 +949,11 @@ public class SaveResultsTestFrame {
         tabColConstantRPMns.setCellFactory(ComboBoxTableCell.forTableColumn(constantResultRPMns));
 
         tabColConstantRPMns.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -928,6 +1000,11 @@ public class SaveResultsTestFrame {
         tabColInsulationResult.setCellFactory(ComboBoxTableCell.forTableColumn(insulationResult));
 
         tabColInsulationResult.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -974,6 +1051,11 @@ public class SaveResultsTestFrame {
         tabColApperianceResult.setCellFactory(ComboBoxTableCell.forTableColumn(appearenseResult));
 
         tabColApperianceResult.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
             TablePosition<Meter, String> pos = event.getTablePosition();
 
             String result = event.getNewValue();
@@ -1018,11 +1100,18 @@ public class SaveResultsTestFrame {
         });
     }
 
-    public void setMeterList(List<Meter> meterList) {
-        this.meterList = meterList;
-    }
 
     public void setTestErrorTableFrameController(TestErrorTableFrameController testErrorTableFrameController) {
         this.testErrorTableFrameController = testErrorTableFrameController;
+    }
+
+    //Если установлен пароль, то запрашиваю его
+    private boolean requestPassword() {
+        if (password) {
+            if (ConsoleHelper.passwordFrame()) {
+                password = false;
+            }
+        }
+        return password;
     }
 }
