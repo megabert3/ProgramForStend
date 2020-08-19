@@ -296,31 +296,30 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                 strError = stendDLLCommands.meterErrorRead(meter.getId());
                 strMass = strError.split(",");
 
-                if (strMass.length != 2) {
-                    continue;
-                }
+                if (strMass.length == 2) {
 
-                resultNo = Integer.parseInt(strMass[0]);
-                error = strMass[1];
+                    resultNo = Integer.parseInt(strMass[0]);
+                    error = strMass[1];
 
-                if (resultNo != 0) {
-                    resultMeter = meter.returnResultCommand(index, channelFlag);
-                    doubleErr = Double.parseDouble(error);
+                    if (resultNo != 0) {
+                        resultMeter = meter.returnResultCommand(index, channelFlag);
+                        doubleErr = Double.parseDouble(error);
 
-                    if (doubleErr > emax || doubleErr < emin) {
-                        ((Meter.ErrorResult) resultMeter).setResultErrorCommand("F" + error, resultNo, error, false);
-                    } else {
-                        ((Meter.ErrorResult) resultMeter).setResultErrorCommand("P" + error, resultNo, error, true);
+                        if (doubleErr > emax || doubleErr < emin) {
+                            ((Meter.ErrorResult) resultMeter).setResultErrorCommand("F" + error, resultNo, error, false);
+                        } else {
+                            ((Meter.ErrorResult) resultMeter).setResultErrorCommand("P" + error, resultNo, error, true);
+                        }
+
+                        if (meter.getErrorResultChange() != resultNo) {
+                            meter.setAmountMeasur(meter.getAmountMeasur() + 1);
+                            meter.setErrorResultChange(resultNo);
+                        }
                     }
 
-                    if (meter.getErrorResultChange() != resultNo) {
-                        meter.setAmountMeasur(meter.getAmountMeasur() + 1);
-                        meter.setErrorResultChange(resultNo);
+                    if (meter.getAmountMeasur() >= countResult) {
+                        flagInStop.put(meter.getId(), true);
                     }
-                }
-
-                if (meter.getAmountMeasur() >= countResult) {
-                    flagInStop.put(meter.getId(), true);
                 }
             }
 

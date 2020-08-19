@@ -1514,7 +1514,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     }
 
 
-                    txtFieldRngEAPPls.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFieldRngEAPPls.setText(String.format(Locale.ROOT,"%.7f", rtcCommand.getErrorForFalseTest()));
                     txtFldRTCFrqAPPls.setText(String.valueOf(rtcCommand.getFreg()));
                     txtFldRTCAmtMshAPPls.setText(String.valueOf(rtcCommand.getCountResultTest()));
                     txtFldRTCTimeMshAPPls.setText(String.valueOf(rtcCommand.getPulseForRTC()));
@@ -1612,7 +1612,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         ChcBxRTCErrAPMns.setValue("Сутч. погрешность");
                     }
 
-                    txtFieldRngEAPMns.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFieldRngEAPMns.setText(String.format(Locale.ROOT, "%.7f", rtcCommand.getErrorForFalseTest()));
                     txtFldRTCFrqAPMns.setText(String.valueOf(rtcCommand.getFreg()));
                     txtFldRTCAmtMshAPMns.setText(String.valueOf(rtcCommand.getCountResultTest()));
                     txtFldRTCTimeMshAPMns.setText(String.valueOf(rtcCommand.getPulseForRTC()));
@@ -1710,7 +1710,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         ChcBxRTCErrRPPls.setValue("Сутч. погрешность");
                     }
 
-                    txtFieldRngERPPls.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFieldRngERPPls.setText(String.format(Locale.ROOT, "%.7f", rtcCommand.getErrorForFalseTest()));
                     txtFldRTCFrqRPPls.setText(String.valueOf(rtcCommand.getFreg()));
                     txtFldRTCAmtMshRPPls.setText(String.valueOf(rtcCommand.getCountResultTest()));
                     txtFldRTCTimeMshRPPls.setText(String.valueOf(rtcCommand.getPulseForRTC()));
@@ -1808,7 +1808,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         ChcBxRTCErrRPMns.setValue("Сутч. погрешность");
                     }
 
-                    txtFieldRngERPMns.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFieldRngERPMns.setText(String.format(Locale.ROOT, "%.7f", rtcCommand.getErrorForFalseTest()));
                     txtFldRTCFrqRPMns.setText(String.valueOf(rtcCommand.getFreg()));
                     txtFldRTCAmtMshRPMns.setText(String.valueOf(rtcCommand.getCountResultTest()));
                     txtFldRTCTimeMshRPMns.setText(String.valueOf(rtcCommand.getPulseForRTC()));
@@ -2759,7 +2759,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //Добаление самохода с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnCRPRPMnsGOST) {
             if (addTglBtnCRPRPMnsGOST.isSelected()) {
-                creepCommand = new CreepCommand(true, true, "Самоход RP- ГОСТ", "CRP;G;R;N",3);;
+                creepCommand = new CreepCommand(true, true, "Самоход RP- ГОСТ", "CRP;G;R;N",3);
 
                 CRPTogBtnRPMns.setSelected(true);
 

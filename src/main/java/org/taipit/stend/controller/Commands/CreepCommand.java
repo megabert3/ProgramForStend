@@ -101,8 +101,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         this.userTimeTest = userTimeTest;
         this.pulseValue = pulseValue;
         this.voltPer = voltPer;
-        this.ratedCurr = 60;
-        this.currPer = 100;
     }
 
     public CreepCommand(boolean threePhaseCommand, boolean gostTest, String name, String id,  int channelFlag) {
@@ -111,7 +109,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         this.name = name;
         this.id = id;
         this.channelFlag = channelFlag;
-        this.pulseValue = 2;
+        this.pulseValue = 1;
         this.voltPer = 115;
     }
 
@@ -221,7 +219,8 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
                 }
 
                 if (mapResult.getValue()) {
-                    if (stendDLLCommands.countRead(mapResult.getKey()) > pulseValue) {
+
+                    if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue) {
 
                         creepCommandResult.put(mapResult.getKey(), false);
 
@@ -279,7 +278,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         //Номер измерения
         int countResult = 1;
-        Meter meter;
         Meter.CreepResult creepResult;
 
         stendDLLCommands.setReviseMode(1);
@@ -355,7 +353,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
                     if (mapResult.getValue()) {
 
-                        if (stendDLLCommands.countRead(mapResult.getKey()) > pulseValue) {
+                        if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue) {
 
                             creepCommandResult.put(mapResult.getKey(), false);
 
@@ -397,7 +395,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
     //reset
     private void setDefTestResults(int channelFlag, int index) {
         for (Meter meter : meterList) {
-            Meter.CreepResult creepResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
+            Meter.CommandResult creepResult = meter.returnResultCommand(index, channelFlag);
             creepResult.setLastResultForTabView("N");
             creepResult.setPassTest(null);
             creepResult.setLastResult("");

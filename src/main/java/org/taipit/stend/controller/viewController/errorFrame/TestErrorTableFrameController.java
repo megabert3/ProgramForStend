@@ -2,6 +2,7 @@ package org.taipit.stend.controller.viewController.errorFrame;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -64,8 +65,6 @@ public class TestErrorTableFrameController {
     private List<Meter> listMetersForTest;
 
     private Metodic methodicForStend;
-
-    private String mode;
 
     //Список команд
     private ObservableList<Commands> commandsAPPls = FXCollections.observableArrayList(new ArrayList<>());
@@ -207,7 +206,7 @@ public class TestErrorTableFrameController {
     private Button btnSave;
 
     @FXML
-    private TableView<Commands> tabViewTestPoints = new TableView<>();
+    private TableView<Commands> tabViewTestPoints;
 
     @FXML
     private Pane checBoxePane;
@@ -2092,6 +2091,23 @@ public class TestErrorTableFrameController {
         return stendRefParametersForFrame.getStendRefParametersForFrame();
     }
 
+    public void initAllTipsForTable() {
+
+        Callback<TableColumn<Commands, String>, TableCell<Commands, String>> existingCellFactory
+                = tabColTestPoints.getCellFactory();
+
+        tabColTestPoints.setCellFactory(c -> {
+
+            TableCell<Commands, String> cell = existingCellFactory.call(c);
+
+            Tooltip tooltip = new Tooltip();
+
+            tooltip.textProperty().bind(cell.itemProperty().asString());
+            cell.setTooltip(tooltip);
+            return cell;
+        });
+    }
+
     //Добавляет объект resultError к каждому счётчику необходимому для теста
     private void initErrorsForMeters() {
 
@@ -2129,6 +2145,7 @@ public class TestErrorTableFrameController {
                 new Callback<TableColumn<Meter.CommandResult, String>, TableCell<Meter.CommandResult, String>>() {
                     public TableCell call(TableColumn p) {
                         return new TableCell<Meter.CommandResult, String>() {
+
                             @Override
                             public void updateItem(String item, boolean empty) {
                                 super.updateItem(item, empty);
@@ -2142,7 +2159,7 @@ public class TestErrorTableFrameController {
 
                                     if (firstSymbol == 'N') {
                                         setText(item.substring(1));
-
+                                        setTextFill(Color.BLACK);
                                     } else if (firstSymbol == 'P') {
                                         setText(item.substring(1));
                                         setTextFill(Color.rgb(0, 105, 201));
@@ -2377,9 +2394,5 @@ public class TestErrorTableFrameController {
 
     public static Button getStaticBtnStop() {
         return btnStopStatic;
-    }
-
-    public void setMode(String mode) {
-        this.mode = mode;
     }
 }

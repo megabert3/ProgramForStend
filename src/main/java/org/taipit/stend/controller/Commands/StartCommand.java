@@ -92,7 +92,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
     private HashMap<Integer, Boolean> startCommandResult;
 
-    public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest, long userTimeTest, int pulseValue, double currPer) {
+    public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest, long userTimeTest, int pulseValue, double ratedCurr) {
         this.threePhaseCommand = threePhaseCommand;
         this.name = name;
         this.id = id;
@@ -101,7 +101,8 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         this.channelFlag = channelFlag;
         this.gostTest = gostTest;
         this.pulseValue = pulseValue;
-        this.currPer = currPer;
+        this.ratedCurr = ratedCurr;
+        this.currPer = 100;
     }
 
     public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest) {
@@ -235,7 +236,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                     meter = meterList.get(mapResult.getKey() - 1);
                     startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
 
-                    if (stendDLLCommands.countRead(mapResult.getKey()) > pulseValue) {
+                    if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue) {
 
                         startCommandResult.put(mapResult.getKey(), true);
                         startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
@@ -383,7 +384,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                         meter = meterList.get(mapResult.getKey() - 1);
                         startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
 
-                        if (stendDLLCommands.countRead(mapResult.getKey()) > pulseValue) {
+                        if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue) {
 
                             startCommandResult.put(mapResult.getKey(), true);
                             startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);

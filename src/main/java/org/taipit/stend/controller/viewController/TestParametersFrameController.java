@@ -341,8 +341,6 @@ public class TestParametersFrameController implements Frame {
             testErrorTableFrameController.setImax(Imax);
             testErrorTableFrameController.setTypeOfMeasuringElementShunt(typeOfMeasuringElementShunt);
             testErrorTableFrameController.setTwoCircut(twoCircut);
-            testErrorTableFrameController.setMode(chosBxPowerType.getValue());
-
 
             //Установка информации в окне теста
             testErrorTableFrameController.getTxtLabUn().setText("Uн = " + Un + " В");
@@ -361,6 +359,7 @@ public class TestParametersFrameController implements Frame {
             stage.show();
 
             testErrorTableFrameController.initScrolBars();
+            testErrorTableFrameController.initAllTipsForTable();
 
             Stage stage1 = (Stage) btnStartTest.getScene().getWindow();
             stage1.close();

@@ -979,7 +979,7 @@ public class Meter implements Serializable{
         }
 
         public void setLastResultForTabView(String lastResultForTabView) {
-            this.lastResultForTabView.set(lastResultForTabView);
+            this.lastResultForTabView.setValue(lastResultForTabView);
         }
 
         public String getLastResult() {
