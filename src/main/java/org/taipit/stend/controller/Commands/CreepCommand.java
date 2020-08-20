@@ -454,6 +454,10 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         return userTimeTest;
     }
 
+    public String getUserTimeTestHHmmss() {
+        return getTime(userTimeTest);
+    }
+
     public boolean isActive() {
         return active;
     }

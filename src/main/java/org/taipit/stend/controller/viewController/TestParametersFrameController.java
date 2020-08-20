@@ -359,7 +359,6 @@ public class TestParametersFrameController implements Frame {
             stage.show();
 
             testErrorTableFrameController.initScrolBars();
-            testErrorTableFrameController.initAllTipsForTable();
 
             Stage stage1 = (Stage) btnStartTest.getScene().getWindow();
             stage1.close();

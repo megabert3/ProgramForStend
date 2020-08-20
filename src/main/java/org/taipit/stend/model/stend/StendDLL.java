@@ -325,7 +325,7 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
     //Если не выставляются малые токи, то необходимов выставлять либо 0 либо 3
     boolean Set_ReviseMode(int mode);
 
-    boolean Set_ReviseTime(int time);
+    boolean Set_ReviseTime(double time);
 
     boolean Set_NoRevise(boolean b);
 

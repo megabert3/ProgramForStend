@@ -393,7 +393,7 @@ public abstract class StendDLLCommands {
         return stend.Set_ReviseMode(mode);
     }
 
-    public boolean setReviseTime(int timeSek) {
+    public boolean setReviseTime(double timeSek) {
         return stend.Set_ReviseTime(timeSek);
     }
 

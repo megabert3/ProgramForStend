@@ -589,4 +589,8 @@ public class RelayCommand implements Commands {
     public boolean isThreePhaseCommand() {
         return threePhaseCommand;
     }
+
+    public String getUserTimeTestHHmmss() {
+        return getTime(userTimeTest);
+    }
 }

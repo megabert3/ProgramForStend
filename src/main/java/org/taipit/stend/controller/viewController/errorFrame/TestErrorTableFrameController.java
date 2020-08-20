@@ -2,7 +2,6 @@ package org.taipit.stend.controller.viewController.errorFrame;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,10 +22,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.viewController.errorFrame.refMeter.OnePhaseStendRefParamController;
@@ -46,6 +47,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TestErrorTableFrameController {
 
@@ -1977,6 +1979,63 @@ public class TestErrorTableFrameController {
             });
         }
 
+        tabViewTestPoints.setRowFactory(tv -> new TableRow<Commands>() {
+            private Tooltip tooltip = new Tooltip();
+
+
+            @Override
+            protected void updateItem(Commands item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item != null) {
+
+                    if (item instanceof ErrorCommand) {
+                        tooltip.setText("Emax: " + ((ErrorCommand) item).getEmax() +
+                                "\nEmin: " + ((ErrorCommand) item).getEmin() +
+                                "\nКоличество импульсов: " + ((ErrorCommand) item).getPulse() +
+                                "\nКоличество измерений: " + ((ErrorCommand) item).getCountResult());
+                    } else if (item instanceof CreepCommand) {
+                        tooltip.setText("Время теста: " + ((CreepCommand) item).getUserTimeTestHHmmss() +
+                                "\nКоличество импульсов: " + ((CreepCommand) item).getPulseValue() +
+                                "\nПроцент от Un: " + item.getVoltPer());
+                    } else if (item instanceof StartCommand) {
+                        tooltip.setText("Время теста: " + ((StartCommand) item).getUserTimeTestHHmmss() +
+                                "\nКоличество импульсов: " + ((StartCommand) item).getPulseValue() +
+                                "\nТок: " + item.getCurrPer());
+                    } else if (item instanceof RTCCommand) {
+                        tooltip.setText("Emax: " + String.format(Locale.ROOT, "%.7f", ((RTCCommand) item).getErrorForFalseTest()) +
+                                "\nEmin: " + String.format(Locale.ROOT, "%.7f", -((RTCCommand) item).getErrorForFalseTest()) +
+                                "\nЧастота: " + String.format(Locale.ROOT, "%.7f", ((RTCCommand) item).getFreg()) +
+                                "\nКоличество импульсов: " + ((RTCCommand) item).getPulseForRTC() +
+                                "\nКоличество измерений: " + ((RTCCommand) item).getCountResult());
+                    } else if (item instanceof ConstantCommand) {
+                        if (((ConstantCommand) item).isRunTestToTime()) {
+                            tooltip.setText("Emax: " + ((ConstantCommand) item).getEmaxProc() +
+                                    "Emin: " + ((ConstantCommand) item).getEminProc() +
+                                    "\nВремя теста: " + ((ConstantCommand) item).getTimeTheTestHHmmss());
+                        } else {
+                            tooltip.setText("Emax: " + ((ConstantCommand) item).getEmaxProc() +
+                                    "Emin: " + ((ConstantCommand) item).getEminProc() +
+                                    "\nКоличество энергии: " + ((ConstantCommand) item).getkWToTest());
+                        }
+                    }  else if (item instanceof ImbalansUCommand) {
+                        tooltip.setText("Emax: " + ((ImbalansUCommand) item).getEmax() +
+                                "\nEmin: " + ((ImbalansUCommand) item).getEmin() +
+                                "\nКоличество импульсов: " + ((ImbalansUCommand) item).getPulse() +
+                                "\nКоличество измерений: " + ((ImbalansUCommand) item).getCountResult());
+                    } else if (item instanceof RelayCommand) {
+                        tooltip.setText("Время теста: " + ((RelayCommand) item).getUserTimeTestHHmmss() +
+                                "\nКоличество импульсов: " + ((RelayCommand) item).getPulseValue() +
+                                "\nТок: " + item.getCurrPer());
+                    }
+                    tooltip.setFont(Font.font(14));
+                    tooltip.setStyle("-fx-background-radius: 0; -fx-background-color: gray");
+                    tooltip.setShowDelay(Duration.millis(20000));
+                    setTooltip(tooltip);
+                }
+            }
+        });
+
         if (commandsAPPls.size() != 0) {
             tglBtnAPPls.fire();
         } else if (commandsAPMns.size() != 0) {
@@ -2091,22 +2150,22 @@ public class TestErrorTableFrameController {
         return stendRefParametersForFrame.getStendRefParametersForFrame();
     }
 
-    public void initAllTipsForTable() {
-
-        Callback<TableColumn<Commands, String>, TableCell<Commands, String>> existingCellFactory
-                = tabColTestPoints.getCellFactory();
-
-        tabColTestPoints.setCellFactory(c -> {
-
-            TableCell<Commands, String> cell = existingCellFactory.call(c);
-
-            Tooltip tooltip = new Tooltip();
-
-            tooltip.textProperty().bind(cell.itemProperty().asString());
-            cell.setTooltip(tooltip);
-            return cell;
-        });
-    }
+//    public void initAllTipsForTable() {
+//
+//        Callback<TableColumn<Commands, String>, TableCell<Commands, String>> existingCellFactory
+//                = tabColTestPoints.getCellFactory();
+//
+//        tabColTestPoints.setCellFactory(c -> {
+//
+//            TableCell<Commands, String> cell = existingCellFactory.call(c);
+//
+//            Tooltip tooltip = new Tooltip();
+//
+//            tooltip.textProperty().bind(cell.itemProperty().asString());
+//            cell.setTooltip(tooltip);
+//            return cell;
+//        });
+//    }
 
     //Добавляет объект resultError к каждому счётчику необходимому для теста
     private void initErrorsForMeters() {

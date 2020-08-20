@@ -523,6 +523,10 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     public void setEmin(String emin) {
 
     }
+    public String getUserTimeTestHHmmss() {
+        return getTime(userTimeTest);
+    }
+
 
     public String getId() {
         return id;
