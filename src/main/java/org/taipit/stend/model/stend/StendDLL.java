@@ -8,7 +8,7 @@ import com.sun.jna.ptr.PointerByReference;
 
 
 public interface StendDLL extends Library {
-    StendDLL INSTANCE = (StendDLL) Native.load(("hscom.dll"), StendDLL.class);
+    StendDLL INSTANCE = Native.load(("hscom.dll"), StendDLL.class);
 
 //--------------------------------------------------------------------------- Adjust_UI
 // Включить напряжение и ток

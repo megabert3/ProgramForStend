@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ProgramForStend" target="11.0.2" />
+      <module name="ProgramForStend" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

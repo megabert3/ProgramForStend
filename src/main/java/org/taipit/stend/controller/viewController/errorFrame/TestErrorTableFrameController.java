@@ -1,7 +1,10 @@
 package org.taipit.stend.controller.viewController.errorFrame;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,7 +30,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import javafx.util.Duration;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.viewController.errorFrame.refMeter.OnePhaseStendRefParamController;
@@ -46,6 +48,7 @@ import org.taipit.stend.model.metodics.Metodic;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -838,7 +841,6 @@ public class TestErrorTableFrameController {
         startCommand.setRatedFreq(Fn);
         startCommand.setRatedVolt(Un);
         startCommand.setIndex(index);
-        startCommand.setRatedCurr(Ib);
         startCommand.setMeterList(listMetersForTest);
 
         if (startCommand.isGostTest()) {
@@ -885,7 +887,6 @@ public class TestErrorTableFrameController {
             if (checkBoxDisableAll.isSelected()) {
                 for (Commands commsnd : tabViewTestPoints.getItems()) {
                     commsnd.setActive(true);
-
                 }
                 tabViewTestPoints.refresh();
             } else {
@@ -1858,7 +1859,6 @@ public class TestErrorTableFrameController {
                         }
                     }
                 });
-
             } else {
 
                 for (int j = 0; j < 2; j++) {
@@ -1982,7 +1982,6 @@ public class TestErrorTableFrameController {
         tabViewTestPoints.setRowFactory(tv -> new TableRow<Commands>() {
             private Tooltip tooltip = new Tooltip();
 
-
             @Override
             protected void updateItem(Commands item, boolean empty) {
                 super.updateItem(item, empty);
@@ -2001,21 +2000,29 @@ public class TestErrorTableFrameController {
                     } else if (item instanceof StartCommand) {
                         tooltip.setText("Время теста: " + ((StartCommand) item).getUserTimeTestHHmmss() +
                                 "\nКоличество импульсов: " + ((StartCommand) item).getPulseValue() +
-                                "\nТок: " + item.getCurrPer());
+                                "\nТок: " + item.getRatedCurr());
                     } else if (item instanceof RTCCommand) {
-                        tooltip.setText("Emax: " + String.format(Locale.ROOT, "%.7f", ((RTCCommand) item).getErrorForFalseTest()) +
-                                "\nEmin: " + String.format(Locale.ROOT, "%.7f", -((RTCCommand) item).getErrorForFalseTest()) +
-                                "\nЧастота: " + String.format(Locale.ROOT, "%.7f", ((RTCCommand) item).getFreg()) +
-                                "\nКоличество импульсов: " + ((RTCCommand) item).getPulseForRTC() +
-                                "\nКоличество измерений: " + ((RTCCommand) item).getCountResult());
+                        if (((RTCCommand) item).getErrorType() == 0) {
+                            tooltip.setText("Emax: " + String.format(Locale.ROOT, "%.7f", ((RTCCommand) item).getErrorForFalseTest()) +
+                                    "\nEmin: " + String.format(Locale.ROOT, "%.7f", -((RTCCommand) item).getErrorForFalseTest()) +
+                                    "\nЧастота: " + String.format(Locale.ROOT, "%.7f", ((RTCCommand) item).getFreg()) +
+                                    "\nКоличество импульсов: " + ((RTCCommand) item).getPulseForRTC() +
+                                    "\nКоличество измерений: " + ((RTCCommand) item).getCountResultTest());
+                        } else {
+                            tooltip.setText("Emax: " + ((RTCCommand) item).getErrorForFalseTest() +
+                                    "\nEmin: " +  -((RTCCommand) item).getErrorForFalseTest() +
+                                    "\nЧастота: " + String.format(Locale.ROOT, "%.7f", ((RTCCommand) item).getFreg()) +
+                                    "\nКоличество импульсов: " + ((RTCCommand) item).getPulseForRTC() +
+                                    "\nКоличество измерений: " + ((RTCCommand) item).getCountResult());
+                        }
                     } else if (item instanceof ConstantCommand) {
                         if (((ConstantCommand) item).isRunTestToTime()) {
                             tooltip.setText("Emax: " + ((ConstantCommand) item).getEmaxProc() +
-                                    "Emin: " + ((ConstantCommand) item).getEminProc() +
+                                    "\nEmin: " + ((ConstantCommand) item).getEminProc() +
                                     "\nВремя теста: " + ((ConstantCommand) item).getTimeTheTestHHmmss());
                         } else {
                             tooltip.setText("Emax: " + ((ConstantCommand) item).getEmaxProc() +
-                                    "Emin: " + ((ConstantCommand) item).getEminProc() +
+                                    "\nEmin: " + ((ConstantCommand) item).getEminProc() +
                                     "\nКоличество энергии: " + ((ConstantCommand) item).getkWToTest());
                         }
                     }  else if (item instanceof ImbalansUCommand) {
@@ -2028,9 +2035,8 @@ public class TestErrorTableFrameController {
                                 "\nКоличество импульсов: " + ((RelayCommand) item).getPulseValue() +
                                 "\nТок: " + item.getCurrPer());
                     }
-                    tooltip.setFont(Font.font(14));
-                    tooltip.setStyle("-fx-background-radius: 0; -fx-background-color: gray");
-                    tooltip.setShowDelay(Duration.millis(20000));
+                    tooltip.setFont(Font.font(12));
+                    tooltip.setStyle("-fx-background-radius: 0; -fx-background-color: gray; -fx-opacity: 0.9;");
                     setTooltip(tooltip);
                 }
             }
@@ -2150,23 +2156,6 @@ public class TestErrorTableFrameController {
         return stendRefParametersForFrame.getStendRefParametersForFrame();
     }
 
-//    public void initAllTipsForTable() {
-//
-//        Callback<TableColumn<Commands, String>, TableCell<Commands, String>> existingCellFactory
-//                = tabColTestPoints.getCellFactory();
-//
-//        tabColTestPoints.setCellFactory(c -> {
-//
-//            TableCell<Commands, String> cell = existingCellFactory.call(c);
-//
-//            Tooltip tooltip = new Tooltip();
-//
-//            tooltip.textProperty().bind(cell.itemProperty().asString());
-//            cell.setTooltip(tooltip);
-//            return cell;
-//        });
-//    }
-
     //Добавляет объект resultError к каждому счётчику необходимому для теста
     private void initErrorsForMeters() {
 
@@ -2249,6 +2238,28 @@ public class TestErrorTableFrameController {
         tableView.setPlaceholder(new Label("Нет точек"));
         paneErrors.getChildren().add(tableView);
         tabViewErrorsList.add(tableView);
+
+        tableView.setRowFactory(tv -> new TableRow<Meter.CommandResult>() {
+            private Tooltip tooltip = new Tooltip();
+
+            @Override
+            protected void updateItem(Meter.CommandResult item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item != null) {
+
+                    String[] results = item.getResults();
+
+                    SimpleStringProperty simpleStringProperty = new SimpleStringProperty(item.getLastResult());
+
+                    tooltip.textProperty().bind(Bindings.convert(simpleStringProperty));
+
+                    tooltip.setFont(Font.font(12));
+                    tooltip.setStyle("-fx-background-radius: 0; -fx-background-color: gray; -fx-opacity: 0.9;");
+                    setTooltip(tooltip);
+                }
+            }
+        });
     }
 
     //Находит все скрол бары
@@ -2453,5 +2464,21 @@ public class TestErrorTableFrameController {
 
     public static Button getStaticBtnStop() {
         return btnStopStatic;
+    }
+
+    public boolean isTypeOfMeasuringElementShunt() {
+        return typeOfMeasuringElementShunt;
+    }
+
+    public double getIb() {
+        return Ib;
+    }
+
+    public double getAccuracyClassAP() {
+        return accuracyClassAP;
+    }
+
+    public double getAccuracyClassRP() {
+        return accuracyClassRP;
     }
 }

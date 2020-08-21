@@ -1,5 +1,7 @@
 package org.taipit.stend.controller;
 
+import com.sun.jna.WString;
+import org.taipit.stend.model.stend.StendDLL;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 
@@ -7,21 +9,24 @@ public class MainStend {
 
     public static void main(String[] args) throws InterruptedException {
 
-
         StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
-//
-//        int channelFlag = 0;
-//
+
+
+        int channelFlag = 0;
+
         stendDLLCommands.setReviseMode(1);
 //
         System.out.println(stendDLLCommands.setNoRevise(true));
-//
-//        //System.out.println(stendDLLCommands.setReviseTime(-15));
+
+        //System.out.println(stendDLLCommands.setReviseTime(-15));
 //
 //        long time = System.currentTimeMillis();
+        StendDLL stend = StendDLL.INSTANCE;
+
+        System.out.println(stend.Error_Clear(9));
+
+        stend.Adjust_UI(1, 230.0, 5.0, 50.0, 0, 0,100.0, 100.0, "H", "1.0", "HY5303C-22", 9);
 //
-//        stendDLLCommands.getUIWithPhase(1, 230, 5, 50, 0, 0,
-//                100, 100, 100, 100, "H", "1.0");
 //
 //        System.out.println(System.currentTimeMillis() - time);
 //
@@ -45,7 +50,7 @@ public class MainStend {
 ////            Thread.sleep(500);
 ////        }
 //
-//        stendDLLCommands.errorClear();
-//        stendDLLCommands.powerOf();
+        stendDLLCommands.errorClear();
+        stendDLLCommands.powerOf();
     }
 }

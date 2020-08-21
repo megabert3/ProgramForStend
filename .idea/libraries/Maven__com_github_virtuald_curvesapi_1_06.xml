@@ -8,6 +8,8 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/com/github/virtuald/curvesapi/1.06/curvesapi-1.06-sources.jar!/" />
+      <root url="file://$PATH_TO_FX$" />
     </SOURCES>
+    <jarDirectory url="file://$PATH_TO_FX$" recursive="false" type="SOURCES" />
   </library>
 </component>

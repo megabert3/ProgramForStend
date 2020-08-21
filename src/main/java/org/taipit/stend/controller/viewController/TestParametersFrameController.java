@@ -179,7 +179,7 @@ public class TestParametersFrameController implements Frame {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 ConsoleHelper.infoException("Недопустимое значение параметра");
-                txtFldFrg.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                txtFldFrg.setStyle("-fx-text-box-border: red;  -fx-focus-color: red;");
                 return;
             }
 
@@ -188,7 +188,7 @@ public class TestParametersFrameController implements Frame {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 ConsoleHelper.infoException("Недопустимое значение параметра");
-                txtFldAccuracyAP.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                txtFldAccuracyAP.setStyle("-fx-text-box-border: red;  -fx-focus-color: red;");
                 return;
             }
 
@@ -197,7 +197,7 @@ public class TestParametersFrameController implements Frame {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 ConsoleHelper.infoException("Недопустимое значение параметра");
-                txtFldAccuracyRP.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
+                txtFldAccuracyRP.setStyle("-fx-text-box-border: red;  -fx-focus-color: red;");
                 return;
             }
 

@@ -292,8 +292,8 @@ public class Meter implements Serializable{
     private List<CommandResult> errorListRPPls = new ArrayList<>();
     private List<CommandResult> errorListRPMns = new ArrayList<>();
 
-    public void createError(Commands command, int numberArrayList , String id, TestErrorTableFrameController testErrorTableFrameController) {
-        switch (numberArrayList) {
+    public void createError(Commands command, int chanelFlag , String id, TestErrorTableFrameController testErrorTableFrameController) {
+        switch (chanelFlag) {
             case 0: {
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
@@ -310,6 +310,8 @@ public class Meter implements Serializable{
                     //Отображаю время теста
                     if (creepCommand.isGostTest()) {
                         errorListAPPls.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()), String.valueOf(creepCommand.getPulseValue())));
+                        creepCommand.setUserTimeTest(testErrorTableFrameController.getTimeToCreepTestGOSTAP());
+
                     } else {
                         errorListAPPls.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
@@ -320,6 +322,9 @@ public class Meter implements Serializable{
                     //Отображаю время теста
                     if (startCommand.isGostTest()) {
                         errorListAPPls.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()), String.valueOf(startCommand.getPulseValue())));
+                        //Время теста для встпялающей подсказки
+                        startCommand.setUserTimeTest(testErrorTableFrameController.getTimeToStartTestGOSTAP());
+                        startCommand.setRatedCurr(calculateCurrentForSTA(testErrorTableFrameController, chanelFlag));
                     } else {
                         errorListAPPls.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
                     }
@@ -357,6 +362,7 @@ public class Meter implements Serializable{
                     //Отображаю время теста
                     if (creepCommand.isGostTest()) {
                         errorListAPMns.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()), String.valueOf(creepCommand.getPulseValue())));
+                        creepCommand.setUserTimeTest(testErrorTableFrameController.getTimeToCreepTestGOSTAP());
                     } else {
                         errorListAPMns.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
@@ -367,6 +373,8 @@ public class Meter implements Serializable{
                     //Отображаю время теста
                     if (startCommand.isGostTest()) {
                         errorListAPMns.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()), String.valueOf(startCommand.getPulseValue())));
+                        startCommand.setUserTimeTest(testErrorTableFrameController.getTimeToStartTestGOSTAP());
+                        startCommand.setRatedCurr(calculateCurrentForSTA(testErrorTableFrameController, chanelFlag));
                     } else {
                         errorListAPMns.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
                     }
@@ -406,6 +414,7 @@ public class Meter implements Serializable{
                     //Отображаю время теста
                     if (creepCommand.isGostTest()) {
                         errorListRPPls.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()), String.valueOf(creepCommand.getPulseValue())));
+                        creepCommand.setUserTimeTest(testErrorTableFrameController.getTimeToCreepTestGOSTRP());
                     } else {
                         errorListRPPls.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
@@ -417,6 +426,8 @@ public class Meter implements Serializable{
                     //Отображаю время теста
                     if (startCommand.isGostTest()) {
                         errorListRPPls.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()), String.valueOf(startCommand.getPulseValue())));
+                        startCommand.setUserTimeTest(testErrorTableFrameController.getTimeToStartTestGOSTRP());
+                        startCommand.setRatedCurr(calculateCurrentForSTA(testErrorTableFrameController, chanelFlag));
                     } else {
                         errorListRPPls.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
                     }
@@ -456,6 +467,7 @@ public class Meter implements Serializable{
                     //Отображаю время теста
                     if (creepCommand.isGostTest()) {
                         errorListRPMns.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()), String.valueOf(creepCommand.getPulseValue())));
+                        creepCommand.setUserTimeTest(testErrorTableFrameController.getTimeToCreepTestGOSTRP());
                     } else {
                         errorListRPMns.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
@@ -467,6 +479,8 @@ public class Meter implements Serializable{
                     //Отображаю время теста
                     if (startCommand.isGostTest()) {
                         errorListRPMns.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()), String.valueOf(startCommand.getPulseValue())));
+                        startCommand.setUserTimeTest(testErrorTableFrameController.getTimeToStartTestGOSTRP());
+                        startCommand.setRatedCurr(calculateCurrentForSTA(testErrorTableFrameController, chanelFlag));
                     } else {
                         errorListRPMns.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
                     }
@@ -1521,5 +1535,38 @@ public class Meter implements Serializable{
 
             return result;
         }
+    }
+
+    //Расчитываю ток по госту для теста Чувствительности
+    private double calculateCurrentForSTA (TestErrorTableFrameController testErrorTableFrameController, int chanelFlag) {
+
+        double ratedCurr;
+        if (chanelFlag < 2) {
+            if (testErrorTableFrameController.isTypeOfMeasuringElementShunt()) {
+                ratedCurr = 0.004 * testErrorTableFrameController.getIb();
+
+            } else {
+                if (testErrorTableFrameController.getAccuracyClassAP() <= 0.5) {
+                    ratedCurr = 0.001 * testErrorTableFrameController.getIb();
+
+                } else {
+                    ratedCurr = 0.002 * testErrorTableFrameController.getIb();
+                }
+            }
+        } else {
+            if (testErrorTableFrameController.isTypeOfMeasuringElementShunt()) {
+                ratedCurr = 0.004 * testErrorTableFrameController.getIb();
+
+            } else {
+                if (testErrorTableFrameController.getAccuracyClassRP() <= 0.5) {
+                    ratedCurr = 0.001 * testErrorTableFrameController.getIb();
+
+                } else {
+                    ratedCurr = 0.002 * testErrorTableFrameController.getIb();
+                }
+            }
+        }
+
+        return ratedCurr;
     }
 }

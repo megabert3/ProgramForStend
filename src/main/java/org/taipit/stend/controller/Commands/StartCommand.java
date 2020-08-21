@@ -57,7 +57,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     private double voltPer = 100;
 
     //Процен от тока
-    private double currPer;
+    private double currPer = 100;
 
     //Коэфициент мощности
     private String cosP = "1.0";
@@ -102,7 +102,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         this.gostTest = gostTest;
         this.pulseValue = pulseValue;
         this.ratedCurr = ratedCurr;
-        this.currPer = 100;
     }
 
     public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest) {
@@ -143,23 +142,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                 }
             }
         };
-
-        Meter meterForCalculate = meterList.get(0);
-
-        if (gostTest) {
-            if (meterForCalculate.isTypeOfMeasuringElementShunt()) {
-                double current = 0.004 * meterForCalculate.getIb();
-                currPer = current * 100 / ratedCurr;
-            } else {
-                if (meterForCalculate.getAccuracyClassAP() <= 0.5) {
-                    double current = 0.001 * meterForCalculate.getIb();
-                    currPer = current * 100 / ratedCurr;
-                } else {
-                    double current = 0.002 * meterForCalculate.getIb();
-                    currPer = current * 100 / ratedCurr;
-                }
-            }
-        }
 
         //Номер измерения
         int countResult = 1;
@@ -286,22 +268,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                 }
             }
         };
-
-        Meter meterForCalculate = meterList.get(0);
-        if (gostTest) {
-            if (meterForCalculate.isTypeOfMeasuringElementShunt()) {
-                double current = 0.004 * meterForCalculate.getIb();
-                currPer = current * 100 / ratedCurr;
-            } else {
-                if (meterForCalculate.getAccuracyClassAP() <= 0.5) {
-                    double current = 0.001 * meterForCalculate.getIb();
-                    currPer = current * 100 / ratedCurr;
-                } else {
-                    double current = 0.002 * meterForCalculate.getIb();
-                    currPer = current * 100 / ratedCurr;
-                }
-            }
-        }
 
         //Номер измерения
         int countResult = 1;
