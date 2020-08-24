@@ -169,6 +169,79 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
         }
     }
 
+    public void readParametersWithoutCheckingParan() {
+        String[] meterParam = stendDLLCommands.stMeterRead().split(",");
+        System.out.println(Arrays.toString(meterParam));
+
+//        try {
+//            if (meterParam.length == 28) {
+//                if (refTypeHY5303C22) {
+//
+//                    txtFldUA.setText(meterParam[0]);
+//                    txtFldUB.setText(meterParam[1]);
+//                    txtFldUC.setText(meterParam[2]);
+//                    txtFldIA.setText(meterParam[3]);
+//                    txtFldIB.setText(meterParam[4]);
+//                    txtFldIC.setText(meterParam[5]);
+//                    txtFldDegA.setText(meterParam[6]);
+//                    txtFldDegB.setText(meterParam[7]);
+//                    txtFldDegC.setText(meterParam[8]);
+//                    txtFldPA.setText(meterParam[9]);
+//                    txtFldPB.setText(meterParam[10]);
+//                    txtFldPC.setText(meterParam[11]);
+//                    txtFldQA.setText(meterParam[12]);
+//                    txtFldQB.setText(meterParam[13]);
+//                    txtFldQC.setText(meterParam[14]);
+//                    txtFldSA.setText(meterParam[15]);
+//                    txtFldSB.setText(meterParam[16]);
+//                    txtFldSC.setText(meterParam[17]);
+//                    txtFldPall.setText(meterParam[18]);
+//                    txtFldQall.setText(meterParam[19]);
+//                    txtFldSall.setText(meterParam[20]);
+//                    txtFldF.setText(meterParam[21]);
+//                    txtFldPFA.setText(meterParam[22]);
+//                    txtFldPFB.setText(meterParam[23]);
+//                    txtFldPFC.setText(meterParam[24]);
+//                    txtFldPFall.setText(meterParam[25]);
+//                    txtFldUaUb.setText(meterParam[26]);
+//                    txtFldUbUc.setText(meterParam[27]);
+//
+//                } else {
+//                    txtFldUA.setText(meterParam[0]);
+//                    txtFldUB.setText(meterParam[1]);
+//                    txtFldUC.setText(meterParam[2]);
+//                    txtFldIA.setText(meterParam[3]);
+//                    txtFldIB.setText(meterParam[4]);
+//                    txtFldIC.setText(meterParam[5]);
+//                    txtFldUaUb.setText(meterParam[6]);
+//                    txtFldUbUc.setText(meterParam[7]);
+//                    txtFldDegA.setText(meterParam[8]);
+//                    txtFldDegB.setText(meterParam[9]);
+//                    txtFldDegC.setText(meterParam[10]);
+//                    txtFldPA.setText(meterParam[11]);
+//                    txtFldPB.setText(meterParam[12]);
+//                    txtFldPC.setText(meterParam[13]);
+//                    txtFldPall.setText(meterParam[14]);
+//                    txtFldQA.setText(meterParam[15]);
+//                    txtFldQB.setText(meterParam[16]);
+//                    txtFldQC.setText(meterParam[17]);
+//                    txtFldQall.setText(meterParam[18]);
+//                    txtFldSA.setText(meterParam[19]);
+//                    txtFldSB.setText(meterParam[20]);
+//                    txtFldSC.setText(meterParam[21]);
+//                    txtFldSall.setText(meterParam[22]);
+//                    txtFldF.setText(meterParam[23]);
+//                    txtFldPFA.setText(meterParam[24]);
+//                    txtFldPFB.setText(meterParam[25]);
+//                    txtFldPFC.setText(meterParam[26]);
+//                    txtFldPFall.setText(meterParam[27]);
+//                }
+//            }
+//        }catch (ArrayIndexOutOfBoundsException e) {
+//            e.printStackTrace();
+//        }
+    }
+
     public void readParameters() throws InterruptedException {
         String[] meterParam = stendDLLCommands.stMeterRead().split(",");
         System.out.println(Arrays.toString(meterParam));
@@ -206,9 +279,6 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
                     txtFldUaUb.setText(meterParam[26]);
                     txtFldUbUc.setText(meterParam[27]);
 
-                    equalsParan(meterParam[0], meterParam[1], meterParam[2],
-                            meterParam[3], meterParam[4], meterParam[5]);
-
                 } else {
                     txtFldUA.setText(meterParam[0]);
                     txtFldUB.setText(meterParam[1]);
@@ -238,10 +308,10 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
                     txtFldPFB.setText(meterParam[25]);
                     txtFldPFC.setText(meterParam[26]);
                     txtFldPFall.setText(meterParam[27]);
-
-                    equalsParan(meterParam[0], meterParam[1], meterParam[2],
-                            meterParam[3], meterParam[4], meterParam[5]);
                 }
+
+                equalsParan(meterParam[0], meterParam[1], meterParam[2],
+                        meterParam[3], meterParam[4], meterParam[5]);
             }
         }catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();

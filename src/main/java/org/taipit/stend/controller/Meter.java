@@ -1,5 +1,6 @@
 package org.taipit.stend.controller;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
@@ -947,6 +948,8 @@ public class Meter implements Serializable{
         //Последний результат теста
         private transient SimpleStringProperty lastResultForTabView;
 
+        private transient SimpleStringProperty errorsForTips;
+
         //Идентификатор команды
         private String id;
 
@@ -963,6 +966,26 @@ public class Meter implements Serializable{
 
         //10-ть последних результатов
         private String[] results = new String[10];
+
+        public void refreshTipsInfo() {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    if (errorsForTips == null) {
+                        errorsForTips = new SimpleStringProperty("");
+                    }
+
+                    StringBuilder sb = new StringBuilder();
+
+                    for (int i = 0; i < results.length; i++) {
+                        if (results[i] != null) {
+                            sb.append(i).append(": ").append(results[i]).append("\n");
+                        }
+                    }
+                    errorsForTips.setValue(sb.toString());
+                }
+            });
+        }
 
         public String getId() {
             return id;
@@ -1027,6 +1050,22 @@ public class Meter implements Serializable{
         public void setResults(String[] results) {
             this.results = results;
         }
+
+        public String getErrorsForTips() {
+            return errorsForTips.get();
+        }
+
+        public SimpleStringProperty errorsForTipsProperty() {
+            return errorsForTips;
+        }
+
+        public void setErrorsForTips(String errorsForTips) {
+            this.errorsForTips.set(errorsForTips);
+        }
+
+        public void setSimpPropErrorsForTips() {
+            this.errorsForTips = new SimpleStringProperty("");
+        }
     }
 
     //Класс для записи результата исполнения ErrorCommnad
@@ -1043,6 +1082,7 @@ public class Meter implements Serializable{
             super.results[resultNo] = error;
             super.lastResult = error;
             super.passTest = passOrNot;
+            refreshTipsInfo();
         }
     }
 
@@ -1069,15 +1109,16 @@ public class Meter implements Serializable{
                 super.lastResult = time + " P";
                 super.results[resultNo] = time + " P";
                 super.passTest = true;
-                creepTest = this;
             } else {
                 super.lastResultForTabView.setValue("F" + time + " F");
                 this.timeTheFailTest = time;
                 super.lastResult = time + " F";
                 super.results[resultNo] = time + " F";
                 super.passTest = false;
-                creepTest = this;
             }
+
+            creepTest = this;
+            refreshTipsInfo();
         }
 
         public void setMaxPulse(String maxPulse) {
@@ -1129,35 +1170,25 @@ public class Meter implements Serializable{
                 super.lastResult = time + " P";
                 super.results[resultNo] = time + " P";
                 super.passTest = true;
-
-                switch (chanelFlag) {
-                    case 0: startTestAPPls =  this;
-                        break;
-                    case 1: startTestAPMns = this;
-                        break;
-                    case 2: startTestRPPls = this;
-                        break;
-                    case 3: startTestRPMns = this;
-                        break;
-                }
-
             } else {
                 super.lastResultForTabView.setValue("F" + time + " F");
                 super.lastResult = time + " F";
                 super.results[resultNo] = time + " F";
                 super.passTest = false;
-
-                switch (chanelFlag) {
-                    case 0: startTestAPPls = this;
-                        break;
-                    case 1: startTestAPMns = this;
-                        break;
-                    case 2: startTestRPPls = this;
-                        break;
-                    case 3: startTestRPMns = this;
-                        break;
-                }
             }
+
+            switch (chanelFlag) {
+                case 0: startTestAPPls = this;
+                    break;
+                case 1: startTestAPMns = this;
+                    break;
+                case 2: startTestRPPls = this;
+                    break;
+                case 3: startTestRPMns = this;
+                    break;
+            }
+
+            refreshTipsInfo();
         }
 
         public void setMaxPulse(String maxPulse) {
@@ -1206,15 +1237,15 @@ public class Meter implements Serializable{
                 super.lastResult = error;
                 super.results[resultNo] = error;
                 super.passTest = true;
-                RTCTest = this;
-
             } else {
                 super.lastResultForTabView.setValue("F" + error + " F");
                 super.lastResult = error;
                 super.results[resultNo] = error;
                 super.passTest = false;
-                RTCTest = this;
             }
+
+            RTCTest = this;
+            refreshTipsInfo();
         }
 
         public String getFreg() {
@@ -1263,17 +1294,6 @@ public class Meter implements Serializable{
                 this.kwMeter = kwMeter;
                 this.kwRefMeter = kwRefMeter;
 
-                switch (chanelFlag) {
-                    case 0: constantTestAPPls = this;
-                        break;
-                    case 1: constantTestAPMns = this;
-                        break;
-                    case 2: constantTestRPPls = this;
-                        break;
-                    case 3: constantTestRPMns = this;
-                        break;
-                }
-
             } else {
                 super.lastResultForTabView.setValue("F" + result + " F");
                 super.lastResult = result;
@@ -1281,18 +1301,20 @@ public class Meter implements Serializable{
                 super.passTest = false;
                 this.kwMeter = kwMeter;
                 this.kwRefMeter = kwRefMeter;
-
-                switch (chanelFlag) {
-                    case 0: constantTestAPPls = this;
-                        break;
-                    case 1: constantTestAPMns = this;
-                        break;
-                    case 2: constantTestRPPls = this;
-                        break;
-                    case 3: constantTestRPMns = this;
-                        break;
-                }
             }
+
+            switch (chanelFlag) {
+                case 0: constantTestAPPls = this;
+                    break;
+                case 1: constantTestAPMns = this;
+                    break;
+                case 2: constantTestRPPls = this;
+                    break;
+                case 3: constantTestRPMns = this;
+                    break;
+            }
+
+            refreshTipsInfo();
         }
 
         public String getKwMeter() {
@@ -1325,6 +1347,7 @@ public class Meter implements Serializable{
             super.results[resultNo] = error;
             super.lastResult = error;
             super.passTest = passOrNot;
+            refreshTipsInfo();
         }
 
     }
@@ -1365,15 +1388,16 @@ public class Meter implements Serializable{
                 super.lastResult = time + " P";
                 super.results[resultNo] = time + " P";
                 super.passTest = true;
-                relayTest = this;
             } else {
                 super.lastResultForTabView.setValue("F" + time + " F");
                 this.timeTheFailTest = time;
                 super.lastResult = time + " F";
                 super.results[resultNo] = time + " F";
                 super.passTest = false;
-                relayTest = this;
             }
+
+            relayTest = this;
+            refreshTipsInfo();
         }
 
         public void setMaxPulse(String maxPulse) {

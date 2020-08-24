@@ -178,9 +178,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
         }
 
-        //Разблокирую интерфейc кнопок
-        TestErrorTableFrameController.blockBtns.setValue(false);
-
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         Thread.sleep(1000); //Пауза для стабилизации
@@ -301,9 +298,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
         }
-
-        //Разблокирую интерфейc кнопок
-        TestErrorTableFrameController.blockBtns.setValue(false);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 

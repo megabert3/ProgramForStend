@@ -177,9 +177,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
         }
 
-        //Разблокирую интерфейc кнопок
-        TestErrorTableFrameController.blockBtns.setValue(false);
-
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
@@ -305,9 +302,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
             if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
         }
-
-        //Разблокирую интерфейc кнопок
-        TestErrorTableFrameController.blockBtns.setValue(false);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 

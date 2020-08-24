@@ -191,7 +191,7 @@ public abstract class StendDLLCommands {
     }
 
     //Включить напряжение и ток без регулеровки пофазного напряжения
-    public synchronized boolean getUI(int phase,
+    public boolean getUI(int phase,
                          double ratedVolt,
                          double ratedCurr,
                          double ratedFreq,
@@ -207,7 +207,7 @@ public abstract class StendDLLCommands {
     }
 
     //Включить напряжение и ток с регулировкой пофазного напряжения
-    public synchronized boolean getUIWithPhase (int phase,
+    public boolean getUIWithPhase (int phase,
                                    double ratedVolt,
                                    double ratedCurr,
                                    double ratedFreq,
@@ -229,7 +229,7 @@ public abstract class StendDLLCommands {
     }
 
     // Выключение напряжения и тока (кнопка Стоп)
-    public synchronized boolean powerOf() {
+    public boolean powerOf() {
         return stend.Power_Off(port);
     }
 

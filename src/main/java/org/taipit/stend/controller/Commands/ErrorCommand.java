@@ -200,7 +200,8 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.transferParam(this);
 
-        long time = System.currentTimeMillis();
+
+        boolean b = false;
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -211,12 +212,11 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                     case "B": voltPerB = voltPer; break;
                     case "C": voltPerC = voltPer; break;
                 }
-
-                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                b = stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
             } else {
-                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                b = stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
             }
         } else {
             if (!threePhaseCommand) {
@@ -230,10 +230,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             }
         }
 
-        System.out.println(System.currentTimeMillis() - time);
-
-        //Разблокирую интерфейc кнопок
-        TestErrorTableFrameController.blockBtns.setValue(false);
+        if (!b) throw new ConnectForStendExeption();
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -394,9 +391,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                 }
             }
         }
-
-        //Разблокирую интерфейc кнопок
-        TestErrorTableFrameController.blockBtns.setValue(false);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 

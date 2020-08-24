@@ -1,32 +1,40 @@
 package org.taipit.stend.controller;
 
-import com.sun.jna.WString;
-import org.taipit.stend.model.stend.StendDLL;
+import org.taipit.stend.controller.viewController.errorFrame.refMeter.ThreePhaseStendRefParamController;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
+
+import java.util.Arrays;
 
 public class MainStend {
 
     public static void main(String[] args) throws InterruptedException {
+        try {
 
-        StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
+            StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
+
+            ThreePhaseStendRefParamController stendRefParametersForFrame = new ThreePhaseStendRefParamController();
 
 
-        int channelFlag = 0;
+            int channelFlag = 0;
 
-        stendDLLCommands.setReviseMode(1);
+            System.out.println(stendDLLCommands.setReviseMode(0));
+            System.out.println(stendDLLCommands.setReviseTime(4.5));
 //
-        System.out.println(stendDLLCommands.setNoRevise(true));
-
-        //System.out.println(stendDLLCommands.setReviseTime(-15));
+           //System.out.println(stendDLLCommands.setNoRevise(true));
 //
-//        long time = System.currentTimeMillis();
-        StendDLL stend = StendDLL.INSTANCE;
+            long time = System.currentTimeMillis();
+            stendDLLCommands.getUI(1, 230.0, 80.0, 50.0, 0, 0, 100.0, 100, "H", "1.0");
+            System.out.println(System.currentTimeMillis() - time);
 
-        System.out.println(stend.Error_Clear(9));
+            //Ua,Ub,Uc,Ia,Ib,Ic,Angle_UaIa, Angle_UbIb, Angle_UcIc, Pa , Pb , Pc , Qa , Qb , Qc , Sa , Sb , Sc ,
+            //Pall(A.P.),Qall(R.P.),Sall(Apparent power), Freq ,PFa,PFb,PFc,PFall, Angle_UaUb, Angle_UbUc
 
-        stend.Adjust_UI(1, 230.0, 5.0, 50.0, 0, 0,100.0, 100.0, "H", "1.0", "HY5303C-22", 9);
-//
+            for (int i = 0; i < 10; i++) {
+                String[] meterParam = stendDLLCommands.stMeterRead().split(",");
+                System.out.println(Arrays.toString(meterParam));
+                Thread.sleep(1000);
+            }
 //
 //        System.out.println(System.currentTimeMillis() - time);
 //
@@ -50,7 +58,10 @@ public class MainStend {
 ////            Thread.sleep(500);
 ////        }
 //
-        stendDLLCommands.errorClear();
-        stendDLLCommands.powerOf();
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

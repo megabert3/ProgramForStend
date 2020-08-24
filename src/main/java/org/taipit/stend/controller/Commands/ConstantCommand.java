@@ -213,9 +213,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
         }
 
-        //Разблокирую интерфейc кнопок
-        TestErrorTableFrameController.blockBtns.setValue(false);
-
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
@@ -514,9 +511,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
         }
-
-        //Разблокирую интерфейc кнопок
-        TestErrorTableFrameController.blockBtns.setValue(false);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
