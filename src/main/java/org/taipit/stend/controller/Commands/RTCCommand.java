@@ -177,8 +177,6 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                 stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC);
             }
 
-            System.out.println(timeTestInMls.longValue() + 500);
-
             Thread.sleep(timeTestInMls.longValue() + 500);
 
             for (Meter meter : meterList) {

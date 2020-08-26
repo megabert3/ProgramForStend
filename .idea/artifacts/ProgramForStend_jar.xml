@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/ProgramForStend_jar</output-path>
     <root id="archive" name="ProgramForStend.jar">
       <element id="module-output" name="ProgramForStend" />
-      <element id="extracted-dir" path="C:/Program Files/Java/jna-5.5.0.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

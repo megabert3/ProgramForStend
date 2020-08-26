@@ -112,15 +112,15 @@ public abstract class StendDLLCommands {
             boolean setEnergy = setPulseChannel(meter.getId(), channelFlag);
 
             if (!setEnergy) {
-
                 while (2 > i) {
                     if (setPulseChannel(meter.getId(), channelFlag)) {
-                        break;
+                        return;
                     } else {
                         Thread.sleep(10);
                         i++;
                     }
                 }
+                throw new ConnectForStendExeption("Не удалось записать \"Set_Pulse_Channel\" месту: " + meter.getId());
             }
         }
     }
@@ -191,7 +191,7 @@ public abstract class StendDLLCommands {
     }
 
     //Включить напряжение и ток без регулеровки пофазного напряжения
-    public boolean getUI(int phase,
+    public void getUI(int phase,
                          double ratedVolt,
                          double ratedCurr,
                          double ratedFreq,
@@ -200,14 +200,16 @@ public abstract class StendDLLCommands {
                          double voltPer,
                          double currPer,
                          String iABC,
-                         String cosP) {
+                         String cosP) throws ConnectForStendExeption {
 
-        return stend.Adjust_UI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPer, currPer, iABC, cosP, typeReferenceMeter, port);
+        if (!stend.Adjust_UI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPer, currPer, iABC, cosP, typeReferenceMeter, port)) {
+            throw new ConnectForStendExeption("Не удалось подать мощность: Adjust_UI");
+        }
     }
 
     //Включить напряжение и ток с регулировкой пофазного напряжения
-    public boolean getUIWithPhase (int phase,
+    public void getUIWithPhase (int phase,
                                    double ratedVolt,
                                    double ratedCurr,
                                    double ratedFreq,
@@ -218,19 +220,24 @@ public abstract class StendDLLCommands {
                                    double voltPerC,
                                    double currPer,
                                    String iABC,
-                                   String cosP) {
-        return stend.Adjust_UI1(phase,ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP, typeReferenceMeter, port);
+                                   String cosP) throws ConnectForStendExeption {
+        if (stend.Adjust_UI1(phase,ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP, typeReferenceMeter, port)) {
+            throw new ConnectForStendExeption("Не удалось подать мощность: Adjust_U_WithPhase");
+        }
     }
 
     // Сброс всех ошибок
-    public synchronized boolean errorClear() {
-        return stend.Error_Clear(port);
+    public synchronized void errorClear() throws ConnectForStendExeption {
+        boolean b = stend.Error_Clear(port);
+        if (!b) throw new ConnectForStendExeption("Не удалось очистить погрешность Error_Clear");
     }
 
     // Выключение напряжения и тока (кнопка Стоп)
-    public boolean powerOf() {
-        return stend.Power_Off(port);
+    public void powerOf() throws ConnectForStendExeption {
+        if (!stend.Power_Off(port)) {
+            throw new ConnectForStendExeption("Не удалось выключить пощность");
+        }
     }
 
     //Получить данные с эталонного счётчика счетчика
@@ -314,8 +321,21 @@ public abstract class StendDLLCommands {
     }
 
     // Старт теста констант
-    public boolean constTestStart (int meterNo, double constant) {
-        return stend.ConstTest_Start(meterNo, constant, port);
+    public void constTestStart (int meterNo, double constant) throws InterruptedException, ConnectForStendExeption {
+        int i = 0;
+        boolean b = stend.ConstTest_Start(meterNo, constant, port);
+
+        if (!b) {
+            while (i < 2) {
+                if (stend.ConstTest_Start(meterNo, constant, port)) {
+                    return;
+                } else {
+                    i++;
+                    Thread.sleep(10);
+                }
+            }
+            throw new ConnectForStendExeption("Не удалось записать \"ConstTest_Start\" месту: " + meterNo);
+        }
     }
 
 
@@ -347,8 +367,9 @@ public abstract class StendDLLCommands {
     }
 
     // Выбор цепи
-    public boolean selectCircuit(int circuit) {
-        return stend.SelectCircuit(circuit, port);
+    public void selectCircuit(int circuit) throws ConnectForStendExeption {
+        boolean b = stend.SelectCircuit(circuit, port);
+        if (!b) throw new ConnectForStendExeption("не удалось переключить цепь SelectCircuit");
     }
 
     // Отключить нейтраль

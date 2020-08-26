@@ -8,6 +8,8 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/org/scream3r/jssc/2.8.0/jssc-2.8.0-sources.jar!/" />
+      <root url="file://C:/Program Files (x86)/Java/javafx-sdk-14.0.2.1/lib" />
     </SOURCES>
+    <jarDirectory url="file://C:/Program Files (x86)/Java/javafx-sdk-14.0.2.1/lib" recursive="false" type="SOURCES" />
   </library>
 </component>

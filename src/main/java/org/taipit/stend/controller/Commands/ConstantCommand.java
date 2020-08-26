@@ -171,6 +171,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             constantMeter = 0;
         }
 
+        //Номер результата
         int countResult = 1;
 
         if (Thread.currentThread().isInterrupted()) {
@@ -192,26 +193,39 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 }
 
                 //Передаю необходимые параметры для эталонного счётчика
-                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
+                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
                         voltPerA * (ratedVolt / 100), voltPerB * (ratedVolt / 100), voltPerC * (ratedVolt / 100), 0.0, 0.0, 0.0);
 
-                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
-                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
             } else {
 
                 //Передаю необходимые параметры для эталонного счётчика
-                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
+                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
                         voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), 0.0, 0.0, 0.0);
 
-                if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
-                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
             }
         } else {
-            ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
+            //Передаю необходимые параметры для эталонного счётчика
+            ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
                     voltPer * (ratedVolt / 100), 0.0);
+            if (iABC.equals("H")) {
+                stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
 
-            if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, phaseSrequence, revers,
-                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            } else if (iABC.equals("A")) {
+                stendDLLCommands.selectCircuit(0);
+                iABC = "H";
+
+            } else if (iABC.equals("B")) {
+                stendDLLCommands.selectCircuit(1);
+                iABC = "H";
+            }
+
+            stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP);
         }
 
         TestErrorTableFrameController.refreshRefMeterParameters();
@@ -272,15 +286,31 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         case "C": voltPerC = voltPer; break;
                     }
 
-                    if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                            voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
                 } else {
-                    if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                            voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
                 }
             } else {
-                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                if (iABC.equals("H")) {
+                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
+
+                } else if (iABC.equals("A")) {
+                    stendDLLCommands.selectCircuit(0);
+                    iABC = "H";
+
+                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
+
+                } else if (iABC.equals("B")) {
+                    stendDLLCommands.selectCircuit(1);
+                    iABC = "H";
+
+                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
+                }
             }
 
             TestErrorTableFrameController.refreshRefMeterParameters();
@@ -295,6 +325,8 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             timeEnd = timeStart + timeTheTest;
 
             while (System.currentTimeMillis() < timeEnd) {
+
+                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 if (refMeterCount % 7 == 0) {
                     TestErrorTableFrameController.refreshRefMeterParameters();
@@ -320,7 +352,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 Thread.sleep(275);
             }
 
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            stendDLLCommands.powerOf();
 
             TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
 
@@ -381,15 +413,32 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         case "C": voltPerC = voltPer; break;
                     }
 
-                    if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                            voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
                 } else {
-                    if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                            voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
                 }
             } else {
-                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+
+                if (iABC.equals("H")) {
+                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
+
+                } else if (iABC.equals("A")) {
+                    stendDLLCommands.selectCircuit(0);
+                    iABC = "H";
+
+                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
+
+                } else if (iABC.equals("B")) {
+                    stendDLLCommands.selectCircuit(1);
+                    iABC = "H";
+
+                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
+                }
             }
 
             TestErrorTableFrameController.refreshRefMeterParameters();
@@ -405,6 +454,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             double hightKw;
 
             while (kWToTest > refMeterEnergy) {
+                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 if (refMeterCount % 4 == 0) {
                     TestErrorTableFrameController.refreshRefMeterParameters();
@@ -435,7 +485,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 Thread.sleep(1000);
             }
 
-            if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+            stendDLLCommands.powerOf();
 
             TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
 
@@ -460,7 +510,9 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             }
         }
 
-        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        stendDLLCommands.errorClear();
+
+        TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
     }
 
     //Метод для цикличной поверки счётчиков
@@ -492,23 +544,23 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
                         voltPerA * (ratedVolt / 100), voltPerB * (ratedVolt / 100), voltPerC * (ratedVolt / 100), 0.0, 0.0, 0.0);
 
-                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
-                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
             } else {
 
                 //Передаю необходимые параметры для эталонного счётчика
                 ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
                         voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), 0.0, 0.0, 0.0);
 
-                if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
-                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
             }
         } else {
             ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
                     voltPer * (ratedVolt / 100), 0.0);
 
-            if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, phaseSrequence, revers,
-                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP);
         }
 
         TestErrorTableFrameController.refreshRefMeterParameters();
@@ -576,15 +628,15 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                             case "C": voltPerC = voltPer; break;
                         }
 
-                        if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                        stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
                     } else {
-                        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                                voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPer, currPer, iABC, cosP);
                     }
                 } else {
-                    if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                            voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
                 }
 
                 timer.schedule(timerTask, 10000);
@@ -624,7 +676,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     Thread.sleep(275);
                 }
 
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                stendDLLCommands.powerOf();
 
                 TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -682,15 +734,15 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                             case "C": voltPerC = voltPer; break;
                         }
 
-                        if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                        stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
                     } else {
-                        if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                                voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPer, currPer, iABC, cosP);
                     }
                 } else {
-                    if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                            voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
                 }
 
                 timer.schedule(timerTask, 7000);
@@ -736,7 +788,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     Thread.sleep(1000);
                 }
 
-                if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                stendDLLCommands.powerOf();
 
                 TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -788,26 +840,28 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
                             voltPerA * (ratedVolt / 100), voltPerB * (ratedVolt / 100), voltPerC * (ratedVolt / 100), 0.0, 0.0, 0.0);
 
-                    if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
-                            voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                            voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
                 } else {
 
                     //Передаю необходимые параметры для эталонного счётчика
                     ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
                             voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), 0.0, 0.0, 0.0);
 
-                    if (!stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
-                            voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
                 }
             } else {
                 ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
                         voltPer * (ratedVolt / 100), 0.0);
 
-                if (!stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, phaseSrequence, revers,
-                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
             }
 
             TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
+
+            stendDLLCommands.errorClear();
 
             Thread.sleep(7000);
 
