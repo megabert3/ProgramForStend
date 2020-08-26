@@ -8,5 +8,6 @@ public interface StendRefParametersForFrame {
     void initRefType(StendDLLCommands stendDLLCommands);
     void readParameters() throws InterruptedException;
     void transferParameters(Commands command);
+    void readParametersWithoutCheckingParan();
     StendRefParametersForFrame getStendRefParametersForFrame();
 }

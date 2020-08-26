@@ -54,9 +54,13 @@ public class TestErrorTableFrameController {
 
     private static Button btnStopStatic;
 
-    private StendDLLCommands stendDLLCommands;
-
     private static StendRefParametersForFrame stendRefParametersForFrame;
+
+    public static long timeToStabilization = (long) (Double.parseDouble(ConsoleHelper.properties.getProperty("timeToStabilization")) * 1000);
+
+    public static String phaseOnePhaseMode = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+
+    private StendDLLCommands stendDLLCommands;
 
     private Stage refMeterStage;
 
@@ -381,6 +385,22 @@ public class TestErrorTableFrameController {
         });
 
         checBoxePane.toFront();
+
+        //Внутренние параметры стенда
+        if (ConsoleHelper.properties.getProperty("cutNeitral").equals("T")) {
+            stendDLLCommands.cutNeutral(0);
+        } else {
+            stendDLLCommands.cutNeutral(1);
+        }
+
+        if (ConsoleHelper.properties.getProperty("reviseOff").equals("F")) {
+            stendDLLCommands.setNoRevise(false);
+        } else {
+            stendDLLCommands.setNoRevise(true);
+        }
+
+        stendDLLCommands.setReviseTime(Integer.parseInt(ConsoleHelper.properties.getProperty("reviseTime")));
+        stendDLLCommands.setReviseMode(Integer.parseInt(ConsoleHelper.properties.getProperty("reviseMode")));
     }
 
     @FXML
@@ -2081,6 +2101,10 @@ public class TestErrorTableFrameController {
 
     public static void refreshRefMeterParameters() throws InterruptedException {
         stendRefParametersForFrame.readParameters();
+    }
+
+    public static void refreshRefMeterParametersWithoutChecking() {
+        stendRefParametersForFrame.readParametersWithoutCheckingParan();
     }
 
     public static void transferParam(Commands command) {

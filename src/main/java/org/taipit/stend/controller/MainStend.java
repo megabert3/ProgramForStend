@@ -15,16 +15,15 @@ public class MainStend {
 
             ThreePhaseStendRefParamController stendRefParametersForFrame = new ThreePhaseStendRefParamController();
 
-
             int channelFlag = 0;
 
-            System.out.println(stendDLLCommands.setReviseMode(0));
+            System.out.println(stendDLLCommands.setReviseMode(1));
             System.out.println(stendDLLCommands.setReviseTime(4.5));
 //
            //System.out.println(stendDLLCommands.setNoRevise(true));
 //
             long time = System.currentTimeMillis();
-            stendDLLCommands.getUI(1, 230.0, 80.0, 50.0, 0, 0, 100.0, 100, "H", "1.0");
+            stendDLLCommands.getUI(1, 230.0, 1.0, 50.0, 0, 0, 100.0, 1, "H", "1.0");
             System.out.println(System.currentTimeMillis() - time);
 
             //Ua,Ub,Uc,Ia,Ib,Ic,Angle_UaIa, Angle_UbIb, Angle_UcIc, Pa , Pb , Pc , Qa , Qb , Qc , Sa , Sb , Sc ,

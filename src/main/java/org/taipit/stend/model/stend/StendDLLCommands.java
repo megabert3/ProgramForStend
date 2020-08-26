@@ -335,7 +335,10 @@ public abstract class StendDLLCommands {
         DoubleByReference pointerMeterKWH = new DoubleByReference();
         DoubleByReference pointerStdKWH = new DoubleByReference();
 
-        stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port);
+        System.out.println(stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port));
+
+        System.out.println(pointerMeterKWH.getValue());
+        System.out.println(pointerStdKWH.getValue());
 
         String bigDecimalMeterKWH = new BigDecimal(pointerMeterKWH.getValue()).setScale(5, RoundingMode.HALF_UP).toString();
         String bigDecimalStdKWH = new BigDecimal(pointerStdKWH.getValue()).setScale(5, RoundingMode.HALF_UP).toString();

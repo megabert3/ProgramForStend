@@ -173,73 +173,73 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
         String[] meterParam = stendDLLCommands.stMeterRead().split(",");
         System.out.println(Arrays.toString(meterParam));
 
-//        try {
-//            if (meterParam.length == 28) {
-//                if (refTypeHY5303C22) {
-//
-//                    txtFldUA.setText(meterParam[0]);
-//                    txtFldUB.setText(meterParam[1]);
-//                    txtFldUC.setText(meterParam[2]);
-//                    txtFldIA.setText(meterParam[3]);
-//                    txtFldIB.setText(meterParam[4]);
-//                    txtFldIC.setText(meterParam[5]);
-//                    txtFldDegA.setText(meterParam[6]);
-//                    txtFldDegB.setText(meterParam[7]);
-//                    txtFldDegC.setText(meterParam[8]);
-//                    txtFldPA.setText(meterParam[9]);
-//                    txtFldPB.setText(meterParam[10]);
-//                    txtFldPC.setText(meterParam[11]);
-//                    txtFldQA.setText(meterParam[12]);
-//                    txtFldQB.setText(meterParam[13]);
-//                    txtFldQC.setText(meterParam[14]);
-//                    txtFldSA.setText(meterParam[15]);
-//                    txtFldSB.setText(meterParam[16]);
-//                    txtFldSC.setText(meterParam[17]);
-//                    txtFldPall.setText(meterParam[18]);
-//                    txtFldQall.setText(meterParam[19]);
-//                    txtFldSall.setText(meterParam[20]);
-//                    txtFldF.setText(meterParam[21]);
-//                    txtFldPFA.setText(meterParam[22]);
-//                    txtFldPFB.setText(meterParam[23]);
-//                    txtFldPFC.setText(meterParam[24]);
-//                    txtFldPFall.setText(meterParam[25]);
-//                    txtFldUaUb.setText(meterParam[26]);
-//                    txtFldUbUc.setText(meterParam[27]);
-//
-//                } else {
-//                    txtFldUA.setText(meterParam[0]);
-//                    txtFldUB.setText(meterParam[1]);
-//                    txtFldUC.setText(meterParam[2]);
-//                    txtFldIA.setText(meterParam[3]);
-//                    txtFldIB.setText(meterParam[4]);
-//                    txtFldIC.setText(meterParam[5]);
-//                    txtFldUaUb.setText(meterParam[6]);
-//                    txtFldUbUc.setText(meterParam[7]);
-//                    txtFldDegA.setText(meterParam[8]);
-//                    txtFldDegB.setText(meterParam[9]);
-//                    txtFldDegC.setText(meterParam[10]);
-//                    txtFldPA.setText(meterParam[11]);
-//                    txtFldPB.setText(meterParam[12]);
-//                    txtFldPC.setText(meterParam[13]);
-//                    txtFldPall.setText(meterParam[14]);
-//                    txtFldQA.setText(meterParam[15]);
-//                    txtFldQB.setText(meterParam[16]);
-//                    txtFldQC.setText(meterParam[17]);
-//                    txtFldQall.setText(meterParam[18]);
-//                    txtFldSA.setText(meterParam[19]);
-//                    txtFldSB.setText(meterParam[20]);
-//                    txtFldSC.setText(meterParam[21]);
-//                    txtFldSall.setText(meterParam[22]);
-//                    txtFldF.setText(meterParam[23]);
-//                    txtFldPFA.setText(meterParam[24]);
-//                    txtFldPFB.setText(meterParam[25]);
-//                    txtFldPFC.setText(meterParam[26]);
-//                    txtFldPFall.setText(meterParam[27]);
-//                }
-//            }
-//        }catch (ArrayIndexOutOfBoundsException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            if (meterParam.length == 28) {
+                if (refTypeHY5303C22) {
+
+                    txtFldUA.setText(meterParam[0]);
+                    txtFldUB.setText(meterParam[1]);
+                    txtFldUC.setText(meterParam[2]);
+                    txtFldIA.setText(meterParam[3]);
+                    txtFldIB.setText(meterParam[4]);
+                    txtFldIC.setText(meterParam[5]);
+                    txtFldDegA.setText(meterParam[6]);
+                    txtFldDegB.setText(meterParam[7]);
+                    txtFldDegC.setText(meterParam[8]);
+                    txtFldPA.setText(meterParam[9]);
+                    txtFldPB.setText(meterParam[10]);
+                    txtFldPC.setText(meterParam[11]);
+                    txtFldQA.setText(meterParam[12]);
+                    txtFldQB.setText(meterParam[13]);
+                    txtFldQC.setText(meterParam[14]);
+                    txtFldSA.setText(meterParam[15]);
+                    txtFldSB.setText(meterParam[16]);
+                    txtFldSC.setText(meterParam[17]);
+                    txtFldPall.setText(meterParam[18]);
+                    txtFldQall.setText(meterParam[19]);
+                    txtFldSall.setText(meterParam[20]);
+                    txtFldF.setText(meterParam[21]);
+                    txtFldPFA.setText(meterParam[22]);
+                    txtFldPFB.setText(meterParam[23]);
+                    txtFldPFC.setText(meterParam[24]);
+                    txtFldPFall.setText(meterParam[25]);
+                    txtFldUaUb.setText(meterParam[26]);
+                    txtFldUbUc.setText(meterParam[27]);
+
+                } else {
+                    txtFldUA.setText(meterParam[0]);
+                    txtFldUB.setText(meterParam[1]);
+                    txtFldUC.setText(meterParam[2]);
+                    txtFldIA.setText(meterParam[3]);
+                    txtFldIB.setText(meterParam[4]);
+                    txtFldIC.setText(meterParam[5]);
+                    txtFldUaUb.setText(meterParam[6]);
+                    txtFldUbUc.setText(meterParam[7]);
+                    txtFldDegA.setText(meterParam[8]);
+                    txtFldDegB.setText(meterParam[9]);
+                    txtFldDegC.setText(meterParam[10]);
+                    txtFldPA.setText(meterParam[11]);
+                    txtFldPB.setText(meterParam[12]);
+                    txtFldPC.setText(meterParam[13]);
+                    txtFldPall.setText(meterParam[14]);
+                    txtFldQA.setText(meterParam[15]);
+                    txtFldQB.setText(meterParam[16]);
+                    txtFldQC.setText(meterParam[17]);
+                    txtFldQall.setText(meterParam[18]);
+                    txtFldSA.setText(meterParam[19]);
+                    txtFldSB.setText(meterParam[20]);
+                    txtFldSC.setText(meterParam[21]);
+                    txtFldSall.setText(meterParam[22]);
+                    txtFldF.setText(meterParam[23]);
+                    txtFldPFA.setText(meterParam[24]);
+                    txtFldPFB.setText(meterParam[25]);
+                    txtFldPFC.setText(meterParam[26]);
+                    txtFldPFall.setText(meterParam[27]);
+                }
+            }
+        }catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 
     public void readParameters() throws InterruptedException {
@@ -322,91 +322,103 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
         double value;
         boolean b = false;
 
-        value = Double.parseDouble(Ua);
-        if (value < UPhaseA - (UPhaseA * 0.2)) {
-            this.Ua = true;
-            b = true;
-        }
-
-        value = Double.parseDouble(Ub);
-        if (value < UPhaseB - (UPhaseB * 0.2)) {
-            this.Ub = true;
-            b = true;
-        }
-
-        value = Double.parseDouble(Uc);
-        if (value < UPhaseC - (UPhaseC * 0.2)) {
-            this.Uc = true;
-            b = true;
-        }
-
-        value = Double.parseDouble(Ia);
-        if (value < currPhaseA - (currPhaseA * 0.2)) {
-            this.Ia = true;
-            b = true;
-        }
-
-        value = Double.parseDouble(Ib);
-        if (value < currPhaseB - (currPhaseB * 0.2)) {
-            this.Ib = true;
-            b = true;
-        }
-
-        value = Double.parseDouble(Ic);
-        if (value < currPhaseC - (currPhaseC * 0.2)) {
-            this.Ic = true;
-            b = true;
-        }
-
-        if (b) {
-            StringBuilder stringBuilder = new StringBuilder("Авария по цепи(-ям)\n");
-            if (this.Ua) {
-                stringBuilder.append("Ua ");
+        try {
+            if (UPhaseA != 0) {
+                value = Double.parseDouble(Ua);
+                if (value < UPhaseA - (UPhaseA * 0.2)) {
+                    this.Ua = true;
+                    b = true;
+                }
             }
 
-            if (this.Ub) {
-                stringBuilder.append("Ub ");
+            if (UPhaseB != 0) {
+                value = Double.parseDouble(Ub);
+                if (value < UPhaseB - (UPhaseB * 0.2)) {
+                    this.Ub = true;
+                    b = true;
+                }
             }
 
-            if (this.Uc) {
-                stringBuilder.append("Uc ");
+            if (UPhaseC != 0) {
+                value = Double.parseDouble(Uc);
+                if (value < UPhaseC - (UPhaseC * 0.2)) {
+                    this.Uc = true;
+                    b = true;
+                }
             }
 
-            if (this.Ia) {
-                stringBuilder.append("Ia ");
+            if (currPhaseA != 0) {
+                value = Double.parseDouble(Ia);
+                if (value < currPhaseA - (currPhaseA * 0.2)) {
+                    this.Ia = true;
+                    b = true;
+                }
             }
 
-            if (this.Ib) {
-                stringBuilder.append("Ib ");
+            if (currPhaseB != 0) {
+                value = Double.parseDouble(Ib);
+                if (value < currPhaseB - (currPhaseB * 0.2)) {
+                    this.Ib = true;
+                    b = true;
+                }
             }
 
-            if (this.Ic) {
-                stringBuilder.append("Ic ");
+            if (currPhaseC != 0) {
+                value = Double.parseDouble(Ic);
+                if (value < currPhaseC - (currPhaseC * 0.2)) {
+                    this.Ic = true;
+                    b = true;
+                }
             }
 
-            ConsoleHelper.infoException(stringBuilder.toString());
+            if (b) {
+                StringBuilder stringBuilder = new StringBuilder("Авария по цепи(-ям)\n");
+                if (this.Ua) {
+                    stringBuilder.append("Ua ");
+                }
 
-            this.Ua = false;
-            this.Ub = false;
-            this.Uc = false;
+                if (this.Ub) {
+                    stringBuilder.append("Ub ");
+                }
 
-            this.Ia = false;
-            this.Ib = false;
-            this.Ic = false;
+                if (this.Uc) {
+                    stringBuilder.append("Uc ");
+                }
 
-            stendDLLCommands.errorClear();
-            stendDLLCommands.powerOf();
+                if (this.Ia) {
+                    stringBuilder.append("Ia ");
+                }
 
-            TestErrorTableFrameController.blockBtns.setValue(false);
+                if (this.Ib) {
+                    stringBuilder.append("Ib ");
+                }
 
-            throw new InterruptedException(stringBuilder.toString());
+                if (this.Ic) {
+                    stringBuilder.append("Ic ");
+                }
+
+                ConsoleHelper.infoException(stringBuilder.toString());
+
+                this.Ua = false;
+                this.Ub = false;
+                this.Uc = false;
+
+                this.Ia = false;
+                this.Ib = false;
+                this.Ic = false;
+
+                TestErrorTableFrameController.getStaticBtnStop().fire();
+
+                throw new InterruptedException(stringBuilder.toString());
+            }
+        }catch (NumberFormatException e) {
+            e.printStackTrace();
         }
     }
 
-
-
     @Override
     public void transferParameters(Commands command) {
+
         double current;
         double U;
 
@@ -494,6 +506,9 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
     }
 
     public void transferParameters(Double Ua, Double Ub, Double Uc, Double Ia, Double Ib, Double Ic) {
+        /**
+         Добавить проверку с максимально допустимыми возможностями установки и если что выкинуть исключение
+         */
         UPhaseA = Ua;
         UPhaseB = Ub;
         UPhaseC = Uc;

@@ -7,6 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.taipit.stend.controller.Commands.Commands;
+import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
+import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 
 import java.util.Arrays;
@@ -16,7 +18,16 @@ public class OnePhaseStendRefParamController implements StendRefParametersForFra
 
     private StendDLLCommands stendDLLCommands;
 
-    private Boolean refTypeHY5303C22 = null;
+    private Boolean refTypeHY5303C22 = false;
+
+    private Double U;
+
+    private Double I;
+
+    //Флаги для отображения по каким фаза ошибка
+    private boolean Uerr;
+
+    private boolean Ierr;
 
     private double xOffset;
 
@@ -72,7 +83,7 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
         }
     }
 
-    public void readParameters() {
+    public void readParameters() throws InterruptedException {
         String[] meterParam = stendDLLCommands.stMeterRead().split(",");
         //U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq
         System.out.println(Arrays.toString(meterParam));
@@ -88,6 +99,31 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
                     txtFldS.setText(meterParam[5]);
                     txtFldF.setText(meterParam[6]);
                 }
+                equalsParan(meterParam[0], meterParam[1]);
+            }
+        }catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void readParametersWithoutCheckingParan() {
+        String[] meterParam = stendDLLCommands.stMeterRead().split(",");
+        //U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq
+        System.out.println(Arrays.toString(meterParam));
+
+        try {
+            if (meterParam.length == 7) {
+                if (refTypeHY5303C22) {
+                    txtFldU.setText(meterParam[0]);
+                    txtFldI.setText(meterParam[1]);
+                    txtFldDeg.setText(meterParam[2]);
+                    txtFldP.setText(meterParam[3]);
+                    txtFldQ.setText(meterParam[4]);
+                    txtFldS.setText(meterParam[5]);
+                    txtFldF.setText(meterParam[6]);
+                }
+
             }
         }catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
@@ -96,7 +132,57 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
 
     @Override
     public void transferParameters(Commands command) {
+        I = command.getRatedCurr() * (command.getCurrPer() / 100);
+        U = command.getRatedVolt() * (command.getVoltPer() / 100);
+    }
 
+    public void transferParameters(Double U, Double I) {
+        /**
+         Добавить проверку с максимально допустимыми возможностями установки и если что выкинуть исключение
+         */
+        this.U = U;
+        this.I = I;
+    }
+
+    private void equalsParan(String U, String I) throws InterruptedException {
+        double value;
+        boolean b = false;
+
+        if (this.U != 0) {
+            value = Double.parseDouble(U);
+            if (value < this.U - (this.U * 0.2)) {
+                this.Uerr = true;
+                b = true;
+            }
+        }
+
+        if (this.I != 0) {
+            value = Double.parseDouble(I);
+            if (value < this.I - (this.I * 0.2)) {
+                this.Ierr = true;
+                b = true;
+            }
+        }
+
+        if (b) {
+            StringBuilder stringBuilder = new StringBuilder("Авария по цепи(-ям)\n");
+            if (this.Uerr) {
+                stringBuilder.append("U ");
+            }
+
+            if (this.Ierr) {
+                stringBuilder.append("I ");
+            }
+
+            ConsoleHelper.infoException(stringBuilder.toString());
+
+            this.Ierr = false;
+            this.Uerr = false;
+
+            TestErrorTableFrameController.getStaticBtnStop().fire();
+
+            throw new InterruptedException(stringBuilder.toString());
+        }
     }
 
     public void addMovingActions() {

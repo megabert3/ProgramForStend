@@ -321,7 +321,7 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
     boolean Dll_Port_Close(PointerByReference close);
 
 
-    //Мод для включения малых токов
+    //Мод для включения малых токов <300 мА
     //Если не выставляются малые токи, то необходимов выставлять либо 0 либо 3
     boolean Set_ReviseMode(int mode);
 
