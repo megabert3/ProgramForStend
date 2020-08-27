@@ -375,9 +375,7 @@ public abstract class StendDLLCommands {
 
     // Выбор цепи
     public void selectCircuit(int circuit) throws ConnectForStendExeption {
-        boolean b = stend.SelectCircuit(circuit, port);
-        System.out.println(b);
-        //if (!b) throw new ConnectForStendExeption("не удалось переключить цепь SelectCircuit");
+        if (!stend.SelectCircuit(circuit, port)) throw new ConnectForStendExeption("не удалось переключить цепь SelectCircuit");
     }
 
     // Отключить нейтраль
@@ -405,13 +403,17 @@ public abstract class StendDLLCommands {
         return pointer.getValue().getString(0, "ASCII");
     }
 
-    public boolean countStart(int meterNo) {
-        return stend.Count_Start(meterNo, port);
+    public void countStart(int meterNo) throws ConnectForStendExeption {
+        if (!stend.Count_Start(meterNo, port)) {
+            throw new ConnectForStendExeption("Не удалось записать команду Count_Start");
+        }
     }
 
-    public int countRead(int meterNo) {
+    public int countRead(int meterNo) throws ConnectForStendExeption {
         IntByReference pointer = new IntByReference();
-        stend.Count_Read(pointer, meterNo, port);
+        if (!stend.Count_Read(pointer, meterNo, port)) {
+            throw new ConnectForStendExeption("Не удалось записать команду Count_Read");
+        }
         return pointer.getValue();
     }
 

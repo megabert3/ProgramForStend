@@ -227,9 +227,6 @@ public class Meter implements Serializable{
     //Необходимо для количетва вычислений
     private int errorResultChange;
 
-    //Количество импульсов полученных в результате теста чувств. сам.
-    private int amountImn;
-
     //Серийный номер счётчика
     private String serNoMeter;
 
@@ -729,14 +726,6 @@ public class Meter implements Serializable{
 
     public void setErrorResultChange(int errorResultChange) {
         this.errorResultChange = errorResultChange;
-    }
-
-    public void setAmountImn(int amountImn) {
-        this.amountImn = amountImn;
-    }
-
-    public int getAmountImn() {
-        return amountImn;
     }
 
     public CreepResult getCreepTest() {

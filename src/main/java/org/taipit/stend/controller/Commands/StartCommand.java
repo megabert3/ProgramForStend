@@ -120,6 +120,9 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
+        ////Т.к. команда Count игнорирует первый импульс
+        pulseValue =--pulseValue;
+
         int refMeterCount = 1;
 
         currThread = Thread.currentThread();
@@ -152,8 +155,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         startCommandResult = initStartCommandResult();
 
-        stendDLLCommands.setReviseMode(1);
-
         TestErrorTableFrameController.transferParam(this);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
@@ -174,13 +175,15 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                         voltPer, currPer, iABC, cosP);
             }
         } else {
+            stendDLLCommands.selectCircuit(0);
+
             stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP);
         }
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(1000); //Пауза для стабилизации
+        Thread.sleep(TestErrorTableFrameController.timeToStabilization); //Пауза для стабилизации
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -197,6 +200,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
 
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+
             if (refMeterCount % 8 == 0) {
                 TestErrorTableFrameController.refreshRefMeterParameters();
             }
@@ -227,11 +231,11 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             Thread.sleep(400);
         }
 
+        timer.cancel();
+
         //Выставляю результат теста счётчиков, которые не прошли тест
         for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
             if (!mapResult.getValue()) {
-                //Для остановки таймера
-                mapResult.setValue(true);
                 startResult = (Meter.StartResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
                 startResult.setResultStartCommand(startResult.getTimeTheTest(), countResult, false, channelFlag);
             }
@@ -246,6 +250,9 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
+
+        ////Т.к. команда Count игнорирует первый импульс
+        pulseValue =--pulseValue;
 
         currThread = Thread.currentThread();
 
@@ -273,8 +280,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-        stendDLLCommands.setReviseMode(1);
-
         TestErrorTableFrameController.transferParam(this);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
@@ -301,9 +306,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(1000); //Время стабилизации
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
+        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -311,6 +314,8 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         while (Thread.currentThread().isAlive()) {
             int refMeterCount = 1;
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
 
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + userTimeTest;
@@ -356,6 +361,8 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                 Thread.sleep(400);
             }
 
+            timer.cancel();
+
             //Выставляю результат теста счётчиков, которые не прошли тест
             for (Map.Entry<Integer, Boolean> mapResultPass : startCommandResult.entrySet()) {
                 if (!mapResultPass.getValue()) {
@@ -365,6 +372,9 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                 }
             }
             countResult++;
+
+            //Время на подумать оставлять результат или нет
+            Thread.sleep(7000);
         }
 
         stendDLLCommands.errorClear();
@@ -379,13 +389,12 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     }
 
     //reset
-    private void setDefTestResults(int channelFlag, int index) {
+    private void setDefTestResults(int channelFlag, int index) throws ConnectForStendExeption {
         for (Meter meter : meterList) {
             Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
             startResult.setLastResultForTabView("N");
             startResult.setPassTest(null);
             startResult.setLastResult("");
-            meter.setAmountImn(0);
             stendDLLCommands.countStart(meter.getId());
         }
     }
