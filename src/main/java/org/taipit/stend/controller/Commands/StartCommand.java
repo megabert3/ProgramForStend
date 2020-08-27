@@ -167,15 +167,15 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                     case "C": voltPerC = voltPer; break;
                 }
 
-                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
             } else {
-                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
             }
         } else {
-            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP);
         }
 
         TestErrorTableFrameController.refreshRefMeterParameters();
@@ -237,7 +237,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             }
         }
 
-        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        stendDLLCommands.errorClear();
     }
 
     @Override
@@ -288,15 +288,15 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                     case "C": voltPerC = voltPer; break;
                 }
 
-                if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
             } else {
-                if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                        voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+                stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
             }
         } else {
-            if (!stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                    voltPer, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+            stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                    voltPer, currPer, iABC, cosP);
         }
 
         TestErrorTableFrameController.refreshRefMeterParameters();
@@ -367,7 +367,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             countResult++;
         }
 
-        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        stendDLLCommands.errorClear();
     }
 
     private HashMap<Integer, Boolean> initStartCommandResult() {

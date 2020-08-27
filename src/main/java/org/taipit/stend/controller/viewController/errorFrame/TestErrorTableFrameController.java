@@ -143,7 +143,7 @@ public class TestErrorTableFrameController {
                 public void run() {
                     try {
                         try {
-                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            stendDLLCommands.errorClear();
                             startAutomaticTest();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -172,7 +172,7 @@ public class TestErrorTableFrameController {
                 public void run() {
                     try {
                         try {
-                            if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                            stendDLLCommands.errorClear();
                             startManualTest();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -364,8 +364,8 @@ public class TestErrorTableFrameController {
                 startUnTest = false;
 
                 try {
-                    if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
-                    if (!stendDLLCommands.powerOf()) throw new ConnectForStendExeption();
+                    stendDLLCommands.errorClear();
+                    stendDLLCommands.powerOf();
 
                     Platform.runLater(new Runnable() {
                         @Override
@@ -572,7 +572,7 @@ public class TestErrorTableFrameController {
                     public void run() {
                         try {
                             try {
-                                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                                stendDLLCommands.errorClear();
                                 startManualTest();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
@@ -617,7 +617,7 @@ public class TestErrorTableFrameController {
                     public void run() {
                         try {
                             try {
-                                if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+                                stendDLLCommands.errorClear();
 
                                 startUn();
 
@@ -747,19 +747,27 @@ public class TestErrorTableFrameController {
 
     //Общая команда для старта напряжения
     private void startUn () throws ConnectForStendExeption, InterruptedException {
-
         if (stendDLLCommands instanceof ThreePhaseStend) {
+
             if (methodicForStend instanceof MethodicForThreePhaseStend) {
-                if (!stendDLLCommands.getUI(0, Un, 0, Fn, 0, 0, 100.0, 0, "H", "1.0")) throw new ConnectForStendExeption();
+                stendDLLCommands.getUI(0, Un, 0.0, Fn, 0, 0, 100.0, 0, "H", "1.0");
             } else {
-                if (!stendDLLCommands.getUIWithPhase(1, Un, 0, Fn, 0, 0, 0, 0, 100, 0, "H", "1.0")) throw new ConnectForStendExeption();
+                double voltPerA = 0.0;
+                double voltPerB = 0.0;
+                double voltPerC = 0.0;
+
+                switch (TestErrorTableFrameController.phaseOnePhaseMode) {
+                    case "A": voltPerA = 100.0; break;
+                    case "B": voltPerB = 100.0; break;
+                    case "C": voltPerC = 100.0; break;
+                }
+
+                stendDLLCommands.getUIWithPhase(1, Un, 0, Fn, 0, 0, voltPerA, voltPerB, voltPerC, 0, "H", "1.0");
             }
 
         } else {
-            if (!stendDLLCommands.getUI(1, Un, 0, Fn, 0, 0, 100.0, 0, "H", "1.0")) throw new ConnectForStendExeption();
+            stendDLLCommands.getUI(1, Un, 0, Fn, 0, 0, 100.0, 0, "H", "1.0");
         }
-
-        blockBtns.setValue(false);
     }
 
     //Инициализирует параметры необходимые для снятия погрешности в точке

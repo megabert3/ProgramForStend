@@ -172,8 +172,8 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.transferParam(this);
 
-        if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+        stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -263,7 +263,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
             Thread.sleep(300);
         }
 
-        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        stendDLLCommands.errorClear();
     }
 
     //Метод для цикличной поверки счётчиков
@@ -296,8 +296,8 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.transferParam(this);
 
-        if (!stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP)) throw new ConnectForStendExeption();
+        stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -370,7 +370,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
             Thread.sleep(300);
         }
 
-        if (!stendDLLCommands.errorClear()) throw new ConnectForStendExeption();
+        stendDLLCommands.errorClear();
     }
 
     //Опрашивает счётчики до нужно значения проходов

@@ -1285,8 +1285,16 @@ public class Meter implements Serializable{
             super.maxError = emax;
         }
 
-        public void setResultConstantCommand(String result, int resultNo, boolean passOrNot, int chanelFlag, String kwMeter, String kwRefMeter) {
-            if (passOrNot) {
+        public void setResultConstantCommand(String result, int resultNo, Boolean passOrNot, int chanelFlag, String kwMeter, String kwRefMeter) {
+            if (passOrNot == null) {
+                super.lastResultForTabView.setValue("N" + result);
+                super.lastResult = result;
+                super.results[resultNo] = result;
+                super.passTest = null;
+                this.kwMeter = kwMeter;
+                this.kwRefMeter = kwRefMeter;
+
+            } else if (passOrNot) {
                 super.lastResultForTabView.setValue("P" + result + " P");
                 super.lastResult = result;
                 super.results[resultNo] = result;

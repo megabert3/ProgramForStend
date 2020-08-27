@@ -211,7 +211,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             //Передаю необходимые параметры для эталонного счётчика
             ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
                     voltPer * (ratedVolt / 100), 0.0);
+
             if (iABC.equals("H")) {
+                stendDLLCommands.selectCircuit(0);
+
                 stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPer, currPer, iABC, cosP);
 
@@ -250,21 +253,27 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
+        //Если команда создана по времени
         if (runTestToTime) {
 
             TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
                     String[] kw;
+
                     if (constantThread.isAlive()) {
                         for (Meter meter : meterForTestList) {
-                            kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
-                            double result = Double.parseDouble(kw[0]);
+                            try {
+                                kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
 
-                            if (result == 0) {
-                                ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
-                                TestErrorTableFrameController.getStaticBtnStop().fire();
-                                timer.cancel();
+                                double result = Double.parseDouble(kw[0]);
+
+                                if (result == 0.0) {
+                                    ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
+                                    timer.cancel();
+                                }
+                            } catch (ConnectForStendExeption connectForStendExeption) {
+                                connectForStendExeption.printStackTrace();
                             }
                         }
                         timer.cancel();
@@ -294,21 +303,23 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 }
             } else {
                 if (iABC.equals("H")) {
-                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                    stendDLLCommands.selectCircuit(0);
+
+                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                             voltPer, currPer, iABC, cosP);
 
                 } else if (iABC.equals("A")) {
                     stendDLLCommands.selectCircuit(0);
                     iABC = "H";
 
-                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                             voltPer, currPer, iABC, cosP);
 
                 } else if (iABC.equals("B")) {
                     stendDLLCommands.selectCircuit(1);
                     iABC = "H";
 
-                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                             voltPer, currPer, iABC, cosP);
                 }
             }
@@ -325,8 +336,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             timeEnd = timeStart + timeTheTest;
 
             while (System.currentTimeMillis() < timeEnd) {
-
-                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 if (refMeterCount % 7 == 0) {
                     TestErrorTableFrameController.refreshRefMeterParameters();
@@ -357,7 +366,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
 
             //Получаю результат
-            double result;
+            Double result;
             String kwRefMeter;
             String kwMeter;
 
@@ -367,13 +376,17 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 result = stendDLLCommands.constProcRead(constantMeter, meter.getId());
                 Meter.ConstantResult constantResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
-                kwRefMeter = kw[0];
-                kwMeter = kw[1];
+                kwRefMeter = kw[1];
+                kwMeter = kw[0];
 
-                if (result < eminProc || result > emaxProc) {
-                    constantResult.setResultConstantCommand(String.valueOf(result), countResult, false, channelFlag, kwRefMeter, kwMeter);
+                if (Double.parseDouble(kwMeter) != 0) {
+                    if (result < eminProc || result > emaxProc) {
+                        constantResult.setResultConstantCommand(String.valueOf(result), countResult, false, channelFlag, kwRefMeter, kwMeter);
+                    } else {
+                        constantResult.setResultConstantCommand(String.valueOf(result), countResult, true, channelFlag, kwRefMeter, kwMeter);
+                    }
                 } else {
-                    constantResult.setResultConstantCommand(String.valueOf(result), countResult, true, channelFlag, kwRefMeter, kwMeter);
+                    constantResult.setResultConstantCommand("Нет импульсов", countResult, null, channelFlag, "", "");
                 }
             }
 
@@ -383,16 +396,19 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    if (!constantThread.isAlive()) {
-                        for (Meter meter : meterForTestList) {
-                            double result = Double.parseDouble(meter.returnResultCommand(index, channelFlag).getLastResultForTabView().substring(1));
-                            if (result == 0) {
-                                ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
-                                TestErrorTableFrameController.getStaticBtnStop().fire();
-                                timer.cancel();
-                            }
-                        }
+                    if (constantThread.isAlive()) {
 
+                        for (Meter meter : meterForTestList) {
+                            try {
+                               double result = Double.parseDouble(meter.returnResultCommand(index, channelFlag).getLastResultForTabView().substring(1));
+
+                                if (result == 0) {
+                                    ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
+                                    timer.cancel();
+                                }
+                            }catch (NumberFormatException ignore) {}
+
+                        }
                         timer.cancel();
                     } else timer.cancel();
                 }
@@ -420,23 +436,24 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                             voltPer, currPer, iABC, cosP);
                 }
             } else {
-
                 if (iABC.equals("H")) {
-                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                    stendDLLCommands.selectCircuit(0);
+
+                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                             voltPer, currPer, iABC, cosP);
 
                 } else if (iABC.equals("A")) {
                     stendDLLCommands.selectCircuit(0);
                     iABC = "H";
 
-                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                             voltPer, currPer, iABC, cosP);
 
                 } else if (iABC.equals("B")) {
                     stendDLLCommands.selectCircuit(1);
                     iABC = "H";
 
-                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                             voltPer, currPer, iABC, cosP);
                 }
             }
@@ -454,7 +471,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             double hightKw;
 
             while (kWToTest > refMeterEnergy) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 if (refMeterCount % 4 == 0) {
                     TestErrorTableFrameController.refreshRefMeterParameters();
@@ -467,10 +483,11 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 for (Meter meter : meterForTestList) {
                     kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
 
-                    if (kw.length == 2) {
-                        constantResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
+                    constantResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
 
-                        constantResult.setLastResultForTabView("N" + kw[0]);
+                    constantResult.setLastResultForTabView("N" + kw[0]);
+
+                    if (Double.parseDouble(kw[0]) != 0) {
 
                         hightKw = Double.parseDouble(kw[1]);
 
@@ -499,13 +516,17 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
                 result = stendDLLCommands.constProcRead(constantMeter, meter.getId());
                 constantResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
-                kwRefMeter = kw[0];
-                kwMeter = kw[1];
+                kwRefMeter = kw[1];
+                kwMeter = kw[0];
 
-                if (result < eminProc || result > emaxProc) {
-                    constantResult.setResultConstantCommand(String.valueOf(result), countResult, false, channelFlag, kwRefMeter, kwMeter);
+                if (Double.parseDouble(kwMeter) != 0) {
+                    if (result < eminProc || result > emaxProc) {
+                        constantResult.setResultConstantCommand(String.valueOf(result), countResult, false, channelFlag, kwRefMeter, kwMeter);
+                    } else {
+                        constantResult.setResultConstantCommand(String.valueOf(result), countResult, true, channelFlag, kwRefMeter, kwMeter);
+                    }
                 } else {
-                    constantResult.setResultConstantCommand(String.valueOf(result), countResult, true, channelFlag, kwRefMeter, kwMeter);
+                    constantResult.setResultConstantCommand("Нет импульсов", countResult, null, channelFlag, "", "");
                 }
             }
         }
@@ -520,6 +541,17 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
     public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
+        }
+
+        try {
+            //Выбор константы в зависимости от энергии
+            if (channelFlag == 0 || channelFlag == 1) {
+                constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
+            } else if (channelFlag == 2 || channelFlag == 3) {
+                constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
+            }
+        }catch (NumberFormatException e) {
+            constantMeter = 0;
         }
 
         constantThread = Thread.currentThread();
@@ -556,10 +588,26 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         voltPer, currPer, iABC, cosP);
             }
         } else {
-            ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
+            //Передаю необходимые параметры для эталонного счётчика
+            ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
                     voltPer * (ratedVolt / 100), 0.0);
 
-            stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, phaseSrequence, revers,
+            if (iABC.equals("H")) {
+                stendDLLCommands.selectCircuit(0);
+
+                stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
+
+            } else if (iABC.equals("A")) {
+                stendDLLCommands.selectCircuit(0);
+                iABC = "H";
+
+            } else if (iABC.equals("B")) {
+                stendDLLCommands.selectCircuit(1);
+                iABC = "H";
+            }
+
+            stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP);
         }
 
@@ -597,15 +645,18 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     @Override
                     public void run() {
                         String[] kw;
-                        if (!constantThread.isAlive()) {
+                        if (constantThread.isAlive()) {
                             for (Meter meter : meterForTestList) {
-                                kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
-                                double result = Double.parseDouble(kw[0]);
+                                try {
+                                    kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
+                                    double result = Double.parseDouble(kw[0]);
 
-                                if (result == 0) {
-                                    ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
-                                    TestErrorTableFrameController.getStaticBtnStop().fire();
-                                    timer.cancel();
+                                    if (result == 0) {
+                                        ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
+                                        timer.cancel();
+                                    }
+                                } catch (ConnectForStendExeption connectForStendExeption) {
+                                    connectForStendExeption.printStackTrace();
                                 }
                             }
                             timer.cancel();
@@ -635,8 +686,26 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                                 voltPer, currPer, iABC, cosP);
                     }
                 } else {
-                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                            voltPer, currPer, iABC, cosP);
+                    if (iABC.equals("H")) {
+                        stendDLLCommands.selectCircuit(0);
+
+                        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPer, currPer, iABC, cosP);
+
+                    } else if (iABC.equals("A")) {
+                        stendDLLCommands.selectCircuit(0);
+                        iABC = "H";
+
+                        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPer, currPer, iABC, cosP);
+
+                    } else if (iABC.equals("B")) {
+                        stendDLLCommands.selectCircuit(1);
+                        iABC = "H";
+
+                        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPer, currPer, iABC, cosP);
+                    }
                 }
 
                 timer.schedule(timerTask, 10000);
@@ -690,13 +759,17 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     String[] kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
                     result = stendDLLCommands.constProcRead(constantMeter, meter.getId());
                     Meter.ConstantResult constantResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
-                    kwRefMeter = kw[0];
-                    kwMeter = kw[1];
+                    kwRefMeter = kw[1];
+                    kwMeter = kw[0];
 
-                    if (result < eminProc || result > emaxProc) {
-                        constantResult.setResultConstantCommand(String.valueOf(result), countResult, false, channelFlag, kwRefMeter, kwMeter);
+                    if (Double.parseDouble(kwMeter) != 0) {
+                        if (result < eminProc || result > emaxProc) {
+                            constantResult.setResultConstantCommand(String.valueOf(result), countResult, false, channelFlag, kwRefMeter, kwMeter);
+                        } else {
+                            constantResult.setResultConstantCommand(String.valueOf(result), countResult, true, channelFlag, kwRefMeter, kwMeter);
+                        }
                     } else {
-                        constantResult.setResultConstantCommand(String.valueOf(result), countResult, true, channelFlag, kwRefMeter, kwMeter);
+                        constantResult.setResultConstantCommand("Нет импульсов", countResult, null, channelFlag, "", "");
                     }
                 }
 
@@ -706,16 +779,17 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 TimerTask timerTask = new TimerTask() {
                     @Override
                     public void run() {
-                        if (!constantThread.isAlive()) {
+                        if (constantThread.isAlive()) {
                             for (Meter meter : meterForTestList) {
-                                double result = Double.parseDouble(meter.returnResultCommand(index, channelFlag).getLastResultForTabView().substring(1));
-                                if (result == 0) {
-                                    ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
-                                    TestErrorTableFrameController.getStaticBtnStop().fire();
-                                    timer.cancel();
-                                }
-                            }
+                                try {
+                                    double result = Double.parseDouble(meter.returnResultCommand(index, channelFlag).getLastResultForTabView().substring(1));
 
+                                    if (result == 0) {
+                                        ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
+                                        timer.cancel();
+                                    }
+                                }catch (NumberFormatException ignore) {}
+                            }
                             timer.cancel();
                         } else timer.cancel();
                     }
@@ -741,11 +815,29 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                                 voltPer, currPer, iABC, cosP);
                     }
                 } else {
-                    stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                            voltPer, currPer, iABC, cosP);
+                    if (iABC.equals("H")) {
+                        stendDLLCommands.selectCircuit(0);
+
+                        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPer, currPer, iABC, cosP);
+
+                    } else if (iABC.equals("A")) {
+                        stendDLLCommands.selectCircuit(0);
+                        iABC = "H";
+
+                        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPer, currPer, iABC, cosP);
+
+                    } else if (iABC.equals("B")) {
+                        stendDLLCommands.selectCircuit(1);
+                        iABC = "H";
+
+                        stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                                voltPer, currPer, iABC, cosP);
+                    }
                 }
 
-                timer.schedule(timerTask, 7000);
+                timer.schedule(timerTask, 10000);
 
                 TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -770,11 +862,12 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     for (Meter meter : meterForTestList) {
                         kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
 
-                        if (kw.length == 2) {
-                            constantResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
 
-                            constantResult.setLastResultForTabView("N" + kw[0]);
+                        constantResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
 
+                        constantResult.setLastResultForTabView("N" + kw[0]);
+
+                        if (Double.parseDouble(kw[0]) != 0) {
                             hightKw = Double.parseDouble(kw[1]);
 
                             if (hightKw > refMeterEnergy) {
@@ -802,13 +895,17 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     kw = stendDLLCommands.constStdEnergyRead(constantMeter, meter.getId()).split(",");
                     result = stendDLLCommands.constProcRead(constantMeter, meter.getId());
                     constantResult = (Meter.ConstantResult) meter.returnResultCommand(index, channelFlag);
-                    kwRefMeter = kw[0];
-                    kwMeter = kw[1];
+                    kwRefMeter = kw[1];
+                    kwMeter = kw[0];
 
-                    if (result < eminProc || result > emaxProc) {
-                        constantResult.setResultConstantCommand(String.valueOf(result), countResult, false, channelFlag, kwRefMeter, kwMeter);
+                    if (Double.parseDouble(kwMeter) != 0) {
+                        if (result < eminProc || result > emaxProc) {
+                            constantResult.setResultConstantCommand(String.valueOf(result), countResult, false, channelFlag, kwRefMeter, kwMeter);
+                        } else {
+                            constantResult.setResultConstantCommand(String.valueOf(result), countResult, true, channelFlag, kwRefMeter, kwMeter);
+                        }
                     } else {
-                        constantResult.setResultConstantCommand(String.valueOf(result), countResult, true, channelFlag, kwRefMeter, kwMeter);
+                        constantResult.setResultConstantCommand("Нет импульсов", countResult, null, channelFlag, "", "");
                     }
                 }
             }
@@ -852,10 +949,26 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                             voltPer, currPer, iABC, cosP);
                 }
             } else {
-                ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
+                //Передаю необходимые параметры для эталонного счётчика
+                ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
                         voltPer * (ratedVolt / 100), 0.0);
 
-                stendDLLCommands.getUI(phase, ratedVolt, 0.0, ratedFreq, phaseSrequence, revers,
+                if (iABC.equals("H")) {
+                    stendDLLCommands.selectCircuit(0);
+
+                    stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
+                            voltPer, currPer, iABC, cosP);
+
+                } else if (iABC.equals("A")) {
+                    stendDLLCommands.selectCircuit(0);
+                    iABC = "H";
+
+                } else if (iABC.equals("B")) {
+                    stendDLLCommands.selectCircuit(1);
+                    iABC = "H";
+                }
+
+                stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPer, currPer, iABC, cosP);
             }
 

@@ -221,7 +221,7 @@ public abstract class StendDLLCommands {
                                    double currPer,
                                    String iABC,
                                    String cosP) throws ConnectForStendExeption {
-        if (stend.Adjust_UI1(phase,ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+        if (!stend.Adjust_UI1(phase,ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPerA, voltPerB, voltPerC, currPer, iABC, cosP, typeReferenceMeter, port)) {
             throw new ConnectForStendExeption("Не удалось подать мощность: Adjust_U_WithPhase");
         }
@@ -340,25 +340,32 @@ public abstract class StendDLLCommands {
 
 
     // Чтение данных по энергии
-    public synchronized double constProcRead(double constant, int meterNo) {
+    public synchronized double constProcRead(double constant, int meterNo) throws ConnectForStendExeption {
         DoubleByReference pointerMeterKWH = new DoubleByReference();
         DoubleByReference pointerStdKWH = new DoubleByReference();
 
-        stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port);
+        if (!stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port)) {
+            throw new ConnectForStendExeption("Не удалось подать команду ConstPulse_Read");
+        }
 
-        return new BigDecimal(((pointerMeterKWH.getValue() - pointerStdKWH.getValue()) / pointerStdKWH.getValue()) * 100)
+        Double meterKWH = pointerMeterKWH.getValue();
+        Double stdKWH = pointerStdKWH.getValue();
+
+        return new BigDecimal(((meterKWH - stdKWH) / stdKWH) * 100)
                 .setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
     // Чтение данных по энергии
-    public synchronized String constStdEnergyRead(double constant, int meterNo) {
+    public synchronized String constStdEnergyRead(double constant, int meterNo) throws ConnectForStendExeption {
         DoubleByReference pointerMeterKWH = new DoubleByReference();
         DoubleByReference pointerStdKWH = new DoubleByReference();
 
-        System.out.println(stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port));
+        if (!stend.ConstPulse_Read(pointerMeterKWH, pointerStdKWH, constant, meterNo, port)) {
+            throw new ConnectForStendExeption("Не удалось подать команду ConstPulse_Read");
+        }
 
-        System.out.println(pointerMeterKWH.getValue());
-        System.out.println(pointerStdKWH.getValue());
+        System.out.println("Счётчик " + meterNo + " " + pointerMeterKWH.getValue());
+        System.out.println("Эталонный счётчик " + pointerStdKWH.getValue());
 
         String bigDecimalMeterKWH = new BigDecimal(pointerMeterKWH.getValue()).setScale(5, RoundingMode.HALF_UP).toString();
         String bigDecimalStdKWH = new BigDecimal(pointerStdKWH.getValue()).setScale(5, RoundingMode.HALF_UP).toString();
@@ -369,7 +376,8 @@ public abstract class StendDLLCommands {
     // Выбор цепи
     public void selectCircuit(int circuit) throws ConnectForStendExeption {
         boolean b = stend.SelectCircuit(circuit, port);
-        if (!b) throw new ConnectForStendExeption("не удалось переключить цепь SelectCircuit");
+        System.out.println(b);
+        //if (!b) throw new ConnectForStendExeption("не удалось переключить цепь SelectCircuit");
     }
 
     // Отключить нейтраль

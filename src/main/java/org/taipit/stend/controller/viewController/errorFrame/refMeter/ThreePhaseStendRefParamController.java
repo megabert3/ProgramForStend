@@ -469,14 +469,14 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
             } else {
                 String phase = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
 
-                current = command.getRatedCurr() * command.getCurrPer();
-                U = command.getRatedVolt() * command.getRatedVolt();
+                current = command.getRatedCurr() * (command.getCurrPer() / 100);
+                U = command.getRatedVolt() * (command.getVoltPer() / 100);
 
                 switch (phase) {
                     case "A": {
                         currPhaseA = current;
-                        currPhaseA = 0.0;
-                        currPhaseA = 0.0;
+                        currPhaseB = 0.0;
+                        currPhaseC = 0.0;
 
                         UPhaseA = U;
                         UPhaseB = 0.0;
@@ -484,8 +484,8 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
                     }break;
                     case "B": {
                         currPhaseA = 0.0;
-                        currPhaseA = current;
-                        currPhaseA = 0.0;
+                        currPhaseB = current;
+                        currPhaseC = 0.0;
 
                         UPhaseA = 0.0;
                         UPhaseB = U;
@@ -493,8 +493,8 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
                     }break;
                     case "C": {
                         currPhaseA = 0.0;
-                        currPhaseA = 0.0;
-                        currPhaseA = current;
+                        currPhaseB = 0.0;
+                        currPhaseC = current;
 
                         UPhaseA = 0.0;
                         UPhaseB = 0.0;

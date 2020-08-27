@@ -15,48 +15,30 @@ public class MainStend {
 
             ThreePhaseStendRefParamController stendRefParametersForFrame = new ThreePhaseStendRefParamController();
 
-            int channelFlag = 0;
+            stendDLLCommands.selectCircuit(1);
 
-            System.out.println(stendDLLCommands.setReviseMode(1));
-            System.out.println(stendDLLCommands.setReviseTime(4.5));
-//
-           //System.out.println(stendDLLCommands.setNoRevise(true));
-//
-            long time = System.currentTimeMillis();
-            stendDLLCommands.getUI(1, 230.0, 1.0, 50.0, 0, 0, 100.0, 1, "H", "1.0");
-            System.out.println(System.currentTimeMillis() - time);
+            int channelFlag = 1;
 
-            //Ua,Ub,Uc,Ia,Ib,Ic,Angle_UaIa, Angle_UbIb, Angle_UcIc, Pa , Pb , Pc , Qa , Qb , Qc , Sa , Sb , Sc ,
-            //Pall(A.P.),Qall(R.P.),Sall(Apparent power), Freq ,PFa,PFb,PFc,PFall, Angle_UaUb, Angle_UbUc
+            stendDLLCommands.setReviseMode(1);
 
-            for (int i = 0; i < 10; i++) {
-                String[] meterParam = stendDLLCommands.stMeterRead().split(",");
-                System.out.println(Arrays.toString(meterParam));
+            stendDLLCommands.getUIWithPhase(1, 230.0, 5.0, 50.0, 0, 0, 0.0, 100.0, 0.0, 100.0, "B",
+                    "1.0");
+
+            //stendDLLCommands.getUI(5, 230.0, 60, 50.0, 0, 0, 100.0, 0, "H", "1.0");
+
+            for (int i = 1; i < 4; i++) {
+                stendDLLCommands.setPulseChannel(i, channelFlag);
+            }
+
+            for (int i = 0; i < 7; i++) {
+
+                for (int j = 1; j < 4; j++) {
+                    System.out.println(stendDLLCommands.stMeterRead());
+                }
+
                 Thread.sleep(1000);
             }
-//
-//        System.out.println(System.currentTimeMillis() - time);
-//
-//        Thread.sleep(10000);
-//
-////        for (int i = 1; i <= 3; i++) {
-////            stendDLLCommands.setPulseChannel(i, channelFlag);
-////        }
-////
-////        for (int i = 1; i <= 3; i++) {
-////            System.out.println(stendDLLCommands.countStart(i));
-////        }
-////
-////        for (int j = 0; j < 50; j++) {
-////
-////            for (int i = 1; i < 4; i++) {
-////                System.out.println("Счётчик: "+ i + "Количество импульсов " + stendDLLCommands.countRead(i));
-////            }
-////
-////            j++;
-////            Thread.sleep(500);
-////        }
-//
+
             stendDLLCommands.errorClear();
             stendDLLCommands.powerOf();
         }catch (Exception e) {
