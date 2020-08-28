@@ -120,40 +120,20 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        ////Т.к. команда Count игнорирует первый импульс
-        pulseValue =--pulseValue;
+        stendDLLCommands.errorClear();
 
         int refMeterCount = 1;
 
         currThread = Thread.currentThread();
 
-        timer = new Timer(true);
-
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Meter.CommandResult creepResult;
-                if (currThread.isAlive()) {
-                    for (Map.Entry<Integer, Boolean> flag : startCommandResult.entrySet()) {
-                        if (!flag.getValue()) {
-                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
-                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
-                        }
-                    }
-                } else {
-                    timer.cancel();
-                }
-            }
-        };
-
         //Номер измерения
         int countResult = 1;
-        Meter meter;
+
         Meter.StartResult startResult;
 
-        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-
         startCommandResult = initStartCommandResult();
+
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
         TestErrorTableFrameController.transferParam(this);
 
@@ -183,6 +163,8 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
+        setTestMode();
+
         Thread.sleep(TestErrorTableFrameController.timeToStabilization); //Пауза для стабилизации
 
         TestErrorTableFrameController.refreshRefMeterParameters();
@@ -193,42 +175,35 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
 
+        timer = new Timer(true);
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Meter.CommandResult creepResult;
+                if (currThread.isAlive()) {
+                    for (Map.Entry<Integer, Boolean> flag : startCommandResult.entrySet()) {
+                        if (!flag.getValue()) {
+                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
+                        }
+                    }
+                } else {
+                    timer.cancel();
+                }
+            }
+        };
+
         timer.schedule(timerTask, 0, 275);
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
-        while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-
-            if (refMeterCount % 8 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
-
-            if (Thread.currentThread().isInterrupted()) {
-                throw new InterruptedException();
-            }
-
-            for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
-
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new InterruptedException();
-                }
-
-                if (!mapResult.getValue()) {
-                    meter = meterList.get(mapResult.getKey() - 1);
-                    startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
-
-                    if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue) {
-
-                        startCommandResult.put(mapResult.getKey(), true);
-                        startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
-                    }
-                }
-            }
-
-            refMeterCount++;
-            Thread.sleep(400);
+        if (pulseValue == 1) {
+            startTestModeSearchMark(refMeterCount, countResult);
+        } else {
+            startTestModeCount(refMeterCount, countResult);
         }
 
         timer.cancel();
@@ -251,31 +226,10 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        ////Т.к. команда Count игнорирует первый импульс
-        pulseValue =--pulseValue;
-
         currThread = Thread.currentThread();
-
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Meter.CommandResult creepResult;
-                if (currThread.isAlive()) {
-                    for (Map.Entry<Integer, Boolean> flag : startCommandResult.entrySet()) {
-                        if (!flag.getValue()) {
-                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
-                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
-                        }
-                    }
-                } else {
-                    timer.cancel();
-                }
-            }
-        };
 
         //Номер измерения
         int countResult = 1;
-        Meter meter;
         Meter.StartResult startResult;
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
@@ -313,52 +267,47 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
 
         while (Thread.currentThread().isAlive()) {
+            stendDLLCommands.errorClear();
+
             int refMeterCount = 1;
+
+            startCommandResult = initStartCommandResult();
+
+            //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
+            setDefTestResults(channelFlag, index);
+
+            setTestMode();
 
             TestErrorTableFrameController.refreshRefMeterParameters();
 
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + userTimeTest;
 
-            //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-            setDefTestResults(channelFlag, index);
-
             timer = new Timer(true);
 
-            startCommandResult = initStartCommandResult();
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    Meter.CommandResult creepResult;
+                    if (currThread.isAlive()) {
+                        for (Map.Entry<Integer, Boolean> flag : startCommandResult.entrySet()) {
+                            if (!flag.getValue()) {
+                                creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                                creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
+                            }
+                        }
+                    } else {
+                        timer.cancel();
+                    }
+                }
+            };
 
             timer.schedule(timerTask, 0, 275);
 
-            while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-
-                if (refMeterCount % 8 == 0) {
-                    TestErrorTableFrameController.refreshRefMeterParameters();
-                }
-
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new InterruptedException();
-                }
-
-                for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
-
-                    if (Thread.currentThread().isInterrupted()) {
-                        throw new InterruptedException();
-                    }
-
-                    if (!mapResult.getValue()) {
-                        meter = meterList.get(mapResult.getKey() - 1);
-                        startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
-
-                        if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue) {
-
-                            startCommandResult.put(mapResult.getKey(), true);
-                            startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
-                        }
-                    }
-                }
-
-                refMeterCount++;
-                Thread.sleep(400);
+            if (pulseValue == 1) {
+                startTestModeSearchMark(refMeterCount, countResult);
+            } else {
+                startTestModeCount(refMeterCount, countResult);
             }
 
             timer.cancel();
@@ -388,14 +337,95 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         return init;
     }
 
+    private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, ConnectForStendExeption {
+        while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+
+            if (refMeterCount % 8 == 0) {
+                TestErrorTableFrameController.refreshRefMeterParameters();
+            }
+
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
+            for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+
+                if (!mapResult.getValue()) {
+                    Meter meter = meterList.get(mapResult.getKey() - 1);
+                    Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
+
+                    if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue - 1) {
+
+                        startCommandResult.put(mapResult.getKey(), true);
+                        startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
+                    }
+                }
+            }
+
+            refMeterCount++;
+
+            Thread.sleep(400);
+        }
+    }
+
+    private void startTestModeSearchMark(int refMeterCount, int countResult) throws InterruptedException {
+        while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+
+            if (refMeterCount % 8 == 0) {
+                TestErrorTableFrameController.refreshRefMeterParameters();
+            }
+
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
+            for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+
+                if (!mapResult.getValue()) {
+                    Meter meter = meterList.get(mapResult.getKey() - 1);
+                    Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
+
+                    if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
+
+                        startCommandResult.put(mapResult.getKey(), true);
+                        startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
+                    }
+                }
+            }
+
+            refMeterCount++;
+
+            Thread.sleep(400);
+        }
+    }
+
     //reset
-    private void setDefTestResults(int channelFlag, int index) throws ConnectForStendExeption {
+    private void setDefTestResults(int channelFlag, int index) {
         for (Meter meter : meterList) {
             Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
             startResult.setLastResultForTabView("N");
             startResult.setPassTest(null);
             startResult.setLastResult("");
-            stendDLLCommands.countStart(meter.getId());
+        }
+    }
+
+    private void setTestMode() throws ConnectForStendExeption {
+        if (pulseValue == 1) {
+            for (Meter meter : meterList) {
+                stendDLLCommands.searchMark(meter.getId());
+            }
+        } else {
+            for (Meter meter : meterList) {
+                stendDLLCommands.countStart(meter.getId());
+            }
         }
     }
 

@@ -300,8 +300,10 @@ public abstract class StendDLLCommands {
     }
 
     // Поиск метки
-    public synchronized boolean searchMark(int meterNo) {
-        return stend.Search_mark(meterNo, port);
+    public void searchMark(int meterNo) throws ConnectForStendExeption {
+        if (!stend.Search_mark(meterNo, port)) {
+            throw new ConnectForStendExeption("Не удалось записать команду Search_mark");
+        }
     }
 
     // результат поиска метки

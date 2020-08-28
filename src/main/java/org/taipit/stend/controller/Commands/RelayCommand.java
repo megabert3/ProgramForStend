@@ -387,13 +387,12 @@ public class RelayCommand implements Commands {
     }
 
     //reset
-    private void setDefTestResults(int channelFlag, int index) {
+    private void setDefTestResults(int channelFlag, int index) throws ConnectForStendExeption {
         for (Meter meter : meterList) {
             Meter.CreepResult creepResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
             creepResult.setLastResultForTabView("N");
             creepResult.setPassTest(null);
             creepResult.setLastResult("");
-            meter.setAmountImn(0);
             stendDLLCommands.countStart(meter.getId());
         }
     }

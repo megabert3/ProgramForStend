@@ -19,22 +19,18 @@ public class MainStend {
 
             int channelFlag = 1;
 
-            stendDLLCommands.setReviseMode(1);
-
-            stendDLLCommands.getUIWithPhase(1, 230.0, 5.0, 50.0, 0, 0, 0.0, 100.0, 0.0, 100.0, "B",
+            stendDLLCommands.getUIWithPhase(1, 230.0, 5.0, 50.0, 0, 0, 100.0, 100.0, 100.0, 100.0, "H",
                     "1.0");
 
             //stendDLLCommands.getUI(5, 230.0, 60, 50.0, 0, 0, 100.0, 0, "H", "1.0");
 
             for (int i = 1; i < 4; i++) {
                 stendDLLCommands.setPulseChannel(i, channelFlag);
+                stendDLLCommands.countStart(i);
             }
 
-            for (int i = 0; i < 7; i++) {
-
-                for (int j = 1; j < 4; j++) {
-                    System.out.println(stendDLLCommands.stMeterRead());
-                }
+            for (int i = 0; i < 20; i++) {
+                System.out.println(stendDLLCommands.countRead(1));
 
                 Thread.sleep(1000);
             }

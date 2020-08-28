@@ -114,33 +114,11 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         currThread = Thread.currentThread();
 
-        //Т.к. команда Count игнорирует первый импульс
-        pulseValue = --pulseValue;
-
         int refMeterCount = 1;
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
-
-        timer = new Timer(true);
-
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Meter.CommandResult creepResult;
-                if (currThread.isAlive()) {
-                    for (Map.Entry<Integer, Boolean> flag : creepCommandResult.entrySet()) {
-                        if (flag.getValue()) {
-                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
-                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
-                        }
-                    }
-                } else {
-                    timer.cancel();
-                }
-            }
-        };
 
         //Номер измерения
         int countResult = 1;
@@ -182,8 +160,12 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
+        stendDLLCommands.errorClear();
+
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию
         setDefTestResults(channelFlag, index);
+
+        setTestMode();
 
         Thread.sleep(TestErrorTableFrameController.timeToStabilization);
 
@@ -192,44 +174,35 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
 
+        timer = new Timer(true);
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Meter.CommandResult creepResult;
+                if (currThread.isAlive()) {
+                    for (Map.Entry<Integer, Boolean> flag : creepCommandResult.entrySet()) {
+                        if (flag.getValue()) {
+                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
+                        }
+                    }
+                } else {
+                    timer.cancel();
+                }
+            }
+        };
+
         timer.schedule(timerTask, 0, 275);
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
-        while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
-
-            if (refMeterCount % 8 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
-
-            if (Thread.currentThread().isInterrupted()) {
-                throw new InterruptedException();
-            }
-
-            for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
-
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new InterruptedException();
-                }
-
-                if (mapResult.getValue()) {
-
-                    if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue) {
-
-                        creepCommandResult.put(mapResult.getKey(), false);
-
-                        creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
-
-                        creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
-                    }
-                }
-            }
-
-            refMeterCount++;
-
-            Thread.sleep(400);
+        if (pulseValue == 1) {
+            startTestModeSearchMark(refMeterCount, countResult);
+        } else {
+            startTestModeCount(refMeterCount, countResult);
         }
 
         timer.cancel();
@@ -251,26 +224,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
-
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Meter.CommandResult creepResult;
-                if (currThread.isAlive()) {
-                    for (Map.Entry<Integer, Boolean> flag : creepCommandResult.entrySet()) {
-                        if (flag.getValue()) {
-                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
-                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
-                        }
-                    }
-                } else {
-                    timer.cancel();
-                }
-            }
-        };
-
-        //Т.к. команда Count игнорирует первый импульс
-        pulseValue = --pulseValue;
 
         currThread = Thread.currentThread();
 
@@ -316,12 +269,12 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         while (Thread.currentThread().isAlive()) {
 
-            TestErrorTableFrameController.refreshRefMeterParameters();
-
             int refMeterCount = 1;
 
             //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
             setDefTestResults(channelFlag, index);
+
+            setTestMode();
 
             creepCommandResult = initCreepCommandResult();
 
@@ -330,39 +283,35 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
             timer = new Timer(true);
 
+            TestErrorTableFrameController.refreshRefMeterParameters();
+
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    Meter.CommandResult creepResult;
+                    if (currThread.isAlive()) {
+                        for (Map.Entry<Integer, Boolean> flag : creepCommandResult.entrySet()) {
+                            if (flag.getValue()) {
+                                creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                                creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
+                            }
+                        }
+                    } else {
+                        timer.cancel();
+                    }
+                }
+            };
+
             timer.schedule(timerTask, 0, 275);
 
-            while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
 
-                if (refMeterCount % 8 == 0) {
-                    TestErrorTableFrameController.refreshRefMeterParameters();
-                }
-
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new InterruptedException();
-                }
-
-                for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
-
-                    if (Thread.currentThread().isInterrupted()) {
-                        throw new InterruptedException();
-                    }
-
-                    if (mapResult.getValue()) {
-
-                        if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue) {
-
-                            creepCommandResult.put(mapResult.getKey(), false);
-
-                            creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
-
-                            creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
-                        }
-                    }
-                }
-                refMeterCount++;
-
-                Thread.sleep(400);
+            if (pulseValue == 1) {
+                startTestModeSearchMark(refMeterCount, countResult);
+            } else {
+                startTestModeCount(refMeterCount, countResult);
             }
 
             timer.cancel();
@@ -390,14 +339,97 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         return init;
     }
 
+    private void setTestMode() throws ConnectForStendExeption {
+        if (pulseValue == 1) {
+            for (Meter meter : meterList) {
+                stendDLLCommands.searchMark(meter.getId());
+            }
+        } else {
+            for (Meter meter : meterList) {
+                stendDLLCommands.countStart(meter.getId());
+            }
+        }
+    }
+
+    private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, ConnectForStendExeption {
+        while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
+
+            if (refMeterCount % 8 == 0) {
+                TestErrorTableFrameController.refreshRefMeterParameters();
+            }
+
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
+            for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+
+                if (mapResult.getValue()) {
+
+                    if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue - 1) {
+
+                        creepCommandResult.put(mapResult.getKey(), false);
+
+                        Meter.CreepResult creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
+
+                        creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
+                    }
+                }
+            }
+
+            refMeterCount++;
+
+            Thread.sleep(400);
+        }
+    }
+
+    private void startTestModeSearchMark(int refMeterCount, int countResult) throws InterruptedException {
+        while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
+
+            if (refMeterCount % 8 == 0) {
+                TestErrorTableFrameController.refreshRefMeterParameters();
+            }
+
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
+            for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+
+                if (mapResult.getValue()) {
+
+                    if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
+
+                        creepCommandResult.put(mapResult.getKey(), false);
+
+                        Meter.CreepResult creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
+
+                        creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
+                    }
+                }
+            }
+
+            refMeterCount++;
+
+            Thread.sleep(400);
+        }
+    }
+
     //reset
-    private void setDefTestResults(int channelFlag, int index) throws ConnectForStendExeption {
+    private void setDefTestResults(int channelFlag, int index) {
         for (Meter meter : meterList) {
             Meter.CommandResult creepResult = meter.returnResultCommand(index, channelFlag);
             creepResult.setLastResultForTabView("N");
             creepResult.setPassTest(null);
             creepResult.setLastResult("");
-            stendDLLCommands.countStart(meter.getId());
         }
     }
 
