@@ -657,6 +657,29 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     @FXML
     private Button influenceBtn;
 
+    //--------------------------------------------------------------- Реле
+    @FXML
+    private ToggleButton tglBtnRelay;
+
+    @FXML
+    private Pane paneRelay;
+
+    @FXML
+    private Label labelDirection;
+
+    @FXML
+    private TextField txtFieldRelayCurrent;
+
+    @FXML
+    private TextField txtFieldRelayTime;
+
+    @FXML
+    private TextField txtFieldAmountImpRelay;
+
+    @FXML
+    private ToggleButton addTglBtnRelay;
+
+
     //Устанавливает имя методики полученное с другого окна
     public void setTextFielMethodicName() {
         metodicNameTxtFld.setText(methodicForThreePhaseStend.getMetodicName());
@@ -1852,6 +1875,9 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }
             }
         }
+
+        //Инициализация реле
+        initRelayTest();
     }
 
     //Находит нужный CheckBox и задаёт значение
@@ -2181,6 +2207,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     @FXML
     void saveOrCancelAction(ActionEvent event) {
         if (event.getSource() == SaveBtn) {
+
             List<Commands> listErrorCommand;
             List<Commands> listCreepStartRTCCommadns;
 
@@ -4289,6 +4316,32 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 ConstTogBtnRPMns.setSelected(true);
             }
         }
+
+        if (event.getSource() == addTglBtnRelay) {
+
+            if (addTglBtnRelay.isSelected()) {
+                if (APPlusCRPSTA.isSelected()) {
+                    addRelayCommand(0);
+                } else if (APMinusCRPSTA.isSelected()) {
+                    addRelayCommand(1);
+                } else if (RPPlusCRPSTA.isSelected()) {
+                    addRelayCommand(2);
+                } else if (APMinusCRPSTA.isSelected()) {
+                    addRelayCommand(3);
+                }
+            } else {
+                if (APPlusCRPSTA.isSelected()) {
+                    deleteRelayCommand(testListForCollumAPPls);
+                } else if (APMinusCRPSTA.isSelected()) {
+                    deleteRelayCommand(testListForCollumAPMns);
+                } else if (RPPlusCRPSTA.isSelected()) {
+                    deleteRelayCommand(testListForCollumRPPls);
+                } else if (APMinusCRPSTA.isSelected()) {
+                    deleteRelayCommand(testListForCollumAPMns);
+                }
+            }
+
+        }
     }
 
 
@@ -4339,6 +4392,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             viewPointTableAPPls.toFront();
             APPlsPane.toFront();
             paneCRPAPPls.toFront();
+            paneRelay.toBack();
 
             APPlus.setSelected(true);
             APMinus.setSelected(false);
@@ -4356,6 +4410,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             viewPointTableAPMns.toFront();
             APMnsPane.toFront();
             paneCRPAPMns.toFront();
+            paneRelay.toBack();
 
             APMinus.setSelected(true);
             APPlus.setSelected(false);
@@ -4372,6 +4427,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             viewPointTableRPPls.toFront();
             RPPlsPane.toFront();
             paneCRPRPPls.toFront();
+            paneRelay.toBack();
 
             RPPlus.setSelected(true);
             APPlus.setSelected(false);
@@ -4388,6 +4444,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             viewPointTableRPMns.toFront();
             RPMnsPane.toFront();
             paneCRPRPMns.toFront();
+            paneRelay.toBack();
 
             RPMinus.setSelected(true);
             RPPlus.setSelected(false);
@@ -4404,6 +4461,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         //AP+
         if (event.getSource() == CRPTogBtnAPPls) {
             paneCRPAPPls.toFront();
+            paneRelay.toBack();
             if (addTglBtnCRPAPPls.isSelected() || addTglBtnCRPAPPlsGOST.isSelected()) {
                 CRPTogBtnAPPls.setSelected(true);
             }else CRPTogBtnAPPls.setSelected(false);
@@ -4411,6 +4469,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
         if (event.getSource() == STATogBtnAPPls) {
             paneSTAAPPls.toFront();
+            paneRelay.toBack();
             if (addTglBtnSTAAPPls.isSelected() || addTglBtnSTAAPPlsGOST.isSelected()) {
                 STATogBtnAPPls.setSelected(true);
             }else STATogBtnAPPls.setSelected(false);
@@ -4418,17 +4477,20 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
         if (event.getSource() == RTCTogBtnAPPls) {
             paneRTCAPPls.toFront();
+            paneRelay.toBack();
             RTCTogBtnAPPls.setSelected(addTglBtnRTCAPPls.isSelected());
         }
 
         if (event.getSource() == ConstTogBtnAPPls) {
             paneConstAPPls.toFront();
+            paneRelay.toBack();
             ConstTogBtnAPPls.setSelected(addTglBtnConstAPPls.isSelected());
         }
 
         //AP-
         if (event.getSource() == CRPTogBtnAPMns) {
             paneCRPAPMns.toFront();
+            paneRelay.toBack();
             if (addTglBtnCRPAPMns.isSelected() || addTglBtnCRPAPMnsGOST.isSelected()) {
                 CRPTogBtnAPMns.setSelected(true);
             } else CRPTogBtnAPMns.setSelected(false);
@@ -4436,6 +4498,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
         if (event.getSource() == STATogBtnAPMns) {
             paneSTAAPMns.toFront();
+            paneRelay.toBack();
             if (addTglBtnSTAAPMns.isSelected() || addTglBtnSTAAPMnsGOST.isSelected()) {
                 STATogBtnAPMns.setSelected(true);
             } else STATogBtnAPMns.setSelected(false);
@@ -4444,53 +4507,71 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         if (event.getSource() == RTCTogBtnAPMns) {
             RTCTogBtnAPMns.setSelected(addTglBtnRTCAPMns.isSelected());
             paneRTCAPMns.toFront();
+            paneRelay.toBack();
         }
 
         if (event.getSource() == ConstTogBtnAPMns) {
             ConstTogBtnAPMns.setSelected(addTglBtnConstAPMns.isSelected());
             paneConstAPMns.toFront();
+            paneRelay.toBack();
         }
 
         //RP+
         if (event.getSource() == CRPTogBtnRPPls) {
             CRPTogBtnRPPls.setSelected(addTglBtnCRPRPPls.isSelected() || addTglBtnCRPRPPlsGOST.isSelected());
             paneCRPRPPls.toFront();
+            paneRelay.toBack();
         }
 
         if (event.getSource() == STATogBtnRPPls) {
             STATogBtnRPPls.setSelected(addTglBtnSTARPPls.isSelected() || addTglBtnSTARPPlsGOST.isSelected());
             paneSTARPPls.toFront();
+            paneRelay.toBack();
         }
 
         if (event.getSource() == RTCTogBtnRPPls) {
             RTCTogBtnRPPls.setSelected(addTglBtnRTCRPPls.isSelected());
             paneRTCRPPls.toFront();
+            paneRelay.toBack();
         }
 
         if (event.getSource() == ConstTogBtnRPPls) {
             ConstTogBtnRPPls.setSelected(addTglBtnConstRPPls.isSelected());
             paneConstRPPls.toFront();
+            paneRelay.toBack();
         }
 
         //RP-
         if (event.getSource() == CRPTogBtnRPMns) {
             CRPTogBtnRPMns.setSelected(addTglBtnCRPRPMns.isSelected() || addTglBtnCRPRPMnsGOST.isSelected());
             paneCRPRPMns.toFront();
+            paneRelay.toBack();
         }
 
         if (event.getSource() == STATogBtnRPMns) {
             STATogBtnRPMns.setSelected(addTglBtnSTARPMns.isSelected() || addTglBtnSTARPMnsGOST.isSelected());
             paneSTARPMns.toFront();
+            paneRelay.toBack();
         }
 
         if (event.getSource() == RTCTogBtnRPMns) {
             RTCTogBtnRPMns.setSelected(addTglBtnRTCRPMns.isSelected());
             paneRTCRPMns.toFront();
+            paneRelay.toBack();
         }
 
         if (event.getSource() == ConstTogBtnRPMns) {
             ConstTogBtnRPMns.setSelected(addTglBtnConstRPMns.isSelected());
             paneConstRPMns.toFront();
+            paneRelay.toBack();
+        }
+
+        //------------------------------------------------ Реле
+
+        if (event.getSource() == tglBtnRelay) {
+            tglBtnRelay.setSelected(addTglBtnRelay.isSelected());
+
+            paneRelay.toFront();
         }
     }
 
@@ -4651,6 +4732,173 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 }
             }
         }
+    }
+
+    //------------------------------------------------Реле
+    private void initRelayTest() {
+
+        txtFieldRelayCurrent.setText("");
+        txtFieldRelayTime.setText("");
+        txtFieldAmountImpRelay.setText("");
+
+        addTglBtnRelay.setSelected(false);
+        tglBtnRelay.setSelected(false);
+
+        txtFieldRelayCurrent.setDisable(false);
+        txtFieldRelayTime.setDisable(false);
+        txtFieldAmountImpRelay.setDisable(false);
+
+        if (APPlusCRPSTA.isSelected()) {
+
+            labelDirection.setText("Активная энергия в прямом направлении тока");
+
+            selectReleyDirection(testListForCollumAPPls);
+        } else if (APMinusCRPSTA.isSelected()) {
+
+            labelDirection.setText("Активная энергия в обратном направлении тока");
+
+            selectReleyDirection(testListForCollumAPMns);
+        } else if (RPPlusCRPSTA.isSelected()) {
+
+            labelDirection.setText("Реактивная энергия в прямом направлении тока");
+
+            selectReleyDirection(testListForCollumRPPls);
+        } else if (RPMinusCRPSTA.isSelected()) {
+
+            labelDirection.setText("Реактивная энергия в обратном направлении тока");
+
+            selectReleyDirection(testListForCollumRPMns);
+        }
+    }
+
+    private void selectReleyDirection(List<Commands> testListForColumn) {
+
+        for (Commands relay : testListForColumn) {
+            if (relay instanceof RelayCommand) {
+
+                txtFieldRelayCurrent.setText(String.valueOf(relay.getRatedCurr()));
+                txtFieldRelayTime.setText(getTime(((RelayCommand) relay).getUserTimeTest()));
+                txtFieldAmountImpRelay.setText(String.valueOf(((RelayCommand) relay).getPulseValue()));
+
+                addTglBtnRelay.setSelected(true);
+                tglBtnRelay.setSelected(true);
+
+                txtFieldRelayCurrent.setDisable(true);
+                txtFieldRelayTime.setDisable(true);
+                txtFieldAmountImpRelay.setDisable(true);
+                break;
+            }
+        }
+    }
+
+
+    private void addRelayCommand(int chanelFlag) {
+
+        txtFieldRelayCurrent.setStyle("");
+        txtFieldRelayTime.setStyle("");
+        txtFieldAmountImpRelay.setStyle("");
+
+        double current;
+        long timeTest;
+        int amountImp;
+
+        try {
+            current = Double.parseDouble(txtFieldRelayCurrent.getText());
+            if (current < 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            ConsoleHelper.infoException("Неверные данные");
+            txtFieldRelayCurrent.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
+            addTglBtnRelay.setSelected(false);
+            return;
+        }
+
+        try {
+            String[] timeArr = txtFieldRelayTime.getText().trim().split(":");
+
+            if (timeArr.length != 3 || timeArr[0].trim().length() > 2 || timeArr[1].trim().length() > 2 || timeArr[2].trim().length() > 2) {
+                throw new NumberFormatException();
+            }
+
+            int hour = Integer.parseInt(timeArr[0].trim());
+            if (hour < 0) throw new NumberFormatException();
+
+            int mins = Integer.parseInt(timeArr[1].trim());
+            if (mins < 0) throw new NumberFormatException();
+            if (mins > 59) {
+                ConsoleHelper.infoException("Количество минут не может быть больше 59");
+                txtFieldRelayTime.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
+                addTglBtnRelay.setSelected(false);
+                return;
+            }
+
+            int sek = Integer.parseInt(timeArr[2].trim());
+            if (sek < 0) throw new NumberFormatException();
+            if (sek > 59) {
+                ConsoleHelper.infoException("Количество секунд не может быть больше 59");
+                txtFieldRelayTime.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
+                addTglBtnRelay.setSelected(false);
+                return;
+            }
+
+            timeTest = (3600 * hour + 60 * mins + sek) * 1000;
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            ConsoleHelper.infoException("Неверные данные");
+            txtFieldRelayTime.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
+            addTglBtnRelay.setSelected(false);
+            return;
+        }
+
+        try {
+            amountImp = Integer.parseInt(txtFieldAmountImpRelay.getText());
+            if (amountImp < 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            ConsoleHelper.infoException("Неверные данные");
+            txtFieldAmountImpRelay.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
+            addTglBtnRelay.setSelected(false);
+            return;
+        }
+
+        switch (chanelFlag) {
+            case 0: {
+                testListForCollumAPPls.add(new RelayCommand(true, "Реле AP+", "RLY;A;P", chanelFlag, timeTest, amountImp, current));
+            }break;
+            case 1: {
+                testListForCollumAPMns.add(new RelayCommand(true, "Реле AP-", "RLY;A;N", chanelFlag, timeTest, amountImp, current));
+            }break;
+            case 2: {
+                testListForCollumRPPls.add(new RelayCommand(true, "Реле RP+", "RLY;R;P", chanelFlag, timeTest, amountImp, current));
+            }break;
+            case 3: {
+                testListForCollumRPMns.add(new RelayCommand(true, "Реле RP-", "RLY;R;N", chanelFlag, timeTest, amountImp, current));
+            }break;
+        }
+
+        txtFieldRelayCurrent.setDisable(true);
+        txtFieldRelayTime.setDisable(true);
+        txtFieldAmountImpRelay.setDisable(true);
+
+        tglBtnRelay.setSelected(true);
+
+    }
+
+    private void deleteRelayCommand (List<Commands> testListForCollum) {
+
+        for (Commands command : testListForCollum) {
+            if (command instanceof RelayCommand) {
+                testListForCollumAPMns.remove(command);
+                break;
+            }
+        }
+
+        txtFieldRelayCurrent.setDisable(false);
+        txtFieldRelayTime.setDisable(false);
+        txtFieldAmountImpRelay.setDisable(false);
+
+        tglBtnRelay.setSelected(false);
     }
 
     private String getTime(long mlS){

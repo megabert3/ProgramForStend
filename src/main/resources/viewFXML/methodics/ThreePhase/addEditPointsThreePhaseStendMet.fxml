@@ -144,7 +144,7 @@
                   </ToggleButton>
                </children>
             </HBox>
-            <StackPane layoutX="-1.0" layoutY="35.0" prefHeight="220.0" prefWidth="750.0">
+            <StackPane layoutY="35.0" prefHeight="220.0" prefWidth="750.0">
                <children>
                   <Pane fx:id="RPPlsPane" prefHeight="200.0" prefWidth="200.0">
                      <children>
@@ -468,6 +468,20 @@
                   </Pane>
                </children>
             </StackPane>
+            <ToggleButton id="defaultYellow" fx:id="tglBtnRelay" layoutY="195.0" mnemonicParsing="false" onAction="#setPointFrameAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Реле" />
+            <Pane fx:id="paneRelay" layoutX="150.0" layoutY="35.0" prefHeight="220.0" prefWidth="600.0" style="-fx-background-color: #797979;">
+               <children>
+                  <Label layoutX="287.0" layoutY="14.0" text="Реле" textFill="WHITE" />
+                  <Label fx:id="labelDirection" layoutX="168.0" layoutY="40.0" text="Активная энергия в прямом направлении тока" textFill="WHITE" />
+                  <Label layoutX="100.0" layoutY="87.0" text="Ток, А" textFill="WHITE" />
+                  <Label layoutX="67.0" layoutY="145.0" text="Время теста" textFill="WHITE" />
+                  <Label layoutX="282.0" layoutY="87.0" text="Количество импульсов" textFill="WHITE" />
+                  <TextField fx:id="txtFieldRelayCurrent" layoutX="137.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="5" stylesheets="@/styleCSS/textField.css" />
+                  <TextField fx:id="txtFieldRelayTime" layoutX="137.0" layoutY="141.0" prefHeight="25.0" prefWidth="100.0" promptText="HH:mm:ss" stylesheets="@/styleCSS/textField.css" />
+                  <TextField fx:id="txtFieldAmountImpRelay" layoutX="413.0" layoutY="83.0" prefHeight="25.0" prefWidth="100.0" promptText="1" stylesheets="@/styleCSS/textField.css" />
+                  <ToggleButton fx:id="addTglBtnRelay" layoutX="483.0" layoutY="180.0" mnemonicParsing="false" onAction="#addSTAcRPrTCcOnst" prefHeight="25.0" prefWidth="105.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/addEditPointsStend.toglBtnDirection.css" text="Добавить" />
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
       <Pane prefHeight="115.0" prefWidth="1226.0" style="-fx-background-color: #2E2E2E;">

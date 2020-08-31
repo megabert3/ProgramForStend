@@ -7,10 +7,11 @@ import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class RelayCommand implements Commands {
+public class RelayCommand implements Commands, Serializable, Cloneable {
 
     //Эта команда из методики для трёхфазного теста?
     private boolean threePhaseCommand;
@@ -38,7 +39,7 @@ public class RelayCommand implements Commands {
     private int phaseSrequence;
 
     //Направление тока
-    private int revers;
+    private int revers = 0;
 
     //Напряжение на фазе А
     private double voltPerA;
@@ -59,7 +60,9 @@ public class RelayCommand implements Commands {
 
     private String iABC = "H";
 
-    private int channelFlag;
+    private int channelFlag = 0;
+
+    private int channelFlagForSave;
 
     private boolean active = true;
 
@@ -87,26 +90,14 @@ public class RelayCommand implements Commands {
 
     private HashMap<Integer, Boolean> relayCommandResult;
 
-    public RelayCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest, long userTimeTest, int pulseValue, double ratedCurr) {
+    public RelayCommand(boolean threePhaseCommand, String name, String id, int channelFlag, long userTimeTest, int pulseValue, double ratedCurr) {
         this.threePhaseCommand = threePhaseCommand;
         this.name = name;
         this.id = id;
         this.userTimeTest = userTimeTest;
-        this.revers = revers;
-        this.channelFlag = channelFlag;
-        this.gostTest = gostTest;
+        this.channelFlagForSave = channelFlag;
         this.pulseValue = pulseValue;
         this.ratedCurr = ratedCurr;
-    }
-
-    public RelayCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest) {
-        this.name = name;
-        this.id = id;
-        this.threePhaseCommand = threePhaseCommand;
-        this.revers = revers;
-        this.channelFlag = channelFlag;
-        this.gostTest = gostTest;
-        this.pulseValue = 2;
     }
 
     @Override
