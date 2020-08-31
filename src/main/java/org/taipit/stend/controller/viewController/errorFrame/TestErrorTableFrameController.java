@@ -119,6 +119,8 @@ public class TestErrorTableFrameController {
 
     private Thread UnomThread = new Thread();
 
+    private Thread refMeterThread = new Thread();
+
     private boolean startUnTest = false;
 
     //Для блокировки кнопок управления
@@ -134,6 +136,7 @@ public class TestErrorTableFrameController {
     private ListChangeListener<Commands> automaticListChangeListener = new ListChangeListener<Commands>() {
         @Override
         public void onChanged(Change<? extends Commands> c) {
+
             automaticTestThread.interrupt();
 
             blockControlBtns(7000);
@@ -143,7 +146,11 @@ public class TestErrorTableFrameController {
                 public void run() {
                     try {
                         try {
+                            stendDLLCommands.powerOf();
+                            refreshRefMeterParametersWithoutChecking();
+                            stendDLLCommands.setRefClock(0);
                             stendDLLCommands.errorClear();
+
                             startAutomaticTest();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -163,6 +170,7 @@ public class TestErrorTableFrameController {
     private ListChangeListener<Commands> manualListChangeListener = new ListChangeListener<Commands>() {
         @Override
         public void onChanged(Change<? extends Commands> c) {
+
             manualTestThread.interrupt();
 
             blockControlBtns(7000);
@@ -172,9 +180,14 @@ public class TestErrorTableFrameController {
                 public void run() {
                     try {
                         try {
+                            stendDLLCommands.powerOf();
+                            refreshRefMeterParametersWithoutChecking();
+                            stendDLLCommands.setRefClock(0);
                             stendDLLCommands.errorClear();
+
                             startManualTest();
                         } catch (InterruptedException e) {
+                            refreshRefMeterParametersWithoutChecking();
                             e.printStackTrace();
                         }
                     } catch (ConnectForStendExeption e) {
@@ -363,6 +376,18 @@ public class TestErrorTableFrameController {
 
                 startUnTest = false;
 
+                refMeterThread = new Thread(() -> {
+                    for (int i = 0; i < 3; i++) {
+                        try {
+                            Thread.sleep(1000);
+                            refreshRefMeterParametersWithoutChecking();
+                        } catch (InterruptedException ignore) {}
+                    }
+
+                });
+
+                refMeterThread.start();
+
                 try {
                     stendDLLCommands.errorClear();
                     stendDLLCommands.powerOf();
@@ -509,6 +534,10 @@ public class TestErrorTableFrameController {
                 startUnTest = false;
                 blockTypeEnergyAndDirectionBtns.setValue(true);
 
+                if (refMeterThread.isAlive()) {
+                    refMeterThread.interrupt();
+                }
+
                 if (manualTestThread.isAlive()) {
                     manualTestThread.interrupt();
                     selectedCommand.removeListener(manualListChangeListener);
@@ -525,17 +554,18 @@ public class TestErrorTableFrameController {
                     public void run() {
                         try {
                             try {
+                                stendDLLCommands.setRefClock(0);
+                                stendDLLCommands.errorClear();
+                                refreshRefMeterParametersWithoutChecking();
                                 startAutomaticTest();
                             } catch (InterruptedException e) {
+                                stendDLLCommands.errorClear();
+                                refreshRefMeterParametersWithoutChecking();
                                 e.printStackTrace();
                             }
                         } catch (ConnectForStendExeption e) {
+                            cathConnectionException();
                             e.printStackTrace();
-                            ConsoleHelper.infoException("Потеряна связь с установкой");
-                            blockBtns.setValue(false);
-                            tglBtnAuto.setSelected(false);
-                            blockTypeEnergyAndDirectionBtns.setValue(false);
-                            selectedCommand.removeListener(automaticListChangeListener);
                         }
                     }
                 });
@@ -556,6 +586,10 @@ public class TestErrorTableFrameController {
                 blockTypeEnergyAndDirectionBtns.setValue(true);
                 startUnTest = false;
 
+                if (refMeterThread.isAlive()) {
+                    refMeterThread.interrupt();
+                }
+
                 if (automaticTestThread.isAlive()) {
                     automaticTestThread.interrupt();
                     selectedCommand.removeListener(automaticListChangeListener);
@@ -572,18 +606,19 @@ public class TestErrorTableFrameController {
                     public void run() {
                         try {
                             try {
+                                stendDLLCommands.setRefClock(0);
                                 stendDLLCommands.errorClear();
+                                refreshRefMeterParametersWithoutChecking();
+
                                 startManualTest();
                             } catch (InterruptedException e) {
+                                stendDLLCommands.errorClear();
+                                refreshRefMeterParametersWithoutChecking();
                                 e.printStackTrace();
                             }
                         } catch (ConnectForStendExeption e) {
+                            cathConnectionException();
                             e.printStackTrace();
-                            ConsoleHelper.infoException("Потеряна связь с установкой");
-                            blockBtns.setValue(false);
-                            tglBtnManualMode.setSelected(false);
-                            selectedCommand.removeListener(manualListChangeListener);
-                            blockTypeEnergyAndDirectionBtns.setValue(false);
                         }
                     }
                 });
@@ -599,8 +634,12 @@ public class TestErrorTableFrameController {
                 tglBtnUnom.setSelected(true);
             } else {
 
-                blockControlBtns(7000);
+                blockControlBtns(5000);
                 startUnTest = true;
+
+                if (refMeterThread.isAlive()) {
+                    refMeterThread.interrupt();
+                }
 
                 if (automaticTestThread.isAlive()) {
                     automaticTestThread.interrupt();
@@ -626,11 +665,9 @@ public class TestErrorTableFrameController {
                                 startUnTest = false;
                             }
                         } catch (ConnectForStendExeption e) {
-                            e.printStackTrace();
-                            ConsoleHelper.infoException("Потеряна связь с установкой");
-                            blockBtns.setValue(false);
                             startUnTest = false;
-                            tglBtnUnom.setSelected(false);
+                            cathConnectionException();
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -751,6 +788,7 @@ public class TestErrorTableFrameController {
 
             if (methodicForStend instanceof MethodicForThreePhaseStend) {
                 stendDLLCommands.getUI(0, Un, 0.0, Fn, 0, 0, 100.0, 0, "H", "1.0");
+
             } else {
                 double voltPerA = 0.0;
                 double voltPerB = 0.0;
@@ -1956,15 +1994,18 @@ public class TestErrorTableFrameController {
                                 "\nEmin: " + ((ErrorCommand) item).getEmin() +
                                 "\nКоличество импульсов: " + ((ErrorCommand) item).getPulse() +
                                 "\nКоличество измерений: " + ((ErrorCommand) item).getCountResult());
+
                     } else if (item instanceof CreepCommand) {
                         tooltip.setText("Время теста: " + ((CreepCommand) item).getUserTimeTestHHmmss() +
                                 "\nКоличество импульсов: " + ((CreepCommand) item).getPulseValue() +
                                 "\nПроцент от Un: " + item.getVoltPer());
+
                     } else if (item instanceof StartCommand) {
                         tooltip.setText("Время теста: " + ((StartCommand) item).getUserTimeTestHHmmss() +
                                 "\nКоличество импульсов: " + ((StartCommand) item).getPulseValue() +
                                 "\nТок: " + item.getRatedCurr());
                     } else if (item instanceof RTCCommand) {
+
                         if (((RTCCommand) item).getErrorType() == 0) {
                             tooltip.setText("Emax: " + String.format(Locale.ROOT, "%.7f", ((RTCCommand) item).getErrorForFalseTest()) +
                                     "\nEmin: " + String.format(Locale.ROOT, "%.7f", -((RTCCommand) item).getErrorForFalseTest()) +
@@ -1976,8 +2017,9 @@ public class TestErrorTableFrameController {
                                     "\nEmin: " +  -((RTCCommand) item).getErrorForFalseTest() +
                                     "\nЧастота: " + String.format(Locale.ROOT, "%.7f", ((RTCCommand) item).getFreg()) +
                                     "\nКоличество импульсов: " + ((RTCCommand) item).getPulseForRTC() +
-                                    "\nКоличество измерений: " + ((RTCCommand) item).getCountResult());
+                                    "\nКоличество измерений: " + ((RTCCommand) item).getCountResultTest());
                         }
+
                     } else if (item instanceof ConstantCommand) {
                         if (((ConstantCommand) item).isRunTestToTime()) {
                             tooltip.setText("Emax: " + ((ConstantCommand) item).getEmaxProc() +
@@ -1988,11 +2030,13 @@ public class TestErrorTableFrameController {
                                     "\nEmin: " + ((ConstantCommand) item).getEminProc() +
                                     "\nКоличество энергии: " + ((ConstantCommand) item).getkWToTest());
                         }
+
                     }  else if (item instanceof ImbalansUCommand) {
                         tooltip.setText("Emax: " + ((ImbalansUCommand) item).getEmax() +
                                 "\nEmin: " + ((ImbalansUCommand) item).getEmin() +
                                 "\nКоличество импульсов: " + ((ImbalansUCommand) item).getPulse() +
                                 "\nКоличество измерений: " + ((ImbalansUCommand) item).getCountResult());
+
                     } else if (item instanceof RelayCommand) {
                         tooltip.setText("Время теста: " + ((RelayCommand) item).getUserTimeTestHHmmss() +
                                 "\nКоличество импульсов: " + ((RelayCommand) item).getPulseValue() +

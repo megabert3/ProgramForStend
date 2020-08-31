@@ -18,13 +18,8 @@ public class RelayCommand implements Commands {
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
 
-    private boolean interrupt;
-
-    private boolean nextCommand;
-
     private StendDLLCommands stendDLLCommands;
 
-    //лист с счётчиками
     private List<Meter> meterList;
 
     //Режим
@@ -54,10 +49,10 @@ public class RelayCommand implements Commands {
     //Напряжение на фазе C
     private double voltPerC;
 
-    private double voltPer;
+    private double voltPer = 100;
 
     //Процен от тока
-    private double currPer;
+    private double currPer = 100;
 
     //Коэфициент мощности
     private String cosP = "1.0";
@@ -76,11 +71,13 @@ public class RelayCommand implements Commands {
     //Время расчитывается по госту?
     private boolean gostTest;
 
-    //Количество импоульсов для провала теста
+    //Время теста введённое пользователем
+    private long userTimeTest;
+
+    //Количество импульсов для провала теста
     private int pulseValue;
 
     //Время теста введённое пользователем
-    private long userTimeTest;
     private long timeStart;
     private long timeEnd;
 
@@ -88,70 +85,50 @@ public class RelayCommand implements Commands {
     private TimerTask timerTask;
     private Thread currThread;
 
-    private HashMap<Integer, Boolean> creepCommandResult;
+    private HashMap<Integer, Boolean> relayCommandResult;
 
-    public RelayCommand(boolean threePhaseCommand, boolean gostTest, String name, String id, int channelFlag, long userTimeTest, int pulseValue, double voltPer) {
+    public RelayCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest, long userTimeTest, int pulseValue, double ratedCurr) {
         this.threePhaseCommand = threePhaseCommand;
         this.name = name;
         this.id = id;
-        this.gostTest = gostTest;
-        this.channelFlag = channelFlag;
         this.userTimeTest = userTimeTest;
+        this.revers = revers;
+        this.channelFlag = channelFlag;
+        this.gostTest = gostTest;
         this.pulseValue = pulseValue;
-        this.voltPer = voltPer;
-        this.ratedCurr = 60;
-        this.currPer = 100;
+        this.ratedCurr = ratedCurr;
     }
 
-    public RelayCommand(boolean threePhaseCommand, boolean gostTest, String name, String id,  int channelFlag) {
-        this.threePhaseCommand = threePhaseCommand;
-        this.gostTest = gostTest;
+    public RelayCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest) {
         this.name = name;
         this.id = id;
+        this.threePhaseCommand = threePhaseCommand;
+        this.revers = revers;
         this.channelFlag = channelFlag;
+        this.gostTest = gostTest;
         this.pulseValue = 2;
-        this.voltPer = 115;
     }
 
     @Override
     public void execute() throws ConnectForStendExeption, InterruptedException {
-
-        currThread = Thread.currentThread();
-
-        int refMeterCount = 1;
-
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
-        timer = new Timer(true);
+        stendDLLCommands.errorClear();
 
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Meter.CommandResult creepResult;
-                if (currThread.isAlive()) {
-                    for (Map.Entry<Integer, Boolean> flag : creepCommandResult.entrySet()) {
-                        if (flag.getValue()) {
-                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
-                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
-                        }
-                    }
-                } else {
-                    timer.cancel();
-                }
-            }
-        };
+        int refMeterCount = 1;
+
+        currThread = Thread.currentThread();
 
         //Номер измерения
         int countResult = 1;
-        Meter.CreepResult creepResult;
+
+        Meter.RelayResult relayResult;
+
+        relayCommandResult = initRelayCommandResult();
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-
-        creepCommandResult = initCreepCommandResult();
-
-        stendDLLCommands.setReviseMode(1);
 
         TestErrorTableFrameController.transferParam(this);
 
@@ -173,25 +150,44 @@ public class RelayCommand implements Commands {
                         voltPer, currPer, iABC, cosP);
             }
         } else {
+            stendDLLCommands.selectCircuit(0);
+
             stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP);
         }
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        if (Thread.currentThread().isInterrupted()) {
-            throw new InterruptedException();
-        }
+        setTestMode();
+
+        Thread.sleep(TestErrorTableFrameController.timeToStabilization); //Пауза для стабилизации
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
         setDefTestResults(channelFlag, index);
 
-        Thread.sleep(500); //Пауза для стабилизации
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
+
+        timer = new Timer(true);
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Meter.CommandResult creepResult;
+                if (currThread.isAlive()) {
+                    for (Map.Entry<Integer, Boolean> flag : relayCommandResult.entrySet()) {
+                        if (!flag.getValue()) {
+                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
+                        }
+                    }
+                } else {
+                    timer.cancel();
+                }
+            }
+        };
 
         timer.schedule(timerTask, 0, 275);
 
@@ -199,45 +195,19 @@ public class RelayCommand implements Commands {
             throw new InterruptedException();
         }
 
-        while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
-
-            if (refMeterCount % 8 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
-
-            if (Thread.currentThread().isInterrupted()) {
-                throw new InterruptedException();
-            }
-
-            for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
-
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new InterruptedException();
-                }
-
-                if (mapResult.getValue()) {
-                    if (stendDLLCommands.countRead(mapResult.getKey()) > pulseValue) {
-
-                        creepCommandResult.put(mapResult.getKey(), false);
-
-                        creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
-
-                        creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
-                    }
-                }
-            }
-
-            refMeterCount++;
-
-            Thread.sleep(400);
+        if (pulseValue == 1) {
+            startTestModeSearchMark(refMeterCount, countResult);
+        } else {
+            startTestModeCount(refMeterCount, countResult);
         }
 
-        //Выставляю результат теста счётчиков, которые прошли тест
-        for (Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
-            if (mapResultPass.getValue()) {
-                mapResultPass.setValue(true);
-                creepResult = (Meter.CreepResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
-                creepResult.setResultCreepCommand(creepResult.getTimeTheTest(), countResult, true);
+        timer.cancel();
+
+        //Выставляю результат теста счётчиков, которые не прошли тест
+        for (Map.Entry<Integer, Boolean> mapResult : relayCommandResult.entrySet()) {
+            if (!mapResult.getValue()) {
+                relayResult = (Meter.RelayResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
+                relayResult.setResultRelayCommand(relayResult.getTimeTheTest(), countResult, false);
             }
         }
 
@@ -253,31 +223,11 @@ public class RelayCommand implements Commands {
 
         currThread = Thread.currentThread();
 
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Meter.CommandResult creepResult;
-                if (currThread.isAlive()) {
-                    for (Map.Entry<Integer, Boolean> flag : creepCommandResult.entrySet()) {
-                        if (flag.getValue()) {
-                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
-                            creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
-                        }
-                    }
-                } else {
-                    timer.cancel();
-                }
-            }
-        };
-
-        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-
         //Номер измерения
         int countResult = 1;
-        Meter meter;
-        Meter.CreepResult creepResult;
+        Meter.RelayResult relayResult;
 
-        stendDLLCommands.setReviseMode(1);
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
         TestErrorTableFrameController.transferParam(this);
 
@@ -305,95 +255,172 @@ public class RelayCommand implements Commands {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
+        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
+
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
-        Thread.sleep(500); // Пауза для стабилизации
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         while (Thread.currentThread().isAlive()) {
+            stendDLLCommands.errorClear();
 
             int refMeterCount = 1;
+
+            relayCommandResult = initRelayCommandResult();
 
             //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
             setDefTestResults(channelFlag, index);
 
-            creepCommandResult = initCreepCommandResult();
+            setTestMode();
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
 
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + userTimeTest;
 
             timer = new Timer(true);
 
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    Meter.CommandResult relayResult;
+                    if (currThread.isAlive()) {
+                        for (Map.Entry<Integer, Boolean> flag : relayCommandResult.entrySet()) {
+                            if (!flag.getValue()) {
+                                relayResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                                relayResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
+                            }
+                        }
+                    } else {
+                        timer.cancel();
+                    }
+                }
+            };
+
             timer.schedule(timerTask, 0, 275);
 
-            while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
+            if (pulseValue == 1) {
+                startTestModeSearchMark(refMeterCount, countResult);
+            } else {
+                startTestModeCount(refMeterCount, countResult);
+            }
 
-                if (refMeterCount % 8 == 0) {
-                    TestErrorTableFrameController.refreshRefMeterParameters();
+            timer.cancel();
+
+            //Выставляю результат теста счётчиков, которые не прошли тест
+            for (Map.Entry<Integer, Boolean> mapResultPass : relayCommandResult.entrySet()) {
+                if (!mapResultPass.getValue()) {
+                    mapResultPass.setValue(true);
+                    relayResult = (Meter.RelayResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
+                    relayResult.setResultRelayCommand(relayResult.getTimeTheTest(), countResult, false);
                 }
+            }
+            countResult++;
+
+            //Время на подумать оставлять результат или нет
+            Thread.sleep(7000);
+        }
+
+        stendDLLCommands.errorClear();
+    }
+
+    private HashMap<Integer, Boolean> initRelayCommandResult() {
+        HashMap<Integer, Boolean> init = new HashMap<>(meterList.size());
+        for (Meter meter : meterList) {
+            init.put(meter.getId(), false);
+        }
+        return init;
+    }
+
+    private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, ConnectForStendExeption {
+        while (relayCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+
+            if (refMeterCount % 8 == 0) {
+                TestErrorTableFrameController.refreshRefMeterParameters();
+            }
+
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
+            for (Map.Entry<Integer, Boolean> mapResult : relayCommandResult.entrySet()) {
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
                 }
 
-                for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
+                if (!mapResult.getValue()) {
+                    Meter meter = meterList.get(mapResult.getKey() - 1);
+                    Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
 
-                    if (Thread.currentThread().isInterrupted()) {
-                        throw new InterruptedException();
+                    if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue - 1) {
+
+                        relayCommandResult.put(mapResult.getKey(), true);
+                        startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
                     }
-
-                    if (mapResult.getValue()) {
-
-                        if (stendDLLCommands.countRead(mapResult.getKey()) > pulseValue) {
-
-                            creepCommandResult.put(mapResult.getKey(), false);
-
-                            creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
-
-                            creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
-                        }
-                    }
-                }
-                refMeterCount++;
-
-                Thread.sleep(400);
-            }
-
-            //Выставляю результат теста счётчиков, которые прошли тест
-            for (Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
-                if (mapResultPass.getValue()) {
-                    mapResultPass.setValue(true);
-                    creepResult = (Meter.CreepResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
-                    creepResult.setResultCreepCommand(creepResult.getTimeTheTest(), countResult, true);
                 }
             }
 
-            //Время на подумать оставить результаты или нет
-            Thread.sleep(5000);
+            refMeterCount++;
 
-            countResult++;
+            Thread.sleep(400);
         }
     }
 
-    private HashMap<Integer, Boolean> initCreepCommandResult() {
-        HashMap<Integer, Boolean> init = new HashMap<>(meterList.size());
-        for (Meter meter : meterList) {
-            init.put(meter.getId(), true);
+    private void startTestModeSearchMark(int refMeterCount, int countResult) throws InterruptedException {
+        while (relayCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+
+            if (refMeterCount % 8 == 0) {
+                TestErrorTableFrameController.refreshRefMeterParameters();
+            }
+
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
+            for (Map.Entry<Integer, Boolean> mapResult : relayCommandResult.entrySet()) {
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+
+                if (!mapResult.getValue()) {
+                    Meter meter = meterList.get(mapResult.getKey() - 1);
+                    Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
+
+                    if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
+
+                        relayCommandResult.put(mapResult.getKey(), true);
+                        startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
+                    }
+                }
+            }
+
+            refMeterCount++;
+
+            Thread.sleep(400);
         }
-        return init;
     }
 
     //reset
-    private void setDefTestResults(int channelFlag, int index) throws ConnectForStendExeption {
+    private void setDefTestResults(int channelFlag, int index) {
         for (Meter meter : meterList) {
-            Meter.CreepResult creepResult = (Meter.CreepResult) meter.returnResultCommand(index, channelFlag);
-            creepResult.setLastResultForTabView("N");
-            creepResult.setPassTest(null);
-            creepResult.setLastResult("");
-            stendDLLCommands.countStart(meter.getId());
+            Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
+            startResult.setLastResultForTabView("N");
+            startResult.setPassTest(null);
+            startResult.setLastResult("");
+        }
+    }
+
+    private void setTestMode() throws ConnectForStendExeption {
+        if (pulseValue == 1) {
+            for (Meter meter : meterList) {
+                stendDLLCommands.searchMark(meter.getId());
+            }
+        } else {
+            for (Meter meter : meterList) {
+                stendDLLCommands.countStart(meter.getId());
+            }
         }
     }
 
@@ -403,24 +430,28 @@ public class RelayCommand implements Commands {
                 TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
     }
 
-    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
-        this.stendDLLCommands = stendDLLCommands;
-    }
-
-    public String getName() {
-        return name;
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setPulseValue(int pulseValue) {
         this.pulseValue = pulseValue;
     }
 
-    public void setVoltPer(double voltPer) {
-        this.voltPer = voltPer;
+    public void setRatedCurr(double ratedCurr) {
+        this.ratedCurr = ratedCurr;
+    }
+
+    public void setRatedVolt(double ratedVolt) {
+        this.ratedVolt = ratedVolt;
     }
 
     public void setRatedFreq(double ratedFreq) {
@@ -431,20 +462,24 @@ public class RelayCommand implements Commands {
         this.phase = phase;
     }
 
-    public void setRatedVolt(double ratedVolt) {
-        this.ratedVolt = ratedVolt;
-    }
-
     public boolean isGostTest() {
         return gostTest;
+    }
+
+    public long getUserTimeTest() {
+        return userTimeTest;
+    }
+
+    public void setUserTimeTest(long timeForTest) {
+        this.userTimeTest = timeForTest;
     }
 
     public int getPulseValue() {
         return pulseValue;
     }
 
-    public long getUserTimeTest() {
-        return userTimeTest;
+    public double getRatedCurr() {
+        return ratedCurr;
     }
 
     public boolean isActive() {
@@ -459,17 +494,8 @@ public class RelayCommand implements Commands {
         this.meterList = meterList;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public void setUserTimeTest(long userTimeTest) {
-        this.userTimeTest = userTimeTest;
+    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
+        this.stendDLLCommands = stendDLLCommands;
     }
 
     @Override
@@ -491,17 +517,13 @@ public class RelayCommand implements Commands {
     public void setEmin(String emin) {
 
     }
+    public String getUserTimeTestHHmmss() {
+        return getTime(userTimeTest);
+    }
+
 
     public String getId() {
         return id;
-    }
-
-    public void setiABC(String iABC) {
-        this.iABC = iABC;
-    }
-
-    public void setRatedCurr(double ratedCurr) {
-        this.ratedCurr = ratedCurr;
     }
 
     public void setPhaseSrequence(int phaseSrequence) {
@@ -532,8 +554,16 @@ public class RelayCommand implements Commands {
         this.cosP = cosP;
     }
 
+    public void setiABC(String iABC) {
+        this.iABC = iABC;
+    }
+
     public int getChannelFlag() {
         return channelFlag;
+    }
+
+    public void setVoltPer(double voltPer) {
+        this.voltPer = voltPer;
     }
 
     public double getVoltPer() {
@@ -565,25 +595,16 @@ public class RelayCommand implements Commands {
     }
 
     @Override
-    public double getRatedCurr() {
-        return ratedCurr;
-    }
-
-    @Override
     public String getiABC() {
         return iABC;
-    }
-
-    @Override
-    public Commands clone() throws CloneNotSupportedException {
-        return (Commands) super.clone();
     }
 
     public boolean isThreePhaseCommand() {
         return threePhaseCommand;
     }
 
-    public String getUserTimeTestHHmmss() {
-        return getTime(userTimeTest);
+    @Override
+    public Commands clone() throws CloneNotSupportedException {
+        return (Commands) super.clone();
     }
 }

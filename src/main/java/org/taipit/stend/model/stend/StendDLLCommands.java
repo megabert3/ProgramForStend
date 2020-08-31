@@ -191,7 +191,7 @@ public abstract class StendDLLCommands {
     }
 
     //Включить напряжение и ток без регулеровки пофазного напряжения
-    public void getUI(int phase,
+    public synchronized void getUI(int phase,
                          double ratedVolt,
                          double ratedCurr,
                          double ratedFreq,
@@ -202,14 +202,16 @@ public abstract class StendDLLCommands {
                          String iABC,
                          String cosP) throws ConnectForStendExeption {
 
-        if (!stend.Adjust_UI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPer, currPer, iABC, cosP, typeReferenceMeter, port)) {
+        boolean b = stend.Adjust_UI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPer, currPer, iABC, cosP, typeReferenceMeter, port);
+
+        if (!b) {
             throw new ConnectForStendExeption("Не удалось подать мощность: Adjust_UI");
         }
     }
 
     //Включить напряжение и ток с регулировкой пофазного напряжения
-    public void getUIWithPhase (int phase,
+    public synchronized void getUIWithPhase (int phase,
                                    double ratedVolt,
                                    double ratedCurr,
                                    double ratedFreq,
@@ -366,9 +368,6 @@ public abstract class StendDLLCommands {
             throw new ConnectForStendExeption("Не удалось подать команду ConstPulse_Read");
         }
 
-        System.out.println("Счётчик " + meterNo + " " + pointerMeterKWH.getValue());
-        System.out.println("Эталонный счётчик " + pointerStdKWH.getValue());
-
         String bigDecimalMeterKWH = new BigDecimal(pointerMeterKWH.getValue()).setScale(5, RoundingMode.HALF_UP).toString();
         String bigDecimalStdKWH = new BigDecimal(pointerStdKWH.getValue()).setScale(5, RoundingMode.HALF_UP).toString();
 
@@ -377,7 +376,7 @@ public abstract class StendDLLCommands {
 
     // Выбор цепи
     public void selectCircuit(int circuit) throws ConnectForStendExeption {
-        if (!stend.SelectCircuit(circuit, port)) throw new ConnectForStendExeption("не удалось переключить цепь SelectCircuit");
+        if (!stend.SelectCircuit(circuit, port)) throw new ConnectForStendExeption("Не удалось переключить цепь SelectCircuit");
     }
 
     // Отключить нейтраль
@@ -386,23 +385,21 @@ public abstract class StendDLLCommands {
     }
 
     // Старт теста ТХЧ
-    public synchronized boolean clockErrorStart(int meterNo, double freq, int duration) {
+    public boolean clockErrorStart(int meterNo, double freq, int duration) {
         return stend.Clock_Error_Start(meterNo, freq, duration, port);
     }
 
     // Прочитать результаты теста ТХЧ. Должна вызываться по прошествии времени, отведенного на тест
     // + запас в пару секунд
-    public synchronized String clockErrorRead (double freq, int errType, int meterNo) {
+    public String clockErrorRead (double freq, int errType, int meterNo) {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.Clock_Error_Read(pointer, freq, errType, meterNo, port);
         return pointer.getValue().getString(0, "ASCII");
     }
 
     // Закрыть порт
-    public String dllPortClose() {
-        PointerByReference pointer = new PointerByReference(new Memory(2048));
-        stend.Dll_Port_Close(pointer);
-        return pointer.getValue().getString(0, "ASCII");
+    public void dllPortClose() {
+        stend.Dll_Port_Close();
     }
 
     public void countStart(int meterNo) throws ConnectForStendExeption {

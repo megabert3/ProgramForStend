@@ -195,15 +195,12 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             ratedFreq = ratedFreq * new BigDecimal(procentParan / 100).setScale(5, RoundingMode.HALF_UP).doubleValue();
         }
 
-        stendDLLCommands.setReviseMode(1);
-        stendDLLCommands.setRefClock(0);
-
         TestErrorTableFrameController.transferParam(this);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
-                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+                iABC = TestErrorTableFrameController.phaseOnePhaseMode;
 
                 switch (iABC) {
                     case "A": voltPerA = voltPer; break;
@@ -217,14 +214,19 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                         voltPer, currPer, iABC, cosP);
             }
         } else {
-            if (!threePhaseCommand) {
-                if (iABC.equals("A")) {
-                    stendDLLCommands.selectCircuit(0);
-                    iABC = "H";
-                } else if (iABC.equals("B")) {
-                    stendDLLCommands.selectCircuit(1);
-                    iABC = "H";
-                }
+
+            if (iABC.equals("B")) {
+                stendDLLCommands.selectCircuit(1);
+                iABC = "H";
+
+                stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
+            } else {
+                stendDLLCommands.selectCircuit(0);
+                iABC = "H";
+
+                stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
             }
         }
 
@@ -354,15 +356,12 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             ratedFreq = new BigDecimal(ratedFreq * (procentParan / 100)).setScale(5, RoundingMode.HALF_UP).doubleValue();
         }
 
-        stendDLLCommands.setReviseMode(1);
-        stendDLLCommands.setRefClock(0);
-
         TestErrorTableFrameController.transferParam(this);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
-                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+                iABC = TestErrorTableFrameController.phaseOnePhaseMode;
 
                 switch (iABC) {
                     case "A": voltPerA = voltPer; break;
@@ -377,14 +376,19 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                         voltPer, currPer, iABC, cosP);
             }
         } else {
-            if (!threePhaseCommand) {
-                if (iABC.equals("A")) {
-                    stendDLLCommands.selectCircuit(0);
-                    iABC = "H";
-                } else if (iABC.equals("B")) {
-                    stendDLLCommands.selectCircuit(1);
-                    iABC = "H";
-                }
+
+            if (iABC.equals("B")) {
+                stendDLLCommands.selectCircuit(1);
+                iABC = "H";
+
+                stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
+            } else {
+                stendDLLCommands.selectCircuit(0);
+                iABC = "H";
+
+                stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                        voltPer, currPer, iABC, cosP);
             }
         }
 

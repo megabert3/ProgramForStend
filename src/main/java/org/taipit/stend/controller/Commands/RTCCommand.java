@@ -22,8 +22,6 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
     //Команда из методики для трехфазной установки?
     private boolean threePhaseCommand;
 
-    private boolean nextCommand;
-
     private List<Meter> meterList;
 
     private StendDLLCommands stendDLLCommands;
@@ -65,7 +63,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
     private String iABC = "H";
 
-    private int channelFlag;
+    private int channelFlag = 4;
 
     //Для сохранения результата теста в нужное направление
     private int channelFlagForSave;
@@ -74,9 +72,6 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
     //Дианазон ошибки
     private double errorForFalseTest;
-
-    //Количество повторов теста
-    private String countResult;
 
     //Количество повторов теста
     private int countResultTest;
@@ -112,10 +107,6 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        channelFlag = 4;
-
-        stendDLLCommands.setReviseMode(1);
-
         TestErrorTableFrameController.transferParam(this);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
@@ -136,13 +127,16 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                         voltPer, currPer, iABC, cosP);
             }
         } else {
+
+            stendDLLCommands.selectCircuit(0);
+
             stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP);
         }
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        //Время стабилизации
+        //Время на включение счётчиков
         Thread.sleep(5000);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
@@ -153,21 +147,23 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-        stendDLLCommands.setRefClock(1);
+        if (!stendDLLCommands.setRefClock(1)) {
+            ConsoleHelper.infoException("Не удалось установить связь с\nБлоком точности хода часов");
+        }
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
         //Преобразую время в миллисекунды
-        BigDecimal timeTestInMls = new BigDecimal((pulseForRTC * freg) * 1000).setScale(0, BigDecimal.ROUND_UP);
+        BigDecimal timeTestInMls = new BigDecimal(((pulseForRTC * freg) * 1000) + freg).setScale(0, BigDecimal.ROUND_UP);
 
-        int count = 0;
+        int count = 1;
         Meter.RTCResult rtcCommand;
         String resultStr;
         double result;
 
-        while (count < countResultTest) {
+        while (count <= countResultTest) {
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -177,7 +173,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                 stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC);
             }
 
-            Thread.sleep(timeTestInMls.longValue() + 500);
+            Thread.sleep(timeTestInMls.longValue());
 
             for (Meter meter : meterList) {
 
@@ -221,13 +217,10 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
+
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
-
-        channelFlag = 4;
-
-        stendDLLCommands.setReviseMode(1);
 
         TestErrorTableFrameController.transferParam(this);
 
@@ -249,6 +242,8 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                         voltPer, currPer, iABC, cosP);
             }
         } else {
+            stendDLLCommands.selectCircuit(0);
+
             stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP);
         }
@@ -266,16 +261,18 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-        stendDLLCommands.setRefClock(1);
+        if (!stendDLLCommands.setRefClock(1)) {
+            ConsoleHelper.infoException("Не удалось установить связь с\nБлоком точности хода часов");
+        }
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
         //Преобразую время в миллисекунды
-        BigDecimal timeTestInMls = new BigDecimal((pulseForRTC * freg) * 1000).setScale(0, BigDecimal.ROUND_UP);
+        BigDecimal timeTestInMls = new BigDecimal(((pulseForRTC * freg) * 1000) + freg).setScale(0, BigDecimal.ROUND_UP);
 
-        int count = 0;
+        int count = 1;
         Meter.RTCResult rtcCommand;
         String resultStr;
         double result;
@@ -290,9 +287,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                 stendDLLCommands.clockErrorStart(meter.getId(), freg, pulseForRTC);
             }
 
-            System.out.println(timeTestInMls.longValue() + 500);
-
-            Thread.sleep(timeTestInMls.longValue() + 500);
+            Thread.sleep(timeTestInMls.longValue());
 
             for (Meter meter : meterList) {
 
@@ -328,11 +323,14 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                     }
                 }
             }
+
+            //Время на подумать оставлять результат или нет
+            Thread.sleep(7000);
+
+            count++;
         }
 
         stendDLLCommands.errorClear();
-
-        stendDLLCommands.powerOf();
     }
 
     public void setIndex(int index) {
