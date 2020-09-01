@@ -191,7 +191,7 @@ public abstract class StendDLLCommands {
     }
 
     //Включить напряжение и ток без регулеровки пофазного напряжения
-    public synchronized void getUI(int phase,
+    public void getUI(int phase,
                          double ratedVolt,
                          double ratedCurr,
                          double ratedFreq,
@@ -211,7 +211,7 @@ public abstract class StendDLLCommands {
     }
 
     //Включить напряжение и ток с регулировкой пофазного напряжения
-    public synchronized void getUIWithPhase (int phase,
+    public void getUIWithPhase (int phase,
                                    double ratedVolt,
                                    double ratedCurr,
                                    double ratedFreq,

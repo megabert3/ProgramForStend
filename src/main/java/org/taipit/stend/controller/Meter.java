@@ -340,6 +340,10 @@ public class Meter implements Serializable{
 
                     ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
                     errorListAPPls.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
+
+                } else if (command instanceof RelayCommand) {
+
+                    errorListAPPls.add(new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue())));
                 }
             } break;
 
@@ -392,6 +396,10 @@ public class Meter implements Serializable{
 
                     ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
                     errorListAPMns.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
+
+                }  else if (command instanceof RelayCommand) {
+
+                    errorListAPMns.add(new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue())));
                 }
             } break;
 
@@ -445,6 +453,10 @@ public class Meter implements Serializable{
 
                     ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
                     errorListRPPls.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
+
+                } else if (command instanceof RelayCommand) {
+
+                    errorListRPPls.add(new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue())));
                 }
             } break;
 
@@ -498,6 +510,9 @@ public class Meter implements Serializable{
 
                     ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
                     errorListRPMns.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
+                } else if (command instanceof RelayCommand) {
+
+                    errorListRPMns.add(new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue())));
                 }
             } break;
         }

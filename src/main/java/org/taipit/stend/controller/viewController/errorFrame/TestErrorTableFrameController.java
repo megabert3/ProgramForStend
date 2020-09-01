@@ -139,20 +139,20 @@ public class TestErrorTableFrameController {
 
             automaticTestThread.interrupt();
 
-            blockControlBtns(7000);
+            blockControlBtns(4000);
 
             automaticTestThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         try {
-                            stendDLLCommands.powerOf();
                             refreshRefMeterParametersWithoutChecking();
-                            stendDLLCommands.setRefClock(0);
-                            stendDLLCommands.errorClear();
+//                            stendDLLCommands.setRefClock(0);
+//                            stendDLLCommands.errorClear();
 
                             startAutomaticTest();
                         } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
                             e.printStackTrace();
                         }
 
@@ -173,21 +173,20 @@ public class TestErrorTableFrameController {
 
             manualTestThread.interrupt();
 
-            blockControlBtns(7000);
+            blockControlBtns(4000);
 
             manualTestThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         try {
-                            stendDLLCommands.powerOf();
                             refreshRefMeterParametersWithoutChecking();
                             stendDLLCommands.setRefClock(0);
                             stendDLLCommands.errorClear();
 
                             startManualTest();
                         } catch (InterruptedException e) {
-                            refreshRefMeterParametersWithoutChecking();
+                            Thread.currentThread().interrupt();
                             e.printStackTrace();
                         }
                     } catch (ConnectForStendExeption e) {
@@ -410,22 +409,6 @@ public class TestErrorTableFrameController {
         });
 
         checBoxePane.toFront();
-
-        //Внутренние параметры стенда
-        if (ConsoleHelper.properties.getProperty("cutNeitral").equals("T")) {
-            stendDLLCommands.cutNeutral(0);
-        } else {
-            stendDLLCommands.cutNeutral(1);
-        }
-
-        if (ConsoleHelper.properties.getProperty("reviseOff").equals("F")) {
-            stendDLLCommands.setNoRevise(false);
-        } else {
-            stendDLLCommands.setNoRevise(true);
-        }
-
-        stendDLLCommands.setReviseTime(Integer.parseInt(ConsoleHelper.properties.getProperty("reviseTime")));
-        stendDLLCommands.setReviseMode(Integer.parseInt(ConsoleHelper.properties.getProperty("reviseMode")));
     }
 
     @FXML
@@ -529,7 +512,7 @@ public class TestErrorTableFrameController {
                 tglBtnAuto.setSelected(true);
                 return;
             } else {
-                blockControlBtns(7000);
+                blockControlBtns(4000);
 
                 startUnTest = false;
                 blockTypeEnergyAndDirectionBtns.setValue(true);
@@ -557,10 +540,11 @@ public class TestErrorTableFrameController {
                                 stendDLLCommands.setRefClock(0);
                                 stendDLLCommands.errorClear();
                                 refreshRefMeterParametersWithoutChecking();
+
                                 startAutomaticTest();
                             } catch (InterruptedException e) {
                                 stendDLLCommands.errorClear();
-                                refreshRefMeterParametersWithoutChecking();
+                                Thread.currentThread().interrupt();
                                 e.printStackTrace();
                             }
                         } catch (ConnectForStendExeption e) {
@@ -581,7 +565,7 @@ public class TestErrorTableFrameController {
                 tglBtnManualMode.setSelected(true);
                 return;
             } else {
-                blockControlBtns(7000);
+                blockControlBtns(4000);
 
                 blockTypeEnergyAndDirectionBtns.setValue(true);
                 startUnTest = false;
@@ -612,8 +596,7 @@ public class TestErrorTableFrameController {
 
                                 startManualTest();
                             } catch (InterruptedException e) {
-                                stendDLLCommands.errorClear();
-                                refreshRefMeterParametersWithoutChecking();
+                                Thread.currentThread().interrupt();
                                 e.printStackTrace();
                             }
                         } catch (ConnectForStendExeption e) {
@@ -721,6 +704,10 @@ public class TestErrorTableFrameController {
 
                 initAllParamForImbCommand((ImbalansUCommand) command, i);
                 command.execute();
+
+            }else if (command instanceof RelayCommand) {
+                initAllParamForStartCommand((RelayCommand) command, i);
+                command.execute();
             }
 
             if (i == tabViewTestPoints.getItems().size() - 1) {
@@ -775,9 +762,13 @@ public class TestErrorTableFrameController {
 
             initAllParamForConstantCommand((ConstantCommand) command, i);
             command.executeForContinuousTest();
-        }else if (command instanceof ImbalansUCommand) {
 
+        }else if (command instanceof ImbalansUCommand) {
             initAllParamForImbCommand((ImbalansUCommand) command, i);
+            command.executeForContinuousTest();
+
+        } else if (command instanceof RelayCommand) {
+            initAllParamForStartCommand((RelayCommand) command, i);
             command.executeForContinuousTest();
         }
     }
@@ -878,6 +869,15 @@ public class TestErrorTableFrameController {
         imbalansUCommand.setRatedFreq(Fn);
         imbalansUCommand.setIndex(index);
         imbalansUCommand.setMeterForTestList(listMetersForTest);
+    }
+
+    //Инициализирует параметры необходимые для команды Реле
+    private void initAllParamForStartCommand(RelayCommand relayCommand, int index) {
+        relayCommand.setStendDLLCommands(stendDLLCommands);
+        relayCommand.setRatedFreq(Fn);
+        relayCommand.setRatedVolt(Un);
+        relayCommand.setIndex(index);
+        relayCommand.setMeterList(listMetersForTest);
     }
 
     @FXML
@@ -2040,8 +2040,9 @@ public class TestErrorTableFrameController {
                     } else if (item instanceof RelayCommand) {
                         tooltip.setText("Время теста: " + ((RelayCommand) item).getUserTimeTestHHmmss() +
                                 "\nКоличество импульсов: " + ((RelayCommand) item).getPulseValue() +
-                                "\nТок: " + item.getCurrPer());
+                                "\nТок: " + item.getRatedCurr());
                     }
+
                     tooltip.setFont(Font.font(12));
                     tooltip.setStyle("-fx-background-radius: 0; -fx-background-color: gray; -fx-opacity: 0.9;");
                     setTooltip(tooltip);
@@ -2149,6 +2150,22 @@ public class TestErrorTableFrameController {
                 }
             });
         }
+
+        //Внутренние параметры стенда
+        if (ConsoleHelper.properties.getProperty("cutNeitral").equals("T")) {
+            stendDLLCommands.cutNeutral(0);
+        } else {
+            stendDLLCommands.cutNeutral(1);
+        }
+
+        if (ConsoleHelper.properties.getProperty("reviseOff").equals("F")) {
+            stendDLLCommands.setNoRevise(false);
+        } else {
+            stendDLLCommands.setNoRevise(true);
+        }
+
+        stendDLLCommands.setReviseTime(Double.parseDouble(ConsoleHelper.properties.getProperty("reviseTime")));
+        stendDLLCommands.setReviseMode(Integer.parseInt(ConsoleHelper.properties.getProperty("reviseMode")));
     }
 
     public static void refreshRefMeterParameters() throws InterruptedException {

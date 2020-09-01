@@ -1,5 +1,6 @@
 package org.taipit.stend.controller;
 
+import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 
@@ -12,13 +13,12 @@ public class MainStend {
 
             StendDLLCommands stendDLLCommands = ThreePhaseStend.getThreePhaseStendInstance();
 
-            stendDLLCommands.errorClear();
-
 //            new Thread(() -> {
 //                try {
-//                    Thread.sleep(5000);
-//                    stendDLLCommands.getUI(1, 230.0, 5.0, 50.0, 0, 0, 100.0, 100.0, "H", "1.0");
-//                    System.out.println("2 " + (time - System.currentTimeMillis()));
+//                    Thread.sleep(4000);
+//                    //stendDLLCommands.getUI(1, 230.0, 5.0, 50.0, 0, 0, 100.0, 100.0, "H", "1.0");
+//                    stendDLLCommands.errorClear();
+//                    System.out.println("2 " + (System.currentTimeMillis() - time));
 //                } catch (ConnectForStendExeption connectForStendExeption) {
 //                    System.out.println("dsgsdgs");
 //                } catch (InterruptedException e) {
@@ -29,8 +29,11 @@ public class MainStend {
 //            stendDLLCommands.getUI(1, 230.0, 5.0, 50.0, 0, 0, 100.0, 100.0, "H", "1.0");
 //            System.out.println((System.currentTimeMillis()) - time);
 
-//            stendDLLCommands.errorClear();
-//            stendDLLCommands.powerOf();
+
+//            Thread.sleep(3000);
+
+            stendDLLCommands.errorClear();
+            stendDLLCommands.powerOf();
         }catch (Exception e) {
             e.printStackTrace();
         }

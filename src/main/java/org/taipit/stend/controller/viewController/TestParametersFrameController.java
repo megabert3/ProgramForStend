@@ -320,6 +320,7 @@ public class TestParametersFrameController implements Frame {
             try {
                 fxmlLoader.load();
             } catch (IOException e) {
+                e.printStackTrace();
                 ConsoleHelper.infoException("Не найден файл загрузки окна\nПопробуйте ещё раз или проверьте целостность\n файлов программы");
             }
 

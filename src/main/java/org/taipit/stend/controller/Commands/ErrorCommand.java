@@ -167,6 +167,21 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
     @Override
     public void execute() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
+
+            Thread th = new Thread(() -> {
+                for (int i = 0; i < 15; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("ErrorCommand");
+                    System.out.println(Thread.currentThread().getName());
+                    System.out.println(Thread.currentThread().getState());
+                }
+            });
+            th.start();
+
             throw new InterruptedException();
         }
 
@@ -188,6 +203,21 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         }
 
         if (Thread.currentThread().isInterrupted()) {
+
+            Thread th = new Thread(() -> {
+                for (int i = 0; i < 15; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("ErrorCommand");
+                    System.out.println(Thread.currentThread().getName());
+                    System.out.println(Thread.currentThread().getState());
+                }
+            });
+            th.start();
+
             throw new InterruptedException();
         }
 
@@ -233,15 +263,44 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
+
+            Thread th = new Thread(() -> {
+                for (int i = 0; i < 15; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("ErrorCommand");
+                    System.out.println(Thread.currentThread().getName());
+                    System.out.println(Thread.currentThread().getState());
+                }
+            });
+            th.start();
+
             throw new InterruptedException();
         }
 
         Thread.sleep(3000); //stendDLLCommands.getPauseForStabization()
 
-        System.out.println("После стабилизации");
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
+
+            Thread th = new Thread(() -> {
+                for (int i = 0; i < 15; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("ErrorCommand");
+                    System.out.println(Thread.currentThread().getName());
+                    System.out.println(Thread.currentThread().getState());
+                }
+            });
+            th.start();
+
             throw new InterruptedException();
         }
 
@@ -251,6 +310,21 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
 
         if (Thread.currentThread().isInterrupted()) {
+
+            Thread th = new Thread(() -> {
+                for (int i = 0; i < 15; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("ErrorCommand");
+                    System.out.println(Thread.currentThread().getName());
+                    System.out.println(Thread.currentThread().getState());
+                }
+            });
+            th.start();
+
             throw new InterruptedException();
         }
 
@@ -258,6 +332,21 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
 
         if (Thread.currentThread().isInterrupted()) {
+
+            Thread th = new Thread(() -> {
+                for (int i = 0; i < 15; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("ErrorCommand");
+                    System.out.println(Thread.currentThread().getName());
+                    System.out.println(Thread.currentThread().getState());
+                }
+            });
+            th.start();
+
             throw new InterruptedException();
         }
 
@@ -275,6 +364,21 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         while (flagInStop.containsValue(false)) {
 
             if (Thread.currentThread().isInterrupted()) {
+
+                Thread th = new Thread(() -> {
+                    for (int i = 0; i < 15; i++) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("ErrorCommand");
+                        System.out.println(Thread.currentThread().getName());
+                        System.out.println(Thread.currentThread().getState());
+                    }
+                });
+                th.start();
+
                 throw new InterruptedException();
             }
 
@@ -285,6 +389,21 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             for (Meter meter : meterForTestList) {
 
                 if (Thread.currentThread().isInterrupted()) {
+
+                    Thread th = new Thread(() -> {
+                        for (int i = 0; i < 15; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            System.out.println("ErrorCommand");
+                            System.out.println(Thread.currentThread().getName());
+                            System.out.println(Thread.currentThread().getState());
+                        }
+                    });
+                    th.start();
+
                     throw new InterruptedException();
                 }
 

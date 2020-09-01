@@ -169,8 +169,8 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
                 Meter.CommandResult creepResult;
                 if (currThread.isAlive()) {
                     for (Map.Entry<Integer, Boolean> flag : relayCommandResult.entrySet()) {
-                        if (!flag.getValue()) {
-                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                        if (flag.getValue()) {
+                            creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlagForSave);
                             creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
                     }
@@ -196,9 +196,9 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
 
         //Выставляю результат теста счётчиков, которые не прошли тест
         for (Map.Entry<Integer, Boolean> mapResult : relayCommandResult.entrySet()) {
-            if (!mapResult.getValue()) {
-                relayResult = (Meter.RelayResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
-                relayResult.setResultRelayCommand(relayResult.getTimeTheTest(), countResult, false);
+            if (mapResult.getValue()) {
+                relayResult = (Meter.RelayResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlagForSave);
+                relayResult.setResultRelayCommand(relayResult.getTimeTheTest(), countResult, true);
             }
         }
 
@@ -277,8 +277,8 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
                     Meter.CommandResult relayResult;
                     if (currThread.isAlive()) {
                         for (Map.Entry<Integer, Boolean> flag : relayCommandResult.entrySet()) {
-                            if (!flag.getValue()) {
-                                relayResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
+                            if (flag.getValue()) {
+                                relayResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlagForSave);
                                 relayResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                             }
                         }
@@ -300,9 +300,9 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
 
             //Выставляю результат теста счётчиков, которые не прошли тест
             for (Map.Entry<Integer, Boolean> mapResultPass : relayCommandResult.entrySet()) {
-                if (!mapResultPass.getValue()) {
-                    mapResultPass.setValue(true);
-                    relayResult = (Meter.RelayResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
+                if (mapResultPass.getValue()) {
+                    mapResultPass.setValue(false);
+                    relayResult = (Meter.RelayResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlagForSave);
                     relayResult.setResultRelayCommand(relayResult.getTimeTheTest(), countResult, false);
                 }
             }
@@ -318,13 +318,13 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
     private HashMap<Integer, Boolean> initRelayCommandResult() {
         HashMap<Integer, Boolean> init = new HashMap<>(meterList.size());
         for (Meter meter : meterList) {
-            init.put(meter.getId(), false);
+            init.put(meter.getId(), true);
         }
         return init;
     }
 
     private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, ConnectForStendExeption {
-        while (relayCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+        while (relayCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
             if (refMeterCount % 8 == 0) {
                 TestErrorTableFrameController.refreshRefMeterParameters();
@@ -340,14 +340,14 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
                     throw new InterruptedException();
                 }
 
-                if (!mapResult.getValue()) {
+                if (mapResult.getValue()) {
                     Meter meter = meterList.get(mapResult.getKey() - 1);
-                    Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
+                    Meter.RelayResult relayResult = (Meter.RelayResult) meter.returnResultCommand(index, channelFlagForSave);
 
                     if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue - 1) {
 
-                        relayCommandResult.put(mapResult.getKey(), true);
-                        startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
+                        relayCommandResult.put(mapResult.getKey(), false);
+                        relayResult.setResultRelayCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
                     }
                 }
             }
@@ -359,7 +359,7 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
     }
 
     private void startTestModeSearchMark(int refMeterCount, int countResult) throws InterruptedException {
-        while (relayCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
+        while (relayCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
             if (refMeterCount % 8 == 0) {
                 TestErrorTableFrameController.refreshRefMeterParameters();
@@ -375,14 +375,14 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
                     throw new InterruptedException();
                 }
 
-                if (!mapResult.getValue()) {
+                if (mapResult.getValue()) {
                     Meter meter = meterList.get(mapResult.getKey() - 1);
-                    Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
+                    Meter.RelayResult relayResult = (Meter.RelayResult) meter.returnResultCommand(index, channelFlagForSave);
 
                     if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
 
-                        relayCommandResult.put(mapResult.getKey(), true);
-                        startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
+                        relayCommandResult.put(mapResult.getKey(), false);
+                        relayResult.setResultRelayCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
                     }
                 }
             }
@@ -396,10 +396,10 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
     //reset
     private void setDefTestResults(int channelFlag, int index) {
         for (Meter meter : meterList) {
-            Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
-            startResult.setLastResultForTabView("N");
-            startResult.setPassTest(null);
-            startResult.setLastResult("");
+            Meter.RelayResult relayResult = (Meter.RelayResult) meter.returnResultCommand(index, channelFlagForSave);
+            relayResult.setLastResultForTabView("N");
+            relayResult.setPassTest(null);
+            relayResult.setLastResult("");
         }
     }
 

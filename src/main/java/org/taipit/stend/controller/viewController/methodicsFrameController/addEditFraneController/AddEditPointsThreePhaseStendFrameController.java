@@ -3307,7 +3307,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         }
 
         //Добаление теста "точность хода часов" AP+
-        if(event.getSource() == addTglBtnRTCAPPls) {
+        if (event.getSource() == addTglBtnRTCAPPls) {
 
             if (addTglBtnRTCAPPls.isSelected()) {
 
@@ -3404,7 +3404,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             }
         }
 
-        if(event.getSource() == addTglBtnRTCAPMns) {
+        if (event.getSource() == addTglBtnRTCAPMns) {
 
             if (addTglBtnRTCAPMns.isSelected()) {
 
@@ -3501,7 +3501,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             }
         }
 
-        if(event.getSource() == addTglBtnRTCRPPls) {
+        if (event.getSource() == addTglBtnRTCRPPls) {
 
             if (addTglBtnRTCRPPls.isSelected()) {
 
@@ -4326,7 +4326,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     addRelayCommand(1);
                 } else if (RPPlusCRPSTA.isSelected()) {
                     addRelayCommand(2);
-                } else if (APMinusCRPSTA.isSelected()) {
+                } else if (RPMinusCRPSTA.isSelected()) {
                     addRelayCommand(3);
                 }
             } else {
@@ -4336,11 +4336,10 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                     deleteRelayCommand(testListForCollumAPMns);
                 } else if (RPPlusCRPSTA.isSelected()) {
                     deleteRelayCommand(testListForCollumRPPls);
-                } else if (APMinusCRPSTA.isSelected()) {
-                    deleteRelayCommand(testListForCollumAPMns);
+                } else if (RPMinusCRPSTA.isSelected()) {
+                    deleteRelayCommand(testListForCollumRPMns);
                 }
             }
-
         }
     }
 
@@ -4403,6 +4402,8 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             APMinusCRPSTA.setSelected(false);
             RPPlusCRPSTA.setSelected(false);
             RPMinusCRPSTA.setSelected(false);
+
+            initRelayTest();
         }
 
         if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
@@ -4421,6 +4422,8 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             APMinusCRPSTA.setSelected(true);
             RPPlusCRPSTA.setSelected(false);
             RPMinusCRPSTA.setSelected(false);
+
+            initRelayTest();
         }
         if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
             setDefPosBtn();
@@ -4438,6 +4441,8 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             APMinusCRPSTA.setSelected(false);
             RPPlusCRPSTA.setSelected(true);
             RPMinusCRPSTA.setSelected(false);
+
+            initRelayTest();
         }
         if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
             setDefPosBtn();
@@ -4455,6 +4460,8 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             APMinusCRPSTA.setSelected(false);
             RPPlusCRPSTA.setSelected(false);
             RPMinusCRPSTA.setSelected(true);
+
+            initRelayTest();
         }
 
         //Переключение окон внутри фрейма "направление" между вкладками Сам. ТХЧ и т.д.
@@ -4567,7 +4574,6 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         }
 
         //------------------------------------------------ Реле
-
         if (event.getSource() == tglBtnRelay) {
             tglBtnRelay.setSelected(addTglBtnRelay.isSelected());
 
@@ -4889,7 +4895,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
         for (Commands command : testListForCollum) {
             if (command instanceof RelayCommand) {
-                testListForCollumAPMns.remove(command);
+                testListForCollum.remove(command);
                 break;
             }
         }
