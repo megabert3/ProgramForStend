@@ -310,10 +310,10 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
                     txtFldPFall.setText(meterParam[27]);
                 }
 
-                equalsParan(meterParam[0], meterParam[1], meterParam[2],
-                        meterParam[3], meterParam[4], meterParam[5]);
+                //equalsParan(meterParam[0], meterParam[1], meterParam[2],
+                //        meterParam[3], meterParam[4], meterParam[5]);
             }
-        }catch (ArrayIndexOutOfBoundsException e) {
+        }catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
             e.printStackTrace();
         }
     }

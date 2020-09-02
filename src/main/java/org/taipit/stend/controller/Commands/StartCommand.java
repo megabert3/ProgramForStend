@@ -161,6 +161,10 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                     voltPer, currPer, iABC, cosP);
         }
 
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
+
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         setTestMode();
@@ -256,6 +260,10 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         } else {
             stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP);
+        }
+
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
         }
 
         TestErrorTableFrameController.refreshRefMeterParameters();

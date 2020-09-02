@@ -167,21 +167,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
     @Override
     public void execute() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
-
-            Thread th = new Thread(() -> {
-                for (int i = 0; i < 15; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("ErrorCommand");
-                    System.out.println(Thread.currentThread().getName());
-                    System.out.println(Thread.currentThread().getState());
-                }
-            });
-            th.start();
-
             throw new InterruptedException();
         }
 
@@ -203,21 +188,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         }
 
         if (Thread.currentThread().isInterrupted()) {
-
-            Thread th = new Thread(() -> {
-                for (int i = 0; i < 15; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("ErrorCommand");
-                    System.out.println(Thread.currentThread().getName());
-                    System.out.println(Thread.currentThread().getState());
-                }
-            });
-            th.start();
-
             throw new InterruptedException();
         }
 
@@ -260,47 +230,17 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             }
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         if (Thread.currentThread().isInterrupted()) {
-
-            Thread th = new Thread(() -> {
-                for (int i = 0; i < 15; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("ErrorCommand");
-                    System.out.println(Thread.currentThread().getName());
-                    System.out.println(Thread.currentThread().getState());
-                }
-            });
-            th.start();
-
             throw new InterruptedException();
         }
 
-        Thread.sleep(3000); //stendDLLCommands.getPauseForStabization()
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
+        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
-
-            Thread th = new Thread(() -> {
-                for (int i = 0; i < 15; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("ErrorCommand");
-                    System.out.println(Thread.currentThread().getName());
-                    System.out.println(Thread.currentThread().getState());
-                }
-            });
-            th.start();
-
             throw new InterruptedException();
         }
 
@@ -310,21 +250,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
 
         if (Thread.currentThread().isInterrupted()) {
-
-            Thread th = new Thread(() -> {
-                for (int i = 0; i < 15; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("ErrorCommand");
-                    System.out.println(Thread.currentThread().getName());
-                    System.out.println(Thread.currentThread().getState());
-                }
-            });
-            th.start();
-
             throw new InterruptedException();
         }
 
@@ -332,21 +257,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.setMetersConstantToStend(meterForTestList, constantMeter, pulse);
 
         if (Thread.currentThread().isInterrupted()) {
-
-            Thread th = new Thread(() -> {
-                for (int i = 0; i < 15; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("ErrorCommand");
-                    System.out.println(Thread.currentThread().getName());
-                    System.out.println(Thread.currentThread().getState());
-                }
-            });
-            th.start();
-
             throw new InterruptedException();
         }
 
@@ -364,21 +274,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         while (flagInStop.containsValue(false)) {
 
             if (Thread.currentThread().isInterrupted()) {
-
-                Thread th = new Thread(() -> {
-                    for (int i = 0; i < 15; i++) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        System.out.println("ErrorCommand");
-                        System.out.println(Thread.currentThread().getName());
-                        System.out.println(Thread.currentThread().getState());
-                    }
-                });
-                th.start();
-
                 throw new InterruptedException();
             }
 
@@ -389,21 +284,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             for (Meter meter : meterForTestList) {
 
                 if (Thread.currentThread().isInterrupted()) {
-
-                    Thread th = new Thread(() -> {
-                        for (int i = 0; i < 15; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            System.out.println("ErrorCommand");
-                            System.out.println(Thread.currentThread().getName());
-                            System.out.println(Thread.currentThread().getState());
-                        }
-                    });
-                    th.start();
-
                     throw new InterruptedException();
                 }
 
@@ -511,13 +391,13 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             }
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
-        Thread.sleep(stendDLLCommands.getPauseForStabization());
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
+        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -556,20 +436,19 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                 strMass = strError.split(",");
 
                 if (strMass.length != 2) {
-                    continue;
-                }
 
-                resultNo = Integer.parseInt(strMass[0]);
-                error = strMass[1];
+                    resultNo = Integer.parseInt(strMass[0]);
+                    error = strMass[1];
 
-                if (resultNo != 0) {
-                    resultMeter = meter.returnResultCommand(index, channelFlag);
-                    doubleErr = Double.parseDouble(error);
+                    if (resultNo != 0) {
+                        resultMeter = meter.returnResultCommand(index, channelFlag);
+                        doubleErr = Double.parseDouble(error);
 
-                    if (doubleErr > emax || doubleErr < emin) {
-                        ((Meter.ErrorResult) resultMeter).setResultErrorCommand("F" + error, resultNo, error, false);
-                    } else {
-                        ((Meter.ErrorResult) resultMeter).setResultErrorCommand("P" + error, resultNo, error, true);
+                        if (doubleErr > emax || doubleErr < emin) {
+                            ((Meter.ErrorResult) resultMeter).setResultErrorCommand("F" + error, resultNo, error, false);
+                        } else {
+                            ((Meter.ErrorResult) resultMeter).setResultErrorCommand("P" + error, resultNo, error, true);
+                        }
                     }
                 }
             }

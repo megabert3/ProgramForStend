@@ -175,9 +175,13 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
 
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
+
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(3000); //stendDLLCommands.getPauseForStabization()
+        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -299,9 +303,13 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
 
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
+
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(stendDLLCommands.getPauseForStabization());
+        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 

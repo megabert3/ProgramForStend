@@ -202,8 +202,13 @@ public abstract class StendDLLCommands {
                          String iABC,
                          String cosP) throws ConnectForStendExeption {
 
+        System.out.println("Треад " + Thread.currentThread().getName());
+        System.out.println("Вошёл в getUI");
         boolean b = stend.Adjust_UI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPer, currPer, iABC, cosP, typeReferenceMeter, port);
+
+        System.out.println("Треад " + Thread.currentThread().getName());
+        System.out.println("Вышел из getUI");
 
         if (!b) {
             throw new ConnectForStendExeption("Не удалось подать мощность: Adjust_UI");
@@ -223,16 +228,34 @@ public abstract class StendDLLCommands {
                                    double currPer,
                                    String iABC,
                                    String cosP) throws ConnectForStendExeption {
-        if (!stend.Adjust_UI1(phase,ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
-                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP, typeReferenceMeter, port)) {
+
+        boolean b = stend.Adjust_UI1(phase,ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
+                voltPerA, voltPerB, voltPerC, currPer, iABC, cosP, typeReferenceMeter, port);
+        if (b) {
             throw new ConnectForStendExeption("Не удалось подать мощность: Adjust_U_WithPhase");
         }
     }
 
     // Сброс всех ошибок
-    public synchronized void errorClear() throws ConnectForStendExeption {
+    public void errorClear() throws ConnectForStendExeption {
+        int i = 0;
         boolean b = stend.Error_Clear(port);
-        if (!b) throw new ConnectForStendExeption("Не удалось очистить погрешность Error_Clear");
+
+        if (!b) {
+            while (i < 2) {
+                if (stend.Error_Clear(port)) {
+                    return;
+                } else {
+                    i++;
+                    try {
+                        Thread.sleep(100);
+                    }catch (InterruptedException e) {
+                        return;
+                    }
+                }
+            }
+            throw new ConnectForStendExeption("Не удалось очистить погрешность Error_Clear");
+        }
     }
 
     // Выключение напряжения и тока (кнопка Стоп)
@@ -245,39 +268,51 @@ public abstract class StendDLLCommands {
     //Получить данные с эталонного счётчика счетчика
     public synchronized String stMeterRead() {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
-        stend.StdMeter_Read(pointer, typeReferenceMeter, port);
+
+        boolean b = stend.StdMeter_Read(pointer, typeReferenceMeter, port);
+
+        if (!b) {
+            System.out.println("Не удалось считать значения эталонного счётчика");
+        }
+
         return pointer.getValue().getString(0, "ASCII");
     }
 
-    public synchronized String stMeterRead(String typeReferenceMeter) {
+    public String stMeterRead(String typeReferenceMeter) {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
         stend.StdMeter_Read(pointer, typeReferenceMeter, port);
         return pointer.getValue().getString(0, "ASCII");
     }
 
     // Получить ошибку навешенного счетчика
-    public synchronized String meterErrorRead(int meterNo) {
+    public String meterErrorRead(int meterNo) {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
-        stend.Error_Read(pointer, meterNo, port);
+
+        boolean b = stend.Error_Read(pointer, meterNo, port);
+
+        if (!b) {
+            System.out.println("Не удалось считать погрешность Error_Read");
+        }
+
         return pointer.getValue().getString(0, "ASCII");
     }
 
     //Сказать константу счётчика стенду для кажого места
-    public synchronized boolean setMetersConstantToStend(List<Meter> metersList, int constant, int amountImpulse) throws ConnectForStendExeption {
+    public boolean setMetersConstantToStend(List<Meter> metersList, int constant, int amountImpulse) throws ConnectForStendExeption {
         for (Meter meter : metersList) {
-            if (!errorStart(meter.getId(), constant, amountImpulse)) throw new ConnectForStendExeption();
+            if (!errorStart(meter.getId(), constant, amountImpulse)) throw new ConnectForStendExeption("не удалось записать команду Error_Start");
         }
         return true;
     }
 
     // Запустить проверку навешенного счетчика (напряжение и ток должны быть включены)
-    public synchronized boolean errorStart(int meterNo, double constant, int pulse) {
+    public boolean errorStart(int meterNo, double constant, int pulse) {
         return stend.Error_Start(meterNo, constant, pulse, port);
     }
 
 
     // Установка режима импульсов
-    public synchronized boolean setPulseChannel(int meterNo, int channelFlag) {
+    public boolean setPulseChannel(int meterNo, int channelFlag) throws ConnectForStendExeption {
         return stend.Set_Pulse_Channel(meterNo, channelFlag, port);
     }
 
@@ -287,18 +322,27 @@ public abstract class StendDLLCommands {
     }
 
     // Старт CRPSTA
-    public synchronized boolean crpstaStart(int meterNo) {
-        return stend.CRPSTA_start(meterNo, port);
+    public void crpstaStart(int meterNo) throws ConnectForStendExeption {
+        boolean b = stend.CRPSTA_start(meterNo, port);
+        if (!b) {
+            throw new ConnectForStendExeption("Не удалось записать команду CRPSTA_start");
+        }
     }
 
     // результат CRPSTA
-    public synchronized boolean crpstaResult(int meterNo) {
-        return stend.CRPSTA_Result(meterNo, port);
+    public void crpstaResult(int meterNo) throws ConnectForStendExeption {
+        boolean b = stend.CRPSTA_Result(meterNo, port);
+        if (!b) {
+            throw new ConnectForStendExeption("Не удалось записть команду CRPSTA_Result");
+        }
     }
 
     // Очистка CRPSTA
-    public synchronized boolean crpstaClear(int meterNo) {
-        return stend.CRPSTA_clear(meterNo, port);
+    public void crpstaClear(int meterNo) throws ConnectForStendExeption {
+        boolean b = stend.CRPSTA_clear(meterNo, port);
+        if (!b) {
+            throw new ConnectForStendExeption("Не удалось записть команду CRPSTA_clear");
+        }
     }
 
     // Поиск метки
@@ -309,13 +353,16 @@ public abstract class StendDLLCommands {
     }
 
     // результат поиска метки
-    public synchronized boolean searchMarkResult(int meterNo) {
+    public boolean searchMarkResult(int meterNo) {
         return stend.Search_mark_Result(meterNo, port);
     }
 
     // Выключение нагрузки (тока)
-    public synchronized boolean powerPause() {
-        return stend.Power_Pause(port);
+    public void powerPause() throws ConnectForStendExeption {
+        boolean b = stend.Power_Pause(port);
+        if (!b) {
+            throw new ConnectForStendExeption("Не удалось записать команду Power_Pause");
+        }
     }
 
     // Чтение серийного номера.
@@ -344,7 +391,7 @@ public abstract class StendDLLCommands {
 
 
     // Чтение данных по энергии
-    public synchronized double constProcRead(double constant, int meterNo) throws ConnectForStendExeption {
+    public double constProcRead(double constant, int meterNo) throws ConnectForStendExeption {
         DoubleByReference pointerMeterKWH = new DoubleByReference();
         DoubleByReference pointerStdKWH = new DoubleByReference();
 
@@ -360,7 +407,7 @@ public abstract class StendDLLCommands {
     }
 
     // Чтение данных по энергии
-    public synchronized String constStdEnergyRead(double constant, int meterNo) throws ConnectForStendExeption {
+    public String constStdEnergyRead(double constant, int meterNo) throws ConnectForStendExeption {
         DoubleByReference pointerMeterKWH = new DoubleByReference();
         DoubleByReference pointerStdKWH = new DoubleByReference();
 
@@ -380,13 +427,17 @@ public abstract class StendDLLCommands {
     }
 
     // Отключить нейтраль
-    public boolean cutNeutral(int cuttingFlag) {
-        return stend.CutNeutral(cuttingFlag, port);
+    public void cutNeutral(int cuttingFlag) throws ConnectForStendExeption {
+        if (!stend.CutNeutral(cuttingFlag, port)) {
+            throw new ConnectForStendExeption("Не удалось записать команду cutNeutral");
+        }
     }
 
     // Старт теста ТХЧ
-    public boolean clockErrorStart(int meterNo, double freq, int duration) {
-        return stend.Clock_Error_Start(meterNo, freq, duration, port);
+    public void clockErrorStart(int meterNo, double freq, int duration) throws ConnectForStendExeption {
+        if (!stend.Clock_Error_Start(meterNo, freq, duration, port)) {
+            throw new ConnectForStendExeption("Не удалось записать команду clockErrorStart");
+        }
     }
 
     // Прочитать результаты теста ТХЧ. Должна вызываться по прошествии времени, отведенного на тест
@@ -422,16 +473,22 @@ public abstract class StendDLLCommands {
 //        return b;
 //    }
 
-    public boolean setReviseMode(int mode) {
-        return stend.Set_ReviseMode(mode);
+    public void setReviseMode(int mode) throws ConnectForStendExeption {
+        if (!stend.Set_ReviseMode(mode)) {
+            throw new ConnectForStendExeption("Не удалось записать команду Set_ReviseMode");
+        }
     }
 
-    public boolean setReviseTime(double timeSek) {
-        return stend.Set_ReviseTime(timeSek);
+    public void setReviseTime(double timeSek) throws ConnectForStendExeption {
+        if (!stend.Set_ReviseTime(timeSek)) {
+            throw new ConnectForStendExeption("Не удалось записать команду Set_ReviseTime");
+        }
     }
 
-    public boolean setNoRevise(boolean b){
-        return stend.Set_NoRevise(b);
+    public void setNoRevise(boolean b) throws ConnectForStendExeption {
+        if (!stend.Set_NoRevise(b)) {
+            throw new ConnectForStendExeption("Не удалось записать команду Set_NoRevise");
+        }
     }
 
     //Список портов

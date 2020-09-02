@@ -44,6 +44,7 @@ import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
 import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
 
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -139,7 +140,7 @@ public class TestErrorTableFrameController {
 
             automaticTestThread.interrupt();
 
-            blockControlBtns(4000);
+            blockControlBtns(8000);
 
             automaticTestThread = new Thread(new Runnable() {
                 @Override
@@ -147,18 +148,16 @@ public class TestErrorTableFrameController {
                     try {
                         try {
                             refreshRefMeterParametersWithoutChecking();
-//                            stendDLLCommands.setRefClock(0);
-//                            stendDLLCommands.errorClear();
+                            stendDLLCommands.setRefClock(0);
+                            stendDLLCommands.errorClear();
 
                             startAutomaticTest();
                         } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
                             e.printStackTrace();
                         }
-
                     } catch (ConnectForStendExeption e) {
                         e.printStackTrace();
-                        cathConnectionException();
+                        cathConnectionException(e);
                     }
                 }
             });
@@ -173,7 +172,7 @@ public class TestErrorTableFrameController {
 
             manualTestThread.interrupt();
 
-            blockControlBtns(4000);
+            blockControlBtns(8000);
 
             manualTestThread = new Thread(new Runnable() {
                 @Override
@@ -186,12 +185,11 @@ public class TestErrorTableFrameController {
 
                             startManualTest();
                         } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
                             e.printStackTrace();
                         }
                     } catch (ConnectForStendExeption e) {
                         e.printStackTrace();
-                        cathConnectionException();
+                        cathConnectionException(e);
                     }
                 }
             });
@@ -376,7 +374,7 @@ public class TestErrorTableFrameController {
                 startUnTest = false;
 
                 refMeterThread = new Thread(() -> {
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < 2; i++) {
                         try {
                             Thread.sleep(1000);
                             refreshRefMeterParametersWithoutChecking();
@@ -384,7 +382,6 @@ public class TestErrorTableFrameController {
                     }
 
                 });
-
                 refMeterThread.start();
 
                 try {
@@ -403,7 +400,7 @@ public class TestErrorTableFrameController {
 
                 }catch (ConnectForStendExeption e) {
                     e.printStackTrace();
-                    cathConnectionException();
+                    cathConnectionException(e);
                 }
             }
         });
@@ -509,13 +506,15 @@ public class TestErrorTableFrameController {
         //Логика работы автоматического режима работы
         if (event.getSource() == tglBtnAuto) {
             if (automaticTestThread.isAlive()) {
+
                 tglBtnAuto.setSelected(true);
                 return;
-            } else {
-                blockControlBtns(4000);
 
-                startUnTest = false;
+            } else {
+                blockControlBtns(8000);
+
                 blockTypeEnergyAndDirectionBtns.setValue(true);
+                startUnTest = false;
 
                 if (refMeterThread.isAlive()) {
                     refMeterThread.interrupt();
@@ -537,19 +536,18 @@ public class TestErrorTableFrameController {
                     public void run() {
                         try {
                             try {
+
                                 stendDLLCommands.setRefClock(0);
                                 stendDLLCommands.errorClear();
                                 refreshRefMeterParametersWithoutChecking();
 
                                 startAutomaticTest();
                             } catch (InterruptedException e) {
-                                stendDLLCommands.errorClear();
-                                Thread.currentThread().interrupt();
                                 e.printStackTrace();
                             }
                         } catch (ConnectForStendExeption e) {
-                            cathConnectionException();
                             e.printStackTrace();
+                            cathConnectionException(e);
                         }
                     }
                 });
@@ -561,11 +559,13 @@ public class TestErrorTableFrameController {
         //------------------------------------------------------------------------------------------------
         //Логика работы ручного режима работы
         if (event.getSource() == tglBtnManualMode) {
+
             if (manualTestThread.isAlive()) {
                 tglBtnManualMode.setSelected(true);
                 return;
+
             } else {
-                blockControlBtns(4000);
+                blockControlBtns(8000);
 
                 blockTypeEnergyAndDirectionBtns.setValue(true);
                 startUnTest = false;
@@ -590,18 +590,18 @@ public class TestErrorTableFrameController {
                     public void run() {
                         try {
                             try {
+
                                 stendDLLCommands.setRefClock(0);
                                 stendDLLCommands.errorClear();
                                 refreshRefMeterParametersWithoutChecking();
 
                                 startManualTest();
                             } catch (InterruptedException e) {
-                                Thread.currentThread().interrupt();
                                 e.printStackTrace();
                             }
                         } catch (ConnectForStendExeption e) {
-                            cathConnectionException();
                             e.printStackTrace();
+                            cathConnectionException(e);
                         }
                     }
                 });
@@ -615,6 +615,7 @@ public class TestErrorTableFrameController {
 
             if (startUnTest) {
                 tglBtnUnom.setSelected(true);
+
             } else {
 
                 blockControlBtns(5000);
@@ -644,13 +645,13 @@ public class TestErrorTableFrameController {
                                 startUn();
 
                             } catch (InterruptedException e) {
-                                e.printStackTrace();
                                 startUnTest = false;
+                                e.printStackTrace();
                             }
                         } catch (ConnectForStendExeption e) {
                             startUnTest = false;
-                            cathConnectionException();
                             e.printStackTrace();
+                            cathConnectionException(e);
                         }
                     }
                 });
@@ -2152,20 +2153,25 @@ public class TestErrorTableFrameController {
         }
 
         //Внутренние параметры стенда
-        if (ConsoleHelper.properties.getProperty("cutNeitral").equals("T")) {
-            stendDLLCommands.cutNeutral(0);
-        } else {
-            stendDLLCommands.cutNeutral(1);
-        }
+        try {
+            if (ConsoleHelper.properties.getProperty("cutNeitral").equals("T")) {
+                stendDLLCommands.cutNeutral(0);
+            } else {
+                stendDLLCommands.cutNeutral(1);
+            }
 
-        if (ConsoleHelper.properties.getProperty("reviseOff").equals("F")) {
-            stendDLLCommands.setNoRevise(false);
-        } else {
-            stendDLLCommands.setNoRevise(true);
-        }
+            if (ConsoleHelper.properties.getProperty("reviseOff").equals("F")) {
+                stendDLLCommands.setNoRevise(false);
+            } else {
+                stendDLLCommands.setNoRevise(true);
+            }
 
-        stendDLLCommands.setReviseTime(Double.parseDouble(ConsoleHelper.properties.getProperty("reviseTime")));
-        stendDLLCommands.setReviseMode(Integer.parseInt(ConsoleHelper.properties.getProperty("reviseMode")));
+            stendDLLCommands.setReviseTime(Double.parseDouble(ConsoleHelper.properties.getProperty("reviseTime")));
+            stendDLLCommands.setReviseMode(Integer.parseInt(ConsoleHelper.properties.getProperty("reviseMode")));
+        }catch (ConnectForStendExeption e) {
+            e.printStackTrace();
+            ConsoleHelper.infoException(e.getMessage());
+        }
     }
 
     public static void refreshRefMeterParameters() throws InterruptedException {
@@ -2432,7 +2438,7 @@ public class TestErrorTableFrameController {
         }).start();
     }
 
-    private void cathConnectionException() {
+    private void cathConnectionException(Throwable e) {
 
         Platform.runLater(new Runnable() {
             @Override
@@ -2445,7 +2451,7 @@ public class TestErrorTableFrameController {
             }
         });
 
-        ConsoleHelper.infoException("Потеряна связь с установкой");
+        ConsoleHelper.infoException("Потеряна связь с установкой\n" + e.getMessage());
 
         selectedCommand.removeListener(automaticListChangeListener);
         selectedCommand.removeListener(manualListChangeListener);

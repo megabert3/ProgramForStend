@@ -124,9 +124,9 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         int countResult = 1;
         Meter.CreepResult creepResult;
 
-        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
-
         creepCommandResult = initCreepCommandResult();
+
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
         TestErrorTableFrameController.transferParam(this);
 
@@ -154,11 +154,11 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
                     voltPer, currPer, iABC, cosP);
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         stendDLLCommands.errorClear();
 
@@ -259,11 +259,11 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
                     voltPer, currPer, iABC, cosP);
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
 
         Thread.sleep(TestErrorTableFrameController.timeToStabilization);
 

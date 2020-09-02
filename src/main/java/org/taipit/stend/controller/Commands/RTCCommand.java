@@ -134,6 +134,10 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
                     voltPer, currPer, iABC, cosP);
         }
 
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
+
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         //Время на включение счётчиков
@@ -246,6 +250,10 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
             stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP);
+        }
+
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
         }
 
         TestErrorTableFrameController.refreshRefMeterParameters();

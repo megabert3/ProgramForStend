@@ -167,7 +167,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             } else if (channelFlag == 2 || channelFlag == 3) {
                 constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
             }
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             constantMeter = 0;
         }
 
@@ -180,6 +180,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
         //Устанавливаем местам импульсный выход
         stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
+
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
@@ -231,13 +235,13 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     voltPer, currPer, iABC, cosP);
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
+        Thread.sleep(5000);
 
         for (Meter meter : meterForTestList) {
             meter.returnResultCommand(index, channelFlag).setLastResultForTabView("N");
@@ -284,6 +288,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             //Передаю параметры, которые должны быть выставлены
             TestErrorTableFrameController.transferParam(this);
 
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 if (!threePhaseCommand) {
 
@@ -324,13 +332,13 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
-            TestErrorTableFrameController.refreshRefMeterParameters();
-
-            timer.schedule(timerTask, 10000);
-
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
             }
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
+
+            timer.schedule(timerTask, 10000);
 
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + timeTheTest;
@@ -416,7 +424,12 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             double refMeterEnergy = 0;
 
+
             TestErrorTableFrameController.transferParam(this);
+
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
 
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 if (!threePhaseCommand) {
@@ -458,13 +471,13 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
-            TestErrorTableFrameController.refreshRefMeterParameters();
-
-            timer.schedule(timerTask, 7000);
-
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
             }
+
+            TestErrorTableFrameController.refreshRefMeterParameters();
+
+            timer.schedule(timerTask, 7000);
 
             Meter.ConstantResult constantResult;
             String[] kw;
@@ -532,8 +545,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         }
 
         stendDLLCommands.errorClear();
-
-        TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
     }
 
     //Метод для цикличной поверки счётчиков
@@ -560,6 +571,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
         //Устанавливаем местам импульсный выход
         stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
+
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
@@ -611,13 +626,14 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     voltPer, currPer, iABC, cosP);
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
+
+        TestErrorTableFrameController.refreshRefMeterParameters();
+
+        Thread.sleep(5000);
 
         for (Meter meter : meterForTestList) {
             meter.returnResultCommand(index, channelFlag).setLastResultForTabView("N");
@@ -666,6 +682,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 TestErrorTableFrameController.refreshRefMeterParameters();
 
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+
                 TestErrorTableFrameController.transferParam(this);
 
                 if (stendDLLCommands instanceof ThreePhaseStend) {
@@ -708,13 +728,13 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     }
                 }
 
-                timer.schedule(timerTask, 10000);
-
-                TestErrorTableFrameController.refreshRefMeterParameters();
-
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
                 }
+
+                timer.schedule(timerTask, 10000);
+
+                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 timeStart = System.currentTimeMillis();
                 timeEnd = timeStart + timeTheTest;
@@ -797,6 +817,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 TestErrorTableFrameController.transferParam(this);
 
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+
                 if (stendDLLCommands instanceof ThreePhaseStend) {
                     if (!threePhaseCommand) {
 
@@ -837,13 +861,13 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     }
                 }
 
-                timer.schedule(timerTask, 10000);
-
-                TestErrorTableFrameController.refreshRefMeterParameters();
-
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
                 }
+
+                timer.schedule(timerTask, 10000);
+
+                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 Meter.ConstantResult constantResult;
                 String[] kw;
@@ -920,6 +944,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             countResult++;
 
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
             TestErrorTableFrameController.transferParam(this);
 
             if (stendDLLCommands instanceof ThreePhaseStend) {
@@ -977,8 +1005,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             stendDLLCommands.errorClear();
 
             Thread.sleep(7000);
-
-            TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
         }
     }
 
