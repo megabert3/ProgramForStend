@@ -104,6 +104,9 @@ public class ResultsMetersController implements Frame {
     private TableColumn<Meter, String> tabColConstantRPMns;
 
     @FXML
+    private TableColumn<Meter, String> tabColRelayResult;
+
+    @FXML
     private TableColumn<Meter, String> tabColInsulationResult;
 
     @FXML
@@ -498,7 +501,28 @@ public class ResultsMetersController implements Frame {
                 return result;
             }
         });
-        tabColConstantRPMns.setStyle( "-fx-alignment: CENTER;");
+        tabColConstantRPMns.setStyle("-fx-alignment: CENTER;");
+
+        tabColRelayResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
+                Meter meter = param.getValue();
+
+                SimpleStringProperty result = null;
+
+                Meter.RelayResult relayResult = meter.getRelayTest();
+
+                if (relayResult.getPassTest() == null) {
+                    result = new SimpleStringProperty(resultMass[0]);
+                } else if (relayResult.getPassTest()) {
+                    result = new SimpleStringProperty(resultMass[1]);
+                } else if (!relayResult.getPassTest()) {
+                    result = new SimpleStringProperty(resultMass[2]);
+                }
+                return result;
+            }
+        });
+        tabColRelayResult.setStyle("-fx-alignment: CENTER;");
 
         tabColInsulationResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override

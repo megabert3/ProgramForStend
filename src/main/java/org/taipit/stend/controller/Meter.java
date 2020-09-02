@@ -940,6 +940,10 @@ public class Meter implements Serializable{
         return totalResult;
     }
 
+    public RelayResult getRelayTest() {
+        return relayTest;
+    }
+
     //==============================================================================================
     //Абстрактный класс для записи результата каждой точки
     public abstract class CommandResult implements Serializable {
@@ -1070,6 +1074,7 @@ public class Meter implements Serializable{
         public void setSimpPropErrorsForTips() {
             this.errorsForTips = new SimpleStringProperty("");
         }
+
     }
 
     //Класс для записи результата исполнения ErrorCommnad
@@ -1512,6 +1517,7 @@ public class Meter implements Serializable{
                 if (!relayTest.isPassTest()) return false;
                 else result = true;
             }
+
 
             if (errorListAPPls.size() != 0) {
                 for (Meter.CommandResult errResult : errorListAPPls) {

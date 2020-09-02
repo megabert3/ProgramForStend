@@ -96,6 +96,7 @@
                   <TableColumn fx:id="tabColConstantRPMns" prefWidth="120.0" sortable="false" text="Р.Э.-" />
                </columns>
             </TableColumn>
+            <TableColumn fx:id="tabColRelayResult" prefWidth="120.0" sortable="false" text="Реле" />
             <TableColumn fx:id="tabColInsulationResult" prefWidth="130.0" sortable="false" text="Проверка изоляции" />
             <TableColumn fx:id="tabColApperianceResult" prefWidth="130.0" sortable="false" text="Внешний вид" />
         </columns>

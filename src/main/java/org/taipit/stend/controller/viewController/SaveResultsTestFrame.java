@@ -153,6 +153,9 @@ public class SaveResultsTestFrame {
     private TableColumn<Meter, String> tabColConstantRPMns;
 
     @FXML
+    private TableColumn<Meter, String> tabColRelayResult;
+
+    @FXML
     void initialize() {
         if (properties.getProperty("config").isEmpty()) {
             password = false;
@@ -813,7 +816,6 @@ public class SaveResultsTestFrame {
         });
 
         //Если есть результаты теста на самоход активной энергии в обратном напралении
-
         tabColConstantAPMns.setStyle( "-fx-alignment: CENTER;");
         tabColConstantAPMns.setEditable(true);
         tabColConstantAPMns.setSortable(false);
@@ -969,6 +971,61 @@ public class SaveResultsTestFrame {
                 constRPMns.setPassTest(true);
             } else if (result.equals(resultMass[2])) {
                 constRPMns.setPassTest(false);
+            }
+        });
+
+        //================================ Реле ===================================
+        tabColRelayResult.setStyle("-fx-alignment: CENTER;");
+        tabColRelayResult.setEditable(true);
+        tabColRelayResult.setSortable(false);
+
+        tabColRelayResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
+                Meter meter = param.getValue();
+
+                SimpleStringProperty result = null;
+
+                Meter.RelayResult relayResult = meter.getRelayTest();
+
+                if (relayResult.getPassTest() == null) {
+                    result = new SimpleStringProperty(resultMass[0]);
+                } else if (relayResult.getPassTest()) {
+                    result = new SimpleStringProperty(resultMass[1]);
+                } else if (!relayResult.getPassTest()) {
+                    result = new SimpleStringProperty(resultMass[2]);
+                }
+                return result;
+            }
+        });
+
+
+        ObservableList<String> relayResult = FXCollections.observableArrayList(resultMass);
+
+        tabColRelayResult.setCellFactory(ComboBoxTableCell.forTableColumn(relayResult));
+
+        tabColRelayResult.setOnEditCommit((TableColumn.CellEditEvent<Meter, String> event) -> {
+            if (requestPassword()) {
+                tabViewResults.refresh();
+                return;
+            }
+
+            TablePosition<Meter, String> pos = event.getTablePosition();
+
+            String result = event.getNewValue();
+
+            int row = pos.getRow();
+
+            Meter meter = event.getTableView().getItems().get(row);
+
+            Meter.RelayResult relayResultEdit = meter.getRelayTest();
+
+            if (result.equals(resultMass[0])) {
+                relayResultEdit.setPassTest(null);
+            } else if (result.equals(resultMass[1])) {
+                relayResultEdit.setPassTest(true);
+            } else if (result.equals(resultMass[2])) {
+                relayResultEdit.setPassTest(false);
             }
         });
 
