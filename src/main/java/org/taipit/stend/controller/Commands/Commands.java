@@ -48,4 +48,6 @@ public interface Commands {
     double getCurrPer();
 
     double getVoltPer();
+
+    void setPauseForStabilization(double pauseForStabilization);
 }

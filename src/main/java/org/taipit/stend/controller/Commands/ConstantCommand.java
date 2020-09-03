@@ -36,6 +36,14 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
     //Минимальный порог ошибки
     private double emaxProc;
 
+    public String getPauseForStabilization() {
+        return "";
+    }
+
+    @Override
+    public void setPauseForStabilization(double pauseForStabilization) {
+    }
+
     //Кол-во импульсов для расчёта ошибки
     private int pulse;
 
@@ -162,11 +170,12 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
         try {
             //Выбор константы в зависимости от энергии
-            if (channelFlag == 0 || channelFlag == 1) {
+            if (channelFlag < 2) {
                 constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
-            } else if (channelFlag == 2 || channelFlag == 3) {
+            } else {
                 constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
             }
+
         } catch (NumberFormatException e) {
             constantMeter = 0;
         }
@@ -241,6 +250,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
+        //Пауза для включения счётчиков
         Thread.sleep(5000);
 
         for (Meter meter : meterForTestList) {
@@ -556,9 +566,9 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
         try {
             //Выбор константы в зависимости от энергии
-            if (channelFlag == 0 || channelFlag == 1) {
+            if (channelFlag < 2) {
                 constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
-            } else if (channelFlag == 2 || channelFlag == 3) {
+            } else {
                 constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
             }
         }catch (NumberFormatException e) {

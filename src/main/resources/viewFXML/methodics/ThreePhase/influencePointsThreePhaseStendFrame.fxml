@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -13,11 +14,14 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1226.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.InfluencePointsThreePhaseStendFrame">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1326.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.InfluencePointsThreePhaseStendFrame">
     <children>
-        <Button fx:id="saveBtn" layoutX="1054.0" layoutY="675.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="41.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/button.css" text="Сохранить">
+        <Button fx:id="saveBtn" layoutX="1141.0" layoutY="676.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="41.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/button.css" text="Сохранить">
             <graphic>
-                <ImageView fitHeight="30.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
+                <ImageView fitHeight="26.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../image/settingsFrame/icons8_save_32.png" />
+               </image></ImageView>
             </graphic>
         </Button>
         <AnchorPane layoutX="28.0" layoutY="438.0" prefHeight="175.0" prefWidth="750.0">
@@ -172,7 +176,7 @@
                 </StackPane>
             </children>
         </AnchorPane>
-        <Pane prefHeight="115.0" prefWidth="1226.0" style="-fx-background-color: #2E2E2E;" />
+        <Pane prefHeight="115.0" prefWidth="1326.0" style="-fx-background-color: #2E2E2E;" />
         <AnchorPane layoutX="28.0" layoutY="80.0" prefHeight="230.0" prefWidth="751.0">
             <children>
                 <VBox fx:id="vBoxForPhaseTgBtn" layoutY="34.0" prefHeight="230.0" prefWidth="108.0" style="-fx-background-color: #303030;">
@@ -225,50 +229,6 @@
                 </HBox>
             </children>
         </AnchorPane>
-        <AnchorPane layoutX="799.0" layoutY="77.0" prefHeight="575.0" prefWidth="405.0">
-            <children>
-                <StackPane prefHeight="575.0" prefWidth="405.0">
-                    <children>
-                        <TableView fx:id="viewPointTableRPPls" prefHeight="575.0" prefWidth="405.0" stylesheets="@/styleCSS/tableViewStyle.css">
-                            <columns>
-                                <TableColumn fx:id="loadCurrTabColRPPls" prefWidth="125.0" text="Нагрузка" />
-                                <TableColumn fx:id="eMaxTabColRPPls" prefWidth="65.0" text="Emax" />
-                                <TableColumn fx:id="eMinTabColRPPls" prefWidth="65.0" text="Emin" />
-                                <TableColumn fx:id="amountImplTabColRPPls" prefWidth="70.0" text="Импульсы" />
-                        <TableColumn fx:id="amountMeasTabColRPPls" text="Измерения" />
-                            </columns>
-                        </TableView>
-                        <TableView fx:id="viewPointTableRPMns" prefHeight="575.0" prefWidth="402.0" stylesheets="@/styleCSS/tableViewStyle.css">
-                            <columns>
-                                <TableColumn fx:id="loadCurrTabColRPMns" prefWidth="125.0" text="Нагрузка" />
-                                <TableColumn fx:id="eMaxTabColRPMns" prefWidth="65.0" text="Emax" />
-                                <TableColumn fx:id="eMinTabColRPMns" prefWidth="65.0" text="Emin" />
-                                <TableColumn fx:id="amountImplTabColRPMns" prefWidth="70.0" text="Импульсы" />
-                        <TableColumn fx:id="amountMeasTabColRPMns" text="Измерения" />
-                            </columns>
-                        </TableView>
-                        <TableView fx:id="viewPointTableAPPls" prefHeight="575.0" prefWidth="402.0" stylesheets="@/styleCSS/tableViewStyle.css">
-                            <columns>
-                                <TableColumn fx:id="loadCurrTabColAPPls" prefWidth="125.0" text="Нагрузка" />
-                                <TableColumn fx:id="eMaxTabColAPPls" prefWidth="65.0" text="Emax" />
-                                <TableColumn fx:id="eMinTabColAPPls" prefWidth="65.0" text="Emin" />
-                                <TableColumn fx:id="amountImplTabColAPPls" prefWidth="70.0" text="Импульсы" />
-                        <TableColumn fx:id="amountMeasTabColAPPls" text="Измерения" />
-                            </columns>
-                        </TableView>
-                        <TableView fx:id="viewPointTableAPMns" prefHeight="575.0" prefWidth="402.0" stylesheets="@/styleCSS/tableViewStyle.css">
-                            <columns>
-                                <TableColumn fx:id="loadCurrTabColAPMns" prefWidth="125.0" text="Нагрузка" />
-                                <TableColumn fx:id="eMaxTabColAPMns" prefWidth="65.0" text="Emax" />
-                                <TableColumn fx:id="eMinTabColAPMns" prefWidth="65.0" text="Emin" />
-                                <TableColumn fx:id="amountImplTabColAPMns" prefWidth="70.0" text="Импульсы" />
-                        <TableColumn fx:id="amountMeasTabColAPMns" text="Измерения" />
-                            </columns>
-                        </TableView>
-                    </children>
-                </StackPane>
-            </children>
-        </AnchorPane>
       <ToggleButton id="defaultYellow" fx:id="selectInfInb" layoutX="27.0" layoutY="571.0" mnemonicParsing="false" onAction="#selectInfluenceTests" prefHeight="41.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/toglButtons.css" text="Инбаланс" />
       <Pane fx:id="InflInbPane" layoutX="177.0" layoutY="472.0" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #797979;">
          <children>
@@ -278,5 +238,53 @@
             <TextField fx:id="txtFieldInfImb" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="387.0" stylesheets="@/styleCSS/textField.css" />
          </children>
       </Pane>
+      <AnchorPane layoutX="799.0" layoutY="77.0" prefHeight="575.0" prefWidth="492.0">
+         <children>
+            <StackPane prefHeight="575.0" prefWidth="492.0">
+               <children>
+                  <TableView fx:id="viewPointTableRPPls" prefHeight="575.0" prefWidth="405.0" stylesheets="@/styleCSS/tableViewStyle.css">
+                     <columns>
+                        <TableColumn fx:id="loadCurrTabColRPPls" prefWidth="125.0" text="Нагрузка" />
+                        <TableColumn fx:id="eMaxTabColRPPls" prefWidth="65.0" text="Emax" />
+                        <TableColumn fx:id="eMinTabColRPPls" prefWidth="65.0" text="Emin" />
+                        <TableColumn fx:id="amountImplTabColRPPls" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColRPPls" text="Измерения" />
+                        <TableColumn fx:id="timeStabTabColRPPls" prefWidth="86.0" text="Вр. стаб." />
+                     </columns>
+                  </TableView>
+                  <TableView fx:id="viewPointTableRPMns" prefHeight="575.0" prefWidth="402.0" stylesheets="@/styleCSS/tableViewStyle.css">
+                     <columns>
+                        <TableColumn fx:id="loadCurrTabColRPMns" prefWidth="125.0" text="Нагрузка" />
+                        <TableColumn fx:id="eMaxTabColRPMns" prefWidth="65.0" text="Emax" />
+                        <TableColumn fx:id="eMinTabColRPMns" prefWidth="65.0" text="Emin" />
+                        <TableColumn fx:id="amountImplTabColRPMns" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColRPMns" text="Измерения" />
+                        <TableColumn fx:id="timeStabTabColRPMns" prefWidth="86.0" text="Вр. стаб." />
+                     </columns>
+                  </TableView>
+                  <TableView fx:id="viewPointTableAPPls" prefHeight="575.0" prefWidth="402.0" stylesheets="@/styleCSS/tableViewStyle.css">
+                     <columns>
+                        <TableColumn fx:id="loadCurrTabColAPPls" prefWidth="125.0" text="Нагрузка" />
+                        <TableColumn fx:id="eMaxTabColAPPls" prefWidth="65.0" text="Emax" />
+                        <TableColumn fx:id="eMinTabColAPPls" prefWidth="65.0" text="Emin" />
+                        <TableColumn fx:id="amountImplTabColAPPls" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColAPPls" text="Измерения" />
+                        <TableColumn fx:id="timeStabTabColAPPls" prefWidth="86.0" text="Вр. стаб." />
+                     </columns>
+                  </TableView>
+                  <TableView fx:id="viewPointTableAPMns" prefHeight="575.0" prefWidth="402.0" stylesheets="@/styleCSS/tableViewStyle.css">
+                     <columns>
+                        <TableColumn fx:id="loadCurrTabColAPMns" prefWidth="125.0" text="Нагрузка" />
+                        <TableColumn fx:id="eMaxTabColAPMns" prefWidth="65.0" text="Emax" />
+                        <TableColumn fx:id="eMinTabColAPMns" prefWidth="65.0" text="Emin" />
+                        <TableColumn fx:id="amountImplTabColAPMns" prefWidth="70.0" text="Импульсы" />
+                        <TableColumn fx:id="amountMeasTabColAPMns" text="Измерения" />
+                        <TableColumn fx:id="timeStabTabColAPMns" prefWidth="86.0" text="Вр. стаб." />
+                     </columns>
+                  </TableView>
+               </children>
+            </StackPane>
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>

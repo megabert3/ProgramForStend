@@ -111,6 +111,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     @FXML
     private TableColumn<Commands, String> amountMeasTabColAPPls;
 
+    @FXML
+    private TableColumn<Commands, String> timeStabTabColAPPls;
+
     //-------------------------------------------------------
     //Активная энергия в обратном направлении тока
     @FXML
@@ -130,6 +133,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
     @FXML
     private TableColumn<Commands, String> amountMeasTabColAPMns;
+
+    @FXML
+    private TableColumn<Commands, String> timeStabTabColAPMns;
 
     //--------------------------------------------------------
     //Реактивная энергия в прямом напралении тока
@@ -151,6 +157,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     @FXML
     private TableColumn<Commands, String> amountMeasTabColRPPls;
 
+    @FXML
+    private TableColumn<Commands, String> timeStabTabColRPPls;
+
     //--------------------------------------------------------
     //Реактивная энергия в обратном напралении тока
     @FXML
@@ -170,6 +179,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
     @FXML
     private TableColumn<Commands, String> amountMeasTabColRPMns;
+
+    @FXML
+    private TableColumn<Commands, String> timeStabTabColRPMns;
+
     //-------------------------------------------------------
     //Данный блок отвечает за сетку выбора точки.
     //Активная энергия в прямом направлении, Все фазы и отдельно А В С
@@ -1058,7 +1071,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 eMaxTabColAPPls,
                 eMinTabColAPPls,
                 amountImplTabColAPPls,
-                amountMeasTabColAPPls
+                amountMeasTabColAPPls,
+                timeStabTabColAPPls
         );
 
         List<TableColumn<Commands, String>> collumnListAPMns = Arrays.asList(
@@ -1066,7 +1080,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 eMaxTabColAPMns,
                 eMinTabColAPMns,
                 amountImplTabColAPMns,
-                amountMeasTabColAPMns
+                amountMeasTabColAPMns,
+                timeStabTabColAPMns
         );
 
         List<TableColumn<Commands, String>> collumnListRPPls = Arrays.asList(
@@ -1074,7 +1089,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 eMaxTabColRPPls,
                 eMinTabColRPPls,
                 amountImplTabColRPPls,
-                amountMeasTabColRPPls
+                amountMeasTabColRPPls,
+                timeStabTabColRPPls
         );
 
         List<TableColumn<Commands, String>> collumnListRPMns = Arrays.asList(
@@ -1082,7 +1098,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 eMaxTabColRPMns,
                 eMinTabColRPMns,
                 amountImplTabColRPMns,
-                amountMeasTabColRPMns
+                amountMeasTabColRPMns,
+                timeStabTabColRPMns
         );
 
         Map<Integer, List<TableColumn<Commands, String>>> mapTableColumn = new HashMap<>();
@@ -1099,18 +1116,21 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             mapTableColumn.get(i).get(2).setCellValueFactory(new PropertyValueFactory<>("emin"));
             mapTableColumn.get(i).get(3).setCellValueFactory(new PropertyValueFactory<>("pulse"));
             mapTableColumn.get(i).get(4).setCellValueFactory(new PropertyValueFactory<>("countResult"));
+            mapTableColumn.get(i).get(5).setCellValueFactory(new PropertyValueFactory<>("pauseForStabilization"));
 
             //Выставляем отображение информации в колонке "по центру"
             mapTableColumn.get(i).get(1).setStyle( "-fx-alignment: CENTER;");
             mapTableColumn.get(i).get(2).setStyle( "-fx-alignment: CENTER;");
             mapTableColumn.get(i).get(3).setStyle( "-fx-alignment: CENTER;");
             mapTableColumn.get(i).get(4).setStyle( "-fx-alignment: CENTER;");
+            mapTableColumn.get(i).get(5).setStyle( "-fx-alignment: CENTER;");
 
             //Устанавливаем возможность редактирования информации в колонке
             mapTableColumn.get(i).get(1).setCellFactory(TextFieldTableCell.forTableColumn());
             mapTableColumn.get(i).get(2).setCellFactory(TextFieldTableCell.forTableColumn());
             mapTableColumn.get(i).get(3).setCellFactory(TextFieldTableCell.forTableColumn());
             mapTableColumn.get(i).get(4).setCellFactory(TextFieldTableCell.forTableColumn());
+            mapTableColumn.get(i).get(5).setCellFactory(TextFieldTableCell.forTableColumn());
 
             //Действие при изменении информации в колонке
             mapTableColumn.get(i).get(1).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
@@ -1192,6 +1212,27 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 if (command instanceof ErrorCommand) {
                     ((ErrorCommand) command).setCountResult(newImpulseValue);
+                }
+            });
+
+            mapTableColumn.get(i).get(5).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+                TablePosition<Commands, String> pos = event.getTablePosition();
+
+                String newTimeForStabilization = event.getNewValue();
+
+                int row = pos.getRow();
+                Commands command = event.getTableView().getItems().get(row);
+
+                if (command instanceof ErrorCommand) {
+                    try {
+                        command.setPauseForStabilization(Double.parseDouble(newTimeForStabilization));
+                    }catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть численным");
+                        event.getTableView().refresh();
+                    }
+                } else {
+                    event.getTableView().refresh();
                 }
             });
         }
@@ -1413,21 +1454,25 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         eMinTabColAPPls.setSortable(false);
         amountImplTabColAPPls.setSortable(false);
         amountMeasTabColAPPls.setSortable(false);
+        timeStabTabColAPPls.setSortable(false);
 
         eMaxTabColAPMns.setSortable(false);
         eMinTabColAPMns.setSortable(false);
         amountImplTabColAPMns.setSortable(false);
         amountMeasTabColAPMns.setSortable(false);
+        timeStabTabColAPMns.setSortable(false);
 
         eMaxTabColRPPls.setSortable(false);
         eMinTabColRPPls.setSortable(false);
         amountImplTabColRPPls.setSortable(false);
         amountMeasTabColRPPls.setSortable(false);
+        timeStabTabColRPPls.setSortable(false);
 
         eMaxTabColRPMns.setSortable(false);
         eMinTabColRPMns.setSortable(false);
         amountImplTabColRPMns.setSortable(false);
         amountMeasTabColRPMns.setSortable(false);
+        timeStabTabColRPMns.setSortable(false);
 
         //Перенос строк
         viewPointTableAPPls.setRowFactory(dragAndRow);

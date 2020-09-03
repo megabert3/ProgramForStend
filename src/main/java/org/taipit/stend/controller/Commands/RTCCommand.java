@@ -112,7 +112,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
-                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+                iABC = TestErrorTableFrameController.phaseOnePhaseMode;
 
                 switch (iABC) {
                     case "A": voltPerA = voltPer; break;
@@ -141,7 +141,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         //Время на включение счётчиков
-        Thread.sleep(5000);
+        Thread.sleep(2000);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -231,7 +231,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
-                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+                iABC = TestErrorTableFrameController.phaseOnePhaseMode;
 
                 switch (iABC) {
                     case "A": voltPerA = voltPer; break;
@@ -259,7 +259,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
         TestErrorTableFrameController.refreshRefMeterParameters();
 
         //Время стабилизации
-        Thread.sleep(5000);
+        Thread.sleep(2000);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -473,6 +473,14 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
 
     public boolean isThreePhaseCommand() {
         return threePhaseCommand;
+    }
+
+    public String getPauseForStabilization() {
+        return "";
+    }
+
+    @Override
+    public void setPauseForStabilization(double pauseForStabilization) {
     }
 
     @Override

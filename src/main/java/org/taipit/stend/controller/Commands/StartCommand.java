@@ -169,7 +169,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         setTestMode();
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization); //Пауза для стабилизации
+        Thread.sleep(5000); //Пауза для стабилизации
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -243,7 +243,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
-                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+                iABC = TestErrorTableFrameController.phaseOnePhaseMode;
 
                 switch (iABC) {
                     case "A": voltPerA = voltPer; break;
@@ -268,7 +268,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
+        Thread.sleep(5000);
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -614,6 +614,14 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
     public boolean isThreePhaseCommand() {
         return threePhaseCommand;
+    }
+
+    public String getPauseForStabilization() {
+        return "";
+    }
+
+    @Override
+    public void setPauseForStabilization(double pauseForStabilization) {
     }
 
     @Override

@@ -57,8 +57,6 @@ public class TestErrorTableFrameController {
 
     private static StendRefParametersForFrame stendRefParametersForFrame;
 
-    public static long timeToStabilization = (long) (Double.parseDouble(ConsoleHelper.properties.getProperty("timeToStabilization")) * 1000);
-
     public static String phaseOnePhaseMode = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
 
     private StendDLLCommands stendDLLCommands;

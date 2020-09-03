@@ -133,7 +133,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
-                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+                iABC = TestErrorTableFrameController.phaseOnePhaseMode;
 
                 switch (iABC) {
                     case "A": voltPerA = voltPer; break;
@@ -167,7 +167,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         setTestMode();
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
+        Thread.sleep(3000);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -265,7 +265,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
+        Thread.sleep(3000);
 
         while (Thread.currentThread().isAlive()) {
 
@@ -441,6 +441,14 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
     public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
         this.stendDLLCommands = stendDLLCommands;
+    }
+
+    public String getPauseForStabilization() {
+        return "";
+    }
+
+    @Override
+    public void setPauseForStabilization(double pauseForStabilization) {
     }
 
     public String getName() {

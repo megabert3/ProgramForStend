@@ -149,6 +149,9 @@ public class InfluencePointsThreePhaseStendFrame {
     @FXML
     private TableColumn<Commands, String> amountMeasTabColAPPls;
 
+    @FXML
+    private TableColumn<Commands, String> timeStabTabColAPPls;
+
     //-------------------------------------------------------
     //Активная энергия в обратном направлении тока
     @FXML
@@ -168,6 +171,9 @@ public class InfluencePointsThreePhaseStendFrame {
 
     @FXML
     private TableColumn<Commands, String> amountMeasTabColAPMns;
+
+    @FXML
+    private TableColumn<Commands, String> timeStabTabColAPMns;
 
     //--------------------------------------------------------
     //Реактивная энергия в прямом напралении тока
@@ -189,6 +195,9 @@ public class InfluencePointsThreePhaseStendFrame {
     @FXML
     private TableColumn<Commands, String> amountMeasTabColRPPls;
 
+    @FXML
+    private TableColumn<Commands, String> timeStabTabColRPPls;
+
     //--------------------------------------------------------
     //Реактивная энергия в обратном напралении тока
     @FXML
@@ -208,6 +217,9 @@ public class InfluencePointsThreePhaseStendFrame {
 
     @FXML
     private TableColumn<Commands, String> amountMeasTabColRPMns;
+
+    @FXML
+    private TableColumn<Commands, String> timeStabTabColRPMns;
 
     @FXML
     private AnchorPane mainAnchorPane;
@@ -3536,26 +3548,26 @@ public class InfluencePointsThreePhaseStendFrame {
             } else if (influenceUorF.equals("F")) {
 
                 if (iABC.equals("H")) {
-                    for (double influenceUproc : influenceFprocAllPhaseAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocAllPhaseAPPls) {
+                        inflListForCollumAPPls.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceFproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
 
                 } else if (iABC.equals("A")) {
-                    for (double influenceUproc : influenceFprocPhaseAAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseAAPPls) {
+                        inflListForCollumAPPls.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
 
                 } else if (iABC.equals("B")) {
-                    for (double influenceUproc : influenceFprocPhaseBAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseBAPPls) {
+                        inflListForCollumAPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
 
                 } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceFprocPhaseCAPPls) {
-                        inflListForCollumAPPls.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseCAPPls) {
+                        inflListForCollumAPPls.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
 
@@ -3593,26 +3605,26 @@ public class InfluencePointsThreePhaseStendFrame {
             } else if (influenceUorF.equals("F")) {
 
                 if (iABC.equals("H")) {
-                    for (double influenceUproc : influenceFprocAllPhaseAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocAllPhaseAPMns) {
+                        inflListForCollumAPMns.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceFproc,
                                 1, percent, iABC, powerFactor, 1));
                     }
 
                 } else if (iABC.equals("A")) {
-                    for (double influenceUproc : influenceFprocPhaseAAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseAAPMns) {
+                        inflListForCollumAPMns.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 1, percent, iABC, powerFactor, 1));
                     }
 
                 } else if (iABC.equals("B")) {
-                    for (double influenceUproc : influenceFprocPhaseBAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseBAPMns) {
+                        inflListForCollumAPMns.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 1, percent, iABC, powerFactor, 1));
                     }
 
                 } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceFprocPhaseCAPMns) {
-                        inflListForCollumAPMns.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseCAPMns) {
+                        inflListForCollumAPMns.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 1, percent, iABC, powerFactor, 1));
                     }
 
@@ -3650,26 +3662,26 @@ public class InfluencePointsThreePhaseStendFrame {
             } else if (influenceUorF.equals("F")) {
 
                 if (iABC.equals("H")) {
-                    for (double influenceUproc : influenceFprocAllPhaseRPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocAllPhaseRPPls) {
+                        inflListForCollumRPPls.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceFproc,
                                 0, percent, iABC, powerFactor, 2));
                     }
 
                 } else if (iABC.equals("A")) {
-                    for (double influenceUproc : influenceFprocPhaseARPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseARPPls) {
+                        inflListForCollumRPPls.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 0, percent, iABC, powerFactor, 2));
                     }
 
                 } else if (iABC.equals("B")) {
-                    for (double influenceUproc : influenceFprocPhaseBRPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseBRPPls) {
+                        inflListForCollumRPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 0, percent, iABC, powerFactor, 2));
                     }
 
                 } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceFprocPhaseCRPPls) {
-                        inflListForCollumRPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseCRPPls) {
+                        inflListForCollumRPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 0, percent, iABC, powerFactor, 2));
                     }
 
@@ -3709,26 +3721,26 @@ public class InfluencePointsThreePhaseStendFrame {
             } else if (influenceUorF.equals("F")) {
 
                 if (iABC.equals("H")) {
-                    for (double influenceUproc : influenceFprocAllPhaseRPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocAllPhaseRPMns) {
+                        inflListForCollumRPMns.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceFproc,
                                 1, percent, iABC, powerFactor, 3));
                     }
 
                 } else if (iABC.equals("A")) {
-                    for (double influenceUproc : influenceFprocPhaseARPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseARPMns) {
+                        inflListForCollumRPMns.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 1, percent, iABC, powerFactor, 3));
                     }
 
                 } else if (iABC.equals("B")) {
-                    for (double influenceUproc : influenceFprocPhaseBRPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseBRPMns) {
+                        inflListForCollumRPMns.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 1, percent, iABC, powerFactor, 3));
                     }
 
                 } else if (iABC.equals("C")) {
-                    for (double influenceUproc : influenceFprocPhaseCRPMns) {
-                        inflListForCollumRPMns.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceUproc,
+                    for (double influenceFproc : influenceFprocPhaseCRPMns) {
+                        inflListForCollumRPMns.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceFproc,
                                 1, percent, iABC, powerFactor, 3));
                     }
                 }
@@ -3787,7 +3799,8 @@ public class InfluencePointsThreePhaseStendFrame {
                 eMaxTabColAPPls,
                 eMinTabColAPPls,
                 amountImplTabColAPPls,
-                amountMeasTabColAPPls
+                amountMeasTabColAPPls,
+                timeStabTabColAPPls
         );
 
         List<TableColumn<Commands, String>> collumnListAPMns = Arrays.asList(
@@ -3795,7 +3808,8 @@ public class InfluencePointsThreePhaseStendFrame {
                 eMaxTabColAPMns,
                 eMinTabColAPMns,
                 amountImplTabColAPMns,
-                amountMeasTabColAPMns
+                amountMeasTabColAPMns,
+                timeStabTabColAPMns
         );
 
         List<TableColumn<Commands, String>> collumnListRPPls = Arrays.asList(
@@ -3803,7 +3817,8 @@ public class InfluencePointsThreePhaseStendFrame {
                 eMaxTabColRPPls,
                 eMinTabColRPPls,
                 amountImplTabColRPPls,
-                amountMeasTabColRPPls
+                amountMeasTabColRPPls,
+                timeStabTabColRPPls
         );
 
         List<TableColumn<Commands, String>> collumnListRPMns = Arrays.asList(
@@ -3811,7 +3826,8 @@ public class InfluencePointsThreePhaseStendFrame {
                 eMaxTabColRPMns,
                 eMinTabColRPMns,
                 amountImplTabColRPMns,
-                amountMeasTabColRPMns
+                amountMeasTabColRPMns,
+                timeStabTabColRPMns
         );
 
         Map<Integer, List<TableColumn<Commands, String>>> mapTableColumn = new HashMap<>();
@@ -3828,18 +3844,21 @@ public class InfluencePointsThreePhaseStendFrame {
             mapTableColumn.get(i).get(2).setCellValueFactory(new PropertyValueFactory<>("emin"));
             mapTableColumn.get(i).get(3).setCellValueFactory(new PropertyValueFactory<>("pulse"));
             mapTableColumn.get(i).get(4).setCellValueFactory(new PropertyValueFactory<>("countResult"));
+            mapTableColumn.get(i).get(5).setCellValueFactory(new PropertyValueFactory<>("pauseForStabilization"));
 
             //Выставляем отображение информации в колонке "по центру"
             mapTableColumn.get(i).get(1).setStyle( "-fx-alignment: CENTER;");
             mapTableColumn.get(i).get(2).setStyle( "-fx-alignment: CENTER;");
             mapTableColumn.get(i).get(3).setStyle( "-fx-alignment: CENTER;");
             mapTableColumn.get(i).get(4).setStyle( "-fx-alignment: CENTER;");
+            mapTableColumn.get(i).get(5).setStyle( "-fx-alignment: CENTER;");
 
             //Устанавливаем возможность редактирования информации в колонке
             mapTableColumn.get(i).get(1).setCellFactory(TextFieldTableCell.forTableColumn());
             mapTableColumn.get(i).get(2).setCellFactory(TextFieldTableCell.forTableColumn());
             mapTableColumn.get(i).get(3).setCellFactory(TextFieldTableCell.forTableColumn());
             mapTableColumn.get(i).get(4).setCellFactory(TextFieldTableCell.forTableColumn());
+            mapTableColumn.get(i).get(5).setCellFactory(TextFieldTableCell.forTableColumn());
 
             //Действие при изменении информации в колонке
             mapTableColumn.get(i).get(1).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
@@ -3924,6 +3943,27 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 ((ErrorCommand) command).setCountResult(newImpulseValue);
 
+            });
+
+            mapTableColumn.get(i).get(5).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
+                TablePosition<Commands, String> pos = event.getTablePosition();
+
+                String newTimeForStabilization = event.getNewValue();
+
+                int row = pos.getRow();
+                Commands command = event.getTableView().getItems().get(row);
+
+                if (command instanceof ErrorCommand) {
+                    try {
+                        command.setPauseForStabilization(Double.parseDouble(newTimeForStabilization));
+                    }catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть численным");
+                        event.getTableView().refresh();
+                    }
+                } else {
+                    event.getTableView().refresh();
+                }
             });
         }
 
@@ -4198,21 +4238,25 @@ public class InfluencePointsThreePhaseStendFrame {
         eMinTabColAPPls.setSortable(false);
         amountImplTabColAPPls.setSortable(false);
         amountMeasTabColAPPls.setSortable(false);
+        timeStabTabColAPPls.setSortable(false);
 
         eMaxTabColAPMns.setSortable(false);
         eMinTabColAPMns.setSortable(false);
         amountImplTabColAPMns.setSortable(false);
         amountMeasTabColAPMns.setSortable(false);
+        timeStabTabColAPMns.setSortable(false);
 
         eMaxTabColRPPls.setSortable(false);
         eMinTabColRPPls.setSortable(false);
         amountImplTabColRPPls.setSortable(false);
         amountMeasTabColRPPls.setSortable(false);
+        timeStabTabColRPPls.setSortable(false);
 
         eMaxTabColRPMns.setSortable(false);
         eMinTabColRPMns.setSortable(false);
         amountImplTabColRPMns.setSortable(false);
         amountMeasTabColRPMns.setSortable(false);
+        timeStabTabColRPMns.setSortable(false);
 
         viewPointTableAPPls.setEditable(true);
         viewPointTableAPMns.setEditable(true);

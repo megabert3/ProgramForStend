@@ -1,7 +1,6 @@
 package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
-import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
@@ -9,6 +8,7 @@ import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +39,8 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
     //Кол-во импульсов для расчёта ошибки
     private int pulse = 5;
+
+    private double pauseForStabilization = 2;
 
     //Имя точки для отображения в таблице
     private String name;
@@ -173,7 +175,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         int refMeterCount = 1;
 
         //Выбор константы в зависимости от энергии
-        if (channelFlag == 0 || channelFlag == 1) {
+        if (channelFlag < 2) {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
         } else {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
@@ -236,7 +238,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
+        Thread.sleep((long) pauseForStabilization * 1000);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -335,7 +337,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         int refMeterCount = 1;
 
         //Выбор константы в зависимости от энергии
-        if (channelFlag == 0 || channelFlag == 1) {
+        if (channelFlag < 2) {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
         } else {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
@@ -397,9 +399,13 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
+        Thread.sleep((long) pauseForStabilization * 1000);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
+
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
 
         //Устанавливаем местам импульсный выход
         stendDLLCommands.setEnergyPulse(meterForTestList, channelFlag);
@@ -648,5 +654,13 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
     public boolean isThreePhaseCommand() {
         return threePhaseCommand;
+    }
+
+    public String getPauseForStabilization() {
+        return String.valueOf(pauseForStabilization);
+    }
+
+    public void setPauseForStabilization(double pauseForStabilization) {
+        this.pauseForStabilization = pauseForStabilization;
     }
 }

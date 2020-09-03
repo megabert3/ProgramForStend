@@ -16,9 +16,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
 
-    //Команда для прерывания метода
-    private boolean interrupt;
-
     //Лист с счётчиками для испытания
     private List<Meter> meterForTestList;
 
@@ -29,16 +26,15 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
     private double emax = 1.0;
 
     //Кол-во импульсов для расчёта ошибки
-    private int pulse = 20;
+    private int pulse = 5;
+
+    private double pauseForStabilization = 2;
 
     //Имя точки для отображения в таблице
     private String name;
 
     //Базовый или максимальный ток из конструктора
     private String current;
-
-    //Стринговый процент получаемый из конструктора
-    private String currentPerсent;
 
     //id кнопки
     private String id;
@@ -150,7 +146,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         int refMeterCount = 1;
 
         //Выбор константы в зависимости от энергии
-        if (channelFlag == 0 || channelFlag == 1) {
+        if (channelFlag < 2) {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
         } else {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
@@ -168,8 +164,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        stendDLLCommands.setReviseMode(1);
-
         TestErrorTableFrameController.transferParam(this);
 
         stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
@@ -181,7 +175,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
+        Thread.sleep((long) pauseForStabilization * 1000);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -280,7 +274,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         int refMeterCount = 1;
 
         //Выбор константы в зависимости от энергии
-        if (channelFlag == 0 || channelFlag == 1) {
+        if (channelFlag < 2) {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
         } else {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterRP());
@@ -296,8 +290,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        stendDLLCommands.setReviseMode(1);
-
         TestErrorTableFrameController.transferParam(this);
 
         stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
@@ -309,7 +301,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
+        Thread.sleep((long) pauseForStabilization * 1000);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
@@ -520,11 +512,13 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         return true;
     }
 
+    public String getPauseForStabilization() {
+        return String.valueOf(pauseForStabilization);
+    }
+
     @Override
-    public String toString() {
-        if (iABC.equals("H")) {
-            return (cosP + "; " + currentPerсent + " "  + current);
-        } else return (iABC + ": " + cosP + "; " + currentPerсent + " "  + current);
+    public void setPauseForStabilization(double pauseForStabilization) {
+        this.pauseForStabilization = pauseForStabilization;
     }
 
     @Override

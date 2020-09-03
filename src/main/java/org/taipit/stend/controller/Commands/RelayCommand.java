@@ -71,9 +71,6 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
 
     private String id;
 
-    //Время расчитывается по госту?
-    private boolean gostTest;
-
     //Время теста введённое пользователем
     private long userTimeTest;
 
@@ -126,7 +123,7 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
-                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+                iABC = TestErrorTableFrameController.phaseOnePhaseMode;
 
                 switch (iABC) {
                     case "A": voltPerA = voltPer; break;
@@ -155,9 +152,13 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
 
         setTestMode();
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization); //Пауза для стабилизации
+        Thread.sleep(2000);
 
         TestErrorTableFrameController.refreshRefMeterParameters();
+
+        if (Thread.currentThread().isInterrupted()) {
+            throw new InterruptedException();
+        }
 
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
         setDefTestResults(channelFlag, index);
@@ -229,7 +230,7 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
-                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+                iABC = TestErrorTableFrameController.phaseOnePhaseMode;
 
                 switch (iABC) {
                     case "A": voltPerA = voltPer; break;
@@ -254,7 +255,7 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        Thread.sleep(TestErrorTableFrameController.timeToStabilization);
+        Thread.sleep(2000);
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -461,10 +462,6 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
         this.phase = phase;
     }
 
-    public boolean isGostTest() {
-        return gostTest;
-    }
-
     public long getUserTimeTest() {
         return userTimeTest;
     }
@@ -600,6 +597,14 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
 
     public boolean isThreePhaseCommand() {
         return threePhaseCommand;
+    }
+
+    public String getPauseForStabilization() {
+        return "";
+    }
+
+    @Override
+    public void setPauseForStabilization(double pauseForStabilization) {
     }
 
     @Override
