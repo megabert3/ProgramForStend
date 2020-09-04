@@ -4,8 +4,10 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
@@ -21,6 +23,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.controller.Commands.ErrorCommand;
@@ -29,6 +32,7 @@ import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class InfluencePointsThreePhaseStendFrame {
@@ -61,6 +65,9 @@ public class InfluencePointsThreePhaseStendFrame {
 
     //Это трёхфазный стенд?
     private boolean isThrePhaseStend;
+
+    //Сохранить изменения?
+    private boolean saveChange = false;
 
     //Листы с точками тестирования до сохранения
     private ObservableList<Commands> inflListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
@@ -448,6 +455,8 @@ public class InfluencePointsThreePhaseStendFrame {
         APPlus.fire();
 
         initTableView();
+
+        addListenerInTestPointList();
     }
 
     @FXML
@@ -2161,58 +2170,117 @@ public class InfluencePointsThreePhaseStendFrame {
 
     //Инициализация полей влияния
     private void initInflFields(MethodicForThreePhaseStend methodicForThreePhaseStend) {
-        inflListForCollumAPPls = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumAPPls());
-        inflListForCollumAPMns = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumAPMns());
-        inflListForCollumRPPls = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumRPPls());
-        inflListForCollumRPMns = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumRPMns());
 
-        influenceUprocAllPhaseAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPPls();
-        influenceUprocPhaseAAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPPls();
-        influenceUprocPhaseBAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPPls();
-        influenceUprocPhaseCAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCAPPls();
+        try {
+            for (Commands command :methodicForThreePhaseStend.getSaveInflListForCollumAPPls()) {
+                inflListForCollumAPPls.add(command.clone());
+            }
 
-        influenceFprocAllPhaseAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseAPPls();
-        influenceFprocPhaseAAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseAAPPls();
-        influenceFprocPhaseBAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBAPPls();
-        influenceFprocPhaseCAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCAPPls();
+            for (Commands command :methodicForThreePhaseStend.getSaveInflListForCollumAPMns()) {
+                inflListForCollumAPMns.add(command.clone());
+            }
 
-        influenceImbUAPPls = methodicForThreePhaseStend.getSaveInfluenceInbUAPPls();
+            for (Commands command :methodicForThreePhaseStend.getSaveInflListForCollumRPPls()) {
+                inflListForCollumRPPls.add(command.clone());
+            }
 
-        influenceUprocAllPhaseAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPMns();
-        influenceUprocPhaseAAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPMns();
-        influenceUprocPhaseBAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPMns();
-        influenceUprocPhaseCAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCAPMns();
+            for (Commands command :methodicForThreePhaseStend.getSaveInflListForCollumRPMns()) {
+                inflListForCollumRPMns.add(command.clone());
+            }
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            ConsoleHelper.infoException(e.getMessage());
+        }
 
-        influenceFprocAllPhaseAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseAPMns();
-        influenceFprocPhaseAAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseAAPMns();
-        influenceFprocPhaseBAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBAPMns();
-        influenceFprocPhaseCAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCAPMns();
+        influenceUprocAllPhaseAPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPPls(),methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPPls().length);
+        influenceUprocPhaseAAPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPPls(),methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPPls().length);
+        influenceUprocPhaseBAPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPPls(),methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPPls().length);
 
-        influenceInbUAPMns = methodicForThreePhaseStend.getSaveInfluenceInbUAPMns();
+        influenceFprocAllPhaseAPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseAPPls(),methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseAPPls().length);
+        influenceFprocPhaseAAPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocPhaseAAPPls(),methodicForThreePhaseStend.getSaveInfluenceFprocPhaseAAPPls().length);
+        influenceFprocPhaseBAPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBAPPls(),methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBAPPls().length);
 
-        influenceUprocAllPhaseRPPls = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseRPPls();
-        influenceUprocPhaseARPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseARPPls();
-        influenceUprocPhaseBRPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBRPPls();
-        influenceUprocPhaseCRPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCRPPls();
+        influenceUprocAllPhaseAPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPMns(),methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPMns().length);
+        influenceUprocPhaseAAPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPMns(),methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPMns().length);
+        influenceUprocPhaseBAPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPMns(),methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPMns().length);
 
-        influenceFprocAllPhaseRPPls = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseRPPls();
-        influenceFprocPhaseARPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseARPPls();
-        influenceFprocPhaseBRPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBRPPls();
-        influenceFprocPhaseCRPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCRPPls();
+        influenceFprocAllPhaseAPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseAPMns(),methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseAPMns().length);
+        influenceFprocPhaseAAPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocPhaseAAPMns(),methodicForThreePhaseStend.getSaveInfluenceFprocPhaseAAPMns().length);
+        influenceFprocPhaseBAPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBAPMns(),methodicForThreePhaseStend.getSaveInfluenceFprocPhaseAAPMns().length);
 
-        influenceInbURPPls = methodicForThreePhaseStend.getSaveInfluenceInbURPPls();
+        influenceUprocAllPhaseRPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseRPPls(),methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseRPPls().length);
+        influenceUprocPhaseARPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocPhaseARPPls(),methodicForThreePhaseStend.getSaveInfluenceUprocPhaseARPPls().length);
+        influenceUprocPhaseBRPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBRPPls(),methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBRPPls().length);
 
-        influenceUprocAllPhaseRPMns = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseRPMns();
-        influenceUprocPhaseARPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseARPMns();
-        influenceUprocPhaseBRPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBRPMns();
-        influenceUprocPhaseCRPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCRPMns();
+        influenceFprocAllPhaseRPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseRPPls(),methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseRPPls().length);
+        influenceFprocPhaseARPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocPhaseARPPls(),methodicForThreePhaseStend.getSaveInfluenceFprocPhaseARPPls().length);
+        influenceFprocPhaseBRPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBRPPls(),methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBRPPls().length);
 
-        influenceFprocAllPhaseRPMns = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseRPMns();
-        influenceFprocPhaseARPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseARPMns();
-        influenceFprocPhaseBRPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBRPMns();
-        influenceFprocPhaseCRPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCRPMns();
+        influenceUprocAllPhaseRPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseRPMns(),methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseRPMns().length);
+        influenceUprocPhaseARPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocPhaseARPMns(),methodicForThreePhaseStend.getSaveInfluenceUprocPhaseARPMns().length);
+        influenceUprocPhaseBRPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBRPMns(),methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBRPMns().length);
 
-        influenceInbURPMns = methodicForThreePhaseStend.getSaveInfluenceInbURPMns();
+        influenceFprocAllPhaseRPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseRPMns(),methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseRPMns().length);
+        influenceFprocPhaseARPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocPhaseARPMns(),methodicForThreePhaseStend.getSaveInfluenceFprocPhaseARPMns().length);
+        influenceFprocPhaseBRPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBRPMns(),methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBRPMns().length);
+
+        influenceImbUAPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceInbUAPPls(), methodicForThreePhaseStend.getSaveInfluenceInbUAPPls().length);
+        influenceInbUAPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceInbUAPMns(), methodicForThreePhaseStend.getSaveInfluenceInbUAPMns().length);
+        influenceInbURPMns = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceInbURPPls(), methodicForThreePhaseStend.getSaveInfluenceInbURPPls().length);
+        influenceInbURPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceInbURPMns(), methodicForThreePhaseStend.getSaveInfluenceInbURPMns().length);
+
+//        inflListForCollumAPPls = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumAPPls());
+//        inflListForCollumAPMns = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumAPMns());
+//        inflListForCollumRPPls = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumRPPls());
+//        inflListForCollumRPMns = FXCollections.observableArrayList(methodicForThreePhaseStend.getSaveInflListForCollumRPMns());
+//
+//        influenceUprocAllPhaseAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPPls();
+//        influenceUprocPhaseAAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPPls();
+//        influenceUprocPhaseBAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPPls();
+//        influenceUprocPhaseCAPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCAPPls();
+//
+//        influenceFprocAllPhaseAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseAPPls();
+//        influenceFprocPhaseAAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseAAPPls();
+//        influenceFprocPhaseBAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBAPPls();
+//        influenceFprocPhaseCAPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCAPPls();
+//
+//        influenceImbUAPPls = methodicForThreePhaseStend.getSaveInfluenceInbUAPPls();
+//
+//        influenceUprocAllPhaseAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPMns();
+//        influenceUprocPhaseAAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPMns();
+//        influenceUprocPhaseBAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPMns();
+//        influenceUprocPhaseCAPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCAPMns();
+//
+//        influenceFprocAllPhaseAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseAPMns();
+//        influenceFprocPhaseAAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseAAPMns();
+//        influenceFprocPhaseBAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBAPMns();
+//        influenceFprocPhaseCAPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCAPMns();
+//
+//        influenceInbUAPMns = methodicForThreePhaseStend.getSaveInfluenceInbUAPMns();
+//
+//        influenceUprocAllPhaseRPPls = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseRPPls();
+//        influenceUprocPhaseARPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseARPPls();
+//        influenceUprocPhaseBRPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBRPPls();
+//        influenceUprocPhaseCRPPls = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCRPPls();
+//
+//        influenceFprocAllPhaseRPPls = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseRPPls();
+//        influenceFprocPhaseARPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseARPPls();
+//        influenceFprocPhaseBRPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBRPPls();
+//        influenceFprocPhaseCRPPls = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCRPPls();
+//
+//        influenceInbURPPls = methodicForThreePhaseStend.getSaveInfluenceInbURPPls();
+//
+//        influenceUprocAllPhaseRPMns = methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseRPMns();
+//        influenceUprocPhaseARPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseARPMns();
+//        influenceUprocPhaseBRPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBRPMns();
+//        influenceUprocPhaseCRPMns = methodicForThreePhaseStend.getSaveInfluenceUprocPhaseCRPMns();
+//
+//        influenceFprocAllPhaseRPMns = methodicForThreePhaseStend.getSaveInfluenceFprocAllPhaseRPMns();
+//        influenceFprocPhaseARPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseARPMns();
+//        influenceFprocPhaseBRPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseBRPMns();
+//        influenceFprocPhaseCRPMns = methodicForThreePhaseStend.getSaveInfluenceFprocPhaseCRPMns();
+//
+//        influenceInbURPMns = methodicForThreePhaseStend.getSaveInfluenceInbURPMns();
     }
 
     private void saveInflInMetodic() {
@@ -3869,6 +3937,9 @@ public class InfluencePointsThreePhaseStendFrame {
                 int row = pos.getRow();
                 Commands command = event.getTableView().getItems().get(row);
 
+                if (!newImpulseValue.equals(event.getOldValue())) {
+                    saveChange = true;
+                }
                 try {
                     Float.parseFloat(newImpulseValue);
                 }catch (NumberFormatException e) {
@@ -3892,6 +3963,9 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 try {
                     Float.parseFloat(newImpulseValue);
+                    if (!newImpulseValue.equals(event.getOldValue())) {
+                        saveChange = true;
+                    }
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
@@ -3913,6 +3987,10 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 try {
                     Float.parseFloat(newImpulseValue);
+
+                    if (!newImpulseValue.equals(event.getOldValue())) {
+                        saveChange = true;
+                    }
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
@@ -3934,6 +4012,10 @@ public class InfluencePointsThreePhaseStendFrame {
 
                 try {
                     Float.parseFloat(newImpulseValue);
+
+                    if (!newImpulseValue.equals(event.getOldValue())) {
+                        saveChange = true;
+                    }
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                     ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
@@ -3956,6 +4038,10 @@ public class InfluencePointsThreePhaseStendFrame {
                 if (command instanceof ErrorCommand) {
                     try {
                         command.setPauseForStabilization(Double.parseDouble(newTimeForStabilization));
+
+                        if (!newTimeForStabilization.equals(event.getOldValue())) {
+                            saveChange = true;
+                        }
                     }catch (NumberFormatException e) {
                         e.printStackTrace();
                         ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть численным");
@@ -4285,6 +4371,80 @@ public class InfluencePointsThreePhaseStendFrame {
             viewPointTableRPPls.getStylesheets().add(cssAdress);
             viewPointTableRPMns.getStylesheets().add(cssAdress);
         }
+    }
+
+    private void addListenerInTestPointList() {
+        inflListForCollumAPPls.addListener(new ListChangeListener<Commands>() {
+            @Override
+            public void onChanged(Change<? extends Commands> c) {
+                while (c.next()) {
+                    if (c.wasAdded() || c.wasRemoved() || c.wasPermutated()) {
+                        saveChange = true;
+                    }
+                }
+            }
+        });
+
+        inflListForCollumAPMns.addListener(new ListChangeListener<Commands>() {
+            @Override
+            public void onChanged(Change<? extends Commands> c) {
+                while (c.next()) {
+                    if (c.wasAdded() || c.wasRemoved() || c.wasPermutated()) {
+                        saveChange = true;
+                    }
+                }
+            }
+        });
+
+        inflListForCollumRPPls.addListener(new ListChangeListener<Commands>() {
+            @Override
+            public void onChanged(Change<? extends Commands> c) {
+                while (c.next()) {
+                    if (c.wasAdded() || c.wasRemoved() || c.wasPermutated()) {
+                        saveChange = true;
+                    }
+                }
+            }
+        });
+
+        inflListForCollumRPMns.addListener(new ListChangeListener<Commands>() {
+            @Override
+            public void onChanged(Change<? extends Commands> c) {
+                while (c.next()) {
+                    if (c.wasAdded() || c.wasRemoved() || c.wasPermutated()) {
+                        saveChange = true;
+                    }
+                }
+            }
+        });
+
+        actionOnCloseWindow();
+    }
+
+    //Действие при закрытии окна, нужно ли сохранить изменение
+    private void actionOnCloseWindow() {
+        Stage mainStage = (Stage) saveBtn.getScene().getWindow();
+
+        mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                event.consume();
+
+                if (saveChange) {
+                    Boolean b = ConsoleHelper.yesOrNoFrame("Сохранение изменений", "Сохранить изменения?");
+
+                    if (b != null) {
+                        if (b) {
+                            saveBtn.fire();
+                        } else {
+                            mainStage.close();
+                        }
+                    }
+                } else {
+                    mainStage.close();
+                }
+            }
+        });
     }
 
     public void setMethodicForThreePhaseStend(MethodicForThreePhaseStend methodicForThreePhaseStend) {

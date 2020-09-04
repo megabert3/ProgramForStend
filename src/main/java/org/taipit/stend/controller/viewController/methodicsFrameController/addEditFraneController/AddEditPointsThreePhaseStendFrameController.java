@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,6 +31,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicNameController;
@@ -65,6 +67,9 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     private List<String> current;
 
     private List<GridPane> gridPanesEnergyAndPhase = new ArrayList<>();
+
+    //Для вывода окна "Сохранить изменения?"
+    private boolean saveChange = false;
 
     //Лист с точками общая методика
     private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
@@ -234,7 +239,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     private ToggleButton RPMinus;
 
     @FXML
-    private Button SaveBtn;
+    private Button saveBtn;
 
     //Этот блок кода отвечает за установку параметров тестов Самахода, ТХЧ, Константы и Чувствительности
     //---------------------------------------------------------------------
@@ -1152,6 +1157,11 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                         return;
                     }
                     ((ErrorCommand) command).setEmax(newImpulseValue);
+
+                    if (!newImpulseValue.equals(event.getOldValue())) {
+                        saveChange = true;
+                    }
+
                 } else {
                     event.getTableView().refresh();
                 }
@@ -1168,6 +1178,10 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 if (command instanceof ErrorCommand) {
                     try {
                         Float.parseFloat(newImpulseValue);
+
+                        if (!newImpulseValue.equals(event.getOldValue())) {
+                            saveChange = true;
+                        }
                     }catch (NumberFormatException e) {
                         e.printStackTrace();
                         ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
@@ -1191,6 +1205,10 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 if (command instanceof ErrorCommand) {
                     try {
                         Float.parseFloat(newImpulseValue);
+
+                        if (!newImpulseValue.equals(event.getOldValue())) {
+                            saveChange = true;
+                        }
                     }catch (NumberFormatException e) {
                         e.printStackTrace();
                         ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
@@ -1214,6 +1232,10 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 if (command instanceof ErrorCommand) {
                     try {
                         Float.parseFloat(newImpulseValue);
+
+                        if (!newImpulseValue.equals(event.getOldValue())) {
+                            saveChange = true;
+                        }
                     }catch (NumberFormatException e) {
                         e.printStackTrace();
                         ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть десятичным");
@@ -1237,6 +1259,10 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
                 if (command instanceof ErrorCommand) {
                     try {
                         command.setPauseForStabilization(Double.parseDouble(newTimeForStabilization));
+
+                        if (!newTimeForStabilization.equals(event.getOldValue())) {
+                            saveChange = true;
+                        }
                     }catch (NumberFormatException e) {
                         e.printStackTrace();
                         ConsoleHelper.infoException("Неверные данные\nЗначение поля должно быть численным");
@@ -1511,15 +1537,54 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
     //Проверияет нет ли данных с полученной методики и если у неё есть данные, то выгружает её в это окно
     //Необходимо для команды Редактирования методики
     public void initEditsMetodic() {
-        testListForCollumAPPls.addAll(methodicForThreePhaseStend.getCommandsMap().get(0));
-        testListForCollumAPMns.addAll(methodicForThreePhaseStend.getCommandsMap().get(1));
-        testListForCollumRPPls.addAll(methodicForThreePhaseStend.getCommandsMap().get(2));
-        testListForCollumRPMns.addAll(methodicForThreePhaseStend.getCommandsMap().get(3));
+        try {
+            //ErrorCommands
+            for (Commands command : methodicForThreePhaseStend.getCommandsMap().get(0)) {
+                testListForCollumAPPls.add(command.clone());
+            }
 
-        testListForCollumAPPls.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(0));
-        testListForCollumAPMns.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(1));
-        testListForCollumRPPls.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(2));
-        testListForCollumRPMns.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(3));
+            for (Commands command : methodicForThreePhaseStend.getCommandsMap().get(1)) {
+                testListForCollumAPMns.add(command.clone());
+            }
+
+            for (Commands command : methodicForThreePhaseStend.getCommandsMap().get(2)) {
+                testListForCollumRPPls.add(command.clone());
+            }
+
+            for (Commands command : methodicForThreePhaseStend.getCommandsMap().get(3)) {
+                testListForCollumRPMns.add(command.clone());
+            }
+
+            //Other commands
+            for (Commands command : methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(0)) {
+                testListForCollumAPPls.add(command.clone());
+            }
+
+            for (Commands command : methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(1)) {
+                testListForCollumAPMns.add(command.clone());
+            }
+
+            for (Commands command : methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(2)) {
+                testListForCollumRPPls.add(command.clone());
+            }
+
+            for (Commands command : methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(3)) {
+                testListForCollumRPMns.add(command.clone());
+            }
+
+        }catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            ConsoleHelper.infoException(e.getMessage());
+        }
+//        testListForCollumAPPls.addAll(methodicForThreePhaseStend.getCommandsMap().get(0));
+//        testListForCollumAPMns.addAll(methodicForThreePhaseStend.getCommandsMap().get(1));
+//        testListForCollumRPPls.addAll(methodicForThreePhaseStend.getCommandsMap().get(2));
+//        testListForCollumRPMns.addAll(methodicForThreePhaseStend.getCommandsMap().get(3));
+//
+//        testListForCollumAPPls.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(0));
+//        testListForCollumAPMns.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(1));
+//        testListForCollumRPPls.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(2));
+//        testListForCollumRPMns.addAll(methodicForThreePhaseStend.getCreepStartRTCConstCommandsMap().get(3));
     }
 
     //Задаёт параметр true или false нужному checkBox'у
@@ -2249,7 +2314,7 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     @FXML
     void saveOrCancelAction(ActionEvent event) {
-        if (event.getSource() == SaveBtn) {
+        if (event.getSource() == saveBtn) {
 
             List<Commands> listErrorCommand;
             List<Commands> listCreepStartRTCCommadns;
@@ -2317,10 +2382,11 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
             }
 
             metodicsForTest.serializationMetodics();
+
             Stage stage1 = (Stage) methodicsAddEditDeleteFrameController.getEditMetBtn().getScene().getWindow();
             stage1.show();
 
-            Stage stage = (Stage) SaveBtn.getScene().getWindow();
+            Stage stage = (Stage) saveBtn.getScene().getWindow();
             stage.close();
         }
     }
@@ -4949,6 +5015,84 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
         txtFieldAmountImpRelay.setDisable(false);
 
         tglBtnRelay.setSelected(false);
+    }
+
+    public void addListenerInTestPointList() {
+        testListForCollumAPPls.addListener(new ListChangeListener<Commands>() {
+            @Override
+            public void onChanged(Change<? extends Commands> c) {
+                while (c.next()) {
+                    if (c.wasAdded() || c.wasRemoved() || c.wasPermutated()) {
+                        saveChange = true;
+                    }
+                }
+            }
+        });
+
+        testListForCollumAPMns.addListener(new ListChangeListener<Commands>() {
+            @Override
+            public void onChanged(Change<? extends Commands> c) {
+                while (c.next()) {
+                    if (c.wasAdded() || c.wasRemoved() || c.wasPermutated()) {
+                        saveChange = true;
+                    }
+                }
+            }
+        });
+
+        testListForCollumRPPls.addListener(new ListChangeListener<Commands>() {
+            @Override
+            public void onChanged(Change<? extends Commands> c) {
+                while (c.next()) {
+                    if (c.wasAdded() || c.wasRemoved() || c.wasPermutated()) {
+                        saveChange = true;
+                    }
+                }
+            }
+        });
+
+        testListForCollumRPMns.addListener(new ListChangeListener<Commands>() {
+            @Override
+            public void onChanged(Change<? extends Commands> c) {
+                while (c.next()) {
+                    if (c.wasAdded() || c.wasRemoved() || c.wasPermutated()) {
+                        saveChange = true;
+                    }
+                }
+            }
+        });
+
+        actionOnCloseWindow();
+    }
+
+    private void actionOnCloseWindow() {
+        //Действие при закрытии окна, нужно ли сохранить изменение
+        Stage mainStage = (Stage) saveBtn.getScene().getWindow();
+
+        mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                event.consume();
+
+                if (saveChange) {
+                    Boolean b = ConsoleHelper.yesOrNoFrame("Сохранение изменений", "Сохранить изменения?");
+
+                    if (b != null) {
+                        if (b) {
+                            saveBtn.fire();
+                        } else {
+                            Stage stage1 = (Stage) methodicsAddEditDeleteFrameController.getEditMetBtn().getScene().getWindow();
+                            stage1.show();
+                            mainStage.close();
+                        }
+                    }
+                } else {
+                    Stage stage1 = (Stage) methodicsAddEditDeleteFrameController.getEditMetBtn().getScene().getWindow();
+                    stage1.show();
+                    mainStage.close();
+                }
+            }
+        });
     }
 
     private String getTime(long mlS){

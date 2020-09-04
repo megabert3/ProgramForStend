@@ -19,10 +19,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
 
-    private boolean interrupt;
-
-    private boolean nextCommand;
-
     private StendDLLCommands stendDLLCommands;
 
     private List<Meter> meterList;

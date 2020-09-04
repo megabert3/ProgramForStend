@@ -118,7 +118,7 @@
             </HBox>
          </children>
       </AnchorPane>
-      <Button fx:id="SaveBtn" layoutX="1140.0" layoutY="813.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/button.css" text="Сохранить">
+      <Button fx:id="saveBtn" layoutX="1140.0" layoutY="813.0" mnemonicParsing="false" onAction="#saveOrCancelAction" prefHeight="40.0" prefWidth="150.0" stylesheets="@/styleCSS/addDeleteEditPointsFrame/button.css" text="Сохранить">
          <graphic>
             <ImageView fitHeight="27.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>

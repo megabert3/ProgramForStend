@@ -8,7 +8,6 @@ import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;

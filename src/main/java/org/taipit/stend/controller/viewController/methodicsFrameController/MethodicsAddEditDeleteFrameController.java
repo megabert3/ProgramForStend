@@ -246,6 +246,8 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
                     public void run() {
                         addEditPointsThreePhaseStendFrameController.addTestPointsOnGreedPane();
                         addEditPointsThreePhaseStendFrameController.addListenerToCheckBoxes();
+                        addEditPointsThreePhaseStendFrameController.addListenerInTestPointList();
+
                     }
                 });
 
@@ -287,6 +289,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
                     public void run() {
                         addEditPointsOnePhaseStendFrameController.addTestPointsOnGreedPane();
                         addEditPointsOnePhaseStendFrameController.addListenerToCheckBoxes();
+                        addEditPointsOnePhaseStendFrameController.addListenerInTestPointList();
                     }
                 });
 
