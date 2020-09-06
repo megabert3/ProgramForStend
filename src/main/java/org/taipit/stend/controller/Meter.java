@@ -251,38 +251,39 @@ public class Meter implements Serializable{
     //CNTAN Константа
     //CNTRP Константа
     //CNTRN Константа
+    //RLY Реле
     //INS Изоляция
     //APR Внешний вид
 
     //Общий результат
-    private Meter.TotalResult totalResult = new Meter.TotalResult("T");
+    private Meter.TotalResult totalResult;
 
     //Самоход
-    private CreepResult creepTest = new CreepResult("CRP", "", "");
+    private CreepResult creepTest;
 
     //Чувствительность
-    private StartResult startTestAPPls = new StartResult("STAAP", "", "");
-    private StartResult startTestAPMns = new StartResult("STAAN", "", "");
-    private StartResult startTestRPPls = new StartResult("STARP", "", "");
-    private StartResult startTestRPMns = new StartResult("STARN", "", "");
+    private StartResult startTestAPPls;
+    private StartResult startTestAPMns;
+    private StartResult startTestRPPls;
+    private StartResult startTestRPMns;
 
     //Точность хода часов
-    private RTCResult RTCTest = new RTCResult("RTC", "", "", "", "", "");
+    private RTCResult RTCTest;
 
     //Изоляция
-    private InsulationResult insulationTest = new InsulationResult("INS");
+    private InsulationResult insulationTest;
 
     //Внешний вид
-    private AppearensResult appearensTest = new AppearensResult("APR");
+    private AppearensResult appearensTest;
 
     //Проверка счётного механизма
-    private ConstantResult constantTestAPPls = new ConstantResult("CNTAP", "", "");
-    private ConstantResult constantTestAPMns = new ConstantResult("CNTAN", "", "");
-    private ConstantResult constantTestRPPls = new ConstantResult("CNTRP", "", "");
-    private ConstantResult constantTestRPMns = new ConstantResult("CNTRN", "", "");
+    private ConstantResult constantTestAPPls;
+    private ConstantResult constantTestAPMns;
+    private ConstantResult constantTestRPPls;
+    private ConstantResult constantTestRPMns;
 
     //Реле
-    private RelayResult relayTest = new RelayResult("RLY", "", "");
+    private RelayResult relayTest;
 
     //Лист с ошибками
     private List<CommandResult> errorListAPPls = new ArrayList<>();

@@ -2168,7 +2168,6 @@ public class TestErrorTableFrameController {
             stendDLLCommands.setReviseMode(Integer.parseInt(ConsoleHelper.properties.getProperty("reviseMode")));
         }catch (ConnectForStendExeption e) {
             e.printStackTrace();
-            ConsoleHelper.infoException(e.getMessage());
         }
     }
 

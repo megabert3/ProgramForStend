@@ -4743,7 +4743,6 @@ public class AddEditPointsThreePhaseStendFrameController implements Frame {
 
     //Добавляет тестовую точку в методику
     private void addTestPointInMethodic(String testPoint) {
-        System.out.println(testPoint);
 
         String[] dirCurFactor = testPoint.split(";");
 

@@ -86,7 +86,7 @@ public class ExcelReport {
         //Все края тонкие текст красный
         centerCenterThinRed = createCellStyle(wb, Calibri_11_Red, HorizontalAlignment.CENTER, VerticalAlignment.CENTER, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
 
-        // 0 - НЕ ПРОВОДИЛОСЬ; 1 - ГОДЕН; 2 - ПРОВАЛИЛ
+        //0 - НЕ ПРОВОДИЛОСЬ; 1 - ГОДЕН; 2 - ПРОВАЛИЛ
         resultName = ConsoleHelper.properties.getProperty("restMeterResults").split(", ");
 
         errCRPSTAother.put("CRP", new HashMap<>());
@@ -99,46 +99,11 @@ public class ExcelReport {
         errCRPSTAother.put("CNTAN", new HashMap<>());
         errCRPSTAother.put("CNTRP", new HashMap<>());
         errCRPSTAother.put("CNTRN", new HashMap<>());
+        errCRPSTAother.put("RLY", new HashMap<>());
         errCRPSTAother.put("INS", new HashMap<>());
         errCRPSTAother.put("APR", new HashMap<>());
         errCRPSTAother.put("T", new HashMap<>());
 
-//        for (int i = 0; i < 10; i++) {
-//            Meter meter = new Meter();
-//            meter.setSerNoMeter("00000000" + i);
-//            meters.add(meter);
-//        }
-//
-//        createCRPSTAError();
-//
-//        for (Meter meter : meters) {
-//            createImbError(meter, meter.getErrorListAPPls());
-//            createImbError(meter, meter.getErrorListAPMns());
-//            createImbError(meter, meter.getErrorListRPPls());
-//            createImbError(meter, meter.getErrorListRPMns());
-//
-//            createTestErrorForABC(meter, meter.getErrorListAPPls());
-//            createTestErrorForABC(meter, meter.getErrorListAPMns());
-//            createTestErrorForABC(meter, meter.getErrorListRPPls());
-//            createTestErrorForABC(meter, meter.getErrorListRPMns());
-//
-//            createTestErrorForInfABC(meter, meter.getErrorListAPPls());
-//            createTestErrorForInfABC(meter, meter.getErrorListAPMns());
-//            createTestErrorForInfABC(meter, meter.getErrorListRPPls());
-//            createTestErrorForInfABC(meter, meter.getErrorListRPMns());
-//
-//            createTestErrorForInf(meter, meter.getErrorListAPPls());
-//            createTestErrorForInf(meter, meter.getErrorListAPMns());
-//            createTestErrorForInf(meter, meter.getErrorListRPPls());
-//            createTestErrorForInf(meter, meter.getErrorListRPMns());
-//
-//            createTestError(meter, meter.getErrorListAPPls());
-//            createTestError(meter, meter.getErrorListAPMns());
-//            createTestError(meter, meter.getErrorListRPPls());
-//            createTestError(meter, meter.getErrorListRPMns());
-//        }
-//
-//        createExcelReport(meters);
     }
 
     private List<Meter> meters = new ArrayList<>();
@@ -514,6 +479,7 @@ public class ExcelReport {
         String[] ImaxIb = idArr[5].split(" ");
 
         String key;
+
         //F;55;L;0.5;Imax;0.02
         if (idArr[6].contains("L") || idArr[6].contains("C")) {
             key = procUorFandUorF[1] + ";" + procUorFandUorF[0] + ";" + idArr[6].substring(idArr[6].length() - 1) + ";"
@@ -637,6 +603,10 @@ public class ExcelReport {
         }
         if (meter.getConstantTestRPMns() != null) {
             errCRPSTAother.get("CNTRN").put(indexMeter, meter.getConstantTestRPMns());
+        }
+
+        if (meter.getRelayTest() != null) {
+            errCRPSTAother.get("RLY").put(indexMeter, meter.getRelayTest());
         }
 
         if (meter.getInsulationTest() != null) {
@@ -1581,6 +1551,10 @@ public class ExcelReport {
 
         @Override
         public void print(int row, int cell) {
+            if (totalElements == 0) {
+                return;
+            }
+
             final String CREEP = "Самоход";
             final String STAAP_PLS = "Чувствительность А.Э.+";
             final String STAAP_MNS = "Чувствительность А.Э.-";
@@ -1592,6 +1566,7 @@ public class ExcelReport {
             final String CNTRP_PLS = "Константа Р.Э.+";
             final String CNTRP_MNS = "Константа Р.Э.-";
             final String INS = "Изоляция";
+            final String RLY = "Реле";
             final String APR = "Внешний вид";
             final String T = "Итоговый результат";
 
@@ -1643,6 +1618,7 @@ public class ExcelReport {
                     //CNTRP Константа
                     //INS Изоляция
                     //APR Внешний вид
+
                     switch (key) {
                         case "CRP": {
                             //Создаю заголовок для Самохода
@@ -2336,6 +2312,70 @@ public class ExcelReport {
                             printCellIndex += 2;
                         } break;
 
+                        case "RLY": {
+                            //Создаю заголовок для Реле
+                            Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
+
+                            createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex + 2, cellCRPSTA, RLY, centerCenter, Calibri_11_Bold,
+                                    mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
+
+                            boolean addComment = false;
+
+                            for (int i = 0; i < meters.size(); i++) {
+                                int rowIndex = printRowIndex + 2 + i;
+
+                                if (commandResultMap.get(i) != null) {
+
+                                    createMergeZone(rowIndex, rowIndex, printCellIndex, printCellIndex + 2, mainSheet,
+                                            BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
+
+                                    Meter.RelayResult result = (Meter.RelayResult) commandResultMap.get(i);
+
+                                    Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
+
+                                    if (result.isPassTest() == null){
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[0]);
+                                    } else if (!result.isPassTest()) {
+                                        //Добавляю коммент к полю реле
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 4,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThinRed);
+                                        cellCRPSTAError.setCellValue(resultName[2]);
+
+                                        //Добавляю коммент к результату
+                                        Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 4, 2,
+                                                "Время провала теста: " + result.getTimeTheFailTest());
+
+                                        cellCRPSTAError.setCellComment(comment);
+
+                                    } else if (result.isPassTest()) {
+                                        //Добавляю коммент к полю реле
+                                        if (!addComment) {
+                                            Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 3,
+                                                    "Время теста: " + result.getTimeTheTest() + "\n" + "Количество импульсов: " + result.getMaxPulse());
+
+                                            cellCRPSTA.setCellComment(comment);
+
+                                            addComment = true;
+                                        }
+
+                                        cellCRPSTAError.setCellStyle(centerCenterThin);
+                                        cellCRPSTAError.setCellValue(resultName[1]);
+                                    }
+                                }
+                            }
+
+                            printCellIndex += 3;
+                        } break;
+
                         case "INS": {
                             //Создаю заголовок для теста Константы
                             Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
@@ -2961,7 +3001,7 @@ public class ExcelReport {
             int rowIndex;
 
             Map<String, Integer> UorFCount = new TreeMap<>(comparatorForUorF);
-            Map<String, Integer> PFcount = new TreeMap<>(comparatorForPowerFactor);
+            Map<String, Integer> PFcount;
 
             Map<String, Map> PFmap;
 
@@ -2974,6 +3014,7 @@ public class ExcelReport {
             createMergeZone(row, row + 2, cell, cell + 1, cellSerNo, SER_NO_NAME, centerCenter, Calibri_11_Bold,
                     mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
 
+            //Добавляю серийные номера счётчиков
             for (int i = 0; i < meters.size(); i++) {
                 int printRow = row + 3 + i;
 
@@ -2992,6 +3033,8 @@ public class ExcelReport {
                 UorFCount.put(UorFKey, 0);
 
                 PFmap = UorFmap.getValue();
+
+                PFcount = new TreeMap<>(comparatorForPowerFactor);
 
                 for (Map.Entry<String, Map> mapPF : PFmap.entrySet()) {
                     PFKey = mapPF.getKey();
@@ -3087,10 +3130,8 @@ public class ExcelReport {
         }
 
         public void getElements() {
-            System.out.println(UorFmap);
             Map<String, Map> ABC;
             Map<String, Map> valueLC0;
-            Map<String, Map> valueCurrent;
 
             for (Map.Entry<String, Map> mapEntry : UorFmap.entrySet()) {
                 System.out.println(mapEntry.getKey());
@@ -3101,13 +3142,7 @@ public class ExcelReport {
                     valueLC0 = abc.getValue();
 
                     for (Map.Entry<String, Map> asfa : valueLC0.entrySet()) {
-                        System.out.println("        " + asfa.getKey());
-
-                        valueCurrent = asfa.getValue();
-
-                        for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
-                            System.out.println("            " + asfaasdas.getKey());
-                        }
+                        System.out.println("        " + asfa.getKey() + " " + asfa.getValue().size());
                     }
                 }
             }
@@ -3212,9 +3247,9 @@ public class ExcelReport {
             int rowIndex;
 
             Map<String, Integer> UorFCount = new TreeMap<>(comparatorForUorF);
-            Map<String, Integer> ABCCount = new TreeMap<>(comparatorForABC);
-            Map<String, Map<String, Integer>> PFmapCount = new TreeMap<>(comparatorForABC);
 
+            Map<String, Map<String, Integer>> PFmapCount;
+            Map<String, Integer> ABCCount;
             Map<String, Integer> PFcount;
 
             Map<String, Map> ABCmap;
@@ -3241,9 +3276,13 @@ public class ExcelReport {
 
             for (Map.Entry<String, Map> UorFmap : UorFmap.entrySet()) {
 
+                PFmapCount = new TreeMap<>(comparatorForABC);
+
                 UorFKey = UorFmap.getKey();
 
                 UorFCount.put(UorFKey, 0);
+
+                ABCCount = new TreeMap<>(comparatorForABC);
 
                 ABCmap = UorFmap.getValue();
 
@@ -3390,7 +3429,7 @@ public class ExcelReport {
                         valueCurrent = asfa.getValue();
 
                         for (Map.Entry<String, Map> asfaasdas : valueCurrent.entrySet()) {
-                            System.out.println("            " + asfaasdas.getKey());
+                            System.out.println("            " + asfaasdas.getKey() + " " + asfaasdas.getValue().size());
                         }
                     }
                 }
@@ -3634,6 +3673,7 @@ public class ExcelReport {
             //CNTAN Константа
             //CNTRP Константа
             //CNTRN Константа
+            //RLY Реле
             //INS Изоляция
             //APR Внешний вид
 
@@ -3676,6 +3716,10 @@ public class ExcelReport {
             } else if (o1.equals("CNTRN") && !o2.equals("CNTRN")) {
                 return -1;
             } else if (!o1.equals("CNTRN") && o2.equals("CNTRN")) {
+                return 1;
+            } else if (o1.equals("RLY") && !o2.equals("RLY")) {
+                return -1;
+            } else if (!o1.equals("RLY") && o2.equals("RLY")) {
                 return 1;
             } else if (o1.equals("INS") && !o2.equals("INS")) {
                 return -1;
