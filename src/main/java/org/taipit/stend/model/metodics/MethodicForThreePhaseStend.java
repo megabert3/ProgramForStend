@@ -1,6 +1,7 @@
 package org.taipit.stend.model.metodics;
 
 import org.taipit.stend.controller.Commands.Commands;
+import org.taipit.stend.controller.Meter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
 
     private boolean bindsParameters;
 
+    //Содержит ли методика несохранённые результаты
+    private boolean containtsLastNotSaveResults = false;
+
     private String Unom;
     private String ImaxAndInom;
     private String Fnom;
@@ -26,6 +30,10 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
     private String factoryManufactuter;
     private String meterModel;
 
+    private List<Meter> newResultsMeters = new ArrayList<>();
+
+    //Несохранённые испытания для этой методики
+    private List<Meter> notSaveResultMeters = new ArrayList<>();
 
     private Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
 
@@ -50,6 +58,17 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
             commandsMap.get(numb).addAll(list);
         }
         return true;
+    }
+
+    //Устанавливает старые результаты новым счётчикам
+    public void setOldResultsNewMeters() {
+        try {
+            for (int i = 0; i < newResultsMeters.size(); i++) {
+                newResultsMeters.get(i).setResults(notSaveResultMeters.get(i));
+            }
+        }catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 
     public Map<Integer, List<Commands>> getCommandsMap() {
@@ -400,6 +419,13 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
     }
 
    //======================================================================================
+   public void setContaintsLastNotSaveResults(boolean containtsLastNotSaveResults) {
+       this.containtsLastNotSaveResults = containtsLastNotSaveResults;
+   }
+
+   public boolean isContaintsLastNotSaveResults() {
+       return containtsLastNotSaveResults;
+   }
 
     public boolean isBindsParameters() {
         return bindsParameters;
@@ -501,6 +527,9 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
         return typeOfMeasuringElementShunt;
     }
 
+    public void setNewResultsMeters(List<Meter> newResultsMeters) {
+        this.newResultsMeters = newResultsMeters;
+    }
 
 //===========================================================================================
     //Внутренний класс отвечающий за точки влияния

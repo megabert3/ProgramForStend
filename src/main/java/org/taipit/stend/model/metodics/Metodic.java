@@ -1,6 +1,7 @@
 package org.taipit.stend.model.metodics;
 
 import org.taipit.stend.controller.Commands.Commands;
+import org.taipit.stend.controller.Meter;
 
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,13 @@ public interface Metodic extends Cloneable {
     String getConstantRP();
     String getFactoryManufactuter();
     String getMeterModel();
+
+    boolean isContaintsLastNotSaveResults();
+    void setContaintsLastNotSaveResults(boolean containtsLastNotSaveResults);
+
+    void setOldResultsNewMeters();
+
+    void setNewResultsMeters(List<Meter> newResultsMeters);
 
     Object clone() throws CloneNotSupportedException;
 }

@@ -274,6 +274,8 @@ public class TestParametersFrameController implements Frame {
                 meter.setInomImax(txtFldCurrent.getText());
                 meter.setTypeMeter(chosBxTypeMeter.getValue());
                 meter.setTestMode(chosBxPowerType.getValue());
+
+                meter.setMetodic(methodicForStend);
             }
 
             if (stendDLLCommands instanceof ThreePhaseStend) {

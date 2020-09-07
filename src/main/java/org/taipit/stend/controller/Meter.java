@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.model.metodics.Metodic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-public class Meter implements Serializable{
+public class Meter implements Serializable {
     /**
      * Для восстановления результатов прошлого теста, при создании
      * новых объектов CommandResult сравнивать хэш код со старыми результатами и если что возвращать старый результат
@@ -161,6 +162,9 @@ public class Meter implements Serializable{
             relayTest.setPassTest(false);
         }
     }
+
+    //Методика по которой поверяется счётчик
+    private Metodic metodic;
 
     private int id;
 
@@ -541,6 +545,22 @@ public class Meter implements Serializable{
         return null;
     }
 
+    //Устанавливает результаты текущему метру
+    public void setResults(Meter meter) {
+        errorListAPPls = meter.getErrorListAPPls();
+        errorListAPMns = meter.getErrorListAPMns();
+        errorListRPPls = meter.getErrorListRPPls();
+        errorListRPMns = meter.getErrorListRPMns();
+    }
+
+    //Пересохраняю результаты
+    private void refreshOldResults() {
+        if (!metodic.isContaintsLastNotSaveResults()) {
+            metodic.setOldResultsNewMeters();
+            metodic.setContaintsLastNotSaveResults(true);
+        }
+    }
+
     //Переводит миллисекунды в формат hh:mm:ss
     private String getTime(long mlS){
         return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(mlS),
@@ -574,6 +594,12 @@ public class Meter implements Serializable{
     public int hashCode() {
         return (int) (Un + Imax + Ib + accuracyClassAP + modelMeter.hashCode() + factoryManufacturer.hashCode() +
                         temperature + humidity + operator.hashCode() + controller.hashCode() + witness.hashCode() + testMode.hashCode() * 31);
+    }
+
+    //=============================================================================== get's and set's
+
+    public void setMetodic(Metodic metodic) {
+        this.metodic = metodic;
     }
 
     public String getConstantMeterAP() {
@@ -1093,6 +1119,7 @@ public class Meter implements Serializable{
             super.lastResult = error;
             super.passTest = passOrNot;
             refreshTipsInfo();
+            refreshOldResults();
         }
     }
 
@@ -1129,6 +1156,7 @@ public class Meter implements Serializable{
 
             creepTest = this;
             refreshTipsInfo();
+            refreshOldResults();
         }
 
         public void setMaxPulse(String maxPulse) {
@@ -1199,6 +1227,7 @@ public class Meter implements Serializable{
             }
 
             refreshTipsInfo();
+            refreshOldResults();
         }
 
         public void setMaxPulse(String maxPulse) {
@@ -1256,6 +1285,7 @@ public class Meter implements Serializable{
 
             RTCTest = this;
             refreshTipsInfo();
+            refreshOldResults();
         }
 
         public String getFreg() {
@@ -1333,6 +1363,7 @@ public class Meter implements Serializable{
             }
 
             refreshTipsInfo();
+            refreshOldResults();
         }
 
         public String getKwMeter() {
@@ -1366,6 +1397,7 @@ public class Meter implements Serializable{
             super.lastResult = error;
             super.passTest = passOrNot;
             refreshTipsInfo();
+            refreshOldResults();
         }
 
     }
@@ -1416,6 +1448,7 @@ public class Meter implements Serializable{
 
             relayTest = this;
             refreshTipsInfo();
+            refreshOldResults();
         }
 
         public void setMaxPulse(String maxPulse) {
