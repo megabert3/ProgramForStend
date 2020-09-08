@@ -54,7 +54,9 @@ public interface Metodic extends Cloneable {
 
     void setOldResultsNewMeters();
 
-    void setNewResultsMeters(List<Meter> newResultsMeters);
+    boolean isResultsOverwriten();
+    void setResultsOverwriten(boolean resultsOverwriten);
+
 
     Object clone() throws CloneNotSupportedException;
 }

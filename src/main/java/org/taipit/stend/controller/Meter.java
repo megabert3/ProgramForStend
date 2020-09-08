@@ -555,9 +555,9 @@ public class Meter implements Serializable {
 
     //Пересохраняю результаты
     private void refreshOldResults() {
-        if (!metodic.isContaintsLastNotSaveResults()) {
+        if (!metodic.isResultsOverwriten()) {
             metodic.setOldResultsNewMeters();
-            metodic.setContaintsLastNotSaveResults(true);
+            metodic.setResultsOverwriten(true);
         }
     }
 

@@ -278,6 +278,16 @@ public class TestParametersFrameController implements Frame {
                 meter.setMetodic(methodicForStend);
             }
 
+            if (methodicForStend.isContaintsLastNotSaveResults()) {
+                Boolean b = ConsoleHelper.yesOrNoFrame("Результаты", "Найдены последние несохранённые результаты теста\nВосстановить их?");
+
+                if (b != null) {
+                    if (b) {
+
+                    }
+                }
+            }
+
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 properties.setProperty("threePhaseStand.lastUnom", txtFldUnom.getText());
                 properties.setProperty("threePhaseStand.lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());

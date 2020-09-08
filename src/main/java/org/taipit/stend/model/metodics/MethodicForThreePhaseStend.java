@@ -18,6 +18,8 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
     //Содержит ли методика несохранённые результаты
     private boolean containtsLastNotSaveResults = false;
 
+    private boolean resultsOverwriten = false;
+
     private String Unom;
     private String ImaxAndInom;
     private String Fnom;
@@ -481,6 +483,14 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
 
     public void setTypeOfMeasuringElementShunt(String typeOfMeasuringElementShunt) {
         this.typeOfMeasuringElementShunt = typeOfMeasuringElementShunt;
+    }
+
+    public boolean isResultsOverwriten() {
+        return resultsOverwriten;
+    }
+
+    public void setResultsOverwriten(boolean resultsOverwriten) {
+        this.resultsOverwriten = resultsOverwriten;
     }
 
     public String getTypeMeter() {
