@@ -32,8 +32,6 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
     private String factoryManufactuter;
     private String meterModel;
 
-    private List<Meter> newResultsMeters = new ArrayList<>();
-
     //Несохранённые испытания для этой методики
     private List<Meter> notSaveResultMeters = new ArrayList<>();
 
@@ -62,17 +60,6 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
         return true;
     }
 
-    //Устанавливает старые результаты новым счётчикам
-    public void setOldResultsNewMeters() {
-        try {
-            for (int i = 0; i < newResultsMeters.size(); i++) {
-                newResultsMeters.get(i).setResults(notSaveResultMeters.get(i));
-            }
-        }catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
-    }
-
     public Map<Integer, List<Commands>> getCommandsMap() {
         return commandsMap;
     }
@@ -83,6 +70,23 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
 
     public void setMetodicName(String methodicName) {
         this.metodicName = methodicName;
+    }
+
+    public void setNotSaveResultMeters(List<Meter> notSaveResultMeters) {
+        this.notSaveResultMeters = notSaveResultMeters;
+    }
+
+    public List<Meter> getNotSaveResultMeters() {
+        return notSaveResultMeters;
+    }
+
+
+    public void setContaintsLastNotSaveResults(boolean containtsLastNotSaveResults) {
+        this.containtsLastNotSaveResults = containtsLastNotSaveResults;
+    }
+
+    public boolean isContaintsLastNotSaveResults() {
+        return containtsLastNotSaveResults;
     }
 
     @Override
@@ -421,14 +425,6 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
     }
 
    //======================================================================================
-   public void setContaintsLastNotSaveResults(boolean containtsLastNotSaveResults) {
-       this.containtsLastNotSaveResults = containtsLastNotSaveResults;
-   }
-
-   public boolean isContaintsLastNotSaveResults() {
-       return containtsLastNotSaveResults;
-   }
-
     public boolean isBindsParameters() {
         return bindsParameters;
     }
@@ -535,10 +531,6 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
 
     public String getTypeOfMeasuringElementShunt() {
         return typeOfMeasuringElementShunt;
-    }
-
-    public void setNewResultsMeters(List<Meter> newResultsMeters) {
-        this.newResultsMeters = newResultsMeters;
     }
 
 //===========================================================================================

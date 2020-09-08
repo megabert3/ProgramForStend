@@ -139,6 +139,17 @@ public class TestParametersFrameController implements Frame {
     @FXML
     void buttonActionTestFrame(ActionEvent event) {
         if (event.getSource() == btnStartTest) {
+
+            //Проверяю не запущен ли уже тест
+            TestErrorTableFrameController testErrorTableFrame = FrameManager.frameManagerInstance().getTestErrorTableFrameController();
+
+            if (testErrorTableFrame != null) {
+                testErrorTableFrame.getTestErrorTableFrameStage().toFront();
+                testErrorTableFrame.getTestErrorTableFrameStage().setIconified(false);
+                ConsoleHelper.infoException("Тест уже запущен");
+                return;
+            }
+
             //Напряжение
             float Un;
             //Базовый ток
@@ -278,16 +289,6 @@ public class TestParametersFrameController implements Frame {
                 meter.setMetodic(methodicForStend);
             }
 
-            if (methodicForStend.isContaintsLastNotSaveResults()) {
-                Boolean b = ConsoleHelper.yesOrNoFrame("Результаты", "Найдены последние несохранённые результаты теста\nВосстановить их?");
-
-                if (b != null) {
-                    if (b) {
-
-                    }
-                }
-            }
-
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 properties.setProperty("threePhaseStand.lastUnom", txtFldUnom.getText());
                 properties.setProperty("threePhaseStand.lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
@@ -375,6 +376,11 @@ public class TestParametersFrameController implements Frame {
 
             Stage stage1 = (Stage) btnStartTest.getScene().getWindow();
             stage1.close();
+
+            //Устанавливаю в менеджере окон, что окно теста открыто
+            FrameManager.frameManagerInstance().setTestErrorTableFrameController(testErrorTableFrameController);
+
+            //Удаляю из менеджера окон, что окно параметров теста открыто
             FrameManager.frameManagerInstance().testParametersFrameController = null;
 
         }

@@ -9,6 +9,7 @@ import javafx.stage.WindowEvent;
 import org.taipit.stend.controller.ResultsMetersController;
 import org.taipit.stend.controller.viewController.PropertiesController;
 import org.taipit.stend.controller.viewController.TestParametersFrameController;
+import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
 
 import java.io.IOException;
@@ -38,6 +39,9 @@ public class FrameManager {
 
     //Окно настройки и запуска теста
     public TestParametersFrameController testParametersFrameController;
+
+    //Окно теста
+    private TestErrorTableFrameController testErrorTableFrameController;
 
     public enum FrameType {
         PROPERTIES,
@@ -191,5 +195,13 @@ public class FrameManager {
 
     public MethodicsAddEditDeleteFrameController getMethodicsAddEditDeleteFrameController() {
         return methodicsAddEditDeleteFrameController;
+    }
+
+    public void setTestErrorTableFrameController(TestErrorTableFrameController testErrorTableFrameController) {
+        this.testErrorTableFrameController = testErrorTableFrameController;
+    }
+
+    public TestErrorTableFrameController getTestErrorTableFrameController() {
+        return testErrorTableFrameController;
     }
 }

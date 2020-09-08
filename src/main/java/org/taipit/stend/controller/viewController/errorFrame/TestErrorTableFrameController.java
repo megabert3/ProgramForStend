@@ -34,10 +34,10 @@ import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.viewController.errorFrame.refMeter.OnePhaseStendRefParamController;
 import org.taipit.stend.controller.viewController.errorFrame.refMeter.StendRefParametersForFrame;
 import org.taipit.stend.controller.viewController.errorFrame.refMeter.ThreePhaseStendRefParamController;
+import org.taipit.stend.helper.frameManager.FrameManager;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.SaveResultsTestFrame;
-import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
@@ -438,37 +438,17 @@ public class TestErrorTableFrameController {
                 @Override
                 public void handle(WindowEvent event) {
                     event.consume();
-
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getResource("/viewFXML/yesOrNoFrame.fxml"));
-                    try {
-                        fxmlLoader.load();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
-                    yesOrNoFrameController.setExitSaveResultFrameWithoutSaving(true);
-                    yesOrNoFrameController.setStageSaveResultTest(stage);
-                    yesOrNoFrameController.getQuestionTxt().setText("Вы уверены, что хотите выйти \nбез сохранения результатов теста?");
-                    yesOrNoFrameController.getQuestionTxt().setLayoutX(165);
-                    yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
-
-                    Parent root = fxmlLoader.getRoot();
-                    Stage stage = new Stage();
-                    stage.setTitle("Сохранение результата");
-                    stage.setScene(new Scene(root));
-                    stage.show();
+                    saveResultsTestFrame.getBtnCancel().fire();
                 }
             });
 
-            txtLabFn.getScene().getWindow().hide();
+            btnSave.getScene().getWindow().hide();
             refMeterStage.hide();
         }
 
         if (event.getSource() == btnExit) {
             if (blockTypeEnergyAndDirectionBtns.getValue() || startUnTest) {
-                ConsoleHelper.infoException("Невозможно выйти во время теста");
+                ConsoleHelper.infoException("Нельзя выйти во время теста");
             } else {
 
                 Boolean answer = ConsoleHelper.yesOrNoFrame("Сохранение результатов", "Желаете сохранить результаты теста?");
@@ -481,6 +461,7 @@ public class TestErrorTableFrameController {
                         Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
                         refMeterStage.close();
                         testErrorTableFrameControllerStage.close();
+                        FrameManager.frameManagerInstance().setTestErrorTableFrameController(null);
                     }
                 }
             }
@@ -1773,6 +1754,28 @@ public class TestErrorTableFrameController {
 
         initErrorsForMeters();
 
+        //Проверяю есть ли ранее не сохранённые результаты для этой методики
+        if (methodicForStend.isContaintsLastNotSaveResults()) {
+            //Спрашиваю пользователя о замене на старые результаты
+            Boolean b = ConsoleHelper.yesOrNoFrame("Результаты", "Найдены последние несохранённые результаты теста,\nвосстановить их?");
+
+            if (b != null) {
+                if (b) {
+                    List<Meter> notSaveResuls = methodicForStend.getNotSaveResultMeters();
+
+                    for (Meter newMeter : listMetersForTest) {
+                        for (Meter oldMeter : notSaveResuls) {
+                            if (newMeter.getId() == oldMeter.getId()) {
+                                newMeter.setResults(oldMeter);
+                            }
+                        }
+                    }
+
+                    methodicForStend.setNotSaveResultMeters(listMetersForTest);
+                }
+            }
+        }
+
         //В зависимости от количества счётчиков инициализирую поля для отображения погрешности
         if (listMetersForTest.size() <= 12) {
 
@@ -2067,24 +2070,7 @@ public class TestErrorTableFrameController {
             @Override
             public void handle(WindowEvent event) {
                 event.consume();
-
-                if (blockTypeEnergyAndDirectionBtns.getValue() || startUnTest) {
-                    ConsoleHelper.infoException("Нельзя выйти во время теста");
-                    return;
-                }
-
-                Boolean answer = ConsoleHelper.yesOrNoFrame("Сохранение результатов", "Желаете сохранить результаты теста?");
-
-                if (answer != null) {
-
-                    if (answer) {
-                        btnSave.fire();
-                    } else {
-                        Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
-                        refMeterStage.close();
-                        testErrorTableFrameControllerStage.close();
-                    }
-                }
+                btnExit.fire();
             }
         });
 
@@ -2567,5 +2553,17 @@ public class TestErrorTableFrameController {
 
     public double getAccuracyClassRP() {
         return accuracyClassRP;
+    }
+
+    public Stage getRefMeterStage() {
+        return refMeterStage;
+    }
+
+    public Metodic getMethodicForStend() {
+        return methodicForStend;
+    }
+
+    public Stage getTestErrorTableFrameStage() {
+        return (Stage) btnExit.getScene().getWindow();
     }
 }

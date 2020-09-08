@@ -545,7 +545,7 @@ public class Meter implements Serializable {
         return null;
     }
 
-    //Устанавливает результаты текущему метру
+    //Устанавливает результаты текущему счётчику
     public void setResults(Meter meter) {
         errorListAPPls = meter.getErrorListAPPls();
         errorListAPMns = meter.getErrorListAPMns();

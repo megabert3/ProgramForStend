@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.controller.viewController.YesOrNoFrameController;
+import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditPointsOnePhaseStendFrameController;
 import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditPointsThreePhaseStendFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
@@ -211,6 +212,15 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
             }catch (InfoExсeption e) {
                 e.printStackTrace();
                 ConsoleHelper.infoException("Выберите методику");
+            }
+
+            //Проверяю не идёт ли сейчас тест по этой методике
+            TestErrorTableFrameController testErrorTableFrameController = FrameManager.frameManagerInstance().getTestErrorTableFrameController();
+            if (testErrorTableFrameController != null) {
+                if (focusedMetodic.getMetodicName().equals(testErrorTableFrameController.getMethodicForStend().getMetodicName())) {
+                    ConsoleHelper.getMessage("Данная методика используется в тесте\nеё нельзя редактировать");
+                    return;
+                }
             }
 
             FXMLLoader fxmlLoader = new FXMLLoader();

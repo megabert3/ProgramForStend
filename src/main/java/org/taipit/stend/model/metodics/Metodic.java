@@ -52,11 +52,11 @@ public interface Metodic extends Cloneable {
     boolean isContaintsLastNotSaveResults();
     void setContaintsLastNotSaveResults(boolean containtsLastNotSaveResults);
 
-    void setOldResultsNewMeters();
-
     boolean isResultsOverwriten();
     void setResultsOverwriten(boolean resultsOverwriten);
 
+    List<Meter> getNotSaveResultMeters();
+    void setNotSaveResultMeters(List<Meter> notSaveResultMeters);
 
     Object clone() throws CloneNotSupportedException;
 }

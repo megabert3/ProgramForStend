@@ -26,6 +26,7 @@ import javafx.util.Callback;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.helper.frameManager.FrameManager;
 import org.taipit.stend.model.ExcelReport;
 import org.taipit.stend.model.ResultsTest;
 
@@ -176,27 +177,22 @@ public class SaveResultsTestFrame {
 
         if (event.getSource() == btnCancel) {
 
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/viewFXML/yesOrNoFrame.fxml"));
-            try {
-                fxmlLoader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
+            //Спрашиваю уверен ли пользователь, что хочет выйти без сохранения
+            Boolean b = ConsoleHelper.yesOrNoFrame("Сохранение", "Вы уверены, что хотите выйти \nбез сохранения результатов теста?");
+
+            if (b != null) {
+                if (b) {
+                    //Закрываю это окно
+                    Stage saveResults = (Stage) btnCancel.getScene().getWindow();
+                    saveResults.close();
+
+                    //Закрываю окно теста
+                    Stage stageTestErrorTableFraneControler = (Stage) testErrorTableFrameController.getTxtLabInom().getScene().getWindow();
+                    stageTestErrorTableFraneControler.close();
+                    testErrorTableFrameController.getRefMeterStage().close();
+                    FrameManager.frameManagerInstance().setTestErrorTableFrameController(null);
+                }
             }
-
-            YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
-            yesOrNoFrameController.setExitSaveResultFrameWithoutSaving(true);
-            yesOrNoFrameController.setStageSaveResultTest((Stage) txtFldWitness.getScene().getWindow());
-            yesOrNoFrameController.getQuestionTxt().setText("Вы уверены, что хотите выйти \nбез сохранения результатов теста?");
-            yesOrNoFrameController.getQuestionTxt().setLayoutX(165);
-            yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
-
-            Parent root = fxmlLoader.getRoot();
-            Stage stage = new Stage();
-            stage.setTitle("Сохранение результата");
-            stage.setScene(new Scene(root));
-            stage.show();
-
         }
 
         if (event.getSource() == btnSave) {
@@ -1170,5 +1166,9 @@ public class SaveResultsTestFrame {
             }
         }
         return password;
+    }
+
+    public Button getBtnCancel() {
+        return btnCancel;
     }
 }
