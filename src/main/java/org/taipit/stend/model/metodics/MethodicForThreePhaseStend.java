@@ -72,23 +72,6 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
         this.metodicName = methodicName;
     }
 
-    public void setNotSaveResultMeters(List<Meter> notSaveResultMeters) {
-        this.notSaveResultMeters = notSaveResultMeters;
-    }
-
-    public List<Meter> getNotSaveResultMeters() {
-        return notSaveResultMeters;
-    }
-
-
-    public void setContaintsLastNotSaveResults(boolean containtsLastNotSaveResults) {
-        this.containtsLastNotSaveResults = containtsLastNotSaveResults;
-    }
-
-    public boolean isContaintsLastNotSaveResults() {
-        return containtsLastNotSaveResults;
-    }
-
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
@@ -479,14 +462,6 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
 
     public void setTypeOfMeasuringElementShunt(String typeOfMeasuringElementShunt) {
         this.typeOfMeasuringElementShunt = typeOfMeasuringElementShunt;
-    }
-
-    public boolean isResultsOverwriten() {
-        return resultsOverwriten;
-    }
-
-    public void setResultsOverwriten(boolean resultsOverwriten) {
-        this.resultsOverwriten = resultsOverwriten;
     }
 
     public String getTypeMeter() {

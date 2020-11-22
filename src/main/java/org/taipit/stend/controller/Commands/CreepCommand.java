@@ -1,7 +1,6 @@
 package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
-import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
@@ -12,6 +11,16 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за реализацию выполнения команды "Самоход".
+ * Необходимо подать напряжение 115 Un, на некоторое время, если счётчик не выдал больше двух импульсов за отведённое время
+ * значит тест пройден.
+ * Подробнее о данном испытании написано в ГОСТ 31819-21
+ *
+ * За дополнительной информацией описания полей см. интерфейс Commands
+ */
 public class CreepCommand implements Commands, Serializable, Cloneable {
 
     //Эта команда из методики для трёхфазного теста?
@@ -52,6 +61,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
     //Напряжение на фазе C
     private double voltPerC;
 
+    //Процент от номинального напряжения
     private double voltPer;
 
     //Процен от тока
@@ -59,9 +69,9 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
     //Коэфициент мощности
     private String cosP = "1.0";
-
+    //Фазы на которые необходимо подать напряжене
     private String iABC = "H";
-
+    //Импульсный выход установки (активная/реактивная энергия)
     private int channelFlag;
 
     private boolean active = true;
@@ -71,7 +81,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
     private String id;
 
-    //Время расчитывается по госту?
+    //Время расчитывается по госту? (если нет значит задано пользователем)
     private boolean gostTest;
 
     //Количество импоульсов для провала теста
@@ -86,8 +96,20 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
     private TimerTask timerTask;
     private Thread currThread;
 
+    //Мапа с результатами прохождения теста для каждого места на установке
     private HashMap<Integer, Boolean> creepCommandResult;
 
+    /**
+     *
+     * @param threePhaseCommand - команда создана для трёхфазного стенда?
+     * @param gostTest - время теста расчитывается по ГОСТУ или задано самим пользователем
+     * @param name - имя точки испытания для отображения в таблице точек
+     * @param id - для добавления или удаления испытания
+     * @param channelFlag - Импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
+     * @param userTimeTest - Время теста введённое пользователем
+     * @param pulseValue - Количество импульсов для провала теста
+     * @param voltPer - процент от напряжения
+     */
     public CreepCommand(boolean threePhaseCommand, boolean gostTest, String name, String id, int channelFlag, long userTimeTest, int pulseValue, double voltPer) {
         this.threePhaseCommand = threePhaseCommand;
         this.name = name;
@@ -99,6 +121,14 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         this.voltPer = voltPer;
     }
 
+    /**
+     * Используется если испытание выполняется по ГОСТУ
+     * @param threePhaseCommand - команда создана для трёхфазного стенда?
+     * @param gostTest - время теста расчитывается по ГОСТУ или задано самим пользователем
+     * @param name - имя точки испытания для отображения в таблице точек
+     * @param id - для добавления или удаления испытания
+     * @param channelFlag - - Импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
+     */
     public CreepCommand(boolean threePhaseCommand, boolean gostTest, String name, String id,  int channelFlag) {
         this.threePhaseCommand = threePhaseCommand;
         this.gostTest = gostTest;
@@ -130,6 +160,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.transferParam(this);
 
+        // Если установка трехвазная
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -165,6 +196,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию
         setDefTestResults(channelFlag, index);
 
+        //Устанавливаю режим теста в зависимости от количества импульсов для провала
         setTestMode();
 
         Thread.sleep(3000);
@@ -176,6 +208,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         timer = new Timer(true);
 
+        //Таймер для отображения времени до окончания теста в GUI
         timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -199,6 +232,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
+        //Непосредственно само выполнение теста
         if (pulseValue == 1) {
             startTestModeSearchMark(refMeterCount, countResult);
         } else {
@@ -218,6 +252,12 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.errorClear();
     }
 
+    /**
+     * Логика работы такая же как и у команды execute()
+     * Более подробное описание см. там
+     * @throws ConnectForStendExeption
+     * @throws InterruptedException
+     */
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
 
@@ -331,6 +371,10 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         }
     }
 
+    /**
+     * Выставляет начальные значения результата теста
+     * @return
+     */
     private HashMap<Integer, Boolean> initCreepCommandResult() {
         HashMap<Integer, Boolean> init = new HashMap<>(meterList.size());
         for (Meter meter : meterList) {
@@ -339,6 +383,13 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         return init;
     }
 
+    /**
+     * В зависимости от количества импульсов для провала теста
+     * выбирает режим работы установки,
+     * если необходимо больше одного импульса, то необходимо выбирать команду
+     * countStart иначе searchMark
+     * @throws ConnectForStendExeption
+     */
     private void setTestMode() throws ConnectForStendExeption {
         if (pulseValue == 1) {
             for (Meter meter : meterList) {
@@ -351,6 +402,13 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         }
     }
 
+    /**
+     * Логика работы по поску более одного импульса, если счётчик выдал более одного импульса, то считается, что он провалил тест
+     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
+     * @param countResult - номер измерения
+     * @throws InterruptedException
+     * @throws ConnectForStendExeption
+     */
     private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, ConnectForStendExeption {
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
@@ -387,7 +445,14 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         }
     }
 
+    /**
+     * Логика работы по поску одного импульса, если счётчик выдал один импульс, то считается, что он провалил тест
+     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
+     * @param countResult - номер измерения
+     * @throws InterruptedException
+     */
     private void startTestModeSearchMark(int refMeterCount, int countResult) throws InterruptedException {
+        //Продолжать тест пока либо все счётчики не провалили его либо не вышло время испытания
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
             if (refMeterCount % 8 == 0) {
@@ -423,7 +488,12 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         }
     }
 
-    //reset
+    /**
+     * Выставляет изначальные, стартовые значения результатам счётчиков
+     * необходим если пользователь выбрал повторить тест
+     * @param channelFlag
+     * @param index
+     */
     private void setDefTestResults(int channelFlag, int index) {
         for (Meter meter : meterList) {
             Meter.CommandResult creepResult = meter.returnResultCommand(index, channelFlag);
@@ -433,6 +503,11 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         }
     }
 
+    /**
+     * Переводит миллисекунды в формат hh:mm:ss
+     * @param time - время в миллисекундах
+     * @return
+     */
     private String getTime(long time) {
         return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(time),
                 TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),

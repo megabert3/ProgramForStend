@@ -2,7 +2,6 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
-import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
@@ -11,6 +10,19 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за реализацию выполнения команды "Проверка работоспособности реле", данный класс применим только к счётчикам с реле
+ * и может выполняться только на стендах оборудовнных внутренним реле.
+ *
+ * Логика работы данного испытания заключается в следующем:
+ * На счётчики подаётся команда разомкнуть реле после чего на некоторое время установка подаёт напряжение и ток на счётчики,
+ * если у счётчика реле разомкнулось, то замыкается реле внутри установки в результате чего ток протекает внутри неё, если у счётчика не разомкнулось реле,
+ * то ток начинает протекать через него и он начинает выдавать импульсы, что является провалом теста и несправностью реле счётчика.
+ *
+ * За дополнительной информацией описания полей см. интерфейс Commands
+ */
 public class RelayCommand implements Commands, Serializable, Cloneable {
 
     //Эта команда из методики для трёхфазного теста?
@@ -87,6 +99,16 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
 
     private HashMap<Integer, Boolean> relayCommandResult;
 
+    /**
+     *
+     * @param threePhaseCommand - команда для трехфазного стенда?
+     * @param name - имя точки испытания для отображения в таблице точек
+     * @param id - для добавления или удаления точки испытания
+     * @param channelFlag - импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
+     * @param userTimeTest - время теста введённое пользователем
+     * @param pulseValue - количество импульсов для провала теста
+     * @param ratedCurr - значение тока, которое необходимо подать на счётчики
+     */
     public RelayCommand(boolean threePhaseCommand, String name, String id, int channelFlag, long userTimeTest, int pulseValue, double ratedCurr) {
         this.threePhaseCommand = threePhaseCommand;
         this.name = name;
@@ -97,6 +119,12 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
         this.ratedCurr = ratedCurr;
     }
 
+    /**
+     * Логика реботы команды схода с StartCommand только в данном случае если приходят импульсы от счётчика,
+     * то считается, что счётчик не прошёл испытание
+     * @throws ConnectForStendExeption
+     * @throws InterruptedException
+     */
     @Override
     public void execute() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
@@ -332,6 +360,13 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
         return init;
     }
 
+    /**
+     * Логика работы по поску более одного импульса, если счётчик выдал более одного импульса, то считается, что он провалил тест
+     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
+     * @param countResult - номер измерения
+     * @throws InterruptedException
+     * @throws ConnectForStendExeption
+     */
     private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, ConnectForStendExeption {
         while (relayCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
@@ -367,6 +402,12 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
         }
     }
 
+    /**
+     * Логика работы по поиску одного импульса, если счётчик выдал один импульс, то считается, что он провалил тест
+     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
+     * @param countResult - номер измерения
+     * @throws InterruptedException
+     */
     private void startTestModeSearchMark(int refMeterCount, int countResult) throws InterruptedException {
         while (relayCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
@@ -402,7 +443,13 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
         }
     }
 
-    //reset
+    //reset погрешностей у результата данного испытания
+    /**
+     * Выставляет изначальные, стартовые значения результатам счётчиков
+     * необходим если пользователь выбрал повторить тест
+     * @param channelFlag
+     * @param index
+     */
     private void setDefTestResults(int channelFlag, int index) {
         for (Meter meter : meterList) {
             Meter.RelayResult relayResult = (Meter.RelayResult) meter.returnResultCommand(index, channelFlagForSave);
@@ -412,6 +459,13 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
         }
     }
 
+    /**
+     * В зависимости от количества импульсов для провала теста
+     * выбирает режим работы установки,
+     * если необходимо больше одного импульса, то необходимо выбирать команду
+     * countStart иначе searchMark
+     * @throws ConnectForStendExeption
+     */
     private void setTestMode() throws ConnectForStendExeption {
         if (pulseValue == 1) {
             for (Meter meter : meterList) {
@@ -424,6 +478,11 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
         }
     }
 
+    /**
+     * Переводит миллисекунды в формат hh:mm:ss
+     * @param time - время в миллисекундах
+     * @return
+     */
     private String getTime(long time) {
         return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(time),
                 TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),

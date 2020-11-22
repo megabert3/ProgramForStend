@@ -105,7 +105,20 @@ public abstract class StendDLLCommands {
         amountActivePlacesForTest = initAmountActivePlacesForTest();
     }
 
-    //Устанавливает значение импульсного выхода у установки для каждого метса
+    /**
+     * //Устанавливает значение импульсного выхода у установки для каждого метса
+     * @param meterList
+     * Лист со счётчиками, которые необходимо испытать
+     * @param channelFlag
+     * //0 - активная энергия в прямом направлении тока
+     * //1 - активная энергия в обратном направлении тока
+     * //2 - реактивная энергия в прямом направлении тока
+     * //3 - реактивная энергия в обратном направлении тока
+     *
+     * @throws ConnectForStendExeption
+     * @throws InterruptedException
+     */
+
     public synchronized void setEnergyPulse (List<Meter> meterList, int channelFlag) throws ConnectForStendExeption, InterruptedException {
         for (Meter meter : meterList) {
             int i = 0;
@@ -201,14 +214,14 @@ public abstract class StendDLLCommands {
                          double currPer,
                          String iABC,
                          String cosP) throws ConnectForStendExeption {
-
-        System.out.println("Треад " + Thread.currentThread().getName());
-        System.out.println("Вошёл в getUI");
+        /**test*/
+//        System.out.println("Треад " + Thread.currentThread().getName());
+//        System.out.println("Вошёл в getUI");
         boolean b = stend.Adjust_UI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPer, currPer, iABC, cosP, typeReferenceMeter, port);
 
-        System.out.println("Треад " + Thread.currentThread().getName());
-        System.out.println("Вышел из getUI");
+//        System.out.println("Треад " + Thread.currentThread().getName());
+//        System.out.println("Вышел из getUI");
 
         if (!b) {
             throw new ConnectForStendExeption("Не удалось подать мощность: Adjust_UI");

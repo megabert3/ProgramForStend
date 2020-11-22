@@ -12,7 +12,16 @@ import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 
-
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за реализацию выполнения команды "Погрешность".
+ * Поверочный стенд выставляет параметры напряжения, тока и др. согласно пользовательским
+ * и в дальнейшем сравнивает мощность посчитанную счетчиком(и) с той, которую посчитал эталонный счётчик.
+ * В результате расчитывается относительная погрешность счётчика
+ *
+ * За дополнительной информацией описания полей см. интерфейс Commands
+ */
 public class ErrorCommand implements Commands, Serializable, Cloneable {
 
     private StendDLLCommands stendDLLCommands;
@@ -23,6 +32,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
     //Необходим для быстрого доступа к Объекту класса resultCommand
     private int index;
 
+    //Параметр влияния (частота или напряжение)
     private String param = "";
 
     private double procentParan;
@@ -39,6 +49,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
     //Кол-во импульсов для расчёта ошибки
     private int pulse = 5;
 
+    //Время для стабилизации параметров необходимых для испытания
     private double pauseForStabilization = 2;
 
     //Имя точки для отображения в таблице
@@ -113,6 +124,20 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
     //Флаг для прекращения сбора погрешности
     private HashMap<Integer, Boolean> flagInStop;
 
+    /**
+     * Конструктор для формирования параметров точки испытания
+     * @param threePhaseStendCommand - команда для трехфазного стенда?
+     * @param id - для добавления или удаления точки испытания
+     * @param phase - режим работы стенда
+     * @param current - ток
+     * @param revers - направление
+     * @param currentPercent - процент от тока
+     * @param iABC - фазы, на которые необходимо подать ток
+     * @param cosP - COSФ или коэфициент активной мощности
+     * @param channelFlag - Импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
+     *
+     * Так же информацию можно найти в stendDLL
+     */
     public ErrorCommand(boolean threePhaseStendCommand, String id, int phase, String current, int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
         this.threePhaseCommand = threePhaseStendCommand;
         this.id = id;
@@ -134,6 +159,23 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         voltPer = 100.0;
     }
 
+    /**
+     * Конструктор для формирования параметров точки испытания, а так же дополнительного
+     * влияния по частоте или напряжению
+     *
+     * @param threePhaseStendCommand - см. выше
+     * @param strPhase
+     * @param param - параметр влияния, либо по частоте либо по папряжению
+     * @param id - см. выше
+     * @param phase - см. выше
+     * @param current - см. выше
+     * @param paramPer - процент влияния от номинальной частоты или номинального напряжения
+     * @param revers - см. выше
+     * @param currentPercent - см. выше
+     * @param iABC - см. выше
+     * @param cosP - см. выше
+     * @param channelFlag - см. выше
+     */
     //Конструктор для создания объекта с вклатки "Влияние"
     public ErrorCommand(boolean threePhaseStendCommand, String strPhase, String param, String id, int phase, String current,
                         double paramPer, int revers, String currentPercent, String iABC, String cosP, int channelFlag) {
@@ -156,6 +198,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             this.procentParan = paramPer;
         }
 
+        //Примеры отображения
         //47.0%Un: 0.5L; 0.01 Ib
         //A: 47.0%Un: 0.5L; 0.01 Ib
         name = (strPhase + paramPer + "%" + param + "n; " + cosP + "; " + currentPerсent + " " + current.trim());
@@ -173,7 +216,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
         int refMeterCount = 1;
 
-        //Выбор константы в зависимости от энергии
+        //Выбор константы счётчика в зависимости от энергии
         if (channelFlag < 2) {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
         } else {
@@ -192,12 +235,14 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
+        //Высчитываю частоту, которую необходимо выставить
         if (param.equals("F")) {
             ratedFreq = ratedFreq * new BigDecimal(procentParan / 100).setScale(5, RoundingMode.HALF_UP).doubleValue();
         }
 
         TestErrorTableFrameController.transferParam(this);
 
+        //Выставляю параметры выбранные пользователем
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -282,12 +327,14 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                 TestErrorTableFrameController.refreshRefMeterParameters();
             }
 
+            //Пробегаюсь по счётчикам и узнаю погрешность
             for (Meter meter : meterForTestList) {
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
                 }
 
+                //Формат - номер измерения погрешности и погрешность. Пример: 3,-0.231
                 strError = stendDLLCommands.meterErrorRead(meter.getId());
                 strMass = strError.split(",");
 
@@ -296,7 +343,9 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                     resultNo = Integer.parseInt(strMass[0]);
                     error = strMass[1];
 
+                    //Если результат измерения поступил
                     if (resultNo != 0) {
+
                         resultMeter = meter.returnResultCommand(index, channelFlag);
                         doubleErr = Double.parseDouble(error);
 
@@ -306,12 +355,14 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                             ((Meter.ErrorResult) resultMeter).setResultErrorCommand("P" + error, resultNo, error, true);
                         }
 
+                        //Если получен новый результат относительной погрешности счётчика
                         if (meter.getErrorResultChange() != resultNo) {
                             meter.setAmountMeasur(meter.getAmountMeasur() + 1);
                             meter.setErrorResultChange(resultNo);
                         }
                     }
 
+                    //Если получено дастаточно значений результата погрешности у счётчика, значит можно переходить к следующей точке
                     if (meter.getAmountMeasur() >= countResult) {
                         flagInStop.put(meter.getId(), true);
                     }
@@ -326,6 +377,11 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.errorClear();
     }
 
+    /**
+     * Логика такая же как и у команды execute только в циле см. выше
+     * @throws ConnectForStendExeption
+     * @throws InterruptedException
+     */
     //Метод для цикличной поверки счётчиков
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
@@ -425,6 +481,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         String error;
         double doubleErr;
 
+        //Выполнять до тех пор пока пользователь не сменил точку испытания
         while (Thread.currentThread().isAlive()) {
 
             if (refMeterCount % 11 == 0) {
@@ -466,7 +523,12 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.errorClear();
     }
 
-    //Опрашивает счётчики до нужно значения проходов
+    /**
+     * Опрашивает счётчики до нужно значения проходов
+     * т.е. количество значений относительной погрешности, которые необходимо получить
+     * от счётчика, после чего флаг переставляется на значение true
+     * @return
+     */
     private HashMap<Integer, Boolean> initBoolList() {
         HashMap<Integer, Boolean> init = new HashMap<>(meterForTestList.size());
 
@@ -476,6 +538,9 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         return init;
     }
 
+    /**
+     * Делает ресет измеренных погрешностей у счётчиков
+     */
     private void resetError() {
         for (Meter meter : meterForTestList) {
             meter.setAmountMeasur(0);

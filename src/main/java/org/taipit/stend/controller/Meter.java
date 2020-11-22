@@ -325,7 +325,7 @@ public class Meter implements Serializable {
                     //Отображаю время теста
                     if (startCommand.isGostTest()) {
                         errorListAPPls.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()), String.valueOf(startCommand.getPulseValue())));
-                        //Время теста для встпялающей подсказки
+                        //Время теста для всплывающей подсказки
                         startCommand.setUserTimeTest(testErrorTableFrameController.getTimeToStartTestGOSTAP());
                         startCommand.setRatedCurr(calculateCurrentForSTA(testErrorTableFrameController, chanelFlag));
                     } else {
@@ -551,14 +551,6 @@ public class Meter implements Serializable {
         errorListAPMns = meter.getErrorListAPMns();
         errorListRPPls = meter.getErrorListRPPls();
         errorListRPMns = meter.getErrorListRPMns();
-    }
-
-    //Пересохраняю результаты
-    private void refreshOldResults() {
-        if (!metodic.isResultsOverwriten()) {
-            metodic.setOldResultsNewMeters();
-            metodic.setResultsOverwriten(true);
-        }
     }
 
     //Переводит миллисекунды в формат hh:mm:ss
@@ -1119,7 +1111,6 @@ public class Meter implements Serializable {
             super.lastResult = error;
             super.passTest = passOrNot;
             refreshTipsInfo();
-            refreshOldResults();
         }
     }
 
@@ -1156,7 +1147,6 @@ public class Meter implements Serializable {
 
             creepTest = this;
             refreshTipsInfo();
-            refreshOldResults();
         }
 
         public void setMaxPulse(String maxPulse) {
@@ -1227,7 +1217,6 @@ public class Meter implements Serializable {
             }
 
             refreshTipsInfo();
-            refreshOldResults();
         }
 
         public void setMaxPulse(String maxPulse) {
@@ -1285,7 +1274,6 @@ public class Meter implements Serializable {
 
             RTCTest = this;
             refreshTipsInfo();
-            refreshOldResults();
         }
 
         public String getFreg() {
@@ -1363,7 +1351,6 @@ public class Meter implements Serializable {
             }
 
             refreshTipsInfo();
-            refreshOldResults();
         }
 
         public String getKwMeter() {
@@ -1397,7 +1384,6 @@ public class Meter implements Serializable {
             super.lastResult = error;
             super.passTest = passOrNot;
             refreshTipsInfo();
-            refreshOldResults();
         }
 
     }
@@ -1448,7 +1434,6 @@ public class Meter implements Serializable {
 
             relayTest = this;
             refreshTipsInfo();
-            refreshOldResults();
         }
 
         public void setMaxPulse(String maxPulse) {

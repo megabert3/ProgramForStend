@@ -10,32 +10,53 @@ import java.util.Map;
 
 public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializable {
 
+    //Имя методики
     private String metodicName;
-
+    //Если параметры при которых должна проводиться методика зафиксированны
     private boolean bindsParameters;
 
+    //Методика с точками для двух токовых цепей
     private boolean twoCircut;
 
+    /**
+     * Данные параметры относятся к испытываемому счётчику
+     */
+    //Номинальное напряжение
     private String Unom;
+    //Максимальный и минимальный ток
     private String ImaxAndInom;
+    //Номинальная частота сети
     private String Fnom;
+    //Класс точности активной энергии
     private String accuracyClassMeterAP;
+    //Класс точности реактивной энергии
     private String accuracyClassMeterRP;
+    //Тип измерительного элемента
     private String typeOfMeasuringElementShunt;
+    //Тип счётчика (трех/одно фазный, много/одно тарифный)
     private String typeMeter;
+    //Постоянная счётчика при подсчёте активной энергии (imp*kW*h)
     private String constantAP;
+    //Постоянная счётчика при подсчёте реактивной энергии (imp*kW*h
     private String constantRP;
+    //Завод изготовитель счётчика
     private String factoryManufactuter;
+    //Модель счётчика (модель с наименованием)
     private String meterModel;
 
-
+    /**
+     * Содержит листы с командами которые необходимо выполнить установке
+     * 0 - активная энергия в прямом направлении
+     * 1 - активная энергия в обратном направлении
+     * 2 - реактивная энергия в прямом направлении
+     * 3 - реактивная энергия в обратном направлении
+     */
     private Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
 
-    //Объект для сохранения точек связанных с влиянием
+    //Объект для сохранения точек (коммад) связанных с влиянием (U, F)
     private InfluenceMetodic influenceMetodic = new InfluenceMetodic();
 
     //Объект для сохранения точек Самохода, чувствительности и влияния
-
     private CreepStartRTCConst creepStartRTCConst = new CreepStartRTCConst();
 
     public MethodicForOnePhaseStend() {
@@ -45,6 +66,7 @@ public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializabl
         commandsMap.put(3, new ArrayList<Commands>());
     }
 
+    //Добавляет команду в нужный лист
     public boolean addCommandToList(Integer numb, ArrayList<Commands> list) {
         if (numb > 4 || numb < 0) return false;
         else {

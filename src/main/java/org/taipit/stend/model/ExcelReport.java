@@ -3758,6 +3758,11 @@ public class ExcelReport {
         }
     };
 
+    /**
+     * Тесты вывода в Excel
+     * @param meter
+     * @param errorList
+     */
     private void createTestErrorForInfABC(Meter meter, List<Meter.CommandResult> errorList) {
         //1;A;A;P;0.2 Ib;0.5C
 

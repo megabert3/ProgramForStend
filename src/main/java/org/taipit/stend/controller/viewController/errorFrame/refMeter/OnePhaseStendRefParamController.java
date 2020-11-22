@@ -13,24 +13,34 @@ import org.taipit.stend.model.stend.StendDLLCommands;
 
 import java.util.Arrays;
 
-
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за отображение параметров полученных от эталонного счётчика однофазного стенда в GUI"
+ */
 public class OnePhaseStendRefParamController implements StendRefParametersForFrame {
 
+    //Обект типа стенда (однофазный)
     private StendDLLCommands stendDLLCommands;
 
+    //Тип эталонного счётчика (их много, но порядок следования параметров разный в двух случаях)
+    //Если тип HY5303C22
     private Boolean refTypeHY5303C22 = false;
 
+    //Наряжение
     private Double U;
 
+    //Ток
     private Double I;
 
-    //Флаги для отображения по каким фаза ошибка
+    //Флаги для отображения в GUI по каким фаза ошибка
+    //Ошибка по цепи напряжения
     private boolean Uerr;
-
+    //Ошибка по цепи тока
     private boolean Ierr;
 
+    //Позиция смещения окна параметров в GUI
     private double xOffset;
-
     private double yOffset;
 
     @FXML
@@ -54,14 +64,7 @@ public class OnePhaseStendRefParamController implements StendRefParametersForFra
     @FXML
     private TextField txtFldDeg;
 
-/*
-Однофазное подключение:
-HY5101C-22(Simulation Meter) : U,I,UI_Angle
-HY5101C-23?SY3803 : U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq
-TC-3000C? Ua , Ub , Uc , Ia , Ib , Ic , UI_Angle_a , UI_Angle_b , UI_Angle_c , Pa , Pb , Pc , Qa ,
-Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
-*/
-
+    //Делаю поля отображения только для чтения
     @FXML
     void initialize() {
         txtFldU.setEditable(false);
@@ -73,6 +76,12 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
         txtFldF.setEditable(false);
     }
 
+    /**
+     * Инициализирует тип эталонного счётчика установок
+     * от этого зависит какой порядок параметров передаёт стенд и в каком порядке
+     * их необходимо отображать в GUI
+     * @param stendDLLCommands
+     */
     public void initRefType(StendDLLCommands stendDLLCommands) {
         this.stendDLLCommands = stendDLLCommands;
 
@@ -83,11 +92,15 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
         }
     }
 
+    /**
+     * Получает значения параметров от эталонного счётчика
+     * парсит их и выводит в GUI
+     * @throws InterruptedException
+     */
     public void readParameters() throws InterruptedException {
         String[] meterParam = stendDLLCommands.stMeterRead().split(",");
-        //U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq
-        System.out.println(Arrays.toString(meterParam));
-
+        // Пример возвращаемой строки от эталонного счётчика:
+        // U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq
         try {
             if (meterParam.length == 7) {
                 if (refTypeHY5303C22) {
@@ -106,6 +119,9 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
         }
     }
 
+    /**
+     * Убрать
+     */
     @Override
     public void readParametersWithoutCheckingParan() {
         String[] meterParam = stendDLLCommands.stMeterRead().split(",");
@@ -130,12 +146,17 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
         }
     }
 
+
+    /**
+     * УБРАНО, ОСТАВЛЕННО ДЛЯ ИНФОРМАЦИИ И ВОЗМОЖНО ДЛЯ ДАЛЬНЕЙШЕЙ РЕАЛИЗАЦИИ
+     *
+     * Передаёт параметры, которые должны быть выставлены установкой если эталонный счётчик передаёт не те, значит ошибка
+     */
     @Override
     public void transferParameters(Commands command) {
         I = command.getRatedCurr() * (command.getCurrPer() / 100);
         U = command.getRatedVolt() * (command.getVoltPer() / 100);
     }
-
     public void transferParameters(Double U, Double I) {
         /**
          Добавить проверку с максимально допустимыми возможностями установки и если что выкинуть исключение
@@ -144,6 +165,12 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
         this.I = I;
     }
 
+    /**
+     * УБРАНО, ОСТАВЛЕННО ДЛЯ ИНФОРМАЦИИ И ВОЗМОЖНО ДЛЯ ДАЛЬНЕЙШЕЙ РЕАЛИЗАЦИИ
+     *
+     * Сравнивает значения полученные от эталонного счётчика с теми, которые должны быть высталенны для испытаний
+     * если они не соответствуют значит сработала авария по току или напряжению
+     */
     private void equalsParan(String U, String I) throws InterruptedException {
         double value;
         boolean b = false;
@@ -185,6 +212,10 @@ Qb , Qc , Sa , Sb , Sc , A.P. , R.P. , Apparent power , Freq , I_Range
         }
     }
 
+    /**
+     * Передвигает окно параметров эталонного счётчика
+     * по нажатию ЛКМ на него
+     */
     public void addMovingActions() {
         Stage thisStage = (Stage) txtFldU.getScene().getWindow();
 

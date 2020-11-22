@@ -9,8 +9,23 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
-public class ImbalansUCommand implements Commands, Serializable, Cloneable {
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за реализацию выполнения команды "Имбаланс напряжений", данный класс применим только к трехфазным счётчикам.
+ * Напряжение и ток выставляются только на те фазы, которые выбрал пользователь, отличие от ErrorCommand в том, что
+ * в ErrorCommand напряжение выставлялось на все фазы, а ток подавался либо на все либо на определённые. Тут напряжение выставляется
+ * только на необходимую для испытания фазу(ы). Снятие погрешности при этом такое же как и у команды ErrorCommand
+ *
+ * Поверочный стенд выставляет параметры напряжения, тока и др. согласно пользовательским
+ * и в дальнейшем сравнивает мощность посчитанную счетчиком(и) с той, которую посчитал эталонный счётчик.
+ * В результате расчитывается относительная погрешность счётчика
+ *
+ * За дополнительной информацией описания полей см. интерфейс Commands
+ */
+public class ImbalansUCommand implements Commands, Serializable, Cloneable {
+    //Обект установки
     private StendDLLCommands stendDLLCommands;
 
     //Необходим для быстрого доступа к Объекту класса resultCommand
@@ -28,6 +43,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
     //Кол-во импульсов для расчёта ошибки
     private int pulse = 5;
 
+    //Время для стабилизации параметров необходимых для испытания
     private double pauseForStabilization = 2;
 
     //Имя точки для отображения в таблице
@@ -82,7 +98,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
     private int revers;
 
     //По каким фазам пустить ток
-    private String iABC = "H";
+    private String iABC;
 
     //Активная ли точка
     private boolean active = true;
@@ -99,6 +115,17 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
     //Флаг для прекращения сбора погрешности
     private HashMap<Integer, Boolean> flagInStop;
 
+    /**
+     * @param id - для добавления или удаления точки испытания
+     * @param phase - режим работы стенда
+     * @param current - ток
+     * @param revers - направление тока
+     * @param cosP - COSф или коэффициент мощности PF
+     * @param channelFlag - Импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
+     * @param voltPerPhaseA - Напряжение на фазе А
+     * @param voltPerPhaseB - Напряжение на фазе B
+     * @param voltPerPhaseC - Напряжение на фазе C
+     */
     public ImbalansUCommand(String id, int phase, String current, int revers, String cosP, int channelFlag,
                             double voltPerPhaseA, double voltPerPhaseB, double voltPerPhaseC) {
         this.id = id;
@@ -373,7 +400,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.errorClear();
     }
 
-    //Опрашивает счётчики до нужно значения проходов
+    //Опрашивает счётчики до нужного значения проходов
     private HashMap<Integer, Boolean> initBoolList() {
         HashMap<Integer, Boolean> init = new HashMap<>(meterForTestList.size());
 

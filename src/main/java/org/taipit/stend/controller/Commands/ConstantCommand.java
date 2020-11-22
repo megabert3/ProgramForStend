@@ -13,18 +13,28 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @autor Albert Khalimov
+ * 
+ * Данный класс отвечает за реализацию выполнения команды "Проверка счётного механизма".
+ * Необходимо подать напряжение и ток либо на определённое время, либо на определённое количество времени,
+ * затем сравнить то, что посчитал счётчик(и) и то, что посчитал поверосный стенд и уже исходя из этого определять прошёл ли счётчик испытание или нет
+ *
+ * За дополнительной информацией описания полей см. интерфейс Commands
+ */
+
 public class ConstantCommand implements Commands, Serializable, Cloneable {
 
     private StendDLLCommands stendDLLCommands;
 
     private boolean threePhaseCommand;
 
-    //Необходим для быстрого доступа к Объекту класса resultCommand
+    //Необходим для быстрого доступа к Объекту класса resultCommand (позволяет быстро записать результат команды)
     private int index;
 
     //Эта команда будет проходить по времени?
     private boolean runTestToTime;
-
+    //Количество энергии, которое необходимо для испытания
     private double kWToTest;
 
     //Лист с счётчиками для испытания
@@ -36,69 +46,48 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
     //Минимальный порог ошибки
     private double emaxProc;
 
-    public String getPauseForStabilization() {
-        return "";
-    }
-
-    @Override
-    public void setPauseForStabilization(double pauseForStabilization) {
-    }
-
-    //Кол-во импульсов для расчёта ошибки
+    //Кол-во импульсов для расчёта ошибки (зарезервированно)
     private int pulse;
 
-    //Имя точки для отображения в таблице
+    //Имя точки испытания для отображения в таблице при создании методики поверки
     private String name;
 
-    //id кнопки
+    //id check box'a (для удаления или добавления точки)
     private String id;
 
     //Базовый ток
     private double Ib;
-
     //Режим
     private int phase;
-
     //Напряжение
     private double ratedVolt;
-
     //Процент от напряжения
     private double voltPer;
-
     //Напряжение на фазе А
     private double voltPerA;
-
     //Напряжение на фазе B
     private double voltPerB;
-
     //Напряжение на фазе C
     private double voltPerC;
-
     //Ток
     private double ratedCurr;
-
     //Процен от тока
     private double currPer;
-
     //Частота
     private double ratedFreq;
-
     //Коэфициент мощности
     private String cosP;
-
-    //Необходимо сделать в доп тестовом окне
+    //Порядок следования фаз
     private int phaseSrequence;
-
     //Направление тока
     private int revers;
-
     //По каким фазам пустить ток
     private String iABC = "H";
 
     //Активная ли точка
     private boolean active = true;
 
-    //Импульсный выход
+    //Импульсный выход установки
     private int channelFlag;
 
     //Количество повторов теста
@@ -107,18 +96,37 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
     //Константа счётчика для теста
     private int constantMeter;
 
-    //Время теста введённое пользователем
+    //Время испытания (введённое пользователем)
     private long timeTheTest;
 
+    //Время начала теста
     private long timeStart;
+    //Время окончания теста
     private long timeEnd;
+    //Текущее время
     private long currTime;
+    //Время теста для отображения в таблице (GUI)
     private String strTime;
 
+    //Ссылка на текущую нить для проверки не подана ли команда стоп
     transient private Thread constantThread;
 
     transient private Timer timer;
 
+    /**
+     * Конструкторы
+     * @param threePhaseStendCommand - команда создана для трёхфазного стенда?
+     * @param runTestToTime - команду необходимо выполнить по количеству времени (иначе по энергии)
+     * @param timeToTest - время теста
+     * @param id - для быстрого поиска в методике поверки
+     * @param name - имя для отображения в таблице (GUI)
+     * @param voltPer - процент от номинального напряжения
+     * @param currPer - процент от номинального тока
+     * @param revers - обратное направление
+     * @param channelFlag - имнульсный выход установки (активная, реактивная энергия)
+     * @param eminProc - нижняя граница погрешности для прохождения теста счётчиком
+     * @param emaxProc - верхняя граница погрешности для прохождения теста счётчиком
+     */
     public ConstantCommand(boolean threePhaseStendCommand, boolean runTestToTime, long timeToTest, String id,
                            String name, double voltPer, double currPer, int revers, int channelFlag, double eminProc, double emaxProc) {
         this.threePhaseCommand = threePhaseStendCommand;
@@ -137,6 +145,20 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         cosP = "1.0";
     }
 
+    /**
+     * Если необходимо провести тест по кол-ву энергии
+     * @param threePhaseStendCommand
+     * @param runTestToTime
+     * @param kWToTest - количество энегрии для теста
+     * @param id - см. выше
+     * @param name - см. выше
+     * @param voltPer - см. выше
+     * @param currPer - см. выше
+     * @param revers - см. выше
+     * @param channelFlag - см. выше
+     * @param eminProc - см. выше
+     * @param emaxProc - см. выше
+     */
     public ConstantCommand(boolean threePhaseStendCommand, boolean runTestToTime, double kWToTest, String id,
                            String name, double voltPer, double currPer, int revers, int channelFlag, double eminProc, double emaxProc) {
         this.threePhaseCommand = threePhaseStendCommand;
@@ -155,6 +177,9 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         cosP = "1.0";
     }
 
+    /**
+     * Необходмо разбить на более мелкие методы
+     */
     //===================================================================================================
     //Команда выполнения для последовательного теста
     @Override
@@ -180,9 +205,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             constantMeter = 0;
         }
 
-        //Номер результата
+        //Номер результата теста
         int countResult = 1;
 
+        //Не нажал ли пользователь кнопку стоп
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
@@ -194,9 +220,15 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
+        /**
+         * Даю счётчикам включиться
+         */
+        //Если испытание проводится на трёхфазном стенде
         if (stendDLLCommands instanceof ThreePhaseStend) {
+            //Но при этом команда создана не для трёхфазного стенда
             if (!threePhaseCommand) {
 
+                //Устанавливаю ту фазу для испытания, которую выбрал пользователь
                 iABC = TestErrorTableFrameController.phaseOnePhaseMode;
 
                 switch (iABC) {
@@ -205,10 +237,14 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     case "C": voltPerC = voltPer; break;
                 }
 
-                //Передаю необходимые параметры для эталонного счётчика
+                /**
+                 * Переделать реализацию
+                 */
+                //Передаю необходимые параметры для эталонного счётчика ()
                 ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
                         voltPerA * (ratedVolt / 100), voltPerB * (ratedVolt / 100), voltPerC * (ratedVolt / 100), 0.0, 0.0, 0.0);
 
+                //Устанавливаю необходимые ток и напряжение для испытания
                 stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
             } else {
@@ -220,6 +256,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPer, currPer, iABC, cosP);
             }
+            //Если испытание проводится на однофазном стенде
         } else {
             //Передаю необходимые параметры для эталонного счётчика
             ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
@@ -250,7 +287,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
         TestErrorTableFrameController.refreshRefMeterParameters();
 
-        //Пауза для включения счётчиков
+        //Пауза для включения счётчиков (необходимо вывести в GUI)
         Thread.sleep(5000);
 
         for (Meter meter : meterForTestList) {
@@ -267,7 +304,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        //Если команда создана по времени
+        //Если команду необходимо выполнить по определённому количеству времени
         if (runTestToTime) {
 
             TimerTask timerTask = new TimerTask() {
@@ -302,6 +339,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 throw new InterruptedException();
             }
 
+            //Выставляю напряжение и ток необходимые для проведения испытания
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 if (!threePhaseCommand) {
 
@@ -348,11 +386,14 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             TestErrorTableFrameController.refreshRefMeterParameters();
 
+            //Запускаю проверку на то, что все счётчики запустили и передают показания
             timer.schedule(timerTask, 10000);
 
+            //Устанавливаю время теста
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + timeTheTest;
 
+            //Отображаю время испытаний в GUI
             while (System.currentTimeMillis() < timeEnd) {
 
                 if (refMeterCount % 7 == 0) {
@@ -383,7 +424,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
 
-            //Получаю результат
+            //Получаю результат теста для каждого счётчика
             Double result;
             String kwRefMeter;
             String kwMeter;
@@ -408,7 +449,9 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
-            //Если тест запущен по количеству энергии
+            /**Если тест запущен по количеству энергии
+             * выполнение практически такое же, что и по времени
+             */
         } else {
 
             TimerTask timerTask = new TimerTask() {
@@ -433,7 +476,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             };
 
             double refMeterEnergy = 0;
-
 
             TestErrorTableFrameController.transferParam(this);
 
@@ -493,6 +535,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             String[] kw;
             double hightKw;
 
+            //Тут я постоянно считывю энергию, которую посчитал сам стенд и если она равна энергии теста ,то выключаю ток и считываю, что насчитал сам счётчик
             while (kWToTest > refMeterEnergy) {
 
                 if (refMeterCount % 4 == 0) {
@@ -557,7 +600,13 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         stendDLLCommands.errorClear();
     }
 
-    //Метод для цикличной поверки счётчиков
+
+    /**
+     * Метод для цикличной поверки счётчиков, реализация такая же, что и для обычного теста, но только в цикле
+     * коментарии см. там
+     * @throws ConnectForStendExeption
+     * @throws InterruptedException
+     */
     @Override
     public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
@@ -1018,20 +1067,22 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         }
     }
 
+    //Парсит миллисекунды в формат hh:mm:ss
     private String getTime(long time) {
         return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(time),
                 TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),
                 TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
     }
 
+    //Устанавливает команде стенд на котором выполняется поверка счётчиков
     public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
         this.stendDLLCommands = stendDLLCommands;
     }
-
+    //Устанавливает напряжение
     public void setRatedVolt(double ratedVolt) {
         this.ratedVolt = ratedVolt;
     }
-
+    //Устанавливает частоту
     public void setRatedFreq(double ratedFreq) {
         this.ratedFreq = ratedFreq;
     }
@@ -1181,5 +1232,13 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
     public boolean isThreePhaseCommand() {
         return threePhaseCommand;
+    }
+
+    public String getPauseForStabilization() {
+        return "";
+    }
+
+    @Override
+    public void setPauseForStabilization(double pauseForStabilization) {
     }
 }

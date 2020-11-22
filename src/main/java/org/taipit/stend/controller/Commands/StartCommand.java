@@ -11,6 +11,21 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за реализацию выполнения команды "Чувствительность"
+ *
+ * Логика работы данного испытания заключается в следующем:
+ * На счётчик подаётся напряжение и значение стартового тока на определённое количество времени,
+ * если счётчик выдаёт два, или заданное пользователем, количество импульсов, то считается, что счётчик детектирует этот ток
+ * и явлется прошедшим испытание. Подробнее о времени и токе, которые необходимы для испытания см. в "Технических условиях" к счётчику
+ *
+ * Реализация схожа с классом CreepCommand за исключение того, что на счётчик подаётся ток и тест является прошедшим если на счётчик поступили импульсы
+ *
+ * За дополнительной информацией описания полей см. интерфейс Commands
+ */
 public class StartCommand implements Commands, Serializable, Cloneable {
 
     //Эта команда из методики для трёхфазного теста?
@@ -88,6 +103,18 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
     private HashMap<Integer, Boolean> startCommandResult;
 
+    /**
+     *
+     * @param threePhaseCommand - команда создана для трёхфазного стенда?
+     * @param name - имя точки испытания для отображения в таблице точек
+     * @param id - для добавления или удаления испытания
+     * @param revers - направление тока
+     * @param channelFlag - импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
+     * @param gostTest - время теста расчитывается по ГОСТУ или задано самим пользователем
+     * @param userTimeTest - Время теста введённое пользователем
+     * @param pulseValue - Количество импульсов для провала теста
+     * @param ratedCurr - значение тока, которое необходимо подать на счётчики
+     */
     public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest, long userTimeTest, int pulseValue, double ratedCurr) {
         this.threePhaseCommand = threePhaseCommand;
         this.name = name;
@@ -100,6 +127,15 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         this.ratedCurr = ratedCurr;
     }
 
+    /**
+     *
+     * @param threePhaseCommand - команда создана для трёхфазного стенда?
+     * @param name - имя точки испытания для отображения в таблице точек
+     * @param id - для добавления или удаления испытания
+     * @param revers - направление тока
+     * @param channelFlag - импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
+     * @param gostTest - время теста расчитывается по ГОСТУ или задано самим пользователем
+     */
     public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest) {
         this.name = name;
         this.id = id;
@@ -341,6 +377,12 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         return init;
     }
 
+    /**
+     * Логика работы по поску одного импульса, если счётчик выдал один импульс, то считается, что он прошёл тест
+     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
+     * @param countResult - номер измерения
+     * @throws InterruptedException
+     */
     private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, ConnectForStendExeption {
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
 
@@ -376,6 +418,12 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
     }
 
+    /**
+     * Логика работы по поску одного импульса, если счётчик выдал один импульс, то считается, что он прошёл тест
+     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
+     * @param countResult - номер измерения
+     * @throws InterruptedException
+     */
     private void startTestModeSearchMark(int refMeterCount, int countResult) throws InterruptedException {
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
 
@@ -412,6 +460,12 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     }
 
     //reset
+    /**
+     * Выставляет изначальные, стартовые значения результатам счётчиков
+     * необходим если пользователь выбрал повторить тест
+     * @param channelFlag
+     * @param index
+     */
     private void setDefTestResults(int channelFlag, int index) {
         for (Meter meter : meterList) {
             Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
@@ -421,6 +475,13 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
     }
 
+    /**
+     * В зависимости от количества импульсов для провала теста
+     * выбирает режим работы установки,
+     * если необходимо больше одного импульса, то необходимо выбирать команду
+     * countStart иначе searchMark
+     * @throws ConnectForStendExeption
+     */
     private void setTestMode() throws ConnectForStendExeption {
         if (pulseValue == 1) {
             for (Meter meter : meterList) {
@@ -433,6 +494,11 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
     }
 
+    /**
+     * Переводит миллисекунды в формат hh:mm:ss
+     * @param time - время в миллисекундах
+     * @return
+     */
     private String getTime(long time) {
         return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(time),
                 TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),

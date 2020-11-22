@@ -51,42 +51,62 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс является контроллером окна "testErrorTableFrame.fxml".
+ * Отвечает за обработку действий пользователя, а так же изменения отображения результата прохождения и результата теста
+ */
 public class TestErrorTableFrameController {
 
+    //Статическая ссылка на кнопку СТОП, если внутри выполнения команды пойдёт что-то не так, то вызывается действие этой кнопки
     private static Button btnStopStatic;
 
+    //Статическая ссылка на окно параметров получаемых из эталонного счётчика
     private static StendRefParametersForFrame stendRefParametersForFrame;
 
+    //Какую фазу необходимо использовать у трехфазного стенда, если на него навешан однофазный счётчик
     public static String phaseOnePhaseMode = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
 
+    //Объект поверочной установки (стенда)
     private StendDLLCommands stendDLLCommands;
 
+    //Окно с параметрами получаемыми из эталонного счётчика
     private Stage refMeterStage;
 
+    //У этого стенда две токовые цепи?
     private boolean twoCircut;
 
-    //Исполняемая команда
+    //Исполняемая на данный момент команда
     private Commands command;
 
+    //Счётчики, которые необходимо протестировать
     private List<Meter> listMetersForTest;
 
+    //Методика по которой необходимо протестировать счётчики
     private Metodic methodicForStend;
 
-    //Список команд
+    //Список команд из методики поверки для активной, реактивной энергии и прямого, обратного направления тока
     private ObservableList<Commands> commandsAPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> commandsAPMns = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> commandsRPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> commandsRPMns = FXCollections.observableArrayList(new ArrayList<>());
 
-    //Список TableView c погрешностями
+    //Список TableView c погрешностями для каждого счётчика
     private List<TableView<Meter.CommandResult>> tabViewErrorsList = new ArrayList<>();
 
+    //======================================================== Параметры
+    //Максимальный ток навешанных на стенд счётчиков
     private double Imax;
 
+    //Базовый ток навешанных на стенд счётчиков
     private double Ib;
 
+    //Номинальное напряжение навешанных на стенд счётчиков
     private double Un;
 
+    //Номинальная частота навешанных на стенд счётчиков
     private double Fn;
 
     //Время для теста Самоход ГОСТ активная энергия
@@ -104,42 +124,56 @@ public class TestErrorTableFrameController {
     //Тип измерительного элемента счётчика шунт/трансформатор
     private boolean typeOfMeasuringElementShunt;
 
+    //Постоянная навешенных счётчиков для активной энергии (imp*kW*h)
     private int constantMeterAP;
 
+    //Постоянная навешенных счётчиков для реактивной энергии (imp*kvar*h)
     private int constantMeterRP;
 
+    //Класс точности измерения активной энергии счётчиков
     private double accuracyClassAP;
 
+    //Класс точности измерения реактивной энергии счётчиков
     private double accuracyClassRP;
 
+    //Поток для запуска автоматического теста (нажата кнопка автоматический режим)
     private Thread automaticTestThread = new Thread();
 
+    //Поток для запуска ручного теста (нажата кнопка ручного режима)
     private Thread manualTestThread = new Thread();
 
+    //Поток если необходимо просто подать напряжение на счётчики
     private Thread UnomThread = new Thread();
 
+    //Поток получения информации от эталонного счётчика в ходе испытаний
     private Thread refMeterThread = new Thread();
 
+    //Флаг указывающий нажата ли кнопка подачи напряжения на счётчики
     private boolean startUnTest = false;
 
-    //Для блокировки кнопок управления
+    //Для блокировки кнопок управления режимами работы установки. Чтобы пользователь не тыкал безумно на кнопки и давал установке стабилизировать параметры
     public static SimpleBooleanProperty blockBtns = new SimpleBooleanProperty(false);
 
-    //Для блокировки кнопок управления
+    //Для блокировки кнопок изменения типа энергии или направления тока (нельзя менять уже в процессе запущенного теста)
     public static SimpleBooleanProperty blockTypeEnergyAndDirectionBtns = new SimpleBooleanProperty(false);
 
-    //Лист с командами для установки слушателя
+
+    //Лист с командами. Необходим для установки слушателя на список команд
+    //для обработки нажатия ЛКМ на листе с командами.
+    //В зависимости от режима работы разное поведение
     private ObservableList<Commands> selectedCommand;
 
-    //Слушатель для таблицы с командами для автоматического теста
+    //Описание поведения нажатия ЛКМ на списке команд при автоматическом режиме работы теста
     private ListChangeListener<Commands> automaticListChangeListener = new ListChangeListener<Commands>() {
         @Override
         public void onChanged(Change<? extends Commands> c) {
-
+            //Завершаю работу треда предыдущей точки испытания
             automaticTestThread.interrupt();
 
+            //Блокирую кнопки чтобы пользователь не насоздавал потоков
             blockControlBtns(8000);
 
+            //Запускаю новый поток с другой точкой испытания, которую выбрал пользователь
             automaticTestThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -163,15 +197,17 @@ public class TestErrorTableFrameController {
         }
     };
 
-    //Слушатель для таблицы с командами для ручного теста
+    //Описание поведения нажатия ЛКМ на списке команд при ручном режиме работы теста
     private ListChangeListener<Commands> manualListChangeListener = new ListChangeListener<Commands>() {
         @Override
         public void onChanged(Change<? extends Commands> c) {
-
+            //Завершаю работу треда предыдущей точки испытания
             manualTestThread.interrupt();
 
+            //Блокирую кнопки чтобы пользователь не насоздавал потоков
             blockControlBtns(8000);
 
+            //Запускаю новый поток с другой точкой испытания, которую выбрал пользователь
             manualTestThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -268,12 +304,6 @@ public class TestErrorTableFrameController {
     private Label txtLabDate;
 
     @FXML
-    private SplitPane splPane;
-
-    @FXML
-    private AnchorPane mainPane;
-
-    @FXML
     private Pane buttonPane;
 
     @FXML
@@ -282,18 +312,22 @@ public class TestErrorTableFrameController {
     @FXML
     private AnchorPane tabViewCommandsPane;
 
+    //Инициализация окна
     @FXML
     void initialize() {
         ToggleGroup toggleGroup = new ToggleGroup();
 
+        //Может быть только один режим работы теста
         tglBtnUnom.setToggleGroup(toggleGroup);
         tglBtnManualMode.setToggleGroup(toggleGroup);
         tglBtnAuto.setToggleGroup(toggleGroup);
 
         btnStopStatic = btnStop;
 
+        //Получаю ссылку на выбранную команду
         selectedCommand = tabViewTestPoints.getSelectionModel().getSelectedItems();
 
+        //Слушатель для блокировки кнопок выбора режима работы
         blockBtns.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -328,6 +362,7 @@ public class TestErrorTableFrameController {
             }
         });
 
+        //Слушатель для юлокировки кнопок изменения энергии и направления
         blockTypeEnergyAndDirectionBtns.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -349,28 +384,29 @@ public class TestErrorTableFrameController {
             }
         });
 
+        //Принцип работы кнопки стоп
         btnStop.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 blockControlBtns(1500);
 
+                //Завершаю рабочие потоки
                 if (manualTestThread.isAlive()) {
                     manualTestThread.interrupt();
                 }
-
                 if (automaticTestThread.isAlive()) {
                     automaticTestThread.interrupt();
                 }
-
-                selectedCommand.removeListener(manualListChangeListener);
-                selectedCommand.removeListener(automaticListChangeListener);
-
                 if (UnomThread.isAlive() || startUnTest) {
                     UnomThread.interrupt();
                 }
-
                 startUnTest = false;
 
+                //Удаляю слушателей
+                selectedCommand.removeListener(manualListChangeListener);
+                selectedCommand.removeListener(automaticListChangeListener);
+
+                //Обновляю информацию из окна эталонного счётчика
                 refMeterThread = new Thread(() -> {
                     for (int i = 0; i < 2; i++) {
                         try {
@@ -383,9 +419,11 @@ public class TestErrorTableFrameController {
                 refMeterThread.start();
 
                 try {
+                    //Отчищаю табло погрешности на установки и отключаю мощность
                     stendDLLCommands.errorClear();
                     stendDLLCommands.powerOf();
 
+                    //Выставляю кнопки в изначальное положение
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -406,16 +444,22 @@ public class TestErrorTableFrameController {
         checBoxePane.toFront();
     }
 
+    /**
+     * Обработчик событий сохранения теста или выхода из теста
+     * @param event
+     */
     @FXML
     void actionEventSaveExit(ActionEvent event) {
-
+        //Если нажата кнопка сохранить
         if (event.getSource() == btnSave) {
 
+            //Если тест запущен необходимо его выключить
             if (blockTypeEnergyAndDirectionBtns.getValue() || startUnTest) {
                 ConsoleHelper.infoException("Нельзя сохранить результаты во время теста");
                 return;
             }
 
+            //Загружаю окно сохранения теста
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/viewFXML/saveResultsTest.fxml"));
             try {
@@ -442,21 +486,30 @@ public class TestErrorTableFrameController {
                 }
             });
 
+            //Скрываю это окно от пользователя, если он передумает и захочет вернуться к тесту
             btnSave.getScene().getWindow().hide();
             refMeterStage.hide();
         }
 
+        //Если пользователь нажал кнопку выйти из теста
         if (event.getSource() == btnExit) {
+
+            //Если в этот момент тест ещё идёт
             if (blockTypeEnergyAndDirectionBtns.getValue() || startUnTest) {
                 ConsoleHelper.infoException("Нельзя выйти во время теста");
-            } else {
 
+                //Если тест не идёт
+            } else {
+                //Пердлагаю сохранить результаты таеста
                 Boolean answer = ConsoleHelper.yesOrNoFrame("Сохранение результатов", "Желаете сохранить результаты теста?");
 
                 if (answer != null) {
 
+                    //Если пользователь нажал сохранить
                     if (answer) {
                         btnSave.fire();
+
+                        //Если пользователь нажал не сохранять
                     } else {
                         Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
                         refMeterStage.close();
@@ -468,8 +521,14 @@ public class TestErrorTableFrameController {
         }
     }
 
+    /**
+     * Если пользователь нажал показать окно эталонного счётчика.
+     * Какие сейчас параметры выставленны
+     * @param event
+     */
     @FXML
     void refMeterParamAction(ActionEvent event) {
+
         if (event.getSource() == refMeterParam) {
             if (refMeterParam.isSelected()) {
                 refMeterStage.show();
@@ -479,22 +538,31 @@ public class TestErrorTableFrameController {
         }
     }
 
+    /**
+     * Если пользователь нажал кнопку начать автоматический тест
+     * @param event
+     */
     @FXML
     void actionEventTestControl(ActionEvent event) {
         //------------------------------------------------------------------------------------------------
         //Логика работы автоматического режима работы
-        if (event.getSource() == tglBtnAuto) {
-            if (automaticTestThread.isAlive()) {
 
+        if (event.getSource() == tglBtnAuto) {
+
+            //Если автоматический тест уже идёт
+            if (automaticTestThread.isAlive()) {
                 tglBtnAuto.setSelected(true);
                 return;
 
+                //Если не идёт
             } else {
-                blockControlBtns(8000);
 
+                //Блокирую кнопки
+                blockControlBtns(8000);
                 blockTypeEnergyAndDirectionBtns.setValue(true);
                 startUnTest = false;
 
+                //Если установка работает в других режимах, то завершаю их
                 if (refMeterThread.isAlive()) {
                     refMeterThread.interrupt();
                 }
@@ -508,6 +576,7 @@ public class TestErrorTableFrameController {
                     UnomThread.interrupt();
                 }
 
+                //Запускаю автоматический режим работы
                 selectedCommand.addListener(automaticListChangeListener);
 
                 automaticTestThread = new Thread(new Runnable() {
@@ -535,20 +604,28 @@ public class TestErrorTableFrameController {
             }
         }
 
-        //------------------------------------------------------------------------------------------------
-        //Логика работы ручного режима работы
+
+        /**
+         * Если пользователь нажал кнопку ручного режима работы
+         * @param event
+         */
         if (event.getSource() == tglBtnManualMode) {
 
+            //Если ручной тест уже идёт
             if (manualTestThread.isAlive()) {
                 tglBtnManualMode.setSelected(true);
                 return;
 
+                //Если нет
             } else {
+
+                //Блокирую кнопк
                 blockControlBtns(8000);
 
                 blockTypeEnergyAndDirectionBtns.setValue(true);
                 startUnTest = false;
 
+                //Останавливаю другие режимы
                 if (refMeterThread.isAlive()) {
                     refMeterThread.interrupt();
                 }
@@ -562,6 +639,7 @@ public class TestErrorTableFrameController {
                     UnomThread.interrupt();
                 }
 
+                //Запускаю ручной режим работы
                 selectedCommand.addListener(manualListChangeListener);
 
                 manualTestThread = new Thread(new Runnable() {
@@ -588,18 +666,24 @@ public class TestErrorTableFrameController {
             }
         }
 
-        //------------------------------------------------------------------------------------------------
-        //Логика работы подачи напряжения
-        if (event.getSource() == tglBtnUnom) {
 
+        /**
+         * Если пользователь нажал кнопку подачи напряжения на счётчики
+         * @param event
+         */
+        if (event.getSource() == tglBtnUnom) {
+            //Если тест уже идёт
             if (startUnTest) {
                 tglBtnUnom.setSelected(true);
 
+                //Если не идёт
             } else {
 
+                //Блокирую кнопки
                 blockControlBtns(5000);
                 startUnTest = true;
 
+                //Завершаю работу других режимов работы
                 if (refMeterThread.isAlive()) {
                     refMeterThread.interrupt();
                 }
@@ -614,6 +698,7 @@ public class TestErrorTableFrameController {
                     selectedCommand.removeListener(manualListChangeListener);
                 }
 
+                //Запускаю подачу напряжения
                 UnomThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -639,27 +724,48 @@ public class TestErrorTableFrameController {
         }
     }
 
-    //Блок команд для старта автоматического теста
+    /**
+     * Реализация работы автоматического режима работы установки.
+     * Режим, при котором все команды из методики поверки выполняются друг за другом
+     * @throws ConnectForStendExeption
+     * @throws InterruptedException
+     */
     private void startAutomaticTest() throws ConnectForStendExeption, InterruptedException {
-        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
 
+        //Получаю индекс команды, которую выбрал пользователь
+        int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
+        //Получаю команду
         command = tabViewTestPoints.getSelectionModel().getSelectedItem();
 
+        //Если пользователь выбрал не выполнять команду (check Box = false)
         if (!command.isActive()) {
+
+            //Перехожу к следующей команде
             for (int index = i + 1; index < tabViewTestPoints.getItems().size(); index++) {
+
+                //Проверяю её на необходмость выполнения
                 if (tabViewTestPoints.getItems().get(index).isActive()) {
+
+                    //Выделяю данную команду в GUI
                     tabViewTestPoints.getSelectionModel().select(index);
+
+                    //Выделяю результаты этой команды в таблице результатов
                     for (TableView<Meter.CommandResult > errorsView : tabViewErrorsList) {
                         errorsView.getSelectionModel().select(index);
                     }
                     break;
                 }
 
+                //Если конец исполняемых команд, жму на кнопку стоп
                 if (index == tabViewTestPoints.getItems().size() - 1 && !tabViewTestPoints.getItems().get(index).isActive()) {
                     btnStop.fire();
                 }
             }
+
+            //Если выбранная команда предназначена для исполнения (check box = true)
         } else {
+            //Проверяю к какому типу команд она относится
+
             if (command instanceof ErrorCommand) {
 
                 initAllParamForErrorCommand((ErrorCommand) command, i);
@@ -690,18 +796,29 @@ public class TestErrorTableFrameController {
                 command.execute();
             }
 
+            //Проверяю не была ли команда последней
             if (i == tabViewTestPoints.getItems().size() - 1) {
                 btnStop.fire();
+
+                //Если не последняя
             } else {
+
+                //Иду дальше по командам
                 for (int index = i + 1; index < tabViewTestPoints.getItems().size(); index++) {
+                    //Если команда активная
                     if (tabViewTestPoints.getItems().get(index).isActive()) {
+
+                        //Выделяю данную команду в GUI
                         tabViewTestPoints.getSelectionModel().select(index);
+
+                        //Выделяю результаты этой команды в таблице результатов
                         for (TableView<Meter.CommandResult > errorsView : tabViewErrorsList) {
                             errorsView.getSelectionModel().select(index);
                         }
                         break;
                     }
 
+                    //Если конец исполняемых команд, жму на кнопку стоп
                     if (index == tabViewTestPoints.getItems().size() - 1 && !tabViewTestPoints.getItems().get(index).isActive()) {
                         btnStop.fire();
                     }
@@ -710,13 +827,19 @@ public class TestErrorTableFrameController {
         }
     }
 
-    //Общая команда для старта ручного теста
+    /**
+     * Реализация работы ручного режима работы установки.
+     * Режим, при котором одна команда выполняется постоянно пока пользователь не нажмёт кнопку стоп
+     * @throws ConnectForStendExeption
+     * @throws InterruptedException
+     */
     private void startManualTest() throws ConnectForStendExeption, InterruptedException {
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
-
+        //Получаю команду выполненую пользователем
         command = tabViewTestPoints.getSelectionModel().getSelectedItem();
 
+        //Инициализирую командами параметрами и выполняю
         if (command instanceof ErrorCommand) {
 
             initAllParamForErrorCommand((ErrorCommand) command, i);
@@ -753,18 +876,28 @@ public class TestErrorTableFrameController {
         }
     }
 
-    //Общая команда для старта напряжения
+    /**
+     * Реализация работы подачи напряжения на установкой на счётчики.
+     * @throws ConnectForStendExeption
+     * @throws InterruptedException
+     */
     private void startUn () throws ConnectForStendExeption, InterruptedException {
+
+        //Если установка трехфазная
         if (stendDLLCommands instanceof ThreePhaseStend) {
 
+            //И при этом на стенд навешен трехфазный счётчик
             if (methodicForStend instanceof MethodicForThreePhaseStend) {
                 stendDLLCommands.getUI(0, Un, 0.0, Fn, 0, 0, 100.0, 0, "H", "1.0");
 
+                //Если навешен однофазный счётчик
             } else {
                 double voltPerA = 0.0;
                 double voltPerB = 0.0;
                 double voltPerC = 0.0;
 
+                //Подаю напряжение лишь на ту фазу, которую выбрал пользователь
+                //для однофазного режима в трехфазной установке
                 switch (TestErrorTableFrameController.phaseOnePhaseMode) {
                     case "A": voltPerA = 100.0; break;
                     case "B": voltPerB = 100.0; break;
@@ -774,6 +907,7 @@ public class TestErrorTableFrameController {
                 stendDLLCommands.getUIWithPhase(1, Un, 0, Fn, 0, 0, voltPerA, voltPerB, voltPerC, 0, "H", "1.0");
             }
 
+            //Если стенд однофазный
         } else {
             stendDLLCommands.getUI(1, Un, 0, Fn, 0, 0, 100.0, 0, "H", "1.0");
         }
@@ -1754,28 +1888,6 @@ public class TestErrorTableFrameController {
 
         initErrorsForMeters();
 
-        //Проверяю есть ли ранее не сохранённые результаты для этой методики
-        if (methodicForStend.isContaintsLastNotSaveResults()) {
-            //Спрашиваю пользователя о замене на старые результаты
-            Boolean b = ConsoleHelper.yesOrNoFrame("Результаты", "Найдены последние несохранённые результаты теста,\nвосстановить их?");
-
-            if (b != null) {
-                if (b) {
-                    List<Meter> notSaveResuls = methodicForStend.getNotSaveResultMeters();
-
-                    for (Meter newMeter : listMetersForTest) {
-                        for (Meter oldMeter : notSaveResuls) {
-                            if (newMeter.getId() == oldMeter.getId()) {
-                                newMeter.setResults(oldMeter);
-                            }
-                        }
-                    }
-
-                    methodicForStend.setNotSaveResultMeters(listMetersForTest);
-                }
-            }
-        }
-
         //В зависимости от количества счётчиков инициализирую поля для отображения погрешности
         if (listMetersForTest.size() <= 12) {
 
@@ -2440,9 +2552,10 @@ public class TestErrorTableFrameController {
         selectedCommand.removeListener(manualListChangeListener);
     }
 
-    //=====================================================================================
-    //get sets
-
+    /** =======================================================================================
+     * GET'S and SET'S
+     *
+     */
     public Label getTxtLabUn() {
         return txtLabUn;
     }

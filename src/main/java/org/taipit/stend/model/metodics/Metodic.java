@@ -8,10 +8,21 @@ import java.util.Map;
 
 public interface Metodic extends Cloneable {
 
+    /**
+     * @return Возвращает имя методики
+     */
     String getMetodicName();
 
+    /**
+     * Устаннавливает имя методике
+     * @param methodicName имя методики
+     */
     void setMetodicName(String methodicName);
 
+    /**
+     * Фиксированны ли параметры у методики (Параметры задаются при создании)
+     * @return
+     */
     boolean isBindsParameters();
 
     Map<Integer, List<Commands>> getCommandsMap();
@@ -48,15 +59,6 @@ public interface Metodic extends Cloneable {
     String getConstantRP();
     String getFactoryManufactuter();
     String getMeterModel();
-
-    boolean isContaintsLastNotSaveResults();
-    void setContaintsLastNotSaveResults(boolean containtsLastNotSaveResults);
-
-    boolean isResultsOverwriten();
-    void setResultsOverwriten(boolean resultsOverwriten);
-
-    List<Meter> getNotSaveResultMeters();
-    void setNotSaveResultMeters(List<Meter> notSaveResultMeters);
 
     Object clone() throws CloneNotSupportedException;
 }

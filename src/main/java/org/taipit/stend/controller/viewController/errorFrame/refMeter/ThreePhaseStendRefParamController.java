@@ -14,17 +14,26 @@ import org.taipit.stend.model.stend.StendDLLCommands;
 
 import java.util.Arrays;
 
-
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за отображение параметров полученных от эталонного счётчика трехфазного стенда в GUI"
+ */
 public class ThreePhaseStendRefParamController implements StendRefParametersForFrame {
 
+    //Обект типа стенда (трехфазный)
     private StendDLLCommands stendDLLCommands;
 
+    //Тип эталонного счётчика (их много, но порядок следования параметров разный в двух случаях)
+    //Если тип HY5303C22
     private Boolean refTypeHY5303C22 = true;
 
+    //Значение тока по фазам
     private Double currPhaseA;
     private Double currPhaseB;
     private Double currPhaseC;
 
+    //Значение напряжения по фазам
     private Double UPhaseA;
     private Double UPhaseB;
     private Double UPhaseC;
@@ -38,8 +47,8 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
     private boolean Ib;
     private boolean Ic;
 
+    //Позиция смещения окна параметров в GUI
     private double xOffset;
-
     private double yOffset;
 
     @FXML
@@ -126,6 +135,7 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
     @FXML
     private TextField txtFldUbUc;
 
+    //Делаю поля отображения только для чтения
     @FXML
     void initialize() {
         txtFldUA.setEditable(false);
@@ -158,6 +168,12 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
         txtFldUbUc.setEditable(false);
     }
 
+    /**
+     * Инициализирует тип эталонного счётчика установок
+     * от этого зависит какой порядок параметров передаёт стенд и в каком порядке
+     * их необходимо отображать в GUI
+     * @param stendDLLCommands
+     */
     public void initRefType(StendDLLCommands stendDLLCommands) {
         this.stendDLLCommands = stendDLLCommands;
 
@@ -169,6 +185,11 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
         }
     }
 
+    /**
+     * Получает значения параметров от эталонного счётчика
+     * парсит их и выводит в GUI
+     * @throws InterruptedException
+     */
     public void readParametersWithoutCheckingParan() {
         String[] meterParam = stendDLLCommands.stMeterRead().split(",");
         System.out.println(Arrays.toString(meterParam));
@@ -242,9 +263,13 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
         }
     }
 
-    public void readParameters() throws InterruptedException {
+    /**
+     * Получает значения параметров от эталонного счётчика
+     * парсит их и выводит в GUI
+     * @throws InterruptedException
+     */
+    public void readParameters() {
         String[] meterParam = stendDLLCommands.stMeterRead().split(",");
-        System.out.println(Arrays.toString(meterParam));
 
         try {
             if (meterParam.length == 28) {
@@ -318,6 +343,19 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
         }
     }
 
+    /**
+     * УБРАНО, ОСТАВЛЕННО ДЛЯ ИНФОРМАЦИИ И ВОЗМОЖНО ДЛЯ ДАЛЬНЕЙШЕЙ РЕАЛИЗАЦИИ
+     *
+     * Сравнивает значения полученные от эталонного счётчика с теми, которые должны быть высталенны для испытаний
+     * если они не соответствуют значит сработала авария по току или напряжению
+     * @param Ua
+     * @param Ub
+     * @param Uc
+     * @param Ia
+     * @param Ib
+     * @param Ic
+     * @throws InterruptedException
+     */
     private void equalsParan(String Ua, String Ub, String Uc, String Ia, String Ib, String Ic) throws InterruptedException {
         double value;
         boolean b = false;
@@ -416,6 +454,12 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
         }
     }
 
+    /**
+     * УБРАНО, ОСТАВЛЕННО ДЛЯ ИНФОРМАЦИИ И ВОЗМОЖНО ДЛЯ ДАЛЬНЕЙШЕЙ РЕАЛИЗАЦИИ
+     *
+     * Передаёт параметры, которые должны быть выставлены установкой если эталонный счётчик передаёт не те, значит ошибка
+     * @param command
+     */
     @Override
     public void transferParameters(Commands command) {
 
@@ -504,7 +548,6 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
             }
         }
     }
-
     public void transferParameters(Double Ua, Double Ub, Double Uc, Double Ia, Double Ib, Double Ic) {
         /**
          Добавить проверку с максимально допустимыми возможностями установки и если что выкинуть исключение
@@ -518,6 +561,10 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
         currPhaseC = Ic;
     }
 
+    /**
+     * Передвигает окно параметров эталонного счётчика
+     * по нажатию ЛКМ на него
+     */
     public void addMovingActions() {
         Stage thisStage = (Stage) txtFldUA.getScene().getWindow();
 

@@ -12,6 +12,18 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за реализацию выполнения команды "Проверка точности хода часов", данный класс применим только к многотарифным счётчикам
+ * и может использоваться только на становках с блоком точности хода часов
+ *
+ * Логика работы данного испытания заключается в следующем:
+ * С испытательного выхода счётчика считываются импульсы равные какой-то определённой частоте, полученные импульсы сравниваются с блоком точности хода часов
+ * установки и в результате разницы расчитывается погрешность точности хода часов самого счётчика
+ *
+ * За дополнительной информацией описания полей см. интерфейс Commands
+ */
 public class RTCCommand implements Commands, Serializable, Cloneable {
 
     //Необходим для быстрого доступа к Объекту класса resultCommand
@@ -88,6 +100,18 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
     //Тип измерения
     private int errorType;
 
+    /**
+     * @param threePhaseCommand - команда для трехфазного стенда?
+     * @param id - для добавления или удаления точки испытания
+     * @param name - имя точки испытания для отображения в таблице точек
+     * @param pulseForRTC - количество импульсов, которые необходимо получить от счётчика для расчёта погрешности
+     * @param freg - частота с короторй счётчик выдаёт импульсы
+     * @param countResultTest - количество результатов теста, после получения которых можно переходить к следующей точке
+     * @param errorType - тип ошибки либо в прошентах либо в значении частоты подробнее в клессе StendDLL метод Clock_Error_Read()
+     * @param errorForFalseTest - диапзон значиний в котором считается, что счётчик прошёл тест
+     * @param channelFlag - импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
+     *                    в контексте данного испытания используется лишь для проведения данного испытания на определённом направлении или типе энергии
+     */
     public RTCCommand(boolean threePhaseCommand, String id , String name, int pulseForRTC, double freg, int countResultTest,
                       int errorType, double errorForFalseTest, int channelFlag) {
         this.threePhaseCommand = threePhaseCommand;
