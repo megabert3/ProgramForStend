@@ -56,7 +56,7 @@ import java.util.Locale;
  * @autor Albert Khalimov
  *
  * Данный класс является контроллером окна "testErrorTableFrame.fxml".
- * Отвечает за обработку действий пользователя, а так же изменения отображения результата прохождения и результата теста
+ * Отвечает за обработку действий пользователя, а так же изменения отображения результата прохождения теста и самого результата теста
  */
 public class TestErrorTableFrameController {
 
@@ -914,7 +914,14 @@ public class TestErrorTableFrameController {
     }
 
     //Инициализирует параметры необходимые для снятия погрешности в точке
-    private void initAllParamForErrorCommand(ErrorCommand errorCommand, int index){
+
+    /**
+     * Передаёт параметры тока, напряжения и д.р. выбранные пользователем, которые необходимы для исполнения команды
+     * "Погрешность счётчика"
+     * @param errorCommand
+     * @param index
+     */
+    private void initAllParamForErrorCommand(ErrorCommand errorCommand, int index) {
         errorCommand.setStendDLLCommands(stendDLLCommands);
         errorCommand.setRatedVolt(Un);
         errorCommand.setIb(Ib);
@@ -924,7 +931,12 @@ public class TestErrorTableFrameController {
         errorCommand.setMeterForTestList(listMetersForTest);
     }
 
-    //Инициализирует параметры необходимые для команды самохода
+    /**
+     * Передаёт параметры тока, напряжения и д.р. выбранные пользователем, которые необходимы для исполнения команды
+     * "Самоход"
+     * @param creepCommand
+     * @param index
+     */
     private void initAllParamForCreepCommand(CreepCommand creepCommand, int index){
         creepCommand.setStendDLLCommands(stendDLLCommands);
         creepCommand.setRatedVolt(Un);
@@ -932,6 +944,7 @@ public class TestErrorTableFrameController {
         creepCommand.setIndex(index);
         creepCommand.setMeterList(listMetersForTest);
 
+        //Если время испытания выбрано по госту, то автоматически рассчитываю время теста
         if (creepCommand.isGostTest()) {
             if (creepCommand.getChannelFlag() < 2) {
                 creepCommand.setUserTimeTest(timeToCreepTestGOSTAP);
@@ -941,7 +954,12 @@ public class TestErrorTableFrameController {
         }
     }
 
-    //Инициализирует параметры необходимые для команды чувствительность
+    /**
+     * Передаёт параметры тока, напряжения и д.р. выбранные пользователем, которые необходимы для исполнения команды
+     * "Чувствительность"
+     * @param startCommand
+     * @param index
+     */
     private void initAllParamForStartCommand(StartCommand startCommand, int index) {
         startCommand.setStendDLLCommands(stendDLLCommands);
         startCommand.setRatedFreq(Fn);
@@ -949,6 +967,7 @@ public class TestErrorTableFrameController {
         startCommand.setIndex(index);
         startCommand.setMeterList(listMetersForTest);
 
+        //Если время испытания выбрано по госту, то автоматически рассчитываю время теста
         if (startCommand.isGostTest()) {
             if (startCommand.getChannelFlag() < 2) {
                 startCommand.setUserTimeTest(timeToStartTestGOSTAP);
@@ -958,7 +977,12 @@ public class TestErrorTableFrameController {
         }
     }
 
-    //Инициализирует параметры необходимые для команды чувстви
+    /**
+     * Передаёт параметры выбранные пользователем, которые необходимы для исполнения команды
+     * "Точность хода часов"
+     * @param rTCCommand
+     * @param index
+     */
     private void initAllParamForRTCCommand(RTCCommand rTCCommand, int index) {
         rTCCommand.setStendDLLCommands(stendDLLCommands);
         rTCCommand.setRatedVolt(Un);
@@ -966,7 +990,12 @@ public class TestErrorTableFrameController {
         rTCCommand.setMeterList(listMetersForTest);
     }
 
-    //Инициализирует параметры необходимые для команды чувстви
+    /**
+     * Передаёт параметры выбранные пользователем, которые необходимы для исполнения команды
+     * "Проверка счётного механизма"
+     * @param constantCommand
+     * @param index
+     */
     private void initAllParamForConstantCommand(ConstantCommand constantCommand, int index) {
         constantCommand.setStendDLLCommands(stendDLLCommands);
         constantCommand.setRatedVolt(Un);
@@ -975,6 +1004,12 @@ public class TestErrorTableFrameController {
         constantCommand.setMeterForTestList(listMetersForTest);
     }
 
+    /**
+     * Передаёт параметры выбранные пользователем, которые необходимы для исполнения команды
+     * "Имбаланс напряжений"
+     * @param imbalansUCommand
+     * @param index
+     */
     private void initAllParamForImbCommand(ImbalansUCommand imbalansUCommand, int index){
         imbalansUCommand.setStendDLLCommands(stendDLLCommands);
         imbalansUCommand.setRatedVolt(Un);
@@ -985,7 +1020,12 @@ public class TestErrorTableFrameController {
         imbalansUCommand.setMeterForTestList(listMetersForTest);
     }
 
-    //Инициализирует параметры необходимые для команды Реле
+    /**
+     * Передаёт параметры выбранные пользователем, которые необходимы для исполнения команды
+     * "Проверка работоспособности реле"
+     * @param relayCommand
+     * @param index
+     */
     private void initAllParamForStartCommand(RelayCommand relayCommand, int index) {
         relayCommand.setStendDLLCommands(stendDLLCommands);
         relayCommand.setRatedFreq(Fn);
@@ -994,6 +1034,10 @@ public class TestErrorTableFrameController {
         relayCommand.setMeterList(listMetersForTest);
     }
 
+    /**
+     * Включает или выключает выполнение всех команд
+     * @param event
+     */
     @FXML
     void checBoxAllDisAction(ActionEvent event) {
         //Устанавливает значение для всех чек боксов сразу
@@ -1013,6 +1057,11 @@ public class TestErrorTableFrameController {
         }
     }
 
+    /**
+     * Действие при смене пользователем направления тока и энергии.
+     * Инициализация таблиц с командами для испытаний в данных режимах
+     * @param event
+     */
     @FXML
     void actionEventSwithEnergyPane(ActionEvent event) {
         if (event.getSource() == tglBtnAPPls) {
@@ -1049,6 +1098,9 @@ public class TestErrorTableFrameController {
         }
     }
 
+    /**
+     * Установка в таблицу команд испытаний для необходимого направления тока и типа энергии
+     */
     //Установка значений таблицы погрешности AP+
     private void initErrorPaneForAPPls() {
         setTabColTestPoints(commandsAPPls);
@@ -1113,6 +1165,9 @@ public class TestErrorTableFrameController {
         }
     }
 
+    /**
+     * Устанавливает селект в таблице на первой команде
+     */
     private void setlectFirsCommand() {
         if (tabViewTestPoints.getItems().size() != 0) {
             tabViewTestPoints.getSelectionModel().select(0);
@@ -1123,7 +1178,11 @@ public class TestErrorTableFrameController {
         }
     }
 
+    /**
+     * Основной метод инициализации таблиц в окне testErrorTableFrame.fxml
+     */
     public void myInitTestErrorTableFrame() {
+
         //Реакция на отключение или включение точки испытания
         Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>> tabColCellData =
                 new Callback<TableColumn.CellDataFeatures<Commands, Boolean>, ObservableValue<Boolean>>() {
@@ -1161,13 +1220,23 @@ public class TestErrorTableFrameController {
         tabColTestPointsDis.setSortable(false);
 
         //Установка команд для таблицы с выбором команды для испытания
+        //Копирую все команды из методики поверки и выставляю параметры согдасно выбору пользователя
+
+        /**
+         * См. интерфейс StendDLL команду Adjust_UI там описано что означает "H, A,B,C", а так же режимы работы установки
+         * (Phase)
+         */
         char[] idChar;
         Commands cloneCommand;
         try {
+            //Если стенд трёхфазный
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 String typeCircut = ConsoleHelper.properties.getProperty("threePhaseStand.lastTypeCircuit");
 
+                //При этом методика выбрана для однофазного стедна (навешан однофазный(ые) счётчик(и))
                 if (methodicForStend instanceof MethodicForOnePhaseStend) {
+
+
                     //AP+
                     //Добавляю точки ErrorCommand
                     for (Commands command : methodicForStend.getCommandsMap().get(0)) {
@@ -1191,6 +1260,7 @@ public class TestErrorTableFrameController {
                         }
                     }
 
+                    //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                     for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
                         cloneCommand = command.clone();
                         cloneCommand.setPhase(0);
@@ -1221,6 +1291,7 @@ public class TestErrorTableFrameController {
                         }
                     }
 
+                    //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                     for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
                         cloneCommand = command.clone();
                         cloneCommand.setPhase(0);
@@ -1250,6 +1321,7 @@ public class TestErrorTableFrameController {
                         }
                     }
 
+                    //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                     for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
                         cloneCommand = command.clone();
                         cloneCommand.setPhase(7);
@@ -1279,182 +1351,216 @@ public class TestErrorTableFrameController {
                         }
                     }
 
+                    //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                     for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
                         cloneCommand = command.clone();
                         cloneCommand.setPhase(7);
                         commandsRPMns.add(cloneCommand);
                     }
 
+                    //Если методика выбрана для трехфазного стенда (чем он и является)
                 } else {
-                    //3P4W, 3P3W, 3P3W 90 R.P., 3P3W 60 R.P.
+                    //Если выбран трехфазный четырёхпроводный режим
                     if (typeCircut.equals("3P4W")) {
 
+                        //AP+
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(0)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(1);
                             commandsAPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(1);
                             commandsAPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(1);
                             commandsAPPls.add(cloneCommand);
                         }
 
-
+                        //AP-
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(1)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(1);
                             commandsAPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(1);
                             commandsAPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(1);
                             commandsAPMns.add(cloneCommand);
                         }
 
-
+                        //RP+
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(2)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(5);
                             commandsRPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(5);
                             commandsRPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(5);
                             commandsRPPls.add(cloneCommand);
                         }
 
-
+                        //RP-
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(3)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(5);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(5);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(5);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Если выбран трехфазный трехпроводный режим
                     } else if (typeCircut.equals("3P3W")) {
 
+                        //AP+
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(0)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(2);
                             commandsAPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumAPPls()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(2);
                             commandsAPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(2);
                             commandsAPPls.add(cloneCommand);
                         }
 
-
+                        //AP-
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(1)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(2);
                             commandsAPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumAPMns()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(2);
                             commandsAPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(2);
                             commandsAPMns.add(cloneCommand);
                         }
 
-
+                        //RP+
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(2)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(6);
                             commandsRPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(6);
                             commandsRPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(6);
                             commandsRPPls.add(cloneCommand);
                         }
 
-
+                        //RP-
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(3)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(6);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(6);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(6);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Если выбран трехфазный трехпроводный режим sin 90
                     } else if (typeCircut.equals("3P3W 90 R.P.")) {
+
                         //RP+
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(2)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(3);
                             commandsRPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(3);
                             commandsRPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(3);
@@ -1462,57 +1568,68 @@ public class TestErrorTableFrameController {
                         }
 
                         //RP-
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(3)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(3);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(3);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(3);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Если выбран трехфазный трехпроводный режим sin 60
                     } else if (typeCircut.equals("3P3W 60 R.P.")) {
+
                         //RP+
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(2)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(4);
                             commandsRPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumRPPls()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(4);
                             commandsRPPls.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(4);
                             commandsRPPls.add(cloneCommand);
                         }
 
-                        //RP-
+                        //RP+
+                        //Добавляю точки ErrorCommand
                         for (Commands command : methodicForStend.getCommandsMap().get(3)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(4);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки ErrorCommand с окна влияния
                         for (Commands command : methodicForStend.getSaveInflListForCollumRPMns()) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(4);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(4);
@@ -1521,9 +1638,10 @@ public class TestErrorTableFrameController {
                     }
                 }
 
-                //Однофазный стенд
+                //Если стенд является однофазным
             } else {
 
+                //Но при этом выбрана методика для трехфазного стенда
                 if (methodicForStend instanceof ThreePhaseStend) {
 
                     //AP+
@@ -1549,6 +1667,7 @@ public class TestErrorTableFrameController {
                         }
                     }
 
+                    //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                     for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
                         cloneCommand = command.clone();
                         cloneCommand.setPhase(0);
@@ -1578,6 +1697,7 @@ public class TestErrorTableFrameController {
                         }
                     }
 
+                    //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                     for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
                         cloneCommand = command.clone();
                         cloneCommand.setPhase(0);
@@ -1607,6 +1727,7 @@ public class TestErrorTableFrameController {
                         }
                     }
 
+                    //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                     for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
                         cloneCommand = command.clone();
                         cloneCommand.setPhase(7);
@@ -1636,14 +1757,17 @@ public class TestErrorTableFrameController {
                         }
                     }
 
+                    //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                     for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
                         cloneCommand = command.clone();
                         cloneCommand.setPhase(7);
                         commandsRPMns.add(cloneCommand);
                     }
 
+                    //Если методика выбрана для однофазного стенда (чем он и является)
                 } else {
 
+                    //Если данный стенд имеет две токовые цепи
                     if (twoCircut) {
 
                         //AP+
@@ -1669,6 +1793,7 @@ public class TestErrorTableFrameController {
                             }
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(0);
@@ -1698,6 +1823,7 @@ public class TestErrorTableFrameController {
                             }
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(0);
@@ -1727,6 +1853,7 @@ public class TestErrorTableFrameController {
                             }
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(7);
@@ -1756,12 +1883,14 @@ public class TestErrorTableFrameController {
                             }
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(7);
                             commandsRPMns.add(cloneCommand);
                         }
 
+                        //Если данный стенд имеет одну токовую цепи
                     } else {
 
                         //AP+
@@ -1787,6 +1916,7 @@ public class TestErrorTableFrameController {
                             }
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(0)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(0);
@@ -1816,6 +1946,7 @@ public class TestErrorTableFrameController {
                             }
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(1)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(0);
@@ -1845,6 +1976,7 @@ public class TestErrorTableFrameController {
                             }
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(2)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(7);
@@ -1874,6 +2006,7 @@ public class TestErrorTableFrameController {
                             }
                         }
 
+                        //Добавляю точки испытания "Самоход, чувствительность, Точность хода часов, проверка счётного механизма"
                         for (Commands command : methodicForStend.getCreepStartRTCConstCommandsMap().get(3)) {
                             cloneCommand = command.clone();
                             cloneCommand.setPhase(7);
@@ -1886,9 +2019,11 @@ public class TestErrorTableFrameController {
             e.printStackTrace();
         }
 
+        //Создаю обекты результата испытания в каждой точке (Command)
         initErrorsForMeters();
 
-        //В зависимости от количества счётчиков инициализирую поля для отображения погрешности
+        //В зависимости от количества счётчиков инициализирую таблицы для отображения погрешности
+        //Если счётчиков меньше 12 размещаю таблицы на одном листе
         if (listMetersForTest.size() <= 12) {
 
             for (int i = 0; i < listMetersForTest.size(); i++) {
@@ -1909,7 +2044,7 @@ public class TestErrorTableFrameController {
                     }
                 }
             });
-
+            //Действие при изменении размеров окна
             paneErrors.heightProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -1919,8 +2054,10 @@ public class TestErrorTableFrameController {
                 }
             });
 
+            //Если счётчиков меньше 24 делю окно и отображаю колонки один под одним
         } else if (listMetersForTest.size() <= 24) {
 
+            //Если счётчиков чётное количество, то отобращаю пополам
             if (listMetersForTest.size() % 2 == 0) {
 
                 for (int j = 0; j < 2; j++) {
@@ -1937,6 +2074,7 @@ public class TestErrorTableFrameController {
                     }
                 }
 
+                //Действие при изменении размеров окна
                 paneErrors.widthProperty().addListener(new ChangeListener<Number>() {
                     @Override
                     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -1974,6 +2112,8 @@ public class TestErrorTableFrameController {
                         }
                     }
                 });
+
+                //Если счётчиков нечётное количество, то отобращаю в верхней части больше счётчиков на 1
             } else {
 
                 for (int j = 0; j < 2; j++) {
@@ -1990,6 +2130,7 @@ public class TestErrorTableFrameController {
                     }
                 }
 
+                //Действие при изменении размеров окна
                 paneErrors.widthProperty().addListener(new ChangeListener<Number>() {
                     @Override
                     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -2034,6 +2175,7 @@ public class TestErrorTableFrameController {
         }
 
         //Если выбираю точку испытания, то должна выставляться фокусировка и на панели с погрешностью
+        //Если все колонки с результатами находятся на одном листе
         if (listMetersForTest.size() <= 12) {
             ObservableList<TablePosition> tablePositions = tabViewTestPoints.getSelectionModel().getSelectedCells();
 
@@ -2052,6 +2194,7 @@ public class TestErrorTableFrameController {
                 }
             });
 
+            //Если все колонки с результатами делят рабочее пространство
         } else {
 
             ObservableList<TablePosition> tablePositions = tabViewTestPoints.getSelectionModel().getSelectedCells();
@@ -2094,6 +2237,7 @@ public class TestErrorTableFrameController {
             });
         }
 
+        //Отображение подсказок с параметрами выбранной команды
         tabViewTestPoints.setRowFactory(tv -> new TableRow<Commands>() {
             private Tooltip tooltip = new Tooltip();
 
@@ -2164,6 +2308,8 @@ public class TestErrorTableFrameController {
             }
         });
 
+        //Если точки для активной энергии в прямом направлении есть, то отображаю их спытания есть,
+        //если нет, то иду дальше пока не найду таблицу, где они есть
         if (commandsAPPls.size() != 0) {
             tglBtnAPPls.fire();
         } else if (commandsAPMns.size() != 0) {
@@ -2172,10 +2318,13 @@ public class TestErrorTableFrameController {
             tglBtnRPPls.fire();
         } else if (commandsRPMns.size() != 0) {
             tglBtnRPMns.fire();
+
+            //Если точек для испытания нет (пустая методика поверки)
         } else {
             tglBtnAPPls.fire();
         }
 
+        //Ставлю слушатель на действие при закрытии окна пользователем
         Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
 
         testErrorTableFrameControllerStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -2187,6 +2336,7 @@ public class TestErrorTableFrameController {
         });
 
         //Загрузка окна с параметрами этелонного счётчика
+        //Если стенд трехфазный, то загружаю окно с параметрами этолонного счётчика для трехфазного стенда
         if (stendDLLCommands instanceof ThreePhaseStend) {
 
             Platform.runLater(new Runnable() {
@@ -2217,6 +2367,7 @@ public class TestErrorTableFrameController {
                 }
             });
 
+            //Если стенд однофазный, то загружаю окно с параметрами этолонного счётчика для однофазного стенда
         } else {
             Platform.runLater(new Runnable() {
                 @Override
@@ -2285,7 +2436,9 @@ public class TestErrorTableFrameController {
         return stendRefParametersForFrame.getStendRefParametersForFrame();
     }
 
-    //Добавляет объект resultError к каждому счётчику необходимому для теста
+    /**
+     * Выполняет добавление результата теста в каждой точке для каждого счётчика
+     */
     private void initErrorsForMeters() {
 
         //Инициализицрую константы активной и реактивной энергии
@@ -2315,6 +2468,7 @@ public class TestErrorTableFrameController {
         }
     }
 
+    //В зафисимости от того вылезает ли результат счётчика за диапазон заданной погрешности раскрашиваю значение
     private void addTableViewAndCollumnInErrorPane(int index) {
 
         //Настройка для отдельного поля счётчика изменения цвета погрешности после окончания теста
@@ -2334,13 +2488,17 @@ public class TestErrorTableFrameController {
                                 } else {
                                     firstSymbol = item.charAt(0);
 
+                                    //Нейтральное значение
                                     if (firstSymbol == 'N') {
                                         setText(item.substring(1));
                                         setTextFill(Color.BLACK);
+
+                                        //погрешность влезла в диапазон
                                     } else if (firstSymbol == 'P') {
                                         setText(item.substring(1));
                                         setTextFill(Color.rgb(0, 105, 201));
 
+                                        //погрешность вылезла за диапазон
                                     } else if (firstSymbol == 'F') {
                                         setText(item.substring(1));
                                         setTextFill(Color.rgb(245, 0, 0));
@@ -2353,11 +2511,14 @@ public class TestErrorTableFrameController {
 
         TableView<Meter.CommandResult> tableView = new TableView<>();
 
+        //Задаю путь к стилю таблицы
         String styleErrorTableView = getClass().getClassLoader().getResource("styleCSS/testErrorTableFrame/tableViewErrors.css").toString();
+
         if (styleErrorTableView != null) {
             tableView.getStylesheets().add(styleErrorTableView);
         }
 
+        //Задаю номер посадочного места
         TableColumn<Meter.CommandResult, String> column = new TableColumn<>("Место " + listMetersForTest.get(index).getId());
         column.setStyle("-fx-alignment: CENTER;");
         column.setCellValueFactory(new PropertyValueFactory<>("lastResultForTabView"));
@@ -2368,6 +2529,7 @@ public class TestErrorTableFrameController {
         paneErrors.getChildren().add(tableView);
         tabViewErrorsList.add(tableView);
 
+        //Добавляю всплывающие окна с результатами прошлых тестов
         tableView.setRowFactory(tv -> new TableRow<Meter.CommandResult>() {
             private Tooltip tooltip = new Tooltip();
 
@@ -2396,14 +2558,13 @@ public class TestErrorTableFrameController {
         });
     }
 
-    //Находит все скрол бары
+    //Находит все скрол бары и устанавливает значения других как у основного (двигаю основной, двигаются другие)
     public void initScrolBars() {
         ScrollBar verticalBarCommands;
         ScrollBar verticalBarErrorsFirst;
         ScrollBar verticalBarErrorsSecond;
 
         //Получаю скрол бары определённого окна
-        //AP+
         verticalBarCommands = (ScrollBar) tabViewTestPoints.lookup(".scroll-bar:vertical");
 
         for (int i = tabViewErrorsList.size() - 1; i > 0; i--) {
@@ -2490,8 +2651,9 @@ public class TestErrorTableFrameController {
         return ((Integer.parseInt(timeArr[0]) * 60) + bigDecimal.intValue()) * 1000;
     }
 
+    //Получаю время тестов по ГОСТУ
     private void intiTimeCRPSTATests() {
-        //Время для самохода гостовские тесты
+
         timeToCreepTestGOSTAP = initTimeForCreepTestGOST(constantMeterAP);
 
         timeToCreepTestGOSTRP = initTimeForCreepTestGOST(constantMeterRP);
@@ -2501,6 +2663,7 @@ public class TestErrorTableFrameController {
         timeToStartTestGOSTRP = initTimeForStartGOSTTest(accuracyClassRP, constantMeterRP);
     }
 
+    //Блокирует кнопки управления от пользователя на заданное время
     private void blockControlBtns(int mls) {
 
         new Thread(new Task() {
@@ -2533,6 +2696,7 @@ public class TestErrorTableFrameController {
         }).start();
     }
 
+    //Действие при возникновении дисконекта от устаноки
     private void cathConnectionException(Throwable e) {
 
         Platform.runLater(new Runnable() {
