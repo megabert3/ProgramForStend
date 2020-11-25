@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 /**
  * @autor Albert Khalimov
- *
+ * Данный класс является контроллером окна "threePhaseStendrefParamFrame.fxml".
  * Данный класс отвечает за отображение параметров полученных от эталонного счётчика трехфазного стенда в GUI"
  */
 public class ThreePhaseStendRefParamController implements StendRefParametersForFrame {

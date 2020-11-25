@@ -1,6 +1,7 @@
 package org.taipit.stend.model.metodics;
 
 import org.taipit.stend.controller.Commands.Commands;
+import org.taipit.stend.controller.Meter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -426,6 +427,36 @@ public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializabl
 
     public String getMeterModel() {
         return meterModel;
+    }
+
+    @Override
+    public boolean isContaintsLastNotSaveResults() {
+        return false;
+    }
+
+    @Override
+    public void setContaintsLastNotSaveResults(boolean containtsLastNotSaveResults) {
+
+    }
+
+    @Override
+    public boolean isResultsOverwriten() {
+        return false;
+    }
+
+    @Override
+    public void setResultsOverwriten(boolean resultsOverwriten) {
+
+    }
+
+    @Override
+    public List<Meter> getNotSaveResultMeters() {
+        return null;
+    }
+
+    @Override
+    public void setNotSaveResultMeters(List<Meter> notSaveResultMeters) {
+
     }
 
     public void setMeterModel(String meterModel) {

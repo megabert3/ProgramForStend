@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 /**
  * @autor Albert Khalimov
- *
+ * Данный класс является контроллером окна "onePhaseStendrefParamFrame.fxml".
  * Данный класс отвечает за отображение параметров полученных от эталонного счётчика однофазного стенда в GUI"
  */
 public class OnePhaseStendRefParamController implements StendRefParametersForFrame {

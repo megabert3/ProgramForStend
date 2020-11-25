@@ -11,30 +11,37 @@ import javafx.stage.Stage;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Comparator;
 
-
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна "addDeleteTestPointInGridPaneFrame.fxml".
+ * Данный класс отвечает за возможность добавления новых параметров при создании ErrorCommand"
+ */
 public class AddDeleteTestPointInGridPaneController {
 
+    //В зависимости от того из какого окна вызывается это, присваиваю объкту ссылку на него
+    //для дальнейших операций с ним
     private AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController;
-
     private AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController;
 
+    //Список значений коэффициента активной мощности для редактирования и добавления новых значений
     private ObservableList<String> powerFactor = FXCollections.observableArrayList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
+    //Список значений тока для редактирования и добавления новых значений
     private ObservableList<String> current = FXCollections.observableArrayList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
 
+    //Возможные варианты для правильности ввода значений
     private String[] powerFactorCoef = {"","L","C"};
     private String[] currentImaxIb = {"Imax", "Ib"};
 
+    //Сортирую список значений коэффициента мощности при добавлении
     private Comparator<String> comparatorForPowerFactor = new Comparator<String>() {
         @Override
         public int compare(String o1, String o2) {
             return o2.compareTo(o1);
         }
     };
-
+    //Сортирую список значений тока при добавлении
     private Comparator<String> comparatorForIbImax = new Comparator<String>() {
         @Override
         public int compare(String o1, String o2) {
@@ -124,15 +131,10 @@ public class AddDeleteTestPointInGridPaneController {
         btnSave.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-                String powerFactor = Arrays.toString(tabListPowerFactor.getItems().toArray());
-                String current = Arrays.toString(tabListCurrent.getItems().toArray());
-
-                ConsoleHelper.properties.setProperty("powerFactorForMetodicPane", powerFactor.substring(1, powerFactor.length() - 1));
-                ConsoleHelper.properties.setProperty("currentForMethodicPane", current.substring(1, current.length() - 1));
-
+                //Сохраняю изменения
                 ConsoleHelper.saveProperties();
 
+                //В зависимости от того с какого окна вызывалось это, обновляю информацию в GUI'е того окна с учётом новых добавленных значений
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -149,26 +151,33 @@ public class AddDeleteTestPointInGridPaneController {
                 });
 
                 Stage stage = (Stage) btnSave.getScene().getWindow();
-
                 stage.close();
             }
         });
     }
 
+    /**
+     * Добавляет либо удаляет значение тока или коэффициента мощности из списка возможных
+     * @param event
+     */
     @FXML
     void addOrDeleteAction(ActionEvent event) {
         if (event.getSource() == btnAddPowerFactor) {
             try {
+                //Если пустое значение или введённое значение уже есть в списке
                 if (txtFldPowerFactor.getText().isEmpty() || tabListPowerFactor.getItems().contains(txtFldPowerFactor.getText().trim() + chBoxPowerFactor.getValue())) {
                     txtFldPowerFactor.clear();
                     txtFldPowerFactor.setStyle("");
                     return;
-                } else {
 
+                    //Если введённого значения нет в списке
+                } else {
+                    //Проверка на корректность
                     if (Float.parseFloat(txtFldPowerFactor.getText().trim()) > 1.0f || Float.parseFloat(txtFldPowerFactor.getText().trim()) < 0) {
                         throw new InfoExсeption("Значение должно быть в диапазоне\nот 0 до 1.0");
                     }
 
+                    //добавляю значение в лист
                     powerFactor.add(txtFldPowerFactor.getText().trim() + chBoxPowerFactor.getValue());
                     powerFactor.sort(comparatorForPowerFactor);
                     tabListPowerFactor.getItems().clear();
@@ -179,11 +188,11 @@ public class AddDeleteTestPointInGridPaneController {
                 }
             }catch (NumberFormatException | InfoExсeption e) {
                 e.printStackTrace();
-                System.out.println("Неверный формат");
                 txtFldPowerFactor.setStyle("-fx-text-box-border: red ;  -fx-focus-color: red ;");
             }
         }
 
+        //Если необходимо удалить значение из списка
         if (event.getSource() == btnDeletePowerFactor) {
             powerFactor.remove(tabListPowerFactor.getSelectionModel().getSelectedIndex());
             powerFactor.sort(comparatorForPowerFactor);
@@ -191,18 +200,23 @@ public class AddDeleteTestPointInGridPaneController {
             tabListPowerFactor.getItems().addAll(powerFactor);
         }
 
+        //Если пользователь хочет добавить значение тока
         if (event.getSource() == btnAddCurrent) {
             try {
+                //Проверка на уникальность значения и на пустоту
                 if (txtFldCurrent.getText().isEmpty() || tabListCurrent.getItems().contains(txtFldCurrent.getText().trim() + " " + chBoxCurrent.getValue())) {
                     txtFldCurrent.clear();
                     txtFldCurrent.setStyle("");
                     return;
+
+                    //Проверяю на корректность введённое число
                 } else {
                     if (Float.parseFloat(txtFldCurrent.getText().trim()) > 100.0f || Float.parseFloat(txtFldCurrent.getText().trim()) < 0) {
-                        throw new InfoExсeption("Значение должно быть в диапазоне\nот 0 до 1.0");
+                        throw new InfoExсeption("Значение должно быть в диапазоне\nот 0 до 100.0");
                     }
                     Float.parseFloat(txtFldCurrent.getText().trim());
 
+                    //Добавление значения
                     current.add(txtFldCurrent.getText().trim() + " " + chBoxCurrent.getValue());
                     current.sort(comparatorForIbImax);
                     tabListCurrent.getItems().clear();
@@ -218,6 +232,7 @@ public class AddDeleteTestPointInGridPaneController {
             }
         }
 
+        //Удаление значения тока
         if (event.getSource() == btnDeleteCurrent) {
             tabListCurrent.getItems().remove(tabListCurrent.getSelectionModel().getSelectedItem());
         }

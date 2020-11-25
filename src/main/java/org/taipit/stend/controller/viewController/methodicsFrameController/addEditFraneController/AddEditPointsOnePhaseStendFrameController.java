@@ -41,23 +41,35 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна "addEditPointsOnePhaseStendMet.fxml".
+ * Данный класс отвечает за возможность добавления, редактирования точек испытания в методику поверки для однофазного стенда"
+ */
 public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
+    //Ссылка на данный контроллер
     private AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController = this;
 
+    //Список всех методик поверки
     private MetodicsForTest metodicsForTest = MetodicsForTest.getMetodicsForTestInstance();
 
+    //Ссылка на окно где можно добавить точки испытаний с влиянием частоты сети и напряжения
     private InfluencePointsOnePhaseStendFrame influencePointsOnePhaseStendFrame;
 
+    //Имя созданной методики можно получить из окна
     private MethodicNameController methodicNameController;
 
+    //Окно выбора для создания или редактированя методики
     private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
 
+    //Объектр данногог класса
     private MethodicForOnePhaseStend methodicForOnePhaseStend;
 
+    //Если пользователь вводит параметры испытания на момент создания методики
     private boolean bindParameters;
 
-    //Это окно вызвано кнопкой редактировать?
+    //Это окно вызвано кнопкой редактировать (выбрано изменить уже существующую методику)?
     private boolean edit;
 
     //Значения коэффициента мощности
@@ -66,14 +78,20 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     //Значения выставленного тока
     private List<String> current;
 
+    //gridPane выбора точек методики
     private List<GridPane> gridPanesEnergyAndPhase = new ArrayList<>();
 
+    //Сохранены ли изменения методики
     private boolean saveChange = false;
 
     //Лист с точками общая методика
+    //Активная энергия в прямом направлении тока
     private ObservableList<Commands> testListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
+    //Активная энергия в обратном направлении тока
     private ObservableList<Commands> testListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
+    //Реактивная энергия в прямом направлении тока
     private ObservableList<Commands> testListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
+    //Реактивная энергия в обратном направлении тока
     private ObservableList<Commands> testListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
 
     @FXML
@@ -88,6 +106,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private GridPane gridPaneForCurrent = new GridPane();
     private GridPane gridPaneForPowerFactor = new GridPane();
 
+    //Закрашивающий квадрат
     private Pane fillSquare;
     private Button btnAddDeleteTestPoints = new Button();
 
@@ -189,22 +208,22 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
     //-------------------------------------------------------
     //Данный блок отвечает за сетку выбора точки.
-    //Активная энергия в прямом направлении, Все фазы и отдельно А В С
+    //Активная энергия в прямом направлении, Одна фаза (H) и если стенд имеет две токовые цепи A B
     private GridPane gridPaneOnePhaseAPPlus = new GridPane();
     private GridPane gridPanePhaseAAPPlus = new GridPane();
     private GridPane gridPanePhaseBAPPlus = new GridPane();
 
-    //Активная энергия в обратном направлении, Все фазы и отдельно А В С
+    //Активная энергия в обратном направлении, Одна фаза (H) и если стенд имеет две токовые цепи A B
     private GridPane gridPaneOnePhaseAPMinus = new GridPane();
     private GridPane gridPanePhaseAAPMinus = new GridPane();
     private GridPane gridPanePhaseBAPMinus = new GridPane();
 
-    //Реактивная энергия в прямом направлении, Все фазы и отдельно А В С
+    //Реактивная энергия в прямом направлении, Одна фаза (H) и если стенд имеет две токовые цепи A B
     private GridPane gridPaneOnePhaseRPPlus = new GridPane();
     private GridPane gridPanePhaseARPPlus = new GridPane();
     private GridPane gridPanePhaseBRPPlus = new GridPane();
 
-    //Реактивная энергия в обратном направлении, Все фазы и отдельно А В С
+    //Реактивная энергия в обратном направлении, Одна фаза (H) и если стенд имеет две токовые цепи A B
     private GridPane gridPaneOnePhaseRPMinus = new GridPane();
     private GridPane gridPanePhaseARPMinus = new GridPane();
     private GridPane gridPanePhaseBRPMinus = new GridPane();
@@ -690,7 +709,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     private ToggleButton addTglBtnRelay;
 
 
-    //Устанавливает имя методики полученное с другого окна
+    //Устанавливает имя методики полученное с окна создания и присвоения имени
     public void setTextFielMethodicName() {
         metodicNameTxtFld.setText(methodicForOnePhaseStend.getMetodicName());
     }
@@ -698,12 +717,13 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     @FXML
     void initialize() {
 
+        //Получаю параметры для построения сетки выбора точки
         current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
         powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
 
         setIdGridPanes();
 
-        createGridPaneAndsetCheckBoxes();
+        createGridPaneAndSetCheckBoxes();
 
         initMainScrollPane();
 
@@ -711,6 +731,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
         createScrollPanesForGridPane();
 
+        //Редактирование параметров сетки выбора точек (Изменение значений коэффициента мощности и тока)
         btnAddDeleteTestPoints.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -740,6 +761,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
         APPlus.fire();
 
+        //Добавляю в группы выбор режима испытания "Проверка счётного механизма" либо по времени, либо по кл-ву энергии
         radBtnConstEnergyAPPls.setToggleGroup(radioBtnGroupAPPls);
         radBtnConstTimeAPPls.setToggleGroup(radioBtnGroupAPPls);
         radBtnConstTimeAPPls.setSelected(true);
@@ -756,6 +778,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         radBtnConstTimeRPMns.setToggleGroup(radioBtnGroupRPMns);
         radBtnConstTimeRPMns.setSelected(true);
 
+        //Изначальное положение кнопок
         APPlus.setSelected(true);
         onePhaseBtn.setSelected(true);
         APPlusCRPSTA.setSelected(true);
@@ -763,11 +786,13 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         paneCRPAPPls.toFront();
 
         initCoiseBoxParamForRTC();
+
         gridPaneOnePhaseAPPlus.toFront();
         viewPointTableAPPls.toFront();
     }
 
 //================Всё чтоё связанно с инициализацией грид пайн ======================
+    //Контейнер, где находятся сетки с выбором точек испытания
     private void initMainScrollPane() {
         mainScrollPane.setPrefHeight(230);
         mainScrollPane.setPrefWidth(643);
@@ -779,6 +804,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
         mainScrollPane.setStyle("-fx-background: #858585;");
 
+        //Устанавливаю стиль
         String cssAdress = getClass().getClassLoader().getResource("styleCSS/scrollPane.css").toString();
         if (cssAdress != null) {
             mainScrollPane.getStylesheets().add(cssAdress);
@@ -791,6 +817,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
     }
 
+    /**
+     * Устанавливает id, необходимые в дальней для выбора точки испытания
+     */
     private void setIdGridPanes() {
             gridPaneOnePhaseAPPlus.setId("0;H;A;P");
             gridPanePhaseAAPPlus.setId("0;A;A;P");
@@ -828,11 +857,15 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         );
     }
 
-    private void createGridPaneAndsetCheckBoxes() {
+    /**
+     * Формирует сетки выбора точек испытаний
+     */
+    private void createGridPaneAndSetCheckBoxes() {
         createRowAndColumnForGridPane();
         setCheckBoxAndLabelInGridPane();
     }
 
+    //Создаёт сетку необходимого размера
     private void createRowAndColumnForGridPane() {
         for (GridPane gridPane : gridPanesEnergyAndPhase) {
             for (int i = 0; i < current.size() + 1; i++) {
@@ -845,17 +878,22 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
     }
 
+    /**
+     * Помещает чек боксы в сетку и задаёт им ID
+     */
     private void setCheckBoxAndLabelInGridPane() {
         String cssAdress = getClass().getClassLoader().getResource("styleCSS/addDeleteEditPointsFrame/checkBox.css").toString();
 
         CheckBox checkBox;
 
+        //Прохожусь по всем сеткам созданным ранее
         for (GridPane gridPane : gridPanesEnergyAndPhase) {
 
             gridPane.setGridLinesVisible(true);
 
             for (int x = 0; x < current.size(); x++) {
                 for (int y = 0; y < powerFactor.size(); y++) {
+
                     //Устанавливаю CheckBox в нужную и соответствующую ячейку
                     checkBox = new CheckBox();
 
@@ -864,7 +902,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
 
                     checkBox.setId(gridPane.getId() + ";" + current.get(x) + ";" + powerFactor.get(y));
-
 
                     GridPane.setColumnIndex(checkBox, x + 1);
                     GridPane.setRowIndex(checkBox, y + 1);
@@ -877,6 +914,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
     }
 
+    /**
+     * Устанавливает слушатель при изменении значения чек бокса
+     * Либо добавляет либо удаляет точку испытания
+     */
     public void addListenerToCheckBoxes() {
         for (GridPane gridPane : gridPanesEnergyAndPhase) {
             for (Node node : gridPane.getChildren()) {
@@ -895,6 +936,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
     }
 
+    /**
+     * Формирует дополнительные scrollPane
+     * это необходимо чтобы при скроллинге основного скролл пэйна смещалась и
+     * информация коэф. мощности и тока принадлежащая столбу и строчке
+     */
     private void createScrollPanesForGridPane() {
         //Curr
         scrollPaneForCurrent.setMinHeight(0);
@@ -929,7 +975,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         gridPaneForPowerFactor.setPrefHeight(gridPaneOnePhaseAPPlus.getHeight());
         scrollPaneForPowerFactor.setContent(gridPaneForPowerFactor);
 
-        //Закрывающий квадрат
+        //Закрывающий квадрат(левый верхний угол mainScrollPane)
         fillSquare = new Pane();
         fillSquare.setStyle("-fx-background-color: #B8B8B8;");
         fillSquare.setPrefHeight(23);
@@ -950,6 +996,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         fillSquare.getChildren().add(btnAddDeleteTestPoints);
     }
 
+    /**
+     * Помещаю на созданные скролл пэйны информацию к какому столбу сетки какое принадлежит значение тока
+     * и какой строчке какое значение коэф. мощности
+     */
     private void initScrolPaneForCurrentAndPowerFactor() {
         gridPaneForCurrent.setPrefWidth(gridPaneOnePhaseAPPlus.getWidth());
         scrollPaneForCurrent.setContent(gridPaneForCurrent);
@@ -985,6 +1035,12 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
     }
 
+    /**
+     * Формирует дополнительные scrollPane
+     * это необходимо чтобы при скроллинге основного скролл пэйна смещалась и
+     * информация коэф. мощности и тока принадлежащая столбу и строчке
+     * Но без закращивающего смещение квадрата
+     */
     private void createScrollPanesForGridPaneWithoutSquare() {
         //Curr
         scrollPaneForCurrent.setMinHeight(0);
@@ -1022,6 +1078,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         fillSquare.toFront();
     }
 
+    /**
+     * Связывает между собой скролл бары основого контейнера, который содержит gridpane's
+     * и скрол бары информации о строках и столбах грид пайнес
+     */
     public void bindScrollPanesCurrentAndPowerFactorToMainScrollPane() {
         ScrollBar currentHorizontalScroll = null;
         ScrollBar mainHorizontalScroll = null;
@@ -1067,9 +1127,13 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         powerFactorVerticalScroll.valueProperty().bindBidirectional(mainVerticalScroll.valueProperty());
     }
 
-    //======================= Всё что связано с отображением выбранных точек в TableView ================================
-    //Инициализирует таблицу для отображения выбранных точек
+    //======================= Всё что связано с отображением выбранных точек в TableView ===============================
+    /**
+     * Инициализирует таблицу для отображения выбранных пользователем точек испытания (ErrorCommand's)
+     */
     public void initTableView() {
+        //Добавляю в лист все колонки с информацией о точке испытания для
+        // точек активной энергии в прямом направлении тока (AP+)
         List<TableColumn<Commands, String>> collumnListAPPls = Arrays.asList(
                 loadCurrTabColAPPls,
                 eMaxTabColAPPls,
@@ -1079,6 +1143,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 timeStabTabColAPPls
         );
 
+        //Добавляю в лист все колонки с информацией о точке испытания для
+        // точек активной энергии в обратном направлении тока (AP-)
         List<TableColumn<Commands, String>> collumnListAPMns = Arrays.asList(
                 loadCurrTabColAPMns,
                 eMaxTabColAPMns,
@@ -1088,6 +1154,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 timeStabTabColAPMns
         );
 
+        //Добавляю в лист все колонки с информацией о точке испытания для
+        // точек реактивной энергии в прямом направлении тока (RP+)
         List<TableColumn<Commands, String>> collumnListRPPls = Arrays.asList(
                 loadCurrTabColRPPls,
                 eMaxTabColRPPls,
@@ -1097,6 +1165,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 timeStabTabColRPPls
         );
 
+        //Добавляю в лист все колонки с информацией о точке испытания для
+        // точек реактивной энергии в обратном направлении тока (RP-)
         List<TableColumn<Commands, String>> collumnListRPMns = Arrays.asList(
                 loadCurrTabColRPMns,
                 eMaxTabColRPMns,
@@ -1106,13 +1176,14 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 timeStabTabColRPMns
         );
 
+        //Добавляю все слиты в мап с индексами напрвления и типа мощности (необходимо для локаничной инициализации)
         Map<Integer, List<TableColumn<Commands, String>>> mapTableColumn = new HashMap<>();
         mapTableColumn.put(0, collumnListAPPls);
         mapTableColumn.put(1, collumnListAPMns);
         mapTableColumn.put(2, collumnListRPPls);
         mapTableColumn.put(3, collumnListRPMns);
 
-
+        //Инициализация всех TableView
         for (int i = 0; i < mapTableColumn.size(); i++) {
             //Устанавливаем данные для колонок (AP+, AP-, RP+, RP-)
             mapTableColumn.get(i).get(0).setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -1137,6 +1208,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             mapTableColumn.get(i).get(5).setCellFactory(TextFieldTableCell.forTableColumn());
 
             //Действие при изменении информации в колонке
+
+            //Изменение максимальной погрешности Emax
             mapTableColumn.get(i).get(1).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
                 TablePosition<Commands, String> pos = event.getTablePosition();
 
@@ -1146,6 +1219,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 Commands command = event.getTableView().getItems().get(row);
 
                 if (command instanceof ErrorCommand) {
+                    //проверка введённого пользователем значения на валидность
                     try {
                         Float.parseFloat(newImpulseValue);
                     }catch (NumberFormatException e) {
@@ -1154,7 +1228,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         event.getTableView().refresh();
                         return;
                     }
-                    ((ErrorCommand) command).setEmax(newImpulseValue);
+
+                    command.setEmax(newImpulseValue);
 
                     if (!newImpulseValue.equals(event.getOldValue())) {
                         saveChange = true;
@@ -1165,6 +1240,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             });
 
+            //Изменение минимальной погрешности Emin
             mapTableColumn.get(i).get(2).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
                 TablePosition<Commands, String> pos = event.getTablePosition();
 
@@ -1182,7 +1258,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         event.getTableView().refresh();
                         return;
                     }
-                    ((ErrorCommand) command).setEmin(newImpulseValue);
+                    command.setEmin(newImpulseValue);
 
                     if (!newImpulseValue.equals(event.getOldValue())) {
                         saveChange = true;
@@ -1192,6 +1268,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             });
 
+            //Изменение количества импульсов измерения
             mapTableColumn.get(i).get(3).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
                 TablePosition<Commands, String> pos = event.getTablePosition();
 
@@ -1209,7 +1286,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         event.getTableView().refresh();
                         return;
                     }
-                    ((ErrorCommand) command).setPulse(newImpulseValue);
+                    command.setPulse(newImpulseValue);
 
                     if (!newImpulseValue.equals(event.getOldValue())) {
                         saveChange = true;
@@ -1219,6 +1296,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             });
 
+            //Изменение количества измерений
             mapTableColumn.get(i).get(4).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
                 TablePosition<Commands, String> pos = event.getTablePosition();
 
@@ -1228,7 +1306,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 Commands command = event.getTableView().getItems().get(row);
 
                 if (command instanceof ErrorCommand) {
-                    ((ErrorCommand) command).setCountResult(newImpulseValue);
+                    command.setCountResult(newImpulseValue);
 
                     if (!newImpulseValue.equals(event.getOldValue())) {
                         saveChange = true;
@@ -1236,6 +1314,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             });
 
+            //Изменение паузы стабилизации
             mapTableColumn.get(i).get(5).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
                 TablePosition<Commands, String> pos = event.getTablePosition();
 
@@ -1261,6 +1340,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             });
         }
 
+        //Действие при перетаскивании строки
         Callback<TableView<Commands>, TableRow<Commands>> dragAndRow = new Callback<TableView<Commands>, TableRow<Commands>>() {
             @Override
             public TableRow<Commands> call(TableView<Commands> param) {
@@ -1314,7 +1394,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         };
 
-        //Компараторы для точек
+        //Компараторы для сортировки точек испытания (ПЕРЕПИСАТЬ)
         Comparator<String> comparatorForCommands = new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
@@ -1468,12 +1548,13 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         };
 
-        //Устанавливаю компаратор
+        //Устанавливаю компаратор таблицам
         loadCurrTabColAPPls.setComparator(comparatorForCommands);
         loadCurrTabColAPMns.setComparator(comparatorForCommands);
         loadCurrTabColRPPls.setComparator(comparatorForCommands);
         loadCurrTabColRPMns.setComparator(comparatorForCommands);
 
+        //Оставляю сортировку только по имени точки
         eMaxTabColAPPls.setSortable(false);
         eMinTabColAPPls.setSortable(false);
         amountImplTabColAPPls.setSortable(false);
@@ -1498,35 +1579,42 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         amountMeasTabColRPMns.setSortable(false);
         timeStabTabColRPMns.setSortable(false);
 
-        //Перенос строк
+        //Устанавливаю возможность переноса строк
         viewPointTableAPPls.setRowFactory(dragAndRow);
         viewPointTableAPMns.setRowFactory(dragAndRow);
         viewPointTableRPPls.setRowFactory(dragAndRow);
         viewPointTableRPMns.setRowFactory(dragAndRow);
 
+        //Возможность редактирования таблиц
         viewPointTableAPPls.setEditable(true);
         viewPointTableAPMns.setEditable(true);
         viewPointTableRPPls.setEditable(true);
         viewPointTableRPMns.setEditable(true);
 
+        //Информация если таблица пустая
         viewPointTableAPPls.setPlaceholder(new Label("Не выбрано ни одной точки"));
         viewPointTableAPMns.setPlaceholder(new Label("Не выбрано ни одной точки"));
         viewPointTableRPPls.setPlaceholder(new Label("Не выбрано ни одной точки"));
         viewPointTableRPMns.setPlaceholder(new Label("Не выбрано ни одной точки"));
 
+        //Добавляю точки испытаний в таблицу
         viewPointTableAPPls.setItems(testListForCollumAPPls);
         viewPointTableAPMns.setItems(testListForCollumAPMns);
         viewPointTableRPPls.setItems(testListForCollumRPPls);
         viewPointTableRPMns.setItems(testListForCollumRPMns);
     }
 
-    //========== Всё для инициализации уже созданной методики (нажата кнопка редактирование) ============
-
-    //Проверияет нет ли данных с полученной методики и если у неё есть данные, то выгружает её в это окно
+    //========== Всё для инициализации уже ранее созданной методики (нажата кнопка редактирование) ============
+    //
     //Необходимо для команды Редактирования методики
+
+    /**
+     * Проверияет нет ли данных с полученной методики и если у неё есть данные, то клонирует точки в это окно.
+     * Клонирование для того чтобы вернуться к исходной методике если пользователь нажмёт кнопку отмены изменений
+     */
     public void initEditsMetodic() {
         try {
-            //ErrorCommands
+            //Добавление точек (ErrorCommands)
             for (Commands command : methodicForOnePhaseStend.getCommandsMap().get(0)) {
                 testListForCollumAPPls.add(command.clone());
             }
@@ -1543,7 +1631,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 testListForCollumRPMns.add(command.clone());
             }
 
-            //Other commands
+            //Добавлений других команд
             for (Commands command : methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(0)) {
                 testListForCollumAPPls.add(command.clone());
             }
@@ -1564,33 +1652,37 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             e.printStackTrace();
             ConsoleHelper.infoException(e.getMessage());
         }
-//        testListForCollumAPPls.addAll(methodicForOnePhaseStend.getCommandsMap().get(0));
-//        testListForCollumAPMns.addAll(methodicForOnePhaseStend.getCommandsMap().get(1));
-//        testListForCollumRPPls.addAll(methodicForOnePhaseStend.getCommandsMap().get(2));
-//        testListForCollumRPMns.addAll(methodicForOnePhaseStend.getCommandsMap().get(3));
-//
-//        testListForCollumAPPls.addAll(methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(0));
-//        testListForCollumAPMns.addAll(methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(1));
-//        testListForCollumRPPls.addAll(methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(2));
-//        testListForCollumRPMns.addAll(methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(3));
     }
 
-    //Задаёт параметр true или false нужному checkBox'у
+    /**
+     * Данный метод используется если нажата кнопка редактирования методики.
+     * В данном случае выставляется значение true или false checkBox'у в зависимости от того есть ли в редактируетмой методике
+     * та или иная точка, если команда не относится к ErrorCommand, то устанавливаются параметры других параметров в соответствующей панели
+     */
     public void addTestPointsOnGreedPane() {
         char[] testPointIdArr;
 
+        //Если лист с точками AP+ не пустой
         if (!testListForCollumAPPls.isEmpty()) {
 
             for (Commands command : testListForCollumAPPls) {
+                //Если это ErrorCommand
                 if (command instanceof ErrorCommand) {
+
                     testPointIdArr = command.getId().toCharArray();
+
+                    //Ищу нужный checkBox в сетке и ставлю ему значение true
                     setTrueOrFalseOnCheckBox(testPointIdArr, command);
 
+                //Если команда относится к Самоходу
                 } else if (command instanceof CreepCommand) {
+
                     CreepCommand creepCommand = (CreepCommand) command;
 
+                    //Если время исполнения этой команды расчитывается не по госту
                     if (!creepCommand.isGostTest()) {
 
+                        //Инициализирую поля окна параметрами команды
                         txtFieldCRPUProcAPPls.setText(String.valueOf(creepCommand.getVoltPer()));
                         txtFieldTimeCRPAPPls.setText(getTime(creepCommand.getUserTimeTest()));
                         txtFieldCRPAmtImpAPPls.setText(String.valueOf(creepCommand.getPulseValue()));
@@ -1600,15 +1692,22 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         txtFieldCRPUProcAPPls.setDisable(true);
                         txtFieldTimeCRPAPPls.setDisable(true);
                         txtFieldCRPAmtImpAPPls.setDisable(true);
+
+                    //Если по ГОСТУ
                     } else {
                         addTglBtnCRPAPPlsGOST.setSelected(true);
                     }
+
                     CRPTogBtnAPPls.setSelected(true);
 
+                //Если команда относится к Чувтсвительности
                 } else if (command instanceof StartCommand) {
                     StartCommand startCommand = (StartCommand) command;
 
+                    //Если время исполнения этой команды расчитывается не по госту
                     if (!startCommand.isGostTest()) {
+
+                        //Инициализирую поля окна параметрами команды
                         txtFieldSTAIProcAPPls.setText(String.valueOf(startCommand.getRatedCurr()));
                         txtFieldTimeSRAAPPls.setText(getTime(startCommand.getUserTimeTest()));
                         txtFieldSTAAmtImpAPPls.setText(String.valueOf(startCommand.getPulseValue()));
@@ -1618,20 +1717,24 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         txtFieldSTAIProcAPPls.setDisable(true);
                         txtFieldTimeSRAAPPls.setDisable(true);
                         txtFieldSTAAmtImpAPPls.setDisable(true);
+
+                    //Если по ГОСТУ
                     }else {
                         addTglBtnSTAAPPlsGOST.setSelected(true);
                     }
+
                     STATogBtnAPPls.setSelected(true);
 
+                //Если команда относится к проверке счётного механизма
                 } else if (command instanceof RTCCommand) {
                     RTCCommand rtcCommand = (RTCCommand) command;
 
+                    //Инициализирую поля окна параметрами команды
                     if (rtcCommand.getErrorType() == 0) {
                         ChcBxRTCErrAPPls.setValue("В ед. частоты");
                     } else {
                         ChcBxRTCErrAPPls.setValue("Сутч. погрешность");
                     }
-
 
                     txtFieldRngEAPPls.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
                     txtFldRTCFrqAPPls.setText(String.valueOf(rtcCommand.getFreg()));
@@ -1649,17 +1752,21 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                     RTCTogBtnAPPls.setSelected(true);
 
+                //Если команда относится к Проверке счётного механизма
                 } else if (command instanceof ConstantCommand) {
                     ConstantCommand constantCommand = (ConstantCommand) command;
 
+                    //Если команда выполняется по времени
                     if (((ConstantCommand) command).isRunTestToTime()) {
                         radBtnConstTimeAPPls.setSelected(true);
                         txtFieldConstTimeAPPls.setText(getTime(constantCommand.getTimeTheTest()));
+                    //Если команда выполняется по энергии
                     } else {
                         radBtnConstEnergyAPPls.setSelected(true);
                         txtFieldEngConstAPPls.setText(String.valueOf(constantCommand.getkWToTest()));
                     }
 
+                    //Инициализирую поля окна параметрами команды
                     txtFieldConsProcUAPPls.setText(String.valueOf(constantCommand.getVoltPer()));
                     txtFieldConsProcIAPPls.setText(String.valueOf(constantCommand.getCurrPer()));
                     txtFieldConsErAPPls.setText(String.valueOf(Math.abs(constantCommand.getEmaxProc())));
@@ -1678,6 +1785,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         }
 
+        //Далее идёт такой же механизм инициализации, но только для ругих направлений тока
+        //и других типов мощности
+
+        //Если лист с точками AP- не пустой
         if (!testListForCollumAPMns.isEmpty()) {
 
             for (Commands command : testListForCollumAPMns) {
@@ -1776,6 +1887,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         }
 
+        //Если лист с точками RP+ не пустой
         if (!testListForCollumRPPls.isEmpty()) {
 
             for (Commands command : testListForCollumRPPls) {
@@ -1874,6 +1986,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         }
 
+        //Если лист с точками RP- не пустой
         if (!testListForCollumRPMns.isEmpty()) {
 
             for (Commands command : testListForCollumRPMns) {
@@ -1972,14 +2085,22 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         }
 
+        //Отдельный метод для инициализации проверки Реле (был добавлен позже)
         initRelayTest();
     }
 
     //Находит нужный CheckBox и задаёт значение
+
+    /**
+     * Находит нужный checkBox в сетке выбора точек по ID и задаёт ему значение true
+     * @param testPointIdArr
+     * @param commands
+     */
     private void setTrueOrFalseOnCheckBox(char[] testPointIdArr, Commands commands) {
-        //AP+
+        //поиск в сетке AP+
         if (testPointIdArr[4] == 'A' && testPointIdArr[6] == 'P') {
 
+            //В сетке точек для стенда с одной токовой цепью
             if (testPointIdArr[2] == 'H') {
 
                 for (Node checkBox : gridPaneOnePhaseAPPlus.getChildren()) {
@@ -1990,6 +2111,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         }
                     }catch (NullPointerException ignore) {}
                 }
+
+            //В сетке точек для стенда с двумя токовыми цепями, для первой цепи (A)
             } else if (testPointIdArr[2] == 'A') {
 
                 for (Node checkBox : gridPanePhaseAAPPlus.getChildren()) {
@@ -2001,6 +2124,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }catch (NullPointerException ignore) {}
                 }
 
+            //В сетке точек для стенда с двумя токовыми цепями, для второй цепи (B)
             } else if (testPointIdArr[2] == 'B') {
 
                 for (Node checkBox : gridPanePhaseBAPPlus.getChildren()) {
@@ -2012,7 +2136,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }catch (NullPointerException ignore) {}
                 }
             }
-        //AP-
+
+        //Далее идёт такой же механизм поиска, но только для ругих направлений тока и типа энергии
+        //поиск в сетке AP-
         } else if (testPointIdArr[4] == 'A' && testPointIdArr[6] == 'N') {
 
             if (testPointIdArr[2] == 'H') {
@@ -2052,7 +2178,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
 
         //RP+
-        } else if (testPointIdArr[4] == 'R' && testPointIdArr[6] == 'P') {
+        }
+
+        //поиск в сетке RP+
+        else if (testPointIdArr[4] == 'R' && testPointIdArr[6] == 'P') {
 
             if (testPointIdArr[2] == 'H') {
 
@@ -2087,7 +2216,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             }
         //RP-
-        } else if (testPointIdArr[4] == 'R' && testPointIdArr[6] == 'N') {
+        }
+
+        //поиск в сетке RP-
+        else if (testPointIdArr[4] == 'R' && testPointIdArr[6] == 'N') {
 
             if (testPointIdArr[2] == 'H') {
 
@@ -2124,14 +2256,21 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
     }
 
-//===================================================================================================
-    //Метод для перерисовки GridPane после добавления новых параметров для точек
+
+    /**
+     * Метод для перерисовки GridPane после добавления новых параметров для точек
+     * Новые значения коэф. мощности (PF) и тока
+     */
     public void refreshGridPaneAndScrolPane() {
+
+        //Получаю новые значения
         current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
         powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
 
+        //Удаляю страную сетку с точками
         mainAnchorPane.getChildren().removeAll(mainScrollPane, scrollPaneForCurrent, scrollPaneForPowerFactor, stackPaneForGridPane);
 
+        //Создаю новую
         stackPaneForGridPane = new StackPane();
         mainScrollPane = new ScrollPane();
         scrollPaneForCurrent = new ScrollPane();
@@ -2155,10 +2294,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         gridPanePhaseARPMinus = new GridPane();
         gridPanePhaseBRPMinus = new GridPane();
 
-
         setIdGridPanes();
 
-        createGridPaneAndsetCheckBoxes();
+        createGridPaneAndSetCheckBoxes();
 
         initMainScrollPane();
 
@@ -2168,6 +2306,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
         APPlus.fire();
 
+        //Привязываю скролл бары друг у другу
         if (mainScrollPane.getSkin() == null || scrollPaneForPowerFactor.getSkin() == null || scrollPaneForCurrent.getSkin() == null) {
             mainScrollPane.skinProperty().addListener(new ChangeListener<Skin<?>>() {
                 @Override
@@ -2176,6 +2315,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
                 }
             });
+
             scrollPaneForPowerFactor.skinProperty().addListener(new ChangeListener<Skin<?>>() {
                 @Override
                 public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
@@ -2192,12 +2332,18 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             });
         } else {
+
             bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
         }
     }
 
+    /**
+     * Действие если пользователь хочет добавить точки влияния
+     * @param event
+     */
     @FXML
     void influenceAction(ActionEvent event) {
+
         if (event.getSource() == influenceBtn) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/OnePhase/influencePointsOnePhaseStendFrame.fxml"));
@@ -2226,8 +2372,13 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
     }
 
+    /**
+     * Если пользователь захочет установить фиксированные параметры при которых должны проводиться испытания
+     * @param event
+     */
     @FXML
     void parametersAction(ActionEvent event) {
+
         if (event.getSource() == parametersBtn) {
             parametersBtn.setSelected(bindParameters);
 
@@ -2257,33 +2408,45 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
     }
 
+    /**
+     * Действие при нажатии кнопки сохранить
+     * @param event
+     */
     @FXML
     void saveOrCancelAction(ActionEvent event) {
+
         if (event.getSource() == saveBtn) {
 
             List<Commands> listErrorCommand;
             List<Commands> listCreepStartRTCCommadns;
 
+            //Сохраняю точки для AP+
             listErrorCommand = methodicForOnePhaseStend.getCommandsMap().get(0);
             listCreepStartRTCCommadns = methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(0);
 
+            //Удаляю прошлые точки испытний
             listErrorCommand.clear();
             listCreepStartRTCCommadns.clear();
 
+            //Добавляю новые
             for (Commands command : testListForCollumAPPls) {
                 if (command instanceof ErrorCommand) {
                     listErrorCommand.add(command);
+
                 } else {
                     listCreepStartRTCCommadns.add(command);
                 }
             }
 
+            //Сохраняю точки для AP-
             listErrorCommand = methodicForOnePhaseStend.getCommandsMap().get(1);
             listCreepStartRTCCommadns = methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(1);
 
+            //Удаляю прошлые точки испытний
             listErrorCommand.clear();
             listCreepStartRTCCommadns.clear();
 
+            //Добавляю новые
             for (Commands command : testListForCollumAPMns) {
                 if (command instanceof ErrorCommand) {
                     listErrorCommand.add(command);
@@ -2292,12 +2455,15 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             }
 
+            //Сохраняю точки для RP+
             listErrorCommand = methodicForOnePhaseStend.getCommandsMap().get(2);
             listCreepStartRTCCommadns = methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(2);
 
+            //Удаляю прошлые точки испытний
             listErrorCommand.clear();
             listCreepStartRTCCommadns.clear();
 
+            //Добавляю новые
             for (Commands command : testListForCollumRPPls) {
                 if (command instanceof ErrorCommand) {
                     listErrorCommand.add(command);
@@ -2306,12 +2472,15 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             }
 
+            //Сохраняю точки для RP-
             listErrorCommand = methodicForOnePhaseStend.getCommandsMap().get(3);
             listCreepStartRTCCommadns = methodicForOnePhaseStend.getCreepStartRTCConstCommandsMap().get(3);
 
+            //Удаляю прошлые точки испытний
             listErrorCommand.clear();
             listCreepStartRTCCommadns.clear();
 
+            //Добавляю новые
             for (Commands command : testListForCollumRPMns) {
                 if (command instanceof ErrorCommand) {
                     listErrorCommand.add(command);
@@ -2320,34 +2489,262 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             }
 
+            //Сохраняю в память изменения
+            metodicsForTest.serializationMetodics();
+
+            //Отображаю методику в окне выбора методик
             if (edit) {
                 methodicsAddEditDeleteFrameController.setListsView(methodicForOnePhaseStend);
             }else {
                 methodicsAddEditDeleteFrameController.refreshMethodicList();
             }
 
-            metodicsForTest.serializationMetodics();
+            //Открываю окно выбора методики
             Stage stage1 = (Stage) methodicsAddEditDeleteFrameController.getEditMetBtn().getScene().getWindow();
             stage1.show();
 
+            //Закрываю это окно
             Stage stage = (Stage) saveBtn.getScene().getWindow();
             stage.close();
         }
     }
 
-    //Устанавливает значения Tgl Btn grid и добавления тестов ТХЧ и т.д.
-    // в соответствующие значения
+    /**
+     * В зависимости от нажатой кнопки выставляет нужные состояния другим и выводит нужный Pane вперёд
+     * @param event
+     */
     @FXML
     void setPointFrameAction(ActionEvent event) {
         setGropToggleButton(event);
         gridPaneToFront(Objects.requireNonNull(getGridPane()));
     }
 
+    /**
+     * Имитация ToggleGroup, но более расширенная
+     * @param event
+     */
+    private void setGropToggleButton(ActionEvent event) {
+
+        //Если пользователь использует кнопки смены токовых цепей
+        if (event.getSource() == onePhaseBtn) {
+            onePhaseBtn.setSelected(true);
+            APhaseBtn.setSelected(false);
+            BPhaseBtn.setSelected(false);
+        }
+
+        if (event.getSource() == APhaseBtn) {
+            APhaseBtn.setSelected(true);
+            onePhaseBtn.setSelected(false);
+            BPhaseBtn.setSelected(false);
+        }
+
+        if (event.getSource() == BPhaseBtn) {
+            BPhaseBtn.setSelected(true);
+            onePhaseBtn.setSelected(false);
+            APhaseBtn.setSelected(false);
+        }
+
+        //Если пользователь нажимает на кнопки смены направления тока и смены типа мощности
+        //AP+
+        if (event.getSource() == APPlus || event.getSource() == APPlusCRPSTA) {
+            setDefPosBtn();
+            viewPointTableAPPls.toFront();
+            APPlsPane.toFront();
+            paneCRPAPPls.toFront();
+            paneRelay.toBack();
+
+            APPlus.setSelected(true);
+            APMinus.setSelected(false);
+            RPPlus.setSelected(false);
+            RPMinus.setSelected(false);
+
+            APPlusCRPSTA.setSelected(true);
+            APMinusCRPSTA.setSelected(false);
+            RPPlusCRPSTA.setSelected(false);
+            RPMinusCRPSTA.setSelected(false);
+
+            initRelayTest();
+        }
+        //AP-
+        if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
+            setDefPosBtn();
+            viewPointTableAPMns.toFront();
+            APMnsPane.toFront();
+            paneCRPAPMns.toFront();
+            paneRelay.toBack();
+
+            APMinus.setSelected(true);
+            APPlus.setSelected(false);
+            RPPlus.setSelected(false);
+            RPMinus.setSelected(false);
+
+            APPlusCRPSTA.setSelected(false);
+            APMinusCRPSTA.setSelected(true);
+            RPPlusCRPSTA.setSelected(false);
+            RPMinusCRPSTA.setSelected(false);
+
+            initRelayTest();
+        }
+        //RP+
+        if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
+            setDefPosBtn();
+            viewPointTableRPPls.toFront();
+            RPPlsPane.toFront();
+            paneCRPRPPls.toFront();
+            paneRelay.toBack();
+
+            RPPlus.setSelected(true);
+            APPlus.setSelected(false);
+            APMinus.setSelected(false);
+            RPMinus.setSelected(false);
+
+            APPlusCRPSTA.setSelected(false);
+            APMinusCRPSTA.setSelected(false);
+            RPPlusCRPSTA.setSelected(true);
+            RPMinusCRPSTA.setSelected(false);
+
+            initRelayTest();
+        }
+        //RP-
+        if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
+            setDefPosBtn();
+            viewPointTableRPMns.toFront();
+            RPMnsPane.toFront();
+            paneCRPRPMns.toFront();
+            paneRelay.toBack();
+
+            RPMinus.setSelected(true);
+            RPPlus.setSelected(false);
+            APPlus.setSelected(false);
+            APMinus.setSelected(false);
+
+            APPlusCRPSTA.setSelected(false);
+            APMinusCRPSTA.setSelected(false);
+            RPPlusCRPSTA.setSelected(false);
+            RPMinusCRPSTA.setSelected(true);
+
+            initRelayTest();
+        }
+
+
+        //Переключение между выборором добавления команд Самоход, чувствительно, ТЧХ, реле, Проверка счётного механизма
+        //AP+
+        if (event.getSource() == CRPTogBtnAPPls) {
+            paneCRPAPPls.toFront();
+            paneRelay.toBack();
+            if (addTglBtnCRPAPPls.isSelected() || addTglBtnCRPAPPlsGOST.isSelected()) {
+                CRPTogBtnAPPls.setSelected(true);
+            }else CRPTogBtnAPPls.setSelected(false);
+        }
+
+        if (event.getSource() == STATogBtnAPPls) {
+            paneSTAAPPls.toFront();
+            if (addTglBtnSTAAPPls.isSelected() || addTglBtnSTAAPPlsGOST.isSelected()) {
+                STATogBtnAPPls.setSelected(true);
+                paneRelay.toBack();
+            }else STATogBtnAPPls.setSelected(false);
+        }
+
+        if (event.getSource() == RTCTogBtnAPPls) {
+            paneRTCAPPls.toFront();
+            paneRelay.toBack();
+            RTCTogBtnAPPls.setSelected(addTglBtnRTCAPPls.isSelected());
+        }
+
+        if (event.getSource() == ConstTogBtnAPPls) {
+            paneConstAPPls.toFront();
+            paneRelay.toBack();
+            ConstTogBtnAPPls.setSelected(addTglBtnConstAPPls.isSelected());
+        }
+        //AP-
+        if (event.getSource() == CRPTogBtnAPMns) {
+            paneCRPAPMns.toFront();
+            paneRelay.toBack();
+            if (addTglBtnCRPAPMns.isSelected() || addTglBtnCRPAPMnsGOST.isSelected()) {
+                CRPTogBtnAPMns.setSelected(true);
+            } else CRPTogBtnAPMns.setSelected(false);
+        }
+        if (event.getSource() == STATogBtnAPMns) {
+            paneSTAAPMns.toFront();
+            paneRelay.toBack();
+            if (addTglBtnSTAAPMns.isSelected() || addTglBtnSTAAPMnsGOST.isSelected()) {
+                STATogBtnAPMns.setSelected(true);
+            } else STATogBtnAPMns.setSelected(false);
+        }
+        if (event.getSource() == RTCTogBtnAPMns) {
+            RTCTogBtnAPMns.setSelected(addTglBtnRTCAPMns.isSelected());
+            paneRTCAPMns.toFront();
+            paneRelay.toBack();
+        }
+        if (event.getSource() == ConstTogBtnAPMns) {
+            ConstTogBtnAPMns.setSelected(addTglBtnConstAPMns.isSelected());
+            paneConstAPMns.toFront();
+            paneRelay.toBack();
+        }
+
+        //RP+
+        if (event.getSource() == CRPTogBtnRPPls) {
+            CRPTogBtnRPPls.setSelected(addTglBtnCRPRPPls.isSelected() || addTglBtnCRPRPPlsGOST.isSelected());
+            paneCRPRPPls.toFront();
+            paneRelay.toBack();
+        }
+        if (event.getSource() == STATogBtnRPPls) {
+            STATogBtnRPPls.setSelected(addTglBtnSTARPPls.isSelected() || addTglBtnSTARPPlsGOST.isSelected());
+            paneSTARPPls.toFront();
+            paneRelay.toBack();
+        }
+        if (event.getSource() == RTCTogBtnRPPls) {
+            RTCTogBtnRPPls.setSelected(addTglBtnRTCRPPls.isSelected());
+            paneRTCRPPls.toFront();
+            paneRelay.toBack();
+        }
+        if (event.getSource() == ConstTogBtnRPPls) {
+            ConstTogBtnRPPls.setSelected(addTglBtnConstRPPls.isSelected());
+            paneConstRPPls.toFront();
+            paneRelay.toBack();
+        }
+
+        //RP-
+        if (event.getSource() == CRPTogBtnRPMns) {
+            CRPTogBtnRPMns.setSelected(addTglBtnCRPRPMns.isSelected() || addTglBtnCRPRPMnsGOST.isSelected());
+            paneCRPRPMns.toFront();
+            paneRelay.toBack();
+        }
+        if (event.getSource() == STATogBtnRPMns) {
+            STATogBtnRPMns.setSelected(addTglBtnSTARPMns.isSelected() || addTglBtnSTARPMnsGOST.isSelected());
+            paneSTARPMns.toFront();
+            paneRelay.toBack();
+        }
+        if (event.getSource() == RTCTogBtnRPMns) {
+            RTCTogBtnRPMns.setSelected(addTglBtnRTCRPMns.isSelected());
+            paneRTCRPMns.toFront();
+            paneRelay.toBack();
+        }
+        if (event.getSource() == ConstTogBtnRPMns) {
+            ConstTogBtnRPMns.setSelected(addTglBtnConstRPMns.isSelected());
+            paneConstRPMns.toFront();
+            paneRelay.toBack();
+        }
+
+        //------------------------------------------------ Реле
+        if (event.getSource() == tglBtnRelay) {
+            tglBtnRelay.setSelected(addTglBtnRelay.isSelected());
+
+            paneRelay.toFront();
+        }
+    }
+
+    /**
+     * Действие при добавлении команд
+     * Самоход, чувствительность, точность хода часов, проверка счётного механизма, проверка реле
+     * @param event
+     */
     @FXML
     void addSTAcRPrTCcOnst(ActionEvent event) {
-        //Действие для добавления теста Самоход
+
+        //------------------------------------------------------ Самоход
         CreepCommand creepCommand;
-        //---------------------------------------------------------------------------------------
+
         //Добаление самохода с параметрами пользователя AP+
         if (event.getSource() == addTglBtnCRPAPPls) {
 
@@ -2361,6 +2758,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 long timeTest;
                 int amountImp;
 
+                //Проверка валидности выбранного пользователем напряжения
                 try {
                     procUnom = Double.parseDouble(txtFieldCRPUProcAPPls.getText());
                     if (procUnom < 0) throw new NumberFormatException();
@@ -2372,6 +2770,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Проверка валидности выставленного пользователем времени теста
                 try {
                     String[] timeArr = txtFieldTimeCRPAPPls.getText().trim().split(":");
 
@@ -2412,6 +2811,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Проверка валидности выбранных пользователем импульсов
                 try {
                     amountImp = Integer.parseInt(txtFieldCRPAmtImpAPPls.getText());
                     if (amountImp < 0) throw new NumberFormatException();
@@ -2424,14 +2824,18 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Добавление команды в общий список команд
                 testListForCollumAPPls.add(new CreepCommand(false,false, "Самоход AP+", "CRP;U;A;P",0,
                         timeTest, amountImp, procUnom));
 
+                //Отключаю редактирование
                 txtFieldCRPAmtImpAPPls.setDisable(true);
                 txtFieldTimeCRPAPPls.setDisable(true);
                 txtFieldCRPUProcAPPls.setDisable(true);
 
                 CRPTogBtnAPPls.setSelected(true);
+
+            //Удаление команды из списка команд
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof CreepCommand) {
@@ -2441,6 +2845,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         }
                     }
                 }
+
                 txtFieldCRPAmtImpAPPls.setDisable(false);
                 txtFieldTimeCRPAPPls.setDisable(false);
                 txtFieldCRPUProcAPPls.setDisable(false);
@@ -2455,12 +2860,15 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
         //Добаление самохода с параметрами по ГОСТу AP+
         if (event.getSource() == addTglBtnCRPAPPlsGOST) {
+
             if (addTglBtnCRPAPPlsGOST.isSelected()) {
                 creepCommand = new CreepCommand(false, true, "Самоход AP+ ГОСТ","CRP;G;A;P", 0);
 
                 CRPTogBtnAPPls.setSelected(true);
 
                 testListForCollumAPPls.add(creepCommand);
+
+            //Удаление команды самоход из списка
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof CreepCommand) {
@@ -2580,7 +2988,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             }
         }
-
         //Добаление самохода с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnCRPAPMnsGOST) {
             if (addTglBtnCRPAPMnsGOST.isSelected()) {
@@ -2707,7 +3114,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             }
         }
-
         //Добаление самохода с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnCRPRPPlsGOST) {
             if (addTglBtnCRPRPPlsGOST.isSelected()) {
@@ -2835,7 +3241,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             }
         }
-
         //Добаление самохода с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnCRPRPMnsGOST) {
             if (addTglBtnCRPRPMnsGOST.isSelected()) {
@@ -2860,7 +3265,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         }
 
-        //------------------------------------------------------------------------------
+        //------------------------------------------------------ Чувствительность
         //Добаление теста на чувствительность с параметрами пользователя AP+
         if (event.getSource() == addTglBtnSTAAPPls) {
             if (addTglBtnSTAAPPls.isSelected()) {
@@ -2873,6 +3278,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 long timeTest;
                 int amountImp;
 
+                //Проверка валидности выбранного пользователем значения тока
                 try {
                     current = Double.parseDouble(txtFieldSTAIProcAPPls.getText());
                     if (current < 0) throw new NumberFormatException();
@@ -2884,6 +3290,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Проверка валидности выбранного пользователем значения времени
                 try {
                     String[] timeArr = txtFieldTimeSRAAPPls.getText().trim().split(":");
 
@@ -2922,6 +3329,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Проверка валидности выбранного пользователем значения количества импульсов для теста
                 try {
                     amountImp = Integer.parseInt(txtFieldSTAAmtImpAPPls.getText());
                     if (amountImp < 0) throw new NumberFormatException();
@@ -2933,6 +3341,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Добавление команды в список команд
                 testListForCollumAPPls.add(new StartCommand(false, "Чувствительность AP+", "STA;U;A;P", 0,
                         0,false, timeTest, amountImp, current));
 
@@ -2943,6 +3352,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 STATogBtnAPPls.setSelected(true);
 
+            //Удаление команды из списка
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof StartCommand) {
@@ -2971,6 +3381,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 STATogBtnAPPls.setSelected(true);
 
+            //Удаление команды из списка
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof StartCommand) {
@@ -3088,7 +3499,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 } else STATogBtnAPMns.setSelected(false);
             }
         }
-
         //Добаление теста на чувствительность с параметрами по ГОСТу AP-
         if (event.getSource() == addTglBtnSTAAPMnsGOST) {
             if (addTglBtnSTAAPMnsGOST.isSelected()) {
@@ -3212,7 +3622,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 } else STATogBtnRPPls.setSelected(false);
             }
         }
-
         //Добаление теста на чувствительность с параметрами по ГОСТу RP+
         if (event.getSource() == addTglBtnSTARPPlsGOST) {
             if (addTglBtnSTARPPlsGOST.isSelected()) {
@@ -3336,7 +3745,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 } else STATogBtnRPMns.setSelected(false);
             }
         }
-
         //Добаление теста на чувствительность с параметрами по ГОСТу RP-
         if (event.getSource() == addTglBtnSTARPMnsGOST) {
             if (addTglBtnSTARPMnsGOST.isSelected()) {
@@ -3359,6 +3767,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         }
 
+        //------------------------------------------------------ Точность хода часов
         //Добаление теста "точность хода часов" AP+
         if(event.getSource() == addTglBtnRTCAPPls) {
 
@@ -3374,6 +3783,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 int anountMeash;
                 int timeMeas;
 
+                //Проверка валидности выбранного пользователем диапазона погрешностей для измерения
                 try {
                     errorRange = Double.parseDouble(txtFieldRngEAPPls.getText());
                     if (errorRange < 0) throw new NumberFormatException();
@@ -3386,6 +3796,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Проверка валидности выбранного пользователем значения частоты
                 try {
                     freg = Double.parseDouble(txtFldRTCFrqAPPls.getText());
                     if (freg < 0) throw new NumberFormatException();
@@ -3397,6 +3808,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Проверка валидности выбранного пользователем значения количества измерений
                 try {
                     anountMeash = Integer.parseInt(txtFldRTCAmtMshAPPls.getText());
                     if (anountMeash < 0) throw new NumberFormatException();
@@ -3408,6 +3820,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Проверка валидности выбранного пользователем значения количества импульсов для измерения
                 try {
                     timeMeas = Integer.parseInt(txtFldRTCTimeMshAPPls.getText());
                     if (timeMeas < 0) throw new NumberFormatException();
@@ -3419,6 +3832,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Добавления точки испытная
                 if (ChcBxRTCErrAPPls.getValue().equals("В ед. частоты")) {
 
                     testListForCollumAPPls.add(new RTCCommand(false, "RTC;A;P", "ТХЧ AP+", timeMeas, freg,
@@ -3437,6 +3851,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 RTCTogBtnAPPls.setSelected(true);
 
+            //Удаление точки испытная
             } else {
                 for (Commands command : testListForCollumAPPls) {
                     if (command instanceof RTCCommand) {
@@ -3457,6 +3872,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         }
 
+        //Добаление теста "точность хода часов" AP-
         if(event.getSource() == addTglBtnRTCAPMns) {
 
             if (addTglBtnRTCAPMns.isSelected()) {
@@ -3553,7 +3969,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 RTCTogBtnAPMns.setSelected(false);
             }
         }
-
+        //Добаление теста "точность хода часов" RP+
         if(event.getSource() == addTglBtnRTCRPPls) {
 
             if (addTglBtnRTCRPPls.isSelected()) {
@@ -3650,7 +4066,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 RTCTogBtnRPPls.setSelected(false);
             }
         }
-
+        //Добаление теста "точность хода часов" RP-
         if(event.getSource() == addTglBtnRTCRPMns) {
 
             if (addTglBtnRTCRPMns.isSelected()) {
@@ -3748,7 +4164,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         }
 
-        //Добавление теста константы
+        //------------------------------------------------------ Проверка счётного механизма
+        //Проверка счётного механизма AP+
         if (event.getSource() == addTglBtnConstAPPls) {
 
             if (addTglBtnConstAPPls.isSelected()) {
@@ -3764,6 +4181,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 double errorRange;
                 long timeTestToMill;
 
+                //Проверка валидности выбранного пользователем значения напряжения для испытания
                 try {
                      Uproc = Double.parseDouble(txtFieldConsProcUAPPls.getText());
                      if (Uproc < 0) throw new NumberFormatException();
@@ -3774,6 +4192,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Проверка валидности выбранного пользователем значения тока для испытания
                 try {
                      IbProc = Double.parseDouble(txtFieldConsProcIAPPls.getText());
                     if (IbProc < 0) throw new NumberFormatException();
@@ -3784,6 +4203,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Проверка валидности выбранного пользователем значения погрешности для испытания
                 try {
                     errorRange = Double.parseDouble(txtFieldConsErAPPls.getText());
                     if (errorRange < 0) throw new NumberFormatException();
@@ -3794,7 +4214,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     return;
                 }
 
+                //Если тест по количеству времени
                 if (radBtnConstTimeAPPls.isSelected()) {
+
+                    //Проверка валидности выбранного пользователем значения времени для испытания
 
                     String[] arrTime = txtFieldConstTimeAPPls.getText().trim().split(":");
 
@@ -3846,11 +4269,15 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         return;
                     }
 
+                    //Добавление точки испытания
                     testListForCollumAPPls.add(new ConstantCommand(false, true, timeTestToMill,
                             "CNT;T;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
+                //Если тест по количеству энергии
                 } else {
                     double testEnergy;
+
+                    //Проверка валидности выбранного пользователем значения количества энергии для испытания
                     try {
                         testEnergy = Double.parseDouble(txtFieldEngConstAPPls.getText());
                     }catch (NumberFormatException e) {
@@ -3867,6 +4294,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         return;
                     }
 
+                    //Добавление точки испытания
                     testListForCollumAPPls.add(new ConstantCommand(false, false, testEnergy,
                             "CNT;E;A;P", "Сонстанта AP+", Uproc, IbProc, 0, 0, -errorRange, errorRange));
 
@@ -3882,6 +4310,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                 ConstTogBtnAPPls.setSelected(true);
 
+            //Удаление команды из списка
             } else {
                 for (Commands commands : testListForCollumAPPls) {
                     if (commands instanceof ConstantCommand) {
@@ -3904,6 +4333,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         }
 
+        //Проверка счётного механизма AP-
         if (event.getSource() == addTglBtnConstAPMns) {
 
             if (addTglBtnConstAPMns.isSelected()) {
@@ -4058,7 +4488,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 ConstTogBtnAPMns.setSelected(false);
             }
         }
-
+        //Проверка счётного механизма RP+
         if (event.getSource() == addTglBtnConstRPPls) {
 
             if (addTglBtnConstRPPls.isSelected()) {
@@ -4214,7 +4644,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 ConstTogBtnRPPls.setSelected(false);
             }
         }
-
+        //Проверка счётного механизма RP-
         if (event.getSource() == addTglBtnConstRPMns) {
 
             if (addTglBtnConstRPMns.isSelected()) {
@@ -4370,25 +4800,44 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             }
         }
 
+        //------------------------------------------------------ Проверка работоспособности реле
         if (event.getSource() == addTglBtnRelay) {
 
+            //Добавление команды
             if (addTglBtnRelay.isSelected()) {
+
+                //Проверка работоспособности реле AP+
                 if (APPlusCRPSTA.isSelected()) {
                     addRelayCommand(0);
+
+                    //Проверка работоспособности реле AP-
                 } else if (APMinusCRPSTA.isSelected()) {
                     addRelayCommand(1);
+
+                    //Проверка работоспособности реле RP+
                 } else if (RPPlusCRPSTA.isSelected()) {
                     addRelayCommand(2);
+
+                    //Проверка работоспособности реле RP-
                 } else if (RPMinusCRPSTA.isSelected()) {
                     addRelayCommand(3);
                 }
+
+            //Удаление команды
             } else {
+                //AP+
                 if (APPlusCRPSTA.isSelected()) {
                     deleteRelayCommand(testListForCollumAPPls);
+
+                    //AP-
                 } else if (APMinusCRPSTA.isSelected()) {
                     deleteRelayCommand(testListForCollumAPMns);
+
+                    //RP+
                 } else if (RPPlusCRPSTA.isSelected()) {
                     deleteRelayCommand(testListForCollumRPPls);
+
+                    //RP-
                 } else if (RPMinusCRPSTA.isSelected()) {
                     deleteRelayCommand(testListForCollumRPMns);
                 }
@@ -4396,6 +4845,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
     }
 
+    /**
+     * Инициализирует ChoiseBox возможными типами  измерения точности хода часов
+     */
     private void initCoiseBoxParamForRTC() {
         ChcBxRTCErrAPPls.getItems().addAll("В ед. частоты", "Сутч. погрешность");
         ChcBxRTCErrAPPls.getSelectionModel().select(0);
@@ -4410,231 +4862,20 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         ChcBxRTCErrRPMns.getSelectionModel().select(0);
     }
 
-    //Имитация ToggleGroup
-    private void setGropToggleButton(ActionEvent event) {
-        if (event.getSource() == onePhaseBtn) {
-            onePhaseBtn.setSelected(true);
-            APhaseBtn.setSelected(false);
-            BPhaseBtn.setSelected(false);
-        }
-
-        if (event.getSource() == APhaseBtn) {
-            APhaseBtn.setSelected(true);
-            onePhaseBtn.setSelected(false);
-            BPhaseBtn.setSelected(false);
-        }
-
-        if (event.getSource() == BPhaseBtn) {
-            BPhaseBtn.setSelected(true);
-            onePhaseBtn.setSelected(false);
-            APhaseBtn.setSelected(false);
-        }
-
-        //Tg btns "энергия и направление" отвечающие за сетку точек и добавление тестов Сам., ТХЧ, Чувств., Конст.
-        if (event.getSource() == APPlus || event.getSource() == APPlusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableAPPls.toFront();
-            APPlsPane.toFront();
-            paneCRPAPPls.toFront();
-            paneRelay.toBack();
-
-            APPlus.setSelected(true);
-            APMinus.setSelected(false);
-            RPPlus.setSelected(false);
-            RPMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(true);
-            APMinusCRPSTA.setSelected(false);
-            RPPlusCRPSTA.setSelected(false);
-            RPMinusCRPSTA.setSelected(false);
-
-            initRelayTest();
-        }
-
-        if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableAPMns.toFront();
-            APMnsPane.toFront();
-            paneCRPAPMns.toFront();
-            paneRelay.toBack();
-
-            APMinus.setSelected(true);
-            APPlus.setSelected(false);
-            RPPlus.setSelected(false);
-            RPMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(false);
-            APMinusCRPSTA.setSelected(true);
-            RPPlusCRPSTA.setSelected(false);
-            RPMinusCRPSTA.setSelected(false);
-
-            initRelayTest();
-        }
-
-        if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableRPPls.toFront();
-            RPPlsPane.toFront();
-            paneCRPRPPls.toFront();
-            paneRelay.toBack();
-
-            RPPlus.setSelected(true);
-            APPlus.setSelected(false);
-            APMinus.setSelected(false);
-            RPMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(false);
-            APMinusCRPSTA.setSelected(false);
-            RPPlusCRPSTA.setSelected(true);
-            RPMinusCRPSTA.setSelected(false);
-
-            initRelayTest();
-        }
-
-        if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
-            setDefPosBtn();
-            viewPointTableRPMns.toFront();
-            RPMnsPane.toFront();
-            paneCRPRPMns.toFront();
-            paneRelay.toBack();
-
-            RPMinus.setSelected(true);
-            RPPlus.setSelected(false);
-            APPlus.setSelected(false);
-            APMinus.setSelected(false);
-
-            APPlusCRPSTA.setSelected(false);
-            APMinusCRPSTA.setSelected(false);
-            RPPlusCRPSTA.setSelected(false);
-            RPMinusCRPSTA.setSelected(true);
-
-            initRelayTest();
-        }
-
-        //Переключение окон внутри фрейма "направление" между вкладками Сам. ТХЧ и т.д.
-        //AP+
-        if (event.getSource() == CRPTogBtnAPPls) {
-            paneCRPAPPls.toFront();
-            paneRelay.toBack();
-            if (addTglBtnCRPAPPls.isSelected() || addTglBtnCRPAPPlsGOST.isSelected()) {
-                CRPTogBtnAPPls.setSelected(true);
-            }else CRPTogBtnAPPls.setSelected(false);
-        }
-
-        if (event.getSource() == STATogBtnAPPls) {
-            paneSTAAPPls.toFront();
-            if (addTglBtnSTAAPPls.isSelected() || addTglBtnSTAAPPlsGOST.isSelected()) {
-                STATogBtnAPPls.setSelected(true);
-                paneRelay.toBack();
-            }else STATogBtnAPPls.setSelected(false);
-        }
-
-        if (event.getSource() == RTCTogBtnAPPls) {
-            paneRTCAPPls.toFront();
-            paneRelay.toBack();
-            RTCTogBtnAPPls.setSelected(addTglBtnRTCAPPls.isSelected());
-        }
-
-        if (event.getSource() == ConstTogBtnAPPls) {
-            paneConstAPPls.toFront();
-            paneRelay.toBack();
-            ConstTogBtnAPPls.setSelected(addTglBtnConstAPPls.isSelected());
-        }
-
-        //AP-
-        if (event.getSource() == CRPTogBtnAPMns) {
-            paneCRPAPMns.toFront();
-            paneRelay.toBack();
-            if (addTglBtnCRPAPMns.isSelected() || addTglBtnCRPAPMnsGOST.isSelected()) {
-                CRPTogBtnAPMns.setSelected(true);
-            } else CRPTogBtnAPMns.setSelected(false);
-        }
-
-        if (event.getSource() == STATogBtnAPMns) {
-            paneSTAAPMns.toFront();
-            paneRelay.toBack();
-            if (addTglBtnSTAAPMns.isSelected() || addTglBtnSTAAPMnsGOST.isSelected()) {
-                STATogBtnAPMns.setSelected(true);
-            } else STATogBtnAPMns.setSelected(false);
-        }
-
-        if (event.getSource() == RTCTogBtnAPMns) {
-            RTCTogBtnAPMns.setSelected(addTglBtnRTCAPMns.isSelected());
-            paneRTCAPMns.toFront();
-            paneRelay.toBack();
-        }
-
-        if (event.getSource() == ConstTogBtnAPMns) {
-            ConstTogBtnAPMns.setSelected(addTglBtnConstAPMns.isSelected());
-            paneConstAPMns.toFront();
-            paneRelay.toBack();
-        }
-
-        //RP+
-        if (event.getSource() == CRPTogBtnRPPls) {
-            CRPTogBtnRPPls.setSelected(addTglBtnCRPRPPls.isSelected() || addTglBtnCRPRPPlsGOST.isSelected());
-            paneCRPRPPls.toFront();
-            paneRelay.toBack();
-        }
-
-        if (event.getSource() == STATogBtnRPPls) {
-            STATogBtnRPPls.setSelected(addTglBtnSTARPPls.isSelected() || addTglBtnSTARPPlsGOST.isSelected());
-            paneSTARPPls.toFront();
-            paneRelay.toBack();
-        }
-
-        if (event.getSource() == RTCTogBtnRPPls) {
-            RTCTogBtnRPPls.setSelected(addTglBtnRTCRPPls.isSelected());
-            paneRTCRPPls.toFront();
-            paneRelay.toBack();
-        }
-
-        if (event.getSource() == ConstTogBtnRPPls) {
-            ConstTogBtnRPPls.setSelected(addTglBtnConstRPPls.isSelected());
-            paneConstRPPls.toFront();
-            paneRelay.toBack();
-        }
-
-        //RP-
-        if (event.getSource() == CRPTogBtnRPMns) {
-            CRPTogBtnRPMns.setSelected(addTglBtnCRPRPMns.isSelected() || addTglBtnCRPRPMnsGOST.isSelected());
-            paneCRPRPMns.toFront();
-            paneRelay.toBack();
-        }
-
-        if (event.getSource() == STATogBtnRPMns) {
-            STATogBtnRPMns.setSelected(addTglBtnSTARPMns.isSelected() || addTglBtnSTARPMnsGOST.isSelected());
-            paneSTARPMns.toFront();
-            paneRelay.toBack();
-        }
-
-        if (event.getSource() == RTCTogBtnRPMns) {
-            RTCTogBtnRPMns.setSelected(addTglBtnRTCRPMns.isSelected());
-            paneRTCRPMns.toFront();
-            paneRelay.toBack();
-        }
-
-        if (event.getSource() == ConstTogBtnRPMns) {
-            ConstTogBtnRPMns.setSelected(addTglBtnConstRPMns.isSelected());
-            paneConstRPMns.toFront();
-            paneRelay.toBack();
-        }
-
-        //------------------------------------------------ Реле
-        if (event.getSource() == tglBtnRelay) {
-            tglBtnRelay.setSelected(addTglBtnRelay.isSelected());
-
-            paneRelay.toFront();
-        }
-    }
-
-    //При переключении вкладки Мощности и Направления устанавливает положение в "Все фазы"
+    /**
+     * Выставляет дефолдное состояние кнопок выбора токовой цепи при переключении между вкладками
+     * смены направления тока и типа мощности
+     */
     private void setDefPosBtn() {
         onePhaseBtn.setSelected(true);
         APhaseBtn.setSelected(false);
         BPhaseBtn.setSelected(false);
     }
 
+    /**
+     * Выводит выбранную пользователем сетку с точками на передний план
+     * @param pane
+     */
     private void gridPaneToFront(GridPane pane) {
         for (GridPane gridPane : gridPanesEnergyAndPhase) {
             if (pane.equals(gridPane)) {
@@ -4646,7 +4887,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         pane.toFront();
     }
 
-    //Выдаёт нужный GridPane в зависимости от нажатой кнопки
+    /**
+     * передаёт нужную сетку в зависимости от состояния кнопок
+     * @return
+     */
     private GridPane getGridPane() {
         if (onePhaseBtn.isSelected()) {
             if (APPlus.isSelected()) return gridPaneOnePhaseAPPlus;
@@ -4671,11 +4915,15 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         return null;
     }
 
-    //Добавляет тестовую точку в методику
+    /**
+     * Добавляет ErrorCommand в список исполняемых команд по значению ID checkBox'a из сетки
+     * @param testPoint - id команды
+     */
     private void addTestPointInMethodic(String testPoint) {
 
         String[] dirCurFactor = testPoint.split(";");
 
+        //Пример:
         /** 1;H;A;P;0.2 Ib;0.5C
          *  режим;
          *  Фазы по которым необходимо пустить ток (H);
@@ -4683,6 +4931,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
          *  Направление тока прямое/обратное
          *  Ток 0.2 Ib
          *  Коэф мощности 0.8L
+         *
+         *  За более подробным описанием в интерфейс StendDLL
+         *  команда Adjust_UI() описание её параметров
          *  */
 
         //Phase - Режим
@@ -4707,27 +4958,36 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         //Коэф мощности
         String powerFactor = dirCurFactor[5];
 
-
+        //Добавление точки AP+
         if (energyType.equals("A") && currentDirection.equals("P")) {
             testListForCollumAPPls.add(new ErrorCommand(false, testPoint, phase, current, 0, percent, iABC, powerFactor, 0));
         }
+
+        //Добавление точки AP-
         if (energyType.equals("A") && currentDirection.equals("N")) {
             testListForCollumAPMns.add(new ErrorCommand(false, testPoint, phase, current, 1, percent, iABC, powerFactor, 1));
         }
 
+        //Добавление точки RP+
         if (energyType.equals("R") && currentDirection.equals("P")) {
             testListForCollumRPPls.add(new ErrorCommand(false, testPoint, phase, current, 0, percent, iABC, powerFactor, 2));
         }
 
+        //Добавление точки RP-
         if (energyType.equals("R") && currentDirection.equals("N")) {
             testListForCollumRPMns.add(new ErrorCommand(false, testPoint, phase, current, 1, percent, iABC, powerFactor, 3));
         }
     }
 
+    /**
+     * Удаляет команду ErrorCommadn по её ID из списка выполняемых команд
+     * @param idCheckBox - ID команды
+     */
     private void deleteTestPointInMethodic(String idCheckBox) {
         ErrorCommand errorCommand;
         String[] point = idCheckBox.split(";");
 
+        //Удаление точки из AP+
         if (point[2].equals("A") && point[3].equals("P")) {
 
             for (Commands current : testListForCollumAPPls) {
@@ -4740,6 +5000,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             }
 
+        //Удаление точки из AP-
         } else if (point[2].equals("A") && point[3].equals("N")) {
 
             for (Commands current : testListForCollumAPMns) {
@@ -4752,6 +5013,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             }
 
+        //Удаление точки из RP+
         } else if (point[2].equals("R") && point[3].equals("P")) {
 
             for (Commands current : testListForCollumRPPls) {
@@ -4763,9 +5025,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     }
                 }
             }
-        }
 
-        if (point[2].equals("R") && point[3].equals("N")) {
+        //Удаление точки из RP-
+        } else if (point[2].equals("R") && point[3].equals("N")) {
 
             for (Commands current : testListForCollumRPMns) {
                 if (current instanceof ErrorCommand) {
@@ -4779,7 +5041,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
     }
 
-    //------------------------------------------------Реле
+    //-------------------------------------------------------- Реле
+
+    /**
+     * Общий метод инициализации полей и надписей в Pane для выбора точки испытания "Реле"
+     */
     private void initRelayTest() {
 
         txtFieldRelayCurrent.setText("");
@@ -4798,16 +5064,19 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             labelDirection.setText("Активная энергия в прямом направлении тока");
 
             selectReleyDirection(testListForCollumAPPls);
+
         } else if (APMinusCRPSTA.isSelected()) {
 
             labelDirection.setText("Активная энергия в обратном направлении тока");
 
             selectReleyDirection(testListForCollumAPMns);
+
         } else if (RPPlusCRPSTA.isSelected()) {
 
             labelDirection.setText("Реактивная энергия в прямом направлении тока");
 
             selectReleyDirection(testListForCollumRPPls);
+
         } else if (RPMinusCRPSTA.isSelected()) {
 
             labelDirection.setText("Реактивная энергия в обратном направлении тока");
@@ -4816,14 +5085,18 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
     }
 
+    /**
+     * Присваивает полям панели выбора теста реле значения согласно направлению тока и типу мощности
+     * @param testListForColumn
+     */
     private void selectReleyDirection(List<Commands> testListForColumn) {
 
-        for (Commands relay : testListForColumn) {
-            if (relay instanceof RelayCommand) {
+        for (Commands commands : testListForColumn) {
+            if (commands instanceof RelayCommand) {
 
-                txtFieldRelayCurrent.setText(String.valueOf(relay.getRatedCurr()));
-                txtFieldRelayTime.setText(getTime(((RelayCommand) relay).getUserTimeTest()));
-                txtFieldAmountImpRelay.setText(String.valueOf(((RelayCommand) relay).getPulseValue()));
+                txtFieldRelayCurrent.setText(String.valueOf(commands.getRatedCurr()));
+                txtFieldRelayTime.setText(getTime(((RelayCommand) commands).getUserTimeTest()));
+                txtFieldAmountImpRelay.setText(String.valueOf(((RelayCommand) commands).getPulseValue()));
 
                 addTglBtnRelay.setSelected(true);
                 tglBtnRelay.setSelected(true);
@@ -4836,7 +5109,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         }
     }
 
-
+    /**
+     * Добавляет команду реле в общий список исполняемых команд
+     * @param chanelFlag
+     */
     private void addRelayCommand(int chanelFlag) {
 
         txtFieldRelayCurrent.setStyle("");
@@ -4847,6 +5123,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         long timeTest;
         int amountImp;
 
+        //Проверка валидности выбранного пользователем значения тока для испытания
         try {
             current = Double.parseDouble(txtFieldRelayCurrent.getText());
             if (current < 0) throw new NumberFormatException();
@@ -4858,6 +5135,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             return;
         }
 
+        //Проверка валидности выбранного пользователем значения времени для испытания
         try {
             String[] timeArr = txtFieldRelayTime.getText().trim().split(":");
 
@@ -4896,6 +5174,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             return;
         }
 
+        //Проверка валидности выбранного пользователем значения количества импульсов для испытания
         try {
             amountImp = Integer.parseInt(txtFieldAmountImpRelay.getText());
             if (amountImp < 0) throw new NumberFormatException();
@@ -4907,6 +5186,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             return;
         }
 
+        //В зависимости от chanelFlag добавляет команду в нужный список команд
         switch (chanelFlag) {
             case 0: {
                 testListForCollumAPPls.add(new RelayCommand(true, "Реле AP+", "RLY;A;P", chanelFlag, timeTest, amountImp, current));
@@ -4930,6 +5210,10 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
     }
 
+    /**
+     * Удаляет команду проверки реле из общего списка исполняемых команд
+     * @param testListForCollum
+     */
     private void deleteRelayCommand (List<Commands> testListForCollum) {
 
         for (Commands command : testListForCollum) {
@@ -4946,6 +5230,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         tglBtnRelay.setSelected(false);
     }
 
+    /**
+     * Действие при изменении списка команд (необходимо для отслеживания изменений и предложения сохранить изменения)
+     */
     public void addListenerInTestPointList() {
         testListForCollumAPPls.addListener(new ListChangeListener<Commands>() {
             @Override
@@ -4994,7 +5281,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         actionOnCloseWindow();
     }
 
-    //Действие при закрытии окна, нужно ли сохранить изменение
+    /**
+     * Действие при закрытии окна, предложение сохранить изменения
+     */
     private void actionOnCloseWindow() {
         Stage mainStage = (Stage) saveBtn.getScene().getWindow();
 
@@ -5024,6 +5313,11 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         });
     }
 
+    /**
+     * Преобразует миллисекунды в формат hh:mm:ss
+     * @param mlS
+     * @return
+     */
     private String getTime(long mlS){
         return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(mlS),
                 TimeUnit.MILLISECONDS.toMinutes(mlS) % TimeUnit.HOURS.toMinutes(1),
