@@ -63,7 +63,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     //Окно выбора для создания или редактированя методики
     private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
 
-    //Объектр данногог класса
+    //Объектр данного класса
     private MethodicForOnePhaseStend methodicForOnePhaseStend;
 
     //Если пользователь вводит параметры испытания на момент создания методики
@@ -761,7 +761,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
         APPlus.fire();
 
-        //Добавляю в группы выбор режима испытания "Проверка счётного механизма" либо по времени, либо по кл-ву энергии
+        //Добавляю в группы выбор режима испытания "Проверка счётного механизма" либо по времени, либо по кол-ву энергии
         radBtnConstEnergyAPPls.setToggleGroup(radioBtnGroupAPPls);
         radBtnConstTimeAPPls.setToggleGroup(radioBtnGroupAPPls);
         radBtnConstTimeAPPls.setSelected(true);
@@ -865,7 +865,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         setCheckBoxAndLabelInGridPane();
     }
 
-    //Создаёт сетку необходимого размера
+    /**
+     * Создаёт сетку необходимого размера
+     */
     private void createRowAndColumnForGridPane() {
         for (GridPane gridPane : gridPanesEnergyAndPhase) {
             for (int i = 0; i < current.size() + 1; i++) {
@@ -1207,7 +1209,8 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
             mapTableColumn.get(i).get(4).setCellFactory(TextFieldTableCell.forTableColumn());
             mapTableColumn.get(i).get(5).setCellFactory(TextFieldTableCell.forTableColumn());
 
-            //Действие при изменении информации в колонке
+
+            //------------------------------------Действие при изменении информации в колонке
 
             //Изменение максимальной погрешности Emax
             mapTableColumn.get(i).get(1).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
@@ -1666,9 +1669,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         if (!testListForCollumAPPls.isEmpty()) {
 
             for (Commands command : testListForCollumAPPls) {
+
                 //Если это ErrorCommand
                 if (command instanceof ErrorCommand) {
-
                     testPointIdArr = command.getId().toCharArray();
 
                     //Ищу нужный checkBox в сетке и ставлю ему значение true
@@ -1725,7 +1728,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
                     STATogBtnAPPls.setSelected(true);
 
-                //Если команда относится к проверке счётного механизма
+                //Если команда относится к точности хода часов
                 } else if (command instanceof RTCCommand) {
                     RTCCommand rtcCommand = (RTCCommand) command;
 
@@ -1736,7 +1739,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                         ChcBxRTCErrAPPls.setValue("Сутч. погрешность");
                     }
 
-                    txtFieldRngEAPPls.setText(String.valueOf(rtcCommand.getErrorForFalseTest()));
+                    txtFieldRngEAPPls.setText(String.format(Locale.ROOT,"%.7f", rtcCommand.getErrorForFalseTest()));
                     txtFldRTCFrqAPPls.setText(String.valueOf(rtcCommand.getFreg()));
                     txtFldRTCAmtMshAPPls.setText(String.valueOf(rtcCommand.getCountResultTest()));
                     txtFldRTCTimeMshAPPls.setText(String.valueOf(rtcCommand.getPulseForRTC()));
@@ -1760,6 +1763,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                     if (((ConstantCommand) command).isRunTestToTime()) {
                         radBtnConstTimeAPPls.setSelected(true);
                         txtFieldConstTimeAPPls.setText(getTime(constantCommand.getTimeTheTest()));
+
                     //Если команда выполняется по энергии
                     } else {
                         radBtnConstEnergyAPPls.setSelected(true);
@@ -2089,8 +2093,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
         initRelayTest();
     }
 
-    //Находит нужный CheckBox и задаёт значение
-
     /**
      * Находит нужный checkBox в сетке выбора точек по ID и задаёт ему значение true
      * @param testPointIdArr
@@ -2137,7 +2139,9 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
                 }
             }
 
-        //Далее идёт такой же механизм поиска, но только для ругих направлений тока и типа энергии
+            /**
+             * Далее идёт такой же механизм поиска, но только для ругих направлений тока и типа энергии
+             */
         //поиск в сетке AP-
         } else if (testPointIdArr[4] == 'A' && testPointIdArr[6] == 'N') {
 
@@ -2258,7 +2262,7 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
 
 
     /**
-     * Метод для перерисовки GridPane после добавления новых параметров для точек
+     * Метод для перерисовки GridPane после добавления новых параметров для точек.
      * Новые значения коэф. мощности (PF) и тока
      */
     public void refreshGridPaneAndScrolPane() {
@@ -5042,7 +5046,6 @@ public class AddEditPointsOnePhaseStendFrameController implements  Frame {
     }
 
     //-------------------------------------------------------- Реле
-
     /**
      * Общий метод инициализации полей и надписей в Pane для выбора точки испытания "Реле"
      */
