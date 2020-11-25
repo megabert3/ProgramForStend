@@ -1,6 +1,5 @@
 package org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController;
 
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -30,11 +29,17 @@ import org.taipit.stend.controller.Commands.ErrorCommand;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
+
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна "influencePointsOnePhaseStendFrame.fxml".
+ * Данный класс отвечает за возможность добавления, редактирования точек испытания влияния по напряжению и частоте в методику поверки для однофазного стенда"
+ */
 public class InfluencePointsOnePhaseStendFrame {
 
+    //Методика для однофазного стенда куда добавляются эти точки
     private MethodicForOnePhaseStend methodicForOnePhaseStend;
 
     //Значения коэффициента мощности
@@ -55,52 +60,64 @@ public class InfluencePointsOnePhaseStendFrame {
     private GridPane gridPaneForCurrent = new GridPane();
     private GridPane gridPaneForPowerFactor = new GridPane();
 
+    //Закрашивающий квадрат для main scrollPane
     private Pane fillSquare = new Pane();
 
     //Сохранить изменения?
     private boolean saveChange = false;
 
-    //Листы с точками тестирования до сохранения
+    //Листы с добавленными точками тестирования
+    //Активная энергия в прямом направлении тока
     private ObservableList<Commands> inflListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
+    //Активная энергия в обратном направлении тока
     private ObservableList<Commands> inflListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
+    //Реактивная энергия в прямом направлении тока
     private ObservableList<Commands> inflListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
+    //Реактивная энергия в обратном направлении тока
     private ObservableList<Commands> inflListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
 
 //=====================================================================
     //Поля необходимые для добавления точек испытания на влияние
-    //До сохранения
     //AP+
-    private float[] influenceUprocAllPhaseAPPls = new float[0];
-    private float[] influenceUprocPhaseAAPPls = new float[0];
-    private float[] influenceUprocPhaseBAPPls = new float[0];
+    //влияние напряжения
+    private float[] influenceUprocAllPhaseAPPls = new float[0]; //Одна токовая цепь одна
+    private float[] influenceUprocPhaseAAPPls = new float[0]; //По первой токовой цепи
+    private float[] influenceUprocPhaseBAPPls = new float[0]; //По второй токовой цепи
 
+    //влияние частоты
     private float[] influenceFprocAllPhaseAPPls = new float[0];
     private float[] influenceFprocPhaseAAPPls = new float[0];
     private float[] influenceFprocPhaseBAPPls = new float[0];
 
     //AP-
+    //влияние напряжения
     private float[] influenceUprocAllPhaseAPMns = new float[0];
     private float[] influenceUprocPhaseAAPMns = new float[0];
     private float[] influenceUprocPhaseBAPMns = new float[0];
 
+    //влияние частоты
     private float[] influenceFprocAllPhaseAPMns = new float[0];
     private float[] influenceFprocPhaseAAPMns = new float[0];
     private float[] influenceFprocPhaseBAPMns = new float[0];
 
     //RP+
+    //влияние напряжения
     private float[] influenceUprocAllPhaseRPPls = new float[0];
     private float[] influenceUprocPhaseARPPls = new float[0];
     private float[] influenceUprocPhaseBRPPls = new float[0];
 
+    //влияние частоты
     private float[] influenceFprocAllPhaseRPPls = new float[0];
     private float[] influenceFprocPhaseARPPls = new float[0];
     private float[] influenceFprocPhaseBRPPls = new float[0];
 
     //RP-
+    //влияние напряжения
     private float[] influenceUprocAllPhaseRPMns = new float[0];
     private float[] influenceUprocPhaseARPMns = new float[0];
     private float[] influenceUprocPhaseBRPMns = new float[0];
 
+    //влияние частоты
     private float[] influenceFprocAllPhaseRPMns = new float[0];
     private float[] influenceFprocPhaseARPMns = new float[0];
     private float[] influenceFprocPhaseBRPMns = new float[0];
@@ -386,12 +403,18 @@ public class InfluencePointsOnePhaseStendFrame {
 
     @FXML
     void initialize() {
+
+        //Получаю параметры для построения сетки выбора точки
         current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
         powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
 
         initMainScrollPaneAndScrollPaneCurrentScrollPanePowerFactor();
     }
 
+    /**
+     * Собственная инициализация окна
+     * @param methodicForOnePhaseStend
+     */
     public void myInitInflFrame(MethodicForOnePhaseStend methodicForOnePhaseStend) {
         this.methodicForOnePhaseStend = methodicForOnePhaseStend;
 
@@ -404,16 +427,26 @@ public class InfluencePointsOnePhaseStendFrame {
         addListenerInTestPointList();
     }
 
+    /**
+     * Добавляет точки влияния напряжения и частоты
+     * @param event
+     */
     @FXML
     void addInfluenceTests(ActionEvent event) {
-        //Влияние напряжения все фазы
+
+        //Если хотим добавить точку для стенда у которго одна токовая цепь
         if (event.getSource() == addTglBtnInfUAllPhase) {
+            //если нажата кнопка выбора влияния напряжения
             if (addTglBtnInfUAllPhase.isSelected()) {
 
-                //Если выбрано AP+
+                //Если выбрана AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
+
+                    //Получаю проценты от номинального напряжения
                     try {
+
                         String[] inf = txtFieldInfUAllPhase.getText().split(",");
+
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -424,24 +457,24 @@ public class InfluencePointsOnePhaseStendFrame {
 
                         influenceUprocAllPhaseAPPls = new float[inflFloat.size()];
 
+                        //Переношу значения процентов от напряжения в соответсвующий лист значений
                         for (int i = 0; i < inflFloat.size(); i++) {
                             influenceUprocAllPhaseAPPls[i] = inflFloat.get(i);
                         }
 
+                        //Даю возможность выставлять точки по полученным процентам
                         gridPaneUAllPhase.setDisable(false);
                         txtFieldInfUAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
 
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Неверные данные");
-                            }
-                        });
-
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUAllPhase.setSelected(false);
                     }
 
+
+                    /**
+                     * Далее механизм такой же как и для точек AP+, но только для других направлений тока и типа мощности
+                     */
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
@@ -463,7 +496,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneUAllPhase.setDisable(false);
                         txtFieldInfUAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUAllPhase.setSelected(false);
                     }
 
@@ -488,7 +522,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneUAllPhase.setDisable(false);
                         txtFieldInfUAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUAllPhase.setSelected(false);
                     }
 
@@ -513,14 +548,20 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneUAllPhase.setDisable(false);
                         txtFieldInfUAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUAllPhase.setSelected(false);
                     }
                 }
+
+                //Если пользователь захотел выставить другие значения процентов влияния напряжения
             } else {
+
+                //Блокирую возможность добавление точек
                 gridPaneUAllPhase.setDisable(true);
                 txtFieldInfUAllPhase.setDisable(false);
 
+                //Отчищаю ранее выбранные точки испытания
                 CheckBox checkBox;
                 for (Node node : gridPaneUAllPhase.getChildren()) {
                     try {
@@ -531,6 +572,7 @@ public class InfluencePointsOnePhaseStendFrame {
                     } catch (ClassCastException ignore) {}
                 }
 
+                //Отчищаю значения влияния напряжения
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
 
                     influenceUprocAllPhaseAPPls = new float[0];
@@ -549,8 +591,12 @@ public class InfluencePointsOnePhaseStendFrame {
                 }
             }
         }
-
-            //Влияние напряжения Фаза А
+        //-----------------------------------------------------------------------------
+        /**
+         * Выбор точек для стенда с двумя токовыми цепями.
+         * Механизм выбора такой же как и для выбора точек для стенда с одной токовой цепью (см. коментарии в начале метода)
+         */
+        //Первая токовая цепь
         if (event.getSource() == addTglBtnInfUPhaseA) {
             if (addTglBtnInfUPhaseA.isSelected()) {
 
@@ -575,7 +621,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneUPhaseA.setDisable(false);
                         txtFieldInfUPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseA.setSelected(false);
                     }
 
@@ -600,7 +647,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneUPhaseA.setDisable(false);
                         txtFieldInfUPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseA.setSelected(false);
                     }
 
@@ -625,7 +673,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneUPhaseA.setDisable(false);
                         txtFieldInfUPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseA.setSelected(false);
                     }
 
@@ -650,10 +699,13 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneUPhaseA.setDisable(false);
                         txtFieldInfUPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseA.setSelected(false);
                     }
                 }
+
+                //Удаление точек
             } else {
                 gridPaneUPhaseA.setDisable(true);
                 txtFieldInfUPhaseA.setDisable(false);
@@ -687,8 +739,8 @@ public class InfluencePointsOnePhaseStendFrame {
                 }
             }
         }
-
-        //Влияние напряжения Фаза B
+        //-----------------------------------------------------------------------------
+        //Вторая токовая цепь
         if (event.getSource() == addTglBtnInfUPhaseB) {
             if (addTglBtnInfUPhaseB.isSelected()) {
 
@@ -713,7 +765,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneUPhaseB.setDisable(false);
                         txtFieldInfUPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseB.setSelected(false);
                     }
 
@@ -738,7 +791,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneUPhaseB.setDisable(false);
                         txtFieldInfUPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseB.setSelected(false);
                     }
 
@@ -763,7 +817,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneUPhaseB.setDisable(false);
                         txtFieldInfUPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseB.setSelected(false);
                     }
 
@@ -788,10 +843,12 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneUPhaseB.setDisable(false);
                         txtFieldInfUPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseB.setSelected(false);
                     }
                 }
+                //Удаление
             } else {
                 gridPaneUPhaseB.setDisable(true);
                 txtFieldInfUPhaseB.setDisable(false);
@@ -826,7 +883,13 @@ public class InfluencePointsOnePhaseStendFrame {
             }
         }
 
-        //Влияние частоты все фазы
+        /**
+         * ====================================================================================================
+         * ====================================================================================================
+         * Далее идёт добавление точек влияния частоты сети, логика такая же как и у добавления точек влияния
+         * напряжения (коментарии см. в начале метода)
+         */
+        //Влияние частоты одна токовая цепь
         if (event.getSource() == addTglBtnInfFAllPhase) {
             if (addTglBtnInfFAllPhase.isSelected()) {
 
@@ -851,7 +914,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneFAllPhase.setDisable(false);
                         txtFieldInfFAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFAllPhase.setSelected(false);
                     }
 
@@ -876,7 +940,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneFAllPhase.setDisable(false);
                         txtFieldInfFAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFAllPhase.setSelected(false);
                     }
 
@@ -901,7 +966,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneFAllPhase.setDisable(false);
                         txtFieldInfFAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFAllPhase.setSelected(false);
                     }
 
@@ -926,10 +992,13 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneFAllPhase.setDisable(false);
                         txtFieldInfFAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFAllPhase.setSelected(false);
                     }
                 }
+
+                //Удаление точек
             } else {
                 gridPaneFAllPhase.setDisable(true);
                 txtFieldInfFAllPhase.setDisable(false);
@@ -964,7 +1033,8 @@ public class InfluencePointsOnePhaseStendFrame {
             }
         }
 
-        //Влияние напряжения Фаза А
+        //--------------------------------------------------------------------------
+        //Влияние частоты две токовые цепи. Цепь первая
         if (event.getSource() == addTglBtnInfFPhaseA) {
             if (addTglBtnInfFPhaseA.isSelected()) {
 
@@ -989,7 +1059,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneFPhaseA.setDisable(false);
                         txtFieldInfFPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseA.setSelected(false);
                     }
 
@@ -1014,7 +1085,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneFPhaseA.setDisable(false);
                         txtFieldInfFPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseA.setSelected(false);
                     }
 
@@ -1039,7 +1111,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneFPhaseA.setDisable(false);
                         txtFieldInfFPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseA.setSelected(false);
                     }
 
@@ -1064,7 +1137,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneFPhaseA.setDisable(false);
                         txtFieldInfFPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseA.setSelected(false);
                     }
                 }
@@ -1101,8 +1175,8 @@ public class InfluencePointsOnePhaseStendFrame {
                 }
             }
         }
-
-        //Влияние напряжения Фаза B
+        //--------------------------------------------------------------------------
+        //Влияние частоты две токовые цепи. Цепь вторая
         if (event.getSource() == addTglBtnInfFPhaseB) {
             if (addTglBtnInfFPhaseB.isSelected()) {
 
@@ -1152,7 +1226,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneFPhaseB.setDisable(false);
                         txtFieldInfFPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseB.setSelected(false);
                     }
 
@@ -1177,7 +1252,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneFPhaseB.setDisable(false);
                         txtFieldInfFPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseB.setSelected(false);
                     }
 
@@ -1202,7 +1278,8 @@ public class InfluencePointsOnePhaseStendFrame {
                         gridPaneFPhaseB.setDisable(false);
                         txtFieldInfFPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseB.setSelected(false);
                     }
                 }
@@ -1241,6 +1318,12 @@ public class InfluencePointsOnePhaseStendFrame {
         }
     }
 
+
+    /**
+     * Действие при нажатии выбора точек испытаний для влияния
+     * Имитирует togleGroup и выводис соответствующую сетку с точками испытаний
+     * @param event
+     */
     @FXML
     void selectInfluenceTests(ActionEvent event) {
         if (event.getSource() == selectInfUAllPhaseTgl) {
@@ -1300,22 +1383,26 @@ public class InfluencePointsOnePhaseStendFrame {
             setVisibleSelectedGridPane(gridPaneFPhaseB);
         }
 
-        //На всякий
-        if (event.getSource() == selectInfUPhaseCTgl) {
-            selectInfUPhaseCTgl.setSelected(true);
-            selectInfFPhaseCTgl.setSelected(false);
-
-            InflUPhaseCPane.toFront();
-        }
-
-        if (event.getSource() == selectInfFPhaseCTgl) {
-            selectInfUPhaseCTgl.setSelected(false);
-            selectInfFPhaseCTgl.setSelected(true);
-
-            InflFPhaseCPane.toFront();
-        }
+        //Зарезервированно
+//        if (event.getSource() == selectInfUPhaseCTgl) {
+//            selectInfUPhaseCTgl.setSelected(true);
+//            selectInfFPhaseCTgl.setSelected(false);
+//
+//            InflUPhaseCPane.toFront();
+//        }
+//
+//        if (event.getSource() == selectInfFPhaseCTgl) {
+//            selectInfUPhaseCTgl.setSelected(false);
+//            selectInfFPhaseCTgl.setSelected(true);
+//
+//            InflFPhaseCPane.toFront();
+//        }
     }
 
+    /**
+     * Действие при нажатие на кнопку "сохранить"
+     * @param event
+     */
     @FXML
     void saveOrCancelAction(ActionEvent event) {
         if (event.getSource() == saveBtn) {
@@ -1325,6 +1412,10 @@ public class InfluencePointsOnePhaseStendFrame {
         }
     }
 
+    /**
+     * Действие при выборе добавления точек для стендов с одной токовой цепью или двумя
+     * @param event
+     */
     @FXML
     void setPhaseGridPaneAction(ActionEvent event) {
         if (event.getSource() == allPhaseBtn) {
@@ -1355,8 +1446,14 @@ public class InfluencePointsOnePhaseStendFrame {
         }
     }
 
+    /**
+     * Действие при смене направления тока и типа мощности
+     * (Выбор AP+, AP-, RP+, RP-)
+     * @param event
+     */
     @FXML
     void setPointFrameAction(ActionEvent event) {
+        //Если пользователь выбирает AP+
         if (event.getSource() == APPlus || event.getSource() == APPlusCRPSTA) {
 
             if (!APPlus.isSelected() || !APPlusCRPSTA.isSelected()) {
@@ -1375,6 +1472,7 @@ public class InfluencePointsOnePhaseStendFrame {
                 initGridPanesAndChoiceSelectionPanesForAPPls();
             }
 
+        //Если пользователь выбирает AP-
         } else if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
 
             if (!APMinus.isSelected() || !APMinusCRPSTA.isSelected()) {
@@ -1393,6 +1491,7 @@ public class InfluencePointsOnePhaseStendFrame {
                 initGridPanesAndChoiceSelectionPanesForAPMns();
             }
 
+        //Если пользователь выбирает RP+
         } else if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
 
             if (!RPPlus.isSelected() || !RPPlusCRPSTA.isSelected()) {
@@ -1411,6 +1510,7 @@ public class InfluencePointsOnePhaseStendFrame {
                 initGridPanesAndChoiceSelectionPanesForRPPls();
             }
 
+        //Если пользователь выбирает RP-
         }  else if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
 
             if (!RPMinus.isSelected() || !RPMinusCRPSTA.isSelected()) {
@@ -1431,13 +1531,13 @@ public class InfluencePointsOnePhaseStendFrame {
         }
     }
 
-    //Инициализация полей влияния
+    /**
+     * Отвечает за инициализацию ранее выбранных точек влияния для данной методики
+     * (Если была нажата кнопка редактировать)
+     * @param methodicForOnePhaseStend
+     */
     private void intitInflFields(MethodicForOnePhaseStend methodicForOnePhaseStend) {
-//        inflListForCollumAPPls = FXCollections.observableArrayList(methodicForOnePhaseStend.getSaveInflListForCollumAPPls());
-//        inflListForCollumAPMns = FXCollections.observableArrayList(methodicForOnePhaseStend.getSaveInflListForCollumAPMns());
-//        inflListForCollumRPPls = FXCollections.observableArrayList(methodicForOnePhaseStend.getSaveInflListForCollumRPPls());
-//        inflListForCollumRPMns = FXCollections.observableArrayList(methodicForOnePhaseStend.getSaveInflListForCollumRPMns());
-
+        //Копирую все точки влияния из методики для разных направлений тока и разного типа мощности
         try {
             for (Commands command : methodicForOnePhaseStend.getSaveInflListForCollumAPPls()) {
                 inflListForCollumAPPls.add(command.clone());
@@ -1459,6 +1559,7 @@ public class InfluencePointsOnePhaseStendFrame {
             ConsoleHelper.infoException(e.getMessage());
         }
 
+        //Копирую все значения процентов влияния для частоты и напряжения, а так же разновидностей токовых цепей
         influenceUprocAllPhaseAPPls = Arrays.copyOf(methodicForOnePhaseStend.getSaveInfluenceUprocAllPhaseAPPls(), methodicForOnePhaseStend.getSaveInfluenceUprocAllPhaseAPPls().length);
         influenceUprocPhaseAAPPls = Arrays.copyOf(methodicForOnePhaseStend.getSaveInfluenceUprocPhaseAAPPls(), methodicForOnePhaseStend.getSaveInfluenceUprocPhaseAAPPls().length);
         influenceUprocPhaseBAPPls = Arrays.copyOf(methodicForOnePhaseStend.getSaveInfluenceUprocPhaseBAPPls(), methodicForOnePhaseStend.getSaveInfluenceUprocPhaseBAPPls().length);
@@ -1492,6 +1593,9 @@ public class InfluencePointsOnePhaseStendFrame {
         influenceFprocPhaseBRPMns = Arrays.copyOf(methodicForOnePhaseStend.getSaveInfluenceFprocPhaseBRPMns(), methodicForOnePhaseStend.getSaveInfluenceFprocPhaseBRPMns().length);
     }
 
+    /**
+     * Добавляет все добавленные или изменённые точки испытания в листы подкотовленные для сохранения точек
+     */
     private void saveInflInMetodic() {
         methodicForOnePhaseStend.setSaveInflListForCollumAPPls(new ArrayList<>(inflListForCollumAPPls));
         methodicForOnePhaseStend.setSaveInflListForCollumAPMns(new ArrayList<>(inflListForCollumAPMns));
@@ -1532,14 +1636,26 @@ public class InfluencePointsOnePhaseStendFrame {
     }
 
     //=========================================================================================================//
-    //========================= Инициализация основного и дополнительных scroll panes ==========================//
+    //========================= Инициализация основного и дополнительных scroll panes =========================//
     //=========================================================================================================//
+
+    /**
+     * Логика такая же как и у контроллера AddEditPointsOnePhaseStendFrameController
+     * см. коментарии там
+     */
+
+    /**
+     * Инициализация панели с сеткой выбора точек испытания
+     */
     private void initMainScrollPaneAndScrollPaneCurrentScrollPanePowerFactor() {
         initMainScrollPane();
         initScrolPaneForCurrentAndPowerFactor();
         createScrollPanesForGridPane();
     }
 
+    /**
+     * Скрол пэйн куда помещаются сетки с возможностью выбора точек испытания
+     */
     private void initMainScrollPane() {
         mainScrollPane.setPrefHeight(230);
         mainScrollPane.setPrefWidth(643);
@@ -1558,11 +1674,13 @@ public class InfluencePointsOnePhaseStendFrame {
 
         mainAnchorPane.getChildren().add(mainScrollPane);
 
-        //stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
-
         mainScrollPane.setContent(stackPaneForGridPane);
     }
 
+    /**
+     * Инициализация информации о колонках и строках
+     * сетки с выбором точек (gridPane)
+     */
     private void initScrolPaneForCurrentAndPowerFactor() {
         gridPaneForCurrent.setPrefWidth(gridPaneUAllPhase.getWidth());
         scrollPaneForCurrent.setContent(gridPaneForCurrent);
@@ -1600,6 +1718,10 @@ public class InfluencePointsOnePhaseStendFrame {
         }
     }
 
+    /**
+     * скрол пэйны для информации о колонках и строках
+     * сетки с выбором точек (gridPane)
+     */
     private void createScrollPanesForGridPane() {
         //Curr
         scrollPaneForCurrent.setMinHeight(0);
@@ -1644,6 +1766,9 @@ public class InfluencePointsOnePhaseStendFrame {
         mainAnchorPane.getChildren().add(fillSquare);
     }
 
+    /**
+     * Привязывает все скролл бары к основной скрол пэйн для синхронизации информации о колонках и самих колонках
+     */
     public void bindScrollPanesCurrentAndPowerFactorToMainScrollPane() {
         ScrollBar currentHorizontalScroll = null;
         ScrollBar mainHorizontalScroll = null;
@@ -1692,28 +1817,37 @@ public class InfluencePointsOnePhaseStendFrame {
     //=========================================================================================================//
     //========================= Инициализация GridPanes и панели выбора натроек ===============================//
     //=========================================================================================================//
-    //Инициализирует все поля, сетку и чекбоксы для AP+
+
+    /**
+     * Инициализирует все поля, сетку и чекбоксы для AP+
+     */
     private void initGridPanesAndChoiceSelectionPanesForAPPls() {
         initAllGridPanesForAPPls();
         setSelectBtns();
         initSelectPanesAPPls();
     }
 
-    //Инициализирует все поля, сетку и чекбоксы для AP-
+    /**
+     * Инициализирует все поля, сетку и чекбоксы для AP-
+     */
     private void initGridPanesAndChoiceSelectionPanesForAPMns() {
         initAllGridPanesForAPMns();
         setSelectBtns();
         initSelectPanesAPMns();
     }
 
-    //Инициализирует все поля, сетку и чекбоксы для RP+
+    /**
+     * Инициализирует все поля, сетку и чекбоксы для RP+
+     */
     private void initGridPanesAndChoiceSelectionPanesForRPPls() {
         initAllGridPanesForRPPls();
         setSelectBtns();
         initSelectPanesRPPls();
     }
 
-    //Инициализирует все поля, сетку и чекбоксы для RP-
+    /**
+     * Инициализирует все поля, сетку и чекбоксы для RP-
+     */
     private void initGridPanesAndChoiceSelectionPanesForRPMns() {
         initAllGridPanesForRPMns();
         setSelectBtns();
