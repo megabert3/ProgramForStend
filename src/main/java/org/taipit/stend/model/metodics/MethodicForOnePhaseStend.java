@@ -429,36 +429,6 @@ public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializabl
         return meterModel;
     }
 
-    @Override
-    public boolean isContaintsLastNotSaveResults() {
-        return false;
-    }
-
-    @Override
-    public void setContaintsLastNotSaveResults(boolean containtsLastNotSaveResults) {
-
-    }
-
-    @Override
-    public boolean isResultsOverwriten() {
-        return false;
-    }
-
-    @Override
-    public void setResultsOverwriten(boolean resultsOverwriten) {
-
-    }
-
-    @Override
-    public List<Meter> getNotSaveResultMeters() {
-        return null;
-    }
-
-    @Override
-    public void setNotSaveResultMeters(List<Meter> notSaveResultMeters) {
-
-    }
-
     public void setMeterModel(String meterModel) {
         this.meterModel = meterModel;
     }
