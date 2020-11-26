@@ -28,20 +28,20 @@ import javafx.util.Callback;
 import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.controller.Commands.ErrorCommand;
 import org.taipit.stend.controller.Commands.ImbalansUCommand;
-import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна "influencePointsThreePhaseStendFrame.fxml".
+ * Данный класс отвечает за возможность добавления, редактирования точек испытания влияния по напряжению и частоте в методику поверки для трехфазного стенда".
+ */
 public class InfluencePointsThreePhaseStendFrame {
 
-    private AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController;
-
+    //Методика для однофазного стенда куда добавляются эти точки
     private MethodicForThreePhaseStend methodicForThreePhaseStend;
-
-    private StendDLLCommands stendDLLCommands;
 
     //Значения коэффициента мощности
     private List<String> powerFactor;
@@ -69,65 +69,80 @@ public class InfluencePointsThreePhaseStendFrame {
     //Сохранить изменения?
     private boolean saveChange = false;
 
-    //Листы с точками тестирования до сохранения
+    //Листы с добавленными точками тестирования
+    //Активная энергия в прямом направлении тока
     private ObservableList<Commands> inflListForCollumAPPls = FXCollections.observableArrayList(new ArrayList<>());
+    //Активная энергия в обратном направлении тока
     private ObservableList<Commands> inflListForCollumAPMns = FXCollections.observableArrayList(new ArrayList<>());
+    //Реактивная энергия в прямом направлении тока
     private ObservableList<Commands> inflListForCollumRPPls = FXCollections.observableArrayList(new ArrayList<>());
+    //Реактивная энергия в обратном направлении тока
     private ObservableList<Commands> inflListForCollumRPMns = FXCollections.observableArrayList(new ArrayList<>());
 
 //=====================================================================
     //Поля необходимые для добавления точек испытания на влияние
-    //До сохранения
     //AP+
+    //влияние напряжения
     private float[] influenceUprocAllPhaseAPPls = new float[0];
     private float[] influenceUprocPhaseAAPPls = new float[0];
     private float[] influenceUprocPhaseBAPPls = new float[0];
     private float[] influenceUprocPhaseCAPPls = new float[0];
 
+    //влияние частоты
     private float[] influenceFprocAllPhaseAPPls = new float[0];
     private float[] influenceFprocPhaseAAPPls = new float[0];
     private float[] influenceFprocPhaseBAPPls = new float[0];
     private float[] influenceFprocPhaseCAPPls = new float[0];
 
+    //Добавление точек имбаланса напряжений по фазам
     private String[] influenceImbUAPPls = new String[0];
 
     //AP-
+    //влияние напряжения
     private float[] influenceUprocAllPhaseAPMns = new float[0];
     private float[] influenceUprocPhaseAAPMns = new float[0];
     private float[] influenceUprocPhaseBAPMns = new float[0];
     private float[] influenceUprocPhaseCAPMns = new float[0];
 
+    //влияние частоты
     private float[] influenceFprocAllPhaseAPMns = new float[0];
     private float[] influenceFprocPhaseAAPMns = new float[0];
     private float[] influenceFprocPhaseBAPMns = new float[0];
     private float[] influenceFprocPhaseCAPMns = new float[0];
 
+    //Добавление точек имбаланса напряжений по фазам
     private String[] influenceInbUAPMns = new String[0];
 
     //RP+
+    //влияние напряжения
     private float[] influenceUprocAllPhaseRPPls = new float[0];
     private float[] influenceUprocPhaseARPPls = new float[0];
     private float[] influenceUprocPhaseBRPPls = new float[0];
     private float[] influenceUprocPhaseCRPPls = new float[0];
 
+    //влияние частоты
     private float[] influenceFprocAllPhaseRPPls = new float[0];
     private float[] influenceFprocPhaseARPPls = new float[0];
     private float[] influenceFprocPhaseBRPPls = new float[0];
     private float[] influenceFprocPhaseCRPPls = new float[0];
 
+    //Добавление точек имбаланса напряжений по фазам
     private String[] influenceInbURPPls = new String[0];
 
     //RP-
+    //влияние напряжения
     private float[] influenceUprocAllPhaseRPMns = new float[0];
     private float[] influenceUprocPhaseARPMns = new float[0];
     private float[] influenceUprocPhaseBRPMns = new float[0];
     private float[] influenceUprocPhaseCRPMns = new float[0];
 
+    //влияние частоты
     private float[] influenceFprocAllPhaseRPMns = new float[0];
     private float[] influenceFprocPhaseARPMns = new float[0];
     private float[] influenceFprocPhaseBRPMns = new float[0];
     private float[] influenceFprocPhaseCRPMns = new float[0];
 
+    //Добавление точек имбаланса напряжений по фазам
     private String[] influenceInbURPMns = new String[0];
 
     //======================================================================
@@ -431,15 +446,18 @@ public class InfluencePointsThreePhaseStendFrame {
 
     @FXML
     void initialize() {
-        if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
-            isThrePhaseStend = true;
-        }
+
+        //Получаю параметры для построения сетки выбора точки
         current = Arrays.asList(ConsoleHelper.properties.getProperty("currentForMethodicPane").split(", "));
         powerFactor = Arrays.asList(ConsoleHelper.properties.getProperty("powerFactorForMetodicPane").split(", "));
 
         initMainScrollPaneAndScrollPaneCurrentScrollPanePowerFactor();
     }
 
+    /**
+     * Собственная инициализация окна
+     * @param methodicForThreePhaseStend - методика поверки для трехфазного стенда
+     */
     public void myInitInflFrame(MethodicForThreePhaseStend methodicForThreePhaseStend) {
         this.methodicForThreePhaseStend = methodicForThreePhaseStend;
 
@@ -452,16 +470,25 @@ public class InfluencePointsThreePhaseStendFrame {
         addListenerInTestPointList();
     }
 
+    /**
+     * Разрешает добавление точки влияния напряжения и частоты исходя из процентов введённых пользователем
+     * @param event
+     */
     @FXML
     void addInfluenceTests(ActionEvent event) {
+
         //Влияние напряжения все фазы
         if (event.getSource() == addTglBtnInfUAllPhase) {
             if (addTglBtnInfUAllPhase.isSelected()) {
 
                 //Если выбрано AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
+
+                    //Получаю проценты от номинального напряжения
                     try {
+
                         String[] inf = txtFieldInfUAllPhase.getText().split(",");
+
                         List<Float> inflFloat = new ArrayList<>();
                         Float procFloat;
 
@@ -472,24 +499,23 @@ public class InfluencePointsThreePhaseStendFrame {
 
                         influenceUprocAllPhaseAPPls = new float[inflFloat.size()];
 
+                        //Переношу значения процентов от напряжения в соответсвующий лист значений
                         for (int i = 0; i < inflFloat.size(); i++) {
                             influenceUprocAllPhaseAPPls[i] = inflFloat.get(i);
                         }
 
+                        //Даю возможность выставлять точки по полученным процентам
                         gridPaneUAllPhase.setDisable(false);
                         txtFieldInfUAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
 
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                ConsoleHelper.infoException("Неверные данные");
-                            }
-                        });
-
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUAllPhase.setSelected(false);
                     }
 
+                    /**
+                     * Далее механизм такой же как и для точек AP+, но только для других направлений тока и типа мощности
+                     */
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
@@ -511,7 +537,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUAllPhase.setDisable(false);
                         txtFieldInfUAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUAllPhase.setSelected(false);
                     }
 
@@ -536,7 +563,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUAllPhase.setDisable(false);
                         txtFieldInfUAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUAllPhase.setSelected(false);
                     }
 
@@ -561,10 +589,13 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUAllPhase.setDisable(false);
                         txtFieldInfUAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUAllPhase.setSelected(false);
                     }
                 }
+
+                //Если пользователь захотел выставить другие значения процентов влияния напряжения
             } else {
                 gridPaneUAllPhase.setDisable(true);
                 txtFieldInfUAllPhase.setDisable(false);
@@ -598,6 +629,11 @@ public class InfluencePointsThreePhaseStendFrame {
             }
         }
 
+        /**
+         * Выбор точек для каждой отдельной фазы.
+         * Механизм выбора такой же как и для выбора точек для всех фаз (см. коментарии в начале метода)
+         */
+
             //Влияние напряжения Фаза А
         if (event.getSource() == addTglBtnInfUPhaseA) {
             if (addTglBtnInfUPhaseA.isSelected()) {
@@ -623,7 +659,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseA.setDisable(false);
                         txtFieldInfUPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseA.setSelected(false);
                     }
 
@@ -648,7 +685,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseA.setDisable(false);
                         txtFieldInfUPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseA.setSelected(false);
                     }
 
@@ -673,7 +711,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseA.setDisable(false);
                         txtFieldInfUPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseA.setSelected(false);
                     }
 
@@ -698,7 +737,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseA.setDisable(false);
                         txtFieldInfUPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseA.setSelected(false);
                     }
                 }
@@ -761,7 +801,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseB.setDisable(false);
                         txtFieldInfUPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseB.setSelected(false);
                     }
 
@@ -786,7 +827,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseB.setDisable(false);
                         txtFieldInfUPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseB.setSelected(false);
                     }
 
@@ -811,7 +853,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseB.setDisable(false);
                         txtFieldInfUPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseB.setSelected(false);
                     }
 
@@ -836,7 +879,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseB.setDisable(false);
                         txtFieldInfUPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseB.setSelected(false);
                     }
                 }
@@ -899,7 +943,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseC.setDisable(false);
                         txtFieldInfUPhaseC.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseC.setSelected(false);
                     }
 
@@ -924,7 +969,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseC.setDisable(false);
                         txtFieldInfUPhaseC.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseC.setSelected(false);
                     }
 
@@ -949,7 +995,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseC.setDisable(false);
                         txtFieldInfUPhaseC.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseC.setSelected(false);
                     }
 
@@ -974,7 +1021,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneUPhaseC.setDisable(false);
                         txtFieldInfUPhaseC.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfUPhaseC.setSelected(false);
                     }
                 }
@@ -1012,6 +1060,13 @@ public class InfluencePointsThreePhaseStendFrame {
             }
         }
 
+        /**
+         * ====================================================================================================
+         * ====================================================================================================
+         * Далее идёт добавление точек влияния частоты сети, логика такая же как и у добавления точек влияния
+         * напряжения (коментарии см. в начале метода)
+         */
+
         //Влияние частоты все фазы
         if (event.getSource() == addTglBtnInfFAllPhase) {
             if (addTglBtnInfFAllPhase.isSelected()) {
@@ -1037,7 +1092,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFAllPhase.setDisable(false);
                         txtFieldInfFAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFAllPhase.setSelected(false);
                     }
 
@@ -1062,7 +1118,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFAllPhase.setDisable(false);
                         txtFieldInfFAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFAllPhase.setSelected(false);
                     }
 
@@ -1087,7 +1144,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFAllPhase.setDisable(false);
                         txtFieldInfFAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFAllPhase.setSelected(false);
                     }
 
@@ -1112,7 +1170,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFAllPhase.setDisable(false);
                         txtFieldInfFAllPhase.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFAllPhase.setSelected(false);
                     }
                 }
@@ -1175,7 +1234,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFPhaseA.setDisable(false);
                         txtFieldInfFPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseA.setSelected(false);
                     }
 
@@ -1200,7 +1260,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFPhaseA.setDisable(false);
                         txtFieldInfFPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseA.setSelected(false);
                     }
 
@@ -1225,7 +1286,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFPhaseA.setDisable(false);
                         txtFieldInfFPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseA.setSelected(false);
                     }
 
@@ -1250,7 +1312,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFPhaseA.setDisable(false);
                         txtFieldInfFPhaseA.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseA.setSelected(false);
                     }
                 }
@@ -1313,7 +1376,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFPhaseB.setDisable(false);
                         txtFieldInfFPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseB.setSelected(false);
                     }
 
@@ -1338,7 +1402,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFPhaseB.setDisable(false);
                         txtFieldInfFPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseB.setSelected(false);
                     }
 
@@ -1363,7 +1428,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFPhaseB.setDisable(false);
                         txtFieldInfFPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseB.setSelected(false);
                     }
 
@@ -1388,7 +1454,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFPhaseB.setDisable(false);
                         txtFieldInfFPhaseB.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseB.setSelected(false);
                     }
                 }
@@ -1451,7 +1518,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFPhaseC.setDisable(false);
                         txtFieldInfFPhaseC.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseC.setSelected(false);
                     }
 
@@ -1476,7 +1544,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFPhaseC.setDisable(false);
                         txtFieldInfFPhaseC.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseC.setSelected(false);
                     }
 
@@ -1526,7 +1595,8 @@ public class InfluencePointsThreePhaseStendFrame {
                         gridPaneFPhaseC.setDisable(false);
                         txtFieldInfFPhaseC.setDisable(true);
                     } catch (NumberFormatException e) {
-                        //InfoEx
+
+                        ConsoleHelper.infoException("Неверные данные");
                         addTglBtnInfFPhaseC.setSelected(false);
                     }
                 }
@@ -1564,17 +1634,23 @@ public class InfluencePointsThreePhaseStendFrame {
             }
         }
 
+        /**
+         * Добавление точек имбаланс напряжений (подробнее в ImbalansUCommand)
+         */
         //Если нажата кнопка добавления теста влияния imb
         if (event.getSource() == addTglBtnImb) {
             if (addTglBtnImb.isSelected()) {
 
                 //Если выбрано AP+
                 if (APPlus.isSelected() || APPlusCRPSTA.isSelected()) {
+
                     try {
+                        //Получаю список фаз на которые необходимо подать напряжение
                         String[] inf = txtFieldInfImb.getText().split(",");
                         List<String> inbStr = new ArrayList<>();
                         String phase;
 
+                        //Проверяю всё, что ввёл пользователь
                         for (String phaseInb : inf) {
                             phase = phaseInb.trim();
 
@@ -1590,10 +1666,12 @@ public class InfluencePointsThreePhaseStendFrame {
 
                         influenceImbUAPPls = new String[inbStr.size()];
 
+                        //Добавляю в значения для сохранения
                         for (int i = 0; i < inbStr.size(); i++) {
                             influenceImbUAPPls[i] = inbStr.get(i);
                         }
 
+                        //Далее в зависимости от введёных фаз на которые необходмо подать напряжения добавляю все необходимые точки испытаний
                         for (String phases : inbStr) {
 
                             switch (phases) {
@@ -1643,6 +1721,9 @@ public class InfluencePointsThreePhaseStendFrame {
                         addTglBtnImb.setSelected(false);
                     }
 
+                    /**
+                     * Механизм добавления имбаланса напряжений такой же как и для AP+ см. коментарии там
+                     */
                     //Если выбрано AP-
                 } else if (APMinus.isSelected() || APMinusCRPSTA.isSelected()) {
                     try {
@@ -1920,6 +2001,11 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+    /**
+     * Действие при нажатии выбора точек испытаний для влияния
+     * Имитирует togleGroup и выводит соответствующую сетку с точками испытаний
+     * @param event
+     */
     @FXML
     void selectInfluenceTests(ActionEvent event) {
         if (event.getSource() == selectInfUAllPhaseTgl) {
@@ -2033,6 +2119,10 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+    /**
+     * Действие при нажатие на кнопку "сохранить"
+     * @param event
+     */
     @FXML
     void saveOrCancelAction(ActionEvent event) {
         if (event.getSource() == saveBtn) {
@@ -2042,6 +2132,11 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+    /**
+     * Действие при выборе добавления точек для трехфазных стендов общей подачей тока и напряжения или пофазной
+     * (Общее, фаза А, фаза Б, фаза С)
+     * @param event
+     */
     @FXML
     void setPhaseGridPaneAction(ActionEvent event) {
         if (event.getSource() == allPhaseBtn) {
@@ -2085,8 +2180,14 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+    /**
+     * Действие при смене направления тока и типа мощности
+     * (Выбор AP+, AP-, RP+, RP-)
+     * @param event
+     */
     @FXML
     void setPointFrameAction(ActionEvent event) {
+        //Если пользователь выбирает AP+
         if (event.getSource() == APPlus || event.getSource() == APPlusCRPSTA) {
 
             if (!APPlus.isSelected() || !APPlusCRPSTA.isSelected()) {
@@ -2105,6 +2206,7 @@ public class InfluencePointsThreePhaseStendFrame {
                 initGridPanesAndChoiceSelectionPanesForAPPls();
             }
 
+            //Если пользователь выбирает AP-
         } else if (event.getSource() == APMinus || event.getSource() == APMinusCRPSTA) {
 
             if (!APMinus.isSelected() || !APMinusCRPSTA.isSelected()) {
@@ -2123,6 +2225,7 @@ public class InfluencePointsThreePhaseStendFrame {
                 initGridPanesAndChoiceSelectionPanesForAPMns();
             }
 
+            //Если пользователь выбирает RP+
         } else if (event.getSource() == RPPlus || event.getSource() == RPPlusCRPSTA) {
 
             if (!RPPlus.isSelected() || !RPPlusCRPSTA.isSelected()) {
@@ -2141,6 +2244,7 @@ public class InfluencePointsThreePhaseStendFrame {
                 initGridPanesAndChoiceSelectionPanesForRPPls();
             }
 
+            //Если пользователь выбирает RP-
         }  else if (event.getSource() == RPMinus || event.getSource() == RPMinusCRPSTA) {
 
             if (!RPMinus.isSelected() || !RPMinusCRPSTA.isSelected()) {
@@ -2161,9 +2265,14 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
-    //Инициализация полей влияния
+    /**
+     * Отвечает за инициализацию ранее выбранных точек влияния для данной методики
+     * (Если была нажата кнопка редактировать)
+     * @param methodicForThreePhaseStend
+     */
     private void initInflFields(MethodicForThreePhaseStend methodicForThreePhaseStend) {
 
+        //Копирую все точки влияния из методики для разных направлений тока и разного типа мощности
         try {
             for (Commands command :methodicForThreePhaseStend.getSaveInflListForCollumAPPls()) {
                 inflListForCollumAPPls.add(command.clone());
@@ -2185,6 +2294,7 @@ public class InfluencePointsThreePhaseStendFrame {
             ConsoleHelper.infoException(e.getMessage());
         }
 
+        //Копирую все значения процентов влияния для частоты и напряжения, а так же разновидностей токовых цепей
         influenceUprocAllPhaseAPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPPls(),methodicForThreePhaseStend.getSaveInfluenceUprocAllPhaseAPPls().length);
         influenceUprocPhaseAAPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPPls(),methodicForThreePhaseStend.getSaveInfluenceUprocPhaseAAPPls().length);
         influenceUprocPhaseBAPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPPls(),methodicForThreePhaseStend.getSaveInfluenceUprocPhaseBAPPls().length);
@@ -2223,6 +2333,9 @@ public class InfluencePointsThreePhaseStendFrame {
         influenceInbURPPls = Arrays.copyOf(methodicForThreePhaseStend.getSaveInfluenceInbURPMns(), methodicForThreePhaseStend.getSaveInfluenceInbURPMns().length);
     }
 
+    /**
+     * Добавляет все добавленные или изменённые точки испытания в листы подготовленные для сохранения точек
+     */
     private void saveInflInMetodic() {
         methodicForThreePhaseStend.setSaveInflListForCollumAPPls(new ArrayList<>(inflListForCollumAPPls));
         methodicForThreePhaseStend.setSaveInflListForCollumAPMns(new ArrayList<>(inflListForCollumAPMns));
@@ -2281,12 +2394,18 @@ public class InfluencePointsThreePhaseStendFrame {
     //=========================================================================================================//
     //========================= Инициализация основного и дополнительных scroll panes ==========================//
     //=========================================================================================================//
+    /**
+     * Инициализация панели с сеткой выбора точек испытания
+     */
     private void initMainScrollPaneAndScrollPaneCurrentScrollPanePowerFactor() {
         initMainScrollPane();
         initScrolPaneForCurrentAndPowerFactor();
         createScrollPanesForGridPane();
     }
 
+    /**
+     * Скрол пэйн куда помещаются сетки с возможностью выбора точек испытания
+     */
     private void initMainScrollPane() {
         mainScrollPane.setPrefHeight(230);
         mainScrollPane.setPrefWidth(643);
@@ -2308,6 +2427,10 @@ public class InfluencePointsThreePhaseStendFrame {
         mainScrollPane.setContent(stackPaneForGridPane);
     }
 
+    /**
+     * Инициализация информации о колонках и строках
+     * сетки с выбором точек (gridPane)
+     */
     private void initScrolPaneForCurrentAndPowerFactor() {
         gridPaneForCurrent.setPrefWidth(gridPaneUAllPhase.getWidth());
         scrollPaneForCurrent.setContent(gridPaneForCurrent);
@@ -2345,6 +2468,10 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+    /**
+     * скрол пэйны для информации о колонках и строках
+     * сетки с выбором точек (gridPane)
+     */
     private void createScrollPanesForGridPane() {
         //Curr
         scrollPaneForCurrent.setMinHeight(0);
@@ -2389,6 +2516,9 @@ public class InfluencePointsThreePhaseStendFrame {
         mainAnchorPane.getChildren().add(fillSquare);
     }
 
+    /**
+     * Привязывает все скролл бары к основной скрол пэйн для синхронизации информации о колонках и самих колонках
+     */
     public void bindScrollPanesCurrentAndPowerFactorToMainScrollPane() {
         ScrollBar currentHorizontalScroll = null;
         ScrollBar mainHorizontalScroll = null;
@@ -2437,35 +2567,52 @@ public class InfluencePointsThreePhaseStendFrame {
     //=========================================================================================================//
     //========================= Инициализация GridPanes и панели выбора натроек ===============================//
     //=========================================================================================================//
-    //Инициализирует все поля, сетку и чекбоксы для AP+
+
+    /**
+     * Инициализирует все поля, сетку и чекбоксы для AP+
+     * Если пользователь меняет напрвление тока и тип мощности
+     */
     private void initGridPanesAndChoiceSelectionPanesForAPPls() {
         initAllGridPanesForAPPls();
         setSelectBtns();
         initSelectPanesAPPls();
     }
 
-    //Инициализирует все поля, сетку и чекбоксы для AP-
+    /**
+     * Инициализирует все поля, сетку и чекбоксы для AP-
+     * Если пользователь меняет напрвление тока и тип мощности
+     */
     private void initGridPanesAndChoiceSelectionPanesForAPMns() {
         initAllGridPanesForAPMns();
         setSelectBtns();
         initSelectPanesAPMns();
     }
 
-    //Инициализирует все поля, сетку и чекбоксы для RP+
+    /**
+     * Инициализирует все поля, сетку и чекбоксы для RP-
+     * Если пользователь меняет напрвление тока и тип мощности
+     */
     private void initGridPanesAndChoiceSelectionPanesForRPPls() {
         initAllGridPanesForRPPls();
         setSelectBtns();
         initSelectPanesRPPls();
     }
 
-    //Инициализирует все поля, сетку и чекбоксы для RP-
+    /**
+     * Инициализирует все поля, сетку и чекбоксы для RP-
+     * Если пользователь меняет напрвление тока и тип мощности
+     */
     private void initGridPanesAndChoiceSelectionPanesForRPMns() {
         initAllGridPanesForRPMns();
         setSelectBtns();
         initSelectPanesRPMns();
     }
 
-    //Устанавливает начальное положение пейнов при смене на AP+
+    /**
+     * Устанавливает начальное (дефолдное) состояния toglBtn для цепей,
+     * и выносит на передний план соотвкетсвующую сетку
+     * (Необходим если пользователь нажимает кнопку смены направляения тока и типа мощности)
+     */
     private void setSelectBtns() {
         allPhaseBtn.setSelected(true);
         phaseABtn.setSelected(false);
@@ -2483,6 +2630,10 @@ public class InfluencePointsThreePhaseStendFrame {
         InflInbPane.toBack();
     }
 
+    /**
+     * Инициализация отобращения сетки и панелей с процентам,
+     * если пользователь нажимает на кнопку AP+ (А.Э.+)
+     */
     private void initAllGridPanesForAPPls() {
         removeOldGrPnAndSetIDGridPanesForAPPls();
         creadteGridPane();
@@ -2491,6 +2642,10 @@ public class InfluencePointsThreePhaseStendFrame {
         setListenerForChecBoxInGridPane();
     }
 
+    /**
+     * Инициализация отобращения сетки и панелей с процентам,
+     * если пользователь нажимает на кнопку AP- (А.Э.-)
+     */
     private void initAllGridPanesForAPMns() {
         removeOldGrPnAndSetIDGridPanesForAPMns();
         creadteGridPane();
@@ -2499,6 +2654,10 @@ public class InfluencePointsThreePhaseStendFrame {
         setListenerForChecBoxInGridPane();
     }
 
+    /**
+     * Инициализация отобращения сетки и панелей с процентам,
+     * если пользователь нажимает на кнопку RP+ (Р.Э.+)
+     */
     private void initAllGridPanesForRPPls() {
         removeOldGrPnAndSetIDGridPanesForRPPls();
         creadteGridPane();
@@ -2507,6 +2666,10 @@ public class InfluencePointsThreePhaseStendFrame {
         setListenerForChecBoxInGridPane();
     }
 
+    /**
+     * Инициализация отобращения сетки и панелей с процентам,
+     * если пользователь нажимает на кнопку RP- (Р.Э.-)
+     */
     private void initAllGridPanesForRPMns() {
         removeOldGrPnAndSetIDGridPanesForRPMns();
         creadteGridPane();
@@ -2515,7 +2678,10 @@ public class InfluencePointsThreePhaseStendFrame {
         setListenerForChecBoxInGridPane();
     }
 
-    //Вбивает ранее использованные параметры влияния в необходимые поля
+    /**
+     * Инициализирует панели с процентам для AP+
+     * (Напряжение или Частота)
+     */
     private void initSelectPanesAPPls() {
         String infStr;
         directLabAllPhaseU.setText("Активная энергия в прямом направлении тока");
@@ -2530,6 +2696,7 @@ public class InfluencePointsThreePhaseStendFrame {
 
         directLabInb.setText("Активная энергия в прямом направлении тока");
 
+        //Если есть значения процентов влияния напряжения для добавления точек в методику для однофазного стенда с одной токовой цепью
         if (influenceUprocAllPhaseAPPls.length != 0) {
             infStr = Arrays.toString(influenceUprocAllPhaseAPPls);
 
@@ -2539,6 +2706,7 @@ public class InfluencePointsThreePhaseStendFrame {
             gridPaneUAllPhase.setDisable(false);
             txtFieldInfUAllPhase.setDisable(true);
 
+            //Если их нет
         } else {
             txtFieldInfUAllPhase.setDisable(false);
             txtFieldInfUAllPhase.clear();
@@ -2547,6 +2715,8 @@ public class InfluencePointsThreePhaseStendFrame {
             txtFieldInfUAllPhase.setDisable(false);
         }
 
+        //Если есть значения процентов влияния напряжения для добавления точек в методику для разных фаз
+        //По фазе А
         if (influenceUprocPhaseAAPPls.length != 0) {
             infStr = Arrays.toString(influenceUprocPhaseAAPPls);
 
@@ -2563,6 +2733,7 @@ public class InfluencePointsThreePhaseStendFrame {
             txtFieldInfUPhaseA.setDisable(false);
         }
 
+        //По фазе B
         if (influenceUprocPhaseBAPPls.length != 0) {
             infStr = Arrays.toString(influenceUprocPhaseBAPPls);
 
@@ -2579,6 +2750,7 @@ public class InfluencePointsThreePhaseStendFrame {
             txtFieldInfUPhaseB.setDisable(false);
         }
 
+        //По фазе C
         if (influenceUprocPhaseCAPPls.length != 0) {
             infStr = Arrays.toString(influenceUprocPhaseCAPPls);
 
@@ -2595,6 +2767,9 @@ public class InfluencePointsThreePhaseStendFrame {
             txtFieldInfUPhaseC.setDisable(false);
         }
 
+        /**
+         * Далее логика такая же, что описана выше, но только для влияния частоты
+         */
         if (influenceFprocAllPhaseAPPls.length != 0) {
             infStr = Arrays.toString(influenceFprocAllPhaseAPPls);
 
@@ -2669,6 +2844,11 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+    /**
+     * Инициализирует панели с процентам для AP-
+     * (Напряжение или Частота)
+     * Логика такая же как и у AP+, там есть несколько коментариев
+     */
     private void initSelectPanesAPMns() {
         String infStr;
 
@@ -2819,6 +2999,11 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+    /**
+     * Инициализирует панели с процентам для RP+
+     * (Напряжение или Частота)
+     * Логика такая же как и у AP+, там есть несколько коментариев
+     */
     private void initSelectPanesRPPls() {
         String infStr;
 
@@ -2968,6 +3153,11 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+    /**
+     * Инициализирует панели с процентам для RP-
+     * (Напряжение или Частота)
+     * Логика такая же как и у AP+, там есть несколько коментариев
+     */
     private void initSelectPanesRPMns() {
         String infStr;
 
@@ -3117,6 +3307,11 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+    /**
+     * Делает видимой необходимую сетку
+     * (При нажатии выбора фазы делает выдимой соответствующую)
+     * @param gridPane
+     */
     private void setVisibleSelectedGridPane(GridPane gridPane) {
         for (GridPane gridPane1 : gridPanesEnergyAndPhase) {
             if (gridPane1.equals(gridPane)) {
@@ -3127,7 +3322,10 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
-    //Удаляет старые GridPane и инициализирует новые после смены напрявления или типа энергии
+    /**
+     * Удаляет старые GridPane (сетки с точками) и инициализирует новые для AP+
+     * (После смены напрявления тока или типа энергии)
+     */
     private void removeOldGrPnAndSetIDGridPanesForAPPls() {
         stackPaneForGridPane.getChildren().clear();
 
@@ -3174,6 +3372,10 @@ public class InfluencePointsThreePhaseStendFrame {
         stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
     }
 
+    /**
+     * Удаляет старые GridPane (сетки с точками) и инициализирует новые для AP-
+     * (После смены напрявления тока или типа энергии)
+     */
     private void removeOldGrPnAndSetIDGridPanesForAPMns() {
         stackPaneForGridPane.getChildren().clear();
 
@@ -3220,6 +3422,10 @@ public class InfluencePointsThreePhaseStendFrame {
         stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
     }
 
+    /**
+     * Удаляет старые GridPane (сетки с точками) и инициализирует новые для RP+
+     * (После смены напрявления тока или типа энергии)
+     */
     private void removeOldGrPnAndSetIDGridPanesForRPPls() {
         stackPaneForGridPane.getChildren().clear();
 
@@ -3266,6 +3472,10 @@ public class InfluencePointsThreePhaseStendFrame {
         stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
     }
 
+    /**
+     * Удаляет старые GridPane (сетки с точками) и инициализирует новые для RP-
+     * (После смены напрявления тока или типа энергии)
+     */
     private void removeOldGrPnAndSetIDGridPanesForRPMns() {
         stackPaneForGridPane.getChildren().clear();
 
@@ -3312,7 +3522,11 @@ public class InfluencePointsThreePhaseStendFrame {
         stackPaneForGridPane.getChildren().addAll(gridPanesEnergyAndPhase);
     }
 
-    //Задаёт GridPane необходимую величину
+    /**
+     * Инициализирует сетки для выбора точек испытания.
+     * В зависимости от количества параметров тока и PF (коэф. мощности)
+     * создаёт необходимое количество столбцов и строк
+     */
     private void creadteGridPane() {
         for (GridPane gridPane : gridPanesEnergyAndPhase) {
             gridPane.setGridLinesVisible(true);
@@ -3327,7 +3541,9 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
-    //Добавляет соответствующий checkBox в соответствующий узел
+    /**
+     * Добавляет checBox для добавления или удаления точки испытания в сетку выбора точки испатания
+     */
     private void addCheckBoxesInGridPane() {
 
         String cssAdress = getClass().getClassLoader().getResource("styleCSS/addDeleteEditPointsFrame/checkBox.css").toString();
@@ -3357,21 +3573,33 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
-    //Устанавливает значение true/false checBox'у в зависимости от того есть ли эта команта в списке выбранных
+    /**
+     * Инициализирует checkBox'ы в сетке значениями true или false в зависимости от того есть эта точка в методике или нет
+     * (Необходим для инициализации новых сеток после смены выбора направления тока и типа мощности)
+     * @param inflListForCollum - лист с точками, которые необходимо обозначить в сетке
+     */
     private void selectCheckBoxesInGridPane(List<Commands> inflListForCollum) {
         if (!inflListForCollum.isEmpty()) {
             char[] charIdTestPoint;
 
             for (Commands command : inflListForCollum) {
                 if (command instanceof ErrorCommand) {
+
+                    //Получаю ID точки
                     charIdTestPoint = ((ErrorCommand) command).getId().toCharArray();
 
+                    //Если команда (точка) влияние по напряжению
                     if (charIdTestPoint[0] == 'U') {
 
+                        //Для всех фаз
                         if (charIdTestPoint[4] == 'H') {
                             for (Node node : gridPaneUAllPhase.getChildren()) {
                                 if (node != null) {
+
+                                    //Если ID чекбокса совпадает с ID комадны
                                     if (((ErrorCommand) command).getId().equals(node.getId())) {
+
+                                        //Выставляю значение чекбокса в true
                                         ((CheckBox) node).setSelected(true);
                                         break;
                                     }
@@ -3379,6 +3607,7 @@ public class InfluencePointsThreePhaseStendFrame {
                             }
                         }
 
+                        //Для фазы А
                         if (charIdTestPoint[4] == 'A') {
                             for (Node node : gridPaneUPhaseA.getChildren()) {
                                 if (node != null) {
@@ -3390,6 +3619,7 @@ public class InfluencePointsThreePhaseStendFrame {
                             }
                         }
 
+                        //Для фазы B
                         if (charIdTestPoint[4] == 'B') {
                             for (Node node : gridPaneUPhaseB.getChildren()) {
                                 if (node != null) {
@@ -3401,6 +3631,7 @@ public class InfluencePointsThreePhaseStendFrame {
                             }
                         }
 
+                        //Для фазы С
                         if (charIdTestPoint[4] == 'C') {
                             for (Node node : gridPaneUPhaseC.getChildren()) {
                                 if (node != null) {
@@ -3412,6 +3643,11 @@ public class InfluencePointsThreePhaseStendFrame {
                             }
                         }
 
+                        /**
+                         * Логика такая же как и для влияния по напряжения см. коментарии там
+                         */
+
+                        //Если команда (точка) влияние по частоте
                     } else if (charIdTestPoint[0] == 'F') {
 
                         if (charIdTestPoint[4] == 'H') {
@@ -3463,11 +3699,19 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
-    //Устанавливает слушателя для CheckBox'ов в выбранной сетке
+    /**
+     * Устанавливает слушателя для CheckBox'ов в сетках
+     */
     private void setListenerForChecBoxInGridPane() {
+
+        //Прохожусь по всем сеткам
         for (GridPane gridPane : gridPanesEnergyAndPhase) {
+
+            //Нахожу все чекбоксы в сетке
             for (Node node : gridPane.getChildren()) {
                 try {
+
+                    //Устанавливаю слушатель найденному чекбоксу
                     CheckBox checkBox = (CheckBox) node;
                     checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
                         @Override
@@ -3485,18 +3729,38 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
-    //Добавляет тестовую точку в методику
+    /**
+     * Добавляет точку в список точки методики по сформированному ID
+     * Параметры сформированного ID:
+     *
+     * 1) U - точка для влияния по напряжению
+     *    F - точка для влияния по частоте
+     *
+     * 2) Режим см. интерфейс StendDLL метод Adjust_UI параметр phase (Данный параметр зарезервирован и не используется, а формируется на этапе испытаний)
+     *
+     * 3) H - для однофазного стенда с одной токовой цепью
+     *    A - для однофазного стенда с двумя токовыми цепями, первая токовая цепь
+     *    B - для однофазного стенда с двумя токовыми цепями, вторая токовая цепь
+     *
+     * 4) A - активная энергия
+     *    R - реактивная энергия
+     *
+     * 5) P - прямое направление тока (positive)
+     *    N - обратное направление тока (negative)
+     *
+     * 6) ток процент (цифра) от значения базового тока (Ib)
+     *    ток процент (цифра) от значения максимального тока (Imax)
+     *
+     * 7) коэфициент мощности значение (цифра) индуктивный (L)
+     *    коэфициент мощности значение (цифра) емкостной (С)
+     *    коэфициент мощности значение 1.0 ни индуктивный и не емкостной
+     *
+     * Пример: U;1;H;A;P;0.2 Ib;0.5C
+     *
+     * @param testPoint ID - для добавления точки в методику
+     */
     private void addTestPointInMethodic(String testPoint) {
 
-        /** U;1;H;A;P;0.2 Ib;0.5C
-         *  По напряжению или частоте
-         *  режим;
-         *  Фазы по которым необходимо пустить ток (H);
-         *  Тип энергии актив/реактив;
-         *  Направление тока прямое/обратное
-         *  Ток 0.2 Ib
-         *  Коэф мощности 0.8L
-         *  */
         String[] dirCurFactor = testPoint.split(";");
 
         //Влияние напряжения или частоты
@@ -3527,25 +3791,33 @@ public class InfluencePointsThreePhaseStendFrame {
         //Добавление точек по влиянию AP+
         if (energyType.equals("A") && currentDirection.equals("P")) {
 
+            //По влиянию напряжения
             if (influenceUorF.equals("U")) {
 
+                //По всем фазам
                 if (iABC.equals("H")) {
+
+                    //Прохожусь по прецентам введёным пользователем и добавляю точки в соответствии с этими процентами и параметрами точки
                     for (double influenceUproc : influenceUprocAllPhaseAPPls) {
                         inflListForCollumAPPls.add(new ErrorCommand(true, "", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
 
+                    //По фазе А
                 } else if (iABC.equals("A")) {
                     for (double influenceUproc : influenceUprocPhaseAAPPls) {
                         inflListForCollumAPPls.add(new ErrorCommand(true, "A; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
 
+                    //По фазе Б
                 } else if (iABC.equals("B")) {
                     for (double influenceUproc : influenceUprocPhaseBAPPls) {
                         inflListForCollumAPPls.add(new ErrorCommand(true, "B; ", influenceUorF, testPoint, phase, current, influenceUproc,
                                 0, percent, iABC, powerFactor, 0));
                     }
+
+                    //По фазе С
                 } else if (iABC.equals("C")) {
                     for (double influenceUproc : influenceUprocPhaseCAPPls) {
                         inflListForCollumAPPls.add(new ErrorCommand(true, "C; ", influenceUorF, testPoint, phase, current, influenceUproc,
@@ -3553,6 +3825,9 @@ public class InfluencePointsThreePhaseStendFrame {
                     }
                 }
 
+                /**
+                 * По влиянию частоты, логика такая же как и добавления точек влияния по напряжению см. коментарии выше
+                 */
             } else if (influenceUorF.equals("F")) {
 
                 if (iABC.equals("H")) {
@@ -3756,7 +4031,11 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
-    //Удаляет точку по айди чекбокса
+    /**
+     * Удаляет точку по из списка выбранных точек по ID
+     * (Если пользователь изменил значение чекбокса выбора на false)
+     * @param idCheckBox
+     */
     private void deleteTestPointOfMethodic(String idCheckBox) {
         String[] point = idCheckBox.split(";");
 
@@ -3798,10 +4077,16 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+
     //=========================================================================================================//
     //==================================== Инициализация TableView  ===========================================//
     //=========================================================================================================//
+    /**
+     * Инициализирует таблицу для отображения выбранных пользователем точек испытания (ErrorCommand's)
+     */
     private void initTableView() {
+        //Добавляю в лист все колонки с информацией о точке испытания для
+        // точек активной энергии в прямом направлении тока (AP+)
         List<TableColumn<Commands, String>> collumnListAPPls = Arrays.asList(
                 loadCurrTabColAPPls,
                 eMaxTabColAPPls,
@@ -3811,6 +4096,8 @@ public class InfluencePointsThreePhaseStendFrame {
                 timeStabTabColAPPls
         );
 
+        //Добавляю в лист все колонки с информацией о точке испытания для
+        // точек активной энергии в прямом направлении тока (AP-)
         List<TableColumn<Commands, String>> collumnListAPMns = Arrays.asList(
                 loadCurrTabColAPMns,
                 eMaxTabColAPMns,
@@ -3820,6 +4107,8 @@ public class InfluencePointsThreePhaseStendFrame {
                 timeStabTabColAPMns
         );
 
+        //Добавляю в лист все колонки с информацией о точке испытания для
+        // точек активной энергии в прямом направлении тока (RP+)
         List<TableColumn<Commands, String>> collumnListRPPls = Arrays.asList(
                 loadCurrTabColRPPls,
                 eMaxTabColRPPls,
@@ -3829,6 +4118,8 @@ public class InfluencePointsThreePhaseStendFrame {
                 timeStabTabColRPPls
         );
 
+        //Добавляю в лист все колонки с информацией о точке испытания для
+        // точек активной энергии в прямом направлении тока (RP-)
         List<TableColumn<Commands, String>> collumnListRPMns = Arrays.asList(
                 loadCurrTabColRPMns,
                 eMaxTabColRPMns,
@@ -3838,6 +4129,7 @@ public class InfluencePointsThreePhaseStendFrame {
                 timeStabTabColRPMns
         );
 
+        //Добавляю все лиcты в мап с индексами напрвления и типа мощности (необходимо для локаничной инициализации)
         Map<Integer, List<TableColumn<Commands, String>>> mapTableColumn = new HashMap<>();
         mapTableColumn.put(0, collumnListAPPls);
         mapTableColumn.put(1, collumnListAPMns);
@@ -3868,7 +4160,8 @@ public class InfluencePointsThreePhaseStendFrame {
             mapTableColumn.get(i).get(4).setCellFactory(TextFieldTableCell.forTableColumn());
             mapTableColumn.get(i).get(5).setCellFactory(TextFieldTableCell.forTableColumn());
 
-            //Действие при изменении информации в колонке
+            //------------------------------------Действие при изменении информации в колонке
+            //Изменение максимальной погрешности Emax
             mapTableColumn.get(i).get(1).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
                 TablePosition<Commands, String> pos = event.getTablePosition();
 
@@ -3893,6 +4186,7 @@ public class InfluencePointsThreePhaseStendFrame {
 
             });
 
+            //Изменение минимальной погрешности Emin
             mapTableColumn.get(i).get(2).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
                 TablePosition<Commands, String> pos = event.getTablePosition();
 
@@ -3917,6 +4211,7 @@ public class InfluencePointsThreePhaseStendFrame {
 
             });
 
+            //Изменение количества импульсов измерения
             mapTableColumn.get(i).get(3).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
                 TablePosition<Commands, String> pos = event.getTablePosition();
 
@@ -3942,6 +4237,7 @@ public class InfluencePointsThreePhaseStendFrame {
 
             });
 
+            //Изменение количества измерений
             mapTableColumn.get(i).get(4).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
                 TablePosition<Commands, String> pos = event.getTablePosition();
 
@@ -3967,6 +4263,7 @@ public class InfluencePointsThreePhaseStendFrame {
 
             });
 
+            //Изменение паузы стабилизации
             mapTableColumn.get(i).get(5).setOnEditCommit((TableColumn.CellEditEvent<Commands, String> event) -> {
                 TablePosition<Commands, String> pos = event.getTablePosition();
 
@@ -3993,6 +4290,7 @@ public class InfluencePointsThreePhaseStendFrame {
             });
         }
 
+        //Действие при перетаскивании строки
         Callback<TableView<Commands>, TableRow<Commands>> dragAndRow = new Callback<TableView<Commands>, TableRow<Commands>>() {
             @Override
             public TableRow<Commands> call(TableView<Commands> param) {
@@ -4046,6 +4344,7 @@ public class InfluencePointsThreePhaseStendFrame {
             }
         };
 
+        //Компараторы для сортировки точек испытания (ПЕРЕПИСАТЬ)
         Comparator<String> comparatorForCommands = new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
@@ -4260,6 +4559,7 @@ public class InfluencePointsThreePhaseStendFrame {
         loadCurrTabColRPPls.setComparator(comparatorForCommands);
         loadCurrTabColRPMns.setComparator(comparatorForCommands);
 
+        //Оставляю сортировку только по имени точки
         eMaxTabColAPPls.setSortable(false);
         eMinTabColAPPls.setSortable(false);
         amountImplTabColAPPls.setSortable(false);
@@ -4284,21 +4584,25 @@ public class InfluencePointsThreePhaseStendFrame {
         amountMeasTabColRPMns.setSortable(false);
         timeStabTabColRPMns.setSortable(false);
 
+        //Возможность редактирования таблиц
         viewPointTableAPPls.setEditable(true);
         viewPointTableAPMns.setEditable(true);
         viewPointTableRPPls.setEditable(true);
         viewPointTableRPMns.setEditable(true);
 
+        //Устанавливаю возможность переноса строк
         viewPointTableAPPls.setRowFactory(dragAndRow);
         viewPointTableAPMns.setRowFactory(dragAndRow);
         viewPointTableRPPls.setRowFactory(dragAndRow);
         viewPointTableRPMns.setRowFactory(dragAndRow);
 
+        //Информация если таблица пустая
         viewPointTableAPPls.setPlaceholder(new Label("Не выбрано ни одной точки"));
         viewPointTableAPMns.setPlaceholder(new Label("Не выбрано ни одной точки"));
         viewPointTableRPPls.setPlaceholder(new Label("Не выбрано ни одной точки"));
         viewPointTableRPMns.setPlaceholder(new Label("Не выбрано ни одной точки"));
 
+        //Добавляю точки испытаний в таблицу
         viewPointTableAPPls.setItems(inflListForCollumAPPls);
         viewPointTableAPMns.setItems(inflListForCollumAPMns);
         viewPointTableRPPls.setItems(inflListForCollumRPPls);
@@ -4313,6 +4617,9 @@ public class InfluencePointsThreePhaseStendFrame {
         }
     }
 
+    /**
+     * Действие при изменении списка команд (необходимо для отслеживания изменений и предложения сохранить изменения)
+     */
     private void addListenerInTestPointList() {
         inflListForCollumAPPls.addListener(new ListChangeListener<Commands>() {
             @Override
@@ -4361,7 +4668,10 @@ public class InfluencePointsThreePhaseStendFrame {
         actionOnCloseWindow();
     }
 
-    //Действие при закрытии окна, нужно ли сохранить изменение
+
+    /**
+     * Действие при закрытии окна, предложение сохранить изменения
+     */
     private void actionOnCloseWindow() {
         Stage mainStage = (Stage) saveBtn.getScene().getWindow();
 
@@ -4385,9 +4695,5 @@ public class InfluencePointsThreePhaseStendFrame {
                 }
             }
         });
-    }
-
-    public void setMethodicForThreePhaseStend(MethodicForThreePhaseStend methodicForThreePhaseStend) {
-        this.methodicForThreePhaseStend = methodicForThreePhaseStend;
     }
 }

@@ -420,7 +420,7 @@ public class InfluencePointsOnePhaseStendFrame {
 
     /**
      * Собственная инициализация окна
-     * @param methodicForOnePhaseStend
+     * @param methodicForOnePhaseStend - методика поверки для однофазного стенда
      */
     public void myInitInflFrame(MethodicForOnePhaseStend methodicForOnePhaseStend) {
         this.methodicForOnePhaseStend = methodicForOnePhaseStend;
@@ -1866,8 +1866,6 @@ public class InfluencePointsOnePhaseStendFrame {
         initSelectPanesRPMns();
     }
 
-    //Устанавливает начальное положение пейнов при смене на AP+
-
     /**
      * Устанавливает начальное (дефолдное) состояния toglBtn для цепей,
      * и выносит на передний план соотвкетсвующую сетку
@@ -1934,8 +1932,6 @@ public class InfluencePointsOnePhaseStendFrame {
         selectCheckBoxesInGridPane(inflListForCollumRPMns);
         setListenerForChecBoxInGridPane();
     }
-
-    //Вбивает ранее использованные параметры влияния в необходимые поля
 
     /**
      * Инициализирует панели с процентам для AP+
@@ -2404,8 +2400,6 @@ public class InfluencePointsOnePhaseStendFrame {
         }
     }
 
-    //Удаляет старые GridPane и инициализирует новые после смены напрявления или типа энергии
-
     /**
      * Удаляет старые GridPane (сетки с точками) и инициализирует новые для AP+
      * (После смены напрявления тока или типа энергии)
@@ -2688,7 +2682,10 @@ public class InfluencePointsOnePhaseStendFrame {
                             }
                         }
 
-                        //Логика такая же как и для влияния по напряжения см. коментарии там
+                        /**
+                         * Логика такая же как и для влияния по напряжения см. коментарии там
+                         */
+
                         //Если команда (точка) влияние по частоте
                     } else if (charIdTestPoint[0] == 'F') {
 
@@ -2849,7 +2846,9 @@ public class InfluencePointsOnePhaseStendFrame {
                     }
                 }
 
-                //По влиянию частоты, логика такая же как и добавления точек влияния по напряжению см. коментарии выше
+                /**
+                 * По влиянию частоты, логика такая же как и добавления точек влияния по напряжению см. коментарии выше
+                 */
             } else if (influenceUorF.equals("F")) {
 
                 if (iABC.equals("H")) {
