@@ -1,6 +1,6 @@
 package org.taipit.stend.controller.Commands;
 
-import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
+import org.taipit.stend.helper.exeptions.StendConnectionException;
 
 /**
  * @autor Albert Khalimov
@@ -10,10 +10,10 @@ import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
 public interface Commands {
 
     //Однократное выполнение команды с переходом к следующей
-    void execute() throws ConnectForStendExeption, InterruptedException;
+    void execute() throws StendConnectionException, InterruptedException;
 
     //Постоянное выполнение одной команды в цикле без перехода к следующей
-    void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException;
+    void executeForContinuousTest() throws StendConnectionException, InterruptedException;
 
     //Устанавливает количество импульсов для расчёта погрешности
     void setPulse(String pulse);

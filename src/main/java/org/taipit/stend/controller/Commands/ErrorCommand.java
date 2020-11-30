@@ -4,7 +4,7 @@ import org.taipit.stend.controller.Meter;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
-import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
+import org.taipit.stend.helper.exeptions.StendConnectionException;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -209,7 +209,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
     //===================================================================================================
     //Команда выполнения для последовательного теста
     @Override
-    public void execute() throws ConnectForStendExeption, InterruptedException {
+    public void execute() throws StendConnectionException, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
@@ -379,12 +379,12 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
     /**
      * Логика такая же как и у команды execute только в циле см. выше
-     * @throws ConnectForStendExeption
+     * @throws StendConnectionException
      * @throws InterruptedException
      */
     //Метод для цикличной поверки счётчиков
     @Override
-    public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
+    public void executeForContinuousTest() throws StendConnectionException, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }

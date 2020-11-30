@@ -3,7 +3,7 @@ package org.taipit.stend.controller.Commands;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
-import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
+import org.taipit.stend.helper.exeptions.StendConnectionException;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -165,7 +165,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public void execute() throws ConnectForStendExeption, InterruptedException {
+    public void execute() throws StendConnectionException, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
@@ -293,7 +293,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
 
     //Метод для цикличной поверки счётчиков
     @Override
-    public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
+    public void executeForContinuousTest() throws StendConnectionException, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }

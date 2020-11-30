@@ -5,7 +5,7 @@ import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
-import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
+import org.taipit.stend.helper.exeptions.StendConnectionException;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -126,7 +126,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public void execute() throws ConnectForStendExeption, InterruptedException {
+    public void execute() throws StendConnectionException, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
@@ -244,7 +244,7 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
+    public void executeForContinuousTest() throws StendConnectionException, InterruptedException {
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();

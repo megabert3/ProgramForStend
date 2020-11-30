@@ -5,7 +5,7 @@ import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
-import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
+import org.taipit.stend.helper.exeptions.StendConnectionException;
 
 import java.io.Serializable;
 import java.util.*;
@@ -147,7 +147,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public void execute() throws ConnectForStendExeption, InterruptedException {
+    public void execute() throws StendConnectionException, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
@@ -256,7 +256,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
+    public void executeForContinuousTest() throws StendConnectionException, InterruptedException {
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -383,7 +383,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
      * @param countResult - номер измерения
      * @throws InterruptedException
      */
-    private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, ConnectForStendExeption {
+    private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, StendConnectionException {
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
 
             if (refMeterCount % 8 == 0) {
@@ -480,9 +480,9 @@ public class StartCommand implements Commands, Serializable, Cloneable {
      * выбирает режим работы установки,
      * если необходимо больше одного импульса, то необходимо выбирать команду
      * countStart иначе searchMark
-     * @throws ConnectForStendExeption
+     * @throws StendConnectionException
      */
-    private void setTestMode() throws ConnectForStendExeption {
+    private void setTestMode() throws StendConnectionException {
         if (pulseValue == 1) {
             for (Meter meter : meterList) {
                 stendDLLCommands.searchMark(meter.getId());

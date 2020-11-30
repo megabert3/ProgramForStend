@@ -4,7 +4,7 @@ import org.taipit.stend.controller.Meter;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
-import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
+import org.taipit.stend.helper.exeptions.StendConnectionException;
 
 import java.io.Serializable;
 import java.util.*;
@@ -140,7 +140,7 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public void execute() throws ConnectForStendExeption, InterruptedException {
+    public void execute() throws StendConnectionException, InterruptedException {
 
         currThread = Thread.currentThread();
 
@@ -255,11 +255,11 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
     /**
      * Логика работы такая же как и у команды execute()
      * Более подробное описание см. там
-     * @throws ConnectForStendExeption
+     * @throws StendConnectionException
      * @throws InterruptedException
      */
     @Override
-    public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
+    public void executeForContinuousTest() throws StendConnectionException, InterruptedException {
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -388,9 +388,9 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
      * выбирает режим работы установки,
      * если необходимо больше одного импульса, то необходимо выбирать команду
      * countStart иначе searchMark
-     * @throws ConnectForStendExeption
+     * @throws StendConnectionException
      */
-    private void setTestMode() throws ConnectForStendExeption {
+    private void setTestMode() throws StendConnectionException {
         if (pulseValue == 1) {
             for (Meter meter : meterList) {
                 stendDLLCommands.searchMark(meter.getId());
@@ -407,9 +407,9 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
      * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
      * @param countResult - номер измерения
      * @throws InterruptedException
-     * @throws ConnectForStendExeption
+     * @throws StendConnectionException
      */
-    private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, ConnectForStendExeption {
+    private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, StendConnectionException {
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
 
             if (refMeterCount % 8 == 0) {

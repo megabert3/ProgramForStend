@@ -7,7 +7,7 @@ import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
-import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
+import org.taipit.stend.helper.exeptions.StendConnectionException;
 
 import java.io.Serializable;
 import java.util.*;
@@ -183,7 +183,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
     //===================================================================================================
     //Команда выполнения для последовательного теста
     @Override
-    public void execute() throws ConnectForStendExeption, InterruptedException {
+    public void execute() throws StendConnectionException, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
@@ -323,7 +323,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                                     ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
                                     timer.cancel();
                                 }
-                            } catch (ConnectForStendExeption connectForStendExeption) {
+                            } catch (StendConnectionException connectForStendExeption) {
                                 connectForStendExeption.printStackTrace();
                             }
                         }
@@ -604,11 +604,11 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
     /**
      * Метод для цикличной поверки счётчиков, реализация такая же, что и для обычного теста, но только в цикле
      * коментарии см. там
-     * @throws ConnectForStendExeption
+     * @throws StendConnectionException
      * @throws InterruptedException
      */
     @Override
-    public void executeForContinuousTest() throws ConnectForStendExeption, InterruptedException {
+    public void executeForContinuousTest() throws StendConnectionException, InterruptedException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
@@ -730,7 +730,7 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                                         ConsoleHelper.infoException("Не поступают импульсы с места № " + meter.getId());
                                         timer.cancel();
                                     }
-                                } catch (ConnectForStendExeption connectForStendExeption) {
+                                } catch (StendConnectionException connectForStendExeption) {
                                     connectForStendExeption.printStackTrace();
                                 }
                             }

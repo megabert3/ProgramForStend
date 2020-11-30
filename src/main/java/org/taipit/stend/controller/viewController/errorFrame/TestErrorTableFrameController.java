@@ -39,7 +39,7 @@ import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.SaveResultsTestFrame;
 import org.taipit.stend.helper.ConsoleHelper;
-import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
+import org.taipit.stend.helper.exeptions.StendConnectionException;
 import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
 import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
@@ -187,7 +187,7 @@ public class TestErrorTableFrameController {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    } catch (ConnectForStendExeption e) {
+                    } catch (StendConnectionException e) {
                         e.printStackTrace();
                         cathConnectionException(e);
                     }
@@ -221,7 +221,7 @@ public class TestErrorTableFrameController {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    } catch (ConnectForStendExeption e) {
+                    } catch (StendConnectionException e) {
                         e.printStackTrace();
                         cathConnectionException(e);
                     }
@@ -434,7 +434,7 @@ public class TestErrorTableFrameController {
                         }
                     });
 
-                }catch (ConnectForStendExeption e) {
+                }catch (StendConnectionException e) {
                     e.printStackTrace();
                     cathConnectionException(e);
                 }
@@ -593,7 +593,7 @@ public class TestErrorTableFrameController {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                        } catch (ConnectForStendExeption e) {
+                        } catch (StendConnectionException e) {
                             e.printStackTrace();
                             cathConnectionException(e);
                         }
@@ -656,7 +656,7 @@ public class TestErrorTableFrameController {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                        } catch (ConnectForStendExeption e) {
+                        } catch (StendConnectionException e) {
                             e.printStackTrace();
                             cathConnectionException(e);
                         }
@@ -712,7 +712,7 @@ public class TestErrorTableFrameController {
                                 startUnTest = false;
                                 e.printStackTrace();
                             }
-                        } catch (ConnectForStendExeption e) {
+                        } catch (StendConnectionException e) {
                             startUnTest = false;
                             e.printStackTrace();
                             cathConnectionException(e);
@@ -727,10 +727,10 @@ public class TestErrorTableFrameController {
     /**
      * Реализация работы автоматического режима работы установки.
      * Режим, при котором все команды из методики поверки выполняются друг за другом
-     * @throws ConnectForStendExeption
+     * @throws StendConnectionException
      * @throws InterruptedException
      */
-    private void startAutomaticTest() throws ConnectForStendExeption, InterruptedException {
+    private void startAutomaticTest() throws StendConnectionException, InterruptedException {
 
         //Получаю индекс команды, которую выбрал пользователь
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
@@ -830,10 +830,10 @@ public class TestErrorTableFrameController {
     /**
      * Реализация работы ручного режима работы установки.
      * Режим, при котором одна команда выполняется постоянно пока пользователь не нажмёт кнопку стоп
-     * @throws ConnectForStendExeption
+     * @throws StendConnectionException
      * @throws InterruptedException
      */
-    private void startManualTest() throws ConnectForStendExeption, InterruptedException {
+    private void startManualTest() throws StendConnectionException, InterruptedException {
 
         int i = tabViewTestPoints.getSelectionModel().getSelectedIndex();
         //Получаю команду выполненую пользователем
@@ -878,10 +878,10 @@ public class TestErrorTableFrameController {
 
     /**
      * Реализация работы подачи напряжения на установкой на счётчики.
-     * @throws ConnectForStendExeption
+     * @throws StendConnectionException
      * @throws InterruptedException
      */
-    private void startUn () throws ConnectForStendExeption, InterruptedException {
+    private void startUn () throws StendConnectionException, InterruptedException {
 
         //Если установка трехфазная
         if (stendDLLCommands instanceof ThreePhaseStend) {
@@ -2415,7 +2415,7 @@ public class TestErrorTableFrameController {
 
             stendDLLCommands.setReviseTime(Double.parseDouble(ConsoleHelper.properties.getProperty("reviseTime")));
             stendDLLCommands.setReviseMode(Integer.parseInt(ConsoleHelper.properties.getProperty("reviseMode")));
-        }catch (ConnectForStendExeption e) {
+        }catch (StendConnectionException e) {
             e.printStackTrace();
         }
     }

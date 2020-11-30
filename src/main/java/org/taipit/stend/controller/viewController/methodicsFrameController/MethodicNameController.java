@@ -21,24 +21,37 @@ import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
 import org.taipit.stend.model.metodics.MetodicsForTest;
 
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна "metodicName.fxml".
+ *
+ * Данный класс отвечает за присваивание имени создаваемой или клонируемой методике.
+ * Проверяет уникальность имени и отвечает за передачу имени в окно добавления точек.
+ */
 public class MethodicNameController {
 
+    //Окно для добавления точек испытаний для трехфазного теста
     private AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController;
 
+    //Окно для добавления точек испытаний для однофазного теста
     private AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController;
 
+    //Окно для отображения уже созданных методик поверки
     private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
 
+    //Хранилище всех уже созданных методик
     private MetodicsForTest metodicsForTest = MetodicsForTest.getMetodicsForTestInstance();
 
+    //Создаваемая методика
     private Metodic methodicForStend;
 
+    //Имя создаваемой методики
     private String name;
 
-    //Это окно вызнано из кнопки копирования?
+    //Это окно вызнано кнопкой "Копировать"?
     private boolean clone;
 
-    //Это окно вызвано из окна "Добавить"
+    //Это окно вызвано кнопкой "Добавить"?
     private boolean add;
 
     @FXML
@@ -52,6 +65,7 @@ public class MethodicNameController {
 
     @FXML
     void initialize() {
+        //Действие при нажатии Enter
         nameField.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -60,21 +74,22 @@ public class MethodicNameController {
         });
     }
 
-    public String getName() {
-        return name;
-    }
-
     @FXML
     void actinonForNameFrame(ActionEvent event) {
+
         if (event.getSource() == acceptNameBtn) {
-            //Если нажата кнопка "Копировать"
+
+            //Если вызвано кнопкой "Копировать"
             if (clone) {
+
                 name = nameField.getText();
                 MetodicsForTest metodicsForTest = MetodicsForTest.getMetodicsForTestInstance();
 
                 try {
+                    //Проверяю уникальность присвоенного имени и если оно уникально, то добавляю его к остальным
                     metodicsForTest.addMethodicToList(name, (Metodic) methodicForStend.clone());
 
+                    //Обновляю список отображения методик с учётом уже добавленной
                     methodicsAddEditDeleteFrameController.refreshMethodicList();
 
                     Stage stage = (Stage) nameField.getScene().getWindow();
@@ -92,6 +107,7 @@ public class MethodicNameController {
                 try {
                     name = nameField.getText().trim();
 
+                    //Проверка на пустое название
                     if (name.isEmpty()) {
                         ConsoleHelper.infoException("Поле \"Название методики\"\nне должно быть пустым");
                         return;
@@ -99,10 +115,13 @@ public class MethodicNameController {
 
                     Stage stage = new Stage();
 
+                    //Если стенд трехфазный, то открою окно для добавления точек для трехфазного стенда
                     if (ConsoleHelper.properties.getProperty("stendType").equals("ThreePhaseStend")) {
 
+                        //Добавляю методику к имеющимся
                         metodicsForTest.addMethodicToList(name, new MethodicForThreePhaseStend());
 
+                        //Открываю окно для добавления точек в методику для трехфазного стенда
                         FXMLLoader fxmlLoader = new FXMLLoader();
                         fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/ThreePhase/addEditPointsThreePhaseStendMet.fxml"));
                         fxmlLoader.load();
@@ -111,9 +130,10 @@ public class MethodicNameController {
                         stage.setScene(new Scene(root));
 
                         addEditPointsThreePhaseStendFrameController = fxmlLoader.getController();
-
                         addEditPointsThreePhaseStendFrameController.setMethodicNameController(this);
                         addEditPointsThreePhaseStendFrameController.setMethodicsAddEditDeleteFrameController(methodicsAddEditDeleteFrameController);
+
+                        //Присваиваю имя методики в окне
                         addEditPointsThreePhaseStendFrameController.setMethodicForThreePhaseStend((MethodicForThreePhaseStend) metodicsForTest.getMetodic(name));
                         addEditPointsThreePhaseStendFrameController.setTextFielMethodicName();
                         addEditPointsThreePhaseStendFrameController.addListenerToCheckBoxes();
@@ -121,6 +141,8 @@ public class MethodicNameController {
                         stage.show();
 
                         addEditPointsThreePhaseStendFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
+
+                        //Если стенд однофазный, то открою окно для добавления точек для однофазного стенда
                     } else {
 
                         metodicsForTest.addMethodicToList(name, new MethodicForOnePhaseStend());
@@ -149,6 +171,7 @@ public class MethodicNameController {
                     Stage methodicsAddEditDeleteFrameControllerStage = (Stage) methodicsAddEditDeleteFrameController.getEditMetBtn().getScene().getWindow();
                     methodicsAddEditDeleteFrameControllerStage.hide();
 
+                    //Действие при закрытии окна добавления точек испытания в методику
                     stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                         @Override
                         public void handle(WindowEvent event) {
@@ -190,5 +213,9 @@ public class MethodicNameController {
 
     public void setMethodicForStend(Metodic methodicForStend) {
         this.methodicForStend = methodicForStend;
+    }
+
+    public String getName() {
+        return name;
     }
 }

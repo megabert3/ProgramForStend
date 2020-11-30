@@ -9,7 +9,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
-
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна "exceptionFrame.fxml".
+ *
+ * Данный класс отвечает за отображение информаци о возникшей в результате работы программы ошибке
+ */
 public class ExceptionFrameController {
 
     @FXML

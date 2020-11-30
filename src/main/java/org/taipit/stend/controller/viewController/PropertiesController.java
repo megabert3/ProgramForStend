@@ -6,11 +6,9 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -31,6 +29,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна настроек приложения "properties.fxml".
+ */
 public class PropertiesController implements Initializable, Frame {
 
     @FXML
@@ -215,7 +217,7 @@ public class PropertiesController implements Initializable, Frame {
     @FXML
     private Button reportSave;
 
-
+    //Файл с настройками приложения
     private Properties properties = ConsoleHelper.properties;
 
     @Override
@@ -233,8 +235,13 @@ public class PropertiesController implements Initializable, Frame {
         stendBtn.fire();
     }
 
+    /**
+     * Сохранение настроек с вкладки "Параметры стенда"
+     * @param event
+     */
     @FXML
     private void stendPaneActionEvent(ActionEvent event) {
+
         if (event.getSource() == stendPaneSave) {
             if (stendPaneStendTypeList.getValue().equals("Однофазная")) {
                 properties.setProperty("stendType", "OnePhaseStend");
@@ -256,6 +263,10 @@ public class PropertiesController implements Initializable, Frame {
         }
     }
 
+    /**
+     * Действие при нажатии кнопки установки пароля с вкладки Пароль
+     * @param event
+     */
     @FXML
     private void passPaneActionEvent(ActionEvent event) {
 
@@ -264,13 +275,16 @@ public class PropertiesController implements Initializable, Frame {
             passFldRepeatNewPass.setStyle("");
             passFldOldPass.setStyle("");
 
+            //Если ранее пароля не было установлено
             if (properties.getProperty("config").isEmpty()) {
 
+                //Если поля пароля пустые
                 if (passFldNewPass.getText().isEmpty() && passFldRepeatNewPass.getText().isEmpty()) {
                     ConsoleHelper.infoException("Пароль успешно установлен");
                     return;
                 }
 
+                //Если введённые пароли с вкладок новый пароль и повторите пароль совпадают
                 if (passFldNewPass.getText().equals(passFldRepeatNewPass.getText())) {
                     try {
                         MessageDigest digester = MessageDigest.getInstance("SHA-512");
@@ -282,13 +296,16 @@ public class PropertiesController implements Initializable, Frame {
                         properties.setProperty("config", digest);
                         ConsoleHelper.saveProperties();
                         ConsoleHelper.infoException("Пароль успешно установлен");
-                    } catch (NoSuchAlgorithmException ignore) {
-                    }
+                    } catch (NoSuchAlgorithmException ignore) {}
+
+                    //Если пароли не совпадают
                 } else {
                     ConsoleHelper.infoException("Пароли не совпадают");
                     passFldNewPass.setStyle("-fx-border-color: red; -fx-focus-color: red;");
                     passFldRepeatNewPass.setStyle("-fx-border-color: red; -fx-focus-color: red;");
                 }
+
+                //Если пароль уже был установлен
             } else {
                 try {
                     MessageDigest digester = MessageDigest.getInstance("SHA-512");
@@ -296,6 +313,7 @@ public class PropertiesController implements Initializable, Frame {
                     //Генерирую хэш из пароля
                     String digest = DatatypeConverter.printHexBinary(digester.digest(passFldOldPass.getText().getBytes()));
 
+                    //Если пароль совпадает с ранее установленным
                     if (digest.equals(properties.getProperty("config"))) {
 
                         //Если поля нового пароля пустые
@@ -306,6 +324,8 @@ public class PropertiesController implements Initializable, Frame {
                             return;
                         }
 
+                        //Устанавливаю новый пароль
+                        //Если новый пароль и пароль с поля "повторите пароль совпадают"
                         if (passFldNewPass.getText().equals(passFldRepeatNewPass.getText())) {
 
                             //Генерирую хэш из пароля
@@ -316,11 +336,14 @@ public class PropertiesController implements Initializable, Frame {
                             ConsoleHelper.saveProperties();
                             ConsoleHelper.infoException("Пароль успешно установлен");
 
+                            //Если пароли не совпадают
                         } else {
                             ConsoleHelper.infoException("Пароли не совпадают");
                             passFldNewPass.setStyle("-fx-border-color: red; -fx-focus-color: red ;");
                             passFldRepeatNewPass.setStyle("-fx-border-color: red; -fx-focus-color: red ;");
                         }
+
+                        //Если введён неверный пароль
                     } else {
                         ConsoleHelper.infoException("Неверный пароль");
                         passFldOldPass.setStyle("-fx-border-color: red; -fx-focus-color: red ;");
@@ -330,6 +353,10 @@ public class PropertiesController implements Initializable, Frame {
         }
     }
 
+    /**
+     * Действие при сохранении изменений с вкладки отчёт
+     * @param event
+     */
     @FXML
     private void reportPaneActionEvent(ActionEvent event) {
         if (event.getSource() == reportSave) {
@@ -337,13 +364,21 @@ public class PropertiesController implements Initializable, Frame {
         }
     }
 
+    /**
+     * Действие при редактированнии параметров счётчика
+     * с вкладки "Параметры счётчика"
+     * @param event
+     */
     @FXML
     private void parameterPaneActionEvent(ActionEvent event) {
+
+        //Если пользователь добавил новый параметр
         if (event.getSource() == btnAddParameter) {
 
             if (txtFldParameters.getText().isEmpty()) {
-                System.out.println("Введите название параметра, который хотите добавить.");
+                ConsoleHelper.infoException("Введите название параметра");
             } else {
+
                 MeterParameter meterParameter = tabViewParameters.getSelectionModel().getSelectedItem();
                 String parameter = ConsoleHelper.properties.getProperty(meterParameter.getId());
                 ConsoleHelper.properties.setProperty(meterParameter.getId(), parameter + ", " + txtFldParameters.getText());
@@ -371,6 +406,9 @@ public class PropertiesController implements Initializable, Frame {
     void handleClicks(ActionEvent event) {
         //Переключение на вкладку Установка
         if (event.getSource() == stendBtn) {
+
+            stendBtn.setSelected(true);
+
             if (stendBtn.isSelected()) {
                 stendPane.toFront();
             }
@@ -378,6 +416,9 @@ public class PropertiesController implements Initializable, Frame {
 
         //Переключение на вкладку Параметры счётчиков
         if (event.getSource() == meterParanBtn) {
+
+            meterParanBtn.setSelected(true);
+
             if (meterParanBtn.isSelected()) {
                 parametersPane.toFront();
             }
@@ -385,6 +426,9 @@ public class PropertiesController implements Initializable, Frame {
 
         //Переключение на вкладку Пароль
         if (event.getSource() == passwordBtn) {
+
+            passwordBtn.setSelected(true);
+
             if (passwordBtn.isSelected()) {
                 passwordPane.toFront();
             }
@@ -392,20 +436,33 @@ public class PropertiesController implements Initializable, Frame {
 
         //Переключение на вкладку Ссылки
         if (event.getSource() == linksBtn) {
+
+            linksBtn.setSelected(true);
+
             if (linksBtn.isSelected()) {
                 linksPane.toFront();
             }
         }
 
+        //Переключение на вкладку Отчёт
         if (event.getSource() == reportBtn) {
+
+            reportBtn.setSelected(true);
+
             if (reportBtn.isSelected()) {
                 reportPane.toFront();
             }
         }
     }
 
+    /**
+     * Действие при выборе пути сохранения файлов из вкладки Ссылки
+     * @param event
+     */
     @FXML
     private void linksPaneActionEvent(ActionEvent event) {
+
+        //Путь сохранения отчёта
         if (event.getSource() == btnPathReport) {
 
             DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -422,6 +479,7 @@ public class PropertiesController implements Initializable, Frame {
             }
         }
 
+        //Путь к файлу с серийными номерами счётчиков
         if (event.getSource() == btnPathSerNoMeter) {
             FileChooser fileChooser = new FileChooser();
 
@@ -444,6 +502,10 @@ public class PropertiesController implements Initializable, Frame {
         }
     }
 
+    /**
+     * Устанавливает полям ранее сохранённые значения (из файла пропертиес)
+     * Инициализирует вкладку параметры стенда
+     */
     private void setParamWithPropFile() {
         //Заполнение полей напрямую из файла
         StendPaneRefSerNo.setText(properties.getProperty("refMeterSerNo"));
@@ -529,6 +591,10 @@ public class PropertiesController implements Initializable, Frame {
                 });
     }
 
+
+    /**
+     * Инициализирует вкладку параметры счётчика
+     */
     private void initMeterParameterPane() {
         MeterParamepersForProperty meterParamepersForProperty = MeterParamepersForProperty.getInstance();
 
@@ -548,11 +614,17 @@ public class PropertiesController implements Initializable, Frame {
         tabViewParameters.getColumns().add(tabColParameters);
     }
 
+    /**
+     * Инициализирует вкладку Ссылки
+     */
     private void initLinksPane() {
         txtFldPathSerNoMeter.setText(properties.getProperty("testParamFrame.fileForSerNo"));
         txtFldPathReport.setText(properties.getProperty("printReportPath"));
     }
 
+    /**
+     * Инициализирует вкладку Отчёт
+     */
     private void initReporPane() {
         String[] info = {"НЕ ПРОВОДИЛОСЬ", "ГОДЕН", "ПРОВАЛИЛ"};
         String result;
@@ -701,6 +773,9 @@ public class PropertiesController implements Initializable, Frame {
         }
     }
 
+    /**
+     * Действие при сохранении изменений во вкладке Отчёт
+     */
     private void saveAcrionInReportPane() {
         String[] info = {"НЕ ПРОВОДИЛОСЬ", "ГОДЕН", "ПРОВАЛИЛ"};
 

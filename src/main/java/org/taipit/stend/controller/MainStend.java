@@ -1,6 +1,6 @@
 package org.taipit.stend.controller;
 
-import org.taipit.stend.helper.exeptions.ConnectForStendExeption;
+import org.taipit.stend.helper.exeptions.StendConnectionException;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 
@@ -18,7 +18,7 @@ public class MainStend {
                     Thread.sleep(1000);
                     stendDLLCommands.getUI(1, 230.0, 5.0, 50.0, 0, 0, 100.0, 100.0, "H", "1.0");
                     System.out.println("2 " + (System.currentTimeMillis() - time));
-                } catch (ConnectForStendExeption connectForStendExeption) {
+                } catch (StendConnectionException stendConnectionException) {
                     System.out.println("dsgsdgs");
                 } catch (InterruptedException e) {
                     e.printStackTrace();

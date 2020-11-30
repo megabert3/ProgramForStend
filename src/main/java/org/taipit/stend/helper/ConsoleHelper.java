@@ -6,8 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.taipit.stend.controller.Commands.Commands;
-import org.taipit.stend.controller.PasswordFrameController;
 import org.taipit.stend.controller.viewController.ExceptionFrameController;
 import org.taipit.stend.controller.viewController.YesOrNoFrameControllerDialog;
 
@@ -32,8 +30,7 @@ public class ConsoleHelper {
         try {
             initProperties.load(new FileInputStream(new File(dir).getCanonicalPath()));
         } catch (IOException e) {
-            ConsoleHelper.infoException("Указанный файл properties не найден");
-            e.printStackTrace();
+            ConsoleHelper.infoException("Указанный файл properties не найден. Проверте целостность программы или переустановите её и попробуйте снова");
         }
         return initProperties;
     }

@@ -38,9 +38,16 @@ import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
 import org.taipit.stend.model.metodics.MetodicsForTest;
 
-
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна "methodicsAddEditDeleteFrame.fxml".
+ *
+ * Данный класс отвечает за возможность изменения названия методик, отображения точек в методике
+ * и дальнейших действий с методиками (Удаление, редактирование, копирование и т.д.)
+ */
 public class MethodicsAddEditDeleteFrameController implements Frame {
 
+    //Все созданные методики
     private MetodicsForTest metodicsForTest = MetodicsForTest.getMetodicsForTestInstance();
 
     private ObservableList<Metodic> metodicsNameList = FXCollections.observableArrayList(metodicsForTest.getMethodicForStends());
@@ -48,14 +55,16 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
     //Выделенная методикка
     private Metodic focusedMetodic;
 
-    //Листы для точек из методики
+    //Листы точек испытаний из выделенной методики
     private List<String> comandListAPPls = new ArrayList<>();
     private List<String> comandListAPMns = new ArrayList<>();
     private List<String> comandListRPPls = new ArrayList<>();
     private List<String> comandListRPMns = new ArrayList<>();
 
+    //Одно присвоения имени методике
     private MethodicNameController methodicNameController;
 
+    //Окна для добавления точек испытаний, для трехфазного теста и для однофазного теста
     private AddEditPointsThreePhaseStendFrameController addEditPointsThreePhaseStendFrameController;
     private AddEditPointsOnePhaseStendFrameController addEditPointsOnePhaseStendFrameController;
 
@@ -110,7 +119,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
     @FXML
     private ListView<String> ListViewRPMns;
 
-    //Дейстаие при нажатии выбора направления энергии
+    //Дейстаие при нажатии кнопок выбора отображения точек испытай выбранной методики (А.Э+, А.Э- и т.д.)
     @FXML
     void tglBtnsEnegyViewAction(ActionEvent event) {
         if (event.getSource() == tglBtnAPPls) {
@@ -143,7 +152,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         toFront();
     }
 
-    //Имитирует Tgl group
+    //Имитирует Tgl group для кнопок отображения точек испытания
     private void imitationTglGroup() {
         if (tglBtnAPPls.isSelected()) {
             tglBtnAPMns.setSelected(false);
@@ -178,6 +187,10 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         initMethodicListName();
     }
 
+    /**
+     * Действие при нажатии кнопки "Добавить"
+     * @param event
+     */
     @FXML
     void actinonForMethodicsFrame(ActionEvent event) {
         //Добавление методики
@@ -204,16 +217,16 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
             }
         }
 
-        //Редактирование методики
+        //Если нажата кнопка "Редактировать"
         if (event.getSource() == editMetBtn) {
             try {
-                if (focusedMetodic == null) throw new InfoExсeption("Не выбрана методика");
+                if (focusedMetodic == null) throw new InfoExсeption("Выберите методику для редактирования");
 
             }catch (InfoExсeption e) {
-                e.printStackTrace();
-                ConsoleHelper.infoException("Выберите методику");
+                ConsoleHelper.infoException(e.getMessage());
             }
 
+            //Необходимо убрать
             //Проверяю не идёт ли сейчас тест по этой методике
             TestErrorTableFrameController testErrorTableFrameController = FrameManager.frameManagerInstance().getTestErrorTableFrameController();
             if (testErrorTableFrameController != null) {
@@ -226,6 +239,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
             FXMLLoader fxmlLoader = new FXMLLoader();
             Stage stage = new Stage();
 
+            //Если выбранная методика для трехфазного стенда, то инициализирую окно для редактирования методики для трехфазного стенда
             if (focusedMetodic instanceof MethodicForThreePhaseStend) {
 
                 fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/ThreePhase/addEditPointsThreePhaseStendMet.fxml"));
@@ -270,6 +284,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
                 addEditPointsThreePhaseStendFrameController.bindScrollPanesCurrentAndPowerFactorToMainScrollPane();
 
+                //Если выбранная методика для однофазного стенда, то инициализирую окно для редактирования методики для однофазного стенда
             } else {
 
                 fxmlLoader.setLocation(getClass().getResource("/viewFXML/methodics/OnePhase/addEditPointsOnePhaseStendMet.fxml"));
@@ -355,7 +370,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         if (event.getSource() == deleteMetBtn) {
 
             if (focusedMetodic == null) {
-                ConsoleHelper.infoException("Выберите методику, которую желаете удалить");
+                ConsoleHelper.infoException("Выберите методику для удаления");
                 return;
             }
 
@@ -374,7 +389,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
             YesOrNoFrameController yesOrNoFrameController = fxmlLoader.getController();
             yesOrNoFrameController.setDeliteMethodic(true);
             yesOrNoFrameController.setMethodicForStend(focusedMetodic);
-            yesOrNoFrameController.getQuestionTxt().setText("Вы действительно желаете удалить\nметодику: " +
+            yesOrNoFrameController.getQuestionTxt().setText("Вы действительно хотите удалить\nметодику: " +
                     focusedMetodic.getMetodicName() + "?");
             yesOrNoFrameController.getQuestionTxt().setLayoutX(150);
             yesOrNoFrameController.getQuestionTxt().setLayoutY(30);
@@ -383,6 +398,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
             stage.show();
         }
 
+        //Если нажата кнопка перехода к испытанию счётчиков
         if (event.getSource() == btnGoToStartTest) {
 
             FrameManager frameManager = FrameManager.frameManagerInstance();
@@ -394,13 +410,16 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         }
     }
 
-    //Инициирует список методик
+    /**
+     * Инициализирует таблицу с созданными методиками
+     */
     private void initMethodicListName() {
 
         tabClMethodics.setCellValueFactory(new PropertyValueFactory<>("metodicName"));
 
         tabClMethodics.setCellFactory(TextFieldTableCell.forTableColumn());
 
+        //Действие при изменении названия методики
         tabClMethodics.setOnEditCommit((TableColumn.CellEditEvent<Metodic, String> event) -> {
             TablePosition<Metodic, String> pos = event.getTablePosition();
 
@@ -424,8 +443,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
                 methodicForStend.setMetodicName(newImpulseValue);
 
             }catch (InfoExсeption e) {
-                e.printStackTrace();
-                ConsoleHelper.infoException("Методика с таким именем уже существует");
+                ConsoleHelper.infoException("Методика с таким названием уже существует");
 
                 viewPointTable.refresh();
             }
@@ -434,7 +452,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         viewPointTable.setEditable(true);
         viewPointTable.setItems(metodicsNameList);
 
-        viewPointTable.setPlaceholder(new Label("У вас не создано ни одной методики"));
+        viewPointTable.setPlaceholder(new Label("Нет созданных методик"));
 
         metodicsNameList = viewPointTable.getSelectionModel().getSelectedItems();
 
@@ -452,7 +470,9 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         });
     }
 
-    //Инициализирует список команд в окне отображения команд
+    /**
+     * Инициалиирует таблицы с точками испытаний взятых из методики
+     */
     private void setListsView() {
         if (focusedMetodic == null) return;
 
@@ -515,8 +535,13 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
     }
 
-    public void setListsView(Metodic methodicForThreePhaseStend) {
-        focusedMetodic = methodicForThreePhaseStend;
+
+    /**
+     * Инициалиирует таблицы с точками испытаний взятых из методики
+     * @param methodicForStend - методика точки которой необходмо отобразить в таблицах
+     */
+    public void setListsView(Metodic methodicForStend) {
+        focusedMetodic = methodicForStend;
 
         comandListAPPls.clear();
         comandListAPMns.clear();
@@ -608,6 +633,9 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
         ListViewRPMns.setItems(FXCollections.observableArrayList(comandListRPMns));
     }
 
+    /**
+     * Слушатель для маштабирования окна
+     */
     public void addListenerForResizeFrame() {
         mainAnchorPane.widthProperty().addListener(new ChangeListener<Number>() {
             @Override

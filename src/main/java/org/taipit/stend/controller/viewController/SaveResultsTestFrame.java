@@ -1,6 +1,5 @@
 package org.taipit.stend.controller.viewController;
 
-import java.io.IOException;
 import java.util.*;
 
 import javafx.beans.property.SimpleBooleanProperty;
@@ -12,10 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
@@ -30,14 +26,22 @@ import org.taipit.stend.helper.frameManager.FrameManager;
 import org.taipit.stend.model.ExcelReport;
 import org.taipit.stend.model.ResultsTest;
 
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна сохранения результатов теста "saveResultsTest.fxml".
+ */
 public class SaveResultsTestFrame {
 
+    //Окно самого теста
     private TestErrorTableFrameController testErrorTableFrameController;
 
+    //Настройки
     private Properties properties = ConsoleHelper.properties;
 
+    //Пароль для редактирования отчётов
     private boolean password;
 
+    //Установка значений из настроек полям окна
     private String[] resultMass = properties.getProperty("restMeterResults").split(", ");
 
     private String[] meterModel = properties.getProperty("meterModels").split(", ");
@@ -158,6 +162,7 @@ public class SaveResultsTestFrame {
 
     @FXML
     void initialize() {
+
         if (properties.getProperty("config").isEmpty()) {
             password = false;
         } else {
@@ -165,8 +170,14 @@ public class SaveResultsTestFrame {
         }
     }
 
+    /**
+     * Отвечает за действия кнопок отмены, сохранения или возврата к тесту
+     * @param event
+     */
     @FXML
     void backSaveCancelActions(ActionEvent event) {
+
+        //Если пользорватель нажал вернуться к тесту
         if (event.getSource() == btnBack) {
             Stage stageTestErrorTable = (Stage) testErrorTableFrameController.getTxtLabDate().getScene().getWindow();
             stageTestErrorTable.show();
@@ -175,6 +186,7 @@ public class SaveResultsTestFrame {
             stageSaveResultTest.close();
         }
 
+        //Если пользорватель нажал отменить сохранения результатов
         if (event.getSource() == btnCancel) {
 
             //Спрашиваю уверен ли пользователь, что хочет выйти без сохранения
@@ -195,33 +207,46 @@ public class SaveResultsTestFrame {
             }
         }
 
+        //Если пользователь хочет сохранить результат теста
         if (event.getSource() == btnSave) {
+
             ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
+
             List<Meter> helpList = new ArrayList<>();
 
             txtFldTemperature.setStyle("");
             txtFldHumidity.setStyle("");
+            txtFldBatchNumb.setStyle("");
 
             for (Meter meter : meterList) {
+
                 if (meter.isSaveResults()) {
+
                     meter.setOperator(txtFldOperator.getText());
                     meter.setController(txtFldController.getText());
                     meter.setWitness(txtFldWitness.getText());
+
                     try {
                         meter.setTemperature(Float.parseFloat(txtFldTemperature.getText()));
                     }catch (NumberFormatException e) {
-                        e.printStackTrace();
                         txtFldTemperature.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
-                        ConsoleHelper.infoException("Неверные данные");
+                        ConsoleHelper.infoException("Значение должно быть численным");
                         return;
                     }
 
                     try {
                         meter.setHumidity(Float.parseFloat(txtFldHumidity.getText()));
                     }catch (NumberFormatException e) {
-                        e.printStackTrace();
                         txtFldHumidity.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
-                        ConsoleHelper.infoException("Неверные данные");
+                        ConsoleHelper.infoException("Значение должно быть численным");
+                        return;
+                    }
+
+                    try {
+                        Float.parseFloat(txtFldBatchNumb.getText());
+                    }catch (NumberFormatException e) {
+                        txtFldBatchNumb.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        ConsoleHelper.infoException("Значение должно быть численным");
                         return;
                     }
 
@@ -232,8 +257,10 @@ public class SaveResultsTestFrame {
                 }
             }
 
+            //Добавляю результаты в хранилище результатов
             resultsTest.addMeterRusults(helpList);
 
+            //Сохраняю на компьютере
             resultsTest.serializationResults();
 
             Stage stageTestErrorTable = (Stage) testErrorTableFrameController.getTxtLabDate().getScene().getWindow();
@@ -243,7 +270,13 @@ public class SaveResultsTestFrame {
             stageSaveResultTest.close();
         }
 
+        //Если пользователь выбрал сохранить результат и вывести отчёт
         if (event.getSource() == saveAndPrint) {
+
+            txtFldTemperature.setStyle("");
+            txtFldHumidity.setStyle("");
+            txtFldBatchNumb.setStyle("");
+
             ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
             List<Meter> helpList = new ArrayList<>();
 
@@ -267,6 +300,14 @@ public class SaveResultsTestFrame {
                         e.printStackTrace();
                         txtFldHumidity.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
                         ConsoleHelper.infoException("Неверные данные");
+                        return;
+                    }
+
+                    try {
+                        Float.parseFloat(txtFldBatchNumb.getText());
+                    }catch (NumberFormatException e) {
+                        txtFldBatchNumb.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
+                        ConsoleHelper.infoException("Значение должно быть численным");
                         return;
                     }
 
@@ -296,6 +337,9 @@ public class SaveResultsTestFrame {
         }
     }
 
+    /**
+     * Инициализирует таблицу результатами тестов счётчика(ов)
+     */
     public void initAllColums() {
         //Получаю счётчики с окна тестирования
         meterList = testErrorTableFrameController.getListMetersForTest();
@@ -306,7 +350,7 @@ public class SaveResultsTestFrame {
             meter.setTotalResult(totalResult.calculateTotalResult());
         }
 
-        //Установка чек боксов и добавление к ним слушателя
+        //Установка чек боксов для сохранения результатов счётчика и добавление к ним слушателя
         tabColChBxSelectOrNot.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, Boolean>, ObservableValue<Boolean>>() {
             @Override
             public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Meter, Boolean> param) {
@@ -334,6 +378,7 @@ public class SaveResultsTestFrame {
             }
         });
 
+        //Номер места на установке
         tabColPosition.setCellValueFactory(new PropertyValueFactory<>("id"));
         tabColPosition.setStyle( "-fx-alignment: CENTER;");
 
