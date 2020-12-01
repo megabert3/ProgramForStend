@@ -29,6 +29,8 @@ import org.taipit.stend.model.ResultsTest;
 /**
  * @autor Albert Khalimov
  * Данный класс является контроллером окна сохранения результатов теста "saveResultsTest.fxml".
+ *
+ * Дайнный класс отвечает за отображение и редактирование результатов
  */
 public class SaveResultsTestFrame {
 

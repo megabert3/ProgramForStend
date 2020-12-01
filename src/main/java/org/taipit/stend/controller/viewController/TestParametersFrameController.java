@@ -37,22 +37,37 @@ import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
 import org.taipit.stend.model.metodics.MetodicsForTest;
 
+
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна старта теста "testParametersFrame.fxml".
+ *
+ * Данный класс отвечает за выставление количества счётчиков для испытания, а так же настраиваемые параметры испытаний
+ */
 public class TestParametersFrameController implements Frame {
 
+    //Список доступных методик
     private MetodicsForTest metodicsForTest = MetodicsForTest.getMetodicsForTestInstance();
 
+    //Выбранная методика для испытаний
     private Metodic methodicForStend;
 
+    //Стенд для испытаний
     private StendDLLCommands stendDLLCommands;
 
+    //Настройки
     private Properties properties = ConsoleHelper.properties;
 
+    //Количество мест для испытаний у стенда
     private List<Meter> metersList = new ArrayList<>(Integer.parseInt(properties.getProperty("stendAmountPlaces")));
 
+    //Счётчики для испытаний
     private ObservableList<Meter> meterObservableList;
 
+    //Файл с серийными номерами счётчиков
     private File fileMetersNo = new File(properties.getProperty("testParamFrame.fileForSerNo"));
 
+    //Стенд имеет
     private boolean twoCircut;
 
     @FXML
