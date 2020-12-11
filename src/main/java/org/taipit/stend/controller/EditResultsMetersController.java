@@ -20,7 +20,15 @@ import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна редактирования результатов теста "yesOrNoFrameDialog.fxml".
+ *
+ * Данный класс отвечает изменение информации с
+ * собственной реализацией dialog.
+ */
 public class EditResultsMetersController {
 
     private ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
@@ -30,6 +38,8 @@ public class EditResultsMetersController {
     private String[] resultMass = properties.getProperty("restMeterResults").split(", ");
 
     private String[] meterModel = properties.getProperty("meterModels").split(", ");
+
+    
 
     private String[] controllers = properties.getProperty("Controllers").split(", ");
     private String[] operators = properties.getProperty("Operators").split(", ");

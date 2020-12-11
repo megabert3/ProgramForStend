@@ -7,6 +7,13 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.taipit.stend.helper.ConsoleHelper;
 
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна "yesOrNoFrameDialog.fxml".
+ *
+ * Данный класс отвечает за выполнение сценариев в зависимости от ответа пользователя и является
+ * собственной реализацией dialog.
+ */
 public class YesOrNoFrameControllerDialog {
 
     @FXML

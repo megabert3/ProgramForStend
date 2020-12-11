@@ -6,15 +6,23 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
-import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
 import org.taipit.stend.model.metodics.MetodicsForTest;
 import org.taipit.stend.model.ResultsTest;
 
 import java.util.List;
 
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна "yesOrNoFrame.fxml".
+ *
+ * Данный класс отвечает за выполнение сценариев в зависимости от ответа пользователя и является
+ * собственной реализацией dialog.
+ * Этот класс использовался только для случая удаления методики, далее я додумался сделать статически диалог.
+ */
 public class YesOrNoFrameController {
 
+    //Кранилище с методиками поверки для счётчиков
     MetodicsForTest metodicsForTest = MetodicsForTest.getMetodicsForTestInstance();
 
     private MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController;
@@ -31,6 +39,7 @@ public class YesOrNoFrameController {
 
     //Запрос с окна результатов
     private boolean resultsMeters;
+
     //Лист выбранных индексов для удаления
     private List<Integer> listIndexces;
 
@@ -47,10 +56,15 @@ public class YesOrNoFrameController {
     void initialize() {
     }
 
+    /**
+     * Действие при нажате кнопки да или нет
+     * @param event
+     */
     @FXML
     void yesOrNoAction(ActionEvent event) {
 
         Stage stageYesOrNo = (Stage) questionTxt.getScene().getWindow();
+
         //если вызвано с окна удаления методики "Удалить методику"
         if (event.getSource() == yesBtn) {
             if (deliteMethodic) {

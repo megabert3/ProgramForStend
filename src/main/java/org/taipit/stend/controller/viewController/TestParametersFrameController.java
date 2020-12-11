@@ -191,6 +191,7 @@ public class TestParametersFrameController implements Frame {
 
             methodicForStend = metodicsForTest.getMetodic(chosBxMetodics.getValue());
 
+            //Проверка на корректность введённых значений пользователем
             try {
                 Un = Float.parseFloat(txtFldUnom.getText());
             } catch (NumberFormatException e) {
@@ -287,7 +288,7 @@ public class TestParametersFrameController implements Frame {
                 }
             }
 
-            //Передаю установленные параметры всем счётчикам
+            //Передаю выбранные пользователем параметры всем счётчикам
             for (Meter meter : metersList) {
                 meter.setIb(Ib);
                 meter.setImax(Imax);
@@ -304,6 +305,8 @@ public class TestParametersFrameController implements Frame {
                 meter.setMetodic(methodicForStend);
             }
 
+            //Сохраняю последние параметры в файл для дальнейшего выставления их при следующем запуске теста
+            //Для трехфазного стенда
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 properties.setProperty("threePhaseStand.lastUnom", txtFldUnom.getText());
                 properties.setProperty("threePhaseStand.lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
@@ -318,6 +321,7 @@ public class TestParametersFrameController implements Frame {
                 properties.setProperty("threePhaseStand.lastMethodicName", chosBxMetodics.getValue());
                 properties.setProperty("threePhaseStand.lastMeterTypeOnePhaseMultiTarif", chosBxTypeMeter.getValue());
 
+                //Для однофазного стенда
             } else {
                 properties.setProperty("onePhaseStand.lastUnom", txtFldUnom.getText());
                 properties.setProperty("onePhaseStand.lastAccuracyClassMeterAP", txtFldAccuracyAP.getText());
@@ -348,8 +352,8 @@ public class TestParametersFrameController implements Frame {
             try {
                 fxmlLoader.load();
             } catch (IOException e) {
-                e.printStackTrace();
-                ConsoleHelper.infoException("Не найден файл загрузки окна\nПопробуйте ещё раз или проверьте целостность\n файлов программы");
+                ConsoleHelper.infoException(e.getMessage() +"\n" +
+                        "Не найден файл загрузки окна\nПопробуйте ещё раз или проверьте целостность\n файлов программы");
             }
 
             Parent root = fxmlLoader.getRoot();
@@ -359,7 +363,7 @@ public class TestParametersFrameController implements Frame {
 
             TestErrorTableFrameController testErrorTableFrameController = fxmlLoader.getController();
 
-            //Установка и передача параметров
+            //Установка и передача параметров в окно теста
             testErrorTableFrameController.setStendDLLCommands(stendDLLCommands);
             testErrorTableFrameController.setMethodicForStend(methodicForStend);
             testErrorTableFrameController.setUn(Un);
@@ -400,6 +404,7 @@ public class TestParametersFrameController implements Frame {
 
         }
 
+        //Действие при нажатии на кнопку "серийные номера"
         if (event.getSource() == btnNumbersMe) {
 
             if (fileMetersNo == null || !fileMetersNo.exists()) {
@@ -454,6 +459,9 @@ public class TestParametersFrameController implements Frame {
         }
     }
 
+    /**
+     * Инициализирует поля окна данными для однофазного стенда, которые были выбраны при прошлом запуске теста
+     */
     private void initForOnePhaseStend() {
 
         for (Metodic onePhaseMethodic : metodicsForTest.getMethodicForStends()) {
@@ -480,6 +488,10 @@ public class TestParametersFrameController implements Frame {
         }
     }
 
+    /**
+     * Инициализирует поля окна данными для трехфазного стенда, которые были выбраны при прошлом запуске теста
+     * для трехфазного стенда
+     */
     private void initForThreePhaseStend() {
 
         for (Metodic metodic : metodicsForTest.getMethodicForStends()) {
@@ -510,6 +522,10 @@ public class TestParametersFrameController implements Frame {
         }
     }
 
+    /**
+     * Инициализирует поля окна данными для трехфазного стенда, которые были выбраны при прошлом запуске теста
+     * для трехфазного стенда
+     */
     private void setDefautParametersForThreePhaseStand() {
         txtFldUnom.setText(properties.getProperty("threePhaseStand.lastUnom"));
         txtFldCurrent.setText(properties.getProperty("threePhaseStand.lastInomAndImax"));
@@ -550,6 +566,10 @@ public class TestParametersFrameController implements Frame {
         twoCircutChcBox.setDisable(false);
     }
 
+    /**
+     * Инициализирует поля окна данными для трехфазного стенда, которые были выбраны при прошлом запуске теста
+     * для однофазного стенда
+     */
     private void setDefautParametersForOnePhaseStand() {
         txtFldUnom.setText(properties.getProperty("onePhaseStand.lastUnom"));
         txtFldCurrent.setText(properties.getProperty("onePhaseStand.lastInomAndImax"));
@@ -596,6 +616,10 @@ public class TestParametersFrameController implements Frame {
         chosBxtypeOfMeasuringElement.setDisable(false);
     }
 
+    /**
+     * Устанавливает параметры полям окна, которые были выбраны при создании методики поверки
+     * @param metodic
+     */
     private void setMetodicParameters(Metodic metodic) {
         txtFldUnom.setText(metodic.getUnom());
         txtFldCurrent.setText(metodic.getImaxAndInom());
@@ -748,6 +772,9 @@ public class TestParametersFrameController implements Frame {
         }
     }
 
+    /**
+     * инициализирует таблицу с отображением параметров счётчиков, для которых проводится испытание
+     */
     private void initTableView() {
         for (int i = 1; i <= Integer.parseInt(properties.getProperty("stendAmountPlaces")); i++) {
             Meter me = new Meter();
@@ -904,6 +931,9 @@ public class TestParametersFrameController implements Frame {
         tabVParamMeters.setPlaceholder(new Label("Укажите количество мест в настройках"));
     }
 
+    /**
+     * Добавляет серийные номера к счётчикам из выбранного файла
+     */
     private void addSerNoMeters() {
 
         List<String> listNo = new ArrayList<>();
@@ -913,10 +943,10 @@ public class TestParametersFrameController implements Frame {
             while ((line = bufferedReader.readLine()) != null) {
                 listNo.add(line);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException ignore) {
+
+        } catch (IOException ignore) {
+
         }
 
         try {
