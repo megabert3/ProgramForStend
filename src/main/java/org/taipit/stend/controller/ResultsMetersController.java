@@ -27,14 +27,24 @@ import org.taipit.stend.helper.frameManager.Frame;
 import org.taipit.stend.model.ExcelReport;
 import org.taipit.stend.model.ResultsTest;
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс является контроллером окна сохранённых результатов теста "resultsMetersFrame.fxml"
+ *
+ * Отвечает за отображение всех сохранённых результатов проведённых когда либо тестов
+ */
 public class ResultsMetersController implements Frame {
 
+    //Сериализованные результаты
     private ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
 
     private Properties properties = ConsoleHelper.properties;
 
+    //Варианты результатов
     private String[] resultMass = properties.getProperty("restMeterResults").split(", ");
 
+    //для инициализации таблицы результатами
     private ObservableList<Meter> observableList = FXCollections.observableArrayList(resultsTest.getListAllResults());
 
     @FXML
@@ -157,15 +167,22 @@ public class ResultsMetersController implements Frame {
     @FXML
     private TableColumn<Meter, String> tabColBatсhNo;
 
+    /**
+     * Действие при удалении или редактировании результатов теста
+     * @param event
+     */
     @FXML
     void editDeleteAction(ActionEvent event) {
+        //Если нажата кнопка редактировать
         if (event.getSource() == btnEdit) {
+            //Если есть установлен пароль, то запрашиваю
             if (!ConsoleHelper.properties.getProperty("config").isEmpty()) {
                 if (!ConsoleHelper.passwordFrame()) {
                     return;
                 }
             }
 
+            //Выбранные для редактировния счётчики
             List<Meter> listSelectedMeters = new ArrayList<>();
 
             ResultsTest results = ResultsTest.getResultsTestInstance();
@@ -196,6 +213,7 @@ public class ResultsMetersController implements Frame {
             stage.show();
         }
 
+        //Если нажата кнопка удалить
         if (event.getSource() == btnDelete) {
             if (!ConsoleHelper.properties.getProperty("config").isEmpty()) {
                 if (!ConsoleHelper.passwordFrame()) {
@@ -231,6 +249,7 @@ public class ResultsMetersController implements Frame {
             tabViewResults.getItems().setAll(FXCollections.observableArrayList(resultsTest.getListAllResults()));
         }
 
+        //Если нажата кнопка создать отчёт
         if (event.getSource() == btnPrintResult) {
             List<Meter> listSelectedMeters = new ArrayList<>();
 
@@ -247,6 +266,7 @@ public class ResultsMetersController implements Frame {
             }
         }
 
+        //Если нажата кнопка выбора пути сохранения отчёта
         if (event.getSource() == btnDrirectoryChooser) {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setTitle("Путь сохранения отчёта");
@@ -272,6 +292,7 @@ public class ResultsMetersController implements Frame {
         tabColMeterModel.setCellValueFactory(new PropertyValueFactory<>("modelMeter"));
         tabColMeterModel.setStyle( "-fx-alignment: CENTER;");
 
+        //Общий результат теста для счётчика
         tabColResultVerification.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -294,6 +315,7 @@ public class ResultsMetersController implements Frame {
         tabColDate.setCellValueFactory(new PropertyValueFactory<>("verificationDate"));
         tabColDate.setStyle( "-fx-alignment: CENTER;");
 
+        //Результат теста Самоход
         tabColCRPResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -315,6 +337,7 @@ public class ResultsMetersController implements Frame {
         });
         tabColCRPResult.setStyle( "-fx-alignment: CENTER;");
 
+        //Результат теста Чувствительность AP+
         tabColStartAPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -335,6 +358,7 @@ public class ResultsMetersController implements Frame {
             }
         });
 
+        //Результат теста Чувствительность AP-
         tabColStartAPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -356,6 +380,7 @@ public class ResultsMetersController implements Frame {
         });
         tabColStartAPMns.setStyle( "-fx-alignment: CENTER;");
 
+        //Результат теста Чувствительность RP+
         tabColStartRPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -377,6 +402,7 @@ public class ResultsMetersController implements Frame {
         });
         tabColStartRPPls.setStyle( "-fx-alignment: CENTER;");
 
+        //Результат теста Чувствительность RP-
         tabColStartRPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -398,6 +424,7 @@ public class ResultsMetersController implements Frame {
         });
         tabColStartRPMns.setStyle( "-fx-alignment: CENTER;");
 
+        //Результат теста Точность хода часов
         tabColRTCResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -419,6 +446,7 @@ public class ResultsMetersController implements Frame {
         });
         tabColRTCResult.setStyle( "-fx-alignment: CENTER;");
 
+        //Результат теста Проверка счётного механизма AP+
         tabColConstantAPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -440,6 +468,7 @@ public class ResultsMetersController implements Frame {
         });
         tabColConstantAPPls.setStyle( "-fx-alignment: CENTER;");
 
+        //Результат теста Проверка счётного механизма AP-
         tabColConstantAPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -461,6 +490,7 @@ public class ResultsMetersController implements Frame {
         });
         tabColConstantAPMns.setStyle( "-fx-alignment: CENTER;");
 
+        //Результат теста Проверка счётного механизма RP+
         tabColConstantRPPls.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -482,6 +512,7 @@ public class ResultsMetersController implements Frame {
         });
         tabColConstantRPPls.setStyle( "-fx-alignment: CENTER;");
 
+        //Результат теста Проверка счётного механизма RP-
         tabColConstantRPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -503,6 +534,7 @@ public class ResultsMetersController implements Frame {
         });
         tabColConstantRPMns.setStyle("-fx-alignment: CENTER;");
 
+        //Результат теста Проверка работоспособности реле
         tabColRelayResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -524,6 +556,7 @@ public class ResultsMetersController implements Frame {
         });
         tabColRelayResult.setStyle("-fx-alignment: CENTER;");
 
+        //Результат теста Проверка изоляции
         tabColInsulationResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -545,7 +578,7 @@ public class ResultsMetersController implements Frame {
         });
         tabColInsulationResult.setStyle( "-fx-alignment: CENTER;");
 
-
+        //Результат теста Внешний вид счётчика
         tabColApperianceResult.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -567,39 +600,51 @@ public class ResultsMetersController implements Frame {
         });
         tabColApperianceResult.setStyle( "-fx-alignment: CENTER;");
 
+        //Отображение температуры
         tabColTemperature.setCellValueFactory(new PropertyValueFactory<>("temperature"));
         tabColTemperature.setStyle( "-fx-alignment: CENTER;");
 
+        //Отображение влажности
         tabColHumidity.setCellValueFactory(new PropertyValueFactory<>("humidity"));
         tabColHumidity.setStyle( "-fx-alignment: CENTER;");
 
+        //Оператор
         tabColOperator.setCellValueFactory(new PropertyValueFactory<>("operator"));
         tabColOperator.setStyle( "-fx-alignment: CENTER;");
 
+        //Контроллер
         tabColController.setCellValueFactory(new PropertyValueFactory<>("controller"));
         tabColController.setStyle( "-fx-alignment: CENTER;");
 
+        //Поверитель
         tabColWitnes.setCellValueFactory(new PropertyValueFactory<>("witness"));
         tabColWitnes.setStyle( "-fx-alignment: CENTER;");
 
+        //Напряжение
         tabColUn.setCellValueFactory(new PropertyValueFactory<>("Un"));
         tabColUn.setStyle( "-fx-alignment: CENTER;");
 
+        //Ток
         tabColInomImax.setCellValueFactory(new PropertyValueFactory<>("InomImax"));
         tabColInomImax.setStyle( "-fx-alignment: CENTER;");
 
+        //Частота
         tabColFn.setCellValueFactory(new PropertyValueFactory<>("Fn"));
         tabColFn.setStyle( "-fx-alignment: CENTER;");
 
+        //Постоянная счётчика Активная энергия
         tabColConstantMeterAPPls.setCellValueFactory(new PropertyValueFactory<>("constantMeterAP"));
         tabColConstantMeterAPPls.setStyle( "-fx-alignment: CENTER;");
 
+        //Постоянная счётчика реактивная энергия
         tabColConstantMeterRPMns.setCellValueFactory(new PropertyValueFactory<>("constantMeterRP"));
         tabColConstantMeterRPMns.setStyle( "-fx-alignment: CENTER;");
 
+        //Тип счётчика
         tabColTypeMeter.setCellValueFactory(new PropertyValueFactory<>("typeMeter"));
         tabColTypeMeter.setStyle( "-fx-alignment: CENTER;");
 
+        //Тип измерительного элемента счётчика
         tabColTypeCurrentDetector.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -617,9 +662,11 @@ public class ResultsMetersController implements Frame {
         });
         tabColTypeCurrentDetector.setStyle( "-fx-alignment: CENTER;");
 
+        //Завод изготовитель
         tabColfactoryManufacturer.setCellValueFactory(new PropertyValueFactory<>("factoryManufacturer"));
         tabColfactoryManufacturer.setStyle( "-fx-alignment: CENTER;");
 
+        //Номер партии
         tabColBatсhNo.setCellValueFactory(new PropertyValueFactory<>("batchNo"));
         tabColBatсhNo.setStyle( "-fx-alignment: CENTER;");
 

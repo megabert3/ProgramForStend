@@ -19,28 +19,28 @@ import org.taipit.stend.model.ResultsTest;
 import java.net.URL;
 import java.util.List;
 import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.Scanner;
 
 /**
  * @autor Albert Khalimov
- * Данный класс является контроллером окна редактирования результатов теста "yesOrNoFrameDialog.fxml".
+ * Данный класс является контроллером окна редактирования результатов теста "editResultsMetersFrame.fxml".
  *
- * Данный класс отвечает изменение информации с
- * собственной реализацией dialog.
+ * Данный класс отвечает изменение информации в результатах теста.
  */
 public class EditResultsMetersController {
 
+    //Объект результатов теста
     private ResultsTest resultsTest = ResultsTest.getResultsTestInstance();
 
+    //Настройки
     private Properties properties = ConsoleHelper.properties;
 
+    //Варианты результатов теста
     private String[] resultMass = properties.getProperty("restMeterResults").split(", ");
 
+    //Модели счётчиков
     private String[] meterModel = properties.getProperty("meterModels").split(", ");
 
-    
-
+    //Выбираемые параметры
     private String[] controllers = properties.getProperty("Controllers").split(", ");
     private String[] operators = properties.getProperty("Operators").split(", ");
     private String[] witneses = properties.getProperty("Witneses").split(", ");
@@ -58,12 +58,6 @@ public class EditResultsMetersController {
     private List<Meter> selectedMetersForEdit;
 
     private ObservableList<Integer> indexcesList;
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private Button btnSave;
@@ -179,6 +173,10 @@ public class EditResultsMetersController {
     @FXML
     private TableColumn<Meter, String> tabColBatсhNo;
 
+    /**
+     * Действие при сохранении изменённых результатов теста
+     * @param event
+     */
     @FXML
     void saveCancelAction(ActionEvent event) {
         if (event.getSource() == btnSave) {
@@ -195,6 +193,7 @@ public class EditResultsMetersController {
             stage.close();
         }
 
+        //Действие при отмене изменения результатов теста
         if (event.getSource() == btnCancel) {
             Stage stage = (Stage) btnCancel.getScene().getWindow();
             stage.close();
@@ -207,7 +206,12 @@ public class EditResultsMetersController {
 
     }
 
+    /**
+     * Инициализация всех колонок результатами теста в основной таблице
+     */
     public void initColumsEditFrame() {
+
+        //Инициализация id
         tabColPosition.setCellValueFactory(new PropertyValueFactory<>("id"));
         tabColPosition.setStyle( "-fx-alignment: CENTER;");
 
@@ -486,7 +490,7 @@ public class EditResultsMetersController {
         });
         tabColStartRPPls.setStyle( "-fx-alignment: CENTER;");
 
-        //Чувствительно RP-
+        //Чувствительность RP-
         tabColStartRPMns.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Meter, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Meter, String> param) {
@@ -756,7 +760,7 @@ public class EditResultsMetersController {
         });
         tabColConstantRPMns.setStyle( "-fx-alignment: CENTER;");
 
-        //--------------------------------------------------------------------------------------------------Реле
+        //-------------------------------------------------------------------------------------------------- Реле
         tabColRelayResult.setStyle("-fx-alignment: CENTER;");
         tabColRelayResult.setEditable(true);
         tabColRelayResult.setSortable(false);
@@ -1095,7 +1099,7 @@ public class EditResultsMetersController {
         });
         tabColFn.setStyle( "-fx-alignment: CENTER;");
 
-        //Константа AP
+        //Константа (постоянная счётчика) AP
         tabColConstantMeterAPPls.setCellValueFactory(new PropertyValueFactory<>("constantMeterAP"));
 
         tabColConstantMeterAPPls.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -1113,7 +1117,7 @@ public class EditResultsMetersController {
         });
         tabColConstantMeterAPPls.setStyle( "-fx-alignment: CENTER;");
 
-        //Константа RP
+        //Константа (постоянная счётчика) RP
         tabColConstantMeterRPMns.setCellValueFactory(new PropertyValueFactory<>("constantMeterRP"));
 
         tabColConstantMeterRPMns.setCellFactory(TextFieldTableCell.forTableColumn());

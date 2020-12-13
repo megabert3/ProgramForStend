@@ -4,7 +4,9 @@ import org.taipit.stend.helper.exeptions.StendConnectionException;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 
-
+/**
+ * Тестовый класс
+ */
 public class MainStend {
 
     public static void main(String[] args) throws InterruptedException {

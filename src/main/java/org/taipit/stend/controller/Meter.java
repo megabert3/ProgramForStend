@@ -13,38 +13,60 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс является программной реализацией испытываемого счётчика
+ *
+ * Объекты результата точек испытаний (Command result) находятся внитри данного класса
+ */
 public class Meter implements Serializable {
     /**
      * Для восстановления результатов прошлого теста, при создании
      * новых объектов CommandResult сравнивать хэш код со старыми результатами и если что возвращать старый результат
      */
 
+    /**
+     * Задаёт результаты испытаний по умолчанию
+     */
     public Meter() {
         Properties properties = ConsoleHelper.properties;
         String result;
 
+        //Заключительный результат
         totalResult = new Meter.TotalResult("T");
 
+        //Результат самохода
         creepTest = new CreepResult("CRP", "", "");
 
+        //Результат теста на чувствительность
         startTestAPPls = new StartResult("STAAP", "", "");
         startTestAPMns = new StartResult("STAAN", "", "");
         startTestRPPls = new StartResult("STARP", "", "");
         startTestRPMns = new StartResult("STARN", "", "");
 
+        //Результат точности хода часов
         RTCTest = new RTCResult("RTC", "", "", "", "", "");
 
+        //Результат проверки изоляции счётчика
         insulationTest = new InsulationResult("INS");
 
+        //Внешний вид счётчика (годен или нет ОТК)
         appearensTest = new AppearensResult("APR");
 
+        //Результат теста проверка счётного механизма
         constantTestAPPls = new ConstantResult("CNTAP", "", "");
         constantTestAPMns = new ConstantResult("CNTAN", "", "");
         constantTestRPPls = new ConstantResult("CNTRP", "", "");
         constantTestRPMns = new ConstantResult("CNTRN", "", "");
 
+        //Резульат теста проверка работоспособности реле
         relayTest = new RelayResult("RLY", "", "");
 
+        /**
+         * Установка результатов из окна настроек
+         */
+        //Самоход
         result = properties.getProperty("propertiesController.reportPane.cmbBxCreep");
         if (result.equals("N")) {
             creepTest.setPassTest(null);
@@ -54,6 +76,7 @@ public class Meter implements Serializable {
             creepTest.setPassTest(false);
         }
 
+        //Чувствительность
         result = properties.getProperty("propertiesController.reportPane.cmbBxSTA_APPls");
         if (result.equals("N")) {
             startTestAPPls.setPassTest(null);
@@ -90,6 +113,7 @@ public class Meter implements Serializable {
             startTestRPMns.setPassTest(false);
         }
 
+        //Точность хода часов
         result = properties.getProperty("propertiesController.reportPane.cmbBxRTC");
         if (result.equals("N")) {
             RTCTest.setPassTest(null);
@@ -99,6 +123,7 @@ public class Meter implements Serializable {
             RTCTest.setPassTest(false);
         }
 
+        //Проверка счётного механизма
         result = properties.getProperty("propertiesController.reportPane.cmbBxConst_APPls");
         if (result.equals("N")) {
             constantTestAPPls.setPassTest(null);
@@ -135,6 +160,7 @@ public class Meter implements Serializable {
             constantTestRPMns.setPassTest(false);
         }
 
+        //Изоляция
         result = properties.getProperty("propertiesController.reportPane.cmbBxInsulation");
         if (result.equals("N")) {
             insulationTest.setPassTest(null);
@@ -144,6 +170,7 @@ public class Meter implements Serializable {
             insulationTest.setPassTest(false);
         }
 
+        //Внешний вид
         result = properties.getProperty("propertiesController.reportPane.cmbBxAppearance");
         if (result.equals("N")) {
             appearensTest.setPassTest(null);
@@ -153,6 +180,7 @@ public class Meter implements Serializable {
             appearensTest.setPassTest(false);
         }
 
+        //Реле
         result = properties.getProperty("propertiesController.reportPane.cmbBxRelay");
         if (result.equals("N")) {
             relayTest.setPassTest(null);
@@ -166,8 +194,10 @@ public class Meter implements Serializable {
     //Методика по которой поверяется счётчик
     private Metodic metodic;
 
+    //Номер посадочного места счётчика на установке
     private int id;
 
+    //Уникальный ID счётчика
     private String unicalID;
 
     //Максимальный ток
@@ -196,24 +226,34 @@ public class Meter implements Serializable {
     //Класс точночти реактивной энергии
     private float accuracyClassRP;
 
+    //Температура при которой испытывался счётчик
     private float temperature;
 
+    //Влажность при которой испытывался счётчик
     private float humidity;
 
+    //Оператор при котором испытывался счётчик
     private String operator;
 
+    //Контроллёр
     private String controller;
 
+    //Поверитель
     private String witness;
 
+    //
     private String verificationDate;
 
+    //Завод производитель
     private String factoryManufacturer;
 
+    //Номер партии
     private String batchNo;
 
+    //Последняя дата изменения
     private String lastModifiedDate;
 
+    //Тестовый режим
     private String testMode;
 
     //Пример: Однотарифный однофазный
@@ -289,70 +329,100 @@ public class Meter implements Serializable {
     //Реле
     private RelayResult relayTest;
 
-    //Лист с ошибками
+    //Лист с результатами п овсем направлениям
     private List<CommandResult> errorListAPPls = new ArrayList<>();
     private List<CommandResult> errorListAPMns = new ArrayList<>();
     private List<CommandResult> errorListRPPls = new ArrayList<>();
     private List<CommandResult> errorListRPMns = new ArrayList<>();
 
+    /**
+     * Создаёт объект результата для каждой точки испытания из методики поверки
+     * @param command - точка испытания
+     * @param chanelFlag - направление и тип мощности
+     * @param id - id при добавлении точки испытания
+     * @param testErrorTableFrameController - окно испытаний
+     */
     public void createError(Commands command, int chanelFlag , String id, TestErrorTableFrameController testErrorTableFrameController) {
         switch (chanelFlag) {
+
+            //AP+
             case 0: {
+                //Создания объекта результата теста погрешность счётчика
                 if (command instanceof ErrorCommand) {
+
                     ErrorCommand errorCommand = (ErrorCommand) command;
 
+                    //Если из влияния
                     if (id.contains("U") || id.contains("F")) {
                         id = errorCommand.getProcentParan() + " " + errorCommand.getId();
                     }
 
                     errorListAPPls.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
 
+                    //Создания объекта результата теста самоход
                 } else if (command instanceof CreepCommand) {
                     CreepCommand creepCommand = (CreepCommand) command;
 
-                    //Отображаю время теста
+                    //Если по госту, расчитываю и
+                    //отображаю время теста
                     if (creepCommand.isGostTest()) {
                         errorListAPPls.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()), String.valueOf(creepCommand.getPulseValue())));
                         creepCommand.setUserTimeTest(testErrorTableFrameController.getTimeToCreepTestGOSTAP());
 
+                        //То отображаю то время, которое указал пользователь
                     } else {
                         errorListAPPls.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
                     }
 
+                    //Создания объекта результата теста чувствительность
                 } else if (command instanceof StartCommand) {
                     StartCommand startCommand = (StartCommand) command;
 
-                    //Отображаю время теста
+                    //Если по госту, расчитываю и
+                    //отображаю время теста
                     if (startCommand.isGostTest()) {
                         errorListAPPls.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()), String.valueOf(startCommand.getPulseValue())));
+
                         //Время теста для всплывающей подсказки
                         startCommand.setUserTimeTest(testErrorTableFrameController.getTimeToStartTestGOSTAP());
                         startCommand.setRatedCurr(calculateCurrentForSTA(testErrorTableFrameController, chanelFlag));
+
+                        //То отображаю то время, которое указал пользователь
                     } else {
                         errorListAPPls.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
                     }
 
+                    //Создания объекта результата теста Точность хода часов
                 } else if (command instanceof RTCCommand) {
                     RTCCommand rtcCommand = (RTCCommand) command;
+
                     errorListAPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
                             String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC())));
 
+                    //Создания объекта результата теста проверка счётного механизма
                 } else if (command instanceof ConstantCommand) {
                     ConstantCommand constantCommand = (ConstantCommand) command;
                     errorListAPPls.add(new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax())));
 
+                    //Создания объекта результата теста имбаланс напряжений
                 } else if (command instanceof ImbalansUCommand) {
 
                     ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
                     errorListAPPls.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
 
+                    //Создания объекта результата теста проверка работоспособности реле
                 } else if (command instanceof RelayCommand) {
 
                     errorListAPPls.add(new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue())));
                 }
             } break;
 
+            //Далее логика создания такая же как и для AP+, но только для других напрявлений и типов мощности (см. комментарии там)
+
+            //AP-
             case 1: {
+
+
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
 
@@ -408,6 +478,7 @@ public class Meter implements Serializable {
                 }
             } break;
 
+            //RP+
             case 2: {
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
@@ -465,6 +536,7 @@ public class Meter implements Serializable {
                 }
             } break;
 
+            //RP-
             case 3: {
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
@@ -523,6 +595,12 @@ public class Meter implements Serializable {
         }
     }
 
+    /**
+     * Возвращает объект результата счётчика (необходим для быстрого доступа и изменения результата)
+     * @param index - порядеовый ноер
+     * @param energyPulseChanel - тип мощности и направления
+     * @return
+     */
     public Meter.CommandResult returnResultCommand (int index, int energyPulseChanel) {
 
         switch (energyPulseChanel) {
@@ -964,7 +1042,10 @@ public class Meter implements Serializable {
     }
 
     //==============================================================================================
-    //Абстрактный класс для записи результата каждой точки
+
+    /**
+     * Абстрактный класс для записи результата каждой точки испытания
+     */
     public abstract class CommandResult implements Serializable {
 
         CommandResult(String id) {
@@ -972,14 +1053,16 @@ public class Meter implements Serializable {
             this.lastResultForTabView = new SimpleStringProperty();
         }
 
-        //Последний результат теста
+        //Последний результат теста для отображения в таблице TabView
         private transient SimpleStringProperty lastResultForTabView;
 
+        //Для отображения последних результатов теста в подсказке
         private transient SimpleStringProperty errorsForTips;
 
         //Идентификатор команды
         private String id;
 
+        //Последний результат
         private String lastResult = "";
 
         //Верхняя граница погрешности
@@ -994,6 +1077,7 @@ public class Meter implements Serializable {
         //10-ть последних результатов
         private String[] results = new String[10];
 
+        //Обновляет список последних результатов при появлении нового в окне подсказки
         public void refreshTipsInfo() {
             Platform.runLater(new Runnable() {
                 @Override
@@ -1096,7 +1180,9 @@ public class Meter implements Serializable {
 
     }
 
-    //Класс для записи результата исполнения ErrorCommnad
+    /**
+     * Класс для записи результата испытания ErrorCommnad
+     */
     public class ErrorResult extends CommandResult implements Serializable {
 
         public ErrorResult(String id, String minError, String maxError) {
@@ -1105,6 +1191,7 @@ public class Meter implements Serializable {
             super.maxError = maxError;
         }
 
+        //Устанавливает новый результат
         public void setResultErrorCommand(String errForTab, int resultNo, String error, boolean passOrNot) {
             super.lastResultForTabView.setValue(errForTab);
             super.results[resultNo] = error;
@@ -1114,14 +1201,18 @@ public class Meter implements Serializable {
         }
     }
 
-    //Класс для записи результата исполнения CreepCommnad
+    /**
+     * Класс для записи результата испытания CreepCommnad
+     */
     public class CreepResult extends CommandResult implements Serializable {
 
-        //Время провала теста
+        //Время провала теста, если он провален
         private String timeTheFailTest = "";
 
+        //Время теста
         private String timeTheTest;
 
+        //Количество импульсов для провала теста
         private String maxPulse;
 
         CreepResult(String id, String timeTheTest, String maxPulse) {
@@ -1131,6 +1222,7 @@ public class Meter implements Serializable {
             super.lastResultForTabView.setValue("N" + timeTheTest);
         }
 
+        //Устанавливает новый результат
         public void setResultCreepCommand(String time, int resultNo, boolean passOrNot) {
             if (passOrNot) {
                 super.lastResultForTabView.setValue("P" + time + " P");
@@ -1174,14 +1266,18 @@ public class Meter implements Serializable {
         }
     }
 
-    //Класс для записи результата исполнения StartCommnad
+    /**
+     * Класс для записи результата испытания StartCommnad
+     */
     public class StartResult extends CommandResult implements Serializable {
 
         //Время прохождения теста
         private String timeThePassTest = "";
 
+        //Время теста
         private String timeTheTest;
 
+        //Количество импульсов для прохождения теста
         private String maxPulse;
 
         StartResult(String id, String timeTheTest, String maxPulse) {
@@ -1191,6 +1287,7 @@ public class Meter implements Serializable {
             super.lastResultForTabView.setValue("N" + timeTheTest);
         }
 
+        //Устанавливает новый результат
         public void setResultStartCommand(String time, int resultNo, boolean passOrNot, int chanelFlag) {
             if (passOrNot) {
                 super.lastResultForTabView.setValue("P" + time + " P");
@@ -1241,13 +1338,17 @@ public class Meter implements Serializable {
         }
     }
 
-    //Класс для записи результата исполнения RTCCommand
+    /**
+     * Класс для записи результата испытания RTCCommand
+     */
     public class RTCResult extends CommandResult implements Serializable {
-
+        //Сачтота с который счётчик подаёт импульсы
         String freg;
 
+        //Количество измерений (результатов теста)
         String amoutMeash;
 
+        //Время измерения (количество импульсов необходимое для расчёта погрешности)
         String timeMeash;
 
         RTCResult(String id, String emin, String emax, String freg, String amoutMeash, String timeMeash) {
@@ -1259,6 +1360,7 @@ public class Meter implements Serializable {
             this.timeMeash = timeMeash;
         }
 
+        //Устанавливает новый результат
         public void setResultRTCCommand(String error, int resultNo, boolean passOrNot) {
             if (passOrNot) {
                 super.lastResultForTabView.setValue("P" + error + " P");
@@ -1301,10 +1403,15 @@ public class Meter implements Serializable {
         }
     }
 
+    /**
+     * Класс для записи результата испытания ConstantCommand
+     */
     public class ConstantResult extends CommandResult implements Serializable {
 
+        //Количество энергии, которое посчитал испытываемый счётчик
         private String kwMeter = "";
 
+        //Количество энергии, которое посчитал эталонный счётчик
         private String kwRefMeter = "";
 
         ConstantResult(String id, String emin, String emax) {
@@ -1313,6 +1420,7 @@ public class Meter implements Serializable {
             super.maxError = emax;
         }
 
+        //Устанавливает новый результат
         public void setResultConstantCommand(String result, int resultNo, Boolean passOrNot, int chanelFlag, String kwMeter, String kwRefMeter) {
             if (passOrNot == null) {
                 super.lastResultForTabView.setValue("N" + result);
@@ -1370,6 +1478,9 @@ public class Meter implements Serializable {
         }
     }
 
+    /**
+     * Класс для записи результата испытания ImbalansUCommand
+     */
     public class ImbUResult extends CommandResult implements Serializable {
 
         public ImbUResult(String id, String emin, String emax) {
@@ -1378,6 +1489,7 @@ public class Meter implements Serializable {
             super.maxError = emax;
         }
 
+        //Устанавливает новый результат
         public void setResultImbCommand(String errForTab, int resultNo, String error, boolean passOrNot) {
             super.lastResultForTabView.setValue(errForTab);
             super.results[resultNo] = error;
@@ -1385,9 +1497,11 @@ public class Meter implements Serializable {
             super.passTest = passOrNot;
             refreshTipsInfo();
         }
-
     }
 
+    /**
+     * Класс для записи результата испытания Insulation (Изоляция)
+     */
     public class InsulationResult extends CommandResult implements Serializable {
 
         InsulationResult(String id) {
@@ -1395,6 +1509,9 @@ public class Meter implements Serializable {
         }
     }
 
+    /**
+     * Класс для записи результата испытания Appearens (Внешний вид)
+     */
     public class AppearensResult extends CommandResult implements Serializable {
 
         AppearensResult(String id) {
@@ -1402,6 +1519,9 @@ public class Meter implements Serializable {
         }
     }
 
+    /**
+     * Класс для записи результата испытания RelayCommand
+     */
     public class RelayResult extends CommandResult implements Serializable {
 
         //Время провала теста
@@ -1418,6 +1538,7 @@ public class Meter implements Serializable {
             super.lastResultForTabView.setValue("N" + timeTheTest);
         }
 
+        //Устанавливает новый результат
         public void setResultRelayCommand(String time, int resultNo, boolean passOrNot) {
             if (passOrNot) {
                 super.lastResultForTabView.setValue("P" + time + " P");
@@ -1461,6 +1582,9 @@ public class Meter implements Serializable {
         }
     }
 
+    /**
+     * Класс для записи результата испытания Заключающий результат
+     */
     public class TotalResult extends CommandResult implements Serializable {
 
         TotalResult(String id) {
@@ -1468,6 +1592,7 @@ public class Meter implements Serializable {
             super.passTest = null;
         }
 
+        //Расчитывает заключающий результат (прошёл счётчик испытания или нет)
         public Boolean calculateTotalResult() {
             Boolean result = null;
 
@@ -1537,7 +1662,6 @@ public class Meter implements Serializable {
                 else result = true;
             }
 
-
             if (errorListAPPls.size() != 0) {
                 for (Meter.CommandResult errResult : errorListAPPls) {
                     if (errResult instanceof ErrorResult) {
@@ -1598,22 +1722,32 @@ public class Meter implements Serializable {
         }
     }
 
-    //Расчитываю ток по госту для теста Чувствительности
+    /**
+     *Рассчитывает ток по госту для испытания Чувствительность
+     */
     private double calculateCurrentForSTA (TestErrorTableFrameController testErrorTableFrameController, int chanelFlag) {
 
         double ratedCurr;
+        //Если активная энергия
         if (chanelFlag < 2) {
+            //Если тип измерительного элемента счётчика шунт
             if (testErrorTableFrameController.isTypeOfMeasuringElementShunt()) {
                 ratedCurr = 0.004 * testErrorTableFrameController.getIb();
 
+                //Если трансформатор
             } else {
+
+                //Если класт точности 0.5 и меньше
                 if (testErrorTableFrameController.getAccuracyClassAP() <= 0.5) {
                     ratedCurr = 0.001 * testErrorTableFrameController.getIb();
 
+                    //Если больше
                 } else {
                     ratedCurr = 0.002 * testErrorTableFrameController.getIb();
                 }
             }
+
+            //Если реактивная энергия
         } else {
             if (testErrorTableFrameController.isTypeOfMeasuringElementShunt()) {
                 ratedCurr = 0.004 * testErrorTableFrameController.getIb();

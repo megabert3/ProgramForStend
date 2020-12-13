@@ -538,7 +538,7 @@ public class MethodicsAddEditDeleteFrameController implements Frame {
 
     /**
      * Инициалиирует таблицы с точками испытаний взятых из методики
-     * @param methodicForStend - методика точки которой необходмо отобразить в таблицах
+     * @param methodicForStend - методика, точки которой необходмо отобразить в таблицах
      */
     public void setListsView(Metodic methodicForStend) {
         focusedMetodic = methodicForStend;
