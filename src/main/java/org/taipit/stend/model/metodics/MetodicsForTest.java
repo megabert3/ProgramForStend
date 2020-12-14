@@ -1,5 +1,6 @@
 package org.taipit.stend.model.metodics;
 
+import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.InfoExсeption;
 
 import java.io.*;
@@ -7,10 +8,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за хранение всех созданных методик испытаний.
+ */
 public class MetodicsForTest implements Serializable {
 
     private static final long serialVersionUID = 19930824L;
 
+    //Паттерн Singleton
     private static MetodicsForTest metodicsForTestInstance = deserializationMetodics();
 
     //Значения коэффициента мощности
@@ -27,23 +34,35 @@ public class MetodicsForTest implements Serializable {
         if (metodicsForTestInstance == null) {
             metodicsForTestInstance = new MetodicsForTest();
         }
+
         return metodicsForTestInstance;
     }
 
     //Лист со всеми методиками
     private ArrayList<Metodic> methodicForStends = new ArrayList<>();
 
-    //Добавление методики в список
-    public boolean addMethodicToList(String name, Metodic methodicForStendList) throws InfoExсeption {
+    /**
+     * Добавление новой методики в хранилище методик
+     * @param name
+     * @param methodicForStendList
+     * @return
+     * @throws InfoExсeption
+     */
+    public void addMethodicToList(String name, Metodic methodicForStendList) throws InfoExсeption {
+
         for (Metodic metodic : methodicForStends) {
             if (metodic.getMetodicName().equals(name)) throw new InfoExсeption("Методика с таким именем уже существует");
         }
+
         methodicForStendList.setMetodicName(name);
         methodicForStends.add(methodicForStendList);
-        return true;
     }
 
-    //Удаление методики
+    /**
+     * Удаляет методику и листа (хранилища)
+     * @param name
+     * @return
+     */
     public boolean deleteMethodic(String name) {
         for (Metodic methodicForStend : methodicForStends) {
 
@@ -55,7 +74,10 @@ public class MetodicsForTest implements Serializable {
         return false;
     }
 
-    //Запись сохранённых данных в файл
+    /**
+     * Производит сериализацию всех методик
+     * @return
+     */
     public boolean serializationMetodics() {
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(new File(".\\src\\main\\resources\\methodicForStends").getCanonicalPath())) {
@@ -66,15 +88,18 @@ public class MetodicsForTest implements Serializable {
             return true;
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            ConsoleHelper.infoException(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            ConsoleHelper.infoException(e.getMessage());
             return false;
-        }return false;
+        } return false;
     }
 
 
-    //Считывание сохранённых методик
+    /**
+     * Производит дессериализацию всех методик поверки из файла
+     * @return
+     */
     private static MetodicsForTest deserializationMetodics() {
         try(FileInputStream fileInputStream = new FileInputStream(new File(".\\src\\main\\resources\\methodicForStends").getCanonicalPath())) {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -82,11 +107,10 @@ public class MetodicsForTest implements Serializable {
             return (MetodicsForTest) objectInputStream.readObject();
 
         } catch (FileNotFoundException e) {
-            System.out.println("Файл не найден");
-            e.printStackTrace();
+            ConsoleHelper.infoException(e.getMessage());
 
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            ConsoleHelper.infoException(e.getMessage());
         }
         return null;
     }

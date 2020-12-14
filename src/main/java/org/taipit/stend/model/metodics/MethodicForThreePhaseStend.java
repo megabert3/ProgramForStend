@@ -9,39 +9,72 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializable {
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за создание методики поверки для трехфазного стенда.
+ * Является неким контейнером содержащий точки испытаний, которые необходимо выполнить.
+ */
+ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializable {
 
+    //Имя методики
     private String metodicName;
 
+    //Если параметры при которых должна проводиться методика зафиксированны
     private boolean bindsParameters;
 
     //Содержит ли методика несохранённые результаты
     private boolean containtsLastNotSaveResults = false;
 
-    private boolean resultsOverwriten = false;
-
+    /**
+     * Данные параметры относятся к испытываемому счётчику
+     */
+    //Номинальное напряжение
     private String Unom;
+
+    //Максимальный и минимальный ток
     private String ImaxAndInom;
+
+    //Номинальная частота сети
     private String Fnom;
+
+    //Класс точности активной энергии
     private String accuracyClassMeterAP;
+
+    //Класс точности реактивной энергии
     private String accuracyClassMeterRP;
+
+    //Тип измерительного элемента
     private String typeOfMeasuringElementShunt;
+
+    //Тип счётчика (трех/одно фазный, много/одно тарифный)
     private String typeMeter;
+
+    //Постоянная счётчика при подсчёте активной энергии (imp*kW*h)
     private String constantAP;
+
+    //Постоянная счётчика при подсчёте реактивной энергии (imp*kW*h
     private String constantRP;
+
+    //Завод изготовитель счётчика
     private String factoryManufactuter;
+
+    //Модель счётчика (модель с наименованием)
     private String meterModel;
 
-    //Несохранённые испытания для этой методики
-    private List<Meter> notSaveResultMeters = new ArrayList<>();
-
+    /**
+     * Содержит листы с командами которые необходимо выполнить установке
+     * 0 - активная энергия в прямом направлении
+     * 1 - активная энергия в обратном направлении
+     * 2 - реактивная энергия в прямом направлении
+     * 3 - реактивная энергия в обратном направлении
+     */
     private Map<Integer, List<Commands>> commandsMap = new HashMap<>(4);
 
-    //Объект для сохранения точек связанных с влиянием
+    //Объект для сохранения точек (коммад) связанных с влиянием (U, F)
     private InfluenceMetodic influenceMetodic = new InfluenceMetodic();
 
-    //Объект для сохранения точек Самохода, чувствительности и влияния
-
+    //Объект для сохранения точек Самохода, чувствительности и влияния и т.д.
     private CreepStartRTCConst creepStartRTCConst = new CreepStartRTCConst();
 
     public MethodicForThreePhaseStend() {
@@ -51,15 +84,7 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
         commandsMap.put(3, new ArrayList<Commands>());
     }
 
-    public boolean addCommandToList(Integer numb, ArrayList<Commands> list) {
-        if (numb > 4 || numb < 0) return false;
-        else {
-            commandsMap.get(numb).clear();
-            commandsMap.get(numb).addAll(list);
-        }
-        return true;
-    }
-
+    //get's and set's
     public Map<Integer, List<Commands>> getCommandsMap() {
         return commandsMap;
     }
@@ -509,28 +534,48 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
     }
 
 //===========================================================================================
-    //Внутренний класс отвечающий за точки влияния
+
+    /**
+     * Данный клас является контейнером для точек испытаний созданых из окна влияния
+     */
     class InfluenceMetodic implements Cloneable, Serializable{
 
         InfluenceMetodic() {
+            //Точки активной энергии в прямом направлении тока (AP+)
             influenceCommandsMap.put(0, new ArrayList<>());
+            //Точки активной энергии в обратном направлении тока (AP-)
             influenceCommandsMap.put(1, new ArrayList<>());
+            //Точки реактивной энергии в прямом направлении тока (RP+)
             influenceCommandsMap.put(2, new ArrayList<>());
+            //Точки реактивной энергии в обратном направлении тока (RP-)
             influenceCommandsMap.put(3, new ArrayList<>());
         }
 
+        //Мапа с точками испытаний для разных направлений и типов мощности
         private Map<Integer, List<Commands>> influenceCommandsMap = new HashMap<>(4);
 
+        //AP+
+        //Влияние по напряжению
+        //Все фазы
         private float[] saveInfluenceUprocAllPhaseAPPls = new float[0];
+        //Фаза А
         private float[] saveInfluenceUprocPhaseAAPPls = new float[0];
+        //Фаза B
         private float[] saveInfluenceUprocPhaseBAPPls = new float[0];
+        //Фаза С
         private float[] saveInfluenceUprocPhaseCAPPls = new float[0];
 
+        //Влияние по частоте
+        //Все фазы
         private float[] saveInfluenceFprocAllPhaseAPPls = new float[0];
+        //Фаза А
         private float[] saveInfluenceFprocPhaseAAPPls = new float[0];
+        //Фаза B
         private float[] saveInfluenceFprocPhaseBAPPls = new float[0];
+        //Фаза С
         private float[] saveInfluenceFprocPhaseCAPPls = new float[0];
 
+        //Имбаланс напряжений
         private String[] saveInfluenceInbUAPPls = new String[0];
 
         //AP-
@@ -578,9 +623,10 @@ public class MethodicForThreePhaseStend implements Metodic, Cloneable, Serializa
         }
     }
 
-    //==================================================================
-    //Внутренний класс отвечающий за точки самохода, чувствительности, ТХЧ, Константы
-
+    //===========================================================================
+    /**
+     * Внутренний класс отвечающий за точки самохода, чувствительности, ТХЧ, Константы и т.д.
+     */
     class CreepStartRTCConst implements Serializable, Cloneable {
 
         CreepStartRTCConst() {

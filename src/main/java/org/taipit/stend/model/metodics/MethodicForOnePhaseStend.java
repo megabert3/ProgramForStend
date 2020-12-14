@@ -8,10 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за создание методики поверки для однофазного стенда.
+ * Является неким контейнером содержащий точки испытаний, которые необходимо выполнить.
+ */
 public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializable {
 
     //Имя методики
     private String metodicName;
+
     //Если параметры при которых должна проводиться методика зафиксированны
     private boolean bindsParameters;
 
@@ -23,24 +30,34 @@ public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializabl
      */
     //Номинальное напряжение
     private String Unom;
+
     //Максимальный и минимальный ток
     private String ImaxAndInom;
+
     //Номинальная частота сети
     private String Fnom;
+
     //Класс точности активной энергии
     private String accuracyClassMeterAP;
+
     //Класс точности реактивной энергии
     private String accuracyClassMeterRP;
+
     //Тип измерительного элемента
     private String typeOfMeasuringElementShunt;
+
     //Тип счётчика (трех/одно фазный, много/одно тарифный)
     private String typeMeter;
+
     //Постоянная счётчика при подсчёте активной энергии (imp*kW*h)
     private String constantAP;
+
     //Постоянная счётчика при подсчёте реактивной энергии (imp*kW*h
     private String constantRP;
+
     //Завод изготовитель счётчика
     private String factoryManufactuter;
+
     //Модель счётчика (модель с наименованием)
     private String meterModel;
 
@@ -56,7 +73,7 @@ public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializabl
     //Объект для сохранения точек (коммад) связанных с влиянием (U, F)
     private InfluenceMetodic influenceMetodic = new InfluenceMetodic();
 
-    //Объект для сохранения точек Самохода, чувствительности и влияния
+    //Объект для сохранения точек Самохода, чувствительности и влияния и т.д.
     private CreepStartRTCConst creepStartRTCConst = new CreepStartRTCConst();
 
     public MethodicForOnePhaseStend() {
@@ -66,16 +83,7 @@ public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializabl
         commandsMap.put(3, new ArrayList<Commands>());
     }
 
-    //Добавляет команду в нужный лист
-    public boolean addCommandToList(Integer numb, ArrayList<Commands> list) {
-        if (numb > 4 || numb < 0) return false;
-        else {
-            commandsMap.get(numb).clear();
-            commandsMap.get(numb).addAll(list);
-        }
-        return true;
-    }
-
+    //get's and set's
     public Map<Integer, List<Commands>> getCommandsMap() {
         return commandsMap;
     }
@@ -94,18 +102,22 @@ public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializabl
     }
 
     //Точки влияния
+    //AP+
     public void setSaveInflListForCollumAPPls(List<Commands> saveInflListForCollumAPPls) {
         influenceMetodic.influenceCommandsMap.put(0, saveInflListForCollumAPPls);
     }
 
+    //AP-
     public void setSaveInflListForCollumAPMns(List<Commands> saveInflListForCollumAPMns) {
         influenceMetodic.influenceCommandsMap.put(1, saveInflListForCollumAPMns);
     }
 
+    //RP+
     public void setSaveInflListForCollumRPPls(List<Commands> saveInflListForCollumRPPls) {
         influenceMetodic.influenceCommandsMap.put(2, saveInflListForCollumRPPls);
     }
 
+    //RP-
     public void setSaveInflListForCollumRPMns(List<Commands> saveInflListForCollumRPMns) {
         influenceMetodic.influenceCommandsMap.put(3, saveInflListForCollumRPMns);
     }
@@ -335,7 +347,6 @@ public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializabl
     }
 
    //======================================================================================
-
     public boolean isBindsParameters() {
         return bindsParameters;
     }
@@ -438,24 +449,43 @@ public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializabl
 
 
 //===========================================================================================
-    //Внутренний класс отвечающий за точки влияния
+
+    /**
+     * Данный клас является контейнером для точек испытаний созданых из окна влияния
+     */
     class InfluenceMetodic implements Cloneable, Serializable{
 
         InfluenceMetodic() {
+            //Точки активной энергии в прямом направлении тока (AP+)
             influenceCommandsMap.put(0, new ArrayList<>());
+            //Точки активной энергии в обратном направлении тока (AP-)
             influenceCommandsMap.put(1, new ArrayList<>());
+            //Точки реактивной энергии в прямом направлении тока (RP+)
             influenceCommandsMap.put(2, new ArrayList<>());
+            //Точки реактивной энергии в обратном направлении тока (RP-)
             influenceCommandsMap.put(3, new ArrayList<>());
         }
 
+        //Мапа с точками испытаний для разных направлений и типов мощности
         private Map<Integer, List<Commands>> influenceCommandsMap = new HashMap<>(4);
 
+        /**
+         *Проценты от напряжения или частоты введённые пользователем (Необходимы для отображения при выборе точек испытания и расчёте)
+         */
+        //Влияние по напряжению
+        //Для стенда с одной токовой цепью
         private float[] saveInfluenceUprocAllPhaseAPPls = new float[0];
+        //Для стенда с двумя токовыми цепями для первой токовой цепи
         private float[] saveInfluenceUprocPhaseAAPPls = new float[0];
+        //Для стенда с двумя токовыми цепями для второй токовой цепи
         private float[] saveInfluenceUprocPhaseBAPPls = new float[0];
 
+        //Влияние по частотк
+        //Для стенда с одной токовой цепью
         private float[] saveInfluenceFprocAllPhaseAPPls = new float[0];
+        //Для стенда с двумя токовыми цепями для первой токовой цепи
         private float[] saveInfluenceFprocPhaseAAPPls = new float[0];
+        //Для стенда с двумя токовыми цепями для второй токовой цепи
         private float[] saveInfluenceFprocPhaseBAPPls = new float[0];
 
         //AP-
@@ -491,9 +521,10 @@ public class MethodicForOnePhaseStend implements Metodic, Cloneable, Serializabl
         }
     }
 
-    //==================================================================
-    //Внутренний класс отвечающий за точки самохода, чувствительности, ТХЧ, Константы
-
+    //================================================================================
+    /**
+     * Внутренний класс отвечающий за точки самохода, чувствительности, ТХЧ, Константы и т.д.
+     */
     class CreepStartRTCConst implements Serializable, Cloneable {
 
         CreepStartRTCConst() {

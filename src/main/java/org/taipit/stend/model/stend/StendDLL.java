@@ -6,7 +6,11 @@ import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
-
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный интерфейст отвечает за загрузку и объявление методов (маршалинг) библиотеки по работе с установкой.
+ */
 public interface StendDLL extends Library {
     StendDLL INSTANCE = Native.load(("hscom.dll"), StendDLL.class);
 

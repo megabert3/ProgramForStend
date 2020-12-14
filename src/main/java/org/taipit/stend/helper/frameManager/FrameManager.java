@@ -14,8 +14,14 @@ import org.taipit.stend.controller.viewController.methodicsFrameController.Metho
 
 import java.io.IOException;
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за учёт и контроль уже открытых окон (Предотвращает дублирование).
+ */
 public class FrameManager {
 
+    //Паттерн Singleton
     private static FrameManager frameManager;
 
     private FrameManager(){
@@ -50,8 +56,14 @@ public class FrameManager {
         PARAMTEST
     }
 
+    /**
+     * Производит инизиализацию и отображение неободимого окна
+     * @param frame
+     */
     public void getFrame(FrameType frame) {
         switch (frame) {
+
+            //Инициализация окна настроек программы
             case PROPERTIES: {
 
                 if (propertiesController == null) {
@@ -85,6 +97,8 @@ public class FrameManager {
                     propertiesController.getStage().toFront();
                 }
             } break;
+
+            //Инициализация окна создания или редактирования методики
             case METHODIC: {
 
                 if (methodicsAddEditDeleteFrameController == null) {
@@ -120,6 +134,7 @@ public class FrameManager {
                 }
             }break;
 
+            //Инициализация окна с результатами проведённых испытаний
             case RESULTS: {
 
                 if (resultsMetersController == null) {
@@ -154,6 +169,7 @@ public class FrameManager {
                 }
             }break;
 
+            //Инициализация окна настроек и запуска теста
             case PARAMTEST: {
                 if (testParametersFrameController == null) {
                     FXMLLoader fxmlLoader = new FXMLLoader();

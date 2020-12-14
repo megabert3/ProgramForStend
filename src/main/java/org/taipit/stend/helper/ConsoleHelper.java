@@ -12,29 +12,49 @@ import org.taipit.stend.controller.viewController.YesOrNoFrameControllerDialog;
 import java.io.*;
 import java.util.Properties;
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс является вспомогательным и упрощает вывод служебной информации.
+ */
 public class ConsoleHelper {
 
-    //Для диалогового окна да или нет
+    //Для диалогового окна да или нет (ответ)
     private static Boolean yesOrNo;
+
+    //Для окна запроса пароля (правильный пароль или нет)
     private static boolean password = false;
 
-    //Директроия с файлом пропертиес
+    //Директроия файла настроек (properties)
     private static final String dir = ".\\src\\main\\resources\\stendProperties.properties";
 
+    //Для считывания информации с консоли (использовался для тестов)
     private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
+    //Файл с настройками программы
     public static Properties properties = getProperties();
 
+    /**
+     * Возвращает объект файла с настройками
+     * @return
+     */
     private static Properties getProperties() {
+
         Properties initProperties = new Properties();
+
         try {
             initProperties.load(new FileInputStream(new File(dir).getCanonicalPath()));
         } catch (IOException e) {
-            ConsoleHelper.infoException("Указанный файл properties не найден. Проверте целостность программы или переустановите её и попробуйте снова");
+            ConsoleHelper.infoException("Файл с настройками программы не найден.\nПроверте целостность программы или переустановите её и попробуйте снова");
         }
+
         return initProperties;
     }
 
+    /**
+     * Сохраняет все изменения произведенённые в файле
+     * @return
+     */
     public static boolean saveProperties() {
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(new File(dir).getCanonicalPath())) {
@@ -43,11 +63,15 @@ public class ConsoleHelper {
             properties = getProperties();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            infoException(e.getMessage());
             return false;
         }
     }
 
+    /**
+     * Выводит информационное окно с ошибкой (аналог диалог. сообщения)
+     * @param mess
+     */
     public static void infoException(String mess) {
         Platform.runLater(new Runnable() {
             @Override
@@ -74,6 +98,10 @@ public class ConsoleHelper {
         });
     }
 
+    /**
+     * Выводит информационное окно с возможностью редактировать загловок (аналог диалог. сообщения)
+     * @param mess
+     */
     public static void infoException(String title, String mess) {
         Platform.runLater(new Runnable() {
             @Override
@@ -100,6 +128,14 @@ public class ConsoleHelper {
         });
     }
 
+    /**
+     * Выводит диалоговое окно (да/нет) с запросом и регулировкой отобращения сообщения(аналог диалог. сообщения)
+     * @param title
+     * @param textQuestion
+     * @param x - местополжение сообщения по оси X
+     * @param y - местополжение сообщения по оси Y
+     * @return
+     */
     public static Boolean yesOrNoFrame(String title, String textQuestion, double x, double y) {
 
         yesOrNo = null;
@@ -127,6 +163,12 @@ public class ConsoleHelper {
         return yesOrNo;
     }
 
+    /**
+     * Выводит диалоговое окно (да/нет) с запросом (аналог диалог. сообщения)
+     * @param title
+     * @param textQuestion
+     * @return
+     */
     public static Boolean yesOrNoFrame(String title, String textQuestion) {
 
         yesOrNo = null;
@@ -152,6 +194,13 @@ public class ConsoleHelper {
         return yesOrNo;
     }
 
+    /**
+     * Метод апредназначенный для загрузки окна (Не используется)
+     * @param modality
+     * @param path
+     * @param title
+     * @return
+     */
     public static Object loadFrame(boolean modality, String path, String title) {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(ConsoleHelper.class.getResource(path));
@@ -169,6 +218,10 @@ public class ConsoleHelper {
         return fxmlLoader.getController();
     }
 
+    /**
+     * Загрущает окно ввода пароля и проверяет его валидность
+     * @return
+     */
     public static Boolean passwordFrame() {
         password = false;
 
@@ -191,6 +244,9 @@ public class ConsoleHelper {
         return password;
     }
 
+    /**
+     * Сообщение об ощибке возникающей при загрузке окна
+     */
     public static void exceptionLoadFrame() {
         infoException("Ошибка при загрузке окна\n" +
                 "проверьте целостность файлов программы\n" +

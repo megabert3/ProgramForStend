@@ -12,22 +12,30 @@ import org.taipit.stend.helper.exeptions.StendConnectionException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
-
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс является программной абстракцией стенда для поверки счётчиков.
+ * Реализует все команды из библиотеки по работе со стендом
+ */
 public abstract class StendDLLCommands {
+
+    //Объект комманд библиотеки
     private StendDLL stend = StendDLL.INSTANCE;
 
+    //Файл содержащий настройки
     private Properties properties = ConsoleHelper.properties;
 
-    //Порт для связи с установкой
+    //COM порт для связи с установкой
     private int port;
 
+    //Модель стенда
     private String stendModel = properties.getProperty("stendModel");
 
-    //Класс точности
+    //Класс точности стенда
     private String stendAccuracyClass = properties.getProperty("stendAccuracyClass");
 
     //Серийный номер
@@ -45,64 +53,13 @@ public abstract class StendDLLCommands {
     //Тип эталонного счётчика
     private String typeReferenceMeter = properties.getProperty("refMeterModel");
 
-    //Кол-во постадочных мест для счётчиков
-    private int amountPlaces;
-
     //Пауза для стабилизации и установки заданных пар-ров установки
     private int pauseForStabization;
-
-    //Количество (активных мест)
-    private boolean[] amountActivePlaces = initializationAmountActivePlaces();
-
-    //Номинальное напряжение
-    private double Unom;
-
-    //Максимальный ток
-    private double Imax;
-
-    //Базовый ток
-    private double Ib;
-
-    //Номинальная частота
-    private double Fn;
-
-    //Константа счётчика
-    private double constant;
-
-    //Необходимо для быстрого обхода в цикле
-    private HashMap<Integer, Meter> amountActivePlacesForTest; // = initAmountActivePlacesForTest();
 
     public StendDLLCommands() {
         String port = ConsoleHelper.properties.getProperty("stendCOMPort").trim().substring(3).trim();
         this.port = Integer.parseInt(port);
-        this.amountPlaces = Integer.parseInt(ConsoleHelper.properties.getProperty("stendAmountPlaces"));
         this.pauseForStabization = Integer.parseInt(ConsoleHelper.properties.getProperty("pauseForStabization"));
-    }
-
-    //Инициализирует посадочные места и устанавливает значения флага
-    private boolean[] initializationAmountActivePlaces() {
-        boolean[] init = new boolean[amountPlaces + 1];
-        for (int i = 1; i <= amountPlaces; i++) {
-            init[i] = true;
-        }
-        return init;
-    }
-
-    //Оставляет только места необходимые для теста
-    private HashMap<Integer, Meter> initAmountActivePlacesForTest() {
-        HashMap<Integer, Meter> init = new HashMap<>();
-        for (int i = 1; i < amountActivePlaces.length; i++) {
-            if (amountActivePlaces[i]) {
-                init.put(i, new Meter());
-            }
-        }
-        return init;
-    }
-
-    //Активирует или деактивирует посадочное место
-    public void setActivePlace(int number, boolean active) {
-        amountActivePlaces[number] = active;
-        amountActivePlacesForTest = initAmountActivePlacesForTest();
     }
 
     /**
@@ -118,7 +75,6 @@ public abstract class StendDLLCommands {
      * @throws StendConnectionException
      * @throws InterruptedException
      */
-
     public synchronized void setEnergyPulse (List<Meter> meterList, int channelFlag) throws StendConnectionException, InterruptedException {
         for (Meter meter : meterList) {
             int i = 0;
@@ -140,67 +96,6 @@ public abstract class StendDLLCommands {
 
     public boolean setRefClock(int setFlag) {
         return stend.SetRefClock(setFlag, port);
-    }
-
-    public HashMap<Integer, Meter> getAmountActivePlacesForTest() {
-        return amountActivePlacesForTest;
-    }
-
-    public int getAmountPlaces() {
-        return amountPlaces;
-    }
-
-    public double getConstant() {
-        return constant;
-    }
-
-    public double getUnom() {
-        return Unom;
-    }
-
-    public double getImax() {
-        return Imax;
-    }
-
-    public double getIb() {
-        return Ib;
-    }
-
-    public double getFn() {
-        return Fn;
-    }
-
-    public void setImax(double imax) {
-        Imax = imax;
-    }
-
-    public void setUnom(double unom) {
-        Unom = unom;
-    }
-
-    public void setIb(double ib) {
-        Ib = ib;
-    }
-
-    public void setStend(StendDLL stend) {
-        this.stend = stend;
-    }
-
-    public void setFn(double fn) {
-        Fn = fn;
-    }
-
-    public void setConstant(double constant) {
-        this.constant = constant;
-    }
-
-    //Пауза для стабилизации счётчика
-    public int getPauseForStabization() {
-        return pauseForStabization;
-    }
-
-    public void setPauseForStabization(int pauseForStabization) {
-        this.pauseForStabization = pauseForStabization;
     }
 
     //Включить напряжение и ток без регулеровки пофазного напряжения
@@ -288,12 +183,6 @@ public abstract class StendDLLCommands {
             System.out.println("Не удалось считать значения эталонного счётчика");
         }
 
-        return pointer.getValue().getString(0, "ASCII");
-    }
-
-    public String stMeterRead(String typeReferenceMeter) {
-        PointerByReference pointer = new PointerByReference(new Memory(1024));
-        stend.StdMeter_Read(pointer, typeReferenceMeter, port);
         return pointer.getValue().getString(0, "ASCII");
     }
 
@@ -479,12 +368,6 @@ public abstract class StendDLLCommands {
         }
         return pointer.getValue();
     }
-
-//    public boolean countRead(int pulse,int meterNo) {
-//        boolean b = stend.Count_Read(pulse, meterNo, port);
-//        System.out.println(b);
-//        return b;
-//    }
 
     public void setReviseMode(int mode) throws StendConnectionException {
         if (!stend.Set_ReviseMode(mode)) {

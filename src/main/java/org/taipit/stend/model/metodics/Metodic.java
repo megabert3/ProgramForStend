@@ -1,11 +1,15 @@
 package org.taipit.stend.model.metodics;
 
 import org.taipit.stend.controller.Commands.Commands;
-import org.taipit.stend.controller.Meter;
 
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный интерфейс отвечает за реализацию методики поверки
+ */
 public interface Metodic extends Cloneable {
 
     /**
@@ -25,6 +29,9 @@ public interface Metodic extends Cloneable {
      */
     boolean isBindsParameters();
 
+    /**
+     * @return - Мап с точками испытаний для разных направлений тока и типов мощности
+     */
     Map<Integer, List<Commands>> getCommandsMap();
 
     Map<Integer, List<Commands>> getCreepStartRTCConstCommandsMap();

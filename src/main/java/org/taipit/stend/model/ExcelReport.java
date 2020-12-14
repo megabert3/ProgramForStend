@@ -18,11 +18,20 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс отвечает за вывод результатов испытания счётчика в Excel.
+ * Для работы с Excel использавлся apache POI
+ */
 public class ExcelReport {
 
+    //Варианты результатов испытаний
     private String[] resultName;
 
+    //Путь куда сохранить отчёт
     private String filePath = ConsoleHelper.properties.getProperty("printReportPath");
+    //Файл отчёта
     private File file;
 
     private final String SER_NO_NAME = "Серийный номер";
@@ -31,17 +40,20 @@ public class ExcelReport {
     private Workbook wb;
     private Sheet mainSheet;
 
+    //Шрифты
     private Font Bauhaus_15_Bold;
     private Font Bauhaus_14_Bold;
     private Font Calibri_11_BoldItalic;
     private Font Bauhaus_12_Bold;
     private Font Calibri_11_Bold;
+
     //Красный текст
     private Font Calibri_11_Red;
 
     //Чёрный
     private Font Calibri_11;
 
+    //Расположение в ячейке
     private CellStyle leftCenter;
     private CellStyle centerCenter;
 
@@ -55,19 +67,25 @@ public class ExcelReport {
     private CellStyle centerCenterThinRed;
 
     public ExcelReport() {
+
+        //Тип Excel
         if (ConsoleHelper.properties.getProperty("reportType").equals("HSSF")) {
+            //До 2007 года
             wb = new HSSFWorkbook();
+            //После 2007 года
         } else {
             wb = new XSSFWorkbook();
         }
 
         mainSheet = wb.createSheet(SHEET_NAME);
 
+        //Инициализация шрифтов
         Bauhaus_15_Bold = createFontStyle(wb, 15, "Calisto MT", true, false, false);
         Bauhaus_14_Bold = createFontStyle(wb, 14, "Bauhaus 93", true, false, false);
         Calibri_11_BoldItalic = createFontStyle(wb, 11, "Calibri", true, true, false);
         Bauhaus_12_Bold = createFontStyle(wb, 12, "Bauhaus 93", true, false, false);
         Calibri_11_Bold = createFontStyle(wb, 11, "Calibri", true, false, false);
+
         //Красный текст
         Calibri_11_Red = createFontStyle(wb, 11, "Calibri", IndexedColors.RED.getIndex(), false, false, false);
 
@@ -103,36 +121,50 @@ public class ExcelReport {
         errCRPSTAother.put("INS", new HashMap<>());
         errCRPSTAother.put("APR", new HashMap<>());
         errCRPSTAother.put("T", new HashMap<>());
-
     }
 
+    //Лист счётчиков результаты которых необходимо вывести в Excel
     private List<Meter> meters = new ArrayList<>();
 
+    //Мапы с результатами для каждого типа результата
+
+    //Результы счётчиков по командам самоход, чувствительность, ТХЧ, проверка счётного механизма, проверка работоспособности реле и т.д.
     private Map<String, Map<Integer, Meter.CommandResult>> errCRPSTAother = new HashMap<>();
 
+    //Результы счётчиков комманды ErrorResult
+    //AP+
+    //ErrorResult c влиянием частоты или напряжения пофазно
     private Map<String, Map<Integer, Meter.CommandResult>> errInflABCAPPls = new HashMap<>();
+    //ErrorResult c влиянием частоты или напряжения
     private Map<String, Map<Integer, Meter.CommandResult>> errInflAPPls = new HashMap<>();
+    //ErrorResult пофазно
     private Map<String, Map<Integer, Meter.CommandResult>> errABCAPPls = new HashMap<>();
+    //ErrorResult по трём фазам (общее)
     private Map<String, Map<Integer, Meter.CommandResult>> errTotalErrorAPPls = new HashMap<>();
+    //ErrorResult инбаланс напряжений
     private Map<String, Map<Integer, Meter.CommandResult>> errImbalansAPPls = new HashMap<>();
 
+    //AP-
     private Map<String, Map<Integer, Meter.CommandResult>> errInflABCAPMns = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errInflAPMns = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errABCAPMns = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errTotalErrorAPMns = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errImbalansAPMns = new HashMap<>();
 
+    //RP+
     private Map<String, Map<Integer, Meter.CommandResult>> errInflABCRPPls = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errInflRPPls = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errABCRPPls = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errTotalErrorRPPls = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errImbalansRPPls = new HashMap<>();
 
+    //RP-
     private Map<String, Map<Integer, Meter.CommandResult>> errInflABCRPMns = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errInflRPMns = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errABCRPMns = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errTotalErrorRPMns = new HashMap<>();
     private Map<String, Map<Integer, Meter.CommandResult>> errImbalansRPMns = new HashMap<>();
+
 
     private Group CRPSTAother = new CRPSTAotherGroup();
 
@@ -160,9 +192,14 @@ public class ExcelReport {
     private Group totalErrorRPMns = new TotalErrorsGroup();
     private Group imbalansRPMns = new ImbalansUGroup();
 
+    /**
+     * Добавляет сгруппированные по Мапам результаты счётчиков в объекты Группировки для дальнейшего вывода
+     * @param meters
+     */
     private void addErrorsInGroups(List<Meter> meters) {
         addMeterErrorsResult(meters);
 
+        //Добавление результатов отличных от ErrorResult (Самоход, чувствительноть и т.д.)
         if (errCRPSTAother.size() != 0) {
             for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errCRPSTAother.entrySet()) {
                 CRPSTAother.putResultInGroup(map.getKey(), map.getValue());
@@ -170,31 +207,35 @@ public class ExcelReport {
         }
 
         //Добавление в группу результатов AP+
+        //Влияние пофазно
         if (errInflABCAPPls.size() != 0) {
             for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errInflABCAPPls.entrySet()) {
                 inflABCAPPls.putResultInGroup(map.getKey(), map.getValue());
             }
         }
 
+        //Влияние общее
         if (errInflAPPls.size() != 0) {
             for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errInflAPPls.entrySet()) {
                 inflAPPls.putResultInGroup(map.getKey(), map.getValue());
             }
         }
 
+        //Результат пофазной погрешности
         if (errABCAPPls.size() != 0) {
             for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errABCAPPls.entrySet()) {
                 ABCAPPls.putResultInGroup(map.getKey(), map.getValue());
             }
         }
 
+        //Результат общей погрешности
         if (errTotalErrorAPPls.size() != 0) {
             for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errTotalErrorAPPls.entrySet()) {
                 totalErrorAPPls.putResultInGroup(map.getKey(), map.getValue());
             }
         }
 
-
+        //Результат погрешности инбаланса напряжений
         if (errImbalansAPPls.size() != 0) {
             for (Map.Entry<String, Map<Integer, Meter.CommandResult>> map : errImbalansAPPls.entrySet()) {
                 imbalansAPPls.putResultInGroup(map.getKey(), map.getValue());
@@ -301,6 +342,10 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Группирует объекты результатов счётчика в соответствующий мап
+     * @param meters
+     */
     private void addMeterErrorsResult(List<Meter> meters) {
 
         List<Meter.CommandResult> commandResultList;
@@ -447,14 +492,22 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Добавляет результаты в точках испытаний в мап влияния пофазно.
+     * Задаёт новый id для удобства сортировки и быстрого вывода в отчёте.
+     * @param errorBlock
+     * @param result
+     * @param indexMeter
+     */
     private void addElementsInInfABC(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
-        //55.0 F;1;A;A;P;0.5 Ib;0.25L
+        //Пример входящего ID: "55.0 F;1;A;A;P;0.5 Ib;0.25L"
         String[] idArr = result.getId().split(";");
         String[] procUorFandUorF = idArr[0].split(" ");
         String[] ImaxIb = idArr[5].split(" ");
 
         String key;
-        //F;55;A;L;0.5;Imax;0.02
+        //Пример нового сформированного ID: "F;55;A;L;0.25;Ib;0.5"
+        //Если коэф. мощности не равен 1.0
         if (idArr[6].contains("L") || idArr[6].contains("C")) {
             key = procUorFandUorF[1] + ";" + procUorFandUorF[0] + ";" + idArr[2] + ";" + idArr[6].substring(idArr[6].length() - 1) + ";"
                     + idArr[6].substring(0, idArr[6].length() - 1) + ";" + ImaxIb[1] + ";" + ImaxIb[0];
@@ -463,8 +516,12 @@ public class ExcelReport {
                     + idArr[6] + ";" + ImaxIb[1] + ";" + ImaxIb[0];
         }
 
+        //Если результат с таким id уже есть в мапе
         if (errorBlock.get(key) != null) {
+            //То кладу результат ниже по индексу счётчика
             errorBlock.get(key).put(indexMeter, result);
+
+            //Если нет, то создаю новую мапу и присваиваю ей ключ этого айди
         } else {
             Map<Integer, Meter.CommandResult> errMap = new HashMap<>();
             errMap.put(indexMeter, result);
@@ -472,6 +529,13 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Добавляет результаты в точках испытаний в мап влияния общая погрешность.
+     * Задаёт новый id для удобства сортировки и быстрого вывода в отчёте.
+     * @param errorBlock
+     * @param result
+     * @param indexMeter
+     */
     private void addElementsInInfl(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
         //55.0 F;1;H;A;P;0.5 Ib;0.25L
         String[] idArr = result.getId().split(";");
@@ -498,6 +562,13 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Добавляет результаты в точках испытаний в мап пофазной погрешности.
+     * Задаёт новый id для удобства сортировки и быстрого вывода в отчёте.
+     * @param errorBlock
+     * @param result
+     * @param indexMeter
+     */
     private void addElementsInABC(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
         //1;A;A;P;0.2 Ib;0.5C
         String[] idArr = result.getId().split(";");
@@ -521,6 +592,13 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Добавляет результаты в точках испытаний в мап общей погрешности.
+     * Задаёт новый id для удобства сортировки и быстрого вывода в отчёте.
+     * @param errorBlock
+     * @param result
+     * @param indexMeter
+     */
     private void addElementsInTotalError(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
         //1;H;A;P;0.2 Ib;0.5C
         String[] idArr = result.getId().split(";");
@@ -544,6 +622,13 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Добавляет результаты в точках испытаний в мап имбаланс напряжений.
+     * Задаёт новый id для удобства сортировки и быстрого вывода в отчёте.
+     * @param errorBlock
+     * @param result
+     * @param indexMeter
+     */
     private void addElementsImb(Map<String, Map<Integer, Meter.CommandResult>> errorBlock, Meter.CommandResult result, int indexMeter) {
         String[] id = result.getId().split(";");
         String key = id[1];
@@ -557,6 +642,11 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Добавляет прочие результаты
+     * @param meter
+     * @param indexMeter
+     */
     private void addElementsInCRPSTA(Meter meter, int indexMeter) {
         //CRP Самоход
         //STAAP Чувствтельность AP+

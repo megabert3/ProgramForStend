@@ -32,7 +32,7 @@ import org.taipit.stend.model.ResultsTest;
  *
  * Данный класс является контроллером окна сохранённых результатов теста "resultsMetersFrame.fxml"
  *
- * Отвечает за отображение всех сохранённых результатов проведённых когда либо тестов
+ * Отвечает за отображение всех сохранённых результатов проведённых когда либо тестов.
  */
 public class ResultsMetersController implements Frame {
 
