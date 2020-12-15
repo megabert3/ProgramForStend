@@ -518,7 +518,7 @@ public class ExcelReport {
 
         //Если результат с таким id уже есть в мапе
         if (errorBlock.get(key) != null) {
-            //То кладу результат ниже по индексу счётчика
+            //То кладу результат по индексу счётчика
             errorBlock.get(key).put(indexMeter, result);
 
             //Если нет, то создаю новую мапу и присваиваю ей ключ этого айди
@@ -660,6 +660,7 @@ public class ExcelReport {
         //CNTRN Константа
         //INS Изоляция
         //APR Внешний вид
+        //RLY Реле
 
         if (meter.getCreepTest() != null) {
             errCRPSTAother.get("CRP").put(indexMeter, meter.getCreepTest());
@@ -711,11 +712,18 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Главный метод создания отчёта, объединяет в себе все этапы группировки и вывода в Excel
+     * @param meterList
+     * @param window
+     * @return
+     */
     public boolean createExcelReport(List<Meter> meterList, Window window) {
 
         if (meterList.isEmpty()) return false;
 
         for (Meter meter : meterList) {
+            //Если информация о счётчиках разная (тип счётчика, условия поверки)
             if (!meterList.get(0).myEquals(meter)) {
                 ConsoleHelper.infoException("Выбранные счётчики\n не с одной навески");
                 return false;
@@ -770,6 +778,9 @@ public class ExcelReport {
         return true;
     }
 
+    /**
+     * Открывает созданный файл отчёта
+     */
     public void openExcelReport() {
         Desktop desktop;
         if (Desktop.isDesktopSupported()) {
@@ -782,8 +793,16 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Отвечает за создание и формирование информации в шапке отчёта
+     * @param wb
+     * @param sheet
+     * @param meter
+     * @param stendDLLCommands
+     */
     private void createHeadInformation(Workbook wb, Sheet sheet, Meter meter, StendDLLCommands stendDLLCommands) {
 
+        //Создаю строки
         for (int i = 0; i < 1200; i++) {
             sheet.createRow(i);
         }
@@ -911,10 +930,11 @@ public class ExcelReport {
         createMergeZone("A9:R9", sheet.createRow(8).createCell(0), "Счётчик", leftCenter,
                 Bauhaus_12_Bold, sheet, BorderStyle.MEDIUM);
 
-        sheet.createRow(9);
+
+        /*sheet.createRow(9);
         sheet.createRow(10);
         sheet.createRow(11);
-        sheet.createRow(12);
+        sheet.createRow(12);*/
 
         createMergeZone("A10:C10", sheet.getRow(9).createCell(0), "Номинальное напряжение:", leftCenter,
                 Calibri_11_BoldItalic, sheet, BorderStyle.THIN, BorderStyle.THIN);
@@ -973,9 +993,9 @@ public class ExcelReport {
         createMergeZone("A15:R15", sheet.createRow(14).createCell(0), "Общее", leftCenter,
                 Bauhaus_12_Bold, sheet, BorderStyle.MEDIUM);
 
-        sheet.createRow(15);
+        /*sheet.createRow(15);
         sheet.createRow(16);
-        sheet.createRow(17);
+        sheet.createRow(17);*/
 
         createMergeZone("A16:C16", sheet.getRow(15).createCell(0), "Температура:", leftCenter,
                 Calibri_11_BoldItalic, sheet, BorderStyle.THIN, BorderStyle.THIN);
@@ -1072,6 +1092,12 @@ public class ExcelReport {
 //
     }
 
+    /**
+     * Вносит результаты испытаний в отчёт Excel
+     * По каждому направлению и типу мощности (AP+, AP-, RP+, RP-)
+     * @param startCell
+     * @param startRow
+     */
     private void printAllErros(int startCell, int startRow) {
         int indexCell = startCell;
         int indexRow = startRow;
@@ -1081,13 +1107,15 @@ public class ExcelReport {
         boolean headRPPls = false;
         boolean headRPMns = false;
 
+        //Выгрузка результатов тестов (сам. чувст. тхч и прочих)
         if (CRPSTAother.getTotalElements() != 0) {
             CRPSTAother.print(indexRow, indexCell);
 
             indexRow += CRPSTAother.getAmountRow() + 2;
         }
 
-        //Вывожу погрешность AP+
+        //Выгрузка результатов ErrorResult AP+
+        //Общая погрешность по (3 фазы)
         if (totalErrorAPPls.getTotalElements() != 0) {
             if (!headAPPls) {
                 indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в прямом направлении");
@@ -1101,6 +1129,7 @@ public class ExcelReport {
             indexRow += totalErrorAPPls.getAmountRow() + 2;
         }
 
+        //Пофазная погрешность
         if (ABCAPPls.getTotalElements() != 0) {
             if (!headAPPls) {
                 indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в прямом направлении");
@@ -1114,6 +1143,7 @@ public class ExcelReport {
             indexRow += ABCAPPls.getAmountRow() + 2;
         }
 
+        //Погрешность с влиянием
         if (inflAPPls.getTotalElements() != 0) {
             if (!headAPPls) {
                 indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в прямом направлении");
@@ -1127,6 +1157,7 @@ public class ExcelReport {
             indexRow += inflAPPls.getAmountRow() + 2;
         }
 
+        //Погрешность с влиянием пофазная
         if (inflABCAPPls.getTotalElements() != 0) {
             if (!headAPPls) {
                 indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в прямом направлении");
@@ -1140,6 +1171,7 @@ public class ExcelReport {
             indexRow += inflABCAPPls.getAmountRow() + 2;
         }
 
+        //Погрешность инбаланса напряжений
         if (imbalansAPPls.getTotalElements() != 0) {
             if (!headAPPls) {
                 indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в прямом направлении");
@@ -1155,7 +1187,8 @@ public class ExcelReport {
             indexRow += 3;
         }
 
-        //Вывожу погрешность AP-
+        //Выгрузка результатов ErrorResult AP-
+        //Логика катая же как и у AP+ см. ком. там
         if (totalErrorAPMns.getTotalElements() != 0) {
             if (!headAPMns) {
                 indexRow += printHeadPower(indexCell, indexRow, "Активная энергия в обратном направлении");
@@ -1223,7 +1256,7 @@ public class ExcelReport {
             indexRow += 3;
         }
 
-        //Вывожу погрешность RP+
+        //Выгрузка результатов ErrorResult RP+
         if (totalErrorRPPls.getTotalElements() != 0) {
             if (!headRPPls) {
                 indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в прямом направлении");
@@ -1291,7 +1324,7 @@ public class ExcelReport {
             indexRow += 3;
         }
 
-        //Вывожу погрешность RP-
+        //Выгрузка результатов ErrorResult RP-
         if (totalErrorRPMns.getTotalElements() != 0) {
             if (!headRPMns) {
                 indexRow += printHeadPower(indexCell, indexRow, "Реактивная энергия в обратном направлении");
@@ -1355,6 +1388,13 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Отвечает за вывод шапки типа мощности и направления тока (AP+, AP-, RP+, RP-)
+     * @param indexCell
+     * @param indexRow
+     * @param headName
+     * @return
+     */
     private int printHeadPower(int indexCell, int indexRow, String headName) {
         Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
 
@@ -1364,6 +1404,12 @@ public class ExcelReport {
         return 2;
     }
 
+    /**
+     * Отвечает за вывод шапки общей мощности
+     * @param indexRow
+     * @param indexCell
+     * @return
+     */
     private int printTotalErrorHead(int indexRow, int indexCell) {
         Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
 
@@ -1373,6 +1419,12 @@ public class ExcelReport {
         return 1;
     }
 
+    /**
+     * Отвечает за вывод шапки пофазная мощность
+     * @param indexRow
+     * @param indexCell
+     * @return
+     */
     private int printABCErrorHead(int indexRow, int indexCell) {
         Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
 
@@ -1382,6 +1434,12 @@ public class ExcelReport {
         return 1;
     }
 
+    /**
+     * Отвечает за вывод шапки погрешность влияния
+     * @param indexRow
+     * @param indexCell
+     * @return
+     */
     private int printInfErrorHead(int indexRow, int indexCell) {
         Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
 
@@ -1391,6 +1449,12 @@ public class ExcelReport {
         return 1;
     }
 
+    /**
+     * Отвечает за вывод шапки пофазная погрешность влияния
+     * @param indexRow
+     * @param indexCell
+     * @return
+     */
     private int printInfABCErrorHead(int indexRow, int indexCell) {
         Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
 
@@ -1400,6 +1464,12 @@ public class ExcelReport {
         return 1;
     }
 
+    /**
+     * Отвечает за вывод шапки имбаланс напряжений
+     * @param indexRow
+     * @param indexCell
+     * @return
+     */
     private int printImbErrorHead(int indexRow, int indexCell) {
         Cell cell = mainSheet.getRow(indexRow).createCell(indexCell);
 
@@ -1409,6 +1479,22 @@ public class ExcelReport {
         return 1;
     }
 
+    /**
+     * Создаёт объединённую зону в Ecxel
+     * @param firstRow - индекс строки откуда начинать объединение
+     * @param lastRow - индекс строки которой закончить объединение
+     * @param firsColumn - индекс ячейки с которой необходимо начать объединение
+     * @param lastColumn - индекс ячейки которой необходимо закончить объединение
+     * @param cell - Ячейка Excel
+     * @param cellText - Текст внутри ячейки
+     * @param style - Стиль ячейки
+     * @param font - Шрифт ячейки
+     * @param sheet - Страница
+     * @param bottom - Стиль нижней границы
+     * @param right - Стиль правой границы
+     * @param left - Стиль левой границы
+     * @param top - - Стиль верхней границы
+     */
     private void createMergeZone(int firstRow, int lastRow, int firsColumn, int lastColumn, Cell cell, String cellText, CellStyle style, Font font, Sheet sheet,
                                  BorderStyle bottom, BorderStyle right, BorderStyle left, BorderStyle top) {
         CellRangeAddress cellAddresses = new CellRangeAddress(firstRow, lastRow, firsColumn, lastColumn);
@@ -1426,6 +1512,9 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Далее идут перегрузки метода выше
+     */
     private void createMergeZone(int firstRow, int lastRow, int firsColumn, int lastColumn, Sheet sheet,
                                  BorderStyle bottom, BorderStyle right, BorderStyle left, BorderStyle top) {
         CellRangeAddress cellAddresses = new CellRangeAddress(firstRow, lastRow, firsColumn, lastColumn);
@@ -1490,6 +1579,16 @@ public class ExcelReport {
         sheet.addMergedRegion(cellAddresses);
     }
 
+    /**
+     * Создаёт шрифт в ячейке excel
+     * @param wb
+     * @param size - высота
+     * @param fontName - Шрифт
+     * @param bold - полужирный
+     * @param setItalic - курсив
+     * @param setStrikeOut - подчёркнутый
+     * @return
+     */
     private static Font createFontStyle(Workbook wb, int size, String fontName, boolean bold, boolean setItalic, boolean setStrikeOut) {
         Font font = wb.createFont();
         font.setFontHeightInPoints((short) size);
@@ -1511,6 +1610,23 @@ public class ExcelReport {
         return font;
     }
 
+    /**
+     * Создаёт стиль ячейки
+     * @param wb
+     * @param font - шрифт
+     * @param halign - выравнивание по вертикали
+     * @param valign - выравнивание по горизонтали
+     * @param borderBottom - стиль нижней границы
+     * @param borderLeft - левой границы
+     * @param borderRight - правой границы
+     * @param borderTop - верхней границы
+     * @param borderBottomColor - цвет нижней границы
+     * @param borderLeftColor - цвет левой границы
+     * @param borderRightColor - цвет правой границы
+     * @param borderTopColor - цвет верхней границы
+     * @param fillForegroundColor - Задний фон
+     * @return
+     */
     private static CellStyle createCellStyle(Workbook wb, Font font, HorizontalAlignment halign, VerticalAlignment valign,
                                              BorderStyle borderBottom, BorderStyle borderLeft, BorderStyle borderRight, BorderStyle borderTop,
                                              short borderBottomColor, short borderLeftColor, short borderRightColor, short borderTopColor,
@@ -1581,6 +1697,17 @@ public class ExcelReport {
         return cellStyle;
     }
 
+    /**
+     * Создат комментарий к ячейке
+     * @param wb
+     * @param sheet - рабочая страница
+     * @param rowInd - привязка к номеру строки
+     * @param cellInd - привязка к номеру ячейки
+     * @param commentSizeColl - размер поля комментария в количестве ячеек
+     * @param commentSizeRow - размер поля комментария в количестве строк
+     * @param txtComment - текст комментария
+     * @return
+     */
     private static Comment createCellComment(Workbook wb, Sheet sheet, int rowInd, int cellInd, int commentSizeColl, int commentSizeRow, String txtComment) {
         CreationHelper factory = wb.getCreationHelper();
         Drawing drawing = sheet.createDrawingPatriarch();
@@ -1597,18 +1724,36 @@ public class ExcelReport {
         return comment;
     }
 
+    /**
+     * Далее идут внутренние классы группировки результатов теста
+     */
+
+    /**
+     * Интерфейс группировки погрешностей
+     */
     public interface Group {
         void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap);
 
+        //Переносит результаты группы в Excel
         void print(int row, int cell);
 
+        //Возвращает количество ячеек в группе (ширина)
         int getAmountCell();
+
+        //Возвращает количество строк в группе (высота)
         int getAmountRow();
 
+        //Общее количество элементов
         int getTotalElements();
     }
 
+    /**
+     * Группа содержащая в себе результаты комманд
+     * Самоход, чувствительность, ТХЧ и прочие.
+     */
     public class CRPSTAotherGroup implements Group {
+
+        //Ключи к основной мапе
         //CRP Самоход
         //STAAP Чувствтельность AP+
         //STAAN Чувствтельность AP-
@@ -1621,14 +1766,20 @@ public class ExcelReport {
         //CNTRN Константа
         //INS Изоляция
         //APR Внешний вид
+        //RLY Реле
 
+        //Количество элементов (результатов погрешности)
         int totalElements;
 
+        //Ширина
         int amountCell;
+        //Высота
         int amountRow;
 
+        //Мап содержащая все результаты
         private Map<String, Map> mainMap;
 
+        //Кладёт результат в группу
         public void putResultInGroup(String keyId, Map<Integer, Meter.CommandResult> commandResultMap) {
             totalElements++;
 
@@ -1668,9 +1819,11 @@ public class ExcelReport {
             //Создаю колонку с серийными номерами счётчиков
             Cell cellSerNo = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
 
+            //Объединяю область
             createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex + 1, cellSerNo, SER_NO_NAME, centerCenter, Calibri_11_Bold,
                     mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
 
+            //Выгружаю серийные номера
             for (int i = 0; i < meters.size(); i++) {
                 int printRow = row + 2 + i;
 
@@ -1682,12 +1835,16 @@ public class ExcelReport {
 
             printCellIndex += 2;
 
+            //Выгружаю результаты испытаний
             for (Map.Entry<String, Map> crpSta : mainMap.entrySet()) {
+
                 boolean containsResult = false;
 
                 key = crpSta.getKey();
+
                 Map<Integer, Meter.CommandResult> commandResultMap = crpSta.getValue();
 
+                //Если испытание (см. ID) содержит результат годен или не годен
                 for (Meter.CommandResult result : commandResultMap.values()) {
                     if (result.getPassTest() != null) {
                         containsResult = true;
@@ -1695,6 +1852,7 @@ public class ExcelReport {
                     }
                 }
 
+                //то переношу результат в Excel
                 if (containsResult) {
                     //CRP Самоход
                     //STAAP Чувствтельность AP+
@@ -1710,6 +1868,8 @@ public class ExcelReport {
                     //APR Внешний вид
 
                     switch (key) {
+
+                        //Переношу результаты теста самоход
                         case "CRP": {
                             //Создаю заголовок для Самохода
                             Cell cellCRPSTA = mainSheet.getRow(printRowIndex).createCell(printCellIndex);
@@ -1717,24 +1877,36 @@ public class ExcelReport {
                             createMergeZone(printRowIndex, printRowIndex + 1, printCellIndex, printCellIndex + 1, cellCRPSTA, CREEP, centerCenter, Calibri_11_Bold,
                                     mainSheet, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM, BorderStyle.MEDIUM);
 
+                            //Если коментарий (параметры испытания) добавлен
                             boolean addComment = false;
 
+                            //Получаю перультаты и переношу в ячейки соответсвующему счётчику
                             for (int i = 0; i < meters.size(); i++) {
+
                                 int rowIndex = printRowIndex + 2 + i;
 
+                                //Если результат годен или не годен
                                 if (commandResultMap.get(i) != null) {
 
+                                    //Получаю результат
                                     Meter.CreepResult result = (Meter.CreepResult) commandResultMap.get(i);
 
+                                    //Создаю ячейку под результат
                                     Cell cellCRPSTAError = mainSheet.getRow(rowIndex).createCell(printCellIndex);
 
+                                    //Выделяю область под результат
                                     createMergeZone(rowIndex, rowIndex, printCellIndex, printCellIndex + 1, mainSheet,
                                             BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
 
+                                    //Если испытание не проводилось
                                     if (result.isPassTest() == null) {
+                                        //Отображаю это в ячейке
                                         cellCRPSTAError.setCellStyle(centerCenterThin);
                                         cellCRPSTAError.setCellValue(resultName[0]);
+
+                                        //Если счётчик не прошёл испытание
                                     } else if (!result.isPassTest()) {
+
                                         //Добавляю коммент к полю самоход
                                         if (!addComment) {
                                             Comment comment = createCellComment(wb, mainSheet, printRowIndex, printCellIndex, 3, 3,
@@ -1745,15 +1917,17 @@ public class ExcelReport {
                                             addComment = true;
                                         }
 
+                                        //Выставляю результат как ГОДЕН
                                         cellCRPSTAError.setCellStyle(centerCenterThinRed);
                                         cellCRPSTAError.setCellValue(resultName[2]);
 
-                                        //Добавляю коммент к результату
+                                        //Добавляю коммент к результату о более подробной информации провала теста
                                         Comment comment = createCellComment(wb, mainSheet, rowIndex, printCellIndex, 4, 2,
                                                 "Время провала теста: " + result.getTimeTheTest());
 
                                         cellCRPSTAError.setCellComment(comment);
 
+                                        //Если результат годен
                                     } else if (result.isPassTest()) {
                                         //Добавляю коммент к полю самоход
                                         if (!addComment) {
@@ -1765,6 +1939,7 @@ public class ExcelReport {
                                             addComment = true;
                                         }
 
+                                        //Отображаю это в ячейке
                                         cellCRPSTAError.setCellStyle(centerCenterThin);
                                         cellCRPSTAError.setCellValue(resultName[1]);
                                     }
@@ -1773,6 +1948,11 @@ public class ExcelReport {
 
                             printCellIndex += 2;
                         } break;
+
+                        /**
+                         *========================================================================================================
+                         * Далее дальнейшая логика отображения результатов данной группы схожа с отображением результата Самоход (см. комментарии выше)
+                         */
 
                         case "STAAP": {
                             //Создаю заголовок для Чувтсвительности AP+
@@ -2579,6 +2759,7 @@ public class ExcelReport {
                 }
             }
 
+            //Обводка всего региона с результатами данной группы
             CellRangeAddress region = new CellRangeAddress(row + 2, row + 1 + meters.size(), cell, printCellIndex + 1);
             RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, mainSheet);
             RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, mainSheet);
@@ -2608,12 +2789,43 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Группа содержащая результаты ErrorCommand
+     * Общую погрешность
+     */
     public class TotalErrorsGroup implements Group {
         //L;0.5;Imax;0.02
+        //количесто элементов
         int totalElements;
 
+        //Ширина
         int amountCell;
+        //Высота
         int amountRow;
+
+        //Древодная логика по сортировке
+        //Пример:
+        //1.0
+        //   Imax
+        //       0.05
+        //       0.01
+        //   Ib
+        //     0.2
+        //     0.1
+        //0.5L
+        //   Imax
+        //       0.05
+        //       0.01
+        //   Ib
+        //     0.2
+        //     0.1
+        //0.5C
+        //   Imax
+        //       0.05
+        //       0.01
+        //   Ib
+        //     0.2
+        //     0.1
 
         private Map<String, Map> powerFactorMap;
         private Map<String, Map> currentMap;
@@ -3252,6 +3464,10 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Группа содержащая все результаты ErrorCommand
+     * Влияния пофазно
+     */
     public class InfABCGroup implements Group {
         //F;55;A;L;0.5;Imax;0.02
 
@@ -3540,6 +3756,10 @@ public class ExcelReport {
         }
     }
 
+    /**
+     * Группа содержащая все результаты ErrorCommand
+     * Имбаланс напряжений
+     */
     public class ImbalansUGroup implements Group{
         //A
         //B
@@ -3655,7 +3875,9 @@ public class ExcelReport {
         }
     }
 
-
+    /**
+     * Компараторы
+     */
     private Comparator<String> comparatorForUorF = new Comparator<String>() {
         @Override
         public int compare(String o1, String o2) {

@@ -19,8 +19,8 @@ import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.frameManager.Frame;
-import org.taipit.stend.model.MeterParamepersForProperty;
-import org.taipit.stend.model.MeterParameter;
+import org.taipit.stend.model.parametersForTest.MeterParamepersForProperty;
+import org.taipit.stend.model.parametersForTest.MeterParameter;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;

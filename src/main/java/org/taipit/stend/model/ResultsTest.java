@@ -6,6 +6,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @autor Albert Khalimov
+ *
+ * Данный класс является хранилищем всех сохранённых результатов теста.
+ */
 public class ResultsTest implements Serializable {
 
     private static final long serialVersionUID = 1111111L;
