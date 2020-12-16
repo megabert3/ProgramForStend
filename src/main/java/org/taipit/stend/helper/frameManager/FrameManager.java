@@ -91,6 +91,7 @@ public class FrameManager {
                         }
                     });
 
+                    stage.setResizable(false);
                     stage.show();
                 } else {
                     propertiesController.getStage().setIconified(false);

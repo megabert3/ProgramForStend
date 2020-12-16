@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="798.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.PropertiesController">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="798.0" style="-fx-background-color: #6A6A6A;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.PropertiesController">
    <children>
       <AnchorPane prefHeight="418.0" style="-fx-background-color: #303030;">
          <children>
@@ -79,6 +79,151 @@
          <children>
             <StackPane fx:id="mainStackPane" prefHeight="418.0" prefWidth="536.0">
                <children>
+                  <AnchorPane fx:id="passwordPane" style="-fx-background-color: #6A6A6A;">
+                     <children>
+                        <GridPane layoutX="58.0" layoutY="61.0" prefHeight="148.0" prefWidth="420.0">
+                          <columnConstraints>
+                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="0.0" prefWidth="0.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Старый пароль" textFill="WHITE" />
+                              <Label text="Новый пароль" textFill="WHITE" GridPane.rowIndex="1" />
+                              <Label text="Повторите новый пароль" textFill="WHITE" GridPane.rowIndex="2" />
+                              <PasswordField fx:id="passFldOldPass" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" />
+                              <PasswordField fx:id="passFldNewPass" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <PasswordField fx:id="passFldRepeatNewPass" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                        <Button fx:id="passPaneSave" layoutX="178.0" layoutY="332.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#passPaneActionEvent" prefHeight="38.0" prefWidth="180.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить">
+                           <graphic>
+                              <ImageView fitHeight="23.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../image/settingsFrame/icons8_save_32.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="linksPane" style="-fx-background-color: #6A6A6A;">
+                     <children>
+                        <GridPane layoutX="58.0" layoutY="61.0" prefHeight="148.0" prefWidth="420.0">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="401.0" minWidth="0.0" prefWidth="396.0" />
+                              <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="24.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Файл с номерами счётчиков" textFill="WHITE" />
+                              <Label text="Путь сохранения отчёта" textFill="WHITE" GridPane.rowIndex="2" />
+                              <TextField fx:id="txtFldPathSerNoMeter" stylesheets="@../styleCSS/textField.css" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtFldPathReport" stylesheets="@../styleCSS/textField.css" GridPane.rowIndex="3" />
+                              <Button fx:id="btnPathSerNoMeter" mnemonicParsing="false" onAction="#linksPaneActionEvent" stylesheets="@../styleCSS/buttonStyle.css" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button fx:id="btnPathReport" mnemonicParsing="false" onAction="#linksPaneActionEvent" stylesheets="@../styleCSS/buttonStyle.css" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           </children>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="reportPane" style="-fx-background-color: #6A6A6A;">
+                     <children>
+                        <GridPane layoutX="54.0" layoutY="31.0" prefHeight="347.0" prefWidth="474.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <RadioButton fx:id="radBtnFormat97XLS" mnemonicParsing="false" stylesheets="@../styleCSS/addDeleteEditPointsFrame/radioBtn.css" text="Excel формат '97(-2007) .xls" textFill="WHITE" />
+                              <RadioButton fx:id="radBtnFormat2007XLSX" mnemonicParsing="false" stylesheets="@../styleCSS/addDeleteEditPointsFrame/radioBtn.css" text="Excel формат c 2007 .xlsx" textFill="WHITE" GridPane.columnIndex="1" />
+                              <Label text="Самоход" textFill="WHITE" GridPane.rowIndex="2" />
+                              <Label text="Точность хода часов" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <ComboBox fx:id="cmbBxCreep" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="3" />
+                              <ComboBox fx:id="cmbBxRTC" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label text="Чувствительность AP+" textFill="WHITE" GridPane.rowIndex="4" />
+                              <Label text="Чувствительность AP-" textFill="WHITE" GridPane.rowIndex="6" />
+                              <Label text="Чувствительность RP+" textFill="WHITE" GridPane.rowIndex="8" />
+                              <Label text="Чувствительность RP-" textFill="WHITE" GridPane.rowIndex="10" />
+                              <ComboBox fx:id="cmbBxSTA_APPls" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="5" />
+                              <ComboBox fx:id="cmbBxSTA_APMns" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="7" />
+                              <ComboBox fx:id="cmbBxSTA_RPPls" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="9" />
+                              <ComboBox fx:id="cmbBxSTA_RPMns" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="11" />
+                              <Label text="Постоянная AP+" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label text="Постоянная AP-" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <Label text="Постоянная RP+" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                              <Label text="Постоянная RP-" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                              <ComboBox fx:id="cmbBxConst_APPls" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <ComboBox fx:id="cmbBxConst_APMns" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <ComboBox fx:id="cmbBxConst_RPPls" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                              <ComboBox fx:id="cmbBxConst_RPMns" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                              <Label text="Изоляция" textFill="WHITE" GridPane.rowIndex="12" />
+                              <Label text="Внешний вид" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                              <Label text="Реле" textFill="WHITE" GridPane.rowIndex="14" />
+                              <ComboBox fx:id="cmbBxInsulation" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="13" />
+                              <ComboBox fx:id="cmbBxRelay" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="15" />
+                              <ComboBox fx:id="cmbBxAppearance" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                           </children>
+                        </GridPane>
+                        <Label layoutX="205.0" layoutY="14.0" text="Формат файла Excel" textFill="WHITE" />
+                        <Button fx:id="reportSave" layoutX="291.0" layoutY="366.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#reportPaneActionEvent" prefHeight="38.0" prefWidth="180.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить">
+                           <graphic>
+                              <ImageView fitHeight="23.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../image/settingsFrame/icons8_save_32.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="parametersPane" style="-fx-background-color: #6A6A6A;">
+                     <children>
+                        <SplitPane dividerPositions="0.4851694915254237" layoutX="31.0" layoutY="29.0" prefHeight="301.0" prefWidth="474.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <TableView fx:id="tabViewParameters" layoutX="-3.0" layoutY="61.0" prefHeight="315.0" prefWidth="226.0" stylesheets="@../styleCSS/tableViewStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <ListView fx:id="listViewParameters" layoutX="11.0" layoutY="60.0" prefHeight="315.0" prefWidth="240.0" stylesheets="@../styleCSS/listViewStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                        <TextField fx:id="txtFldParameters" layoutX="181.0" layoutY="344.0" prefHeight="25.0" prefWidth="226.0" stylesheets="@../styleCSS/textField.css" />
+                        <Button fx:id="btnAddParameter" layoutX="417.0" layoutY="344.0" mnemonicParsing="false" onAction="#parameterPaneActionEvent" prefHeight="25.0" prefWidth="84.0" stylesheets="@../styleCSS/buttonStyle.css" text="Добавить" />
+                        <Button fx:id="btnDeleteParameter" layoutX="417.0" layoutY="379.0" mnemonicParsing="false" onAction="#parameterPaneActionEvent" prefHeight="25.0" prefWidth="84.0" stylesheets="@../styleCSS/buttonStyle.css" text="Удалить" />
+                     </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="stendPane" prefHeight="418.0" prefWidth="536.0" style="-fx-background-color: #6A6A6A;">
                      <children>
                         <Button fx:id="stendPaneSave" layoutX="326.0" layoutY="361.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#stendPaneActionEvent" prefHeight="38.0" prefWidth="180.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить">
@@ -172,151 +317,6 @@
                               <TextField fx:id="txtFidRefMetModel" maxHeight="27.0" maxWidth="95.0" minHeight="0.0" minWidth="0.0" prefHeight="27.0" prefWidth="86.0" style="-fx-background-radius: 0;" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="passwordPane" style="-fx-background-color: #6A6A6A;">
-                     <children>
-                        <GridPane layoutX="58.0" layoutY="61.0" prefHeight="148.0" prefWidth="420.0">
-                          <columnConstraints>
-                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="0.0" prefWidth="0.0" />
-                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Label text="Старый пароль" textFill="WHITE" />
-                              <Label text="Новый пароль" textFill="WHITE" GridPane.rowIndex="1" />
-                              <Label text="Повторите новый пароль" textFill="WHITE" GridPane.rowIndex="2" />
-                              <PasswordField fx:id="passFldOldPass" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" />
-                              <PasswordField fx:id="passFldNewPass" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <PasswordField fx:id="passFldRepeatNewPass" stylesheets="@../styleCSS/textField.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                           </children>
-                        </GridPane>
-                        <Button fx:id="passPaneSave" layoutX="178.0" layoutY="332.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#passPaneActionEvent" prefHeight="38.0" prefWidth="180.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить">
-                           <graphic>
-                              <ImageView fitHeight="23.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../image/settingsFrame/icons8_save_32.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="parametersPane" style="-fx-background-color: #6A6A6A;">
-                     <children>
-                        <SplitPane dividerPositions="0.4851694915254237" layoutX="31.0" layoutY="29.0" prefHeight="301.0" prefWidth="474.0">
-                          <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                 <children>
-                                    <TableView fx:id="tabViewParameters" layoutX="-3.0" layoutY="61.0" prefHeight="315.0" prefWidth="226.0" stylesheets="@../styleCSS/tableViewStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                 </children>
-                              </AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                 <children>
-                                    <ListView fx:id="listViewParameters" layoutX="11.0" layoutY="60.0" prefHeight="315.0" prefWidth="240.0" stylesheets="@../styleCSS/listViewStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                 </children>
-                              </AnchorPane>
-                          </items>
-                        </SplitPane>
-                        <TextField fx:id="txtFldParameters" layoutX="181.0" layoutY="344.0" prefHeight="25.0" prefWidth="226.0" stylesheets="@../styleCSS/textField.css" />
-                        <Button fx:id="btnAddParameter" layoutX="417.0" layoutY="344.0" mnemonicParsing="false" onAction="#parameterPaneActionEvent" prefHeight="25.0" prefWidth="84.0" stylesheets="@../styleCSS/buttonStyle.css" text="Добавить" />
-                        <Button fx:id="btnDeleteParameter" layoutX="417.0" layoutY="379.0" mnemonicParsing="false" onAction="#parameterPaneActionEvent" prefHeight="25.0" prefWidth="84.0" stylesheets="@../styleCSS/buttonStyle.css" text="Удалить" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="linksPane" style="-fx-background-color: #6A6A6A;">
-                     <children>
-                        <GridPane layoutX="58.0" layoutY="61.0" prefHeight="148.0" prefWidth="420.0">
-                           <columnConstraints>
-                              <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="401.0" minWidth="0.0" prefWidth="396.0" />
-                              <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="24.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="BOTTOM" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="BOTTOM" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <children>
-                              <Label text="Файл с номерами счётчиков" textFill="WHITE" />
-                              <Label text="Путь сохранения отчёта" textFill="WHITE" GridPane.rowIndex="2" />
-                              <TextField fx:id="txtFldPathSerNoMeter" stylesheets="@../styleCSS/textField.css" GridPane.rowIndex="1" />
-                              <TextField fx:id="txtFldPathReport" stylesheets="@../styleCSS/textField.css" GridPane.rowIndex="3" />
-                              <Button fx:id="btnPathSerNoMeter" mnemonicParsing="false" onAction="#linksPaneActionEvent" stylesheets="@../styleCSS/buttonStyle.css" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Button fx:id="btnPathReport" mnemonicParsing="false" onAction="#linksPaneActionEvent" stylesheets="@../styleCSS/buttonStyle.css" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                           </children>
-                        </GridPane>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="reportPane" style="-fx-background-color: #6A6A6A;">
-                     <children>
-                        <GridPane layoutX="54.0" layoutY="31.0" prefHeight="347.0" prefWidth="474.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <RadioButton fx:id="radBtnFormat97XLS" mnemonicParsing="false" stylesheets="@../styleCSS/addDeleteEditPointsFrame/radioBtn.css" text="Excel формат '97(-2007) .xls" textFill="WHITE" />
-                              <RadioButton fx:id="radBtnFormat2007XLSX" mnemonicParsing="false" stylesheets="@../styleCSS/addDeleteEditPointsFrame/radioBtn.css" text="Excel формат c 2007 .xlsx" textFill="WHITE" GridPane.columnIndex="1" />
-                              <Label text="Самоход" textFill="WHITE" GridPane.rowIndex="2" />
-                              <Label text="Точность хода часов" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <ComboBox fx:id="cmbBxCreep" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="3" />
-                              <ComboBox fx:id="cmbBxRTC" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Label text="Чувствительность AP+" textFill="WHITE" GridPane.rowIndex="4" />
-                              <Label text="Чувствительность AP-" textFill="WHITE" GridPane.rowIndex="6" />
-                              <Label text="Чувствительность RP+" textFill="WHITE" GridPane.rowIndex="8" />
-                              <Label text="Чувствительность RP-" textFill="WHITE" GridPane.rowIndex="10" />
-                              <ComboBox fx:id="cmbBxSTA_APPls" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="5" />
-                              <ComboBox fx:id="cmbBxSTA_APMns" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="7" />
-                              <ComboBox fx:id="cmbBxSTA_RPPls" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="9" />
-                              <ComboBox fx:id="cmbBxSTA_RPMns" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="11" />
-                              <Label text="Постоянная AP+" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <Label text="Постоянная AP-" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <Label text="Постоянная RP+" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                              <Label text="Постоянная RP-" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                              <ComboBox fx:id="cmbBxConst_APPls" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <ComboBox fx:id="cmbBxConst_APMns" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                              <ComboBox fx:id="cmbBxConst_RPPls" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                              <ComboBox fx:id="cmbBxConst_RPMns" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                              <Label text="Изоляция" textFill="WHITE" GridPane.rowIndex="12" />
-                              <Label text="Внешний вид" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-                              <Label text="Реле" textFill="WHITE" GridPane.rowIndex="14" />
-                              <ComboBox fx:id="cmbBxInsulation" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="13" />
-                              <ComboBox fx:id="cmbBxRelay" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.rowIndex="15" />
-                              <ComboBox fx:id="cmbBxAppearance" prefWidth="150.0" stylesheets="@../styleCSS/comboBox.css" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-                           </children>
-                        </GridPane>
-                        <Label layoutX="205.0" layoutY="14.0" text="Формат файла Excel" textFill="WHITE" />
-                        <Button fx:id="reportSave" layoutX="291.0" layoutY="366.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#reportPaneActionEvent" prefHeight="38.0" prefWidth="180.0" stylesheets="@../styleCSS/buttonStyle.css" text="Сохранить">
-                           <graphic>
-                              <ImageView fitHeight="23.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../image/settingsFrame/icons8_save_32.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
                      </children>
                   </AnchorPane>
                </children>

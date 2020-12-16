@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -34,6 +35,9 @@ import java.util.*;
  * Данный класс является контроллером окна настроек приложения "properties.fxml".
  */
 public class PropertiesController implements Initializable, Frame {
+
+    @FXML
+    private AnchorPane mainAnchorPane;
 
     @FXML
     private StackPane mainStackPane;
@@ -220,6 +224,9 @@ public class PropertiesController implements Initializable, Frame {
     //Файл с настройками приложения
     private Properties properties = ConsoleHelper.properties;
 
+    //Лист со всеми вкладкими окна
+    private List<Pane> listPane;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         stendBtn.setToggleGroup(toggleGroup);
@@ -227,6 +234,18 @@ public class PropertiesController implements Initializable, Frame {
         passwordBtn.setToggleGroup(toggleGroup);
         linksBtn.setToggleGroup(toggleGroup);
         reportBtn.setToggleGroup(toggleGroup);
+
+        listPane = Arrays.asList(
+                passwordPane,
+                linksPane,
+                reportPane,
+                parametersPane,
+                stendPane
+        );
+
+        for (Pane pane : listPane) {
+            pane.setVisible(false);
+        }
 
         setParamWithPropFile();
         initMeterParameterPane();
@@ -271,6 +290,7 @@ public class PropertiesController implements Initializable, Frame {
     private void passPaneActionEvent(ActionEvent event) {
 
         if (event.getSource() == passPaneSave) {
+
             passFldNewPass.setStyle("");
             passFldRepeatNewPass.setStyle("");
             passFldOldPass.setStyle("");
@@ -410,6 +430,7 @@ public class PropertiesController implements Initializable, Frame {
             stendBtn.setSelected(true);
 
             if (stendBtn.isSelected()) {
+                setVisibleSelectedPane(stendPane);
                 stendPane.toFront();
             }
         }
@@ -420,6 +441,7 @@ public class PropertiesController implements Initializable, Frame {
             meterParanBtn.setSelected(true);
 
             if (meterParanBtn.isSelected()) {
+                setVisibleSelectedPane(parametersPane);
                 parametersPane.toFront();
             }
         }
@@ -430,6 +452,7 @@ public class PropertiesController implements Initializable, Frame {
             passwordBtn.setSelected(true);
 
             if (passwordBtn.isSelected()) {
+                setVisibleSelectedPane(passwordPane);
                 passwordPane.toFront();
             }
         }
@@ -440,6 +463,7 @@ public class PropertiesController implements Initializable, Frame {
             linksBtn.setSelected(true);
 
             if (linksBtn.isSelected()) {
+                setVisibleSelectedPane(linksPane);
                 linksPane.toFront();
             }
         }
@@ -450,6 +474,7 @@ public class PropertiesController implements Initializable, Frame {
             reportBtn.setSelected(true);
 
             if (reportBtn.isSelected()) {
+                setVisibleSelectedPane(reportPane);
                 reportPane.toFront();
             }
         }
@@ -892,6 +917,20 @@ public class PropertiesController implements Initializable, Frame {
         ConsoleHelper.saveProperties();
 
         ConsoleHelper.infoException("Информация", "Параметры успешно сохранены");
+    }
+
+    /**
+     * Делает выбранный пользователем Pane видимым
+     * @param setVisiblePane
+     */
+    private void setVisibleSelectedPane(Pane setVisiblePane) {
+        for (Pane pane : listPane) {
+            if (setVisiblePane.equals(pane)) {
+                pane.setVisible(true);
+            } else {
+                pane.setVisible(false);
+            }
+        }
     }
 
     @Override
