@@ -2308,7 +2308,162 @@ public class TestErrorTableFrameController {
                     }
                 });
             }
+
+        } else if (listMetersForTest.size() <= 48) {
+
+            //Создаю колонки
+            for (int i = 0; i < listMetersForTest.size(); i++) {
+                addTableViewAndCollumnInErrorPane(i);
+            }
+
+            if (listMetersForTest.size() % 4 == 0) {
+
+                int secondLine = listMetersForTest.size() / 4; //12
+                int thirdLine = listMetersForTest.size() / 2; //24
+                int fourthLine = listMetersForTest.size() - listMetersForTest.size() / 4; //36
+
+                //Устанавливаю размер колонок под окно погрешности
+                paneErrors.widthProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        double widthColumn = ((Double) newValue) / (tabViewErrorsList.size() / 4);
+
+                        for (int i = 0; i < listMetersForTest.size(); i++) {
+                            tabViewErrorsList.get(i).setPrefWidth(widthColumn);
+                            tabViewErrorsList.get(i).getColumns().get(0).setPrefWidth(widthColumn);
+
+                            //Первый ряд
+                            if (i < secondLine) {
+                                tabViewErrorsList.get(i).setLayoutX(widthColumn * i);
+
+                                //Второй ряд
+                            } else if (i < thirdLine) {
+                                tabViewErrorsList.get(i).setLayoutX(widthColumn * (i - secondLine));
+
+                                //Третий ряд
+                            } else if (i < fourthLine) {
+                                tabViewErrorsList.get(i).setLayoutX(widthColumn * (i - thirdLine));
+
+                            }else {
+                                tabViewErrorsList.get(i).setLayoutX(widthColumn * (i - fourthLine));
+                            }
+                        }
+                    }
+                });
+
+                //Действие при изменении размеров окна
+                paneErrors.heightProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+                        double height = ((Double) newValue) / 4;
+
+                        for (int i = 0; i < tabViewErrorsList.size(); i++) {
+                            tabViewErrorsList.get(i).setPrefHeight(height);
+
+                            //Первый ряд
+                            if (i < secondLine) {
+                                tabViewErrorsList.get(i).setLayoutY(0);
+
+                                //Второй ряд
+                            } else if (i < thirdLine) {
+                                tabViewErrorsList.get(i).setLayoutY(height * 1);
+
+                                //Третий ряд
+                            } else if (i <fourthLine) {
+                                tabViewErrorsList.get(i).setLayoutY(height * 2);
+
+                                //Четвертый ряд
+                            } else {
+                                tabViewErrorsList.get(i).setLayoutY(height * 3);
+                            }
+
+                        }
+                    }
+                });
+
+            } else {
+
+                int secondLine = listMetersForTest.size() / 4 + 1; // 12
+                int thirdLine;
+
+                if (listMetersForTest.size() % 2 == 0) {
+                    thirdLine = listMetersForTest.size() / 2 + 1; //24
+                } else {
+                    thirdLine = listMetersForTest.size() / 2 + 2; //24
+                }
+
+                int fourthLine = thirdLine + secondLine; //36
+
+                //Устанавливаю размер колонок под окно погрешности
+                paneErrors.widthProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+                        double widthColumn = ((Double) newValue) / (tabViewErrorsList.size() / 3 + 1);
+
+                        for (int i = 0; i < listMetersForTest.size(); i++) {
+                            tabViewErrorsList.get(i).setPrefWidth(widthColumn);
+                            tabViewErrorsList.get(i).getColumns().get(0).setPrefWidth(widthColumn);
+
+                            //Первый ряд
+                            if (i < secondLine) {
+                                tabViewErrorsList.get(i).setLayoutX(widthColumn * i);
+
+                                //Второй ряд
+                            } else if (i < thirdLine) {
+                                tabViewErrorsList.get(i).setLayoutX(widthColumn * (i - secondLine));
+
+                                //Третий ряд
+                            } else if (i < fourthLine) {
+                                tabViewErrorsList.get(i).setLayoutX(widthColumn * (i - thirdLine ));
+
+                                //Четвёртый
+                            } else {
+                                tabViewErrorsList.get(i).setLayoutX(widthColumn * (i - fourthLine));
+                            }
+                        }
+                    }
+                });
+
+                //Действие при изменении размеров окна
+                paneErrors.heightProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+                        double height = ((Double) newValue) / 4;
+
+                        for (int i = 0; i < tabViewErrorsList.size(); i++) {
+
+                            tabViewErrorsList.get(i).setPrefHeight(height);
+
+                            //Первый ряд
+                            if (i < secondLine) {
+                                tabViewErrorsList.get(i).setLayoutY(0);
+
+                                //Второй ряд
+                            } else if (i < thirdLine) {
+                                tabViewErrorsList.get(i).setLayoutY(height);
+
+                                //Третий ряд
+                            } else if (i < fourthLine) {
+                                tabViewErrorsList.get(i).setLayoutY(height * 2);
+
+                                //Четвёртый
+                            } else {
+                                tabViewErrorsList.get(i).setLayoutY(height * 3);
+                            }
+                        }
+                    }
+                });
+            }
+
+        } else {
+            ConsoleHelper.infoException("В настройках указано больше посадочных мест\n чем может отоброзить программа");
+            return;
         }
+
+
 
         //Если выбираю точку испытания, то должна выставляться фокусировка и на панели с погрешностью
         //Если все колонки с результатами находятся на одном листе
