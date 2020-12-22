@@ -56,7 +56,7 @@ import java.util.Locale;
  * @autor Albert Khalimov
  *
  * Данный класс является контроллером окна "testErrorTableFrame.fxml".
- * Отвечает за обработку действий пользователя, а так же изменения отображения результата прохождения теста и самого результата теста
+ * Отвечает за обработку действий пользователя, а так же за отображение изменениЙ результата прохождения теста и самого результата теста
  */
 public class TestErrorTableFrameController {
 
@@ -148,6 +148,9 @@ public class TestErrorTableFrameController {
     //Поток получения информации от эталонного счётчика в ходе испытаний
     private Thread refMeterThread = new Thread();
 
+    //Поток блокировки кнопок
+    private Thread blockButtonsThread;
+
     //Флаг указывающий нажата ли кнопка подачи напряжения на счётчики
     private boolean startUnTest = false;
 
@@ -184,15 +187,14 @@ public class TestErrorTableFrameController {
                             stendDLLCommands.errorClear();
 
                             startAutomaticTest();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        } catch (InterruptedException ignore) { }
+
                     } catch (StendConnectionException e) {
-                        e.printStackTrace();
                         cathConnectionException(e);
                     }
                 }
             });
+
             automaticTestThread.start();
         }
     };
@@ -201,6 +203,7 @@ public class TestErrorTableFrameController {
     private ListChangeListener<Commands> manualListChangeListener = new ListChangeListener<Commands>() {
         @Override
         public void onChanged(Change<? extends Commands> c) {
+
             //Завершаю работу треда предыдущей точки испытания
             manualTestThread.interrupt();
 
@@ -218,11 +221,9 @@ public class TestErrorTableFrameController {
                             stendDLLCommands.errorClear();
 
                             startManualTest();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        } catch (InterruptedException ignore) { }
+
                     } catch (StendConnectionException e) {
-                        e.printStackTrace();
                         cathConnectionException(e);
                     }
                 }
@@ -315,6 +316,7 @@ public class TestErrorTableFrameController {
     //Инициализация окна
     @FXML
     void initialize() {
+
         ToggleGroup toggleGroup = new ToggleGroup();
 
         //Может быть только один режим работы теста
@@ -406,6 +408,9 @@ public class TestErrorTableFrameController {
                 selectedCommand.removeListener(manualListChangeListener);
                 selectedCommand.removeListener(automaticListChangeListener);
 
+                /**
+                 * Удалить
+                 */
                 //Обновляю информацию из окна эталонного счётчика
                 refMeterThread = new Thread(() -> {
                     for (int i = 0; i < 2; i++) {
@@ -419,7 +424,7 @@ public class TestErrorTableFrameController {
                 refMeterThread.start();
 
                 try {
-                    //Отчищаю табло погрешности на установки и отключаю мощность
+                    //Отчищаю табло погрешности на установке и отключаю мощность
                     stendDLLCommands.errorClear();
                     stendDLLCommands.powerOf();
 
@@ -435,7 +440,6 @@ public class TestErrorTableFrameController {
                     });
 
                 }catch (StendConnectionException e) {
-                    e.printStackTrace();
                     cathConnectionException(e);
                 }
             }
@@ -465,6 +469,7 @@ public class TestErrorTableFrameController {
             try {
                 fxmlLoader.load();
             } catch (IOException e) {
+                System.out.println("Контролирую");
                 e.printStackTrace();
             }
 
@@ -496,12 +501,12 @@ public class TestErrorTableFrameController {
 
             //Если в этот момент тест ещё идёт
             if (blockTypeEnergyAndDirectionBtns.getValue() || startUnTest) {
-                ConsoleHelper.infoException("Нельзя выйти во время теста");
+                ConsoleHelper.infoException("Для того чтобы выйти, необходимо остановить тест");
 
                 //Если тест не идёт
             } else {
                 //Пердлагаю сохранить результаты таеста
-                Boolean answer = ConsoleHelper.yesOrNoFrame("Сохранение результатов", "Желаете сохранить результаты теста?");
+                Boolean answer = ConsoleHelper.yesOrNoFrame("Сохранение результатов", "Сохранить результаты теста?");
 
                 if (answer != null) {
 
@@ -590,11 +595,10 @@ public class TestErrorTableFrameController {
                                 refreshRefMeterParametersWithoutChecking();
 
                                 startAutomaticTest();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+
+                            } catch (InterruptedException ignore) { }
+
                         } catch (StendConnectionException e) {
-                            e.printStackTrace();
                             cathConnectionException(e);
                         }
                     }
@@ -653,11 +657,9 @@ public class TestErrorTableFrameController {
                                 refreshRefMeterParametersWithoutChecking();
 
                                 startManualTest();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                            } catch (InterruptedException ignore) { }
+
                         } catch (StendConnectionException e) {
-                            e.printStackTrace();
                             cathConnectionException(e);
                         }
                     }
@@ -710,11 +712,9 @@ public class TestErrorTableFrameController {
 
                             } catch (InterruptedException e) {
                                 startUnTest = false;
-                                e.printStackTrace();
                             }
                         } catch (StendConnectionException e) {
                             startUnTest = false;
-                            e.printStackTrace();
                             cathConnectionException(e);
                         }
                     }
@@ -2384,23 +2384,23 @@ public class TestErrorTableFrameController {
 
             } else {
 
-                int secondLine = listMetersForTest.size() / 4 + 1; // 12
+                int secondLine = listMetersForTest.size() / 4 + 1;
                 int thirdLine;
 
                 if (listMetersForTest.size() % 2 == 0) {
-                    thirdLine = listMetersForTest.size() / 2 + 1; //24
+                    thirdLine = listMetersForTest.size() / 2 + 1;
                 } else {
-                    thirdLine = listMetersForTest.size() / 2 + 2; //24
+                    thirdLine = secondLine * 2;
                 }
 
-                int fourthLine = thirdLine + secondLine; //36
+                int fourthLine = thirdLine + secondLine;
 
                 //Устанавливаю размер колонок под окно погрешности
                 paneErrors.widthProperty().addListener(new ChangeListener<Number>() {
                     @Override
                     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 
-                        double widthColumn = ((Double) newValue) / (tabViewErrorsList.size() / 3 + 1);
+                        double widthColumn = ((Double) newValue) / (secondLine);
 
                         for (int i = 0; i < listMetersForTest.size(); i++) {
                             tabViewErrorsList.get(i).setPrefWidth(widthColumn);
@@ -2462,7 +2462,6 @@ public class TestErrorTableFrameController {
             ConsoleHelper.infoException("В настройках указано больше посадочных мест\n чем может отоброзить программа");
             return;
         }
-
 
 
         //Если выбираю точку испытания, то должна выставляться фокусировка и на панели с погрешностью
@@ -2542,7 +2541,8 @@ public class TestErrorTableFrameController {
                         tooltip.setText("Emax: " + ((ErrorCommand) item).getEmax() +
                                 "\nEmin: " + ((ErrorCommand) item).getEmin() +
                                 "\nКоличество импульсов: " + ((ErrorCommand) item).getPulse() +
-                                "\nКоличество измерений: " + ((ErrorCommand) item).getCountResult());
+                                "\nКоличество измерений: " + ((ErrorCommand) item).getCountResult() +
+                                "\nВремя стабилизации: " + ((ErrorCommand) item).getPauseForStabilization());
 
                     } else if (item instanceof CreepCommand) {
                         tooltip.setText("Время теста: " + ((CreepCommand) item).getUserTimeTestHHmmss() +
@@ -2553,8 +2553,8 @@ public class TestErrorTableFrameController {
                         tooltip.setText("Время теста: " + ((StartCommand) item).getUserTimeTestHHmmss() +
                                 "\nКоличество импульсов: " + ((StartCommand) item).getPulseValue() +
                                 "\nТок: " + item.getRatedCurr());
-                    } else if (item instanceof RTCCommand) {
 
+                    } else if (item instanceof RTCCommand) {
                         if (((RTCCommand) item).getErrorType() == 0) {
                             tooltip.setText("Emax: " + String.format(Locale.ROOT, "%.7f", ((RTCCommand) item).getErrorForFalseTest()) +
                                     "\nEmin: " + String.format(Locale.ROOT, "%.7f", -((RTCCommand) item).getErrorForFalseTest()) +
@@ -2698,6 +2698,10 @@ public class TestErrorTableFrameController {
                 stendDLLCommands.cutNeutral(1);
             }
 
+            stendDLLCommands.setReviseMode(Integer.parseInt(ConsoleHelper.properties.getProperty("reviseMode")));
+        }catch (StendConnectionException ignored) {}
+
+        try {
             if (ConsoleHelper.properties.getProperty("reviseOff").equals("F")) {
                 stendDLLCommands.setNoRevise(false);
             } else {
@@ -2705,10 +2709,8 @@ public class TestErrorTableFrameController {
             }
 
             stendDLLCommands.setReviseTime(Double.parseDouble(ConsoleHelper.properties.getProperty("reviseTime")));
-            stendDLLCommands.setReviseMode(Integer.parseInt(ConsoleHelper.properties.getProperty("reviseMode")));
-        }catch (StendConnectionException e) {
-            e.printStackTrace();
-        }
+
+        }catch (StendConnectionException ignored) {}
     }
 
     public static void refreshRefMeterParameters() throws InterruptedException {
@@ -2820,7 +2822,7 @@ public class TestErrorTableFrameController {
         paneErrors.getChildren().add(tableView);
         tabViewErrorsList.add(tableView);
 
-        //Добавляю всплывающие окна с результатами прошлых тестов
+        //Добавляю всплывающие окна с результатами прошлых измерений
         tableView.setRowFactory(tv -> new TableRow<Meter.CommandResult>() {
             private Tooltip tooltip = new Tooltip();
 
@@ -2957,7 +2959,7 @@ public class TestErrorTableFrameController {
     //Блокирует кнопки управления от пользователя на заданное время
     private void blockControlBtns(int mls) {
 
-        new Thread(new Task() {
+        blockButtonsThread = new Thread(new Task() {
             @Override
             protected Object call() {
 
@@ -2971,9 +2973,7 @@ public class TestErrorTableFrameController {
 
                 try {
                     Thread.sleep(mls);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                } catch (InterruptedException ignore) {}
 
                 Platform.runLater(() -> {
                     tabViewCommandsPane.setCursor(Cursor.DEFAULT);
@@ -2984,11 +2984,15 @@ public class TestErrorTableFrameController {
 
                 return null;
             }
-        }).start();
+        });
+
+        blockButtonsThread.start();
     }
 
     //Действие при возникновении дисконекта от устаноки
     private void cathConnectionException(Throwable e) {
+
+        blockButtonsThread.interrupt();
 
         Platform.runLater(new Runnable() {
             @Override
@@ -2997,11 +3001,12 @@ public class TestErrorTableFrameController {
                 tglBtnAuto.setSelected(false);
                 tglBtnManualMode.setSelected(false);
                 tglBtnUnom.setSelected(false);
+
                 blockTypeEnergyAndDirectionBtns.setValue(false);
             }
         });
 
-        ConsoleHelper.infoException("Потеряна связь с установкой\n" + e.getMessage());
+        ConsoleHelper.infoException("Потеряна связь с установкой.\nПроверьте выставлен ли режим \"Онлайн\" и подключение интерфейса связи.\n" + e.getMessage());
 
         selectedCommand.removeListener(automaticListChangeListener);
         selectedCommand.removeListener(manualListChangeListener);

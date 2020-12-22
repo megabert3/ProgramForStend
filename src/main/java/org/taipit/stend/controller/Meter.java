@@ -1093,6 +1093,7 @@ public class Meter implements Serializable {
                             sb.append(i).append(": ").append(results[i]).append("\n");
                         }
                     }
+
                     errorsForTips.setValue(sb.toString());
                 }
             });

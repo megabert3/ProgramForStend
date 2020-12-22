@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="140.0" prefWidth="360.0" style="-fx-background-color: #303030;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.taipit.stend.controller.viewController.ExceptionFrameController">
    <children>
-      <Button fx:id="okBtn" layoutX="137.0" layoutY="93.0" mnemonicParsing="false" onAction="#okAction" prefHeight="34.0" prefWidth="116.0" style="-fx-background-color: #FFC107;" text="Хорошо" />
+      <Button fx:id="okBtn" layoutX="137.0" layoutY="93.0" mnemonicParsing="false" onAction="#okAction" prefHeight="34.0" prefWidth="116.0" style="-fx-background-color: #FFC107; -fx-background-radius: 0;" text="Хорошо" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="137.0" />
       <Label fx:id="label" layoutX="122.0" layoutY="35.0" text="Label" textFill="WHITE">
          <padding>
             <Insets right="10.0" />
