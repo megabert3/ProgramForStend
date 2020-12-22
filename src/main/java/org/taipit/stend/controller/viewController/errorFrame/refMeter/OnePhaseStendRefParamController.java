@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.helper.exeptions.StendConnectionException;
 import org.taipit.stend.model.stend.StendDLLCommands;
 
 import java.util.Arrays;
@@ -36,6 +37,7 @@ public class OnePhaseStendRefParamController implements StendRefParametersForFra
     //Флаги для отображения в GUI по каким фаза ошибка
     //Ошибка по цепи напряжения
     private boolean Uerr;
+
     //Ошибка по цепи тока
     private boolean Ierr;
 
@@ -93,15 +95,15 @@ public class OnePhaseStendRefParamController implements StendRefParametersForFra
     }
 
     /**
-     * Получает значения параметров от эталонного счётчика
-     * парсит их и выводит в GUI
-     * @throws InterruptedException
+     * Убрать
      */
     public void readParameters() throws InterruptedException {
-        String[] meterParam = stendDLLCommands.stMeterRead().split(",");
+
         // Пример возвращаемой строки от эталонного счётчика:
         // U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq
         try {
+            String[] meterParam = stendDLLCommands.stMeterRead().split(",");
+
             if (meterParam.length == 7) {
                 if (refTypeHY5303C22) {
                     txtFldU.setText(meterParam[0]);
@@ -114,21 +116,21 @@ public class OnePhaseStendRefParamController implements StendRefParametersForFra
                 }
                 equalsParan(meterParam[0], meterParam[1]);
             }
-        }catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
+        }catch (StendConnectionException ignore) {}
     }
 
+
     /**
-     * Убрать
+     * Получает значения параметров от эталонного счётчика
+     * парсит их и выводит в GUI
+     * @throws InterruptedException
      */
     @Override
     public void readParametersWithoutCheckingParan() {
-        String[] meterParam = stendDLLCommands.stMeterRead().split(",");
         //U,I,UI_Angle,A.P.,R.P.,Apparent power, Freq
-        System.out.println(Arrays.toString(meterParam));
-
         try {
+            String[] meterParam = stendDLLCommands.stMeterRead().split(",");
+
             if (meterParam.length == 7) {
                 if (refTypeHY5303C22) {
                     txtFldU.setText(meterParam[0]);
@@ -139,11 +141,8 @@ public class OnePhaseStendRefParamController implements StendRefParametersForFra
                     txtFldS.setText(meterParam[5]);
                     txtFldF.setText(meterParam[6]);
                 }
-
             }
-        }catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
+        }catch (StendConnectionException ignore) {}
     }
 
 

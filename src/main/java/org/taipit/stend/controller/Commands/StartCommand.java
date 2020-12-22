@@ -167,8 +167,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-        TestErrorTableFrameController.transferParam(this);
-
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -197,13 +195,9 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         setTestMode();
 
         Thread.sleep(5000); //Пауза для стабилизации
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
 
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
         setDefTestResults(channelFlag, index);
@@ -237,9 +231,9 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         }
 
         if (pulseValue == 1) {
-            startTestModeSearchMark(refMeterCount, countResult);
+            startTestModeSearchMark(countResult);
         } else {
-            startTestModeCount(refMeterCount, countResult);
+            startTestModeCount(countResult);
         }
 
         timer.cancel();
@@ -270,8 +264,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-        TestErrorTableFrameController.transferParam(this);
-
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -298,8 +290,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         Thread.sleep(5000);
 
         if (Thread.currentThread().isInterrupted()) {
@@ -317,8 +307,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             setDefTestResults(channelFlag, index);
 
             setTestMode();
-
-            TestErrorTableFrameController.refreshRefMeterParameters();
 
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + userTimeTest;
@@ -345,9 +333,9 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             timer.schedule(timerTask, 0, 275);
 
             if (pulseValue == 1) {
-                startTestModeSearchMark(refMeterCount, countResult);
+                startTestModeSearchMark(countResult);
             } else {
-                startTestModeCount(refMeterCount, countResult);
+                startTestModeCount(countResult);
             }
 
             timer.cancel();
@@ -379,16 +367,12 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
     /**
      * Логика работы по поску одного импульса, если счётчик выдал один импульс, то считается, что он прошёл тест
-     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
      * @param countResult - номер измерения
      * @throws InterruptedException
      */
-    private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, StendConnectionException {
+    private void startTestModeCount(int countResult) throws InterruptedException, StendConnectionException {
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
 
-            if (refMeterCount % 8 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -412,24 +396,17 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
-            refMeterCount++;
-
             Thread.sleep(400);
         }
     }
 
     /**
      * Логика работы по поску одного импульса, если счётчик выдал один импульс, то считается, что он прошёл тест
-     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
      * @param countResult - номер измерения
      * @throws InterruptedException
      */
-    private void startTestModeSearchMark(int refMeterCount, int countResult) throws InterruptedException {
+    private void startTestModeSearchMark(int countResult) throws InterruptedException {
         while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-
-            if (refMeterCount % 8 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -452,8 +429,6 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                     }
                 }
             }
-
-            refMeterCount++;
 
             Thread.sleep(400);
         }

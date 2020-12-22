@@ -203,6 +203,7 @@ public class SaveResultsTestFrame {
                     //Закрываю окно теста
                     Stage stageTestErrorTableFraneControler = (Stage) testErrorTableFrameController.getTxtLabInom().getScene().getWindow();
                     stageTestErrorTableFraneControler.close();
+                    testErrorTableFrameController.getRefMeterThread().interrupt();
                     testErrorTableFrameController.getRefMeterStage().close();
                     FrameManager.frameManagerInstance().setTestErrorTableFrameController(null);
                 }

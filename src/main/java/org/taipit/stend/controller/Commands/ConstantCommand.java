@@ -1,8 +1,6 @@
 package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
-import org.taipit.stend.controller.viewController.errorFrame.refMeter.OnePhaseStendRefParamController;
-import org.taipit.stend.controller.viewController.errorFrame.refMeter.ThreePhaseStendRefParamController;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
@@ -188,8 +186,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        int refMeterCount = 1;
-
         timer = new Timer(true);
         constantThread = Thread.currentThread();
 
@@ -240,27 +236,17 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 /**
                  * Переделать реализацию
                  */
-                //Передаю необходимые параметры для эталонного счётчика ()
-                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
-                        voltPerA * (ratedVolt / 100), voltPerB * (ratedVolt / 100), voltPerC * (ratedVolt / 100), 0.0, 0.0, 0.0);
 
                 //Устанавливаю необходимые ток и напряжение для испытания
                 stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
             } else {
 
-                //Передаю необходимые параметры для эталонного счётчика
-                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
-                        voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), 0.0, 0.0, 0.0);
-
                 stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPer, currPer, iABC, cosP);
             }
             //Если испытание проводится на однофазном стенде
         } else {
-            //Передаю необходимые параметры для эталонного счётчика
-            ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
-                    voltPer * (ratedVolt / 100), 0.0);
 
             if (iABC.equals("H")) {
                 stendDLLCommands.selectCircuit(0);
@@ -285,8 +271,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         //Пауза для включения счётчиков (необходимо вывести в GUI)
         Thread.sleep(5000);
 
@@ -297,8 +281,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
         for (Meter meter : meterForTestList) {
             stendDLLCommands.constTestStart(meter.getId(), constantMeter);
         }
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -331,13 +313,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     } else timer.cancel();
                 }
             };
-
-            //Передаю параметры, которые должны быть выставлены
-            TestErrorTableFrameController.transferParam(this);
-
-            if (Thread.currentThread().isInterrupted()) {
-                throw new InterruptedException();
-            }
 
             //Выставляю напряжение и ток необходимые для проведения испытания
             if (stendDLLCommands instanceof ThreePhaseStend) {
@@ -384,8 +359,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 throw new InterruptedException();
             }
 
-            TestErrorTableFrameController.refreshRefMeterParameters();
-
             //Запускаю проверку на то, что все счётчики запустили и передают показания
             timer.schedule(timerTask, 10000);
 
@@ -395,10 +368,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             //Отображаю время испытаний в GUI
             while (System.currentTimeMillis() < timeEnd) {
-
-                if (refMeterCount % 7 == 0) {
-                    TestErrorTableFrameController.refreshRefMeterParameters();
-                }
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
@@ -415,14 +384,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     errorResult.setLastResultForTabView("N" + strTime);
                 }
 
-                refMeterCount++;
-
                 Thread.sleep(275);
             }
 
             stendDLLCommands.powerOf();
-
-            TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
 
             //Получаю результат теста для каждого счётчика
             Double result;
@@ -477,12 +442,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
             double refMeterEnergy = 0;
 
-            TestErrorTableFrameController.transferParam(this);
-
-            if (Thread.currentThread().isInterrupted()) {
-                throw new InterruptedException();
-            }
-
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 if (!threePhaseCommand) {
 
@@ -527,8 +486,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 throw new InterruptedException();
             }
 
-            TestErrorTableFrameController.refreshRefMeterParameters();
-
             timer.schedule(timerTask, 7000);
 
             Meter.ConstantResult constantResult;
@@ -538,9 +495,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             //Тут я постоянно считывю энергию, которую посчитал сам стенд и если она равна энергии теста ,то выключаю ток и считываю, что насчитал сам счётчик
             while (kWToTest > refMeterEnergy) {
 
-                if (refMeterCount % 4 == 0) {
-                    TestErrorTableFrameController.refreshRefMeterParameters();
-                }
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
@@ -563,14 +517,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     }
                 }
 
-                refMeterCount++;
-
                 Thread.sleep(1000);
             }
 
             stendDLLCommands.powerOf();
-
-            TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
 
             //Получаю результат
             double result;
@@ -646,25 +596,14 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     case "C": voltPerC = voltPer; break;
                 }
 
-                //Передаю необходимые параметры для эталонного счётчика
-                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
-                        voltPerA * (ratedVolt / 100), voltPerB * (ratedVolt / 100), voltPerC * (ratedVolt / 100), 0.0, 0.0, 0.0);
-
                 stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
             } else {
-
-                //Передаю необходимые параметры для эталонного счётчика
-                ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
-                        voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), 0.0, 0.0, 0.0);
 
                 stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPer, currPer, iABC, cosP);
             }
         } else {
-            //Передаю необходимые параметры для эталонного счётчика
-            ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
-                    voltPer * (ratedVolt / 100), 0.0);
 
             if (iABC.equals("H")) {
                 stendDLLCommands.selectCircuit(0);
@@ -689,22 +628,15 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         Thread.sleep(5000);
 
         for (Meter meter : meterForTestList) {
             meter.returnResultCommand(index, channelFlag).setLastResultForTabView("N");
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         while (Thread.currentThread().isAlive()) {
 
             timer = new Timer(true);
-
-            int refMeterCount = 1;
 
             for (Meter meter : meterForTestList) {
                 stendDLLCommands.constTestStart(meter.getId(), constantMeter);
@@ -738,14 +670,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         } else timer.cancel();
                     }
                 };
-
-                TestErrorTableFrameController.refreshRefMeterParameters();
-
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new InterruptedException();
-                }
-
-                TestErrorTableFrameController.transferParam(this);
 
                 if (stendDLLCommands instanceof ThreePhaseStend) {
                     if (!threePhaseCommand) {
@@ -793,16 +717,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 timer.schedule(timerTask, 10000);
 
-                TestErrorTableFrameController.refreshRefMeterParameters();
-
                 timeStart = System.currentTimeMillis();
                 timeEnd = timeStart + timeTheTest;
 
                 while (System.currentTimeMillis() < timeEnd) {
-
-                    if (refMeterCount % 7 == 0) {
-                        TestErrorTableFrameController.refreshRefMeterParameters();
-                    }
 
                     if (Thread.currentThread().isInterrupted()) {
                         throw new InterruptedException();
@@ -819,14 +737,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         errorResult.setLastResultForTabView("N" + strTime);
                     }
 
-                    refMeterCount++;
-
                     Thread.sleep(275);
                 }
 
                 stendDLLCommands.powerOf();
-
-                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 //Получаю результат
                 double result;
@@ -874,12 +788,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                     }
                 };
 
-                TestErrorTableFrameController.transferParam(this);
-
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new InterruptedException();
-                }
-
                 if (stendDLLCommands instanceof ThreePhaseStend) {
                     if (!threePhaseCommand) {
 
@@ -926,17 +834,11 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
 
                 timer.schedule(timerTask, 10000);
 
-                TestErrorTableFrameController.refreshRefMeterParameters();
-
                 Meter.ConstantResult constantResult;
                 String[] kw;
                 double hightKw;
 
                 while (kWToTest > refMeterEnergy) {
-
-                    if (refMeterCount % 4 == 0) {
-                        TestErrorTableFrameController.refreshRefMeterParameters();
-                    }
 
                     if (Thread.currentThread().isInterrupted()) {
                         throw new InterruptedException();
@@ -959,14 +861,10 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         }
                     }
 
-                    refMeterCount++;
-
                     Thread.sleep(1000);
                 }
 
                 stendDLLCommands.powerOf();
-
-                TestErrorTableFrameController.refreshRefMeterParameters();
 
                 //Получаю результат
                 double result;
@@ -993,8 +891,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
-            TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
-
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
             }
@@ -1007,8 +903,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 throw new InterruptedException();
             }
 
-            TestErrorTableFrameController.transferParam(this);
-
             if (stendDLLCommands instanceof ThreePhaseStend) {
                 if (!threePhaseCommand) {
 
@@ -1020,25 +914,14 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                         case "C": voltPerC = voltPer; break;
                     }
 
-                    //Передаю необходимые параметры для эталонного счётчика
-                    ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
-                            voltPerA * (ratedVolt / 100), voltPerB * (ratedVolt / 100), voltPerC * (ratedVolt / 100), 0.0, 0.0, 0.0);
-
                     stendDLLCommands.getUIWithPhase(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                             voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
                 } else {
-
-                    //Передаю необходимые параметры для эталонного счётчика
-                    ((ThreePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters(
-                            voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), voltPer * (ratedVolt / 100), 0.0, 0.0, 0.0);
 
                     stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                             voltPer, currPer, iABC, cosP);
                 }
             } else {
-                //Передаю необходимые параметры для эталонного счётчика
-                ((OnePhaseStendRefParamController) TestErrorTableFrameController.getRefMeterController()).transferParameters (
-                        voltPer * (ratedVolt / 100), 0.0);
 
                 if (iABC.equals("H")) {
                     stendDLLCommands.selectCircuit(0);
@@ -1058,8 +941,6 @@ public class ConstantCommand implements Commands, Serializable, Cloneable {
                 stendDLLCommands.getUI(phase, ratedVolt, 0, ratedFreq, phaseSrequence, revers,
                         voltPer, currPer, iABC, cosP);
             }
-
-            TestErrorTableFrameController.refreshRefMeterParametersWithoutChecking();
 
             stendDLLCommands.errorClear();
 

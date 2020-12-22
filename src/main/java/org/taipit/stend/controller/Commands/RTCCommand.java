@@ -131,8 +131,6 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.transferParam(this);
-
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -162,12 +160,8 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         //Время на включение счётчиков
         Thread.sleep(2000);
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -250,8 +244,6 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.transferParam(this);
-
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -280,12 +272,8 @@ public class RTCCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         //Время стабилизации
         Thread.sleep(2000);
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();

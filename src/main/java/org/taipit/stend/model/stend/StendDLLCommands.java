@@ -174,13 +174,13 @@ public abstract class StendDLLCommands {
     }
 
     //Получить данные с эталонного счётчика счетчика
-    public synchronized String stMeterRead() {
+    public synchronized String stMeterRead() throws StendConnectionException {
         PointerByReference pointer = new PointerByReference(new Memory(1024));
 
         boolean b = stend.StdMeter_Read(pointer, typeReferenceMeter, port);
 
         if (!b) {
-            System.out.println("Не удалось считать значения эталонного счётчика");
+            throw new StendConnectionException("Не удалось считать значения эталонного счётчика");
         }
 
         return pointer.getValue().getString(0, "ASCII");

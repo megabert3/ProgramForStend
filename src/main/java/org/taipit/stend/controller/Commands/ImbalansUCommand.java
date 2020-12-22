@@ -2,7 +2,6 @@ package org.taipit.stend.controller.Commands;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.model.stend.StendDLLCommands;
-import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.exeptions.StendConnectionException;
 
 import java.io.Serializable;
@@ -170,8 +169,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        int refMeterCount = 1;
-
         //Выбор константы в зависимости от энергии
         if (channelFlag < 2) {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
@@ -191,8 +188,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.transferParam(this);
-
         stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
 
@@ -200,11 +195,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         Thread.sleep((long) pauseForStabilization * 1000);
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -238,10 +229,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         double doubleErr;
 
         while (flagInStop.containsValue(false)) {
-
-            if (refMeterCount % 11 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -284,7 +271,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
-            refMeterCount++;
             Thread.sleep(300);
         }
 
@@ -297,8 +283,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
-
-        int refMeterCount = 1;
 
         //Выбор константы в зависимости от энергии
         if (channelFlag < 2) {
@@ -317,8 +301,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.transferParam(this);
-
         stendDLLCommands.getUIWithPhase(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                 voltPerA, voltPerB, voltPerC, currPer, iABC, cosP);
 
@@ -326,11 +308,7 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         Thread.sleep((long) pauseForStabilization * 1000);
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -361,10 +339,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
 
         while (Thread.currentThread().isAlive()) {
 
-            if (refMeterCount % 11 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
-
             for (Meter meter : meterForTestList) {
 
                 if (Thread.currentThread().isInterrupted()) {
@@ -393,7 +367,6 @@ public class ImbalansUCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
-            refMeterCount++;
             Thread.sleep(300);
         }
 

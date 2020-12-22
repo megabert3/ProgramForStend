@@ -158,8 +158,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-        TestErrorTableFrameController.transferParam(this);
-
         // Если установка трехвазная
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
@@ -189,8 +187,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         stendDLLCommands.errorClear();
 
         //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию
@@ -200,8 +196,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         setTestMode();
 
         Thread.sleep(3000);
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
 
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
@@ -234,9 +228,9 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
         //Непосредственно само выполнение теста
         if (pulseValue == 1) {
-            startTestModeSearchMark(refMeterCount, countResult);
+            startTestModeSearchMark(countResult);
         } else {
-            startTestModeCount(refMeterCount, countResult);
+            startTestModeCount(countResult);
         }
 
         timer.cancel();
@@ -273,8 +267,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
         int countResult = 1;
         Meter.CreepResult creepResult;
 
-        TestErrorTableFrameController.transferParam(this);
-
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -303,8 +295,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         Thread.sleep(3000);
 
         while (Thread.currentThread().isAlive()) {
@@ -323,7 +313,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
             timer = new Timer(true);
 
-            TestErrorTableFrameController.refreshRefMeterParameters();
 
             timerTask = new TimerTask() {
                 @Override
@@ -349,9 +338,9 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
             }
 
             if (pulseValue == 1) {
-                startTestModeSearchMark(refMeterCount, countResult);
+                startTestModeSearchMark(countResult);
             } else {
-                startTestModeCount(refMeterCount, countResult);
+                startTestModeCount(countResult);
             }
 
             timer.cancel();
@@ -404,17 +393,12 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
 
     /**
      * Логика работы по поску более одного импульса, если счётчик выдал более одного импульса, то считается, что он провалил тест
-     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
      * @param countResult - номер измерения
      * @throws InterruptedException
      * @throws StendConnectionException
      */
-    private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, StendConnectionException {
+    private void startTestModeCount(int countResult) throws InterruptedException, StendConnectionException {
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
-
-            if (refMeterCount % 8 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -439,25 +423,18 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
-            refMeterCount++;
-
             Thread.sleep(400);
         }
     }
 
     /**
      * Логика работы по поску одного импульса, если счётчик выдал один импульс, то считается, что он провалил тест
-     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
      * @param countResult - номер измерения
      * @throws InterruptedException
      */
-    private void startTestModeSearchMark(int refMeterCount, int countResult) throws InterruptedException {
+    private void startTestModeSearchMark(int countResult) throws InterruptedException {
         //Продолжать тест пока либо все счётчики не провалили его либо не вышло время испытания
         while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
-
-            if (refMeterCount % 8 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -481,8 +458,6 @@ public class CreepCommand implements Commands, Serializable, Cloneable {
                     }
                 }
             }
-
-            refMeterCount++;
 
             Thread.sleep(400);
         }

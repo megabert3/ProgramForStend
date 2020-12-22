@@ -64,7 +64,7 @@ public class TestErrorTableFrameController {
     private static Button btnStopStatic;
 
     //Статическая ссылка на окно параметров получаемых из эталонного счётчика
-    private static StendRefParametersForFrame stendRefParametersForFrame;
+    private StendRefParametersForFrame stendRefParametersForFrame;
 
     //Какую фазу необходимо использовать у трехфазного стенда, если на него навешан однофазный счётчик
     public static String phaseOnePhaseMode = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
@@ -146,7 +146,7 @@ public class TestErrorTableFrameController {
     private Thread UnomThread = new Thread();
 
     //Поток получения информации от эталонного счётчика в ходе испытаний
-    private Thread refMeterThread = new Thread();
+    private Thread refMeterThread;
 
     //Поток блокировки кнопок
     private Thread blockButtonsThread;
@@ -182,7 +182,6 @@ public class TestErrorTableFrameController {
                 public void run() {
                     try {
                         try {
-                            refreshRefMeterParametersWithoutChecking();
                             stendDLLCommands.setRefClock(0);
                             stendDLLCommands.errorClear();
 
@@ -216,7 +215,6 @@ public class TestErrorTableFrameController {
                 public void run() {
                     try {
                         try {
-                            refreshRefMeterParametersWithoutChecking();
                             stendDLLCommands.setRefClock(0);
                             stendDLLCommands.errorClear();
 
@@ -408,21 +406,6 @@ public class TestErrorTableFrameController {
                 selectedCommand.removeListener(manualListChangeListener);
                 selectedCommand.removeListener(automaticListChangeListener);
 
-                /**
-                 * Удалить
-                 */
-                //Обновляю информацию из окна эталонного счётчика
-                refMeterThread = new Thread(() -> {
-                    for (int i = 0; i < 2; i++) {
-                        try {
-                            Thread.sleep(1000);
-                            refreshRefMeterParametersWithoutChecking();
-                        } catch (InterruptedException ignore) {}
-                    }
-
-                });
-                refMeterThread.start();
-
                 try {
                     //Отчищаю табло погрешности на установке и отключаю мощность
                     stendDLLCommands.errorClear();
@@ -444,6 +427,25 @@ public class TestErrorTableFrameController {
                 }
             }
         });
+
+        //Запускаю считывание параметров с эталонного счётчика
+        refMeterThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while (!Thread.currentThread().isInterrupted()) {
+
+                    stendRefParametersForFrame.readParametersWithoutCheckingParan();
+                    try {
+                        Thread.sleep(3000);
+                    }catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            }
+        });
+
+        refMeterThread.start();
 
         checBoxePane.toFront();
     }
@@ -501,7 +503,7 @@ public class TestErrorTableFrameController {
 
             //Если в этот момент тест ещё идёт
             if (blockTypeEnergyAndDirectionBtns.getValue() || startUnTest) {
-                ConsoleHelper.infoException("Для того чтобы выйти, необходимо остановить тест");
+                ConsoleHelper.infoException("Необходимо остановить тест");
 
                 //Если тест не идёт
             } else {
@@ -516,6 +518,8 @@ public class TestErrorTableFrameController {
 
                         //Если пользователь нажал не сохранять
                     } else {
+                        refMeterThread.interrupt();
+
                         Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
                         refMeterStage.close();
                         testErrorTableFrameControllerStage.close();
@@ -568,10 +572,6 @@ public class TestErrorTableFrameController {
                 startUnTest = false;
 
                 //Если установка работает в других режимах, то завершаю их
-                if (refMeterThread.isAlive()) {
-                    refMeterThread.interrupt();
-                }
-
                 if (manualTestThread.isAlive()) {
                     manualTestThread.interrupt();
                     selectedCommand.removeListener(manualListChangeListener);
@@ -588,12 +588,10 @@ public class TestErrorTableFrameController {
                     @Override
                     public void run() {
                         try {
+                            stendDLLCommands.setRefClock(0);
+                            stendDLLCommands.errorClear();
+
                             try {
-
-                                stendDLLCommands.setRefClock(0);
-                                stendDLLCommands.errorClear();
-                                refreshRefMeterParametersWithoutChecking();
-
                                 startAutomaticTest();
 
                             } catch (InterruptedException ignore) { }
@@ -630,10 +628,6 @@ public class TestErrorTableFrameController {
                 startUnTest = false;
 
                 //Останавливаю другие режимы
-                if (refMeterThread.isAlive()) {
-                    refMeterThread.interrupt();
-                }
-
                 if (automaticTestThread.isAlive()) {
                     automaticTestThread.interrupt();
                     selectedCommand.removeListener(automaticListChangeListener);
@@ -650,13 +644,12 @@ public class TestErrorTableFrameController {
                     @Override
                     public void run() {
                         try {
+                            stendDLLCommands.setRefClock(0);
+                            stendDLLCommands.errorClear();
+
                             try {
-
-                                stendDLLCommands.setRefClock(0);
-                                stendDLLCommands.errorClear();
-                                refreshRefMeterParametersWithoutChecking();
-
                                 startManualTest();
+
                             } catch (InterruptedException ignore) { }
 
                         } catch (StendConnectionException e) {
@@ -686,10 +679,6 @@ public class TestErrorTableFrameController {
                 startUnTest = true;
 
                 //Завершаю работу других режимов работы
-                if (refMeterThread.isAlive()) {
-                    refMeterThread.interrupt();
-                }
-
                 if (automaticTestThread.isAlive()) {
                     automaticTestThread.interrupt();
                     selectedCommand.removeListener(automaticListChangeListener);
@@ -2638,7 +2627,6 @@ public class TestErrorTableFrameController {
                     try {
                         fxmlLoader.load();
                     } catch (IOException e) {
-                        e.printStackTrace();
                         System.out.println("Ошибка при загрузке окна.");
                     }
 
@@ -2668,7 +2656,6 @@ public class TestErrorTableFrameController {
                     try {
                         fxmlLoader.load();
                     } catch (IOException e) {
-                        e.printStackTrace();
                         System.out.println("Ошибка при загрузке окна.");
                     }
 
@@ -2711,22 +2698,6 @@ public class TestErrorTableFrameController {
             stendDLLCommands.setReviseTime(Double.parseDouble(ConsoleHelper.properties.getProperty("reviseTime")));
 
         }catch (StendConnectionException ignored) {}
-    }
-
-    public static void refreshRefMeterParameters() throws InterruptedException {
-        stendRefParametersForFrame.readParameters();
-    }
-
-    public static void refreshRefMeterParametersWithoutChecking() {
-        stendRefParametersForFrame.readParametersWithoutCheckingParan();
-    }
-
-    public static void transferParam(Commands command) {
-        stendRefParametersForFrame.transferParameters(command);
-    }
-
-    public static StendRefParametersForFrame getRefMeterController() {
-        return stendRefParametersForFrame.getStendRefParametersForFrame();
     }
 
     /**
@@ -3138,5 +3109,9 @@ public class TestErrorTableFrameController {
 
     public Stage getTestErrorTableFrameStage() {
         return (Stage) btnExit.getScene().getWindow();
+    }
+
+    public Thread getRefMeterThread() {
+        return refMeterThread;
     }
 }

@@ -214,8 +214,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        int refMeterCount = 1;
-
         //Выбор константы счётчика в зависимости от энергии
         if (channelFlag < 2) {
             constantMeter = Integer.parseInt(meterForTestList.get(0).getConstantMeterAP());
@@ -239,8 +237,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         if (param.equals("F")) {
             ratedFreq = ratedFreq * new BigDecimal(procentParan / 100).setScale(5, RoundingMode.HALF_UP).doubleValue();
         }
-
-        TestErrorTableFrameController.transferParam(this);
 
         //Выставляю параметры выбранные пользователем
         if (stendDLLCommands instanceof ThreePhaseStend) {
@@ -280,11 +276,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         Thread.sleep((long) pauseForStabilization * 1000);
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -321,10 +313,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
-            }
-
-            if (refMeterCount % 11 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
             }
 
             //Пробегаюсь по счётчикам и узнаю погрешность
@@ -369,8 +357,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
-            refMeterCount++;
-
             Thread.sleep(300);
         }
 
@@ -388,8 +374,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
-
-        int refMeterCount = 1;
 
         //Выбор константы в зависимости от энергии
         if (channelFlag < 2) {
@@ -411,8 +395,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         if (param.equals("F")) {
             ratedFreq = new BigDecimal(ratedFreq * (procentParan / 100)).setScale(5, RoundingMode.HALF_UP).doubleValue();
         }
-
-        TestErrorTableFrameController.transferParam(this);
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
@@ -452,11 +434,7 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         Thread.sleep((long) pauseForStabilization * 1000);
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -484,10 +462,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
         //Выполнять до тех пор пока пользователь не сменил точку испытания
         while (Thread.currentThread().isAlive()) {
 
-            if (refMeterCount % 11 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
-
             for (Meter meter : meterForTestList) {
 
                 if (Thread.currentThread().isInterrupted()) {
@@ -514,8 +488,6 @@ public class ErrorCommand implements Commands, Serializable, Cloneable {
                     }
                 }
             }
-
-            refMeterCount++;
 
             Thread.sleep(300);
         }

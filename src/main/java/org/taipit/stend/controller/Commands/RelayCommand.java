@@ -146,8 +146,6 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-        TestErrorTableFrameController.transferParam(this);
-
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -176,13 +174,9 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         setTestMode();
 
         Thread.sleep(2000);
-
-        TestErrorTableFrameController.refreshRefMeterParameters();
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
@@ -220,9 +214,9 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
         }
 
         if (pulseValue == 1) {
-            startTestModeSearchMark(refMeterCount, countResult);
+            startTestModeSearchMark(countResult);
         } else {
-            startTestModeCount(refMeterCount, countResult);
+            startTestModeCount(countResult);
         }
 
         timer.cancel();
@@ -253,8 +247,6 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
-        TestErrorTableFrameController.transferParam(this);
-
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
@@ -281,8 +273,6 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        TestErrorTableFrameController.refreshRefMeterParameters();
-
         Thread.sleep(2000);
 
         if (Thread.currentThread().isInterrupted()) {
@@ -300,8 +290,6 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
             setDefTestResults(channelFlag, index);
 
             setTestMode();
-
-            TestErrorTableFrameController.refreshRefMeterParameters();
 
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + userTimeTest;
@@ -328,9 +316,9 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
             timer.schedule(timerTask, 0, 275);
 
             if (pulseValue == 1) {
-                startTestModeSearchMark(refMeterCount, countResult);
+                startTestModeSearchMark(countResult);
             } else {
-                startTestModeCount(refMeterCount, countResult);
+                startTestModeCount(countResult);
             }
 
             timer.cancel();
@@ -362,17 +350,12 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
 
     /**
      * Логика работы по поску более одного импульса, если счётчик выдал более одного импульса, то считается, что он провалил тест
-     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
      * @param countResult - номер измерения
      * @throws InterruptedException
      * @throws StendConnectionException
      */
-    private void startTestModeCount(int refMeterCount, int countResult) throws InterruptedException, StendConnectionException {
+    private void startTestModeCount(int countResult) throws InterruptedException, StendConnectionException {
         while (relayCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
-
-            if (refMeterCount % 8 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -396,24 +379,17 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
                 }
             }
 
-            refMeterCount++;
-
             Thread.sleep(400);
         }
     }
 
     /**
      * Логика работы по поиску одного импульса, если счётчик выдал один импульс, то считается, что он провалил тест
-     * @param refMeterCount - передаёт значение для обновления данных параметров эталонного счётчика в GUI
      * @param countResult - номер измерения
      * @throws InterruptedException
      */
-    private void startTestModeSearchMark(int refMeterCount, int countResult) throws InterruptedException {
+    private void startTestModeSearchMark(int countResult) throws InterruptedException {
         while (relayCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
-
-            if (refMeterCount % 8 == 0) {
-                TestErrorTableFrameController.refreshRefMeterParameters();
-            }
 
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
@@ -436,8 +412,6 @@ public class RelayCommand implements Commands, Serializable, Cloneable {
                     }
                 }
             }
-
-            refMeterCount++;
 
             Thread.sleep(400);
         }

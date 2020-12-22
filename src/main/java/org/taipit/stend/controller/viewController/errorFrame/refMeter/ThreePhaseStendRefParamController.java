@@ -10,6 +10,7 @@ import org.taipit.stend.controller.Commands.Commands;
 import org.taipit.stend.controller.Commands.ImbalansUCommand;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.helper.exeptions.StendConnectionException;
 import org.taipit.stend.model.stend.StendDLLCommands;
 
 import java.util.Arrays;
@@ -178,8 +179,10 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
         this.stendDLLCommands = stendDLLCommands;
 
         String typeRefMeter = stendDLLCommands.getTypeReferenceMeter();
+
         if (typeRefMeter.equals("HY5303C-22") || typeRefMeter.equals("SY3302")) {
             refTypeHY5303C22 = true;
+
         } else if (typeRefMeter.equals("HS5320") || typeRefMeter.equals("SY3102")) {
             refTypeHY5303C22 = false;
         }
@@ -191,10 +194,10 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
      * @throws InterruptedException
      */
     public void readParametersWithoutCheckingParan() {
-        String[] meterParam = stendDLLCommands.stMeterRead().split(",");
-        System.out.println(Arrays.toString(meterParam));
 
         try {
+            String[] meterParam = stendDLLCommands.stMeterRead().split(",");
+
             if (meterParam.length == 28) {
                 if (refTypeHY5303C22) {
 
@@ -258,9 +261,7 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
                     txtFldPFall.setText(meterParam[27]);
                 }
             }
-        }catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
+        }catch (StendConnectionException ignored) {}
     }
 
     /**
@@ -269,9 +270,9 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
      * @throws InterruptedException
      */
     public void readParameters() {
-        String[] meterParam = stendDLLCommands.stMeterRead().split(",");
-
         try {
+            String[] meterParam = stendDLLCommands.stMeterRead().split(",");
+
             if (meterParam.length == 28) {
                 if (refTypeHY5303C22) {
 
@@ -338,9 +339,8 @@ public class ThreePhaseStendRefParamController implements StendRefParametersForF
                 //equalsParan(meterParam[0], meterParam[1], meterParam[2],
                 //        meterParam[3], meterParam[4], meterParam[5]);
             }
-        }catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
-            e.printStackTrace();
-        }
+
+        }catch (ArrayIndexOutOfBoundsException | NullPointerException | StendConnectionException ignored) {}
     }
 
     /**
