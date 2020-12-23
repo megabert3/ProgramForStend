@@ -46,6 +46,7 @@ import org.taipit.stend.model.metodics.Metodic;
 
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -3131,5 +3132,24 @@ public class TestErrorTableFrameController {
 
     public Thread getRefMeterThread() {
         return refMeterThread;
+    }
+
+    /**
+     * Внутренний класс для работы с несохранёнными результатами
+     * испытаний.
+     */
+    private class NotSavedResults implements Serializable {
+
+        //Директория сохранения несохранённых результатов
+        String dir = ".\\src\\main\\resources\\mwrans";
+
+
+
+        //Счётчики с несохранёнными результатами
+        private List<Meter> metersWhoseResultsAreNotSaved = new ArrayList<>();
+
+        private  NotSavedResults(){}
+
+
     }
 }
