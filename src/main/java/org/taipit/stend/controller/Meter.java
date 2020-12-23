@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.model.ResultsTest;
 import org.taipit.stend.model.metodics.Metodic;
 
 import java.io.Serializable;
@@ -343,8 +344,10 @@ public class Meter implements Serializable {
      * @param testErrorTableFrameController - окно испытаний
      */
     public void createError(Commands command, int chanelFlag , String id, TestErrorTableFrameController testErrorTableFrameController) {
-        switch (chanelFlag) {
 
+        CommandResult result = null;
+
+        switch (chanelFlag) {
             //AP+
             case 0: {
                 //Создания объекта результата теста погрешность счётчика
@@ -357,7 +360,9 @@ public class Meter implements Serializable {
                         id = errorCommand.getProcentParan() + " " + errorCommand.getId();
                     }
 
-                    errorListAPPls.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
+                    result = new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax());
+
+                    errorListAPPls.add(result);
 
                     //Создания объекта результата теста самоход
                 } else if (command instanceof CreepCommand) {
@@ -366,22 +371,27 @@ public class Meter implements Serializable {
                     //Если по госту, расчитываю и
                     //отображаю время теста
                     if (creepCommand.isGostTest()) {
-                        errorListAPPls.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()), String.valueOf(creepCommand.getPulseValue())));
+
+                        result = new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()), String.valueOf(creepCommand.getPulseValue()));
                         creepCommand.setUserTimeTest(testErrorTableFrameController.getTimeToCreepTestGOSTAP());
 
                         //То отображаю то время, которое указал пользователь
                     } else {
-                        errorListAPPls.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
+                        result = new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue()));
                     }
+
+                    errorListAPPls.add(result);
 
                     //Создания объекта результата теста чувствительность
                 } else if (command instanceof StartCommand) {
+
                     StartCommand startCommand = (StartCommand) command;
 
                     //Если по госту, расчитываю и
                     //отображаю время теста
                     if (startCommand.isGostTest()) {
-                        errorListAPPls.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()), String.valueOf(startCommand.getPulseValue())));
+
+                        result = new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()), String.valueOf(startCommand.getPulseValue()));
 
                         //Время теста для всплывающей подсказки
                         startCommand.setUserTimeTest(testErrorTableFrameController.getTimeToStartTestGOSTAP());
@@ -389,39 +399,50 @@ public class Meter implements Serializable {
 
                         //То отображаю то время, которое указал пользователь
                     } else {
-                        errorListAPPls.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
+
+                        result = new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue()));
                     }
+
+                    errorListAPPls.add(result);
 
                     //Создания объекта результата теста Точность хода часов
                 } else if (command instanceof RTCCommand) {
                     RTCCommand rtcCommand = (RTCCommand) command;
 
-                    errorListAPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
-                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC())));
+                    result = new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
+                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC()));
+
+                    errorListAPPls.add(result);
 
                     //Создания объекта результата теста проверка счётного механизма
                 } else if (command instanceof ConstantCommand) {
                     ConstantCommand constantCommand = (ConstantCommand) command;
-                    errorListAPPls.add(new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax())));
+
+                    result = new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax()));
+
+                    errorListAPPls.add(result);
 
                     //Создания объекта результата теста имбаланс напряжений
                 } else if (command instanceof ImbalansUCommand) {
 
                     ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
-                    errorListAPPls.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
+
+                    result = new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax());
+                    errorListAPPls.add(result);
 
                     //Создания объекта результата теста проверка работоспособности реле
                 } else if (command instanceof RelayCommand) {
 
-                    errorListAPPls.add(new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue())));
+                    result = new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue()));
+                    errorListAPPls.add(result);
                 }
+
             } break;
 
             //Далее логика создания такая же как и для AP+, но только для других напрявлений и типов мощности (см. комментарии там)
 
             //AP-
             case 1: {
-
 
                 if (command instanceof ErrorCommand) {
                     ErrorCommand errorCommand = (ErrorCommand) command;
@@ -430,7 +451,8 @@ public class Meter implements Serializable {
                         id = errorCommand.getProcentParan() + " " + errorCommand.getId();
                     }
 
-                    errorListAPMns.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
+                    result = new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax());
+                    errorListAPMns.add(result);
 
                 } else if (command instanceof CreepCommand) {
 
@@ -438,44 +460,65 @@ public class Meter implements Serializable {
 
                     //Отображаю время теста
                     if (creepCommand.isGostTest()) {
-                        errorListAPMns.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()), String.valueOf(creepCommand.getPulseValue())));
+
+                        result = new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTAP()), String.valueOf(creepCommand.getPulseValue()));
                         creepCommand.setUserTimeTest(testErrorTableFrameController.getTimeToCreepTestGOSTAP());
+
                     } else {
-                        errorListAPMns.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
+                        result = new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue()));
+
                     }
+
+                    errorListAPMns.add(result);
 
                 } else if (command instanceof StartCommand) {
                     StartCommand startCommand = (StartCommand) command;
 
                     //Отображаю время теста
                     if (startCommand.isGostTest()) {
-                        errorListAPMns.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()), String.valueOf(startCommand.getPulseValue())));
+
+                        result = new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTAP()), String.valueOf(startCommand.getPulseValue()));
+
                         startCommand.setUserTimeTest(testErrorTableFrameController.getTimeToStartTestGOSTAP());
                         startCommand.setRatedCurr(calculateCurrentForSTA(testErrorTableFrameController, chanelFlag));
                     } else {
-                        errorListAPMns.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
+                        result = new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue()));
                     }
+
+                    errorListAPMns.add(result);
 
                 } else if (command instanceof RTCCommand) {
 
                     RTCCommand rtcCommand = (RTCCommand) command;
-                    errorListAPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
-                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC())));
+
+                    result = new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
+                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC()));
+
+                    errorListAPMns.add(result);
 
                 } else if (command instanceof ConstantCommand) {
 
                     ConstantCommand constantCommand = (ConstantCommand) command;
-                    errorListAPMns.add(new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax())));
+
+                    result = new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax()));
+
+                    errorListAPMns.add(result);
 
                 } else if (command instanceof ImbalansUCommand) {
 
                     ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
-                    errorListAPMns.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
+
+                    result = new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax());
+
+                    errorListAPMns.add(result);
 
                 }  else if (command instanceof RelayCommand) {
 
-                    errorListAPMns.add(new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue())));
+                    result = new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue()));
+
+                    errorListAPMns.add(result);
                 }
+
             } break;
 
             //RP+
@@ -487,7 +530,9 @@ public class Meter implements Serializable {
                         id = errorCommand.getProcentParan() + " " + errorCommand.getId();
                     }
 
-                    errorListRPPls.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
+                    result = new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax());
+
+                    errorListRPPls.add(result);
 
                 } else if (command instanceof CreepCommand) {
 
@@ -495,11 +540,17 @@ public class Meter implements Serializable {
 
                     //Отображаю время теста
                     if (creepCommand.isGostTest()) {
-                        errorListRPPls.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()), String.valueOf(creepCommand.getPulseValue())));
+
+                        result = new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()), String.valueOf(creepCommand.getPulseValue()));
                         creepCommand.setUserTimeTest(testErrorTableFrameController.getTimeToCreepTestGOSTRP());
+
                     } else {
-                        errorListRPPls.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
+
+                        result = new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue()));
+
                     }
+
+                    errorListRPPls.add(result);
 
                 } else if (command instanceof StartCommand) {
 
@@ -507,32 +558,49 @@ public class Meter implements Serializable {
 
                     //Отображаю время теста
                     if (startCommand.isGostTest()) {
-                        errorListRPPls.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()), String.valueOf(startCommand.getPulseValue())));
+
+                        result = new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()), String.valueOf(startCommand.getPulseValue()));
                         startCommand.setUserTimeTest(testErrorTableFrameController.getTimeToStartTestGOSTRP());
+
                         startCommand.setRatedCurr(calculateCurrentForSTA(testErrorTableFrameController, chanelFlag));
                     } else {
-                        errorListRPPls.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
+
+                        result = new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue()));
+
                     }
+
+                    errorListRPPls.add(result);
 
                 } else if (command instanceof RTCCommand) {
 
                     RTCCommand rtcCommand = (RTCCommand) command;
-                    errorListRPPls.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
-                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC())));
+
+                    result = new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
+                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC()));
+
+                    errorListRPPls.add(result);
 
                 } else if (command instanceof ConstantCommand) {
 
                     ConstantCommand constantCommand = (ConstantCommand) command;
-                    errorListRPPls.add(new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax())));
+
+                    result = new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax()));
+
+                    errorListRPPls.add(result);
 
                 } else if (command instanceof ImbalansUCommand) {
 
                     ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
-                    errorListRPPls.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
+
+                    result = new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax());
+
+                    errorListRPPls.add(result);
 
                 } else if (command instanceof RelayCommand) {
 
-                    errorListRPPls.add(new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue())));
+                    result = new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue()));
+
+                    errorListRPPls.add(result);
                 }
             } break;
 
@@ -545,7 +613,9 @@ public class Meter implements Serializable {
                         id = errorCommand.getProcentParan() + " " + errorCommand.getId();
                     }
 
-                    errorListRPMns.add(new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax()));
+                    result = new ErrorResult(id, errorCommand.getEmin(), errorCommand.getEmax());
+
+                    errorListRPMns.add(result);
 
                 } else if (command instanceof CreepCommand) {
 
@@ -553,11 +623,15 @@ public class Meter implements Serializable {
 
                     //Отображаю время теста
                     if (creepCommand.isGostTest()) {
-                        errorListRPMns.add(new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()), String.valueOf(creepCommand.getPulseValue())));
+                        result = new CreepResult(id, getTime(testErrorTableFrameController.getTimeToCreepTestGOSTRP()), String.valueOf(creepCommand.getPulseValue()));
                         creepCommand.setUserTimeTest(testErrorTableFrameController.getTimeToCreepTestGOSTRP());
+
                     } else {
-                        errorListRPMns.add(new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue())));
+                        result = new CreepResult(id, getTime(creepCommand.getUserTimeTest()), String.valueOf(creepCommand.getPulseValue()));
+
                     }
+
+                    errorListRPMns.add(result);
 
                 } else if (command instanceof StartCommand) {
 
@@ -565,32 +639,49 @@ public class Meter implements Serializable {
 
                     //Отображаю время теста
                     if (startCommand.isGostTest()) {
-                        errorListRPMns.add(new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()), String.valueOf(startCommand.getPulseValue())));
+
+                        result = new StartResult(id, getTime(testErrorTableFrameController.getTimeToStartTestGOSTRP()), String.valueOf(startCommand.getPulseValue()));
                         startCommand.setUserTimeTest(testErrorTableFrameController.getTimeToStartTestGOSTRP());
+
                         startCommand.setRatedCurr(calculateCurrentForSTA(testErrorTableFrameController, chanelFlag));
                     } else {
-                        errorListRPMns.add(new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue())));
+                        result = new StartResult(id, getTime(startCommand.getUserTimeTest()), String.valueOf(startCommand.getPulseValue()));
                     }
+
+                    errorListRPMns.add(result);
 
                 } else if (command instanceof RTCCommand) {
 
                     RTCCommand rtcCommand = (RTCCommand) command;
-                    errorListRPMns.add(new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
-                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC())));
+
+                    result = new RTCResult(id, String.valueOf(-rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getErrorForFalseTest()), String.valueOf(rtcCommand.getFreg()),
+                            String.valueOf(rtcCommand.getCountResultTest()), String.valueOf(rtcCommand.getPulseForRTC()));
+
+                    errorListRPMns.add(result);
 
                 } else if (command instanceof ConstantCommand) {
 
                     ConstantCommand constantCommand = (ConstantCommand) command;
-                    errorListRPMns.add(new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax())));
+
+                    result = new ConstantResult(id, String.valueOf(constantCommand.getEmin()), String.valueOf(constantCommand.getEmax()));
+
+                    errorListRPMns.add(result);
 
                 } else if (command instanceof ImbalansUCommand) {
 
                     ImbalansUCommand imbalansUCommand = (ImbalansUCommand) command;
-                    errorListRPMns.add(new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax()));
+
+                    result = new ImbUResult(id, imbalansUCommand.getEmin(), imbalansUCommand.getEmax());
+
+                    errorListRPMns.add(result);
+
                 } else if (command instanceof RelayCommand) {
 
-                    errorListRPMns.add(new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue())));
+                    result = new RelayResult(id, getTime(((RelayCommand) command).getUserTimeTest()), String.valueOf(((RelayCommand) command).getPulseValue()));
+
+                    errorListRPMns.add(result);
                 }
+
             } break;
         }
     }
@@ -1094,7 +1185,11 @@ public class Meter implements Serializable {
                         }
                     }
 
-                    errorsForTips.setValue(sb.toString());
+                    if (!sb.toString().isEmpty()) {
+                        errorsForTips.setValue(sb.toString());
+                    } else {
+                        errorsForTips.setValue("Нет результатов измерения");
+                    }
                 }
             });
         }
@@ -1178,7 +1273,6 @@ public class Meter implements Serializable {
         public void setSimpPropErrorsForTips() {
             this.errorsForTips = new SimpleStringProperty("");
         }
-
     }
 
     /**
@@ -1199,6 +1293,7 @@ public class Meter implements Serializable {
             super.lastResult = error;
             super.passTest = passOrNot;
             refreshTipsInfo();
+            TestErrorTableFrameController.saveResults = true;
         }
     }
 
@@ -1240,6 +1335,7 @@ public class Meter implements Serializable {
 
             creepTest = this;
             refreshTipsInfo();
+            TestErrorTableFrameController.saveResults = true;
         }
 
         public void setMaxPulse(String maxPulse) {
@@ -1315,6 +1411,7 @@ public class Meter implements Serializable {
             }
 
             refreshTipsInfo();
+            TestErrorTableFrameController.saveResults = true;
         }
 
         public void setMaxPulse(String maxPulse) {
@@ -1377,6 +1474,7 @@ public class Meter implements Serializable {
 
             RTCTest = this;
             refreshTipsInfo();
+            TestErrorTableFrameController.saveResults = true;
         }
 
         public String getFreg() {
@@ -1460,6 +1558,7 @@ public class Meter implements Serializable {
             }
 
             refreshTipsInfo();
+            TestErrorTableFrameController.saveResults = true;
         }
 
         public String getKwMeter() {
@@ -1497,6 +1596,7 @@ public class Meter implements Serializable {
             super.lastResult = error;
             super.passTest = passOrNot;
             refreshTipsInfo();
+            TestErrorTableFrameController.saveResults = true;
         }
     }
 
@@ -1556,6 +1656,7 @@ public class Meter implements Serializable {
 
             relayTest = this;
             refreshTipsInfo();
+            TestErrorTableFrameController.saveResults = true;
         }
 
         public void setMaxPulse(String maxPulse) {

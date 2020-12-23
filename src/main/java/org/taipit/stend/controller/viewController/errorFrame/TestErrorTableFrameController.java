@@ -87,6 +87,9 @@ public class TestErrorTableFrameController {
     //Методика по которой необходимо протестировать счётчики
     private Metodic methodicForStend;
 
+    //Флаг есть ли какие-то результаты, если да, то предлагаю сохранить при выходе
+    public static boolean saveResults = false;
+
     //Список команд из методики поверки для активной, реактивной энергии и прямого, обратного направления тока
     private ObservableList<Commands> commandsAPPls = FXCollections.observableArrayList(new ArrayList<>());
     private ObservableList<Commands> commandsAPMns = FXCollections.observableArrayList(new ArrayList<>());
@@ -428,25 +431,6 @@ public class TestErrorTableFrameController {
             }
         });
 
-        //Запускаю считывание параметров с эталонного счётчика
-        refMeterThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                while (!Thread.currentThread().isInterrupted()) {
-
-                    stendRefParametersForFrame.readParametersWithoutCheckingParan();
-                    try {
-                        Thread.sleep(3000);
-                    }catch (InterruptedException e) {
-                        break;
-                    }
-                }
-            }
-        });
-
-        refMeterThread.start();
-
         checBoxePane.toFront();
     }
 
@@ -507,24 +491,36 @@ public class TestErrorTableFrameController {
 
                 //Если тест не идёт
             } else {
-                //Пердлагаю сохранить результаты таеста
-                Boolean answer = ConsoleHelper.yesOrNoFrame("Сохранение результатов", "Сохранить результаты теста?");
 
-                if (answer != null) {
+                //Если есть какие-то результаты теста
+                if (saveResults) {
+                    //Пердлагаю сохранить результаты теста
+                    Boolean answer = ConsoleHelper.yesOrNoFrame("Сохранение результатов", "Сохранить результаты теста?");
 
-                    //Если пользователь нажал сохранить
-                    if (answer) {
-                        btnSave.fire();
+                    if (answer != null) {
 
-                        //Если пользователь нажал не сохранять
-                    } else {
-                        refMeterThread.interrupt();
+                        //Если пользователь нажал сохранить
+                        if (answer) {
+                            btnSave.fire();
 
-                        Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
-                        refMeterStage.close();
-                        testErrorTableFrameControllerStage.close();
-                        FrameManager.frameManagerInstance().setTestErrorTableFrameController(null);
+                            //Если пользователь нажал не сохранять
+                        } else {
+                            refMeterThread.interrupt();
+
+                            Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
+                            refMeterStage.close();
+                            testErrorTableFrameControllerStage.close();
+                            FrameManager.frameManagerInstance().setTestErrorTableFrameController(null);
+                        }
                     }
+
+                } else {
+                    refMeterThread.interrupt();
+
+                    Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
+                    refMeterStage.close();
+                    testErrorTableFrameControllerStage.close();
+                    FrameManager.frameManagerInstance().setTestErrorTableFrameController(null);
                 }
             }
         }
@@ -2005,7 +2001,7 @@ public class TestErrorTableFrameController {
                 }
             }
         }catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            ConsoleHelper.infoException(e.getMessage());
         }
 
         //Создаю обекты результата испытания в каждой точке (Command)
@@ -2676,6 +2672,28 @@ public class TestErrorTableFrameController {
                 }
             });
         }
+
+        //Запускаю считывание параметров с эталонного счётчика
+        refMeterThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while (!Thread.currentThread().isInterrupted()) {
+
+                    if (stendRefParametersForFrame != null) {
+                        stendRefParametersForFrame.readParametersWithoutCheckingParan();
+                    }
+
+                    try {
+                        Thread.sleep(3000);
+                    }catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            }
+        });
+
+        refMeterThread.start();
 
         //Внутренние параметры стенда
         try {
