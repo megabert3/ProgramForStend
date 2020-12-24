@@ -91,6 +91,9 @@ public class TestErrorTableFrameController {
     //Флаг есть ли какие-то результаты, если да, то предлагаю сохранить при выходе
     public static boolean saveResults = false;
 
+    //Флаг если появились новые результаты испытания
+    public volatile static boolean newResults = true;
+
     //Директория сохранения несохранённых результатов
     private String dirWithNotSaveResults = ".\\src\\main\\resources\\mwrans";
 
@@ -157,6 +160,9 @@ public class TestErrorTableFrameController {
 
     //Поток блокировки кнопок
     private Thread blockButtonsThread;
+
+    //Поток сериализации новых несохранённых результатов
+    private Thread serializeNewNotSavedResults;
 
     //Флаг указывающий нажата ли кнопка подачи напряжения на счётчики
     private boolean startUnTest = false;
@@ -510,6 +516,7 @@ public class TestErrorTableFrameController {
                             //Если пользователь нажал не сохранять
                         } else {
                             refMeterThread.interrupt();
+                            serializeNewNotSavedResults.interrupt();
 
                             Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
                             refMeterStage.close();
@@ -520,6 +527,7 @@ public class TestErrorTableFrameController {
 
                 } else {
                     refMeterThread.interrupt();
+                    serializeNewNotSavedResults.interrupt();
 
                     Stage testErrorTableFrameControllerStage = (Stage) btnExit.getScene().getWindow();
                     refMeterStage.close();
@@ -2011,6 +2019,26 @@ public class TestErrorTableFrameController {
         //Создаю обекты результата испытания в каждой точке (Command)
         initErrorsForMeters();
 
+        checkAndLoadNotSavedResults();
+
+        serializeNewNotSavedResults = new Thread(()-> {
+
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    if (newResults) {
+                        NotSavedResults.serializationNotSaveResults(listMetersForTest, dirWithNotSaveResults);
+                        newResults = false;
+                    }
+
+                    Thread.sleep(5000);
+                }catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+
+        serializeNewNotSavedResults.start();
+
         //В зависимости от количества счётчиков инициализирую таблицы для отображения погрешности
         //Если счётчиков меньше 12 размещаю таблицы на одном листе
         if (listMetersForTest.size() <= 12) {
@@ -2767,14 +2795,77 @@ public class TestErrorTableFrameController {
                     "восстановить их?");
 
             if (answer != null) {
+
                 if (answer) {
+
                     for (int i = 0; i < notSavedResults.getMetersWhoseResultsAreNotSaved().size(); i++) {
 
+                        Meter notSaveResultsMeter = notSavedResults.getMetersWhoseResultsAreNotSaved().get(i);
+
                         try {
+                            Meter meterInTest = listMetersForTest.get(i);
 
-                        }catch (IndexOutOfBoundsException e) {
+                            if (notSaveResultsMeter.getId() == meterInTest.getId()) {
 
-                        }
+                                //Инициализирую результаты для AP+
+                                if (!meterInTest.getErrorListAPPls().isEmpty()) {
+
+                                    for (int j = 0; j < meterInTest.getErrorListAPPls().size(); j++) {
+
+                                        for (Meter.CommandResult resultNotSave : notSaveResultsMeter.getErrorListAPPls()) {
+
+                                            if (meterInTest.getErrorListAPPls().get(j).getId().equals(resultNotSave.getId())) {
+                                                meterInTest.getErrorListAPPls().set(j, resultNotSave);
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    //Инициализирую результаты для AP-
+                                } else if (!meterInTest.getErrorListAPMns().isEmpty()) {
+
+                                    for (int j = 0; j < meterInTest.getErrorListAPMns().size(); j++) {
+
+                                        for (Meter.CommandResult resultNotSave : notSaveResultsMeter.getErrorListAPMns()) {
+
+                                            if (meterInTest.getErrorListAPMns().get(j).getId().equals(resultNotSave.getId())) {
+                                                meterInTest.getErrorListAPMns().set(j, resultNotSave);
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    //Инициализирую результаты для RP+
+                                } else if (!meterInTest.getErrorListRPPls().isEmpty()) {
+
+                                    for (int j = 0; j < meterInTest.getErrorListRPPls().size(); j++) {
+
+                                        for (Meter.CommandResult resultNotSave : notSaveResultsMeter.getErrorListRPPls()) {
+
+                                            if (meterInTest.getErrorListRPPls().get(j).getId().equals(resultNotSave.getId())) {
+                                                meterInTest.getErrorListRPPls().set(j, resultNotSave);
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    //Инициализирую результаты для RP-
+                                } else if (!meterInTest.getErrorListRPMns().isEmpty()) {
+
+                                    for (int j = 0; j < meterInTest.getErrorListRPMns().size(); j++) {
+
+                                        for (Meter.CommandResult resultNotSave : notSaveResultsMeter.getErrorListRPMns()) {
+
+                                            if (meterInTest.getErrorListRPMns().get(j).getId().equals(resultNotSave.getId())) {
+                                                meterInTest.getErrorListRPMns().set(j, resultNotSave);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        } catch (IndexOutOfBoundsException ignored) { }
                     }
                 }
             }
@@ -3162,5 +3253,9 @@ public class TestErrorTableFrameController {
 
     public Thread getRefMeterThread() {
         return refMeterThread;
+    }
+
+    public Thread getSerializeNewNotSavedResults() {
+        return serializeNewNotSavedResults;
     }
 }

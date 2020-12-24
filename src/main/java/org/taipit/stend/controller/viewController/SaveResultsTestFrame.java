@@ -204,6 +204,7 @@ public class SaveResultsTestFrame {
                     Stage stageTestErrorTableFraneControler = (Stage) testErrorTableFrameController.getTxtLabInom().getScene().getWindow();
                     stageTestErrorTableFraneControler.close();
                     testErrorTableFrameController.getRefMeterThread().interrupt();
+                    testErrorTableFrameController.getSerializeNewNotSavedResults().interrupt();
                     testErrorTableFrameController.getRefMeterStage().close();
                     FrameManager.frameManagerInstance().setTestErrorTableFrameController(null);
                 }

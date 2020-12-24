@@ -1293,6 +1293,7 @@ public class Meter implements Serializable {
             super.passTest = passOrNot;
             refreshTipsInfo();
             TestErrorTableFrameController.saveResults = true;
+            TestErrorTableFrameController.newResults = true;
         }
     }
 
@@ -1335,6 +1336,7 @@ public class Meter implements Serializable {
             creepTest = this;
             refreshTipsInfo();
             TestErrorTableFrameController.saveResults = true;
+            TestErrorTableFrameController.newResults = true;
         }
 
         public void setMaxPulse(String maxPulse) {
@@ -1411,6 +1413,7 @@ public class Meter implements Serializable {
 
             refreshTipsInfo();
             TestErrorTableFrameController.saveResults = true;
+            TestErrorTableFrameController.newResults = true;
         }
 
         public void setMaxPulse(String maxPulse) {
@@ -1474,6 +1477,7 @@ public class Meter implements Serializable {
             RTCTest = this;
             refreshTipsInfo();
             TestErrorTableFrameController.saveResults = true;
+            TestErrorTableFrameController.newResults = true;
         }
 
         public String getFreg() {
@@ -1558,6 +1562,7 @@ public class Meter implements Serializable {
 
             refreshTipsInfo();
             TestErrorTableFrameController.saveResults = true;
+            TestErrorTableFrameController.newResults = true;
         }
 
         public String getKwMeter() {
@@ -1596,6 +1601,7 @@ public class Meter implements Serializable {
             super.passTest = passOrNot;
             refreshTipsInfo();
             TestErrorTableFrameController.saveResults = true;
+            TestErrorTableFrameController.newResults = true;
         }
     }
 
@@ -1656,6 +1662,7 @@ public class Meter implements Serializable {
             relayTest = this;
             refreshTipsInfo();
             TestErrorTableFrameController.saveResults = true;
+            TestErrorTableFrameController.newResults = true;
         }
 
         public void setMaxPulse(String maxPulse) {
