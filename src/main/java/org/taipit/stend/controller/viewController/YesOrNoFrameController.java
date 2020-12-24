@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
 import org.taipit.stend.model.metodics.Metodic;
 import org.taipit.stend.model.metodics.MetodicsForTest;
-import org.taipit.stend.model.ResultsTest;
+import org.taipit.stend.model.result.ResultsTest;
 
 import java.util.List;
 

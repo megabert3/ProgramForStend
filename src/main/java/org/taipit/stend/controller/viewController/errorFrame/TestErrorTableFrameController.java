@@ -35,6 +35,7 @@ import org.taipit.stend.controller.viewController.errorFrame.refMeter.OnePhaseSt
 import org.taipit.stend.controller.viewController.errorFrame.refMeter.StendRefParametersForFrame;
 import org.taipit.stend.controller.viewController.errorFrame.refMeter.ThreePhaseStendRefParamController;
 import org.taipit.stend.helper.frameManager.FrameManager;
+import org.taipit.stend.model.result.NotSavedResults;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.SaveResultsTestFrame;
@@ -45,8 +46,7 @@ import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
 
 
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +90,9 @@ public class TestErrorTableFrameController {
 
     //Флаг есть ли какие-то результаты, если да, то предлагаю сохранить при выходе
     public static boolean saveResults = false;
+
+    //Директория сохранения несохранённых результатов
+    private String dirWithNotSaveResults = ".\\src\\main\\resources\\mwrans";
 
     //Список команд из методики поверки для активной, реактивной энергии и прямого, обратного направления тока
     private ObservableList<Commands> commandsAPPls = FXCollections.observableArrayList(new ArrayList<>());
@@ -2751,6 +2754,33 @@ public class TestErrorTableFrameController {
         }
     }
 
+    /**
+     * Проверяет наличие несохранённых результатов в программе предлагает их восстановить
+     */
+    private void checkAndLoadNotSavedResults() {
+        NotSavedResults notSavedResults = NotSavedResults.getNotSavedResultsInstance(dirWithNotSaveResults);
+
+        //Если есть несохранённые результаты
+        if (notSavedResults != null) {
+
+            Boolean answer = ConsoleHelper.yesOrNoFrame("Восстановление результатов" ,"Найдены последние не сохранённые результаты теста,\n" +
+                    "восстановить их?");
+
+            if (answer != null) {
+                if (answer) {
+                    for (int i = 0; i < notSavedResults.getMetersWhoseResultsAreNotSaved().size(); i++) {
+
+                        try {
+
+                        }catch (IndexOutOfBoundsException e) {
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     //В зафисимости от того вылезает ли результат счётчика за диапазон заданной погрешности раскрашиваю значение
     private void addTableViewAndCollumnInErrorPane(int index) {
 
@@ -3132,24 +3162,5 @@ public class TestErrorTableFrameController {
 
     public Thread getRefMeterThread() {
         return refMeterThread;
-    }
-
-    /**
-     * Внутренний класс для работы с несохранёнными результатами
-     * испытаний.
-     */
-    private class NotSavedResults implements Serializable {
-
-        //Директория сохранения несохранённых результатов
-        String dir = ".\\src\\main\\resources\\mwrans";
-
-
-
-        //Счётчики с несохранёнными результатами
-        private List<Meter> metersWhoseResultsAreNotSaved = new ArrayList<>();
-
-        private  NotSavedResults(){}
-
-
     }
 }

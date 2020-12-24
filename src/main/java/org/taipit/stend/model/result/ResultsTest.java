@@ -1,4 +1,4 @@
-package org.taipit.stend.model;
+package org.taipit.stend.model.result;
 
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.helper.ConsoleHelper;

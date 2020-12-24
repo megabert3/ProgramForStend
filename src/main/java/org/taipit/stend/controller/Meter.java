@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleStringProperty;
 import org.taipit.stend.controller.Commands.*;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
-import org.taipit.stend.model.ResultsTest;
 import org.taipit.stend.model.metodics.Metodic;
 
 import java.io.Serializable;

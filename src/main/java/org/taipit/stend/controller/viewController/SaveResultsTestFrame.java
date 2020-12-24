@@ -24,7 +24,7 @@ import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrame
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.frameManager.FrameManager;
 import org.taipit.stend.model.ExcelReport;
-import org.taipit.stend.model.ResultsTest;
+import org.taipit.stend.model.result.ResultsTest;
 
 /**
  * @autor Albert Khalimov

@@ -14,9 +14,8 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.taipit.stend.helper.ConsoleHelper;
-import org.taipit.stend.model.ResultsTest;
+import org.taipit.stend.model.result.ResultsTest;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 
