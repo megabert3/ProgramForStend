@@ -2021,6 +2021,8 @@ public class TestErrorTableFrameController {
 
         checkAndLoadNotSavedResults();
 
+        //NotSavedResults.serializationNotSaveResults(listMetersForTest, dirWithNotSaveResults);
+
         serializeNewNotSavedResults = new Thread(()-> {
 
             while (!Thread.currentThread().isInterrupted()) {

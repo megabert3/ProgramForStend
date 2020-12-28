@@ -22,7 +22,9 @@ public class NotSavedResults implements Serializable{
 
     private static NotSavedResults notSavedResultsInstance;
 
-    private NotSavedResults(){}
+    private NotSavedResults(List<Meter> saveListMeters){
+        this.metersWhoseResultsAreNotSaved = saveListMeters;
+    }
 
     public static NotSavedResults getNotSavedResultsInstance(String dir) {
 
@@ -57,17 +59,10 @@ public class NotSavedResults implements Serializable{
         try (FileOutputStream fileOutputStream = new FileOutputStream(new File(dir).getCanonicalPath())) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
-            NotSavedResults notSavedResults = getNotSavedResultsInstance(dir);
 
-            if (notSavedResults == null) {
-                notSavedResultsInstance = new NotSavedResults();
+            notSavedResultsInstance = new NotSavedResults(metersWithResults);
 
-                notSavedResults = notSavedResultsInstance;
-            }
-
-            notSavedResultsInstance.setMetersWhoseResultsAreNotSaved(metersWithResults);
-
-            objectOutputStream.writeObject(notSavedResults);
+            objectOutputStream.writeObject(notSavedResultsInstance);
 
             objectOutputStream.flush();
 
