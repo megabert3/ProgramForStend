@@ -403,6 +403,9 @@ public class TestParametersFrameController implements Frame {
             //Удаляю из менеджера окон, что окно параметров теста открыто
             FrameManager.frameManagerInstance().testParametersFrameController = null;
 
+
+            //TEST УДАЛИТЬ
+            //testErrorTableFrameController.createRandomResults();
         }
 
         //Действие при нажатии на кнопку "серийные номера"

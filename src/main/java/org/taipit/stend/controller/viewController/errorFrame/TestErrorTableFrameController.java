@@ -48,9 +48,7 @@ import org.taipit.stend.model.metodics.Metodic;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 
 /**
@@ -92,7 +90,7 @@ public class TestErrorTableFrameController {
     public static boolean saveResults = false;
 
     //Флаг если появились новые результаты испытания
-    public volatile static boolean newResults = true;
+    public volatile static boolean newResults = false;
 
     //Директория сохранения несохранённых результатов
     private String dirWithNotSaveResults = ".\\src\\main\\resources\\mwrans";
@@ -2024,9 +2022,15 @@ public class TestErrorTableFrameController {
         //NotSavedResults.serializationNotSaveResults(listMetersForTest, dirWithNotSaveResults);
 
         serializeNewNotSavedResults = new Thread(()-> {
+            int i = 0;
 
             while (!Thread.currentThread().isInterrupted()) {
                 try {
+
+                    if (i % 2 == 0) {
+                        newResults = true;
+                    }
+
                     if (newResults) {
                         NotSavedResults.serializationNotSaveResults(listMetersForTest, dirWithNotSaveResults);
                         newResults = false;
@@ -2036,6 +2040,7 @@ public class TestErrorTableFrameController {
                 }catch (InterruptedException e) {
                     break;
                 }
+                i++;
             }
         });
 
@@ -3123,6 +3128,90 @@ public class TestErrorTableFrameController {
 
         selectedCommand.removeListener(automaticListChangeListener);
         selectedCommand.removeListener(manualListChangeListener);
+    }
+
+    /**
+     * TEST!
+     */
+    public void createRandomResults() {
+
+        for (Meter meter : listMetersForTest) {
+
+            Map<Integer, List<Meter.CommandResult>> map = new HashMap<>();
+            map.put(0, meter.getErrorListAPPls());
+            map.put(1, meter.getErrorListAPMns());
+            map.put(2, meter.getErrorListRPPls());
+            map.put(3, meter.getErrorListRPMns());
+
+            for (Map.Entry<Integer, List<Meter.CommandResult>> errorList : map.entrySet()) {
+
+                if (!errorList.getValue().isEmpty()) {
+
+                    for (Meter.CommandResult result : errorList.getValue()) {
+
+                        if (result instanceof Meter.ErrorResult) {
+
+                            double randRes = -5 + (Math.random() * 5);
+                            double randMin = -7 + (Math.random() * 7);
+                            double randMax = -7 + (Math.random() * 7);
+
+                            result.setMinError(String.format(Locale.ROOT, "%.3f", randMin));
+                            result.setMaxError(String.format(Locale.ROOT, "%.3f", randMax));
+                            result.setLastResult(String.format(Locale.ROOT, "%.3f", randRes));
+                            result.setLastResultForTabView(String.format(Locale.ROOT,"%.3f", randRes));
+
+                            if (randRes < randMin || randRes > randMax) {
+                                result.setPassTest(false);
+                            } else {
+                                result.setPassTest(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        new Thread(() -> {
+            while (true) {
+
+                for (Meter meter : listMetersForTest) {
+
+                    Map<Integer, List<Meter.CommandResult>> map = new HashMap<>();
+                    map.put(0, meter.getErrorListAPPls());
+                    map.put(1, meter.getErrorListAPMns());
+                    map.put(2, meter.getErrorListRPPls());
+                    map.put(3, meter.getErrorListRPMns());
+
+                    for (Map.Entry<Integer, List<Meter.CommandResult>> errorList : map.entrySet()) {
+
+                        if (!errorList.getValue().isEmpty()) {
+
+                            for (Meter.CommandResult result : errorList.getValue()) {
+
+                                if (result instanceof Meter.ErrorResult) {
+
+                                    double randRes = -5 + (Math.random() * 5);
+
+                                    if (Double.parseDouble(result.getMinError()) > randRes || Double.parseDouble(result.getMaxError()) < randRes) {
+                                        result.setLastResultForTabView("F" + String.format(Locale.ROOT,"%.3f", randRes));
+                                        result.setPassTest(false);
+                                    } else {
+                                        result.setLastResultForTabView("P" + String.format(Locale.ROOT,"%.3f", randRes));
+                                        result.setPassTest(true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                }
+            }
+
+        }).start();
     }
 
     /** =======================================================================================

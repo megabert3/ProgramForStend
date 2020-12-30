@@ -344,7 +344,7 @@ public class Meter implements Serializable {
      */
     public void createError(Commands command, int chanelFlag , String id, TestErrorTableFrameController testErrorTableFrameController) {
 
-        CommandResult result = null;
+        CommandResult result;
 
         switch (chanelFlag) {
             //AP+
