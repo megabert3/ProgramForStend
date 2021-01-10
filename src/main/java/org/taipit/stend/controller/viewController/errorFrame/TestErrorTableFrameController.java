@@ -45,11 +45,9 @@ import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
 import org.taipit.stend.model.metodics.MethodicForThreePhaseStend;
 import org.taipit.stend.model.metodics.Metodic;
 
-
 import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
-
 
 /**
  * @autor Albert Khalimov
@@ -184,6 +182,8 @@ public class TestErrorTableFrameController {
             //Завершаю работу треда предыдущей точки испытания
             automaticTestThread.interrupt();
 
+            blockTypeEnergyAndDirectionBtns.setValue(true);
+
             //Блокирую кнопки чтобы пользователь не насоздавал потоков
             blockControlBtns(8000);
 
@@ -216,6 +216,8 @@ public class TestErrorTableFrameController {
 
             //Завершаю работу треда предыдущей точки испытания
             manualTestThread.interrupt();
+
+            blockTypeEnergyAndDirectionBtns.setValue(true);
 
             //Блокирую кнопки чтобы пользователь не насоздавал потоков
             blockControlBtns(8000);
@@ -405,12 +407,15 @@ public class TestErrorTableFrameController {
                 if (manualTestThread.isAlive()) {
                     manualTestThread.interrupt();
                 }
+
                 if (automaticTestThread.isAlive()) {
                     automaticTestThread.interrupt();
                 }
+
                 if (UnomThread.isAlive() || startUnTest) {
                     UnomThread.interrupt();
                 }
+
                 startUnTest = false;
 
                 //Удаляю слушателей
@@ -571,10 +576,11 @@ public class TestErrorTableFrameController {
 
                 //Если не идёт
             } else {
+                blockTypeEnergyAndDirectionBtns.setValue(true);
 
                 //Блокирую кнопки
                 blockControlBtns(8000);
-                blockTypeEnergyAndDirectionBtns.setValue(true);
+
                 startUnTest = false;
 
                 //Если установка работает в других режимах, то завершаю их
@@ -627,10 +633,11 @@ public class TestErrorTableFrameController {
                 //Если нет
             } else {
 
+                blockTypeEnergyAndDirectionBtns.setValue(true);
+
                 //Блокирую кнопк
                 blockControlBtns(8000);
 
-                blockTypeEnergyAndDirectionBtns.setValue(true);
                 startUnTest = false;
 
                 //Останавливаю другие режимы
@@ -2017,9 +2024,7 @@ public class TestErrorTableFrameController {
         //Создаю обекты результата испытания в каждой точке (Command)
         initErrorsForMeters();
 
-        checkAndLoadNotSavedResults();
-
-        //NotSavedResults.serializationNotSaveResults(listMetersForTest, dirWithNotSaveResults);
+        //checkAndLoadNotSavedResults();
 
         serializeNewNotSavedResults = new Thread(()-> {
             int i = 0;
@@ -2027,12 +2032,16 @@ public class TestErrorTableFrameController {
             while (!Thread.currentThread().isInterrupted()) {
                 try {
 
-                    if (i % 2 == 0) {
-                        newResults = true;
-                    }
-
                     if (newResults) {
+                        System.out.println("Сработало сохранение");
                         NotSavedResults.serializationNotSaveResults(listMetersForTest, dirWithNotSaveResults);
+
+                        for (Meter meter : listMetersForTest) {
+                            for (Meter.CommandResult result : meter.getErrorListAPPls()) {
+                                System.out.println(result.getLastResult());
+                            }
+                        }
+
                         newResults = false;
                     }
 
@@ -2792,7 +2801,7 @@ public class TestErrorTableFrameController {
     /**
      * Проверяет наличие несохранённых результатов в программе предлагает их восстановить
      */
-    private void checkAndLoadNotSavedResults() {
+    public void checkAndLoadNotSavedResults() {
         NotSavedResults notSavedResults = NotSavedResults.getNotSavedResultsInstance(dirWithNotSaveResults);
 
         //Если есть несохранённые результаты
@@ -2805,75 +2814,259 @@ public class TestErrorTableFrameController {
 
                 if (answer) {
 
-                    for (int i = 0; i < notSavedResults.getMetersWhoseResultsAreNotSaved().size(); i++) {
+                    //Ссылки на конкретные результаты счётчиков, для удобного прохождения и замены
+                    Meter.ErrorResult meterInTestErrorResult;
+                    Meter.ErrorResult meterErrorResultNotSave;
 
-                        Meter notSaveResultsMeter = notSavedResults.getMetersWhoseResultsAreNotSaved().get(i);
+                    //Прохожусь по не сохранённым результатам
+                    for (Meter notSaveResultsMeter : notSavedResults.getMetersWhoseResultsAreNotSaved()) {
 
-                        try {
-                            Meter meterInTest = listMetersForTest.get(i);
+                        //Сравниваю id с посадочным местом установки
+                        for (Meter meterInTest : listMetersForTest) {
 
+                            //Если счётчик на посадочном месте есть
                             if (notSaveResultsMeter.getId() == meterInTest.getId()) {
 
-                                //Инициализирую результаты для AP+
-                                if (!meterInTest.getErrorListAPPls().isEmpty()) {
+                                //Мапы чтобы не дублировать код
+                                Map<Integer, List<Meter.CommandResult>> mapNotSavedResultsMeter = new HashMap<>();
+                                Map<Integer, List<Meter.CommandResult>> mapResultsMeterInTest = new HashMap<>();
 
-                                    for (int j = 0; j < meterInTest.getErrorListAPPls().size(); j++) {
+                                mapNotSavedResultsMeter.put(0, notSaveResultsMeter.getErrorListAPPls());
+                                mapNotSavedResultsMeter.put(1, notSaveResultsMeter.getErrorListAPMns());
+                                mapNotSavedResultsMeter.put(2, notSaveResultsMeter.getErrorListRPPls());
+                                mapNotSavedResultsMeter.put(3, notSaveResultsMeter.getErrorListRPMns());
 
-                                        for (Meter.CommandResult resultNotSave : notSaveResultsMeter.getErrorListAPPls()) {
+                                mapResultsMeterInTest.put(0, meterInTest.getErrorListAPPls());
+                                mapResultsMeterInTest.put(1, meterInTest.getErrorListAPMns());
+                                mapResultsMeterInTest.put(2, meterInTest.getErrorListRPPls());
+                                mapResultsMeterInTest.put(3, meterInTest.getErrorListRPMns());
 
-                                            if (meterInTest.getErrorListAPPls().get(j).getId().equals(resultNotSave.getId())) {
-                                                meterInTest.getErrorListAPPls().set(j, resultNotSave);
-                                                break;
-                                            }
-                                        }
-                                    }
+                                for (int i = 0; i < 4; i++) {
+                                    //Если точки испытаний по данной методике есть, переношу из несохранённых к текущему
+                                    if (!mapResultsMeterInTest.get(i).isEmpty() && !mapNotSavedResultsMeter.get(i).isEmpty()) {
 
-                                    //Инициализирую результаты для AP-
-                                } else if (!meterInTest.getErrorListAPMns().isEmpty()) {
+                                        for (Meter.CommandResult notSaveResult : mapNotSavedResultsMeter.get(i)) {
 
-                                    for (int j = 0; j < meterInTest.getErrorListAPMns().size(); j++) {
+                                            for (Meter.CommandResult resultInTest : mapResultsMeterInTest.get(i)) {
 
-                                        for (Meter.CommandResult resultNotSave : notSaveResultsMeter.getErrorListAPMns()) {
+                                                if (notSaveResult.getId().equals(resultInTest.getId())) {
 
-                                            if (meterInTest.getErrorListAPMns().get(j).getId().equals(resultNotSave.getId())) {
-                                                meterInTest.getErrorListAPMns().set(j, resultNotSave);
-                                                break;
-                                            }
-                                        }
-                                    }
+                                                    if (notSaveResult instanceof Meter.ErrorResult) {
 
-                                    //Инициализирую результаты для RP+
-                                } else if (!meterInTest.getErrorListRPPls().isEmpty()) {
+                                                        meterInTestErrorResult = (Meter.ErrorResult) resultInTest;
+                                                        meterErrorResultNotSave = (Meter.ErrorResult) notSaveResult;
 
-                                    for (int j = 0; j < meterInTest.getErrorListRPPls().size(); j++) {
+                                                        meterInTestErrorResult.setLastResult(meterErrorResultNotSave.getLastResult());
+                                                        meterInTestErrorResult.setResults(meterErrorResultNotSave.getResults());
+                                                        meterInTestErrorResult.refreshTipsInfo();
 
-                                        for (Meter.CommandResult resultNotSave : notSaveResultsMeter.getErrorListRPPls()) {
+                                                        if (!meterInTestErrorResult.getLastResult().isEmpty()) {
+                                                            double result = Double.parseDouble(meterInTestErrorResult.getLastResult());
 
-                                            if (meterInTest.getErrorListRPPls().get(j).getId().equals(resultNotSave.getId())) {
-                                                meterInTest.getErrorListRPPls().set(j, resultNotSave);
-                                                break;
-                                            }
-                                        }
-                                    }
+                                                            if (Double.parseDouble(meterInTestErrorResult.getMaxError()) < result ||
+                                                                    Double.parseDouble(meterInTestErrorResult.getMinError()) > result ) {
+                                                                meterInTestErrorResult.setLastResultForTabView("F" + meterInTestErrorResult.getLastResult());
+                                                                meterInTestErrorResult.setPassTest(false);
+                                                            } else {
+                                                                meterInTestErrorResult.setLastResultForTabView("P" + meterInTestErrorResult.getLastResult());
+                                                                meterInTestErrorResult.setPassTest(true);
+                                                            }
+                                                        }
 
-                                    //Инициализирую результаты для RP-
-                                } else if (!meterInTest.getErrorListRPMns().isEmpty()) {
+                                                    } else if (notSaveResult instanceof Meter.CreepResult) {
 
-                                    for (int j = 0; j < meterInTest.getErrorListRPMns().size(); j++) {
+                                                        Meter.CreepResult meterInTestResult = (Meter.CreepResult) resultInTest;
+                                                        Meter.CreepResult meterResultNotSave = (Meter.CreepResult) notSaveResult;
 
-                                        for (Meter.CommandResult resultNotSave : notSaveResultsMeter.getErrorListRPMns()) {
+                                                        //Если есть результат
+                                                        if (!meterResultNotSave.getLastResult().isEmpty()) {
 
-                                            if (meterInTest.getErrorListRPMns().get(j).getId().equals(resultNotSave.getId())) {
-                                                meterInTest.getErrorListRPMns().set(j, resultNotSave);
-                                                break;
+                                                            //Если условия точки испытания такие же как и у не сохранённого результата
+                                                            if (meterInTestResult.getTimeTheTest().equals(meterResultNotSave.getTimeTheTest()) &&
+                                                                    meterInTestResult.getMaxPulse().equals(meterResultNotSave.getMaxPulse())) {
+
+                                                                meterInTestResult.setLastResult(meterResultNotSave.getLastResult());
+                                                                meterInTestResult.setResults(meterResultNotSave.getResults());
+                                                                meterInTestResult.setPassTest(meterResultNotSave.isPassTest());
+                                                                meterInTestResult.refreshTipsInfo();
+
+                                                                if (meterInTestResult.isPassTest()) {
+                                                                    meterInTestResult.setLastResultForTabView("P" + meterResultNotSave.getTimeTheTest() + " P");
+                                                                } else {
+                                                                    meterInTestResult.setTimeTheFailTest(meterResultNotSave.getTimeTheFailTest());
+                                                                    meterInTestResult.setLastResultForTabView("F" + meterResultNotSave.getTimeTheFailTest() + " F");
+                                                                }
+                                                            }
+
+                                                            //Устанавливаю результат счётчику
+                                                            meterInTest.setCreepTest(meterInTestResult);
+                                                        }
+
+                                                    } else if (notSaveResult instanceof Meter.StartResult) {
+
+                                                        Meter.StartResult meterInTestResult = (Meter.StartResult) resultInTest;
+                                                        Meter.StartResult meterResultNotSave = (Meter.StartResult) notSaveResult;
+
+                                                        //Если есть результат
+                                                        if (!meterResultNotSave.getLastResult().isEmpty()) {
+
+                                                            //Если условия точки испытания такие же как и у не сохранённого результата
+                                                            if (meterInTestResult.getTimeTheTest().equals(meterResultNotSave.getTimeTheTest()) &&
+                                                                    meterInTestResult.getMaxPulse().equals(meterResultNotSave.getMaxPulse())) {
+
+                                                                meterInTestResult.setLastResult(meterResultNotSave.getLastResult());
+                                                                meterInTestResult.setResults(meterResultNotSave.getResults());
+                                                                meterInTestResult.setPassTest(meterResultNotSave.isPassTest());
+                                                                meterInTestResult.refreshTipsInfo();
+
+                                                                if (meterInTestResult.isPassTest()) {
+                                                                    meterInTestResult.setTimeThePassTest(meterResultNotSave.getTimeThePassTest());
+                                                                    meterInTestResult.setLastResultForTabView("P" + meterResultNotSave.getTimeThePassTest() + " P");
+                                                                } else {
+                                                                    meterInTestResult.setLastResultForTabView("F" + meterResultNotSave.getTimeTheTest() + " F");
+                                                                }
+                                                            }
+
+                                                            //Установка результата счётчику
+                                                            switch (i) {
+                                                                case 0: {
+                                                                    meterInTest.setStartTestAPPls(meterInTestResult);
+                                                                }break;
+                                                                case 1: {
+                                                                    meterInTest.setStartTestAPMns(meterInTestResult);
+                                                                }break;
+                                                                case 2: {
+                                                                    meterInTest.setStartTestRPPls(meterInTestResult);
+                                                                }break;
+                                                                case 3: {
+                                                                    meterInTest.setStartTestRPMns(meterInTestResult);
+                                                                }
+                                                            }
+                                                        }
+
+                                                    } else if (notSaveResult instanceof  Meter.RTCResult) {
+
+                                                        Meter.RTCResult meterInTestResult = (Meter.RTCResult) resultInTest;
+                                                        Meter.RTCResult meterResultNotSave = (Meter.RTCResult) notSaveResult;
+
+                                                        if (!meterResultNotSave.getLastResult().isEmpty()) {
+
+                                                            //Если условия точки испытания такие же как и у не сохранённого результата
+                                                            if (meterInTestResult.getTimeMeash().equals(meterResultNotSave.getTimeMeash()) &&
+                                                                    meterInTestResult.getAmoutMeash().equals(meterResultNotSave.getAmoutMeash()) &&
+                                                                    meterInTestResult.getFreg().equals(meterResultNotSave.getFreg())) {
+
+                                                                meterInTestResult.setLastResult(meterResultNotSave.getLastResult());
+                                                                meterInTestResult.setPassTest(meterResultNotSave.getPassTest());
+                                                                meterInTestResult.setResults(meterResultNotSave.getResults());
+                                                                meterInTestResult.refreshTipsInfo();
+
+                                                                if (meterInTestResult.isPassTest()) {
+                                                                    meterInTestResult.setLastResultForTabView("P" + meterInTestResult.getLastResult() + " P");
+                                                                } else {
+                                                                    meterInTestResult.setLastResultForTabView("F" + meterInTestResult.getLastResult() + " F");
+                                                                }
+                                                            }
+
+                                                            //Устанавливаю результат счётчику
+                                                            meterInTest.setRTCTest(meterInTestResult);
+                                                        }
+
+                                                    }  else if (notSaveResult instanceof Meter.ConstantResult) {
+
+                                                        Meter.ConstantResult meterInTestResult = (Meter.ConstantResult) resultInTest;
+                                                        Meter.ConstantResult meterResultNotSave = (Meter.ConstantResult) notSaveResult;
+
+                                                        if (!meterResultNotSave.getLastResult().isEmpty()) {
+
+                                                            meterInTestResult.setLastResult(meterResultNotSave.getLastResult());
+                                                            meterInTestResult.setPassTest(meterResultNotSave.getPassTest());
+                                                            meterInTestResult.setResults(meterResultNotSave.getResults());
+                                                            meterInTestResult.refreshTipsInfo();
+
+                                                            if (meterInTestResult.isPassTest()) {
+                                                                meterInTestResult.setLastResultForTabView("P" + meterInTestResult.getLastResult() + " P");
+                                                            } else {
+                                                                meterInTestResult.setLastResultForTabView("F" + meterInTestResult.getLastResult() + " F");
+                                                            }
+
+                                                            //Установка результата счётчику
+                                                            switch (i) {
+                                                                case 0: {
+                                                                    meterInTest.setConstantTestAPPls(meterInTestResult);
+                                                                }break;
+                                                                case 1: {
+                                                                    meterInTest.setConstantTestAPMns(meterInTestResult);
+                                                                }break;
+                                                                case 2: {
+                                                                    meterInTest.setConstantTestRPPls(meterInTestResult);
+                                                                }break;
+                                                                case 3: {
+                                                                    meterInTest.setConstantTestRPMns(meterInTestResult);
+                                                                }
+                                                            }
+                                                        }
+
+                                                    } else if (notSaveResult instanceof  Meter.ImbUResult) {
+
+                                                        Meter.ImbUResult meterInTestResult = (Meter.ImbUResult) resultInTest;
+                                                        Meter.ImbUResult meterResultNotSave = (Meter.ImbUResult) notSaveResult;
+
+                                                        if (!meterInTestResult.getLastResult().isEmpty()) {
+
+                                                            meterInTestResult.setLastResult(meterResultNotSave.getLastResult());
+                                                            meterInTestResult.setResults(meterResultNotSave.getResults());
+                                                            meterInTestResult.refreshTipsInfo();
+
+                                                            double result = Double.parseDouble(meterInTestResult.getLastResult());
+
+                                                            if (Double.parseDouble(meterInTestResult.getMaxError()) < result ||
+                                                                    Double.parseDouble(meterInTestResult.getMinError()) > result ) {
+
+                                                                meterInTestResult.setLastResultForTabView("F" + meterInTestResult.getLastResult());
+                                                                meterInTestResult.setPassTest(false);
+                                                            } else {
+                                                                meterInTestResult.setLastResultForTabView("P" + meterInTestResult.getLastResult());
+                                                                meterInTestResult.setPassTest(true);
+                                                            }
+                                                        }
+
+                                                    } else if (notSaveResult instanceof  Meter.RelayResult) {
+
+                                                        Meter.RelayResult meterInTestResult = (Meter.RelayResult) resultInTest;
+                                                        Meter.RelayResult meterResultNotSave = (Meter.RelayResult) notSaveResult;
+
+                                                        if (!meterResultNotSave.getLastResult().isEmpty()) {
+
+                                                            if (meterInTestResult.getTimeTheTest().equals(meterResultNotSave.getTimeTheTest()) &&
+                                                                    meterInTestResult.getMaxPulse().equals(meterResultNotSave.getMaxPulse())) {
+                                                                meterInTestResult.setPassTest(meterResultNotSave.getPassTest());
+                                                                meterInTestResult.setLastResult(meterResultNotSave.getLastResult());
+                                                                meterInTestResult.setResults(meterResultNotSave.getResults());
+                                                                meterInTestResult.refreshTipsInfo();
+
+                                                                if (meterInTestResult.getPassTest()) {
+                                                                    meterInTestResult.setLastResultForTabView("P" + meterResultNotSave.getTimeTheTest() + " P");
+                                                                } else {
+                                                                    meterInTestResult.setLastResultForTabView("F" + meterResultNotSave.getTimeTheFailTest() + " F");
+                                                                }
+                                                            }
+
+                                                            //Устанавливаю результат счётчику
+                                                            meterInTest.setRelayTest(meterInTestResult);
+                                                        }
+                                                    }
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
                                 }
+                                break;
                             }
-
-                        } catch (IndexOutOfBoundsException ignored) { }
+                        }
                     }
+                    saveResults = true;
                 }
             }
         }
@@ -3135,44 +3328,7 @@ public class TestErrorTableFrameController {
      */
     public void createRandomResults() {
 
-        for (Meter meter : listMetersForTest) {
-
-            Map<Integer, List<Meter.CommandResult>> map = new HashMap<>();
-            map.put(0, meter.getErrorListAPPls());
-            map.put(1, meter.getErrorListAPMns());
-            map.put(2, meter.getErrorListRPPls());
-            map.put(3, meter.getErrorListRPMns());
-
-            for (Map.Entry<Integer, List<Meter.CommandResult>> errorList : map.entrySet()) {
-
-                if (!errorList.getValue().isEmpty()) {
-
-                    for (Meter.CommandResult result : errorList.getValue()) {
-
-                        if (result instanceof Meter.ErrorResult) {
-
-                            double randRes = -5 + (Math.random() * 5);
-                            double randMin = -7 + (Math.random() * 7);
-                            double randMax = -7 + (Math.random() * 7);
-
-                            result.setMinError(String.format(Locale.ROOT, "%.3f", randMin));
-                            result.setMaxError(String.format(Locale.ROOT, "%.3f", randMax));
-                            result.setLastResult(String.format(Locale.ROOT, "%.3f", randRes));
-                            result.setLastResultForTabView(String.format(Locale.ROOT,"%.3f", randRes));
-
-                            if (randRes < randMin || randRes > randMax) {
-                                result.setPassTest(false);
-                            } else {
-                                result.setPassTest(true);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         new Thread(() -> {
-            while (true) {
 
                 for (Meter meter : listMetersForTest) {
 
@@ -3191,8 +3347,19 @@ public class TestErrorTableFrameController {
                                 if (result instanceof Meter.ErrorResult) {
 
                                     double randRes = -5 + (Math.random() * 5);
+                                    double randMin = -7 + (Math.random() * 7);
+                                    double randMax = -7 + (Math.random() * 7);
 
-                                    if (Double.parseDouble(result.getMinError()) > randRes || Double.parseDouble(result.getMaxError()) < randRes) {
+                                    result.setMinError(String.format(Locale.ROOT, "%.3f", randMin));
+                                    result.setMaxError(String.format(Locale.ROOT, "%.3f", randMax));
+                                    result.setLastResult(String.format(Locale.ROOT, "%.3f", randRes));
+
+                                    for (int j = 0; j < result.getResults().length; j++) {
+                                        double newRand = -5 + (Math.random() * 5);
+                                        result.getResults()[j] = String.format(Locale.ROOT, "%.3f", newRand);
+                                    }
+
+                                    if (randMin > randRes || randMax < randRes) {
                                         result.setLastResultForTabView("F" + String.format(Locale.ROOT,"%.3f", randRes));
                                         result.setPassTest(false);
                                     } else {
@@ -3205,11 +3372,7 @@ public class TestErrorTableFrameController {
                     }
                 }
 
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                }
-            }
+                newResults = true;
 
         }).start();
     }

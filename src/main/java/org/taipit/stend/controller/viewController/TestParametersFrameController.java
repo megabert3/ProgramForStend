@@ -394,6 +394,8 @@ public class TestParametersFrameController implements Frame {
 
             testErrorTableFrameController.initScrolBars();
 
+
+
             Stage stage1 = (Stage) btnStartTest.getScene().getWindow();
             stage1.close();
 
@@ -404,8 +406,11 @@ public class TestParametersFrameController implements Frame {
             FrameManager.frameManagerInstance().testParametersFrameController = null;
 
 
-            //TEST УДАЛИТЬ
+            /**TEST УДАЛИТЬ
+             *
+             */
             //testErrorTableFrameController.createRandomResults();
+            testErrorTableFrameController.checkAndLoadNotSavedResults();
         }
 
         //Действие при нажатии на кнопку "серийные номера"

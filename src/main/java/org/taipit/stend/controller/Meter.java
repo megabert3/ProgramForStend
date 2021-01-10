@@ -26,6 +26,7 @@ public class Meter implements Serializable {
      * новых объектов CommandResult сравнивать хэш код со старыми результатами и если что возвращать старый результат
      */
 
+
     /**
      * Задаёт результаты испытаний по умолчанию
      */
@@ -1131,6 +1132,10 @@ public class Meter implements Serializable {
         return relayTest;
     }
 
+    public void setRelayTest(RelayResult relayTest) {
+        this.relayTest = relayTest;
+    }
+
     //==============================================================================================
 
     /**
@@ -1428,6 +1433,10 @@ public class Meter implements Serializable {
             return timeThePassTest;
         }
 
+        public void setTimeThePassTest(String timeThePassTest) {
+            this.timeThePassTest = timeThePassTest;
+        }
+
         public String getTimeTheTest() {
             return timeTheTest;
         }
@@ -1442,7 +1451,7 @@ public class Meter implements Serializable {
      * Класс для записи результата испытания RTCCommand
      */
     public class RTCResult extends CommandResult implements Serializable {
-        //Сачтота с который счётчик подаёт импульсы
+        //Частота с который счётчик подаёт импульсы
         String freg;
 
         //Количество измерений (результатов теста)
