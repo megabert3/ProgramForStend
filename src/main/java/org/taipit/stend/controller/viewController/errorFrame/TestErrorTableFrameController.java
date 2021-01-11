@@ -468,7 +468,7 @@ public class TestErrorTableFrameController {
             try {
                 fxmlLoader.load();
             } catch (IOException e) {
-                System.out.println("Контролирую");
+                ConsoleHelper.infoException("Ошибка при загрузке окна сохранения теста");
                 e.printStackTrace();
             }
 
@@ -2024,10 +2024,7 @@ public class TestErrorTableFrameController {
         //Создаю обекты результата испытания в каждой точке (Command)
         initErrorsForMeters();
 
-        //checkAndLoadNotSavedResults();
-
         serializeNewNotSavedResults = new Thread(()-> {
-            int i = 0;
 
             while (!Thread.currentThread().isInterrupted()) {
                 try {
@@ -2036,12 +2033,6 @@ public class TestErrorTableFrameController {
                         System.out.println("Сработало сохранение");
                         NotSavedResults.serializationNotSaveResults(listMetersForTest, dirWithNotSaveResults);
 
-                        for (Meter meter : listMetersForTest) {
-                            for (Meter.CommandResult result : meter.getErrorListAPPls()) {
-                                System.out.println(result.getLastResult());
-                            }
-                        }
-
                         newResults = false;
                     }
 
@@ -2049,7 +2040,6 @@ public class TestErrorTableFrameController {
                 }catch (InterruptedException e) {
                     break;
                 }
-                i++;
             }
         });
 
@@ -3054,6 +3044,13 @@ public class TestErrorTableFrameController {
 
                                                             //Устанавливаю результат счётчику
                                                             meterInTest.setRelayTest(meterInTestResult);
+                                                        }
+                                                    } else {
+
+                                                        if (notSaveResult instanceof Meter.AppearensResult) {
+                                                            meterInTest.setAppearensTest((Meter.AppearensResult) notSaveResult);
+                                                        } else if (notSaveResult instanceof Meter.InsulationResult) {
+                                                            meterInTest.setInsulationTest((Meter.InsulationResult) notSaveResult);
                                                         }
                                                     }
                                                     break;
