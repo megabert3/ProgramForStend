@@ -394,8 +394,6 @@ public class TestParametersFrameController implements Frame {
 
             testErrorTableFrameController.initScrolBars();
 
-
-
             Stage stage1 = (Stage) btnStartTest.getScene().getWindow();
             stage1.close();
 
@@ -409,7 +407,7 @@ public class TestParametersFrameController implements Frame {
             /**TEST УДАЛИТЬ
              *
              */
-            //testErrorTableFrameController.createRandomResults();
+            testErrorTableFrameController.createRandomResults();
             testErrorTableFrameController.checkAndLoadNotSavedResults();
         }
 

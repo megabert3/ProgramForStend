@@ -226,40 +226,51 @@ public class SaveResultsTestFrame {
 
                 if (meter.isSaveResults()) {
 
-                    meter.setOperator(txtFldOperator.getText());
-                    meter.setController(txtFldController.getText());
-                    meter.setWitness(txtFldWitness.getText());
+                    meter.setOperator(txtFldOperator.getText().trim());
+                    meter.setController(txtFldController.getText().trim());
+                    meter.setWitness(txtFldWitness.getText().trim());
 
                     try {
                         meter.setTemperature(Float.parseFloat(txtFldTemperature.getText()));
                     }catch (NumberFormatException e) {
-                        txtFldTemperature.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
-                        ConsoleHelper.infoException("Значение должно быть численным");
+                        txtFldTemperature.setStyle("-fx-border-color: red; -fx-focus-color: red;");
+                        ConsoleHelper.infoException("Значение должно быть числовым");
                         return;
                     }
 
                     try {
                         meter.setHumidity(Float.parseFloat(txtFldHumidity.getText()));
                     }catch (NumberFormatException e) {
-                        txtFldHumidity.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
-                        ConsoleHelper.infoException("Значение должно быть численным");
+                        txtFldHumidity.setStyle("-fx-border-color: red; -fx-focus-color: red;");
+                        ConsoleHelper.infoException("Значение должно быть числовым");
                         return;
                     }
 
                     try {
                         Float.parseFloat(txtFldBatchNumb.getText());
                     }catch (NumberFormatException e) {
-                        txtFldBatchNumb.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
-                        ConsoleHelper.infoException("Значение должно быть численным");
+                        txtFldBatchNumb.setStyle("-fx-border-color: red; -fx-focus-color: red;");
+                        ConsoleHelper.infoException("Значение должно быть числовым");
                         return;
                     }
 
-                    meter.setBatchNo(txtFldBatchNumb.getText());
-                    meter.setVerificationDate(txtFldТMusterDate.getText());
+                    meter.setBatchNo(txtFldBatchNumb.getText().trim());
+                    meter.setVerificationDate(txtFldТMusterDate.getText().trim());
                     meter.setLastModifiedDate(new Date().toString());
                     helpList.add(meter);
                 }
             }
+
+            properties.setProperty("lastController", txtFldController.getText().trim());
+            properties.setProperty("lastOperator", txtFldOperator.getText().trim());
+            properties.setProperty("lastWitness", txtFldWitness.getText().trim());
+
+            properties.setProperty("lastTemperature", txtFldTemperature.getText().trim());
+            properties.setProperty("lastHumidity", txtFldHumidity.getText().trim());
+
+            properties.setProperty("lastBatchNumb", txtFldBatchNumb.getText().trim());
+
+            ConsoleHelper.saveProperties();
 
             //Добавляю результаты в хранилище результатов
             resultsTest.addMeterRusults(helpList);
@@ -268,10 +279,16 @@ public class SaveResultsTestFrame {
             resultsTest.serializationResults();
 
             Stage stageTestErrorTable = (Stage) testErrorTableFrameController.getTxtLabDate().getScene().getWindow();
+            testErrorTableFrameController.deleteNotSavedResults();
             stageTestErrorTable.close();
 
             Stage stageSaveResultTest = (Stage) txtFldWitness.getScene().getWindow();
             stageSaveResultTest.close();
+
+            testErrorTableFrameController.getRefMeterThread().interrupt();
+            testErrorTableFrameController.getSerializeNewNotSavedResults().interrupt();
+            testErrorTableFrameController.getRefMeterStage().close();
+            FrameManager.frameManagerInstance().setTestErrorTableFrameController(null);
         }
 
         //Если пользователь выбрал сохранить результат и вывести отчёт
@@ -286,15 +303,15 @@ public class SaveResultsTestFrame {
 
             for (Meter meter : meterList) {
                 if (meter.isSaveResults()) {
-                    meter.setOperator(txtFldOperator.getText());
-                    meter.setController(txtFldController.getText());
-                    meter.setWitness(txtFldWitness.getText());
+                    meter.setOperator(txtFldOperator.getText().trim());
+                    meter.setController(txtFldController.getText().trim());
+                    meter.setWitness(txtFldWitness.getText().trim());
                     try {
                         meter.setTemperature(Float.parseFloat(txtFldTemperature.getText()));
                     }catch (NumberFormatException e) {
                         e.printStackTrace();
-                        txtFldTemperature.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
-                        ConsoleHelper.infoException("Неверные данные");
+                        txtFldTemperature.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
+                        ConsoleHelper.infoException("Значение должно быть числовым");
                         return;
                     }
 
@@ -302,26 +319,37 @@ public class SaveResultsTestFrame {
                         meter.setHumidity(Float.parseFloat(txtFldHumidity.getText()));
                     }catch (NumberFormatException e) {
                         e.printStackTrace();
-                        txtFldHumidity.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
-                        ConsoleHelper.infoException("Неверные данные");
+                        txtFldHumidity.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
+                        ConsoleHelper.infoException("Значение должно быть числовым");
                         return;
                     }
 
                     try {
                         Float.parseFloat(txtFldBatchNumb.getText());
                     }catch (NumberFormatException e) {
-                        txtFldBatchNumb.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
-                        ConsoleHelper.infoException("Значение должно быть численным");
+                        txtFldBatchNumb.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
+                        ConsoleHelper.infoException("Значение должно быть числовым");
                         return;
                     }
 
-                    meter.setBatchNo(txtFldBatchNumb.getText());
-                    meter.setVerificationDate(txtFldТMusterDate.getText());
+                    meter.setBatchNo(txtFldBatchNumb.getText().trim());
+                    meter.setVerificationDate(txtFldТMusterDate.getText().trim());
                     meter.setLastModifiedDate(new Date().toString());
 
                     helpList.add(meter);
                 }
             }
+
+            properties.setProperty("lastController", txtFldController.getText().trim());
+            properties.setProperty("lastOperator", txtFldOperator.getText().trim());
+            properties.setProperty("lastWitness", txtFldWitness.getText().trim());
+
+            properties.setProperty("lastTemperature", txtFldTemperature.getText().trim());
+            properties.setProperty("lastHumidity", txtFldHumidity.getText().trim());
+
+            properties.setProperty("lastBatchNumb", txtFldBatchNumb.getText().trim());
+
+            ConsoleHelper.saveProperties();
 
             ExcelReport excelReport = new ExcelReport();
 
@@ -334,10 +362,16 @@ public class SaveResultsTestFrame {
             resultsTest.serializationResults();
 
             Stage stageTestErrorTable = (Stage) testErrorTableFrameController.getTxtLabDate().getScene().getWindow();
+            testErrorTableFrameController.deleteNotSavedResults();
             stageTestErrorTable.close();
 
             Stage stageSaveResultTest = (Stage) txtFldWitness.getScene().getWindow();
             stageSaveResultTest.close();
+
+            testErrorTableFrameController.getRefMeterThread().interrupt();
+            testErrorTableFrameController.getSerializeNewNotSavedResults().interrupt();
+            testErrorTableFrameController.getRefMeterStage().close();
+            FrameManager.frameManagerInstance().setTestErrorTableFrameController(null);
         }
     }
 

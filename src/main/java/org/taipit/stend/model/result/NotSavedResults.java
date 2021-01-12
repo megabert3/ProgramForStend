@@ -18,7 +18,7 @@ public class NotSavedResults implements Serializable{
     private static final long serialVersionUID = 14886969L;
 
     //Счётчики с несохранёнными результатами
-    private List<Meter> metersWhoseResultsAreNotSaved = new ArrayList<>();
+    private List<Meter> metersWhoseResultsAreNotSaved;
 
     private static NotSavedResults notSavedResultsInstance;
 
@@ -70,6 +70,19 @@ public class NotSavedResults implements Serializable{
             ConsoleHelper.infoException("Программе не удалось сохранить результаты теста на компьютер.\n" + e.getMessage());
         } catch (IOException e) {
             ConsoleHelper.infoException("Программе не удалось сохранить результаты теста на компьютер.\n" + e.getMessage());
+        }
+    }
+
+    public static void deleteResultFile(String dir) {
+        File resultFile = new File(dir);
+
+        if (resultFile.exists()) {
+
+            if (!resultFile.delete()) {
+                ConsoleHelper.infoException("Удаление файла", "Не удалось удалить файл с предыдущими результатами");
+            }
+        } else {
+            System.out.println("Файла не существует");
         }
     }
 

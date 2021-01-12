@@ -85,7 +85,7 @@ public class TestErrorTableFrameController {
     private Metodic methodicForStend;
 
     //Флаг есть ли какие-то результаты, если да, то предлагаю сохранить при выходе
-    public static boolean saveResults = false;
+    public static boolean saveResults;
 
     //Флаг если появились новые результаты испытания
     public volatile static boolean newResults = false;
@@ -327,6 +327,8 @@ public class TestErrorTableFrameController {
     //Инициализация окна
     @FXML
     void initialize() {
+
+        saveResults = false;
 
         ToggleGroup toggleGroup = new ToggleGroup();
 
@@ -3067,6 +3069,10 @@ public class TestErrorTableFrameController {
                 }
             }
         }
+    }
+
+    public void deleteNotSavedResults() {
+        NotSavedResults.deleteResultFile(dirWithNotSaveResults);
     }
 
     //В зафисимости от того вылезает ли результат счётчика за диапазон заданной погрешности раскрашиваю значение
