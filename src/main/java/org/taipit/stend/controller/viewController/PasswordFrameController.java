@@ -1,4 +1,4 @@
-package org.taipit.stend.controller;
+package org.taipit.stend.controller.viewController;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

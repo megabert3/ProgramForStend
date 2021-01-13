@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.taipit.stend.controller.viewController.ResultsMetersController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.result.ResultsTest;
 

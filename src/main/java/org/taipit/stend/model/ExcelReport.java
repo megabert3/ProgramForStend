@@ -2743,12 +2743,12 @@ public class ExcelReport {
                                     if (result.isPassTest() == null){
                                         cellCRPSTAError.setCellStyle(centerCenterThin);
                                         cellCRPSTAError.setCellValue(resultName[0]);
+
                                     } else if (!result.isPassTest()) {
                                         cellCRPSTAError.setCellStyle(centerCenterThinRed);
                                         cellCRPSTAError.setCellValue(resultName[2]);
 
                                     } else if (result.isPassTest()) {
-
                                         cellCRPSTAError.setCellStyle(centerCenterThin);
                                         cellCRPSTAError.setCellValue(resultName[1]);
                                     }

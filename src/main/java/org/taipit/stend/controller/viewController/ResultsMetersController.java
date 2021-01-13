@@ -1,4 +1,4 @@
-package org.taipit.stend.controller;
+package org.taipit.stend.controller.viewController;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +21,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.taipit.stend.controller.EditResultsMetersController;
+import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.frameManager.Frame;

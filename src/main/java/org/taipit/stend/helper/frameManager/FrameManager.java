@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.taipit.stend.controller.ResultsMetersController;
+import org.taipit.stend.controller.viewController.ResultsMetersController;
 import org.taipit.stend.controller.viewController.PropertiesController;
 import org.taipit.stend.controller.viewController.TestParametersFrameController;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;

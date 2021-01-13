@@ -4,7 +4,6 @@ import org.taipit.stend.controller.Meter;
 import org.taipit.stend.helper.ConsoleHelper;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +39,11 @@ public class NotSavedResults implements Serializable{
         try (FileInputStream fileInputStream = new FileInputStream(new File(dir).getCanonicalPath())) {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-            return (NotSavedResults) objectInputStream.readObject();
+            NotSavedResults results = (NotSavedResults) objectInputStream.readObject();
+
+            objectInputStream.close();
+
+            return results;
 
         } catch (FileNotFoundException e) {
             System.out.println("Нет файла с прошлыми результатами");
@@ -59,12 +62,13 @@ public class NotSavedResults implements Serializable{
         try (FileOutputStream fileOutputStream = new FileOutputStream(new File(dir).getCanonicalPath())) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
-
             notSavedResultsInstance = new NotSavedResults(metersWithResults);
 
             objectOutputStream.writeObject(notSavedResultsInstance);
 
             objectOutputStream.flush();
+
+            objectOutputStream.close();
 
         } catch (FileNotFoundException e) {
             ConsoleHelper.infoException("Программе не удалось сохранить результаты теста на компьютер.\n" + e.getMessage());
