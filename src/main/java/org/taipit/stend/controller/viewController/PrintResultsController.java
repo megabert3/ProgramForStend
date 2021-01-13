@@ -6,8 +6,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.model.ExcelReport;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,14 +50,39 @@ public class PrintResultsController {
 
         if (e.getSource() == saveBtn) {
 
+            dirSaveFileTxtFld.setStyle("");
+
             Path path = Paths.get(dirSaveFileTxtFld.getText());
+            File reportFile = new File(dirSaveFileTxtFld.getText());
+
+            if (reportFile.isFile()) {
+                ConsoleHelper.infoException("Необходимо выбрать директорию, а не файл");
+                dirSaveFileTxtFld.setStyle("-fx-text-box-border: red;  -fx-focus-color: red;");
+                return;
+            }
 
             if (Files.exists(path)) {
 
                 if (Files.isDirectory(path)) {
+                    reportFile = new File(dirSaveFileTxtFld.getText() + "\\" + fileNameTxtFld.getText());
+
+                    if (reportFile.exists()) {
+                        Boolean answer = ConsoleHelper.yesOrNoFrame("Перезапись файла","Файл под названием \"" + fileNameTxtFld.getText() + "\" уже существует,\nпересохранить его?" );
+
+                        if (answer != null && !answer) {
+                            properties.setProperty("printReportPath", dirSaveFileTxtFld.getText());
+                            properties.setProperty("printReportName", fileNameTxtFld.getText());
+
+                            ExcelReport excelReport = new ExcelReport();
+
+                            if (excelReport.createExcelReport(helpList, saveAndPrint.getScene().getWindow())) {
+                                excelReport.openExcelReport();
+                            } else return;
+                        }
+                    }
 
                 } else {
-                    ConsoleHelper.infoException("Ошибка", "Указанный путь не является директорией");
+                    ConsoleHelper.infoException("Указанный путь не является директорией");
                 }
             } else {
                 Boolean answer = ConsoleHelper.yesOrNoFrame("Создание директории","Указанной директории не существует.\nСоздать её?");
@@ -71,6 +98,8 @@ public class PrintResultsController {
                     }
                 }
             }
+
+            File reortFile = new File();
 
 
 
