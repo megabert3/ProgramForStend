@@ -351,15 +351,12 @@ public class SaveResultsTestFrame {
 
             ConsoleHelper.saveProperties();
 
-            ExcelReport excelReport = new ExcelReport();
-
-            if (excelReport.createExcelReport(helpList, saveAndPrint.getScene().getWindow())) {
-                excelReport.openExcelReport();
-            } else return;
-
             resultsTest.addMeterRusults(helpList);
 
             resultsTest.serializationResults();
+
+            //Вывод результата
+            FrameManager.frameManagerInstance().printMeterResults(helpList, saveAndPrint.getScene().getWindow());
 
             Stage stageTestErrorTable = (Stage) testErrorTableFrameController.getTxtLabDate().getScene().getWindow();
             testErrorTableFrameController.deleteNotSavedResults();

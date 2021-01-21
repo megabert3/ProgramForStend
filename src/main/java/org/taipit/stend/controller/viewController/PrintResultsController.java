@@ -2,25 +2,38 @@ package org.taipit.stend.controller.viewController;
 
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+import org.taipit.stend.controller.Meter;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.ExcelReport;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
+/**
+ * @autor Albert Khalimov
+ * Данный класс является контроллером окна сохранения отчёта "printResultsFrame.fxml".
+ * Отвечает за задание директории и имени файла с сохранёнными результатами
+ */
 public class PrintResultsController {
-    /**
-     * @autor Albert Khalimov
-     * Данный класс является контроллером окна сохранения отчёта "printResultsFrame.fxml".
-     */
+
+    //Результаты счётчиков, которые необходимо вывести
+    private List<Meter> meterResultSave;
+
+    //Окно вызова
+    private Window window;
 
     @FXML
     private TextField fileNameTxtFld;
@@ -51,62 +64,74 @@ public class PrintResultsController {
         if (e.getSource() == saveBtn) {
 
             dirSaveFileTxtFld.setStyle("");
+            fileNameTxtFld.setStyle("");
 
             Path path = Paths.get(dirSaveFileTxtFld.getText());
             File reportFile = new File(dirSaveFileTxtFld.getText());
 
-            if (reportFile.isFile()) {
-                ConsoleHelper.infoException("Необходимо выбрать директорию, а не файл");
-                dirSaveFileTxtFld.setStyle("-fx-text-box-border: red;  -fx-focus-color: red;");
+            if (fileNameTxtFld.getText().trim().isEmpty()) {
+                ConsoleHelper.infoException("Название файла не должно быть пустым");
+                fileNameTxtFld.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
                 return;
             }
 
-            if (Files.exists(path)) {
-
-                if (Files.isDirectory(path)) {
-                    reportFile = new File(dirSaveFileTxtFld.getText() + "\\" + fileNameTxtFld.getText());
-
-                    if (reportFile.exists()) {
-                        Boolean answer = ConsoleHelper.yesOrNoFrame("Перезапись файла","Файл под названием \"" + fileNameTxtFld.getText() + "\" уже существует,\nпересохранить его?" );
-
-                        if (answer != null && !answer) {
-                            properties.setProperty("printReportPath", dirSaveFileTxtFld.getText());
-                            properties.setProperty("printReportName", fileNameTxtFld.getText());
-
-                            ExcelReport excelReport = new ExcelReport();
-
-                            if (excelReport.createExcelReport(helpList, saveAndPrint.getScene().getWindow())) {
-                                excelReport.openExcelReport();
-                            } else return;
-                        }
-                    }
-
-                } else {
-                    ConsoleHelper.infoException("Указанный путь не является директорией");
-                }
-            } else {
-                Boolean answer = ConsoleHelper.yesOrNoFrame("Создание директории","Указанной директории не существует.\nСоздать её?");
-
-                if (answer != null) {
-                    if (answer) {
-
-                        try {
-                            Files.createDirectories(path);
-                        } catch (IOException ex) {
-                            ConsoleHelper.infoException("При создании директории произошла ошибка\n" + ex.getMessage());
-                        }
-                    }
-                }
+            if (reportFile.isFile()) {
+                ConsoleHelper.infoException("Необходимо выбрать директорию, а не файл");
+                dirSaveFileTxtFld.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
+                return;
             }
 
-            File reortFile = new File();
+            if (Files.isDirectory(path)) {
+                reportFile = new File(dirSaveFileTxtFld.getText() + "\\" + fileNameTxtFld.getText());
 
+                if (reportFile.exists()) {
+                    Boolean answer = ConsoleHelper.yesOrNoFrame("Перезапись файла", "Файл под названием \"" + fileNameTxtFld.getText() + "\" уже существует,\nпересохранить его?");
 
+                    if (answer != null && !answer) {
+                        properties.setProperty("printReportPath", dirSaveFileTxtFld.getText());
+                        properties.setProperty("printReportName", fileNameTxtFld.getText());
+
+                        ExcelReport excelReport = new ExcelReport();
+
+                        if (excelReport.createExcelReport(meterResultSave, window)) {
+                            excelReport.openExcelReport();
+                        }
+                    }
+                }
+
+            } else {
+                ConsoleHelper.infoException("Указанной директории не существует.\nВыберите директорию для сохранения файла");
+            }
 
         } else if (e.getSource() == cancelBtn) {
+            Stage stage = (Stage) cancelBtn.getScene().getWindow();
+            stage.close();
 
         } else if (e.getSource() == choiseDirBtn) {
 
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("Сохранение файла");
+
+            File dirFile = new File(ConsoleHelper.properties.getProperty("printReportPath"));
+            if (dirFile.isDirectory()) {
+                directoryChooser.setInitialDirectory(dirFile);
+            } else {
+                directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+            }
+
+            File dir = directoryChooser.showDialog(choiseDirBtn.getScene().getWindow());
+
+            if (dir != null) {
+                dirSaveFileTxtFld.setText(dir.getAbsolutePath());
+            }
         }
+    }
+
+    public void setMeterResultSave(List<Meter> meterResultSave) {
+        this.meterResultSave = meterResultSave;
+    }
+
+    public void setWindow(Window window) {
+        this.window = window;
     }
 }

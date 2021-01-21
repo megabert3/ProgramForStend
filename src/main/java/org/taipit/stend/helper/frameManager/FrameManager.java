@@ -4,15 +4,21 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.stage.WindowEvent;
+import org.taipit.stend.controller.Meter;
+import org.taipit.stend.controller.viewController.PrintResultsController;
 import org.taipit.stend.controller.viewController.ResultsMetersController;
 import org.taipit.stend.controller.viewController.PropertiesController;
 import org.taipit.stend.controller.viewController.TestParametersFrameController;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
+import org.taipit.stend.helper.ConsoleHelper;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @autor Albert Khalimov
@@ -197,13 +203,34 @@ public class FrameManager {
                         }
                     });
 
-                    stage.show();
+                    stage.showAndWait();
                 } else {
                     testParametersFrameController.getStage().setIconified(false);
                     testParametersFrameController.getStage().toFront();
                 }
             }
         }
+    }
+
+    public void printMeterResults(List<Meter> meterResultsList, Window window) {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/viewFXML/printResultsFrame.fxml"));
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            ConsoleHelper.infoException("Произошла ошибка при загрузке окна\n" + e.getMessage());
+        }
+
+        Parent root = fxmlLoader.getRoot();
+        Stage stage = new Stage();
+        stage.setTitle("Сохранение результата");
+        stage.setScene(new Scene(root));
+
+        PrintResultsController resultsController = fxmlLoader.getController();
+        resultsController.setMeterResultSave(meterResultsList);
+        resultsController.setWindow(window);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
 
     public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {
