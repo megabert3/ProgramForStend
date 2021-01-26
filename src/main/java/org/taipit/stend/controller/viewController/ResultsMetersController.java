@@ -26,6 +26,7 @@ import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.frameManager.Frame;
+import org.taipit.stend.helper.frameManager.FrameManager;
 import org.taipit.stend.model.ExcelReport;
 import org.taipit.stend.model.result.ResultsTest;
 
@@ -261,11 +262,7 @@ public class ResultsMetersController implements Frame {
                 listSelectedMeters.add(results.getListAllResults().get(index));
             }
 
-            ExcelReport excelReport = new ExcelReport();
-
-            if (excelReport.createExcelReport(listSelectedMeters, btnPrintResult.getScene().getWindow())) {
-                excelReport.openExcelReport();
-            }
+            FrameManager.frameManagerInstance().printMeterResults(listSelectedMeters, btnPrintResult.getScene().getWindow());
         }
 
         //Если нажата кнопка выбора пути сохранения отчёта

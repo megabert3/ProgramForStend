@@ -740,28 +740,10 @@ public class ExcelReport {
 
         printAllErros(0, 20);
 
-        file = new File(filePath);
-
-        if (!file.isDirectory()) {
-            ConsoleHelper.infoException("Неверно указан путь сохранения файла");
-
-            DirectoryChooser directoryChooser = new DirectoryChooser();
-            directoryChooser.setTitle("Путь сохранения отчёта");
-
-            File newFile = directoryChooser.showDialog(window);
-
-            if (newFile != null) {
-                ConsoleHelper.properties.setProperty("printReportPath", newFile.getAbsolutePath());
-
-                ConsoleHelper.saveProperties();
-            }
-            return false;
-        }
-
         if (ConsoleHelper.properties.getProperty("reportType").equals("HSSF")) {
-            file = new File(filePath + "\\\\" + "report.xls");
+            file = new File(filePath + "\\\\" + ConsoleHelper.properties.getProperty("printReportName") + ".xls");
         } else {
-            file = new File(filePath + "\\\\" + "report.xlsx");
+            file = new File(filePath + "\\\\" + ConsoleHelper.properties.getProperty("printReportName") + ".xlsx");
         }
 
         try (OutputStream outputStream = new FileOutputStream(file.getAbsolutePath())) {

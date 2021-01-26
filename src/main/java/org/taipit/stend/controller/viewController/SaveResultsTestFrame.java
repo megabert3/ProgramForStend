@@ -351,24 +351,24 @@ public class SaveResultsTestFrame {
 
             ConsoleHelper.saveProperties();
 
-            resultsTest.addMeterRusults(helpList);
+            //Если пользователь не нажал отмена
+            if (FrameManager.frameManagerInstance().printMeterResults(helpList, saveAndPrint.getScene().getWindow())) {
+                resultsTest.addMeterRusults(helpList);
 
-            resultsTest.serializationResults();
+                resultsTest.serializationResults();
 
-            //Вывод результата
-            FrameManager.frameManagerInstance().printMeterResults(helpList, saveAndPrint.getScene().getWindow());
+                Stage stageTestErrorTable = (Stage) testErrorTableFrameController.getTxtLabDate().getScene().getWindow();
+                testErrorTableFrameController.deleteNotSavedResults();
+                stageTestErrorTable.close();
 
-            Stage stageTestErrorTable = (Stage) testErrorTableFrameController.getTxtLabDate().getScene().getWindow();
-            testErrorTableFrameController.deleteNotSavedResults();
-            stageTestErrorTable.close();
+                Stage stageSaveResultTest = (Stage) txtFldWitness.getScene().getWindow();
+                stageSaveResultTest.close();
 
-            Stage stageSaveResultTest = (Stage) txtFldWitness.getScene().getWindow();
-            stageSaveResultTest.close();
-
-            testErrorTableFrameController.getRefMeterThread().interrupt();
-            testErrorTableFrameController.getSerializeNewNotSavedResults().interrupt();
-            testErrorTableFrameController.getRefMeterStage().close();
-            FrameManager.frameManagerInstance().setTestErrorTableFrameController(null);
+                testErrorTableFrameController.getRefMeterThread().interrupt();
+                testErrorTableFrameController.getSerializeNewNotSavedResults().interrupt();
+                testErrorTableFrameController.getRefMeterStage().close();
+                FrameManager.frameManagerInstance().setTestErrorTableFrameController(null);
+            }
         }
     }
 

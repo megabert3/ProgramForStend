@@ -30,6 +30,9 @@ public class FrameManager {
     //Паттерн Singleton
     private static FrameManager frameManager;
 
+    //Пользователь нажал отмена в окне распечатывания отчёта?
+    public static boolean selectCancelInPrintResultFrame;
+
     private FrameManager(){
     }
 
@@ -212,7 +215,9 @@ public class FrameManager {
         }
     }
 
-    public void printMeterResults(List<Meter> meterResultsList, Window window) {
+    public boolean printMeterResults(List<Meter> meterResultsList, Window window) {
+        selectCancelInPrintResultFrame = false;
+
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/viewFXML/printResultsFrame.fxml"));
         try {
@@ -230,7 +235,8 @@ public class FrameManager {
         resultsController.setMeterResultSave(meterResultsList);
         resultsController.setWindow(window);
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
+        stage.showAndWait();
+        return selectCancelInPrintResultFrame;
     }
 
     public void setMethodicsAddEditDeleteFrameController(MethodicsAddEditDeleteFrameController methodicsAddEditDeleteFrameController) {

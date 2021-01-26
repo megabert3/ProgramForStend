@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.helper.ConsoleHelper;
+import org.taipit.stend.helper.frameManager.FrameManager;
 import org.taipit.stend.model.ExcelReport;
 
 import java.io.File;
@@ -82,28 +83,58 @@ public class PrintResultsController {
             }
 
             if (Files.isDirectory(path)) {
-                reportFile = new File(dirSaveFileTxtFld.getText() + "\\" + fileNameTxtFld.getText());
+
+                String pathToFile = dirSaveFileTxtFld.getText() + "\\" + fileNameTxtFld.getText();
+
+                if (ConsoleHelper.properties.getProperty("reportType").equals("HSSF")) {
+                    pathToFile += ".xls";
+                } else {
+                    pathToFile += ".xlsx";
+                }
+
+                reportFile = new File(pathToFile);
 
                 if (reportFile.exists()) {
                     Boolean answer = ConsoleHelper.yesOrNoFrame("Перезапись файла", "Файл под названием \"" + fileNameTxtFld.getText() + "\" уже существует,\nпересохранить его?");
 
-                    if (answer != null && !answer) {
+                    if (answer != null && answer) {
                         properties.setProperty("printReportPath", dirSaveFileTxtFld.getText());
                         properties.setProperty("printReportName", fileNameTxtFld.getText());
+
+                        ConsoleHelper.saveProperties();
 
                         ExcelReport excelReport = new ExcelReport();
 
                         if (excelReport.createExcelReport(meterResultSave, window)) {
                             excelReport.openExcelReport();
+                            FrameManager.frameManagerInstance().selectCancelInPrintResultFrame = true;
+                            Stage thisStage = (Stage) saveBtn.getScene().getWindow();
+                            thisStage.close();
                         }
+                    }
+                } else {
+                    properties.setProperty("printReportPath", dirSaveFileTxtFld.getText());
+                    properties.setProperty("printReportName", fileNameTxtFld.getText());
+
+                    ConsoleHelper.saveProperties();
+
+                    ExcelReport excelReport = new ExcelReport();
+
+                    if (excelReport.createExcelReport(meterResultSave, window)) {
+                        excelReport.openExcelReport();
+                        FrameManager.frameManagerInstance().selectCancelInPrintResultFrame = true;
+                        Stage thisStage = (Stage) saveBtn.getScene().getWindow();
+                        thisStage.close();
                     }
                 }
 
             } else {
                 ConsoleHelper.infoException("Указанной директории не существует.\nВыберите директорию для сохранения файла");
+                dirSaveFileTxtFld.setStyle("-fx-border-color: red ; -fx-focus-color: red ;");
             }
 
         } else if (e.getSource() == cancelBtn) {
+            FrameManager.selectCancelInPrintResultFrame = false;
             Stage stage = (Stage) cancelBtn.getScene().getWindow();
             stage.close();
 
