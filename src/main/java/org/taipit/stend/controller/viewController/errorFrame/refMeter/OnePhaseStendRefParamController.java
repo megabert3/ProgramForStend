@@ -6,13 +6,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import org.taipit.stend.controller.Commands.Commands;
+import org.taipit.stend.controller.сommands.Commands;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.helper.exeptions.StendConnectionException;
 import org.taipit.stend.model.stend.StendDLLCommands;
-
-import java.util.Arrays;
 
 /**
  * @autor Albert Khalimov

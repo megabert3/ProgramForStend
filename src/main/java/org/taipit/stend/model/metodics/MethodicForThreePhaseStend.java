@@ -1,7 +1,6 @@
 package org.taipit.stend.model.metodics;
 
-import org.taipit.stend.controller.Commands.Commands;
-import org.taipit.stend.controller.Meter;
+import org.taipit.stend.controller.сommands.Commands;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
-package org.taipit.stend.controller.Commands;
+package org.taipit.stend.controller.сommands;
 
 import org.taipit.stend.controller.Meter;
-import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.stend.StendDLLCommands;
 import org.taipit.stend.model.stend.ThreePhaseStend;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
@@ -15,18 +14,14 @@ import java.util.concurrent.TimeUnit;
 /**
  * @autor Albert Khalimov
  *
- * Данный класс отвечает за реализацию выполнения команды "Чувствительность"
- *
- * Логика работы данного испытания заключается в следующем:
- * На счётчик подаётся напряжение и значение стартового тока на определённое количество времени,
- * если счётчик выдаёт два, или заданное пользователем, количество импульсов, то считается, что счётчик детектирует этот ток
- * и явлется прошедшим испытание. Подробнее о времени и токе, которые необходимы для испытания см. в "Технических условиях" к счётчику
- *
- * Реализация схожа с классом CreepCommand за исключение того, что на счётчик подаётся ток и тест является прошедшим если на счётчик поступили импульсы
+ * Данный класс отвечает за реализацию выполнения команды "Самоход".
+ * Необходимо подать напряжение 115 Un, на некоторое время, если счётчик не выдал больше двух импульсов за отведённое время
+ * значит тест пройден.
+ * Подробнее о данном испытании написано в ГОСТ 31819-21
  *
  * За дополнительной информацией описания полей см. интерфейс Commands
  */
-public class StartCommand implements Commands, Serializable, Cloneable {
+public class CreepCommand implements Commands, Serializable, Cloneable {
 
     //Эта команда из методики для трёхфазного теста?
     private boolean threePhaseCommand;
@@ -36,6 +31,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
     private StendDLLCommands stendDLLCommands;
 
+    //лист с счётчиками
     private List<Meter> meterList;
 
     //Режим
@@ -65,16 +61,17 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     //Напряжение на фазе C
     private double voltPerC;
 
-    private double voltPer = 100;
+    //Процент от номинального напряжения
+    private double voltPer;
 
     //Процен от тока
-    private double currPer = 100;
+    private double currPer;
 
     //Коэфициент мощности
     private String cosP = "1.0";
-
+    //Фазы на которые необходимо подать напряжене
     private String iABC = "H";
-
+    //Импульсный выход установки (активная/реактивная энергия)
     private int channelFlag;
 
     private boolean active = true;
@@ -84,16 +81,14 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
     private String id;
 
-    //Время расчитывается по госту?
+    //Время расчитывается по госту? (если нет значит задано пользователем)
     private boolean gostTest;
 
-    //Время теста введённое пользователем
-    private long userTimeTest;
-
-    //Количество импульсов для провала теста
+    //Количество импоульсов для провала теста
     private int pulseValue;
 
     //Время теста введённое пользователем
+    private long userTimeTest;
     private long timeStart;
     private long timeEnd;
 
@@ -101,76 +96,73 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     private TimerTask timerTask;
     private Thread currThread;
 
-    private HashMap<Integer, Boolean> startCommandResult;
+    //Мапа с результатами прохождения теста для каждого места на установке
+    private HashMap<Integer, Boolean> creepCommandResult;
 
     /**
      *
      * @param threePhaseCommand - команда создана для трёхфазного стенда?
+     * @param gostTest - время теста расчитывается по ГОСТУ или задано самим пользователем
      * @param name - имя точки испытания для отображения в таблице точек
      * @param id - для добавления или удаления испытания
-     * @param revers - направление тока
-     * @param channelFlag - импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
-     * @param gostTest - время теста расчитывается по ГОСТУ или задано самим пользователем
+     * @param channelFlag - Импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
      * @param userTimeTest - Время теста введённое пользователем
      * @param pulseValue - Количество импульсов для провала теста
-     * @param ratedCurr - значение тока, которое необходимо подать на счётчики
+     * @param voltPer - процент от напряжения
      */
-    public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest, long userTimeTest, int pulseValue, double ratedCurr) {
+    public CreepCommand(boolean threePhaseCommand, boolean gostTest, String name, String id, int channelFlag, long userTimeTest, int pulseValue, double voltPer) {
         this.threePhaseCommand = threePhaseCommand;
         this.name = name;
         this.id = id;
-        this.userTimeTest = userTimeTest;
-        this.revers = revers;
-        this.channelFlag = channelFlag;
         this.gostTest = gostTest;
+        this.channelFlag = channelFlag;
+        this.userTimeTest = userTimeTest;
         this.pulseValue = pulseValue;
-        this.ratedCurr = ratedCurr;
+        this.voltPer = voltPer;
     }
 
     /**
-     *
+     * Используется если испытание выполняется по ГОСТУ
      * @param threePhaseCommand - команда создана для трёхфазного стенда?
+     * @param gostTest - время теста расчитывается по ГОСТУ или задано самим пользователем
      * @param name - имя точки испытания для отображения в таблице точек
      * @param id - для добавления или удаления испытания
-     * @param revers - направление тока
-     * @param channelFlag - импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
-     * @param gostTest - время теста расчитывается по ГОСТУ или задано самим пользователем
+     * @param channelFlag - - Импульсный выход установки (активная/реактивная энергия, прямое/обратное направление тока)
      */
-    public StartCommand(boolean threePhaseCommand, String name, String id, int revers, int channelFlag, boolean gostTest) {
+    public CreepCommand(boolean threePhaseCommand, boolean gostTest, String name, String id,  int channelFlag) {
+        this.threePhaseCommand = threePhaseCommand;
+        this.gostTest = gostTest;
         this.name = name;
         this.id = id;
-        this.threePhaseCommand = threePhaseCommand;
-        this.revers = revers;
         this.channelFlag = channelFlag;
-        this.gostTest = gostTest;
         this.pulseValue = 2;
+        this.voltPer = 115;
     }
 
     @Override
     public void execute() throws StendConnectionException, InterruptedException {
+
+        currThread = Thread.currentThread();
+
+        int refMeterCount = 1;
+
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException();
         }
 
-        stendDLLCommands.errorClear();
-
-        int refMeterCount = 1;
-
-        currThread = Thread.currentThread();
-
         //Номер измерения
         int countResult = 1;
+        Meter.CreepResult creepResult;
 
-        Meter.StartResult startResult;
-
-        startCommandResult = initStartCommandResult();
+        creepCommandResult = initCreepCommandResult();
 
         stendDLLCommands.setEnergyPulse(meterList, channelFlag);
 
+        // Если установка трехвазная
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
 
-                iABC = ConsoleHelper.properties.getProperty("phaseOnOnePhaseMode");
+                iABC = TestErrorTableFrameController.phaseOnePhaseMode;
 
                 switch (iABC) {
                     case "A": voltPerA = voltPer; break;
@@ -195,25 +187,29 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
+        stendDLLCommands.errorClear();
+
+        //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию
+        setDefTestResults(channelFlag, index);
+
+        //Устанавливаю режим теста в зависимости от количества импульсов для провала
         setTestMode();
 
-        Thread.sleep(5000); //Пауза для стабилизации
-
-        //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
-        setDefTestResults(channelFlag, index);
+        Thread.sleep(3000);
 
         timeStart = System.currentTimeMillis();
         timeEnd = timeStart + userTimeTest;
 
         timer = new Timer(true);
 
+        //Таймер для отображения времени до окончания теста в GUI
         timerTask = new TimerTask() {
             @Override
             public void run() {
                 Meter.CommandResult creepResult;
                 if (currThread.isAlive()) {
-                    for (Map.Entry<Integer, Boolean> flag : startCommandResult.entrySet()) {
-                        if (!flag.getValue()) {
+                    for (Map.Entry<Integer, Boolean> flag : creepCommandResult.entrySet()) {
+                        if (flag.getValue()) {
                             creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
                             creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                         }
@@ -230,6 +226,7 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
+        //Непосредственно само выполнение теста
         if (pulseValue == 1) {
             startTestModeSearchMark(countResult);
         } else {
@@ -238,17 +235,23 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         timer.cancel();
 
-        //Выставляю результат теста счётчиков, которые не прошли тест
-        for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
-            if (!mapResult.getValue()) {
-                startResult = (Meter.StartResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
-                startResult.setResultStartCommand(startResult.getTimeTheTest(), countResult, false, channelFlag);
+        //Выставляю результат теста счётчиков, которые прошли тест
+        for (Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
+            if (mapResultPass.getValue()) {
+                creepResult = (Meter.CreepResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
+                creepResult.setResultCreepCommand(creepResult.getTimeTheTest(), countResult, true);
             }
         }
 
         stendDLLCommands.errorClear();
     }
 
+    /**
+     * Логика работы такая же как и у команды execute()
+     * Более подробное описание см. там
+     * @throws StendConnectionException
+     * @throws InterruptedException
+     */
     @Override
     public void executeForContinuousTest() throws StendConnectionException, InterruptedException {
 
@@ -258,11 +261,11 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
         currThread = Thread.currentThread();
 
+        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+
         //Номер измерения
         int countResult = 1;
-        Meter.StartResult startResult;
-
-        stendDLLCommands.setEnergyPulse(meterList, channelFlag);
+        Meter.CreepResult creepResult;
 
         if (stendDLLCommands instanceof ThreePhaseStend) {
             if (!threePhaseCommand) {
@@ -282,6 +285,8 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                         voltPer, currPer, iABC, cosP);
             }
         } else {
+            stendDLLCommands.selectCircuit(0);
+
             stendDLLCommands.getUI(phase, ratedVolt, ratedCurr, ratedFreq, phaseSrequence, revers,
                     voltPer, currPer, iABC, cosP);
         }
@@ -290,36 +295,32 @@ public class StartCommand implements Commands, Serializable, Cloneable {
             throw new InterruptedException();
         }
 
-        Thread.sleep(5000);
-
-        if (Thread.currentThread().isInterrupted()) {
-            throw new InterruptedException();
-        }
+        Thread.sleep(3000);
 
         while (Thread.currentThread().isAlive()) {
-            stendDLLCommands.errorClear();
 
             int refMeterCount = 1;
-
-            startCommandResult = initStartCommandResult();
 
             //Устанавливаю значения tableColumn, флаги и погрешности по умолчанию.
             setDefTestResults(channelFlag, index);
 
             setTestMode();
 
+            creepCommandResult = initCreepCommandResult();
+
             timeStart = System.currentTimeMillis();
             timeEnd = timeStart + userTimeTest;
 
             timer = new Timer(true);
+
 
             timerTask = new TimerTask() {
                 @Override
                 public void run() {
                     Meter.CommandResult creepResult;
                     if (currThread.isAlive()) {
-                        for (Map.Entry<Integer, Boolean> flag : startCommandResult.entrySet()) {
-                            if (!flag.getValue()) {
+                        for (Map.Entry<Integer, Boolean> flag : creepCommandResult.entrySet()) {
+                            if (flag.getValue()) {
                                 creepResult = meterList.get(flag.getKey() - 1).returnResultCommand(index, channelFlag);
                                 creepResult.setLastResultForTabView("N" + getTime(timeEnd - System.currentTimeMillis()));
                             }
@@ -332,6 +333,10 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
             timer.schedule(timerTask, 0, 275);
 
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
             if (pulseValue == 1) {
                 startTestModeSearchMark(countResult);
             } else {
@@ -340,114 +345,31 @@ public class StartCommand implements Commands, Serializable, Cloneable {
 
             timer.cancel();
 
-            //Выставляю результат теста счётчиков, которые не прошли тест
-            for (Map.Entry<Integer, Boolean> mapResultPass : startCommandResult.entrySet()) {
-                if (!mapResultPass.getValue()) {
-                    mapResultPass.setValue(true);
-                    startResult = (Meter.StartResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
-                    startResult.setResultStartCommand(startResult.getTimeTheTest(), countResult, false, channelFlag);
+            //Выставляю результат теста счётчиков, которые прошли тест
+            for (Map.Entry<Integer, Boolean> mapResultPass : creepCommandResult.entrySet()) {
+                if (mapResultPass.getValue()) {
+                    creepResult = (Meter.CreepResult) meterList.get(mapResultPass.getKey() - 1).returnResultCommand(index, channelFlag);
+                    creepResult.setResultCreepCommand(creepResult.getTimeTheTest(), countResult, true);
                 }
             }
-            countResult++;
 
-            //Время на подумать оставлять результат или нет
+            //Время на подумать оставить результаты или нет
             Thread.sleep(7000);
-        }
 
-        stendDLLCommands.errorClear();
+            countResult++;
+        }
     }
 
-    private HashMap<Integer, Boolean> initStartCommandResult() {
+    /**
+     * Выставляет начальные значения результата теста
+     * @return
+     */
+    private HashMap<Integer, Boolean> initCreepCommandResult() {
         HashMap<Integer, Boolean> init = new HashMap<>(meterList.size());
         for (Meter meter : meterList) {
-            init.put(meter.getId(), false);
+            init.put(meter.getId(), true);
         }
         return init;
-    }
-
-    /**
-     * Логика работы по поску одного импульса, если счётчик выдал один импульс, то считается, что он прошёл тест
-     * @param countResult - номер измерения
-     * @throws InterruptedException
-     */
-    private void startTestModeCount(int countResult) throws InterruptedException, StendConnectionException {
-        while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-
-
-            if (Thread.currentThread().isInterrupted()) {
-                throw new InterruptedException();
-            }
-
-            for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
-
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new InterruptedException();
-                }
-
-                if (!mapResult.getValue()) {
-                    Meter meter = meterList.get(mapResult.getKey() - 1);
-                    Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
-
-                    if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue - 1) {
-
-                        startCommandResult.put(mapResult.getKey(), true);
-                        startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
-                    }
-                }
-            }
-
-            Thread.sleep(400);
-        }
-    }
-
-    /**
-     * Логика работы по поску одного импульса, если счётчик выдал один импульс, то считается, что он прошёл тест
-     * @param countResult - номер измерения
-     * @throws InterruptedException
-     */
-    private void startTestModeSearchMark(int countResult) throws InterruptedException {
-        while (startCommandResult.containsValue(false) && System.currentTimeMillis() <= timeEnd) {
-
-            if (Thread.currentThread().isInterrupted()) {
-                throw new InterruptedException();
-            }
-
-            for (Map.Entry<Integer, Boolean> mapResult : startCommandResult.entrySet()) {
-
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new InterruptedException();
-                }
-
-                if (!mapResult.getValue()) {
-                    Meter meter = meterList.get(mapResult.getKey() - 1);
-                    Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
-
-                    if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
-
-                        startCommandResult.put(mapResult.getKey(), true);
-                        startResult.setResultStartCommand(getTime(System.currentTimeMillis() - timeStart), countResult, true, channelFlag);
-                    }
-                }
-            }
-
-            Thread.sleep(400);
-        }
-    }
-
-    //reset
-    /**
-     * Выставляет изначальные, стартовые значения результатам счётчиков
-     * необходим если пользователь выбрал повторить тест
-     * @param channelFlag
-     * @param index
-     */
-    private void setDefTestResults(int channelFlag, int index) {
-        for (Meter meter : meterList) {
-            Meter.StartResult startResult = (Meter.StartResult) meter.returnResultCommand(index, channelFlag);
-            startResult.setLastResultForTabView("N");
-            startResult.setPassTest(null);
-            startResult.setLastResult("");
-        }
     }
 
     /**
@@ -470,6 +392,93 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     }
 
     /**
+     * Логика работы по поску более одного импульса, если счётчик выдал более одного импульса, то считается, что он провалил тест
+     * @param countResult - номер измерения
+     * @throws InterruptedException
+     * @throws StendConnectionException
+     */
+    private void startTestModeCount(int countResult) throws InterruptedException, StendConnectionException {
+        while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
+
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
+            for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+
+                if (mapResult.getValue()) {
+
+                    if (stendDLLCommands.countRead(mapResult.getKey()) >= pulseValue - 1) {
+
+                        creepCommandResult.put(mapResult.getKey(), false);
+
+                        Meter.CreepResult creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
+
+                        creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
+                    }
+                }
+            }
+
+            Thread.sleep(400);
+        }
+    }
+
+    /**
+     * Логика работы по поску одного импульса, если счётчик выдал один импульс, то считается, что он провалил тест
+     * @param countResult - номер измерения
+     * @throws InterruptedException
+     */
+    private void startTestModeSearchMark(int countResult) throws InterruptedException {
+        //Продолжать тест пока либо все счётчики не провалили его либо не вышло время испытания
+        while (creepCommandResult.containsValue(true) && System.currentTimeMillis() <= timeEnd) {
+
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
+            for (Map.Entry<Integer, Boolean> mapResult : creepCommandResult.entrySet()) {
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+
+                if (mapResult.getValue()) {
+
+                    if (stendDLLCommands.searchMarkResult(mapResult.getKey())) {
+
+                        creepCommandResult.put(mapResult.getKey(), false);
+
+                        Meter.CreepResult creepResult = (Meter.CreepResult) meterList.get(mapResult.getKey() - 1).returnResultCommand(index, channelFlag);
+
+                        creepResult.setResultCreepCommand(getTime(System.currentTimeMillis() - timeStart), countResult, false);
+                    }
+                }
+            }
+
+            Thread.sleep(400);
+        }
+    }
+
+    /**
+     * Выставляет изначальные, стартовые значения результатам счётчиков
+     * необходим если пользователь выбрал повторить тест
+     * @param channelFlag
+     * @param index
+     */
+    private void setDefTestResults(int channelFlag, int index) {
+        for (Meter meter : meterList) {
+            Meter.CommandResult creepResult = meter.returnResultCommand(index, channelFlag);
+            creepResult.setLastResultForTabView("N");
+            creepResult.setPassTest(null);
+            creepResult.setLastResult("");
+        }
+    }
+
+    /**
      * Переводит миллисекунды в формат hh:mm:ss
      * @param time - время в миллисекундах
      * @return
@@ -480,28 +489,32 @@ public class StartCommand implements Commands, Serializable, Cloneable {
                 TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
+        this.stendDLLCommands = stendDLLCommands;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getPauseForStabilization() {
+        return "";
+    }
+
+    @Override
+    public void setPauseForStabilization(double pauseForStabilization) {
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setPulseValue(int pulseValue) {
         this.pulseValue = pulseValue;
     }
 
-    public void setRatedCurr(double ratedCurr) {
-        this.ratedCurr = ratedCurr;
-    }
-
-    public void setRatedVolt(double ratedVolt) {
-        this.ratedVolt = ratedVolt;
+    public void setVoltPer(double voltPer) {
+        this.voltPer = voltPer;
     }
 
     public void setRatedFreq(double ratedFreq) {
@@ -512,24 +525,24 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         this.phase = phase;
     }
 
+    public void setRatedVolt(double ratedVolt) {
+        this.ratedVolt = ratedVolt;
+    }
+
     public boolean isGostTest() {
         return gostTest;
-    }
-
-    public long getUserTimeTest() {
-        return userTimeTest;
-    }
-
-    public void setUserTimeTest(long timeForTest) {
-        this.userTimeTest = timeForTest;
     }
 
     public int getPulseValue() {
         return pulseValue;
     }
 
-    public double getRatedCurr() {
-        return ratedCurr;
+    public long getUserTimeTest() {
+        return userTimeTest;
+    }
+
+    public String getUserTimeTestHHmmss() {
+        return getTime(userTimeTest);
     }
 
     public boolean isActive() {
@@ -544,8 +557,17 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         this.meterList = meterList;
     }
 
-    public void setStendDLLCommands(StendDLLCommands stendDLLCommands) {
-        this.stendDLLCommands = stendDLLCommands;
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public void setUserTimeTest(long userTimeTest) {
+        this.userTimeTest = userTimeTest;
     }
 
     @Override
@@ -567,13 +589,17 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     public void setEmin(String emin) {
 
     }
-    public String getUserTimeTestHHmmss() {
-        return getTime(userTimeTest);
-    }
-
 
     public String getId() {
         return id;
+    }
+
+    public void setiABC(String iABC) {
+        this.iABC = iABC;
+    }
+
+    public void setRatedCurr(double ratedCurr) {
+        this.ratedCurr = ratedCurr;
     }
 
     public void setPhaseSrequence(int phaseSrequence) {
@@ -604,16 +630,8 @@ public class StartCommand implements Commands, Serializable, Cloneable {
         this.cosP = cosP;
     }
 
-    public void setiABC(String iABC) {
-        this.iABC = iABC;
-    }
-
     public int getChannelFlag() {
         return channelFlag;
-    }
-
-    public void setVoltPer(double voltPer) {
-        this.voltPer = voltPer;
     }
 
     public double getVoltPer() {
@@ -645,24 +663,21 @@ public class StartCommand implements Commands, Serializable, Cloneable {
     }
 
     @Override
-    public String getiABC() {
-        return iABC;
-    }
-
-    public boolean isThreePhaseCommand() {
-        return threePhaseCommand;
-    }
-
-    public String getPauseForStabilization() {
-        return "";
+    public double getRatedCurr() {
+        return ratedCurr;
     }
 
     @Override
-    public void setPauseForStabilization(double pauseForStabilization) {
+    public String getiABC() {
+        return iABC;
     }
 
     @Override
     public Commands clone() throws CloneNotSupportedException {
         return (Commands) super.clone();
+    }
+
+    public boolean isThreePhaseCommand() {
+        return threePhaseCommand;
     }
 }

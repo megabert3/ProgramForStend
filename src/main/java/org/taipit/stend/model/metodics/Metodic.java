@@ -1,6 +1,6 @@
 package org.taipit.stend.model.metodics;
 
-import org.taipit.stend.controller.Commands.Commands;
+import org.taipit.stend.controller.сommands.Commands;
 
 import java.util.List;
 import java.util.Map;

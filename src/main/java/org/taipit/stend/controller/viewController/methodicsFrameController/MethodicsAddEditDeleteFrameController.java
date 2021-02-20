@@ -24,7 +24,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javafx.stage.WindowEvent;
-import org.taipit.stend.controller.Commands.Commands;
+import org.taipit.stend.controller.сommands.Commands;
 import org.taipit.stend.controller.viewController.YesOrNoFrameController;
 import org.taipit.stend.controller.viewController.errorFrame.TestErrorTableFrameController;
 import org.taipit.stend.controller.viewController.methodicsFrameController.addEditFraneController.AddEditPointsOnePhaseStendFrameController;

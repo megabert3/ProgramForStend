@@ -1,4 +1,4 @@
-package org.taipit.stend.controller.Commands;
+package org.taipit.stend.controller.сommands;
 
 import org.taipit.stend.helper.exeptions.StendConnectionException;
 

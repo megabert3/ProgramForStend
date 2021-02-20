@@ -29,7 +29,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import org.taipit.stend.controller.Commands.*;
+import org.taipit.stend.controller.сommands.*;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicNameController;
 import org.taipit.stend.controller.viewController.methodicsFrameController.MethodicsAddEditDeleteFrameController;
 import org.taipit.stend.helper.ConsoleHelper;

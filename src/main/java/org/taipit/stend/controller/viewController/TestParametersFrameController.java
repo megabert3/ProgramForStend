@@ -407,7 +407,7 @@ public class TestParametersFrameController implements Frame {
             /**TEST УДАЛИТЬ
              *
              */
-            //testErrorTableFrameController.createRandomResults();
+            testErrorTableFrameController.createRandomResults();
             testErrorTableFrameController.checkAndLoadNotSavedResults();
         }
 

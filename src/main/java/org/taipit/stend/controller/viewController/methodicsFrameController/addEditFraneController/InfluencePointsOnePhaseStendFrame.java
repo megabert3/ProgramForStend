@@ -24,8 +24,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import org.taipit.stend.controller.Commands.Commands;
-import org.taipit.stend.controller.Commands.ErrorCommand;
+import org.taipit.stend.controller.сommands.Commands;
+import org.taipit.stend.controller.сommands.ErrorCommand;
 import org.taipit.stend.helper.ConsoleHelper;
 import org.taipit.stend.model.metodics.MethodicForOnePhaseStend;
 

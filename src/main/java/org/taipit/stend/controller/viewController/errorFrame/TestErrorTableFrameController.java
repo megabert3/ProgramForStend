@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import org.taipit.stend.controller.Commands.*;
+import org.taipit.stend.controller.сommands.*;
 import org.taipit.stend.controller.Meter;
 import org.taipit.stend.controller.viewController.errorFrame.refMeter.OnePhaseStendRefParamController;
 import org.taipit.stend.controller.viewController.errorFrame.refMeter.StendRefParametersForFrame;
